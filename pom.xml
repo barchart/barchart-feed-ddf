@@ -10,33 +10,33 @@
 	</parent>
 
 	<groupId>com.barchart.feed</groupId>
-	<artifactId>barchart-feed-ddf3</artifactId>
+	<artifactId>barchart-feed-ddf</artifactId>
 	<version>3.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<scm>
-		<url>https://github.com/barchart/barchart-feed-ddf3</url>
-		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf3.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf3.git</developerConnection>
+		<url>https://github.com/barchart/barchart-feed-ddf</url>
+		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
 	</scm>
 
 	<modules>
 
-		<module>barchart-feed-ddf3-settings</module>
+		<module>barchart-feed-ddf-settings</module>
 
-		<module>barchart-feed-ddf3-instrument</module>
+		<module>barchart-feed-ddf-instrument</module>
 
-		<module>barchart-feed-ddf3-message</module>
+		<module>barchart-feed-ddf-message</module>
 
-		<module>barchart-feed-ddf3-historical</module>
+		<module>barchart-feed-ddf-historical</module>
 
-		<module>barchart-feed-ddf3-datalink</module>
+		<module>barchart-feed-ddf-datalink</module>
 
-		<module>barchart-feed-ddf3-newslink</module>
+		<module>barchart-feed-ddf-newslink</module>
 
-		<module>barchart-feed-ddf3-market</module>
+		<module>barchart-feed-ddf-market</module>
 
-		<module>barchart-feed-ddf3-bundle</module>
+		<module>barchart-feed-ddf-bundle</module>
 
 	</modules>
 
