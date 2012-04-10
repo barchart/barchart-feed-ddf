@@ -10,7 +10,9 @@ package com.barchart.feed.ddf.message.api;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.TextValue;
 
-/** represents ddf feed server response message */
+/**
+ * represents ddf feed server response message.
+ */
 @NotMutable
 public interface DDF_ControlResponse extends DDF_ControlBase {
 

@@ -39,6 +39,7 @@ import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 import com.barchart.feed.ddf.settings.provider.DDF_SettingsService;
 import com.barchart.feed.ddf.util.FeedDDF;
 
+// TODO: Auto-generated Javadoc
 /**
  * TODO provide alternative DDF_InstrumentService registration
  */
@@ -223,6 +224,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.datalink.api.DDF_FeedClient#login(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public synchronized boolean login(final String username,
 			final String password) {
@@ -260,6 +264,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.datalink.api.DDF_FeedClient#logout()
+	 */
 	@Override
 	public synchronized void logout() {
 
@@ -278,6 +285,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		return channel.isConnected();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.datalink.api.DDF_FeedClient#send(java.lang.CharSequence)
+	 */
 	@Override
 	public boolean send(final CharSequence command) {
 
@@ -299,6 +309,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.datalink.api.DDF_FeedClient#post(java.lang.CharSequence)
+	 */
 	@Override
 	public boolean post(final CharSequence command) {
 
@@ -323,6 +336,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	private DDF_FeedHandler handler;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.datalink.api.DDF_FeedClient#bind(com.barchart.feed.ddf.datalink.api.DDF_FeedHandler)
+	 */
 	@Override
 	public synchronized void bind(final DDF_FeedHandler handler) {
 		this.handler = handler;
@@ -330,6 +346,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see org.jboss.netty.channel.SimpleChannelHandler#channelConnected(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.ChannelStateEvent)
+	 */
 	@Override
 	public void channelConnected(final ChannelHandlerContext ctx,
 			final ChannelStateEvent e) throws Exception {
@@ -340,6 +359,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.jboss.netty.channel.SimpleChannelHandler#channelDisconnected(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.ChannelStateEvent)
+	 */
 	@Override
 	public void channelDisconnected(final ChannelHandlerContext ctx,
 			final ChannelStateEvent e) throws Exception {
@@ -394,6 +416,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.jboss.netty.channel.SimpleChannelHandler#messageReceived(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.MessageEvent)
+	 */
 	@Override
 	public void messageReceived(final ChannelHandlerContext context,
 			final MessageEvent eventIn) throws Exception {

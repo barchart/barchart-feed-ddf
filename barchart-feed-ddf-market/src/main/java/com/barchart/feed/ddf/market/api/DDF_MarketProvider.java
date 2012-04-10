@@ -10,6 +10,9 @@ package com.barchart.feed.ddf.market.api;
 import com.barchart.feed.base.api.market.provider.MarketMakerProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 
+/**
+ * The Interface DDF_MarketProvider.
+ */
 public interface DDF_MarketProvider extends MarketMakerProvider<DDF_MarketBase> {
 
 }

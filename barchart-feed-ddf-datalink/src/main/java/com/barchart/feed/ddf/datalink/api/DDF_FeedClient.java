@@ -9,6 +9,9 @@ package com.barchart.feed.ddf.datalink.api;
 
 import com.barchart.util.anno.UsedOnce;
 
+/**
+ * The Interface DDF_FeedClient.
+ */
 public interface DDF_FeedClient {
 
 	/**

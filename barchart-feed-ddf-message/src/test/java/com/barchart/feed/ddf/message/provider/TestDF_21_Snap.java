@@ -36,12 +36,26 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDF_21_Snap.
+ */
 public class TestDF_21_Snap extends TestDDFBase {
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception the exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -50,6 +64,9 @@ public class TestDF_21_Snap extends TestDDFBase {
 	final static byte[] ba22sp = "2HI1,2AN15,SP2HI2,HI3,2445,2604,2404,2582,,,,2481,,,2582,,,12196949,3 "
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode spread.
+	 */
 	@Test
 	public void testDecodeSpread() {
 
@@ -75,6 +92,9 @@ public class TestDF_21_Snap extends TestDDFBase {
 	final static byte[] ba21 = "2SF0,12B10,,,,,-,-,,,,,,,,,Q JFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode21.
+	 */
 	@Test
 	public void testDecode21() {
 
@@ -121,6 +141,9 @@ public class TestDF_21_Snap extends TestDDFBase {
 	final static byte[] ba22 = "2HIG,2AN15,2445,2604,2404,2582,,,,2481,,,2582,,,12196949,3 JFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode22.
+	 */
 	@Test
 	public void testDecode22() {
 
@@ -178,6 +201,9 @@ public class TestDF_21_Snap extends TestDDFBase {
 	final static byte[] ba26 = "2$DJUBSSO,6Ao10,5515,5642,5501,5631,,,,,,,,,,,S JFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode26.
+	 */
 	@Test
 	public void testDecode26() {
 
@@ -232,6 +258,9 @@ public class TestDF_21_Snap extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test encode.
+	 */
 	@Test
 	public void testEncode() {
 		testEncodeDecode(new DF_21_Snap(), ba21);
@@ -239,6 +268,9 @@ public class TestDF_21_Snap extends TestDDFBase {
 		testEncodeDecode(new DF_21_Snap(), ba26);
 	}
 
+	/**
+	 * Test encode empty.
+	 */
 	@Test
 	public void testEncodeEmpty() {
 
@@ -285,6 +317,9 @@ public class TestDF_21_Snap extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test type.
+	 */
 	@Test
 	public void testType() {
 

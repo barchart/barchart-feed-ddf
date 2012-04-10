@@ -20,8 +20,9 @@ import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
+// TODO: Auto-generated Javadoc
 /**
- * ddf trade day codes
+ * ddf trade day codes.
  */
 public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 
@@ -70,23 +71,29 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DDF_TradeDay.class);
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+	 */
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeByte#code()
+	 */
 	@Override
 	public final byte code() {
 		return code;
 	}
 
-	/** byte sized ordinal */
+	/** byte sized ordinal. */
 	public final byte ord;
 
-	/** ddf feed encoding */
+	/** ddf feed encoding. */
 	public final byte code;
 
-	/** day of month number */
+	/** day of month number. */
 	public int day;
 
 	private DDF_TradeDay(final byte code) {
@@ -97,6 +104,11 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 
 	private final static DDF_TradeDay[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ trade day[]
+	 */
 	@Deprecated
 	public final static DDF_TradeDay[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -107,11 +119,23 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ trade day
+	 */
 	public final static DDF_TradeDay fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
 	// TODO optimize
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ trade day
+	 */
 	public final static DDF_TradeDay fromCode(final byte code) {
 		for (final DDF_TradeDay known : ENUM_VALUES) {
 			if (known.code == code) {
@@ -121,11 +145,23 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 		return UNKNOWN;
 	}
 
+	/**
+	 * From millis utc.
+	 *
+	 * @param millisUTC the millis utc
+	 * @return the dD f_ trade day
+	 */
 	public static final DDF_TradeDay fromMillisUTC(final long millisUTC) {
 		final DateTime dateTime = new DateTime(millisUTC, DateTimeZone.UTC);
 		return fromDay(dateTime.getDayOfMonth());
 	}
 
+	/**
+	 * From day.
+	 *
+	 * @param day the day
+	 * @return the dD f_ trade day
+	 */
 	public static final DDF_TradeDay fromDay(final int day) {
 		/* NOTE: Date range is 1...31 ordinal range is 0...30 */
 		if (1 <= day & day <= 31) {
@@ -135,6 +171,11 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 		return UNKNOWN;
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}
@@ -178,7 +219,9 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 	 * 
 	 * depends on current invocation time
 	 * 
-	 * assumes DDF CST time zone of DDF_TradeDay
+	 * assumes DDF CST time zone of DDF_TradeDay.
+	 *
+	 * @return the time value
 	 */
 	public TimeValue tradeDate() {
 
@@ -203,7 +246,11 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 	 * 
 	 * expressed in UTC zone
 	 * 
-	 * year, month, day : should be treated as local market trade date
+	 * year, month, day : should be treated as local market trade date.
+	 *
+	 * @param tradeDay the trade day
+	 * @param todayDate the today date
+	 * @return the time value
 	 */
 	public static TimeValue tradeDateFrom(final DDF_TradeDay tradeDay,
 			final DateTime todayDate) {

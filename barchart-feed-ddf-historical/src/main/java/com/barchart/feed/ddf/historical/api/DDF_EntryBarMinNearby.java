@@ -8,6 +8,9 @@
 package com.barchart.feed.ddf.historical.api;
 
 
+/**
+ * The Interface DDF_EntryBarMinNearby.
+ */
 public interface DDF_EntryBarMinNearby extends DDF_EntryBarMin {
 
 }

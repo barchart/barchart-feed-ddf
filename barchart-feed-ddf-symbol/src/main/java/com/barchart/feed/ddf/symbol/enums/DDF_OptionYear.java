@@ -10,7 +10,9 @@ package com.barchart.feed.ddf.symbol.enums;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Enum DDF_OptionYear.
  */
 public enum DDF_OptionYear {
 
@@ -45,12 +47,19 @@ public enum DDF_OptionYear {
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_OptionYear.class);
 
+	/** The code. */
 	public final char code;
 
 	private DDF_OptionYear(char code) {
 		this.code = code;
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ option year
+	 */
 	public static final DDF_OptionYear fromCode(final char code) {
 		switch (code) {
 		case 'C':
@@ -100,6 +109,13 @@ public enum DDF_OptionYear {
 		}
 	}
 
+	/**
+	 * From indi year.
+	 *
+	 * @param indicator the indicator
+	 * @param year the year
+	 * @return the dD f_ option year
+	 */
 	public static final DDF_OptionYear fromIndiYear(final DDF_Option indicator,
 			final DDF_ExpireYear year) {
 		if (indicator == null || year == null) {
@@ -124,6 +140,14 @@ public enum DDF_OptionYear {
 		return values()[index];
 	}
 
+	/**
+	 * Gets the for year.
+	 *
+	 * @param indicator the indicator
+	 * @param thisYear the this year
+	 * @param testYear the test year
+	 * @return the for year
+	 */
 	public static final DDF_OptionYear getForYear(final DDF_Option indicator,
 			final int thisYear, final int testYear) {
 		if (thisYear < 2000 || testYear < 2000) {
@@ -153,6 +177,12 @@ public enum DDF_OptionYear {
 		return values()[index];
 	}
 
+	/**
+	 * Checks if is valid.
+	 *
+	 * @param code the code
+	 * @return true, if is valid
+	 */
 	public final static boolean isValid(final char code) {
 		final DDF_OptionYear indicator = fromCode(code);
 		return indicator != UNKNOWN;

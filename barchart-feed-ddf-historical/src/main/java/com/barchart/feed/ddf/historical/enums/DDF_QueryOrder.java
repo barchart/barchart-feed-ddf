@@ -9,6 +9,10 @@ package com.barchart.feed.ddf.historical.enums;
 
 import com.barchart.util.enums.EnumCodeString;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum DDF_QueryOrder.
+ */
 public enum DDF_QueryOrder implements EnumCodeString {
 
 	/** default */
@@ -16,11 +20,16 @@ public enum DDF_QueryOrder implements EnumCodeString {
 
 	DESCENDING("desc"), //
 
-	;
+	/** The code. */
+ ;
 
 	public final String code;
 
-	/** used in page url and as xml code */
+	/**
+	 * used in page url and as xml code.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public final String code() {
 		return code;
@@ -32,11 +41,22 @@ public enum DDF_QueryOrder implements EnumCodeString {
 
 	private static final DDF_QueryOrder[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ query order[]
+	 */
 	@Deprecated
 	public static final DDF_QueryOrder[] valuesUnsafe() {
 		return ENUM_VALUES;
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ query order
+	 */
 	public static final DDF_QueryOrder fromCode(final String code) {
 		for (final DDF_QueryOrder known : ENUM_VALUES) {
 			if (known.code.equalsIgnoreCase(code)) {

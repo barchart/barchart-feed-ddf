@@ -9,6 +9,10 @@ package com.barchart.feed.ddf.historical.enums;
 
 import com.barchart.util.enums.EnumCodeString;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum DDF_QueryEodType.
+ */
 public enum DDF_QueryEodType implements EnumCodeString {
 
 	/** default */
@@ -44,9 +48,14 @@ public enum DDF_QueryEodType implements EnumCodeString {
 
 	;
 
+	/** The code. */
 	public final String code;
 
-	/** used in page url and as xml code */
+	/**
+	 * used in page url and as xml code.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public final String code() {
 		return code;
@@ -61,16 +70,32 @@ public enum DDF_QueryEodType implements EnumCodeString {
 	private static final DDF_QueryEodType[] ENUM_VALUES_NON_FUTURE = //
 	new DDF_QueryEodType[] { DAILY, WEEKLY, MONTHLY };
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ query eod type[]
+	 */
 	@Deprecated
 	public static final DDF_QueryEodType[] valuesUnsafe() {
 		return ENUM_VALUES;
 	}
 
+	/**
+	 * Values unsafe non future.
+	 *
+	 * @return the dD f_ query eod type[]
+	 */
 	@Deprecated
 	public static final DDF_QueryEodType[] valuesUnsafeNonFuture() {
 		return ENUM_VALUES_NON_FUTURE;
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ query eod type
+	 */
 	public static final DDF_QueryEodType fromCode(final String code) {
 		for (final DDF_QueryEodType known : ENUM_VALUES) {
 			if (known.code.equalsIgnoreCase(code)) {

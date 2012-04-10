@@ -13,6 +13,9 @@ abstract class RunnerDDF implements Runnable {
 
 	protected abstract void runCore();
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public final void run() {
 

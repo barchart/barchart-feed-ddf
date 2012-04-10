@@ -24,6 +24,10 @@ import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDDF_MarketService.
+ */
 public class TestDDF_MarketService {
 
 	private static Logger log = LoggerFactory
@@ -35,6 +39,11 @@ public class TestDDF_MarketService {
 	static final byte[] err2 = "3RJZ1,BAC55,66290K1,66270L1,66250M2,66240N1,66230O1,66370J2,66380I1,66400H1,66420G1,66430F2"
 			.getBytes();
 
+	/**
+	 * Test make dd f_ market base market do.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void testMakeDDF_MarketBaseMarketDo() throws Exception {
 

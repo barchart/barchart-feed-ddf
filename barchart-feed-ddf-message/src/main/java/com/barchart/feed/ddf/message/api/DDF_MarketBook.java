@@ -10,7 +10,9 @@ package com.barchart.feed.ddf.message.api;
 import com.barchart.feed.base.provider.market.provider.MarketDoBookEntry;
 import com.barchart.util.anno.NotMutable;
 
-/** represents ddf feed market depth snapshot */
+/**
+ * represents ddf feed market depth snapshot.
+ */
 @NotMutable
 public interface DDF_MarketBook extends DDF_MarketBase {
 

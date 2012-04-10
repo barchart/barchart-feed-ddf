@@ -22,8 +22,7 @@
 
 		<exec executable="${executable}">
 
-			<arg value="clean" />
-			<arg value="deploy" />
+			<arg value="site:run" />
 
 		</exec>
 	</target>

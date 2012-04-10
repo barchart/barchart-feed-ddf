@@ -13,7 +13,10 @@ import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeByte;
 import com.barchart.util.math.MathExtra;
 
-/** optional xml quote field */
+// TODO: Auto-generated Javadoc
+/**
+ * optional xml quote field.
+ */
 public enum DDF_QuoteMode implements EnumCodeByte, EnumByteOrdinal {
 
 	END_OF_DAY(_D_), //
@@ -28,20 +31,28 @@ public enum DDF_QuoteMode implements EnumCodeByte, EnumByteOrdinal {
 
 	UNKNOWN(QUEST), //
 
-	;
+	/* (non-Javadoc)
+  * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+  */
+ ;
 
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeByte#code()
+	 */
 	@Override
 	public final byte code() {
 		return code;
 	}
 
+	/** The ord. */
 	public final byte ord;
 
+	/** The code. */
 	public final byte code;
 
 	DDF_QuoteMode(final byte code) {
@@ -51,6 +62,11 @@ public enum DDF_QuoteMode implements EnumCodeByte, EnumByteOrdinal {
 
 	private final static DDF_QuoteMode[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ quote mode[]
+	 */
 	@Deprecated
 	public final static DDF_QuoteMode[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -61,10 +77,22 @@ public enum DDF_QuoteMode implements EnumCodeByte, EnumByteOrdinal {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ quote mode
+	 */
 	public final static DDF_QuoteMode fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ quote mode
+	 */
 	public final static DDF_QuoteMode fromCode(final byte code) {
 		for (final DDF_QuoteMode known : ENUM_VALUES) {
 			if (known.code == code) {
@@ -74,6 +102,11 @@ public enum DDF_QuoteMode implements EnumCodeByte, EnumByteOrdinal {
 		return UNKNOWN;
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}

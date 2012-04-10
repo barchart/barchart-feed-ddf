@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
 
+// TODO: Auto-generated Javadoc
 /**
  * convert DDF message frames into {@link DDF_BaseMessage} messages
  */
@@ -25,10 +26,16 @@ class MsgDecoderDDF extends SimpleChannelHandler {
 
 	static final Logger log = LoggerFactory.getLogger(MsgDecoderDDF.class);
 
+	/**
+	 * Instantiates a new msg decoder ddf.
+	 */
 	public MsgDecoderDDF() {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.jboss.netty.channel.SimpleChannelHandler#messageReceived(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.MessageEvent)
+	 */
 	@Override
 	public void messageReceived(final ChannelHandlerContext context,
 			final MessageEvent eventIn) throws Exception {

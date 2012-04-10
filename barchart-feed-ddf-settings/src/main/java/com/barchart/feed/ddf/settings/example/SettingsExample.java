@@ -13,16 +13,21 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.settings.provider.DDF_SettingsService;
 
+// TODO: Auto-generated Javadoc
 /**
- * 
- * 
- * */
+ * The Class SettingsExample.
+ */
 
 public class SettingsExample {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(SettingsExample.class);
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public final static void main(String[] args) {
 
 		final String username = System.getProperty("barchart.username");

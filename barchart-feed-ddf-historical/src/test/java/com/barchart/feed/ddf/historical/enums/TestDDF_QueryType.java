@@ -11,8 +11,15 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDDF_QueryType.
+ */
 public class TestDDF_QueryType {
 
+	/**
+	 * Test from code.
+	 */
 	@Test
 	public void testFromCode() {
 

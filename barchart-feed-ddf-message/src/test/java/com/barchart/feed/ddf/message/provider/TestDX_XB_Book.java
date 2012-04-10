@@ -33,12 +33,26 @@ import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.provider.ValueBuilder;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDX_XB_Book.
+ */
 public class TestDX_XB_Book extends TestDDFBase {
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception the exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -47,6 +61,9 @@ public class TestDX_XB_Book extends TestDDFBase {
 	final byte[] baXBsp = "%<BOOK askcount=\"10\" askprices=\"110000,110025,110050,110075,110100,110125,110150,110175,110200,110225\" asksizes=\"247,794,646,868,811,1049,830,1244,2287,694\" basecode=\"A\" bidcount=\"10\" bidprices=\"109975,109950,109925,109900,109875,109850,109825,109800,109775,109750\" bidsizes=\"162,582,692,698,953,680,819,931,958,1166\" symbol=\"ESM0_ESZ0\"/>"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode spread xml.
+	 */
 	@Test
 	public void testDecodeSpreadXML() {
 
@@ -73,6 +90,9 @@ public class TestDX_XB_Book extends TestDDFBase {
 	final byte[] baXB = "%<BOOK askcount=\"10\" askprices=\"110000,110025,110050,110075,110100,110125,110150,110175,110200,110225\" asksizes=\"247,794,646,868,811,1049,830,1244,2287,694\" basecode=\"A\" bidcount=\"10\" bidprices=\"109975,109950,109925,109900,109875,109850,109825,109800,109775,109750\" bidsizes=\"162,582,692,698,953,680,819,931,958,1166\" symbol=\"ESM0\"/>"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode xml.
+	 */
 	@Test
 	public void testDecodeXML() {
 
@@ -179,6 +199,9 @@ public class TestDX_XB_Book extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test decode encode xml.
+	 */
 	@Test
 	public void testDecodeEncodeXML() {
 
@@ -214,6 +237,9 @@ public class TestDX_XB_Book extends TestDDFBase {
 				ValueBuilder.newPrice(mant, exp), ValueBuilder.newSize(size));
 	}
 
+	/**
+	 * Test to string.
+	 */
 	@Test
 	public void testToString() {
 
@@ -232,6 +258,9 @@ public class TestDX_XB_Book extends TestDDFBase {
 	final static byte[] baXB_1 = "%<BOOK askcount=\"10\" askprices=\"117025,117050,117075,117100,117125,117150,117175,117200,117225,117250\" asksizes=\"389,798,1356,1382,1251,2036,2009,1628,2234,1335\" basecode=\"A\" bidcount=\"10\" bidprices=\"117000,116975,116950,116925,116900,116875,116850,116825,116800,116775\" bidsizes=\"1895,1761,1744,1207,1589,221,367,268,570,167\" symbol=\"ESZ1\"/>"
 			.getBytes();
 
+	/**
+	 * Test to string_1.
+	 */
 	@Test
 	public void testToString_1() {
 
@@ -247,6 +276,9 @@ public class TestDX_XB_Book extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test type.
+	 */
 	@Test
 	public void testType() {
 
@@ -260,6 +292,9 @@ public class TestDX_XB_Book extends TestDDFBase {
 	final static byte[] baXB_empty = "%<BOOK symbol=\"KCZ1\" basecode=\"A\" askcount=\"0\" bidcount=\"0\"/>"
 			.getBytes();
 
+	/**
+	 * Test empty.
+	 */
 	@Test
 	public void testEmpty() {
 

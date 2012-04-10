@@ -7,6 +7,10 @@
  */
 package com.barchart.feed.ddf.symbol.enums;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum DDF_Option.
+ */
 public enum DDF_Option {
 
 	/*
@@ -20,7 +24,8 @@ public enum DDF_Option {
 
 	UNKNOWN('?'), //
 
-	;
+	/** The code. */
+ ;
 
 	public final char code;
 
@@ -28,6 +33,12 @@ public enum DDF_Option {
 		this.code = code;
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ option
+	 */
 	public final static DDF_Option fromCode(final char code) {
 		switch (code) {
 		case 'c':
@@ -41,11 +52,23 @@ public enum DDF_Option {
 		}
 	}
 
+	/**
+	 * Checks if is valid.
+	 *
+	 * @param code the code
+	 * @return true, if is valid
+	 */
 	public final static boolean isValid(final char code) {
 		final DDF_Option indicator = fromCode(code);
 		return indicator != UNKNOWN;
 	}
 
+	/**
+	 * From option year.
+	 *
+	 * @param indicator the indicator
+	 * @return the dD f_ option
+	 */
 	public final static DDF_Option fromOptionYear(final DDF_OptionYear indicator) {
 		switch (indicator) {
 		case CALL_0:

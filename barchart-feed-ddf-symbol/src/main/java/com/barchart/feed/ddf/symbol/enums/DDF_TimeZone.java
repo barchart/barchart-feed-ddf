@@ -13,6 +13,7 @@ import com.barchart.util.enums.EnumCodeString;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.Value;
 
+// TODO: Auto-generated Javadoc
 /**
  * ddf centric time zones
  * 
@@ -41,17 +42,23 @@ public enum DDF_TimeZone implements EnumCodeString, Value<DDF_TimeZone> {
 	 */
 	LOCAL("", DateTimeZone.getDefault()), //
 
-	;
+	/** The ord. */
+ ;
 
 	public final byte ord;
 
+	/** The code. */
 	public final String code;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeString#code()
+	 */
 	@Override
 	public final String code() {
 		return code;
 	}
 
+	/** The zone. */
 	public final DateTimeZone zone;
 
 	private DDF_TimeZone(final String code, final DateTimeZone zone) {
@@ -67,6 +74,11 @@ public enum DDF_TimeZone implements EnumCodeString, Value<DDF_TimeZone> {
 
 	private final static DDF_TimeZone[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ time zone[]
+	 */
 	@Deprecated
 	public final static DDF_TimeZone[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -77,14 +89,31 @@ public enum DDF_TimeZone implements EnumCodeString, Value<DDF_TimeZone> {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != LOCAL;
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ time zone
+	 */
 	public final static DDF_TimeZone fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ time zone
+	 */
 	public final static DDF_TimeZone fromCode(final String code) {
 		for (final DDF_TimeZone known : ENUM_VALUES) {
 			if (known.code.equalsIgnoreCase(code)) {
@@ -94,16 +123,25 @@ public enum DDF_TimeZone implements EnumCodeString, Value<DDF_TimeZone> {
 		return LOCAL;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.values.api.Value#freeze()
+	 */
 	@Override
 	public DDF_TimeZone freeze() {
 		return this;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.values.api.Value#isFrozen()
+	 */
 	@Override
 	public boolean isFrozen() {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.values.api.Value#isNull()
+	 */
 	@Override
 	public boolean isNull() {
 		return this == LOCAL;

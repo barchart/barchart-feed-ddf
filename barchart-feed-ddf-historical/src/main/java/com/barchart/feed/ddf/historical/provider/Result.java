@@ -18,6 +18,7 @@ import com.barchart.feed.ddf.historical.api.DDF_ResultListener;
 import com.barchart.feed.ddf.historical.enums.DDF_ResultStatus;
 import com.barchart.util.thread.Runner;
 
+// TODO: Auto-generated Javadoc
 class Result<E extends DDF_Entry> implements DDF_Result<E> {
 
 	// ////////////////////////////
@@ -82,11 +83,17 @@ class Result<E extends DDF_Entry> implements DDF_Result<E> {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_Result#getStatus()
+	 */
 	@Override
 	public DDF_ResultStatus getStatus() {
 		return status;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_Result#getStatusComment()
+	 */
 	@Override
 	public String getStatusComment() {
 		return statusComment;
@@ -94,6 +101,9 @@ class Result<E extends DDF_Entry> implements DDF_Result<E> {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_Result#runLoop(com.barchart.util.thread.Runner, java.util.List)
+	 */
 	@Override
 	public <R> void runLoop(final Runner<R, E> task, final List<R> list) {
 		progressStart();
@@ -110,6 +120,9 @@ class Result<E extends DDF_Entry> implements DDF_Result<E> {
 		progressFinish();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_Result#size()
+	 */
 	@Override
 	public int size() {
 		return entryList.size();
@@ -120,6 +133,9 @@ class Result<E extends DDF_Entry> implements DDF_Result<E> {
 		progressUpdate("entry list add interrupted");
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		progressStart();
@@ -133,11 +149,17 @@ class Result<E extends DDF_Entry> implements DDF_Result<E> {
 		return text.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_Result#get(int)
+	 */
 	@Override
 	public E get(final int index) {
 		return entryList.get(index);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_Result#asCSV()
+	 */
 	@Override
 	public String asCSV() {
 
@@ -160,6 +182,9 @@ class Result<E extends DDF_Entry> implements DDF_Result<E> {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_Result#getQuery()
+	 */
 	@Override
 	public DDF_Query<E> getQuery() {
 		return query.clone();

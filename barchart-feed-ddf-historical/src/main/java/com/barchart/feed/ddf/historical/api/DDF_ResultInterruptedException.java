@@ -7,9 +7,18 @@
  */
 package com.barchart.feed.ddf.historical.api;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DDF_ResultInterruptedException.
+ */
 @SuppressWarnings("serial")
 public final class DDF_ResultInterruptedException extends RuntimeException {
 
+	/**
+	 * Instantiates a new dD f_ result interrupted exception.
+	 *
+	 * @param message the message
+	 */
 	public DDF_ResultInterruptedException(final String message) {
 		super(message);
 	}

@@ -11,8 +11,9 @@ import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.*;
 
 import com.barchart.util.math.MathExtra;
 
+// TODO: Auto-generated Javadoc
 /**
- * market channel "permission" qualifiers
+ * market channel "permission" qualifiers.
  */
 public enum DDF_ExchangeChannel {
 
@@ -222,17 +223,18 @@ public enum DDF_ExchangeChannel {
 	/***/
 	UNKNOWN("", DDF_Exchange.UNKNOWN), //
 
-	;
+	/** The ord. */
+ ;
 
 	// /////////////////////
 
 	/** byte sized enum ordinal */
 	public final byte ord;
 
-	/** ddf encoding of this enum */
+	/** ddf encoding of this enum. */
 	public final String code;
 
-	/** ddf exchange associated with "permissions" exchange */
+	/** ddf exchange associated with "permissions" exchange. */
 	public final DDF_Exchange exchange;
 
 	// /////////////////////
@@ -245,6 +247,11 @@ public enum DDF_ExchangeChannel {
 
 	private final static DDF_ExchangeChannel[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ exchange channel[]
+	 */
 	@Deprecated
 	public final static DDF_ExchangeChannel[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -255,6 +262,12 @@ public enum DDF_ExchangeChannel {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ exchange channel
+	 */
 	public final static DDF_ExchangeChannel fromCode(final String code) {
 		for (final DDF_ExchangeChannel known : ENUM_VALUES) {
 			if (known.code.equalsIgnoreCase(code)) {
@@ -264,10 +277,21 @@ public enum DDF_ExchangeChannel {
 		return UNKNOWN;
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ exchange channel
+	 */
 	public final static DDF_ExchangeChannel fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}

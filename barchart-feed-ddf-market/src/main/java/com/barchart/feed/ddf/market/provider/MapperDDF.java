@@ -59,23 +59,33 @@ import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueConst;
 
+// TODO: Auto-generated Javadoc
 @ThreadSafe
 class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MessageVisitor#visit(com.barchart.feed.ddf.message.api.DDF_ControlResponse, java.lang.Object)
+	 */
 	@Override
 	public Void visit(final DDF_ControlResponse message, final MarketDo market) {
 		// not used
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MessageVisitor#visit(com.barchart.feed.ddf.message.api.DDF_ControlTimestamp, java.lang.Object)
+	 */
 	@Override
 	public Void visit(final DDF_ControlTimestamp message, final MarketDo market) {
 		// not used
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MessageVisitor#visit(com.barchart.feed.ddf.message.api.DDF_MarketBook, java.lang.Object)
+	 */
 	@Override
 	public Void visit(final DDF_MarketBook message, final MarketDo market) {
 
@@ -88,6 +98,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MessageVisitor#visit(com.barchart.feed.ddf.message.api.DDF_MarketBookTop, java.lang.Object)
+	 */
 	@Override
 	public Void visit(final DDF_MarketBookTop message, final MarketDo market) {
 
@@ -100,12 +113,18 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MessageVisitor#visit(com.barchart.feed.ddf.message.api.DDF_MarketCondition, java.lang.Object)
+	 */
 	@Override
 	public Void visit(final DDF_MarketCondition message, final MarketDo market) {
 		log.error("TODO : \n{}", message);
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MessageVisitor#visit(com.barchart.feed.ddf.message.api.DDF_MarketCuvol, java.lang.Object)
+	 */
 	@Override
 	public Void visit(final DDF_MarketCuvol message, final MarketDo market) {
 
@@ -118,6 +137,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MessageVisitor#visit(com.barchart.feed.ddf.message.api.DDF_MarketParameter, java.lang.Object)
+	 */
 	@Override
 	public Void visit(final DDF_MarketParameter message, final MarketDo market) {
 
@@ -284,7 +306,13 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 	}
 
-	/** via feed XQ snapshot or web URL lookup */
+	/**
+	 * via feed XQ snapshot or web URL lookup.
+	 *
+	 * @param message the message
+	 * @param market the market
+	 * @return the void
+	 */
 	@Override
 	public Void visit(final DDF_MarketQuote message, final MarketDo market) {
 
@@ -363,7 +391,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	}
 
 	/**
-	 * via xml quote
+	 * via xml quote.
+	 *
+	 * @param message the message
+	 * @param market the market
+	 * @return the void
 	 */
 	@Override
 	public Void visit(final DDF_MarketSession message, final MarketDo market) {
@@ -385,7 +417,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	}
 
 	/**
-	 * via feed message 21
+	 * via feed message 21.
+	 *
+	 * @param message the message
+	 * @param market the market
+	 * @return the void
 	 */
 	@Override
 	public Void visit(final DDF_MarketSnapshot message, final MarketDo market) {
@@ -537,6 +573,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MessageVisitor#visit(com.barchart.feed.ddf.message.api.DDF_MarketTrade, java.lang.Object)
+	 */
 	@Override
 	public Void visit(final DDF_MarketTrade message, final MarketDo market) {
 

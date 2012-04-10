@@ -26,7 +26,10 @@ import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeChar;
 import com.barchart.util.math.MathExtra;
 
-/** subset of supported ddf messages */
+// TODO: Auto-generated Javadoc
+/**
+ * subset of supported ddf messages.
+ */
 public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/* ### CTRL messages ### */
@@ -107,38 +110,46 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 	/** place holder for unsupported message types */
 	UNKNOWN(_0_, _0_, Void.class), //
 
-	;
+	/* (non-Javadoc)
+  * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+  */
+ ;
 
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeChar#code()
+	 */
 	@Override
 	public final char code() {
 		return code;
 	}
 
-	/** ordinal of this enum */
+	/** ordinal of this enum. */
 	public final byte ord;
 
-	/** ddf classifier : "message record" */
+	/** ddf classifier : "message record". */
 	public final byte record;
 
-	/** ddf classifier : "message sub-record" */
+	/** ddf classifier : "message sub-record". */
 	public final byte subRecord;
 
-	/**
-	 * ddf classifier : "code = record (high byte) & sub-record (low byte)"
-	 * packed in a char letter
-	 */
+	/** ddf classifier : "code = record (high byte) & sub-record (low byte)" packed in a char letter. */
 	public final char code;
 
-	/** message interface used for this message type */
+	/** message interface used for this message type. */
 	public Class<?> klaz;
 
+	/** The is control timestamp. */
 	public final boolean isControlTimestamp;
+	
+	/** The is control response. */
 	public final boolean isControlResponse;
+	
+	/** The is market message. */
 	public final boolean isMarketMessage;
 
 	private DDF_MessageType(final int record, final int subRecord,
@@ -159,6 +170,11 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	private final static DDF_MessageType[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ message type[]
+	 */
 	@Deprecated
 	public final static DDF_MessageType[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -169,10 +185,23 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ message type
+	 */
 	public final static DDF_MessageType fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * From pair.
+	 *
+	 * @param record the record
+	 * @param subRecord the sub record
+	 * @return the dD f_ message type
+	 */
 	public final static DDF_MessageType fromPair(final byte record,
 			final byte subRecord) {
 		switch (record) {
@@ -261,6 +290,12 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 		}
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ message type
+	 */
 	public final static DDF_MessageType fromCode(final char code) {
 		return fromPair((byte) (code >>> 8), (byte) code);
 	}
@@ -290,6 +325,11 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 		}
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}

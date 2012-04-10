@@ -7,7 +7,9 @@
  */
 package com.barchart.feed.ddf.message.api;
 
-/** base type for ddf feed control messages */
+/**
+ * base type for ddf feed control messages.
+ */
 public interface DDF_ControlBase extends DDF_BaseMessage {
 
 }

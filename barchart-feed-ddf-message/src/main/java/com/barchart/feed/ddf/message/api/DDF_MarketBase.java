@@ -19,7 +19,9 @@ import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 
-/** base type for ddf feed market data messages */
+/**
+ * base type for ddf feed market data messages.
+ */
 @NotMutable
 public interface DDF_MarketBase extends DDF_BaseMessage, MarketMessage {
 

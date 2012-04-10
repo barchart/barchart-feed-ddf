@@ -44,6 +44,9 @@ import com.barchart.util.values.api.TimeValue;
 
 class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.provider.CodecDOM#decodeXML(org.w3c.dom.Element)
+	 */
 	@Override
 	public void decodeXML(final Element tag) throws Exception {
 

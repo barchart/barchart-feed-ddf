@@ -10,7 +10,9 @@ package com.barchart.feed.ddf.message.api;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.TimeValue;
 
-/** represents ddf feed server time stamp or heart beat message */
+/**
+ * represents ddf feed server time stamp or heart beat message.
+ */
 @NotMutable
 public interface DDF_ControlTimestamp extends DDF_ControlBase {
 

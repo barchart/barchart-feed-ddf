@@ -13,13 +13,23 @@ import com.barchart.feed.base.api.instrument.DefinitionService;
 import com.barchart.util.values.api.TextValue;
 
 /**
- * contract: instrument service should cache all previous requests
+ * contract: instrument service should cache all previous requests.
  */
 public interface DDF_DefinitionService extends
 		DefinitionService<DDF_Instrument> {
 
+	/**
+	 * 
+	 * @param symbolList
+	 * @return
+	 */
 	List<DDF_Instrument> lookup(List<String> symbolList);
 
+	/**
+	 * 
+	 * @param symbol
+	 * @return
+	 */
 	DDF_Instrument lookupDDF(TextValue symbol);
 
 }

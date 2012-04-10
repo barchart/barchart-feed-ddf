@@ -13,8 +13,9 @@ import static com.barchart.util.ascii.ASCII.*;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.Value;
 
+// TODO: Auto-generated Javadoc
 /**
- * ddf market channels "kind" qualifiers
+ * ddf market channels "kind" qualifiers.
  */
 public enum DDF_ExchangeKind implements Value<DDF_ExchangeKind> {
 
@@ -30,16 +31,18 @@ public enum DDF_ExchangeKind implements Value<DDF_ExchangeKind> {
 
 	UNKNOWN(QUEST, DDF_TimeZone.LOCAL), //
 
-	;
+	/** The ord. */
+ ;
 
 	// /////////////////////////
 
 	/** byte sized enum ordinal */
 	public final byte ord;
 
-	/** ddf encoding of this enum */
+	/** ddf encoding of this enum. */
 	public final byte code;
 
+	/** The time. */
 	public final DDF_TimeZone time;
 
 	// /////////////////////////
@@ -52,6 +55,11 @@ public enum DDF_ExchangeKind implements Value<DDF_ExchangeKind> {
 
 	private final static DDF_ExchangeKind[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ exchange kind[]
+	 */
 	@Deprecated
 	public final static DDF_ExchangeKind[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -62,6 +70,12 @@ public enum DDF_ExchangeKind implements Value<DDF_ExchangeKind> {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ exchange kind
+	 */
 	public final static DDF_ExchangeKind fromCode(final byte code) {
 		for (final DDF_ExchangeKind known : ENUM_VALUES) {
 			if (known.code == code) {
@@ -71,24 +85,44 @@ public enum DDF_ExchangeKind implements Value<DDF_ExchangeKind> {
 		return UNKNOWN;
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ exchange kind
+	 */
 	public final static DDF_ExchangeKind fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.values.api.Value#freeze()
+	 */
 	@Override
 	public DDF_ExchangeKind freeze() {
 		return this;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.values.api.Value#isFrozen()
+	 */
 	@Override
 	public boolean isFrozen() {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.values.api.Value#isNull()
+	 */
 	@Override
 	public boolean isNull() {
 		return this == UNKNOWN;

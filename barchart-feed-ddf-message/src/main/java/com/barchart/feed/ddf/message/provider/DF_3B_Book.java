@@ -28,9 +28,13 @@ import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
+// TODO: Auto-generated Javadoc
 /** zero size in size array means an empty book entry for this place */
 class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			final DDF_MessageVisitor<Result, Param> visitor, final Param param) {
@@ -61,7 +65,9 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 	/**
 	 * TODO @see TestData
 	 * 
-	 * XXX note: {@link MarketBook#ENTRY_TOP}
+	 * XXX note: {@link MarketBook#ENTRY_TOP}.
+	 *
+	 * @return the market do book entry[]
 	 */
 	@Override
 	public final MarketDoBookEntry[] entries() {

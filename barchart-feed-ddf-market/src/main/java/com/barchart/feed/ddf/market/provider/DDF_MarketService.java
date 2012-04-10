@@ -15,6 +15,10 @@ import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.util.anno.ThreadSafe;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DDF_MarketService.
+ */
 @ThreadSafe
 public class DDF_MarketService extends MakerBase<DDF_MarketBase> implements
 		DDF_MarketProvider {
@@ -25,6 +29,11 @@ public class DDF_MarketService extends MakerBase<DDF_MarketBase> implements
 		super(MarketType.DDF);
 	}
 
+	/**
+	 * New instance.
+	 *
+	 * @return the dD f_ market provider
+	 */
 	public static final DDF_MarketProvider newInstance() {
 		return new DDF_MarketService();
 	}

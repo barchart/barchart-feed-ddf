@@ -15,10 +15,14 @@ import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
+// TODO: Auto-generated Javadoc
 class DF_C1_Response extends BaseControl implements DDF_ControlResponse {
 
 	protected byte[] comment;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			DDF_MessageVisitor<Result, Param> visitor, Param param) {
@@ -34,6 +38,9 @@ class DF_C1_Response extends BaseControl implements DDF_ControlResponse {
 		millisUTC = System.currentTimeMillis();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#encodeDDF(java.nio.ByteBuffer)
+	 */
 	@Override
 	public final void encodeDDF(final ByteBuffer buffer) {
 
@@ -47,6 +54,9 @@ class DF_C1_Response extends BaseControl implements DDF_ControlResponse {
 	/* CLockout ip xxx.xxx.xxx */
 	/* + Successful login */
 	/* - Login failed */
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#decodeDDF(java.nio.ByteBuffer)
+	 */
 	@Override
 	public final void decodeDDF(final ByteBuffer buffer) {
 
@@ -71,6 +81,9 @@ class DF_C1_Response extends BaseControl implements DDF_ControlResponse {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_ControlResponse#getComment()
+	 */
 	@Override
 	public TextValue getComment() {
 		return ValueBuilder.newText(comment);

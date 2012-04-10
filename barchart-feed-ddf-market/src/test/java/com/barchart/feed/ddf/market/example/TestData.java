@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.ddf.market.example;
 
+/**
+ * The Class TestData.
+ */
 public class TestData {
 
 	/**

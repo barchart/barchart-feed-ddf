@@ -12,6 +12,10 @@ import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum DDF_ExpireYear.
+ */
 public enum DDF_ExpireYear {
 
 	/*
@@ -37,12 +41,19 @@ public enum DDF_ExpireYear {
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_ExpireYear.class);
 
+	/** The code. */
 	public final char code;
 
 	private DDF_ExpireYear(final char code) {
 		this.code = code;
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ expire year
+	 */
 	public static final DDF_ExpireYear fromCode(final char code) {
 		switch (code) {
 		case '0':
@@ -76,6 +87,9 @@ public enum DDF_ExpireYear {
 	 * Y9.getYear("millisUTC-some-time-in-2009") -> 2009
 	 * 
 	 * Y9.getYear("millisUTC-some-time-in-2013") -> 2019
+	 *
+	 * @param millisUTC the millis utc
+	 * @return the year this or next
 	 */
 	public final int getYearThisOrNext(final long millisUTC) {
 
@@ -102,6 +116,12 @@ public enum DDF_ExpireYear {
 
 	}
 
+	/**
+	 * Gets the year this or past.
+	 *
+	 * @param millisUTC the millis utc
+	 * @return the year this or past
+	 */
 	public final int getYearThisOrPast(final long millisUTC) {
 
 		// say 2
@@ -127,6 +147,12 @@ public enum DDF_ExpireYear {
 
 	}
 
+	/**
+	 * From date time.
+	 *
+	 * @param dateTime the date time
+	 * @return the dD f_ expire year
+	 */
 	public static final DDF_ExpireYear fromDateTime(final DateTime dateTime) {
 		final int year = dateTime.getYear();
 		final int yearOfDecade = year % 10;
@@ -136,20 +162,43 @@ public enum DDF_ExpireYear {
 	}
 
 	// NOTE: TIME_ZONE_CHICAGO
+	/**
+	 * From millis utc.
+	 *
+	 * @param millisUTC the millis utc
+	 * @return the dD f_ expire year
+	 */
 	public static final DDF_ExpireYear fromMillisUTC(final long millisUTC) {
 		final DateTime dateTime = new DateTime(millisUTC, DateTimeZone.UTC);
 		return fromDateTime(dateTime);
 	}
 
+	/**
+	 * Checks if is valid.
+	 *
+	 * @param code the code
+	 * @return true, if is valid
+	 */
 	public static final boolean isValid(final char code) {
 		final DDF_ExpireYear year = fromCode(code);
 		return year != UNKNOWN;
 	}
 
+	/**
+	 * Offset.
+	 *
+	 * @return the int
+	 */
 	public int offset() {
 		return code - '0';
 	}
 
+	/**
+	 * From option year.
+	 *
+	 * @param indicator the indicator
+	 * @return the dD f_ expire year
+	 */
 	public static final DDF_ExpireYear fromOptionYear(
 			final DDF_OptionYear indicator) {
 		switch (indicator) {

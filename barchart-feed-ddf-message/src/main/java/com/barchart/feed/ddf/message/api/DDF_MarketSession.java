@@ -12,7 +12,9 @@ import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 
-/** represents xml session; "extended snapshot info; part of quote" */
+/**
+ * represents xml session; "extended snapshot info; part of quote".
+ */
 @NotMutable
 public interface DDF_MarketSession extends DDF_MarketSnapshot {
 

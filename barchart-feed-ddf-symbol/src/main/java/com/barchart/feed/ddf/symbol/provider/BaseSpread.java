@@ -19,6 +19,9 @@ import com.barchart.feed.ddf.symbol.api.DDF_SymbolSpread;
 
 	protected List<T> legList;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.symbol.api.DDF_SymbolSpread#getLegList()
+	 */
 	public List<T> getLegList() {
 		return legList;
 	}

@@ -18,8 +18,14 @@ import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
 
+// TODO: Auto-generated Javadoc
 class EntryEod extends EntryBar implements DDF_EntryBarEod {
 
+	/**
+	 * Instantiates a new entry eod.
+	 *
+	 * @param instrument the instrument
+	 */
 	public EntryEod(final DDF_Instrument instrument) {
 		super(instrument);
 	}
@@ -30,6 +36,9 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 
 	// ///////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryBarEod#sizeInterest()
+	 */
 	@Override
 	public long sizeInterest() {
 		return sizeInterest;
@@ -38,7 +47,9 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 	//
 
 	/**
-	 * SYMBOL,YYYY­MM­DD,OPEN,HIGH,LOW,CLOSE,VOLUME[,OPENINTEREST]
+	 * SYMBOL,YYYY­MM­DD,OPEN,HIGH,LOW,CLOSE,VOLUME[,OPENINTEREST].
+	 *
+	 * @param inputLine the input line
 	 */
 	@Override
 	public void decode(final String inputLine) {
@@ -72,6 +83,9 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 			+ "PRICE_OPEN,PRICE_HIGH,PRICE_LOW,PRICE_CLOSE,"
 			+ "SIZE_VOLUME,SIZE_INTEREST";
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.EntryBar#encode()
+	 */
 	@Override
 	public String encode() {
 
@@ -105,11 +119,17 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.EntryBar#csvHeader()
+	 */
 	@Override
 	public String csvHeader() {
 		return HEADER;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.EntryBar#csvEntry()
+	 */
 	@Override
 	public String csvEntry() {
 

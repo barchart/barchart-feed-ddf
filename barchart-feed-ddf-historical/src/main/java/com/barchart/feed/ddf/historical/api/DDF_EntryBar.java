@@ -8,6 +8,9 @@
 package com.barchart.feed.ddf.historical.api;
 
 
+/**
+ * The Interface DDF_EntryBar.
+ */
 public interface DDF_EntryBar extends DDF_Entry {
 
 	long priceOpenMantissa();

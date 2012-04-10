@@ -12,7 +12,9 @@ import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
-/** represents ddf feed market cumulative volume snapshot */
+/**
+ * represents ddf feed market cumulative volume snapshot.
+ */
 @NotMutable
 public interface DDF_MarketCuvol extends DDF_MarketBase {
 

@@ -25,6 +25,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.util.bench.time.StopWatch;
 import com.barchart.util.thread.Runner;
 
+// TODO: Auto-generated Javadoc
 /**
  * http://ds01.ddfplus.com/historical/queryticks.ashx?username=USER
  * &password=PASS&symbol=GOOG &start=20090203090000 &end=20090203120000
@@ -34,6 +35,11 @@ public class HistoricalTicksExample {
 
 	private static final Logger log = LoggerFactory.getLogger(HistoricalTicksExample.class);
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public final static void main(final String[] args) {
 
 		/*

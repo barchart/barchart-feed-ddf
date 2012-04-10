@@ -23,7 +23,10 @@ import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
-/** keeps in memory cache */
+// TODO: Auto-generated Javadoc
+/**
+ * keeps in memory cache.
+ */
 @ThreadSafe
 public class ServiceMemoryDDF extends ServiceBasicDDF {
 
@@ -35,9 +38,15 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 	private final ConcurrentMap<TextValue, DDF_Instrument> ddfInstrumentMap = //
 	new ConcurrentHashMap<TextValue, DDF_Instrument>();
 	
+	/**
+	 * Instantiates a new service memory ddf.
+	 */
 	public ServiceMemoryDDF() {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#clear()
+	 */
 	@Override
 	public final void clear() {
 		instrumentMap.clear();
@@ -97,6 +106,9 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookupDDF(com.barchart.util.values.api.TextValue)
+	 */
 	@Override
 	public DDF_Instrument lookupDDF(TextValue symbol) {
 
@@ -128,6 +140,9 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookup(com.barchart.util.values.api.TextValue)
+	 */
 	@Override
 	public final DDF_Instrument lookup(final TextValue symbol) {
 
@@ -156,6 +171,9 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookup(java.util.List)
+	 */
 	@Override
 	public List<DDF_Instrument> lookup(final List<String> symbolList) {
 

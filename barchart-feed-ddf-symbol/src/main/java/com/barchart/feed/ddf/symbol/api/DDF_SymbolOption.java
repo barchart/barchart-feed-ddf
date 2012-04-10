@@ -9,6 +9,9 @@ package com.barchart.feed.ddf.symbol.api;
 
 import com.barchart.feed.ddf.symbol.enums.DDF_Option;
 
+/**
+ * The Interface DDF_SymbolOption.
+ */
 public interface DDF_SymbolOption extends DDF_SymbolExpiration {
 
 	String getStrike();

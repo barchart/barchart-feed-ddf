@@ -32,12 +32,26 @@ import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDF_28_BookTop.
+ */
 public class TestDF_28_BookTop extends TestDDFBase {
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception the exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -46,6 +60,9 @@ public class TestDF_28_BookTop extends TestDDFBase {
 	final byte[] ba28sp = "2HOZ9,8CJ10SP1HOM0,20911,5,20919,1,SGJFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode spread.
+	 */
 	@Test
 	public void testDecodeSpread() {
 
@@ -75,6 +92,9 @@ public class TestDF_28_BookTop extends TestDDFBase {
 	final byte[] ba28 = "2HOZ9,8CJ1020911,5,20919,1,SGJFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode.
+	 */
 	@Test
 	public void testDecode() {
 
@@ -107,11 +127,17 @@ public class TestDF_28_BookTop extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test encode.
+	 */
 	@Test
 	public void testEncode() {
 		testEncodeDecode(new DF_28_BookTop(), ba28);
 	}
 
+	/**
+	 * Test encode empty.
+	 */
 	@Test
 	public void testEncodeEmpty() {
 
@@ -148,6 +174,9 @@ public class TestDF_28_BookTop extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test type.
+	 */
 	@Test
 	public void testType() {
 

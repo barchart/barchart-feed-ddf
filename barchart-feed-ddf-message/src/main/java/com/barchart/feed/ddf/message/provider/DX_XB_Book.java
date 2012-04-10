@@ -21,8 +21,12 @@ import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
 
+// TODO: Auto-generated Javadoc
 class DX_XB_Book extends DF_3B_Book {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.DF_3B_Book#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			final DDF_MessageVisitor<Result, Param> visitor, final Param param) {
@@ -44,6 +48,9 @@ class DX_XB_Book extends DF_3B_Book {
 		return TAG;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#decodeXML(org.w3c.dom.Element)
+	 */
 	@Override
 	public final void decodeXML(final Element tag) {
 
@@ -91,6 +98,9 @@ class DX_XB_Book extends DF_3B_Book {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#encodeXML(org.w3c.dom.Element)
+	 */
 	@Override
 	public final void encodeXML(final Element tag) {
 
@@ -156,6 +166,9 @@ class DX_XB_Book extends DF_3B_Book {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#toString()
+	 */
 	@Override
 	public String toString() {
 		final Element tag = HelperXML.xmlNewDocument(xmlTagName());

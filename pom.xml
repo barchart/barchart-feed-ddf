@@ -32,8 +32,6 @@
 
 		<module>barchart-feed-ddf-datalink</module>
 
-		<module>barchart-feed-ddf-newslink</module>
-
 		<module>barchart-feed-ddf-market</module>
 
 		<module>barchart-feed-ddf-bundle</module>

@@ -13,6 +13,11 @@ import com.barchart.feed.ddf.historical.enums.DDF_ResultStatus;
 import com.barchart.util.thread.Runner;
 import com.barchart.util.thread.RunnerLoop;
 
+/**
+ * The Interface DDF_Result.
+ *
+ * @param <E> the element type
+ */
 public interface DDF_Result<E extends DDF_Entry> extends RunnerLoop<E> {
 
 	/** clone of original query */

@@ -16,6 +16,7 @@ import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeByte;
 import com.barchart.util.math.MathExtra;
 
+// TODO: Auto-generated Javadoc
 /** a.k.a base code */
 public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
@@ -45,68 +46,58 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	UNKNOWN(QUEST, 0, DEC_Z00), //
 
-	;
+	/* (non-Javadoc)
+  * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+  */
+ ;
 
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeByte#code()
+	 */
 	@Override
 	public final byte code() {
 		return baseCode;
 	}
 
-	/**
-	 * form #1 of ddf price exponent encoding
-	 */
+	/** form #1 of ddf price exponent encoding. */
 	public final byte baseCode;
 
-	/**
-	 * form #2 of ddf price exponent encoding
-	 */
+	/** form #2 of ddf price exponent encoding. */
 	public final int unitCode;
 
-	/**
-	 * byte sized ordinal of this enum
-	 */
+	/** byte sized ordinal of this enum. */
 	public final byte ord;
 
-	/**
-	 * base-10 exponent and denominator, regardless of enum base
-	 */
+	/** base-10 exponent and denominator, regardless of enum base. */
 	public final int decimalExponent;
+	
+	/** The decimal denominator. */
 	public final long decimalDenominator;
 
-	/**
-	 * base-2 or base-10 exponent and denominator, depending on enum base
-	 */
+	/** base-2 or base-10 exponent and denominator, depending on enum base. */
 	public final int nativeExponent;
+	
+	/** The native denominator. */
 	public final long nativeDenominator;
 
-	/**
-	 * number of digits needed to display fraction in native form
-	 */
+	/** number of digits needed to display fraction in native form. */
 	public final int spaces;
 
-	/**
-	 * "positive" difference between native and decimal spaces
-	 */
+	/** "positive" difference between native and decimal spaces. */
 	public final long spacesDenomPlus;
 
-	/**
-	 * "negative" difference between native and decimal spaces
-	 */
+	/** "negative" difference between native and decimal spaces. */
 	public final long spacesDenomMinus;
 
-	/**
-	 * base generic fraction api enum used by ddf fraction enum
-	 */
+	/** base generic fraction api enum used by ddf fraction enum. */
 	public final Fraction fraction;
 
-	/**
-	 * convenience flag to differentiate base-2 vs base-10 fractions
-	 */
+	/** convenience flag to differentiate base-2 vs base-10 fractions. */
 	public final boolean isBinary;
 
 	private DDF_Fraction(final byte baseCode, final int unitCode,
@@ -135,6 +126,11 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	private final static DDF_Fraction[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ fraction[]
+	 */
 	@Deprecated
 	public final static DDF_Fraction[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -147,6 +143,12 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	// TODO optimize: replace with 2 tableswitch blocks;
 	// http://java.sun.com/docs/books/jvms/second_edition/html/Compiling.doc.html#14942
+	/**
+	 * From base code.
+	 *
+	 * @param baseCode the base code
+	 * @return the dD f_ fraction
+	 */
 	public final static DDF_Fraction fromBaseCode(final byte baseCode) {
 		for (final DDF_Fraction known : ENUM_VALUES) {
 			if (known.baseCode == baseCode) {
@@ -158,6 +160,12 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	// TODO optimize: replace with 2 tableswitch blocks;
 	// http://java.sun.com/docs/books/jvms/second_edition/html/Compiling.doc.html#14942
+	/**
+	 * From unit code.
+	 *
+	 * @param unitCode the unit code
+	 * @return the dD f_ fraction
+	 */
 	public final static DDF_Fraction fromUnitCode(final int unitCode) {
 		for (final DDF_Fraction known : ENUM_VALUES) {
 			if (known.unitCode == unitCode) {
@@ -168,6 +176,12 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 	}
 
 	// TODO optimize; replace with 1 tableswitch block
+	/**
+	 * From fraction.
+	 *
+	 * @param fraction the fraction
+	 * @return the dD f_ fraction
+	 */
 	public final static DDF_Fraction fromFraction(final Fraction fraction) {
 		for (final DDF_Fraction known : ENUM_VALUES) {
 			if (known.fraction == fraction) {
@@ -177,10 +191,21 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 		return UNKNOWN;
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ fraction
+	 */
 	public final static DDF_Fraction fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}

@@ -28,6 +28,7 @@ import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 import com.barchart.feed.ddf.util.HelperXML;
 
+// TODO: Auto-generated Javadoc
 class SettingsDDF implements DDF_Settings {
 
 	private static final Logger log = LoggerFactory
@@ -41,11 +42,17 @@ class SettingsDDF implements DDF_Settings {
 	private final String username;
 	private final String password;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getAuthUser()
+	 */
 	@Override
 	public final String getAuthUser() {
 		return username;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getAuthPass()
+	 */
 	@Override
 	public String getAuthPass() {
 		return password;
@@ -105,16 +112,25 @@ class SettingsDDF implements DDF_Settings {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getLogin()
+	 */
 	@Override
 	public LoginDDF getLogin() {
 		return login;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getServer(com.barchart.feed.ddf.settings.enums.DDF_ServerType)
+	 */
 	@Override
 	public DDF_Server getServer(final DDF_ServerType type) {
 		return serverMap.get(type);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "" + //
@@ -125,6 +141,9 @@ class SettingsDDF implements DDF_Settings {
 				"";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#isValid(com.barchart.feed.ddf.settings.enums.DDF_ServerType)
+	 */
 	@Override
 	public boolean isValid(final DDF_ServerType type) {
 		if (!login.isValid()) {
@@ -141,6 +160,9 @@ class SettingsDDF implements DDF_Settings {
 	}
 
 	// @SuppressWarnings("deprecation")
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#isValidLogin()
+	 */
 	@Override
 	public boolean isValidLogin() {
 		return login.isValid();
@@ -148,6 +170,9 @@ class SettingsDDF implements DDF_Settings {
 
 	private String comment = "";
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getCommentDDF()
+	 */
 	@Override
 	public String getCommentDDF() {
 		return comment;

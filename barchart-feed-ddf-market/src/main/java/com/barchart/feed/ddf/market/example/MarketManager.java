@@ -30,14 +30,10 @@ import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.util.FeedDDF;
 
+// TODO: Auto-generated Javadoc
 /**
- * This class can be removed, it should only be created in the MarketManager
- * example Use the DDF_MarketServiceFacade instead
- * 
- * @author g-litchfield
- * @deprecated
+ * The Class MarketManager.
  */
-@Deprecated
 public class MarketManager implements DDF_FeedHandler, MarketRegListener {
 
 	private static final Logger log = LoggerFactory
@@ -46,6 +42,9 @@ public class MarketManager implements DDF_FeedHandler, MarketRegListener {
 	private final DDF_FeedClient client;
 	private final DDF_MarketProvider maker;
 
+	/**
+	 * Instantiates a new market manager.
+	 */
 	public MarketManager() {
 
 		final Executor runner = new Executor() {
@@ -63,6 +62,13 @@ public class MarketManager implements DDF_FeedHandler, MarketRegListener {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.datalink.api.DDF_FeedHandler#handleEvent(com.barchart
+	 * .feed.ddf.datalink.enums.DDF_FeedEvent)
+	 */
 	@Override
 	public void handleEvent(final DDF_FeedEvent event) {
 
@@ -70,6 +76,13 @@ public class MarketManager implements DDF_FeedHandler, MarketRegListener {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.datalink.api.DDF_FeedHandler#handleMessage(com.
+	 * barchart.feed.ddf.message.api.DDF_BaseMessage)
+	 */
 	@Override
 	public void handleMessage(final DDF_BaseMessage message) {
 
@@ -85,6 +98,14 @@ public class MarketManager implements DDF_FeedHandler, MarketRegListener {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.barchart.feed.base.api.market.provider.MarketRegListener#
+	 * onRegistrationChange
+	 * (com.barchart.feed.base.api.instrument.values.MarketInstrument,
+	 * java.util.Set)
+	 */
 	@Override
 	public void onRegistrationChange(final MarketInstrument instrument,
 			final Set<MarketEvent> events) {
@@ -104,10 +125,20 @@ public class MarketManager implements DDF_FeedHandler, MarketRegListener {
 
 	}
 
+	/**
+	 * Gets the maker.
+	 * 
+	 * @return the maker
+	 */
 	public MarketMaker getMaker() {
 		return maker;
 	}
 
+	/**
+	 * Gets the client.
+	 * 
+	 * @return the client
+	 */
 	public DDF_FeedClient getClient() {
 		return client;
 	}

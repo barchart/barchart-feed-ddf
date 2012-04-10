@@ -12,6 +12,11 @@ import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 
 class EntryMinsNearby extends EntryBar implements DDF_EntryBarMinNearby {
 
+	/**
+	 * Instantiates a new entry mins nearby.
+	 *
+	 * @param instrument the instrument
+	 */
 	public EntryMinsNearby(final DDF_Instrument instrument) {
 		super(instrument);
 	}

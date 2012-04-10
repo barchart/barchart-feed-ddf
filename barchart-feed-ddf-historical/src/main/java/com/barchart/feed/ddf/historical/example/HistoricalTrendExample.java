@@ -28,7 +28,9 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.util.ValUtil;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class HistoricalTrendExample.
  */
 
 public class HistoricalTrendExample {
@@ -36,6 +38,11 @@ public class HistoricalTrendExample {
 	private static final Logger log = LoggerFactory
 			.getLogger(HistoricalTrendExample.class);
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public final static void main(final String[] args) {
 
 		/*

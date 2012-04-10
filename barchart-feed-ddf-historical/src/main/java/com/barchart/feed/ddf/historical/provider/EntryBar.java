@@ -18,8 +18,14 @@ import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
 
+// TODO: Auto-generated Javadoc
 abstract class EntryBar extends Entry implements DDF_EntryBar {
 
+	/**
+	 * Instantiates a new entry bar.
+	 *
+	 * @param instrument the instrument
+	 */
 	public EntryBar(final DDF_Instrument instrument) {
 		super(instrument);
 	}
@@ -37,26 +43,41 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 
 	// ///////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryBar#priceCloseMantissa()
+	 */
 	@Override
 	public long priceCloseMantissa() {
 		return priceCloseMantissa;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryBar#priceHighMantissa()
+	 */
 	@Override
 	public long priceHighMantissa() {
 		return priceHighMantissa;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryBar#priceLowMantissa()
+	 */
 	@Override
 	public long priceLowMantissa() {
 		return priceLowMantissa;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryBar#priceOpenMantissa()
+	 */
 	@Override
 	public long priceOpenMantissa() {
 		return priceOpenMantissa;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryBar#sizeVolume()
+	 */
 	@Override
 	public long sizeVolume() {
 		return sizeVolume;
@@ -67,7 +88,9 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 	/**
 	 * YYYY­MM­DD HH:MM,TRADING_DAY,
 	 * 
-	 * OPEN,HIGH,LOW,CLOSE,VOLUME
+	 * OPEN,HIGH,LOW,CLOSE,VOLUME.
+	 *
+	 * @param inputLine the input line
 	 */
 	@Override
 	public void decode(final String inputLine) {
@@ -91,6 +114,9 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.Entry#encode()
+	 */
 	@Override
 	public String encode() {
 
@@ -122,11 +148,17 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 	static final String HEADER = "INDEX,SYMBOL,MILLIS_UTC,DATE_TIME_ISO,TRADE_DAY,"
 			+ "PRICE_OPEN,PRICE_HIGH,PRICE_LOW,PRICE_CLOSE," + "SIZE_VOLUME";
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.Entry#csvHeader()
+	 */
 	@Override
 	public String csvHeader() {
 		return HEADER;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.Entry#csvEntry()
+	 */
 	@Override
 	public String csvEntry() {
 

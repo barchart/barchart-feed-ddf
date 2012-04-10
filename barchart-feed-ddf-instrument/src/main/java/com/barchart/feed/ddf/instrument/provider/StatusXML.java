@@ -10,6 +10,7 @@ package com.barchart.feed.ddf.instrument.provider;
 import com.barchart.util.enums.EnumCodeString;
 import com.barchart.util.math.MathExtra;
 
+// TODO: Auto-generated Javadoc
 enum StatusXML implements EnumCodeString {
 
 	FOUND("200"), //
@@ -22,6 +23,9 @@ enum StatusXML implements EnumCodeString {
 
 	final String code;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeString#code()
+	 */
 	@Override
 	public final String code() {
 		return code;
@@ -33,6 +37,11 @@ enum StatusXML implements EnumCodeString {
 
 	private final static StatusXML[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the status xm l[]
+	 */
 	@Deprecated
 	public final static StatusXML[] valuesUnsafe() {
 		return ENUM_VALUES;

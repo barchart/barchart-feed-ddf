@@ -17,8 +17,18 @@ import com.barchart.feed.ddf.resolver.api.DDF_Resolver.Mode;
 import com.barchart.feed.ddf.resolver.provider.DDF_ResolverProvider;
 import com.barchart.util.thread.ExecutorCallable;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MainResolverIndex.
+ */
 public class MainResolverIndex {
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws Exception the exception
+	 */
 	public static void main(final String... args) throws Exception {
 
 		final String folder = MainConst.FOLDER;

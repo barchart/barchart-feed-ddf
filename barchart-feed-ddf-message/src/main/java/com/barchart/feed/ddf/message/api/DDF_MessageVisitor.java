@@ -9,6 +9,9 @@ package com.barchart.feed.ddf.message.api;
 
 /**
  * http://en.wikipedia.org/wiki/Visitor_pattern
+ *
+ * @param <Result> the generic type
+ * @param <Param> the generic type
  */
 public interface DDF_MessageVisitor<Result, Param> {
 

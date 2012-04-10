@@ -37,12 +37,17 @@ import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DDF_InstrumentProvider.
+ */
 @ThreadSafe
 public final class DDF_InstrumentProvider {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_InstrumentProvider.class);
 
+	/** The Constant NULL_INSTRUMENT. */
 	public static final DDF_Instrument NULL_INSTRUMENT = new InstrumentDDF();
 
 	static final List<DDF_Instrument> NULL_LIST = Collections
@@ -95,7 +100,11 @@ public final class DDF_InstrumentProvider {
 
 	}
 
-	/** bind weak reference to resolver instance */
+	/**
+	 * bind weak reference to resolver instance.
+	 *
+	 * @param instance the instance
+	 */
 	public static void bind(final DDF_DefinitionService instance) {
 
 		service = new WeakReference<DDF_DefinitionService>(instance);
@@ -103,21 +112,29 @@ public final class DDF_InstrumentProvider {
 	}
 
 	/**
-	 * cache via instrument service;
-	 * 
+	 * cache via instrument service;.
+	 *
+	 * @param symbol the symbol
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
 	public static DDF_Instrument find(final TextValue symbol) {
 		return instance().lookup(symbol);
 	}
 
+	/**
+	 * Find ddf.
+	 *
+	 * @param symbol the symbol
+	 * @return the dD f_ instrument
+	 */
 	public static DDF_Instrument findDDF(final TextValue symbol) {
 		return instance().lookupDDF(symbol);
 	}
 
 	/**
-	 * NOTE: cache via instrument service;
-	 * 
+	 * NOTE: cache via instrument service;.
+	 *
+	 * @param symbol the symbol
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
 	public static DDF_Instrument find(final String symbol) {
@@ -125,15 +142,21 @@ public final class DDF_InstrumentProvider {
 	}
 
 	/**
-	 * NOTE: cache via instrument service;
-	 * 
+	 * NOTE: cache via instrument service;.
+	 *
+	 * @param symbolList the symbol list
 	 * @return list with instruments or empty list;
 	 */
 	public static List<DDF_Instrument> find(final List<String> symbolList) {
 		return instance().lookup(symbolList);
 	}
 
-	/** NOTE: does NOT cache NOR use instrument service */
+	/**
+	 * NOTE: does NOT cache NOR use instrument service.
+	 *
+	 * @param symbolList the symbol list
+	 * @return the list
+	 */
 	public static List<DDF_Instrument> fetch(final List<String> symbolList) {
 
 		if (CodecHelper.isEmpty(symbolList)) {
@@ -149,13 +172,22 @@ public final class DDF_InstrumentProvider {
 
 	}
 
-	/** modifiable instrument */
+	/**
+	 * modifiable instrument.
+	 *
+	 * @return the dD f_ instrument do
+	 */
 	public static DDF_InstrumentDo newInstrumentDDF() {
 
 		return new InstrumentDDF();
 
 	}
 
+	/**
+	 * Override lookup url.
+	 *
+	 * @param b the b
+	 */
 	public static void overrideLookupURL(final boolean b) {
 		overrideURL = b;
 	}

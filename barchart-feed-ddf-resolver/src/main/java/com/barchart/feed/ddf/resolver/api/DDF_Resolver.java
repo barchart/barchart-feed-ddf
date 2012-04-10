@@ -12,6 +12,10 @@ import java.util.concurrent.Future;
 
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface DDF_Resolver.
+ */
 public interface DDF_Resolver {
 
 	enum Mode {
@@ -30,7 +34,10 @@ public interface DDF_Resolver {
 	/**
 	 * start index;
 	 * 
-	 * TODO @return readiness future
+	 * TODO @return readiness future.
+	 *
+	 * @param mode the mode
+	 * @return the future
 	 */
 	public Future<?> open(Mode mode);
 

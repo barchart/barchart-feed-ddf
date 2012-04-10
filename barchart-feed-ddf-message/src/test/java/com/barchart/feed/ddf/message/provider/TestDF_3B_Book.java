@@ -34,12 +34,26 @@ import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.provider.ValueBuilder;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDF_3B_Book.
+ */
 public class TestDF_3B_Book extends TestDDFBase {
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception the exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -51,6 +65,9 @@ public class TestDF_3B_Book extends TestDDFBase {
 	final byte[] ba3B_1 = "3ESZ1,BAMAA,118925K114,118900L1242,118875M952,118850N1216,118825O1021,118800P1058,118775Q1135,118750R1031,118725S866,118700T1345,118950J333,118975I853,119000H2551,119025G1221,119050F1323,119075E1401,119100D1656,119125C1150,119150B1192,119175A1050"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode_1.
+	 */
 	@Test
 	public void testDecode_1() {
 
@@ -78,6 +95,9 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test decode.
+	 */
 	@Test
 	public void testDecode() {
 
@@ -105,11 +125,17 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test encode.
+	 */
 	@Test
 	public void testEncode() {
 		testEncodeDecode(new DF_3B_Book(), ba3B);
 	}
 
+	/**
+	 * Test entries.
+	 */
 	@Test
 	public void testEntries() {
 
@@ -165,6 +191,9 @@ public class TestDF_3B_Book extends TestDDFBase {
 				ValueBuilder.newPrice(mant, exp), ValueBuilder.newSize(size));
 	}
 
+	/**
+	 * Test encode empty.
+	 */
 	@Test
 	public void testEncodeEmpty() {
 
@@ -195,6 +224,9 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test type.
+	 */
 	@Test
 	public void testType() {
 

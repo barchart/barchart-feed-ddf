@@ -12,6 +12,11 @@ import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 
 class EntryMins extends EntryBar implements DDF_EntryBarMin {
 
+	/**
+	 * Instantiates a new entry mins.
+	 *
+	 * @param instrument the instrument
+	 */
 	public EntryMins(final DDF_Instrument instrument) {
 		super(instrument);
 	}

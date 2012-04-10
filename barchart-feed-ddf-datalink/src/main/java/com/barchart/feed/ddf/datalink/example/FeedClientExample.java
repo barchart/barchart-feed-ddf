@@ -18,11 +18,21 @@ import com.barchart.feed.ddf.datalink.api.DDF_FeedHandler;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedService;
 import com.barchart.feed.ddf.util.FeedDDF;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FeedClientExample.
+ */
 public class FeedClientExample {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(FeedClientExample.class);
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws Exception the exception
+	 */
 	public static void main(final String[] args) throws Exception {
 
 		final Executor runner = Executors.newCachedThreadPool();

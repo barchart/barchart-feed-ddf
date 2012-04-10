@@ -21,6 +21,10 @@ import com.barchart.feed.base.api.market.values.Market;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MarketStateExample.
+ */
 public class MarketStateExample {
 
 	private static final Logger log = LoggerFactory.getLogger(MarketStateExample.class);
@@ -56,6 +60,12 @@ public class MarketStateExample {
 
 	static int i = 0;
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws Exception the exception
+	 */
 	public static void main(final String[] args) throws Exception {
 
 		final String username = System.getProperty("barchart.username");

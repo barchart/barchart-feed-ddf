@@ -12,6 +12,10 @@ import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum DDF_ExpireMonth.
+ */
 public enum DDF_ExpireMonth {
 
 	/*
@@ -53,8 +57,10 @@ public enum DDF_ExpireMonth {
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_ExpireMonth.class);
 
+	/** The code. */
 	public final char code;
 
+	/** The value. */
 	public final int value;
 
 	private DDF_ExpireMonth(char code, int value) {
@@ -62,6 +68,12 @@ public enum DDF_ExpireMonth {
 		this.value = value;
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ expire month
+	 */
 	public static final DDF_ExpireMonth fromCode(final char code) {
 		switch (code) {
 		case 'F':
@@ -99,11 +111,23 @@ public enum DDF_ExpireMonth {
 		}
 	}
 
+	/**
+	 * From millis utc.
+	 *
+	 * @param millisUTC the millis utc
+	 * @return the dD f_ expire month
+	 */
 	public static final DDF_ExpireMonth fromMillisUTC(final long millisUTC) {
 		final DateTime dateTime = new DateTime(millisUTC, DateTimeZone.UTC);
 		return fromDateTime(dateTime);
 	}
 
+	/**
+	 * From date time.
+	 *
+	 * @param dateTime the date time
+	 * @return the dD f_ expire month
+	 */
 	public static final DDF_ExpireMonth fromDateTime(final DateTime dateTime) {
 		if (dateTime == null) {
 			return UNKNOWN;
@@ -141,6 +165,12 @@ public enum DDF_ExpireMonth {
 		}
 	}
 
+	/**
+	 * Checks if is valid.
+	 *
+	 * @param code the code
+	 * @return true, if is valid
+	 */
 	public static final boolean isValid(final char code) {
 		final DDF_ExpireMonth month = fromCode(code);
 		return month != UNKNOWN;

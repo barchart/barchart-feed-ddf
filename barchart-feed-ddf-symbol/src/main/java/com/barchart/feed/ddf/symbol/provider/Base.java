@@ -9,23 +9,36 @@ package com.barchart.feed.ddf.symbol.provider;
 
 import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
 
+// TODO: Auto-generated Javadoc
 /*package*/abstract class Base implements DDF_Symbol {
 
 	protected String name = "";
 
 	protected String group = "";
 
+	/**
+	 * Instantiates a new base.
+	 */
 	public Base() {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.symbol.api.DDF_Symbol#getGroup()
+	 */
 	public String getGroup() {
 		return group;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.symbol.api.DDF_Symbol#getName()
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object otherSymbol) {
 		if (otherSymbol instanceof DDF_Symbol) {
@@ -35,6 +48,9 @@ import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		return name.hashCode();

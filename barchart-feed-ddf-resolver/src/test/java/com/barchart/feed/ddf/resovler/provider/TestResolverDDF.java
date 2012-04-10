@@ -11,8 +11,15 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestResolverDDF.
+ */
 public class TestResolverDDF {
 
+	/**
+	 * Test0.
+	 */
 	@Test
 	public void test0() {
 

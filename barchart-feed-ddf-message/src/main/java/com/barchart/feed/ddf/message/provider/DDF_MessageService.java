@@ -28,7 +28,10 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 
-/** TODO provide alternative DDF_InstrumentService registration */
+// TODO: Auto-generated Javadoc
+/**
+ * TODO provide alternative DDF_InstrumentService registration.
+ */
 public final class DDF_MessageService {
 
 	private static final Logger log = LoggerFactory
@@ -41,23 +44,54 @@ public final class DDF_MessageService {
 
 	/* corresponds to DDF_EMPTY "comma-nothing-comma" values */
 
+	/** The Constant DECIMAL_EMPTY. */
 	public static final DecimalValue DECIMAL_EMPTY = newDecimalMutable(0, 0);
+	
+	/** The Constant PRICE_EMPTY. */
 	public static final PriceValue PRICE_EMPTY = newPriceMutable(0, 0);
+	
+	/** The Constant SIZE_EMPTY. */
 	public static final SizeValue SIZE_EMPTY = newSizeMutable(0);
+	
+	/** The Constant TIME_EMPTY. */
 	public static final TimeValue TIME_EMPTY = newTimeMutable(0);
 
+	/**
+	 * Checks if is blank.
+	 *
+	 * @param value the value
+	 * @return true, if is blank
+	 */
 	public static final boolean isBlank(final DecimalValue value) {
 		return value == DECIMAL_EMPTY;
 	}
 
+	/**
+	 * Checks if is empty.
+	 *
+	 * @param value the value
+	 * @return true, if is empty
+	 */
 	public static final boolean isEmpty(final PriceValue value) {
 		return value == PRICE_EMPTY;
 	}
 
+	/**
+	 * Checks if is empty.
+	 *
+	 * @param value the value
+	 * @return true, if is empty
+	 */
 	public static final boolean isEmpty(final SizeValue value) {
 		return value == SIZE_EMPTY;
 	}
 
+	/**
+	 * Checks if is empty.
+	 *
+	 * @param value the value
+	 * @return true, if is empty
+	 */
 	public static final boolean isEmpty(final TimeValue value) {
 		return value == TIME_EMPTY;
 	}
@@ -66,23 +100,54 @@ public final class DDF_MessageService {
 
 	/* corresponds to DDF_CLEAR "comma-dash-comma" values */
 
+	/** The Constant DECIMAL_CLEAR. */
 	public static final DecimalValue DECIMAL_CLEAR = newDecimalMutable(0, 0);
+	
+	/** The Constant PRICE_CLEAR. */
 	public static final PriceValue PRICE_CLEAR = newPriceMutable(0, 0);
+	
+	/** The Constant SIZE_CLEAR. */
 	public static final SizeValue SIZE_CLEAR = newSizeMutable(0);
+	
+	/** The Constant TIME_CLEAR. */
 	public static final TimeValue TIME_CLEAR = newTimeMutable(0);
 
+	/**
+	 * Checks if is clear.
+	 *
+	 * @param value the value
+	 * @return true, if is clear
+	 */
 	public static final boolean isClear(final DecimalValue value) {
 		return value == DECIMAL_CLEAR;
 	}
 
+	/**
+	 * Checks if is clear.
+	 *
+	 * @param value the value
+	 * @return true, if is clear
+	 */
 	public static final boolean isClear(final PriceValue value) {
 		return value == PRICE_CLEAR;
 	}
 
+	/**
+	 * Checks if is clear.
+	 *
+	 * @param value the value
+	 * @return true, if is clear
+	 */
 	public static final boolean isClear(final SizeValue value) {
 		return value == SIZE_CLEAR;
 	}
 
+	/**
+	 * Checks if is clear.
+	 *
+	 * @param value the value
+	 * @return true, if is clear
+	 */
 	public static final boolean isClear(final TimeValue value) {
 		return value == TIME_CLEAR;
 	}
@@ -149,11 +214,25 @@ public final class DDF_MessageService {
 
 	}
 
+	/**
+	 * Decode.
+	 *
+	 * @param buffer the buffer
+	 * @return the dD f_ base message
+	 * @throws Exception the exception
+	 */
 	public static final DDF_BaseMessage decode(final ByteBuffer buffer)
 			throws Exception {
 		throw new UnsupportedOperationException("TODO");
 	}
 
+	/**
+	 * Decode.
+	 *
+	 * @param array the array
+	 * @return the dD f_ base message
+	 * @throws Exception the exception
+	 */
 	public static final DDF_BaseMessage decode(final byte[] array)
 			throws Exception {
 
@@ -232,6 +311,13 @@ public final class DDF_MessageService {
 
 	}
 
+	/**
+	 * Market book from url.
+	 *
+	 * @param symbolURI the symbol uri
+	 * @return the dD f_ market book
+	 * @throws Exception the exception
+	 */
 	public static final DDF_MarketBook marketBookFromUrl(final String symbolURI)
 			throws Exception {
 
@@ -250,6 +336,13 @@ public final class DDF_MessageService {
 
 	}
 
+	/**
+	 * Market cuvol from url.
+	 *
+	 * @param symbolURI the symbol uri
+	 * @return the dD f_ market cuvol
+	 * @throws Exception the exception
+	 */
 	public static final DDF_MarketCuvol marketCuvolFromUrl(
 			final String symbolURI) throws Exception {
 
@@ -268,6 +361,13 @@ public final class DDF_MessageService {
 
 	}
 
+	/**
+	 * Market quote from url.
+	 *
+	 * @param symbolURI the symbol uri
+	 * @return the dD f_ market quote
+	 * @throws Exception the exception
+	 */
 	public static final DDF_MarketQuote marketQuoteFromUrl(
 			final String symbolURI) throws Exception {
 

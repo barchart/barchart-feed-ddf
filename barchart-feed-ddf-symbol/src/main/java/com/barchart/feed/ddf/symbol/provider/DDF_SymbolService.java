@@ -29,6 +29,10 @@ import com.barchart.feed.ddf.symbol.enums.DDF_OptionYear;
 import com.barchart.util.ascii.ASCII;
 import com.barchart.util.values.api.TextValue;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DDF_SymbolService.
+ */
 public class DDF_SymbolService {
 
 	private static final Logger log = LoggerFactory
@@ -46,6 +50,12 @@ public class DDF_SymbolService {
 	private static final ConcurrentMap<TextValue, DDF_Symbol> symbolMap = //
 	new ConcurrentHashMap<TextValue, DDF_Symbol>();
 
+	/**
+	 * Find.
+	 *
+	 * @param text the text
+	 * @return the dD f_ symbol
+	 */
 	public static final DDF_Symbol find(final TextValue text) {
 		final TextValue guid = DDF_Symbology.lookupFromSymbol(text);
 		DDF_Symbol symbol = symbolMap.get(guid);
@@ -60,12 +70,21 @@ public class DDF_SymbolService {
 		return symbol;
 	}
 
+	/**
+	 * Clear cache.
+	 */
 	public static final void clearCache() {
 		symbolMap.clear();
 	}
 
 	// /////////////////////////
 
+	/**
+	 * Decode.
+	 *
+	 * @param symbolName the symbol name
+	 * @return the dD f_ symbol
+	 */
 	public static final DDF_Symbol decode(final String symbolName) {
 
 		if (symbolName == null) {
@@ -168,6 +187,14 @@ public class DDF_SymbolService {
 	}
 
 	// TODO
+	/**
+	 * New future.
+	 *
+	 * @param group the group
+	 * @param year the year
+	 * @param month the month
+	 * @return the dD f_ symbol future
+	 */
 	public static final DDF_SymbolFuture newFuture(final String group,
 			final DDF_ExpireYear year, final DDF_ExpireMonth month) {
 		final BaseFuture symbol = new BaseFuture();
@@ -179,6 +206,16 @@ public class DDF_SymbolService {
 	}
 
 	// TODO
+	/**
+	 * New option.
+	 *
+	 * @param group the group
+	 * @param year the year
+	 * @param month the month
+	 * @param strike the strike
+	 * @param indicator the indicator
+	 * @return the dD f_ symbol option
+	 */
 	public static final DDF_SymbolOption newOption(final String group,
 			final DDF_ExpireYear year, final DDF_ExpireMonth month,
 			final String strike, final DDF_Option indicator) {
@@ -186,27 +223,57 @@ public class DDF_SymbolService {
 	}
 
 	// TODO
+	/**
+	 * New spread future.
+	 *
+	 * @param symbolArray the symbol array
+	 * @return the dD f_ symbol spread
+	 */
 	public static final DDF_SymbolSpread<DDF_SymbolFuture> newSpreadFuture(
 			final DDF_SymbolFuture... symbolArray) {
 		return null;
 	}
 
 	// TODO
+	/**
+	 * New spread option.
+	 *
+	 * @param symbolArray the symbol array
+	 * @return the dD f_ symbol spread
+	 */
 	public static final DDF_SymbolSpread<DDF_SymbolOption> newSpreadOption(
 			final DDF_SymbolOption... symbolArray) {
 		return null;
 	}
 
 	// TODO
+	/**
+	 * New index.
+	 *
+	 * @param symbolName the symbol name
+	 * @return the dD f_ symbol index
+	 */
 	public static final DDF_SymbolIndex newIndex(final String symbolName) {
 		return null;
 	}
 
 	// TODO
+	/**
+	 * New equity.
+	 *
+	 * @param symbolName the symbol name
+	 * @return the dD f_ symbol equity
+	 */
 	public static final DDF_SymbolEquity newEquity(final String symbolName) {
 		return null;
 	}
 
+	/**
+	 * Find ddf.
+	 *
+	 * @param id the id
+	 * @return the dD f_ symbol
+	 */
 	public static DDF_Symbol findDDF(final TextValue id) {
 		// TODO Auto-generated method stub
 		return null;

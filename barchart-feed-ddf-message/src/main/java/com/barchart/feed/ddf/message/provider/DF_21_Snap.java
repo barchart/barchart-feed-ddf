@@ -19,8 +19,12 @@ import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
+// TODO: Auto-generated Javadoc
 class DF_21_Snap extends BaseMarket implements DDF_MarketSnapshot {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			final DDF_MessageVisitor<Result, Param> visitor, final Param param) {
@@ -64,71 +68,113 @@ class DF_21_Snap extends BaseMarket implements DDF_MarketSnapshot {
 
 	// //////////////////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapshot#getPriceAsk()
+	 */
 	@Override
 	public PriceValue getPriceAsk() {
 		return HelperDDF.newPriceDDF(priceAsk, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapshot#getPriceBid()
+	 */
 	@Override
 	public PriceValue getPriceBid() {
 		return HelperDDF.newPriceDDF(priceBid, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapshot#getPriceClose2()
+	 */
 	@Override
 	public PriceValue getPriceClose2() {
 		return HelperDDF.newPriceDDF(priceClose2, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapshot#getPriceLast()
+	 */
 	@Override
 	public PriceValue getPriceLast() {
 		return HelperDDF.newPriceDDF(priceLast, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapshot#getPriceLastPrevious()
+	 */
 	@Override
 	public PriceValue getPriceLastPrevious() {
 		return HelperDDF.newPriceDDF(priceLastPrevious, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapshot#getPriceOpen2()
+	 */
 	@Override
 	public PriceValue getPriceOpen2() {
 		return HelperDDF.newPriceDDF(priceOpen2, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapshot#getPriceSettle()
+	 */
 	@Override
 	public PriceValue getPriceSettle() {
 		return HelperDDF.newPriceDDF(priceSettle, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapshot#getSizeVolumePrevious()
+	 */
 	@Override
 	public SizeValue getSizeVolumePrevious() {
 		return HelperDDF.newSizeDDF(sizeVolumePrevious);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapBase#getPriceClose()
+	 */
 	@Override
 	public PriceValue getPriceClose() {
 		return HelperDDF.newPriceDDF(priceClose, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapBase#getPriceHigh()
+	 */
 	@Override
 	public PriceValue getPriceHigh() {
 		return HelperDDF.newPriceDDF(priceHigh, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapBase#getSizeInterest()
+	 */
 	@Override
 	public SizeValue getSizeInterest() {
 		return HelperDDF.newSizeDDF(sizeInterest);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapBase#getPriceLow()
+	 */
 	@Override
 	public PriceValue getPriceLow() {
 		return HelperDDF.newPriceDDF(priceLow, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapBase#getPriceOpen()
+	 */
 	@Override
 	public PriceValue getPriceOpen() {
 		return HelperDDF.newPriceDDF(priceOpen, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSnapBase#getSizeVolume()
+	 */
 	@Override
 	public SizeValue getSizeVolume() {
 		return HelperDDF.newSizeDDF(sizeVolume);

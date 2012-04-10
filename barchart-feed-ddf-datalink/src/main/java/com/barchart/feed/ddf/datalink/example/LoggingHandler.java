@@ -14,11 +14,18 @@ import com.barchart.feed.ddf.datalink.api.DDF_FeedHandler;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LoggingHandler.
+ */
 public class LoggingHandler implements DDF_FeedHandler {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(LoggingHandler.class);
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.datalink.api.DDF_FeedHandler#handleEvent(com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent)
+	 */
 	@Override
 	public void handleEvent(final DDF_FeedEvent event) {
 
@@ -26,6 +33,9 @@ public class LoggingHandler implements DDF_FeedHandler {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.datalink.api.DDF_FeedHandler#handleMessage(com.barchart.feed.ddf.message.api.DDF_BaseMessage)
+	 */
 	@Override
 	public void handleMessage(final DDF_BaseMessage message) {
 

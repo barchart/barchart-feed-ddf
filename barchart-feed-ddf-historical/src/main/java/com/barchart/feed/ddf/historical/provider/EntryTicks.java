@@ -14,8 +14,14 @@ import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 
+// TODO: Auto-generated Javadoc
 abstract class EntryTicks extends Entry {
 
+	/**
+	 * Instantiates a new entry ticks.
+	 *
+	 * @param instrument the instrument
+	 */
 	public EntryTicks(final DDF_Instrument instrument) {
 		super(instrument);
 	}
@@ -27,17 +33,27 @@ abstract class EntryTicks extends Entry {
 
 	// ///////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.Entry#getTradeDay()
+	 */
 	@Override
 	public DDF_TradeDay getTradeDay() {
 		return DDF_TradeDay.fromOrd(ordTradeDay);
 	}
 
+	/**
+	 * Gets the session.
+	 *
+	 * @return the session
+	 */
 	public DDF_Session getSession() {
 		return DDF_Session.fromOrd(ordSession);
 	}
 
 	/**
 	 * YYYY­MM­DD HH:MM:SS.FFF,TRADING_DAY,SESSION_CODE,...
+	 *
+	 * @param inputArray the input array
 	 */
 	@Override
 	public void decodeHead(final String[] inputArray) {

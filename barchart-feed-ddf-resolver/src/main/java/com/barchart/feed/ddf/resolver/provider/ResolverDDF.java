@@ -35,6 +35,7 @@ import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.util.thread.ExecutorCallable;
 import com.barchart.util.values.api.TextValue;
 
+// TODO: Auto-generated Javadoc
 class ResolverDDF extends ResolverState implements DDF_Resolver {
 
 	static final double RAM_BUFFER_SIZE_MB = 48.0;
@@ -103,6 +104,9 @@ class ResolverDDF extends ResolverState implements DDF_Resolver {
 
 	private Future<?> future;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.resolver.api.DDF_Resolver#open(com.barchart.feed.ddf.resolver.api.DDF_Resolver.Mode)
+	 */
 	@Override
 	public synchronized Future<?> open(final Mode mode) {
 
@@ -177,6 +181,9 @@ class ResolverDDF extends ResolverState implements DDF_Resolver {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.resolver.api.DDF_Resolver#searchLucene(java.lang.String)
+	 */
 	@Override
 	public List<DDF_Instrument> searchLucene(final String phrase)
 			throws Exception {
@@ -188,6 +195,9 @@ class ResolverDDF extends ResolverState implements DDF_Resolver {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.resolver.api.DDF_Resolver#searchSimple(java.lang.String)
+	 */
 	@Override
 	public List<DDF_Instrument> searchSimple(final String phrase)
 			throws Exception {
@@ -271,6 +281,9 @@ class ResolverDDF extends ResolverState implements DDF_Resolver {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.resolver.provider.ResolverState#close()
+	 */
 	@Override
 	public synchronized void close() {
 

@@ -17,12 +17,19 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.values.api.TimeValue;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDDF_TradeDay.
+ */
 public class TestDDF_TradeDay {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(TestDDF_TradeDay.class);
 
 	// same month past day
+	/**
+	 * Test trade date from0.
+	 */
 	@Test
 	public void testTradeDateFrom0() {
 
@@ -45,6 +52,9 @@ public class TestDDF_TradeDay {
 	}
 
 	// same month next day
+	/**
+	 * Test trade date from1.
+	 */
 	@Test
 	public void testTradeDateFrom1() {
 
@@ -67,6 +77,9 @@ public class TestDDF_TradeDay {
 	}
 
 	// past month past day
+	/**
+	 * Test trade date from2.
+	 */
 	@Test
 	public void testTradeDateFrom2() {
 
@@ -89,6 +102,9 @@ public class TestDDF_TradeDay {
 	}
 
 	// next month next day
+	/**
+	 * Test trade date from3.
+	 */
 	@Test
 	public void testTradeDateFrom3() {
 
@@ -111,6 +127,9 @@ public class TestDDF_TradeDay {
 	}
 
 	// same month same day
+	/**
+	 * Test trade date from5.
+	 */
 	@Test
 	public void testTradeDateFrom5() {
 

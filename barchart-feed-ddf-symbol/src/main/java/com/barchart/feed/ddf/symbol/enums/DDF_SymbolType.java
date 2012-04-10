@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.ddf.symbol.enums;
 
+/**
+ * The Enum DDF_SymbolType.
+ */
 public enum DDF_SymbolType {
 
 	//

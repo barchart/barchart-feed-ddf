@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 
+// TODO: Auto-generated Javadoc
 /**
- * Factory class for building FeedClientDDF
- * 
+ * Factory class for building FeedClientDDF.
+ *
  * @author g-litchfield
- * 
  */
 public class DDF_FeedService {
 
@@ -31,10 +31,10 @@ public class DDF_FeedService {
 	}
 
 	/**
-	 * Factory which defaults the DDF_ServerType to STREAM
-	 * 
-	 * @param runner
-	 * @return
+	 * Factory which defaults the DDF_ServerType to STREAM.
+	 *
+	 * @param runner the runner
+	 * @return the dD f_ feed client
 	 */
 	public static DDF_FeedClient newInstance(final Executor runner) {
 
@@ -45,11 +45,11 @@ public class DDF_FeedService {
 	}
 
 	/**
-	 * Factory which allows user specified DDF_ServerType
-	 * 
-	 * @param serverType
-	 * @param runner
-	 * @return
+	 * Factory which allows user specified DDF_ServerType.
+	 *
+	 * @param serverType the server type
+	 * @param runner the runner
+	 * @return the dD f_ feed client
 	 */
 	public static DDF_FeedClient newInstance(final DDF_ServerType serverType,
 			final Executor runner) {

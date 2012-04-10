@@ -25,13 +25,20 @@ import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.util.bench.time.StopWatch;
 import com.barchart.util.thread.Runner;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class HistoricalEodExample.
  */
 
 public class HistoricalEodExample {
 
 	private static final Logger log = LoggerFactory.getLogger(HistoricalEodExample.class);
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public final static void main(final String[] args) {
 
 		/*

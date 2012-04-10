@@ -30,6 +30,7 @@ import com.barchart.util.ascii.ASCII;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
+// TODO: Auto-generated Javadoc
 abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	BaseMarket() {
@@ -55,12 +56,18 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	// //////////////////////////////////////
 
 	// NOTE: invokes resolver
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getInstrument()
+	 */
 	@Override
 	public final DDF_Instrument getInstrument() {
 		return DDF_InstrumentProvider.findDDF(getId());
 	}
 
 	// NOTE: invokes parser
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getSymbol()
+	 */
 	@Override
 	public final DDF_Symbol getSymbol() {
 		return DDF_SymbolService.find(getId());
@@ -68,11 +75,17 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getDelay()
+	 */
 	@Override
 	public final int getDelay() {
 		return delay;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getFraction()
+	 */
 	@Override
 	public final DDF_Fraction getFraction() {
 		return DDF_Fraction.fromOrd(ordFraction);
@@ -82,6 +95,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		ordFraction = frac.ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getExchange()
+	 */
 	@Override
 	public final DDF_Exchange getExchange() {
 		return DDF_Exchange.fromOrd(ordExchange);
@@ -91,6 +107,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		ordExchange = exchange.ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getSession()
+	 */
 	@Override
 	public final DDF_Session getSession() {
 		return DDF_Session.fromOrd(ordSession);
@@ -100,6 +119,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		ordSession = session.ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getTradeDay()
+	 */
 	@Override
 	public final DDF_TradeDay getTradeDay() {
 		return DDF_TradeDay.fromOrd(ordTradeDay);
@@ -109,6 +131,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		ordTradeDay = day.ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getSpreadType()
+	 */
 	@Override
 	public final DDF_SpreadType getSpreadType() {
 		return DDF_SpreadType.fromOrd(ordSpread);
@@ -138,6 +163,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * 
 	 * for spread: <symbol1>_<symbol2>_..._<symbolN>
 	 */
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getId()
+	 */
 	@Override
 	public TextValue getId() {
 		return ValueBuilder.newText(getSymbolFull());
@@ -151,6 +179,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * ... body ...
 	 * 
 	 * ||<day><session><etx>||<time stamp>
+	 */
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#encodeDDF(java.nio.ByteBuffer)
 	 */
 	@Override
 	public final void encodeDDF(final ByteBuffer buffer) {
@@ -198,6 +229,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	// ######################
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#decodeDDF(java.nio.ByteBuffer)
+	 */
 	@Override
 	public final void decodeDDF(final ByteBuffer buffer) {
 		decodeHead(buffer);

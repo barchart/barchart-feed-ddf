@@ -11,12 +11,19 @@ import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.*;
 
 import com.barchart.feed.ddf.symbol.enums.DDF_SymbolType;
 
+// TODO: Auto-generated Javadoc
 /*package*/class OptionExtended extends OptionBasic {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.symbol.provider.OptionBasic#getType()
+	 */
 	public DDF_SymbolType getType() {
 		return DDF_SymbolType.OPTION_EXTENDED;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.symbol.provider.OptionBasic#toString()
+	 */
 	@Override
 	public String toString() {
 		return group + month.code + year.code + //

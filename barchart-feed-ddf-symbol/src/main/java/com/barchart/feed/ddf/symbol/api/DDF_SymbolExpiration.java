@@ -10,6 +10,9 @@ package com.barchart.feed.ddf.symbol.api;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireYear;
 
+/**
+ * The Interface DDF_SymbolExpiration.
+ */
 public interface DDF_SymbolExpiration extends DDF_Symbol {
 
 	DDF_ExpireYear getYear();

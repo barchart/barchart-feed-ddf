@@ -14,7 +14,7 @@ import com.barchart.util.values.api.SizeValue;
 
 /**
  * represents ddf feed market parameter message; carries additional price or
- * size value, depending on parameter type;
+ * size value, depending on parameter type;.
  */
 @NotMutable
 public interface DDF_MarketParameter extends DDF_MarketBase {

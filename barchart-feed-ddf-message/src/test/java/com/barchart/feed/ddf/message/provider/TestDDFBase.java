@@ -14,6 +14,12 @@ import java.util.Arrays;
 
 abstract class TestDDFBase {
 
+	/**
+	 * Test encode decode.
+	 *
+	 * @param msg the msg
+	 * @param arraySource the array source
+	 */
 	public void testEncodeDecode(final Base msg, final byte[] arraySource) {
 
 		final ByteBuffer source = ByteBuffer.wrap(arraySource);

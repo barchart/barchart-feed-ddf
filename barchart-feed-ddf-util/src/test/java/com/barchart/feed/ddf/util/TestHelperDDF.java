@@ -19,16 +19,33 @@ import org.junit.Test;
 
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestHelperDDF.
+ */
 public class TestHelperDDF {
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception the exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
 
+	/**
+	 * Test decode long string1.
+	 */
 	@Test
 	public void testDecodeLongString1() {
 		final long value = 125986235986125L;
@@ -39,6 +56,9 @@ public class TestHelperDDF {
 		assertEquals(value, result);
 	}
 
+	/**
+	 * Test decode long string1e.
+	 */
 	@Test(expected = IllegalStateException.class)
 	public void testDecodeLongString1e() {
 		final long value = 125986235986125L;
@@ -49,6 +69,9 @@ public class TestHelperDDF {
 		assertEquals(value, result);
 	}
 
+	/**
+	 * Test decode long string2.
+	 */
 	@Test
 	public void testDecodeLongString2() {
 		final long value = -125986235986125L;
@@ -59,6 +82,9 @@ public class TestHelperDDF {
 		assertEquals(value, result);
 	}
 
+	/**
+	 * Test decode long string2e.
+	 */
 	@Test(expected = IllegalStateException.class)
 	public void testDecodeLongString2e() {
 		final long value = -125986235986125L;
@@ -69,6 +95,9 @@ public class TestHelperDDF {
 		assertEquals(value, result);
 	}
 
+	/**
+	 * Test decode long string blank.
+	 */
 	@Test
 	public void testDecodeLongStringBlank() {
 		final long value = HelperDDF.DDF_EMPTY;
@@ -79,6 +108,9 @@ public class TestHelperDDF {
 		assertEquals(value, result);
 	}
 
+	/**
+	 * Test decode long string blank2.
+	 */
 	@Test
 	public void testDecodeLongStringBlank2() {
 		final long value = HelperDDF.DDF_EMPTY;
@@ -92,6 +124,9 @@ public class TestHelperDDF {
 		assertEquals(value, result);
 	}
 
+	/**
+	 * Test encode long blank.
+	 */
 	@Test
 	public void testEncodeLongBlank() {
 		final long value = HelperDDF.DDF_EMPTY;
@@ -101,6 +136,9 @@ public class TestHelperDDF {
 		assertEquals(",", result);
 	}
 
+	/**
+	 * Test encode long clear.
+	 */
 	@Test
 	public void testEncodeLongClear() {
 		final long value = HelperDDF.DDF_CLEAR;
@@ -110,6 +148,9 @@ public class TestHelperDDF {
 		assertEquals("-,", result);
 	}
 
+	/**
+	 * Test decode long string clear.
+	 */
 	@Test
 	public void testDecodeLongStringClear() {
 		final long value = HelperDDF.DDF_CLEAR;
@@ -120,6 +161,9 @@ public class TestHelperDDF {
 		assertEquals(value, result);
 	}
 
+	/**
+	 * Test decode long string clear2.
+	 */
 	@Test
 	public void testDecodeLongStringClear2() {
 		final long clear = HelperDDF.DDF_CLEAR;
@@ -133,6 +177,9 @@ public class TestHelperDDF {
 		assertEquals(clear, result);
 	}
 
+	/**
+	 * Test decode long string clear blank.
+	 */
 	@Test
 	public void testDecodeLongStringClearBlank() {
 		final long clear = HelperDDF.DDF_CLEAR;
@@ -151,6 +198,9 @@ public class TestHelperDDF {
 		assertEquals(clear, result);
 	}
 
+	/**
+	 * Test decode binary to decimal.
+	 */
 	@Test
 	public void testDecodeBinaryToDecimal() {
 
@@ -200,6 +250,9 @@ public class TestHelperDDF {
 
 	}
 
+	/**
+	 * Test encode decimal to binary.
+	 */
 	@Test
 	public void testEncodeDecimalToBinary() {
 

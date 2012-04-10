@@ -13,8 +13,9 @@ import static com.barchart.util.ascii.ASCII.*;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.Value;
 
+// TODO: Auto-generated Javadoc
 /**
- * dff market exchange channels
+ * dff market exchange channels.
  */
 public enum DDF_Exchange implements Value<DDF_Exchange> {
 
@@ -115,20 +116,21 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 
 	UNKNOWN(QUEST, DDF_ExchangeKind.UNKNOWN), //
 
-	;
+	/** The ord. */
+ ;
 
 	// ////////////////////////
 
 	/** byte sized enum ordinal */
 	public final byte ord;
 
-	/** ddf encoding of this enum */
+	/** ddf encoding of this enum. */
 	public final byte code;
 
-	/** ddf "kind" qualifier of this ddf exchange channel */
+	/** ddf "kind" qualifier of this ddf exchange channel. */
 	public final DDF_ExchangeKind kind;
 
-	/** free style exchange description; can be used in full text search */
+	/** free style exchange description; can be used in full text search. */
 	public final String description;
 
 	// ////////////////////////
@@ -154,6 +156,12 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ exchange
+	 */
 	public final static DDF_Exchange fromCode(final byte code) {
 		for (final DDF_Exchange known : ENUM_VALUES) {
 			if (known.code == code) {
@@ -163,10 +171,21 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 		return UNKNOWN;
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ exchange
+	 */
 	public final static DDF_Exchange fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}
@@ -184,6 +203,11 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 		}
 	}
 
+	/**
+	 * Checks if is nASDAQ.
+	 *
+	 * @return true, if is nASDAQ
+	 */
 	public final boolean isNASDAQ() {
 		switch (this) {
 		case NASDAQ:
@@ -196,16 +220,25 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.values.api.Value#freeze()
+	 */
 	@Override
 	public DDF_Exchange freeze() {
 		return this;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.values.api.Value#isFrozen()
+	 */
 	@Override
 	public boolean isFrozen() {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.values.api.Value#isNull()
+	 */
 	@Override
 	public boolean isNull() {
 		return this == UNKNOWN;

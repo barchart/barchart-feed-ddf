@@ -15,10 +15,11 @@ import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.util.FeedDDF;
 
+// TODO: Auto-generated Javadoc
 /**
  * flags for ddf jerq "go" command to activate specific information channels in
- * the feed
- * */
+ * the feed.
+ */
 public enum DDF_FeedInterest {
 
 	UNKNOWN('?'), //
@@ -31,12 +32,6 @@ public enum DDF_FeedInterest {
 	//
 
 	CUVOL_SNAPSHOT('c'), //
-	// CUVOL_UPDATE('C'), // not in jerq yet
-
-	//
-
-	// OHLC_SNAPSHOT('o'), // not in jerq yet
-	// OHLC_UPDATE('O'), // not in jerq yet
 
 	//
 
@@ -47,21 +42,39 @@ public enum DDF_FeedInterest {
 
 	private static final DDF_FeedInterest[] ENUM_VALS = values();
 
+	/**
+	 * Size.
+	 * 
+	 * @return the int
+	 */
 	public static final int size() {
 		return ENUM_VALS.length;
 	}
 
+	/**
+	 * Values unsafe.
+	 * 
+	 * @return the dD f_ feed interest[]
+	 */
 	@Deprecated
 	public static final DDF_FeedInterest[] valuesUnsafe() {
 		return ENUM_VALS;
 	}
 
+	/** The code. */
 	public final char code;
 
 	private DDF_FeedInterest(final char code) {
 		this.code = code;
 	}
 
+	/**
+	 * Of.
+	 * 
+	 * @param code
+	 *            the code
+	 * @return the dD f_ feed interest
+	 */
 	public static final DDF_FeedInterest of(final char code) {
 		for (final DDF_FeedInterest known : values()) {
 			if (known.code == code) {
@@ -73,6 +86,13 @@ public enum DDF_FeedInterest {
 
 	private static final String NONE = "";
 
+	/**
+	 * From.
+	 * 
+	 * @param eventSet
+	 *            the event set
+	 * @return the string
+	 */
 	public static final String from(final Set<MarketEvent> eventSet) {
 
 		if (eventSet == null || eventSet.isEmpty()) {
@@ -130,6 +150,15 @@ public enum DDF_FeedInterest {
 
 	}
 
+	/**
+	 * Command.
+	 * 
+	 * @param instrumentDDF
+	 *            the instrument ddf
+	 * @param eventSet
+	 *            the event set
+	 * @return the char sequence
+	 */
 	public static CharSequence command(final DDF_Instrument instrumentDDF,
 			final Set<MarketEvent> eventSet) {
 

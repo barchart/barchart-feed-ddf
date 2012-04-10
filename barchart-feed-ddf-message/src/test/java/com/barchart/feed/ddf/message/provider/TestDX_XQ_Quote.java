@@ -34,12 +34,26 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDX_XQ_Quote.
+ */
 public class TestDX_XQ_Quote extends TestDDFBase {
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception the exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -48,6 +62,9 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 	final byte[] baXQ0sp = "%<QUOTE symbol=\"ESM0_ESZ0\" name=\"E-Mini S&amp;P 500\" exchange=\"GBLX\" basecode=\"A\" pointvalue=\"50.0\" tickincrement=\"25\" ddfexchange=\"M\" lastupdate=\"20100615144110\" bid=\"109975\" bidsize=\"162\" ask=\"110000\" asksize=\"248\" mode=\"R\"><SESSION day=\"E\" session=\"G\" timestamp=\"20100615094112\" open=\"109025\" high=\"110175\" low=\"108850\" last=\"109975\" previous=\"109050\" tradesize=\"2\" volume=\"362318\" tradetime=\"20100615094111\" id=\"combined\"/><SESSION day=\"D\" session=\"G\" timestamp=\"20100614205606\" open=\"109050\" high=\"110600\" low=\"108875\" last=\"109050\" previous=\"108925\" tradesize=\"1\" openinterest=\"1482925\" volume=\"887313\" tradetime=\"20100614151457\" id=\"previous\"/></QUOTE>"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode spread xml.
+	 */
 	@Test
 	public void testDecodeSpreadXML() {
 
@@ -74,6 +91,9 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 	final byte[] baXQ0 = "%<QUOTE symbol=\"ESM0\" name=\"E-Mini S&amp;P 500\" exchange=\"GBLX\" basecode=\"A\" pointvalue=\"50.0\" tickincrement=\"25\" ddfexchange=\"M\" lastupdate=\"20100615144110\" bid=\"109975\" bidsize=\"162\" ask=\"110000\" asksize=\"248\" mode=\"R\"><SESSION day=\"E\" session=\"G\" timestamp=\"20100615094112\" open=\"109025\" high=\"110175\" low=\"108850\" last=\"109975\" previous=\"109050\" tradesize=\"2\" volume=\"362318\" tradetime=\"20100615094111\" id=\"combined\"/><SESSION day=\"D\" session=\"G\" timestamp=\"20100614205606\" open=\"109050\" high=\"110600\" low=\"108875\" last=\"109050\" previous=\"108925\" tradesize=\"1\" openinterest=\"1482925\" volume=\"887313\" tradetime=\"20100614151457\" id=\"previous\"/></QUOTE>"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode xm l0.
+	 */
 	@Test
 	public void testDecodeXML0() {
 
@@ -179,6 +199,9 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 	final byte[] baXQ1 = "%<QUOTE ask=\"110000\" asksize=\"248\" basecode=\"A\" bid=\"109975\" bidsize=\"162\" ddfexchange=\"M\" exchange=\"GBLX\" lastupdate=\"20100615144110\" mode=\"R\" name=\"E-Mini S&amp;P 500\" pointvalue=\"50.0\" symbol=\"ESM0\" tickincrement=\"25\"><SESSION day=\"E\" high=\"110175\" id=\"combined\" last=\"109975\" low=\"108850\" open=\"109025\" previous=\"109050\" session=\"G\" timestamp=\"20100615094112\" tradesize=\"2\" tradetime=\"20100615094111\" volume=\"362318\"/><SESSION day=\"D\" high=\"110600\" id=\"previous\" last=\"109050\" low=\"108875\" open=\"109050\" openinterest=\"1482925\" previous=\"108925\" session=\"G\" timestamp=\"20100614205606\" tradesize=\"1\" tradetime=\"20100614151457\" volume=\"887313\"/></QUOTE>"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode encode xml.
+	 */
 	@Test
 	public void testDecodeEncodeXML() {
 
@@ -208,6 +231,9 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test encode empty.
+	 */
 	@Test
 	public void testEncodeEmpty() {
 
@@ -233,6 +259,9 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 			.getBytes();
 
 	// TODO
+	/**
+	 * Test decode xm l2.
+	 */
 	@Test
 	public void testDecodeXML2() {
 

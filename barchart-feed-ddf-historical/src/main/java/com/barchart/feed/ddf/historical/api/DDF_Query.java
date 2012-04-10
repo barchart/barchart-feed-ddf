@@ -28,21 +28,29 @@ import com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.clone.PublicCloneable;
 
+// TODO: Auto-generated Javadoc
 /**
- * ddf historical market data query builder
+ * ddf historical market data query builder.
+ *
+ * @param <E> the element type
  */
 @Mutable
 public final class DDF_Query<E extends DDF_Entry> implements
 		PublicCloneable<DDF_Query<E>> {
 
+	/**
+	 * Instantiates a new dD f_ query.
+	 *
+	 * @param queryType the query type
+	 */
 	public DDF_Query(final DDF_QueryType<E> queryType) {
 		this.type = queryType;
 	}
 
-	/**  */
+	/** The type. */
 	public DDF_QueryType<E> type;
 
-	/**  */
+	/** The instrument. */
 	public DDF_Instrument instrument;
 
 	/**
@@ -59,10 +67,10 @@ public final class DDF_Query<E extends DDF_Entry> implements
 	 */
 	public DateTime timeEnd;
 
-	/** query result sort order */
+	/** query result sort order. */
 	public DDF_QueryOrder resultOrder = DDF_QueryOrder.ASCENDING;
 
-	/** positive limit of records to return; zero for no limit */
+	/** positive limit of records to return; zero for no limit. */
 	public int maxRecords = 0;
 
 	/**
@@ -74,13 +82,15 @@ public final class DDF_Query<E extends DDF_Entry> implements
 	 */
 	public int groupBy = 1;
 
-	/**  */
+	/** The eod type. */
 	public DDF_QueryEodType eodType;
 
-	/**  */
+	/** The eod volume. */
 	public DDF_QueryEodVolume eodVolume;
 
-	/**  */
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
 	// public boolean isTrend;
 
 	@SuppressWarnings("unchecked")
@@ -141,6 +151,9 @@ public final class DDF_Query<E extends DDF_Entry> implements
 		return volume.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public final String toString() {
 		return "" + //
@@ -156,6 +169,11 @@ public final class DDF_Query<E extends DDF_Entry> implements
 				"";
 	}
 
+	/**
+	 * Description.
+	 *
+	 * @return the string
+	 */
 	public final String description() {
 		final StringBuilder text = new StringBuilder(128);
 		build: {
@@ -198,6 +216,11 @@ public final class DDF_Query<E extends DDF_Entry> implements
 		return text.toString();
 	}
 
+	/**
+	 * Inits the from.
+	 *
+	 * @param that the that
+	 */
 	public final void initFrom(final DDF_Query<E> that) {
 		this.type = that.type;
 		this.instrument = that.instrument;

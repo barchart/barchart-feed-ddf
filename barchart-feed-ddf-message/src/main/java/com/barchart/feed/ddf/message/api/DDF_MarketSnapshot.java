@@ -11,7 +11,9 @@ import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
-/** ddf feed market snapshot messages; "reduced session info" */
+/**
+ * ddf feed market snapshot messages; "reduced session info".
+ */
 @NotMutable
 public interface DDF_MarketSnapshot extends DDF_MarketSnapBase {
 

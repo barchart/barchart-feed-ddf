@@ -11,7 +11,9 @@ import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
-/** represents ddf feed market trade message */
+/**
+ * represents ddf feed market trade message.
+ */
 @NotMutable
 public interface DDF_MarketTrade extends DDF_MarketBase {
 

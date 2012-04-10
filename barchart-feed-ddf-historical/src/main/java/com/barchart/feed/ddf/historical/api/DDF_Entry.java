@@ -10,6 +10,9 @@ package com.barchart.feed.ddf.historical.api;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 
+/**
+ * The Interface DDF_Entry.
+ */
 public interface DDF_Entry {
 
 	DDF_TradeDay getTradeDay();

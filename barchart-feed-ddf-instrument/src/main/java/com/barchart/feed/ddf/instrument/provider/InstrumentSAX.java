@@ -44,6 +44,9 @@ import com.barchart.util.values.api.TimeValue;
 
 class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.provider.CodecSAX#decodeSAX(org.xml.sax.Attributes)
+	 */
 	@Override
 	public void decodeSAX(final Attributes ats) throws Exception {
 

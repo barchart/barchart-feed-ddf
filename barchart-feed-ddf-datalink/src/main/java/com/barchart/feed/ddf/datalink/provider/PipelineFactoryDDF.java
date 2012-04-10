@@ -22,6 +22,9 @@ class PipelineFactoryDDF implements ChannelPipelineFactory {
 		this.handler = handler;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.jboss.netty.channel.ChannelPipelineFactory#getPipeline()
+	 */
 	@Override
 	public ChannelPipeline getPipeline() throws Exception {
 

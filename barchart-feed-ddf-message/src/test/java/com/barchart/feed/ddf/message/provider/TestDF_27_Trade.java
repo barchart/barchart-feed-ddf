@@ -30,12 +30,26 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDF_27_Trade.
+ */
 public class TestDF_27_Trade extends TestDDFBase {
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception the exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -44,6 +58,9 @@ public class TestDF_27_Trade extends TestDDFBase {
 	final static byte[] ba27sp = "2HOZ9,7CJ10SP2HOZ1,HOZ2,21371,5,SGJFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode spread.
+	 */
 	@Test
 	public void testDecodeSpread() {
 
@@ -68,6 +85,9 @@ public class TestDF_27_Trade extends TestDDFBase {
 	final static byte[] ba27 = "2HOZ9,7CJ1021371,5,SGJFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode.
+	 */
 	@Test
 	public void testDecode() {
 
@@ -97,11 +117,17 @@ public class TestDF_27_Trade extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test encode.
+	 */
 	@Test
 	public void testEncode() {
 		testEncodeDecode(new DF_27_Trade(), ba27);
 	}
 
+	/**
+	 * Test encode empty.
+	 */
 	@Test
 	public void testEncodeEmpty() {
 
@@ -138,6 +164,9 @@ public class TestDF_27_Trade extends TestDDFBase {
 	final static byte[] ba2Z = "2ORCL,ZCQ15300376,200,QWKI[OrG"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode2 z.
+	 */
 	@Test
 	public void testDecode2Z() {
 
@@ -168,6 +197,9 @@ public class TestDF_27_Trade extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test type0.
+	 */
 	@Test
 	public void testType0() {
 
@@ -178,6 +210,9 @@ public class TestDF_27_Trade extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test type1.
+	 */
 	@Test
 	public void testType1() {
 

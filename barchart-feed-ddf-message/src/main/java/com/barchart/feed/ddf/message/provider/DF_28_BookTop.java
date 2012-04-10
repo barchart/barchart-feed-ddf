@@ -26,8 +26,12 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueConst;
 
+// TODO: Auto-generated Javadoc
 class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			final DDF_MessageVisitor<Result, Param> visitor, final Param param) {
@@ -52,11 +56,17 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 
 	// //////////////////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBookTop#getPriceBid()
+	 */
 	@Override
 	public PriceValue getPriceBid() {
 		return HelperDDF.newPriceDDF(priceBid, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBookTop#getSizeBid()
+	 */
 	@Override
 	public SizeValue getSizeBid() {
 		return HelperDDF.newSizeDDF(sizeBid);
@@ -64,11 +74,17 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBookTop#getPriceAsk()
+	 */
 	@Override
 	public PriceValue getPriceAsk() {
 		return HelperDDF.newPriceDDF(priceAsk, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBookTop#getSizeAsk()
+	 */
 	@Override
 	public SizeValue getSizeAsk() {
 		return HelperDDF.newSizeDDF(sizeAsk);
@@ -76,6 +92,9 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBookTop#entry(com.barchart.feed.base.api.market.enums.MarketBookSide)
+	 */
 	@Override
 	public final MarketDoBookEntry entry(final MarketBookSide side) {
 

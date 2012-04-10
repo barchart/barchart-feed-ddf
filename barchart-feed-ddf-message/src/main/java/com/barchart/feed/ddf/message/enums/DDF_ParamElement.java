@@ -13,7 +13,10 @@ import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeByte;
 import com.barchart.util.math.MathExtra;
 
-/** qualifier for market parameter message */
+// TODO: Auto-generated Javadoc
+/**
+ * qualifier for market parameter message.
+ */
 public enum DDF_ParamElement implements EnumCodeByte, EnumByteOrdinal {
 
 	/** 0 = trade */
@@ -72,17 +75,25 @@ public enum DDF_ParamElement implements EnumCodeByte, EnumByteOrdinal {
 	/** not classified / missing / error */
 	UNKNOWN(QUEST), //
 
-	;
+	/** The ord. */
+ ;
 
 	public final byte ord;
 
+	/** The code. */
 	public final byte code;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+	 */
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeByte#code()
+	 */
 	@Override
 	public final byte code() {
 		return code;
@@ -95,6 +106,11 @@ public enum DDF_ParamElement implements EnumCodeByte, EnumByteOrdinal {
 
 	private final static DDF_ParamElement[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ param element[]
+	 */
 	@Deprecated
 	public final static DDF_ParamElement[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -105,6 +121,11 @@ public enum DDF_ParamElement implements EnumCodeByte, EnumByteOrdinal {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}

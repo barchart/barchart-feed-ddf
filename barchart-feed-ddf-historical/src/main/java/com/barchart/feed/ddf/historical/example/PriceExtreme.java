@@ -29,6 +29,9 @@ class PriceExtreme {
 
 	long mantissaMax = Long.MIN_VALUE;
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 

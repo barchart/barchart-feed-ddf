@@ -13,7 +13,10 @@ import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeByte;
 import com.barchart.util.math.MathExtra;
 
-/** market condition */
+// TODO: Auto-generated Javadoc
+/**
+ * market condition.
+ */
 public enum DDF_Condition implements EnumCodeByte, EnumByteOrdinal {
 
 	NORMAL(NUL), //
@@ -44,17 +47,25 @@ public enum DDF_Condition implements EnumCodeByte, EnumByteOrdinal {
 
 	UNKNOWN(QUEST), //
 
-	;
+	/** The ord. */
+ ;
 
 	public final byte ord;
 
+	/** The code. */
 	public final byte code;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+	 */
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeByte#code()
+	 */
 	@Override
 	public final byte code() {
 		return code;
@@ -67,6 +78,11 @@ public enum DDF_Condition implements EnumCodeByte, EnumByteOrdinal {
 
 	private final static DDF_Condition[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ condition[]
+	 */
 	@Deprecated
 	public final static DDF_Condition[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -77,10 +93,22 @@ public enum DDF_Condition implements EnumCodeByte, EnumByteOrdinal {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ condition
+	 */
 	public final static DDF_Condition fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ condition
+	 */
 	public final static DDF_Condition fromCode(final byte code) {
 		for (final DDF_Condition known : ENUM_VALUES) {
 			if (known.code == code) {
@@ -90,6 +118,11 @@ public enum DDF_Condition implements EnumCodeByte, EnumByteOrdinal {
 		return UNKNOWN;
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}

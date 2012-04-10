@@ -17,8 +17,14 @@ import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.util.ascii.ASCII;
 
+// TODO: Auto-generated Javadoc
 class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {
 
+	/**
+	 * Instantiates a new entry ticks detail.
+	 *
+	 * @param instrument the instrument
+	 */
 	public EntryTicksDetail(final DDF_Instrument instrument) {
 		super(instrument);
 	}
@@ -31,11 +37,17 @@ class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {
 
 	// ///////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryTick#priceTradeMantissa()
+	 */
 	@Override
 	public long priceTradeMantissa() {
 		return priceTradeMantissa;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryTick#sizeTrade()
+	 */
 	@Override
 	public long sizeTrade() {
 		return sizeTrade;
@@ -45,6 +57,8 @@ class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {
 	 * YYYY­MM­DD HH:MM:SS.FFF,TRADING_DAY,SESSION_CODE,
 	 * 
 	 * PRICE,SIZE
+	 *
+	 * @param inputArray the input array
 	 */
 	@Override
 	public void decodeTail(final String[] inputArray) {
@@ -55,6 +69,9 @@ class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.Entry#encode()
+	 */
 	@Override
 	public String encode() {
 
@@ -82,11 +99,17 @@ class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {
 
 	static final String HEADER = "INDEX,SYMBOL,MILLIS_UTC,DATE_TIME_ISO,TRADE_DAY,TRADE_SESSION,PRICE,SIZE";
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.Entry#csvHeader()
+	 */
 	@Override
 	public String csvHeader() {
 		return HEADER;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.Entry#csvEntry()
+	 */
 	@Override
 	public String csvEntry() {
 

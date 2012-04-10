@@ -17,6 +17,10 @@ import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.feed.ddf.resolver.provider.DDF_ResolverProvider;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MainResolverSearch.
+ */
 public class MainResolverSearch {
 
 	private static Logger log = LoggerFactory
@@ -47,6 +51,12 @@ public class MainResolverSearch {
 
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws Exception the exception
+	 */
 	public static void main(String... args) throws Exception {
 
 		String folder = MainConst.FOLDER;

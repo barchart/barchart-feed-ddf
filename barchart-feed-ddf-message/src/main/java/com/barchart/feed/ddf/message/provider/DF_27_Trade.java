@@ -19,8 +19,12 @@ import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
+// TODO: Auto-generated Javadoc
 class DF_27_Trade extends BaseMarket implements DDF_MarketTrade {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			DDF_MessageVisitor<Result, Param> visitor, Param param) {
@@ -43,11 +47,17 @@ class DF_27_Trade extends BaseMarket implements DDF_MarketTrade {
 
 	// //////////////////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketTrade#getPrice()
+	 */
 	@Override
 	public final PriceValue getPrice() {
 		return HelperDDF.newPriceDDF(price, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketTrade#getSize()
+	 */
 	@Override
 	public final SizeValue getSize() {
 		return HelperDDF.newSizeDDF(size);

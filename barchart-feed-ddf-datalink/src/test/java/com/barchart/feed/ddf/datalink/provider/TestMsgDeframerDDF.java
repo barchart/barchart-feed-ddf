@@ -18,6 +18,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestMsgDeframerDDF.
+ */
 public class TestMsgDeframerDDF {
 
 	private static Logger log = LoggerFactory
@@ -73,6 +77,11 @@ public class TestMsgDeframerDDF {
 
 	}
 
+	/**
+	 * Test0.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test0() throws Exception {
 
@@ -92,6 +101,11 @@ public class TestMsgDeframerDDF {
 
 	}
 
+	/**
+	 * Test1.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test1() throws Exception {
 
@@ -111,6 +125,11 @@ public class TestMsgDeframerDDF {
 
 	}
 
+	/**
+	 * Test2.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test2() throws Exception {
 

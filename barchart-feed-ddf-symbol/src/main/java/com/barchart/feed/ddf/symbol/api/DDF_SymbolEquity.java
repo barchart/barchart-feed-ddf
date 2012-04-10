@@ -9,6 +9,9 @@ package com.barchart.feed.ddf.symbol.api;
 
 import com.barchart.feed.ddf.symbol.enums.DDF_Equity;
 
+/**
+ * The Interface DDF_SymbolEquity.
+ */
 public interface DDF_SymbolEquity extends DDF_Symbol {
 
 	DDF_Equity getEquityType();

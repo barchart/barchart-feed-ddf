@@ -32,6 +32,7 @@ import org.w3c.dom.Element;
 import com.barchart.feed.ddf.settings.api.DDF_Login;
 import com.barchart.feed.ddf.util.HelperXML;
 
+// TODO: Auto-generated Javadoc
 class LoginDDF implements DDF_Login {
 
 	// ////////////////////////////////
@@ -91,36 +92,57 @@ class LoginDDF implements DDF_Login {
 		maxSymbols = 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Login#getUsername()
+	 */
 	@Override
 	public String getUsername() {
 		return username;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Login#getStatus()
+	 */
 	@Override
 	public String getStatus() {
 		return status;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Login#getCredentials()
+	 */
 	@Override
 	public String getCredentials() {
 		return credentials;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Login#getServiceId()
+	 */
 	@Override
 	public String getServiceId() {
 		return serviceId;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Login#getMaxSymbols()
+	 */
 	@Override
 	public int getMaxSymbols() {
 		return maxSymbols;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Login#getExchangeSet()
+	 */
 	@Override
 	public Set<String> getExchangeSet() {
 		return Collections.unmodifiableSet(exchangeSet);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Login#isValid()
+	 */
 	@Override
 	public boolean isValid() {
 
@@ -144,6 +166,9 @@ class LoginDDF implements DDF_Login {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "" + //

@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.util.HelperXML;
 
+// TODO: Auto-generated Javadoc
 /**
  * Provides static factory methods for building DDF_Settings objects.
  * <p>
@@ -28,6 +29,7 @@ public final class DDF_SettingsService {
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_SettingsService.class);
 
+	/** The Constant NULL_SETTINGS. */
 	public final static DDF_Settings NULL_SETTINGS = //
 	new SettingsDDF("");
 
@@ -38,12 +40,10 @@ public final class DDF_SettingsService {
 	 * Basic static factory method for creating a DDF_Settings object.
 	 * <p>
 	 * Automatically pulls user settings from internal Barchart client info uri.
-	 * 
-	 * @param username
-	 *            User's Barchart given user name.
-	 * @param password
-	 *            User's Barchart given password.
-	 * @return
+	 *
+	 * @param username User's Barchart given user name.
+	 * @param password User's Barchart given password.
+	 * @return the dD f_ settings
 	 */
 	public static DDF_Settings newSettings(final String username,
 			final String password) {
@@ -85,12 +85,11 @@ public final class DDF_SettingsService {
 	}
 
 	/**
-	 * 
-	 * @param username
-	 *            User's Barchart given user name.
-	 * @param password
-	 *            User's Barchart given password.
-	 * @return
+	 * New settings mock valid.
+	 *
+	 * @param username User's Barchart given user name.
+	 * @param password User's Barchart given password.
+	 * @return the dD f_ settings
 	 */
 	public static DDF_Settings newSettingsMockValid(final String username,
 			final String password) {
@@ -101,12 +100,11 @@ public final class DDF_SettingsService {
 	}
 
 	/**
-	 * 
-	 * @param username
-	 *            User's Barchart given user name.
-	 * @param password
-	 *            User's Barchart given password.
-	 * @return
+	 * New settings mock not valid.
+	 *
+	 * @param username User's Barchart given user name.
+	 * @param password User's Barchart given password.
+	 * @return the dD f_ settings
 	 */
 	public static DDF_Settings newSettingsMockNotValid(final String username,
 			final String password) {

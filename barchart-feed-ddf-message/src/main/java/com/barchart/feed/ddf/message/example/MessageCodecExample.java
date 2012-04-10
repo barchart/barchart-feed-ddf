@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
 
+// TODO: Auto-generated Javadoc
 /**
- *
- *
- * */
+ * The Class MessageCodecExample.
+ */
 
 public class MessageCodecExample {
 
@@ -74,6 +74,11 @@ public class MessageCodecExample {
 
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public final static void main(String[] args) {
 
 		decodeMessage(ba20);

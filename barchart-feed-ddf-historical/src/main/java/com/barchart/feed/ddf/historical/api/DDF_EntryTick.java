@@ -9,6 +9,9 @@ package com.barchart.feed.ddf.historical.api;
 
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 
+/**
+ * The Interface DDF_EntryTick.
+ */
 public interface DDF_EntryTick extends DDF_Entry {
 
 	DDF_Session getSession();

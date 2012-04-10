@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.ddf.symbol.enums;
 
+/**
+ * The Enum DDF_Equity.
+ */
 public enum DDF_Equity {
 
 	USA, // 

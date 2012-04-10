@@ -13,17 +13,29 @@ import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
 
-/** does batch symbol lookup; keeps file system cache */
+// TODO: Auto-generated Javadoc
+/**
+ * does batch symbol lookup; keeps file system cache.
+ */
 @ThreadSafe
 public class ServicePersistentDDF extends ServiceBasicDDF {
 
+	/**
+	 * Instantiates a new service persistent ddf.
+	 */
 	public ServicePersistentDDF() {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#clear()
+	 */
 	@Override
 	public final void clear() {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookup(com.barchart.util.values.api.TextValue)
+	 */
 	@Override
 	public final DDF_Instrument lookup(final TextValue symbol) {
 

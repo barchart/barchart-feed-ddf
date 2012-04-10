@@ -13,6 +13,9 @@ import org.jboss.netty.util.CharsetUtil;
 /** convert outgoing DDF string commands into NETTY channel buffers */
 class MsgEncoderDDF extends StringEncoder {
 
+	/**
+	 * Instantiates a new msg encoder ddf.
+	 */
 	public MsgEncoderDDF() {
 		super((CharsetUtil.US_ASCII));
 	}

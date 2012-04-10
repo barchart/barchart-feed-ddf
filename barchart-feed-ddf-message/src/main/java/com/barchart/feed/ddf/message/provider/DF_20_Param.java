@@ -19,8 +19,12 @@ import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
+// TODO: Auto-generated Javadoc
 class DF_20_Param extends BaseMarket implements DDF_MarketParameter {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			DDF_MessageVisitor<Result, Param> visitor, Param param) {
@@ -50,20 +54,34 @@ class DF_20_Param extends BaseMarket implements DDF_MarketParameter {
 
 	// //////////////////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketParameter#getParamType()
+	 */
 	@Override
 	public final DDF_ParamType getParamType() {
 		return DDF_ParamType.fromOrd(ordParam);
 	}
 
+	/**
+	 * Sets the param type.
+	 *
+	 * @param type the new param type
+	 */
 	public final void setParamType(final DDF_ParamType type) {
 		ordParam = type.ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketParameter#getAsPrice()
+	 */
 	@Override
 	public final PriceValue getAsPrice() {
 		return HelperDDF.newPriceDDF(value, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketParameter#getAsSize()
+	 */
 	@Override
 	public final SizeValue getAsSize() {
 		return HelperDDF.newSizeDDF(value);

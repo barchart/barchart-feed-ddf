@@ -60,6 +60,7 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
+// TODO: Auto-generated Javadoc
 /**
  * 
  * 15:08:28.909 [# ddf-messages] DEBUG c.d.f.f.example.LoggingHandler - message
@@ -72,6 +73,9 @@ import com.barchart.util.values.provider.ValueBuilder;
 
 class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			final DDF_MessageVisitor<Result, Param> visitor, final Param param) {
@@ -100,6 +104,11 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 	// //////////////////////////////////////
 
+	/**
+	 * Gets the price first.
+	 *
+	 * @return the price first
+	 */
 	public final PriceValue getPriceFirst() {
 		return HelperDDF.newPriceDDF(priceFirst, getFraction());
 	}
@@ -117,6 +126,9 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 		return entryCount;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketCuvol#entries()
+	 */
 	@Override
 	public final MarketDoCuvolEntry[] entries() {
 
@@ -150,29 +162,51 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 	}
 
+	/**
+	 * Entries.
+	 *
+	 * @param array the array
+	 */
 	public final void entries(final long[] array) {
 		sizeArray = array;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketCuvol#getSizeLastCuvol()
+	 */
 	@Override
 	public SizeValue getSizeLastCuvol() {
 		return HelperDDF.newSizeDDF(sizeTradeCuvol);
 	}
 
+	/**
+	 * Sets the last size cuvol.
+	 *
+	 * @param size the new last size cuvol
+	 */
 	public void setLastSizeCuvol(final long size) {
 		sizeTradeCuvol = size;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketCuvol#getPriceLast()
+	 */
 	@Override
 	public PriceValue getPriceLast() {
 		return HelperDDF.newPriceDDF(priceTrade, getFraction());
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketCuvol#getSizeLast()
+	 */
 	@Override
 	public SizeValue getSizeLast() {
 		return HelperDDF.newSizeDDF(sizeTrade);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketCuvol#getPriceStep()
+	 */
 	@Override
 	public PriceValue getPriceStep() {
 		return HelperDDF.newPriceDDF(priceStep, getFraction());
@@ -185,6 +219,9 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 		return TAG;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#decodeXML(org.w3c.dom.Element)
+	 */
 	@Override
 	public final void decodeXML(final Element tag) {
 
@@ -266,6 +303,9 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#encodeXML(org.w3c.dom.Element)
+	 */
 	@Override
 	public final void encodeXML(final Element tag) {
 
@@ -327,6 +367,9 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#toString()
+	 */
 	@Override
 	public String toString() {
 		final Element tag = HelperXML.xmlNewDocument(xmlTagName());

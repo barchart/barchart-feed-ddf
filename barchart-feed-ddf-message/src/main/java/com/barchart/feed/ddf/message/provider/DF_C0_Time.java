@@ -18,12 +18,16 @@ import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.util.ascii.ASCII;
 import com.barchart.util.values.api.TimeValue;
 
+// TODO: Auto-generated Javadoc
 class DF_C0_Time extends BaseControl implements DDF_ControlTimestamp {
 
 	static final DateTimeZone zoneCST = DateTimeZone.forID("America/Chicago");
 
 	protected long stampUTC;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			final DDF_MessageVisitor<Result, Param> visitor, final Param param) {
@@ -39,6 +43,9 @@ class DF_C0_Time extends BaseControl implements DDF_ControlTimestamp {
 		millisUTC = System.currentTimeMillis();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#encodeDDF(java.nio.ByteBuffer)
+	 */
 	@Override
 	public final void encodeDDF(final ByteBuffer buffer) {
 
@@ -52,6 +59,9 @@ class DF_C0_Time extends BaseControl implements DDF_ControlTimestamp {
 	}
 
 	/* <soh>#20110923142300<etx> */
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#decodeDDF(java.nio.ByteBuffer)
+	 */
 	@Override
 	public final void decodeDDF(final ByteBuffer buffer) {
 
@@ -75,6 +85,9 @@ class DF_C0_Time extends BaseControl implements DDF_ControlTimestamp {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_ControlTimestamp#getStampUTC()
+	 */
 	@Override
 	public TimeValue getStampUTC() {
 		return HelperDDF.newTimeDDF(stampUTC);

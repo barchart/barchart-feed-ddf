@@ -9,6 +9,9 @@ package com.barchart.feed.ddf.datalink.enums;
 
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 
+/**
+ * The Enum DDF_FeedEvent.
+ */
 public enum DDF_FeedEvent {
 
 	/**

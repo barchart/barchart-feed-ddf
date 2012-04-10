@@ -19,8 +19,9 @@ import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeChar;
 import com.barchart.util.math.MathExtra;
 
+// TODO: Auto-generated Javadoc
 /**
- * subset of supported market parameter message qualifiers
+ * subset of supported market parameter message qualifiers.
  */
 public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 
@@ -105,28 +106,42 @@ public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_ParamType.class);
 
+	/**
+	 * The Enum Kind.
+	 */
 	public enum Kind {
 		PRICE, SIZE, NONE
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+	 */
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeChar#code()
+	 */
 	@Override
 	public final char code() {
 		return code;
 	}
 
+	/** The ord. */
 	public final byte ord;
 
+	/** The element. */
 	public final DDF_ParamElement element;
+	
+	/** The modifier. */
 	public final DDF_ParamModifier modifier;
 
-	/** combination of 2 element + modifier */
+	/** combination of 2 element + modifier. */
 	public final char code;
 
+	/** The kind. */
 	public final Kind kind;
 
 	private DDF_ParamType(final DDF_ParamElement element,
@@ -145,6 +160,11 @@ public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 
 	private final static DDF_ParamType[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ param type[]
+	 */
 	@Deprecated
 	public final static DDF_ParamType[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -155,15 +175,34 @@ public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ param type
+	 */
 	public final static DDF_ParamType fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * From pair.
+	 *
+	 * @param element the element
+	 * @param modifier the modifier
+	 * @return the dD f_ param type
+	 */
 	public final static DDF_ParamType fromPair(final byte element,
 			final byte modifier) {
 		return fromCode(ByteConverters.charFromBytes(element, modifier));
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ param type
+	 */
 	public final static DDF_ParamType fromCode(final char code) {
 		for (final DDF_ParamType known : ENUM_VALUES) {
 			if (known.code == code) {
@@ -173,16 +212,29 @@ public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 		return UNKNOWN;
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Enum#toString()
+	 */
 	@Override
 	public String toString() {
 		return String.format("%c%c   %-20s", element.code, modifier.code,
 				name());
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(final String... args) {
 
 		log.debug("init");

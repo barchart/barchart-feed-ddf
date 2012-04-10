@@ -31,12 +31,26 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDF_20_Param.
+ */
 public class TestDF_20_Param extends TestDDFBase {
 
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
 
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception the exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -45,6 +59,9 @@ public class TestDF_20_Param extends TestDDFBase {
 	final static byte[] ba20sp = "2SF0,02B10SP1SG0,10533,D0Q JFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode spread.
+	 */
 	@Test
 	public void testDecodeSpread() {
 
@@ -71,6 +88,9 @@ public class TestDF_20_Param extends TestDDFBase {
 	final static byte[] ba20 = "2SF0,02B1010533,D0Q JFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode.
+	 */
 	@Test
 	public void testDecode() {
 
@@ -109,6 +129,9 @@ public class TestDF_20_Param extends TestDDFBase {
 	final static byte[] ba20mgexoptpit = "2MEZ900C,02G10100,D0Q JFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	/**
+	 * Test decode mge x_ options_ pit.
+	 */
 	@Test
 	public void testDecodeMGEX_Options_Pit() {
 
@@ -147,11 +170,17 @@ public class TestDF_20_Param extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test encode.
+	 */
 	@Test
 	public void testEncode() {
 		testEncodeDecode(new DF_20_Param(), ba20);
 	}
 
+	/**
+	 * Test encode empty.
+	 */
 	@Test
 	public void testEncodeEmpty() {
 
@@ -189,6 +218,9 @@ public class TestDF_20_Param extends TestDDFBase {
 
 	}
 
+	/**
+	 * Test type.
+	 */
 	@Test
 	public void testType() {
 
@@ -206,6 +238,11 @@ public class TestDF_20_Param extends TestDDFBase {
 	final byte[] baX1 = "#20111219103312".getBytes();
 	final byte[] baX2 = "2SEQUENCE,08#0047569,00I ".getBytes();
 
+	/**
+	 * Test decode1.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void testDecode1() throws Exception {
 

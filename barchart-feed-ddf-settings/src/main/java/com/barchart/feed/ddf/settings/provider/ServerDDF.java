@@ -17,6 +17,7 @@ import org.w3c.dom.Element;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 
+// TODO: Auto-generated Javadoc
 class ServerDDF implements DDF_Server {
 
 	private final DDF_ServerType type;
@@ -37,25 +38,41 @@ class ServerDDF implements DDF_Server {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#getServerType()
+	 */
 	public DDF_ServerType getServerType() {
 		return type;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#getPrimary()
+	 */
 	public String getPrimary() {
 		return primary;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#getSecondary()
+	 */
 	public String getSecondary() {
 		return secondary;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#getRecovery()
+	 */
 	public String getRecovery() {
 		return recovery;
 	}
 
 	private boolean isPrimary = true;
 
-	/** round robin; non null */
+	/**
+	 * round robin; non null.
+	 *
+	 * @return the primary or secondary
+	 */
 	public synchronized String getPrimaryOrSecondary() {
 
 		final boolean isValidPrimary = isValid(primary);
@@ -86,6 +103,9 @@ class ServerDDF implements DDF_Server {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#isValid()
+	 */
 	@Override
 	public final boolean isValid() {
 		return isValid(primary) && isValid(secondary);
@@ -98,6 +118,9 @@ class ServerDDF implements DDF_Server {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "" + //

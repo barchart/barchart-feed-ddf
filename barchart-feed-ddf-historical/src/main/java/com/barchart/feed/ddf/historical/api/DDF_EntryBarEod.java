@@ -8,6 +8,9 @@
 package com.barchart.feed.ddf.historical.api;
 
 
+/**
+ * The Interface DDF_EntryBarEod.
+ */
 public interface DDF_EntryBarEod extends DDF_EntryBar {
 
 	long sizeInterest();

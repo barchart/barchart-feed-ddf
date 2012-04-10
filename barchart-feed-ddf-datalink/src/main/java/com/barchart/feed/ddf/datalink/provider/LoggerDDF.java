@@ -18,6 +18,9 @@ import org.jboss.netty.handler.logging.LoggingHandler;
  */
 class LoggerDDF extends LoggingHandler {
 
+	/* (non-Javadoc)
+	 * @see org.jboss.netty.handler.logging.LoggingHandler#log(org.jboss.netty.channel.ChannelEvent)
+	 */
 	@Override
 	public void log(ChannelEvent e) {
 

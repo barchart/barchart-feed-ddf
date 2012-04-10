@@ -11,6 +11,11 @@ import java.util.List;
 
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 
+/**
+ * The Interface DDF_SymbolSpread.
+ *
+ * @param <T> the generic type
+ */
 public interface DDF_SymbolSpread<T extends DDF_SymbolExpiration> extends
 		DDF_SymbolExpiration {
 

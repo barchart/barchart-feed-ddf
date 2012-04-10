@@ -22,20 +22,34 @@ import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
-/** creates fake unresolved instruments */
+// TODO: Auto-generated Javadoc
+/**
+ * creates fake unresolved instruments.
+ */
 @ThreadSafe
 public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
+	/**
+	 * Instantiates a new service basic ddf.
+	 */
 	public ServiceBasicDDF() {
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.base.api.instrument.DefinitionService#clear()
+	 */
 	@Override
 	public void clear() {
 	}
 
-	/** TODO add more fields via symbol parser */
+	/**
+	 * TODO add more fields via symbol parser.
+	 *
+	 * @param symbol the symbol
+	 * @return the dD f_ instrument
+	 */
 	@Override
 	public DDF_Instrument lookup(final TextValue symbol) {
 
@@ -54,6 +68,9 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.api.DDF_DefinitionService#lookup(java.util.List)
+	 */
 	@Override
 	public List<DDF_Instrument> lookup(final List<String> symbolList) {
 
@@ -81,6 +98,9 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.api.DDF_DefinitionService#lookupDDF(com.barchart.util.values.api.TextValue)
+	 */
 	@Override
 	public DDF_Instrument lookupDDF(TextValue symbol) {
 		

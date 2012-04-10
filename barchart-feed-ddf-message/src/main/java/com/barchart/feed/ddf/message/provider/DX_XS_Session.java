@@ -54,8 +54,12 @@ import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
+// TODO: Auto-generated Javadoc
 class DX_XS_Session extends DF_21_Snap implements DDF_MarketSession {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.DF_21_Snap#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			final DDF_MessageVisitor<Result, Param> visitor, final Param param) {
@@ -83,21 +87,35 @@ class DX_XS_Session extends DF_21_Snap implements DDF_MarketSession {
 
 	// //////////////////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSession#getSizeLast()
+	 */
 	@Override
 	public final SizeValue getSizeLast() {
 		return newSizeDDF(sizeLast);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSession#getTimeLast()
+	 */
 	@Override
 	public final TimeValue getTimeLast() {
 		return ValueBuilder.newTime(timeLast);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_MarketSession#getIndicator()
+	 */
 	@Override
 	public final DDF_Indicator getIndicator() {
 		return DDF_Indicator.fromOrd(ordIndicator);
 	}
 
+	/**
+	 * Sets the indicator.
+	 *
+	 * @param indicator the new indicator
+	 */
 	public final void setIndicator(final DDF_Indicator indicator) {
 		ordIndicator = indicator.ord;
 	}
@@ -109,6 +127,9 @@ class DX_XS_Session extends DF_21_Snap implements DDF_MarketSession {
 		return TAG;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#decodeXML(org.w3c.dom.Element)
+	 */
 	@Override
 	public final void decodeXML(final Element tag) {
 
@@ -157,6 +178,9 @@ class DX_XS_Session extends DF_21_Snap implements DDF_MarketSession {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#encodeXML(org.w3c.dom.Element)
+	 */
 	@Override
 	public final void encodeXML(final Element tag) {
 
@@ -202,6 +226,9 @@ class DX_XS_Session extends DF_21_Snap implements DDF_MarketSession {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Base#toString()
+	 */
 	@Override
 	public String toString() {
 		final Element tag = HelperXML.xmlNewDocument(xmlTagName());

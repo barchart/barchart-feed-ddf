@@ -13,6 +13,9 @@ import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.values.api.Value;
 
+/**
+ * The Interface DDF_InstrumentDo.
+ */
 @Mutable
 public interface DDF_InstrumentDo extends DDF_Instrument, MarketDoInstrument {
 

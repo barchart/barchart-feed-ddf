@@ -11,14 +11,21 @@ import com.barchart.feed.ddf.symbol.api.DDF_SymbolFuture;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.symbol.enums.DDF_SymbolType;
 
+// TODO: Auto-generated Javadoc
 //TODO
 
 /*package*/class Spread extends BaseSpread<DDF_SymbolFuture> {
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.symbol.api.DDF_Symbol#getType()
+	 */
 	public DDF_SymbolType getType() {
 		return DDF_SymbolType.SPREAD;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.symbol.api.DDF_SymbolSpread#getSpread()
+	 */
 	@Override
 	public DDF_SpreadType getSpread() {
 		// TODO Auto-generated method stub

@@ -11,6 +11,7 @@ import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeString;
 import com.barchart.util.math.MathExtra;
 
+// TODO: Auto-generated Javadoc
 /**
  * ddf quote session indicator : "current combo" vs "previous combo" vs
  * "individual session"; possible format:
@@ -22,8 +23,7 @@ import com.barchart.util.math.MathExtra;
  * "session_D_S", individual (non-combo) day/session permutations; with
  * D=DDF_TradeDay, S=DDF_Session;
  * 
- * allows to classify quote snapshot sessions: THIS vs PAST market day
- * 
+ * allows to classify quote snapshot sessions: THIS vs PAST market day.
  */
 public enum DDF_Indicator implements EnumCodeString, EnumByteOrdinal {
 
@@ -36,17 +36,25 @@ public enum DDF_Indicator implements EnumCodeString, EnumByteOrdinal {
 	/** non-combo, specific for a trading day + session pair */
 	UNKNOWN(""), //
 
-	;
+	/** The ord. */
+ ;
 
 	public final byte ord;
 
+	/** The code. */
 	public final String code;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+	 */
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeString#code()
+	 */
 	@Override
 	public final String code() {
 		return code;
@@ -59,6 +67,11 @@ public enum DDF_Indicator implements EnumCodeString, EnumByteOrdinal {
 
 	private final static DDF_Indicator[] ENUM_VALUES = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ indicator[]
+	 */
 	@Deprecated
 	public final static DDF_Indicator[] valuesUnsafe() {
 		return ENUM_VALUES;
@@ -69,10 +82,22 @@ public enum DDF_Indicator implements EnumCodeString, EnumByteOrdinal {
 		MathExtra.castIntToByte(ENUM_VALUES.length);
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ indicator
+	 */
 	public final static DDF_Indicator fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
 
+	/**
+	 * From code.
+	 *
+	 * @param code the code
+	 * @return the dD f_ indicator
+	 */
 	public final static DDF_Indicator fromCode(final String code) {
 		for (final DDF_Indicator known : ENUM_VALUES) {
 			if (known.code.equalsIgnoreCase(code)) {
@@ -82,6 +107,11 @@ public enum DDF_Indicator implements EnumCodeString, EnumByteOrdinal {
 		return UNKNOWN;
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}

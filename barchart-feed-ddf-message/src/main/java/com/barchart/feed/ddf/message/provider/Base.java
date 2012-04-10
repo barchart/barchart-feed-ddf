@@ -20,6 +20,7 @@ import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.util.values.api.TimeValue;
 
+// TODO: Auto-generated Javadoc
 abstract class Base implements DDF_BaseMessage, Codec {
 
 	protected static final Logger log = LoggerFactory.getLogger(Base.class);
@@ -36,11 +37,19 @@ abstract class Base implements DDF_BaseMessage, Codec {
 
 	private byte ordMessageType;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_BaseMessage#getMessageType()
+	 */
 	@Override
 	public final DDF_MessageType getMessageType() {
 		return DDF_MessageType.fromOrd(ordMessageType);
 	}
 
+	/**
+	 * Sets the message type.
+	 *
+	 * @param messageType the new message type
+	 */
 	public final void setMessageType(final DDF_MessageType messageType) {
 		ordMessageType = messageType.ord;
 	}
@@ -49,6 +58,9 @@ abstract class Base implements DDF_BaseMessage, Codec {
 
 	protected long millisUTC = HelperDDF.DDF_EMPTY;
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_BaseMessage#getTime()
+	 */
 	@Override
 	public final TimeValue getTime() {
 		return HelperDDF.newTimeDDF(millisUTC);
@@ -67,11 +79,17 @@ abstract class Base implements DDF_BaseMessage, Codec {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Codec#decodeDDF(java.nio.ByteBuffer)
+	 */
 	@Override
 	public void decodeDDF(final ByteBuffer buffer) {
 		throw new UnsupportedOperationException("you must override");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Codec#encodeDDF(java.nio.ByteBuffer)
+	 */
 	@Override
 	public void encodeDDF(final ByteBuffer buffer) {
 		throw new UnsupportedOperationException("you must override");
@@ -83,6 +101,9 @@ abstract class Base implements DDF_BaseMessage, Codec {
 		throw new UnsupportedOperationException("you must override");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Codec#decodeXML(java.nio.ByteBuffer)
+	 */
 	@Override
 	public final void decodeXML(final ByteBuffer buffer) {
 		final byte[] array = buffer.array();
@@ -93,6 +114,9 @@ abstract class Base implements DDF_BaseMessage, Codec {
 		decodeXML(tag);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Codec#encodeXML(java.nio.ByteBuffer)
+	 */
 	@Override
 	public final void encodeXML(final ByteBuffer buffer) {
 		final Element tag = HelperXML.xmlNewDocument(xmlTagName());
@@ -101,11 +125,17 @@ abstract class Base implements DDF_BaseMessage, Codec {
 		buffer.put(array);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Codec#decodeXML(org.w3c.dom.Element)
+	 */
 	@Override
 	public void decodeXML(final Element root) {
 		throw new UnsupportedOperationException();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.provider.Codec#encodeXML(org.w3c.dom.Element)
+	 */
 	@Override
 	public void encodeXML(final Element root) {
 		throw new UnsupportedOperationException();
@@ -113,12 +143,18 @@ abstract class Base implements DDF_BaseMessage, Codec {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_BaseMessage#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	 */
 	@Override
 	public <Result, Param> Result accept(
 			DDF_MessageVisitor<Result, Param> visitor, Param param) {
 		throw new UnsupportedOperationException();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 
@@ -144,6 +180,9 @@ abstract class Base implements DDF_BaseMessage, Codec {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.message.api.DDF_BaseMessage#toStringFields()
+	 */
 	@Override
 	public String toStringFields() {
 

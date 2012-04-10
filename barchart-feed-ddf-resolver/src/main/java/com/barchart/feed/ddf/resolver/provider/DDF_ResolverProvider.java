@@ -10,22 +10,22 @@ package com.barchart.feed.ddf.resolver.provider;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.util.thread.ExecutorCallable;
 
-/**  */
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DDF_ResolverProvider.
+ */
 public final class DDF_ResolverProvider {
 
 	private DDF_ResolverProvider() {
 	}
 
 	/**
-	 * make new resolver
-	 * 
-	 * @param executor
-	 *            - external executor
-	 * @param folder
-	 *            - location of index database
-	 * @param limit
-	 *            - maximum number of returned search results
-	 * 
+	 * make new resolver.
+	 *
+	 * @param executor - external executor
+	 * @param folder - location of index database
+	 * @param limit - maximum number of returned search results
+	 * @return the dD f_ resolver
 	 */
 	public static DDF_Resolver newInstance(final ExecutorCallable executor,
 			final String folder, final int limit) {

@@ -22,8 +22,9 @@ import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeByte;
 import com.barchart.util.math.MathExtra;
 
+// TODO: Auto-generated Javadoc
 /**
- * ddf trade session source;
+ * ddf trade session source;.
  */
 public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
@@ -256,7 +257,10 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 	/** */
 	UNKNOWN(QUEST, DEF), //
 
-	;
+	/**
+  * The Enum Market.
+  */
+ ;
 
 	public static enum Market {
 
@@ -277,6 +281,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_Session.class);
 
+	/** The COM p_ code. */
 	public static Comparator<DDF_Session> COMP_CODE = new Comparator<DDF_Session>() {
 		@Override
 		public int compare(final DDF_Session o1, final DDF_Session o2) {
@@ -293,6 +298,11 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 		}
 	};
 
+	/**
+	 * The main method.
+	 *
+	 * @param strings the arguments
+	 */
 	public static void main(final String... strings) {
 
 		log.debug("init");
@@ -309,25 +319,37 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Enum#toString()
+	 */
 	@Override
 	public String toString() {
 		return String.format("%40s '%c' %4s", name(), code, market);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+	 */
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.util.enums.EnumCodeByte#code()
+	 */
 	@Override
 	public final byte code() {
 		return code;
 	}
 
+	/** The ord. */
 	public final byte ord;
 
+	/** The code. */
 	public final byte code;
 
+	/** The market. */
 	public final Market market;
 
 	private DDF_Session(final byte code, final Market kind) {
@@ -338,6 +360,11 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	private final static DDF_Session[] ENUM_VALS = values();
 
+	/**
+	 * Values unsafe.
+	 *
+	 * @return the dD f_ session[]
+	 */
 	@Deprecated
 	public final static DDF_Session[] valuesUnsafe() {
 		return ENUM_VALS;
@@ -348,6 +375,12 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 		MathExtra.castIntToByte(ENUM_VALS.length);
 	}
 
+	/**
+	 * From ord.
+	 *
+	 * @param ord the ord
+	 * @return the dD f_ session
+	 */
 	public final static DDF_Session fromOrd(final byte ord) {
 		return ENUM_VALS[ord];
 	}
@@ -373,7 +406,13 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	}
 
-	/** NOTE: ORD vs CODE */
+	/**
+	 * NOTE: ORD vs CODE.
+	 *
+	 * @param exchOrd the exch ord
+	 * @param sessCode the sess code
+	 * @return the dD f_ session
+	 */
 	public final static DDF_Session fromPair(final byte exchOrd,
 			final byte sessCode) {
 
@@ -389,6 +428,11 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	}
 
+	/**
+	 * Checks if is known.
+	 *
+	 * @return true, if is known
+	 */
 	public final boolean isKnown() {
 		return this != UNKNOWN;
 	}

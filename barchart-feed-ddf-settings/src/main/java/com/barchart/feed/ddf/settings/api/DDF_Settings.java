@@ -18,8 +18,6 @@ import com.barchart.util.anno.NotMutable;
  * User will create a DDF_Settings object using one of the static factory
  * methods in DDF_SettingsService.
  * 
- * @author g-litchfield
- * 
  **/
 @NotMutable
 public interface DDF_Settings {

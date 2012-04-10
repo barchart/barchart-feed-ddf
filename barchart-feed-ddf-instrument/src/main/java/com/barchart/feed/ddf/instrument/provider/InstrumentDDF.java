@@ -30,6 +30,7 @@ import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
 
+// TODO: Auto-generated Javadoc
 // TODO freeze
 class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
@@ -49,6 +50,9 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
 	//
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.api.DDF_Instrument#get(com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField)
+	 */
 	@Override
 	public <V extends Value<V>> V get(final DDF_InstrumentField<V> field) {
 
@@ -63,6 +67,9 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.provider.DDF_InstrumentDo#set(com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField, com.barchart.util.values.api.Value)
+	 */
 	@Override
 	public <V extends Value<V>> V set(final DDF_InstrumentField<V> field,
 			final V value) {
@@ -78,16 +85,25 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.base.provider.instrument.provider.VarInstrument#isFrozen()
+	 */
 	@Override
 	public boolean isFrozen() {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.base.provider.instrument.provider.VarInstrument#freeze()
+	 */
 	@Override
 	public final InstrumentDDF freeze() {
 		return this;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.base.provider.instrument.provider.BaseInstrument#isNull()
+	 */
 	@Override
 	public final boolean isNull() {
 		return this == DDF_InstrumentProvider.NULL_INSTRUMENT;
@@ -103,6 +119,9 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 		return frac + " (" + frac.fraction.description + ")";
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.base.provider.instrument.provider.BaseInstrument#toString()
+	 */
 	@Override
 	public final String toString() {
 		return "" + //
@@ -140,6 +159,9 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.instrument.api.DDF_Instrument#fullText()
+	 */
 	@Override
 	public String fullText() {
 

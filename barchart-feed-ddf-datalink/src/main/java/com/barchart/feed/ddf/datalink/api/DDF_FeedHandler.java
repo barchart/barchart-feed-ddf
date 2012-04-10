@@ -10,6 +10,9 @@ package com.barchart.feed.ddf.datalink.api;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 
+/**
+ * The Interface DDF_FeedHandler.
+ */
 public interface DDF_FeedHandler {
 
 	/** called from pool thread */

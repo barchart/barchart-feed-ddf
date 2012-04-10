@@ -7,9 +7,18 @@
  */
 package com.barchart.feed.ddf.historical.api;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DDF_ResultEmptyException.
+ */
 @SuppressWarnings("serial")
 public final class DDF_ResultEmptyException extends RuntimeException {
 
+	/**
+	 * Instantiates a new dD f_ result empty exception.
+	 *
+	 * @param message the message
+	 */
 	public DDF_ResultEmptyException(final String message) {
 		super(message);
 	}

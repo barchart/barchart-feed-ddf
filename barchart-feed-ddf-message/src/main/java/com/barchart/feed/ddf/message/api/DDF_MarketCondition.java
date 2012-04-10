@@ -11,7 +11,9 @@ import com.barchart.feed.ddf.message.enums.DDF_Condition;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.anno.NotYetImplemented;
 
-/** represents ddf feed market condition */
+/**
+ * represents ddf feed market condition.
+ */
 @NotMutable
 @NotYetImplemented
 public interface DDF_MarketCondition extends DDF_MarketBase {

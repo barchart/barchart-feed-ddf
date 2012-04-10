@@ -16,8 +16,17 @@ import org.junit.Test;
 
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestDDF_InstrumentProvider.
+ */
 public class TestDDF_InstrumentProvider {
 
+	/**
+	 * Test0.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test0() throws Exception {
 
@@ -44,6 +53,11 @@ public class TestDDF_InstrumentProvider {
 
 	}
 
+	/**
+	 * Test1.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test1() throws Exception {
 

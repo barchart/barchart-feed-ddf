@@ -13,6 +13,10 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ByteConverters.
+ */
 public final class ByteConverters {
 
 	private static final Logger log = LoggerFactory
@@ -20,6 +24,13 @@ public final class ByteConverters {
 
 	/*
 	 * Convert an int to a byte source of size <i>len</i>, big-endian order
+	 */
+	/**
+	 * Int to bytes.
+	 *
+	 * @param i the i
+	 * @param len the len
+	 * @return the byte[]
 	 */
 	public static byte[] intToBytes(int i, int len) {
 		byte[] b = new byte[len];
@@ -31,6 +42,14 @@ public final class ByteConverters {
 	/*
 	 * Convert a byte source of size <i>len</i> to an int, big-endian order
 	 */
+	/**
+	 * Bytes to int.
+	 *
+	 * @param b the b
+	 * @param offset the offset
+	 * @param len the len
+	 * @return the int
+	 */
 	public static int bytesToInt(byte[] b, int offset, int len) {
 		int value = 0;
 		for (int j = 0; j < len; ++j)
@@ -40,6 +59,13 @@ public final class ByteConverters {
 
 	/*
 	 * Convert a long to a byte source of size <i>len</i>, big-endian order
+	 */
+	/**
+	 * Long to bytes.
+	 *
+	 * @param i the i
+	 * @param len the len
+	 * @return the byte[]
 	 */
 	public static byte[] longToBytes(long i, int len) {
 		byte[] b = new byte[len];
@@ -51,6 +77,14 @@ public final class ByteConverters {
 	/*
 	 * Convert a byte source of size <i>len</i> to a long, big-endian order
 	 */
+	/**
+	 * Bytes to long.
+	 *
+	 * @param b the b
+	 * @param offset the offset
+	 * @param len the len
+	 * @return the long
+	 */
 	public static long bytesToLong(byte[] b, int offset, int len) {
 		long value = 0;
 		for (int j = 0; j < len; ++j)
@@ -60,6 +94,14 @@ public final class ByteConverters {
 
 	/*
 	 * Convert a byte source to a UTF-8 string
+	 */
+	/**
+	 * Bytes to unicode.
+	 *
+	 * @param b the b
+	 * @param offset the offset
+	 * @param len the len
+	 * @return the string
 	 */
 	public static String bytesToUnicode(byte[] b, int offset, int len) {
 		if (len == 0)
@@ -74,6 +116,12 @@ public final class ByteConverters {
 
 	/*
 	 * Convert a UTF-8 string to a byte source
+	 */
+	/**
+	 * Unicode to bytes.
+	 *
+	 * @param s the s
+	 * @return the byte[]
 	 */
 	public static byte[] unicodeToBytes(String s) {
 		if (s == null)
@@ -108,10 +156,23 @@ public final class ByteConverters {
 		return result;
 	}
 
+	/**
+	 * Unsigned byte to int.
+	 *
+	 * @param value the value
+	 * @return the int
+	 */
 	public final static int unsignedByteToInt(final byte value) {
 		return value & 0xFF;
 	}
 
+	/**
+	 * Char from bytes.
+	 *
+	 * @param hi the hi
+	 * @param lo the lo
+	 * @return the char
+	 */
 	public static final char charFromBytes(final byte hi, final byte lo) {
 		return (char) (((hi & 0xFF) << 8) | (lo & 0xFF));
 	}
@@ -119,7 +180,10 @@ public final class ByteConverters {
 	/**
 	 * from int value = 0xFAEBDCCD;
 	 * 
-	 * into byte[] array = { 0xFA, 0xEB, 0xDC, 0xCD }; (at index: 0, 1, 2, 3)
+	 * into byte[] array = { 0xFA, 0xEB, 0xDC, 0xCD }; (at index: 0, 1, 2, 3).
+	 *
+	 * @param value the value
+	 * @return the byte[]
 	 */
 	public static final byte[] byteArrayFromInt(final int value) {
 		return new byte[] {

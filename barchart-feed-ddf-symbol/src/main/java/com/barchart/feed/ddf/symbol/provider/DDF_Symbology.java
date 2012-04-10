@@ -18,6 +18,10 @@ import com.barchart.feed.ddf.symbol.enums.DDF_OptionYear;
 import com.barchart.util.ascii.ASCII;
 import com.barchart.util.values.api.TextValue;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DDF_Symbology.
+ */
 public final class DDF_Symbology {
 
 	private DDF_Symbology() {
@@ -25,7 +29,12 @@ public final class DDF_Symbology {
 
 	// //////////////////////////////////////
 
-	/** barchart policy : only upper case symbols are permitted */
+	/**
+	 * barchart policy : only upper case symbols are permitted.
+	 *
+	 * @param text the text
+	 * @return the text value
+	 */
 	public static final TextValue lookupFromSymbol(final TextValue text) {
 		if (text == null) {
 			return NULL_TEXT;
@@ -33,6 +42,12 @@ public final class DDF_Symbology {
 		return text.toUpperCase();
 	}
 
+	/**
+	 * Guid from symbol.
+	 *
+	 * @param text the text
+	 * @return the text value
+	 */
 	public static final TextValue guidFromSymbol(final String text) {
 		return lookupFromSymbol(newText(text));
 	}
@@ -43,15 +58,24 @@ public final class DDF_Symbology {
 	 * or
 	 * 
 	 * for spread: <symbol1>_<symbol2>_..._<symbolN>
+	 *
+	 * @param symbolArray the symbol array
+	 * @return the text value
 	 */
 	public static final TextValue symbolFromSymbolArray(
 			final byte[][] symbolArray) {
 		return newText(byteArrayFromSymbolArray(symbolArray));
 	}
 
-	/** default ddf message "empty" symbol */
+	/** default ddf message "empty" symbol. */
 	public static final byte[] DDF_NO_NAME = new byte[0];
 
+	/**
+	 * Byte array from symbol array.
+	 *
+	 * @param symbolArray the symbol array
+	 * @return the byte[]
+	 */
 	public static final byte[] byteArrayFromSymbolArray(
 			final byte[][] symbolArray) {
 		if (symbolArray == null || symbolArray.length == 0) {
@@ -81,6 +105,9 @@ public final class DDF_Symbology {
 	/**
 	 * from ddf symbol with legs "<symbol1>_<symbl2>_...<symbolN>" into 2D byte
 	 * array
+	 *
+	 * @param string the string
+	 * @return the byte[][]
 	 */
 	public static final byte[][] symbolArrayFromSymbolString(final String string) {
 		if (string == null) {
@@ -98,48 +125,88 @@ public final class DDF_Symbology {
 
 	// //////////////////////////////////////
 
+	/** The Constant PREFIX_INDEX. */
 	public static final String PREFIX_INDEX = "$";
 
+	/** The Constant PREFIX_FOREX. */
 	public static final String PREFIX_FOREX = "$";
 
+	/** The Constant PREFIX_SECTOR. */
 	public static final String PREFIX_SECTOR = "-";
 
+	/** The Constant PREFIX_TEST. */
 	public static final String PREFIX_TEST = "_";
 
 	//
 
+	/** The Constant SUFFIX_EQUITY_CAN_1. */
 	public static final String SUFFIX_EQUITY_CAN_1 = ".TO";
 
+	/** The Constant SUFFIX_EQUITY_CAN_2. */
 	public static final String SUFFIX_EQUITY_CAN_2 = ".VN";
 
+	/** The Constant SUFFIX_EQUITY_LSE. */
 	public static final String SUFFIX_EQUITY_LSE = ".LS";
 
+	/** The Constant SUFFIX_EQUITY_NSE. */
 	public static final String SUFFIX_EQUITY_NSE = ".NS";
 
+	/** The Constant SUFFIX_FUTURE_GROUP. */
 	public static final String SUFFIX_FUTURE_GROUP = "^F";
 
+	/** The Constant SUFFIX_OPTION_GROUP. */
 	public static final String SUFFIX_OPTION_GROUP = "^O";
 
 	//
 
 	// example : ES^F
+	/**
+	 * Symbol future group.
+	 *
+	 * @param groupName the group name
+	 * @return the string
+	 */
 	public static final String symbolFutureGroup(final String groupName) {
 		return groupName + SUFFIX_FUTURE_GROUP;
 	}
 
 	// example : ES^O
+	/**
+	 * Symbol option group.
+	 *
+	 * @param groupName the group name
+	 * @return the string
+	 */
 	public static final String symbolOptionGroup(final String groupName) {
 		return groupName + SUFFIX_OPTION_GROUP;
 	}
 
+	/**
+	 * Checks if is future group.
+	 *
+	 * @param symbolName the symbol name
+	 * @return true, if is future group
+	 */
 	public static final boolean isFutureGroup(final String symbolName) {
 		return symbolName.toUpperCase().endsWith(SUFFIX_FUTURE_GROUP);
 	}
 
+	/**
+	 * Checks if is option group.
+	 *
+	 * @param symbolName the symbol name
+	 * @return true, if is option group
+	 */
 	public static final boolean isOptionGroup(final String symbolName) {
 		return symbolName.toUpperCase().endsWith(SUFFIX_OPTION_GROUP);
 	}
 
+	/**
+	 * Gets the future group.
+	 *
+	 * @param symbolName the symbol name
+	 * @return the future group
+	 */
 	public static final String getFutureGroup(final String symbolName) {
 		final int index = symbolName.indexOf(SUFFIX_FUTURE_GROUP);
 		if (index == -1) {
@@ -149,6 +216,12 @@ public final class DDF_Symbology {
 		}
 	}
 
+	/**
+	 * Gets the option group.
+	 *
+	 * @param symbolAllName the symbol all name
+	 * @return the option group
+	 */
 	public static final String getOptionGroup(final String symbolAllName) {
 		final int index = symbolAllName.indexOf(SUFFIX_OPTION_GROUP);
 		if (index == -1) {
@@ -163,6 +236,12 @@ public final class DDF_Symbology {
 	 * 
 	 * Futures Symbols are 3 or 4 bytes, where C or CC is commodity code from
 	 * symbols list, M is contract month code and Y is contract year.
+	 */
+	/**
+	 * Checks if is future.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is future
 	 */
 	public static final boolean isFuture(final String symbol) {
 		if (symbol == null) {
@@ -184,12 +263,24 @@ public final class DDF_Symbology {
 		return true;
 	}
 
+	/**
+	 * Gets the group future.
+	 *
+	 * @param symbolName the symbol name
+	 * @return the group future
+	 */
 	public static final String getGroupFuture(final String symbolName) {
 		final int start = 0;
 		final int finish = symbolName.length() - 2;
 		return symbolName.substring(start, finish);
 	}
 
+	/**
+	 * Gets the future expire year.
+	 *
+	 * @param symbolName the symbol name
+	 * @return the future expire year
+	 */
 	public static final DDF_ExpireYear getFutureExpireYear(
 			final String symbolName) {
 		final int size = symbolName.length();
@@ -197,6 +288,12 @@ public final class DDF_Symbology {
 		return DDF_ExpireYear.fromCode(code);
 	}
 
+	/**
+	 * Gets the future expire month.
+	 *
+	 * @param symbolName the symbol name
+	 * @return the future expire month
+	 */
 	public static final DDF_ExpireMonth getFutureExpireMonth(
 			final String symbolName) {
 		final int size = symbolName.length();
@@ -216,6 +313,12 @@ public final class DDF_Symbology {
 	 * years out
 	 */
 
+	/**
+	 * Checks if is option basic.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is option basic
+	 */
 	public static final boolean isOptionBasic(final String symbol) {
 		if (!containsDigit(symbol)) {
 			return false;
@@ -247,8 +350,15 @@ public final class DDF_Symbology {
 	 * justified, zero padded to the right. C = Call, P = Put
 	 */
 
+	/** The Constant OPTION_SEPARATOR. */
 	public static final String OPTION_SEPARATOR = ASCII.STRING_BAR;
 
+	/**
+	 * Contains option separator.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if successful
+	 */
 	public static final boolean containsOptionSeparator(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -259,6 +369,12 @@ public final class DDF_Symbology {
 		return symbol.contains(OPTION_SEPARATOR);
 	}
 
+	/**
+	 * Checks if is option extended.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is option extended
+	 */
 	public static final boolean isOptionExtended(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -273,6 +389,12 @@ public final class DDF_Symbology {
 		return true;
 	}
 
+	/**
+	 * Checks if is index.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is index
+	 */
 	public static final boolean isIndex(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -280,6 +402,12 @@ public final class DDF_Symbology {
 		return symbol.toUpperCase().startsWith(PREFIX_INDEX);
 	}
 
+	/**
+	 * Checks if is forex.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is forex
+	 */
 	public static final boolean isForex(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -287,6 +415,12 @@ public final class DDF_Symbology {
 		return symbol.toUpperCase().startsWith(PREFIX_FOREX);
 	}
 
+	/**
+	 * Checks if is equity sector.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is equity sector
+	 */
 	public static final boolean isEquitySector(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -294,6 +428,12 @@ public final class DDF_Symbology {
 		return symbol.toUpperCase().startsWith(PREFIX_SECTOR);
 	}
 
+	/**
+	 * Checks if is test.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is test
+	 */
 	public static final boolean isTest(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -301,6 +441,12 @@ public final class DDF_Symbology {
 		return symbol.toUpperCase().startsWith(PREFIX_TEST);
 	}
 
+	/**
+	 * Checks if is equity can.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is equity can
+	 */
 	public static final boolean isEquityCAN(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -310,6 +456,12 @@ public final class DDF_Symbology {
 				|| name.endsWith(SUFFIX_EQUITY_CAN_2);
 	}
 
+	/**
+	 * Gets the group equity can.
+	 *
+	 * @param symbol the symbol
+	 * @return the group equity can
+	 */
 	public static final String getGroupEquityCAN(final String symbol) {
 		final String name = symbol.toUpperCase();
 		if (name.endsWith(SUFFIX_EQUITY_CAN_1)) {
@@ -321,6 +473,12 @@ public final class DDF_Symbology {
 		return null;
 	}
 
+	/**
+	 * Checks if is equity lse.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is equity lse
+	 */
 	public static final boolean isEquityLSE(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -328,11 +486,23 @@ public final class DDF_Symbology {
 		return symbol.toUpperCase().endsWith(SUFFIX_EQUITY_LSE);
 	}
 
+	/**
+	 * Gets the group equity lse.
+	 *
+	 * @param symbolName the symbol name
+	 * @return the group equity lse
+	 */
 	public static final String getGroupEquityLSE(final String symbolName) {
 		final String name = symbolName.toUpperCase();
 		return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_LSE));
 	}
 
+	/**
+	 * Checks if is equity nse.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is equity nse
+	 */
 	public static final boolean isEquityNSE(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -341,11 +511,23 @@ public final class DDF_Symbology {
 		return name.toUpperCase().endsWith(SUFFIX_EQUITY_NSE);
 	}
 
+	/**
+	 * Gets the group equity nse.
+	 *
+	 * @param symbolName the symbol name
+	 * @return the group equity nse
+	 */
 	public static final String getGroupEquityNSE(final String symbolName) {
 		final String name = symbolName.toUpperCase();
 		return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_NSE));
 	}
 
+	/**
+	 * Checks if is equity other.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is equity other
+	 */
 	public static final boolean isEquityOther(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -381,6 +563,12 @@ public final class DDF_Symbology {
 		return true;
 	}
 
+	/**
+	 * Checks if is future historical.
+	 *
+	 * @param symbol the symbol
+	 * @return true, if is future historical
+	 */
 	public static final boolean isFutureHistorical(final String symbol) {
 		if (symbol == null) {
 			return false;
@@ -400,6 +588,12 @@ public final class DDF_Symbology {
 		return true;
 	}
 
+	/**
+	 * Future normal from historical.
+	 *
+	 * @param symbol the symbol
+	 * @return the string
+	 */
 	public static final String futureNormalFromHistorical(final String symbol) {
 		final int size = symbol.length();
 		final char digitLow = symbol.charAt(size - 1);
@@ -407,6 +601,12 @@ public final class DDF_Symbology {
 		return group + digitLow;
 	}
 
+	/**
+	 * Future normal into historical.
+	 *
+	 * @param symbol the symbol
+	 * @return the string
+	 */
 	public static final String futureNormalIntoHistorical(final String symbol) {
 		return "";
 	}

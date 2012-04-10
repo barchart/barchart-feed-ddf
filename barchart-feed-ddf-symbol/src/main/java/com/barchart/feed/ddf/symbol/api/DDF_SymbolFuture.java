@@ -8,6 +8,9 @@
 package com.barchart.feed.ddf.symbol.api;
 
 
+/**
+ * The Interface DDF_SymbolFuture.
+ */
 public interface DDF_SymbolFuture extends DDF_SymbolExpiration {
 
 }

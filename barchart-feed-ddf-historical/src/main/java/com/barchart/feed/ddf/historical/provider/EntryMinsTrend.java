@@ -14,8 +14,14 @@ import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
 
+// TODO: Auto-generated Javadoc
 class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 
+	/**
+	 * Instantiates a new entry mins trend.
+	 *
+	 * @param instrument the instrument
+	 */
 	public EntryMinsTrend(final DDF_Instrument instrument) {
 		super(instrument);
 	}
@@ -27,11 +33,17 @@ class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 
 	// ///////////////////////////
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryTrend#priceResistance()
+	 */
 	@Override
 	public long priceResistance() {
 		return priceResistance;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.api.DDF_EntryTrend#priceSupport()
+	 */
 	@Override
 	public long priceSupport() {
 		return priceSupport;
@@ -42,7 +54,9 @@ class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 	/**
 	 * YYYY­MM­DD HH:MM,TRADING_DAY,
 	 * 
-	 * PRICE_SUPPORT,PRICE_RESISTANCE
+	 * PRICE_SUPPORT,PRICE_RESISTANCE.
+	 *
+	 * @param inputArray the input array
 	 */
 	@Override
 	public void decodeHead(final String[] inputArray) {
@@ -53,6 +67,9 @@ class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.Entry#decodeTail(java.lang.String[])
+	 */
 	@Override
 	public void decodeTail(final String[] inputArray) {
 
@@ -61,6 +78,9 @@ class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.barchart.feed.ddf.historical.provider.Entry#encode()
+	 */
 	@Override
 	public String encode() {
 
