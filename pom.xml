@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
-		<version>2.0.0</version>
+		<version>2.1.2</version>
 	</parent>
 
 	<groupId>com.barchart.feed</groupId>
@@ -41,7 +41,8 @@
 		<module>barchart-feed-ddf-symbol</module>
 		
 		<module>barchart-feed-ddf-util</module>
-		
+
+		<module>barchart-feed-ddf-resolver</module>
 	</modules>
 
 </project>
