@@ -19,7 +19,7 @@
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
 	</scm>
-
+	
 	<modules>
 
 		<module>barchart-feed-ddf-settings</module>
@@ -38,6 +38,10 @@
 
 		<module>barchart-feed-ddf-bundle</module>
 
+		<module>barchart-feed-ddf-symbol</module>
+		
+		<module>barchart-feed-ddf-util</module>
+		
 	</modules>
 
 </project>
