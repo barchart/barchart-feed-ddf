@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import com.barchart.feed.ddf.settings.api.DDF_Settings;
-import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
+//import com.barchart.feed.ddf.settings.api.DDF_Settings;
+//import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 
 /**
  * 
@@ -65,13 +65,13 @@ final class ConstInstrumentDDF {
 	private ConstInstrumentDDF() {
 	}
 
-	static final DDF_ServerType SERVER_TYPE = DDF_ServerType.STREAM;
+//	static final DDF_ServerType SERVER_TYPE = DDF_ServerType.STREAM;
 
 	/**
 	 * * http://qs01.ddfplus.com/stream/quote.jsx?symbols=esm0,ibm&username=USER
 	 * & password=PASS
 	 * */
-	static final String urlQuoteLookup(final CharSequence server,
+	private static final String urlQuoteLookup(final CharSequence server,
 			final CharSequence username, final CharSequence password,
 			final CharSequence symbolGuid) {
 		return "http://" + server + "/stream/quote.jsx" + "?" + "symbols="
@@ -79,14 +79,14 @@ final class ConstInstrumentDDF {
 				+ password;
 	}
 
-	static final String urlQuoteLookup(final DDF_Settings settings,
-			final CharSequence symbolGuid) {
-		final String server = settings.getServer(SERVER_TYPE)
-				.getPrimaryOrSecondary();
-		final String username = settings.getAuthUser();
-		final String password = settings.getAuthPass();
-		return urlQuoteLookup(server, username, password, symbolGuid);
-	}
+//	private static final String urlQuoteLookup(final DDF_Settings settings,
+//			final CharSequence symbolGuid) {
+//		final String server = settings.getServer(SERVER_TYPE)
+//				.getPrimaryOrSecondary();
+//		final String username = settings.getAuthUser();
+//		final String password = settings.getAuthPass();
+//		return urlQuoteLookup(server, username, password, symbolGuid);
+//	}
 
 	/**
 	 * http://extras.ddfplus.com/instruments/?lookup=esu0
