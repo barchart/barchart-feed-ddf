@@ -13,11 +13,8 @@ package com.barchart.feed.ddf.settings.enums;
 import com.barchart.util.enums.EnumCodeString;
 import com.barchart.util.math.MathExtra;
 
-// TODO: Auto-generated Javadoc
 /**
  * Enum denoting the data source/server type for a connection.
- * 
- * @author g-litchfield
  * 
  */
 public enum DDF_ServerType implements EnumCodeString {
@@ -51,16 +48,6 @@ public enum DDF_ServerType implements EnumCodeString {
 
 	private final static DDF_ServerType[] ENUM_VALUES = values();
 
-	/**
-	 * Values unsafe.
-	 *
-	 * @return the dD f_ server type[]
-	 */
-	@Deprecated
-	public final static DDF_ServerType[] valuesUnsafe() {
-		return ENUM_VALUES;
-	}
-
 	static {
 		// validate use of byte ord
 		MathExtra.castIntToByte(ENUM_VALUES.length);
@@ -68,9 +55,10 @@ public enum DDF_ServerType implements EnumCodeString {
 
 	/**
 	 * From ord.
-	 *
-	 * @param ord the ord
-	 * @return the dD f_ server type
+	 * 
+	 * @param ord
+	 *            the ord
+	 * @return the DDF_ServerType
 	 */
 	public final static DDF_ServerType fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
@@ -78,9 +66,10 @@ public enum DDF_ServerType implements EnumCodeString {
 
 	/**
 	 * From code.
-	 *
-	 * @param code the code
-	 * @return the dD f_ server type
+	 * 
+	 * @param code
+	 *            the code
+	 * @return the DDF_ServerType
 	 */
 	public static final DDF_ServerType fromCode(final String code) {
 		for (final DDF_ServerType known : ENUM_VALUES) {
@@ -91,7 +80,9 @@ public enum DDF_ServerType implements EnumCodeString {
 		return UNKNOWN;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.util.enums.EnumCodeString#code()
 	 */
 	@Override

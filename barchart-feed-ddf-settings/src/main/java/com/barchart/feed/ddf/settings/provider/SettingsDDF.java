@@ -28,7 +28,6 @@ import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 import com.barchart.feed.ddf.util.HelperXML;
 
-// TODO: Auto-generated Javadoc
 class SettingsDDF implements DDF_Settings {
 
 	private static final Logger log = LoggerFactory
@@ -42,7 +41,9 @@ class SettingsDDF implements DDF_Settings {
 	private final String username;
 	private final String password;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getAuthUser()
 	 */
 	@Override
@@ -50,7 +51,9 @@ class SettingsDDF implements DDF_Settings {
 		return username;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getAuthPass()
 	 */
 	@Override
@@ -73,8 +76,6 @@ class SettingsDDF implements DDF_Settings {
 
 		this.username = username;
 		this.password = password;
-
-		// log.debug("\n{}\n", nodeRoot);
 
 		final Element nodeLogin = HelperXML.xmlFirstChild(root, LOGIN, true);
 
@@ -112,7 +113,9 @@ class SettingsDDF implements DDF_Settings {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getLogin()
 	 */
 	@Override
@@ -120,15 +123,21 @@ class SettingsDDF implements DDF_Settings {
 		return login;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getServer(com.barchart.feed.ddf.settings.enums.DDF_ServerType)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.settings.api.DDF_Settings#getServer(com.barchart
+	 * .feed.ddf.settings.enums.DDF_ServerType)
 	 */
 	@Override
 	public DDF_Server getServer(final DDF_ServerType type) {
 		return serverMap.get(type);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -141,8 +150,12 @@ class SettingsDDF implements DDF_Settings {
 				"";
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#isValid(com.barchart.feed.ddf.settings.enums.DDF_ServerType)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.settings.api.DDF_Settings#isValid(com.barchart.
+	 * feed.ddf.settings.enums.DDF_ServerType)
 	 */
 	@Override
 	public boolean isValid(final DDF_ServerType type) {
@@ -159,8 +172,9 @@ class SettingsDDF implements DDF_Settings {
 		return true;
 	}
 
-	// @SuppressWarnings("deprecation")
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#isValidLogin()
 	 */
 	@Override
@@ -170,7 +184,9 @@ class SettingsDDF implements DDF_Settings {
 
 	private String comment = "";
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Settings#getCommentDDF()
 	 */
 	@Override

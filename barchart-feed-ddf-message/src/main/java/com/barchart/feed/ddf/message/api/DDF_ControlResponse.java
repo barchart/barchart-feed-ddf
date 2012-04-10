@@ -16,6 +16,11 @@ import com.barchart.util.values.api.TextValue;
 @NotMutable
 public interface DDF_ControlResponse extends DDF_ControlBase {
 
+	/**
+	 * 
+	 * @return The TextValue comment returned by the server in a response
+	 *         message.
+	 */
 	TextValue getComment();
 
 }

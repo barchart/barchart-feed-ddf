@@ -12,22 +12,48 @@ import com.barchart.util.anno.NotMutable;
 
 /**
  * Encapsulates all necessary data on the server to which a connection is made.
+ * <p>
+ * How does this work? What is primary vs secondary?
  * 
  */
 @NotMutable
 public interface DDF_Server {
 
+	/**
+	 * 
+	 * @return
+	 */
 	DDF_ServerType getServerType();
 
+	/**
+	 * 
+	 * @return
+	 */
 	String getPrimary();
 
+	/**
+	 * 
+	 * @return
+	 */
 	String getSecondary();
 
+	/**
+	 * 
+	 * @return
+	 */
 	String getRecovery();
 
 	// round robin
+	/**
+	 * 
+	 * @return
+	 */
 	String getPrimaryOrSecondary();
 
+	/**
+	 * 
+	 * @return
+	 */
 	boolean isValid();
 
 }

@@ -16,6 +16,10 @@ import com.barchart.util.values.api.TimeValue;
 @NotMutable
 public interface DDF_ControlTimestamp extends DDF_ControlBase {
 
+	/**
+	 * 
+	 * @return The TimeValue representation of a server time stamp.
+	 */
 	TimeValue getStampUTC();
 
 }

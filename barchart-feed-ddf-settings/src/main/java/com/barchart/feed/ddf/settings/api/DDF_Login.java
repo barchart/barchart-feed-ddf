@@ -41,6 +41,7 @@ public interface DDF_Login {
 	String getCredentials();
 
 	/**
+	 * What is the serviceId? How is it used?
 	 * 
 	 * @return
 	 */
@@ -61,7 +62,8 @@ public interface DDF_Login {
 
 	/**
 	 * 
-	 * @return
+	 * @return Returns true if both getStatus() and getCredentials() return
+	 *         "ok".
 	 */
 	boolean isValid();
 

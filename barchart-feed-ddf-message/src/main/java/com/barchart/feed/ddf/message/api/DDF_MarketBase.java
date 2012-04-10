@@ -20,7 +20,7 @@ import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 
 /**
- * base type for ddf feed market data messages.
+ * Base type for ddf feed market data messages.
  */
 @NotMutable
 public interface DDF_MarketBase extends DDF_BaseMessage, MarketMessage {

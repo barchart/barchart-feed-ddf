@@ -14,7 +14,7 @@ import com.barchart.util.values.api.TimeValue;
 /**
  * base type for all ddf/xml messasges;
  * 
- * includes: link control, market data, url lookup;.
+ * includes: link control, market data, url lookup.
  */
 @NotMutable
 public interface DDF_BaseMessage {

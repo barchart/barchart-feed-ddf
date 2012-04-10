@@ -23,22 +23,44 @@ import com.barchart.util.anno.NotMutable;
 public interface DDF_Settings {
 
 	/**
-	 * login authorization username
-	 * */
+	 * @return login authorization username
+	 */
 	String getAuthUser();
 
-	/** login authorization password */
+	/**
+	 * @return login authorization password
+	 */
 	String getAuthPass();
 
+	/**
+	 * 
+	 * @return
+	 */
 	DDF_Login getLogin();
 
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
 	DDF_Server getServer(final DDF_ServerType type);
 
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
 	boolean isValid(final DDF_ServerType type);
 
+	/**
+	 * 
+	 * @return
+	 */
 	boolean isValidLogin();
 
-	/** operation error message */
+	/**
+	 * @return operation error message
+	 */
 	String getCommentDDF();
 
 }

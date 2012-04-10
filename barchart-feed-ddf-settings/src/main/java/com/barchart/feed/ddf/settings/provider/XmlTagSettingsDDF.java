@@ -10,14 +10,11 @@
  */
 package com.barchart.feed.ddf.settings.provider;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Const.
  */
 final class XmlTagSettingsDDF {
 
-	/**
-	 */
 	private XmlTagSettingsDDF() {
 	}
 

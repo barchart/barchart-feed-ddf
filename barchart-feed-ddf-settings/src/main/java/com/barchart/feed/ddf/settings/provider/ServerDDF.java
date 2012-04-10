@@ -10,14 +10,16 @@
  */
 package com.barchart.feed.ddf.settings.provider;
 
-import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.*;
+import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.SERVERS_SERVER_PRIMARY;
+import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.SERVERS_SERVER_RECOVERY;
+import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.SERVERS_SERVER_SECONDARY;
+import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.SERVERS_SERVER_TYPE;
 
 import org.w3c.dom.Element;
 
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 
-// TODO: Auto-generated Javadoc
 class ServerDDF implements DDF_Server {
 
 	private final DDF_ServerType type;
@@ -38,30 +40,42 @@ class ServerDDF implements DDF_Server {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#getServerType()
 	 */
+	@Override
 	public DDF_ServerType getServerType() {
 		return type;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#getPrimary()
 	 */
+	@Override
 	public String getPrimary() {
 		return primary;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#getSecondary()
 	 */
+	@Override
 	public String getSecondary() {
 		return secondary;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#getRecovery()
 	 */
+	@Override
 	public String getRecovery() {
 		return recovery;
 	}
@@ -70,9 +84,10 @@ class ServerDDF implements DDF_Server {
 
 	/**
 	 * round robin; non null.
-	 *
+	 * 
 	 * @return the primary or secondary
 	 */
+	@Override
 	public synchronized String getPrimaryOrSecondary() {
 
 		final boolean isValidPrimary = isValid(primary);
@@ -103,7 +118,9 @@ class ServerDDF implements DDF_Server {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.settings.api.DDF_Server#isValid()
 	 */
 	@Override
@@ -118,7 +135,9 @@ class ServerDDF implements DDF_Server {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
