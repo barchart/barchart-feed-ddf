@@ -7,9 +7,10 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.instrument.provider.ConstInstrumentDDF.*;
-import static com.barchart.feed.ddf.util.HelperXML.*;
-import static com.barchart.util.values.provider.ValueBuilder.*;
+import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
+import static com.barchart.feed.ddf.util.HelperXML.xmlDocumentDecode;
+import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -47,13 +48,19 @@ public final class DDF_InstrumentProvider {
 	static final List<DDF_Instrument> NULL_LIST = Collections
 			.unmodifiableList(new ArrayList<DDF_Instrument>(0));
 
+	static final String SERVER_EXTRAS = "extras.ddfplus.com";
+
+	static final String urlInstrumentLookup(final CharSequence lookup) {
+		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
+	}
+
 	private DDF_InstrumentProvider() {
 	}
 
 	private static volatile DDF_DefinitionService instance;
 
 	private static Boolean overrideURL = false;
-	
+
 	// TODO
 	private static volatile WeakReference<DDF_DefinitionService> service;
 
@@ -103,8 +110,8 @@ public final class DDF_InstrumentProvider {
 	public static DDF_Instrument find(final TextValue symbol) {
 		return instance().lookup(symbol);
 	}
-	
-	public static DDF_Instrument findDDF(final TextValue symbol){
+
+	public static DDF_Instrument findDDF(final TextValue symbol) {
 		return instance().lookupDDF(symbol);
 	}
 
@@ -135,7 +142,7 @@ public final class DDF_InstrumentProvider {
 
 		try {
 			return remoteLookup(symbolList);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			log.error("", e);
 			return NULL_LIST;
 		}
@@ -149,19 +156,19 @@ public final class DDF_InstrumentProvider {
 
 	}
 
-	public static void overrideLookupURL(boolean b){
+	public static void overrideLookupURL(final boolean b) {
 		overrideURL = b;
 	}
-	
+
 	// TODO: FIXME - allow custom look URL
 	//
-	
-	static DDF_Instrument remoteLookup(CharSequence symbol)
-			throws Exception {
 
-		if(overrideURL)
+	static DDF_Instrument remoteLookup(CharSequence symbol) throws Exception {
+
+		if (overrideURL) {
 			symbol = symbol + "&bats=1";
-		
+		}
+
 		final String symbolURI = urlInstrumentLookup(symbol);
 
 		log.debug("SINGLE symbolURI");
@@ -241,11 +248,11 @@ public final class DDF_InstrumentProvider {
 
 							list.add(instruement);
 
-						} catch (SymbolNotFoundException e) {
+						} catch (final SymbolNotFoundException e) {
 
 							log.warn("symbol not found : {}", e.getMessage());
 
-						} catch (Exception e) {
+						} catch (final Exception e) {
 
 							log.error("decode failure", e);
 							HelperXML.log(attributes);
@@ -265,7 +272,7 @@ public final class DDF_InstrumentProvider {
 
 			parser.parse(stream, handler);
 
-		} catch (SAXParseException e) {
+		} catch (final SAXParseException e) {
 
 			log.warn("parse failed : {} ", symbolURI);
 

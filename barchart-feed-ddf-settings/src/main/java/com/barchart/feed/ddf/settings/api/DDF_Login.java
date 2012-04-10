@@ -29,13 +29,14 @@ public interface DDF_Login {
 	/**
 	 * Call to determine the status of a login attempt.
 	 * 
-	 * @return String "ok" is both user name and password are valid.
+	 * @return String "ok" if user name is valid.
 	 */
 	String getStatus();
 
 	/**
+	 * Call to determine the status of a login attempt.
 	 * 
-	 * @return
+	 * @return String "ok" if both user name and password are valid.
 	 */
 	String getCredentials();
 
