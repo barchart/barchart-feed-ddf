@@ -170,7 +170,9 @@
 						</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
 						<Export-Package>
-							com.barchart.*;version=${project.parent.version},
+							com.barchart.util.*;version=${barchartUtilVersion},
+							com.barchart.feed.base*;version=${barchartFeedBaseVersion},
+							com.barchart.feed.ddf.*;version=${project.parent.version},
 						</Export-Package>
 					</instructions>
 				</configuration>
