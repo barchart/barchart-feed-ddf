@@ -21,9 +21,9 @@
 	
 	<properties>
 		
-		<barchartUtilVersion>2.0.0</barchartUtilVersion>
+		<barchartUtilVersion>2.0.2</barchartUtilVersion>
 	
-		<barchartFeedBaseVersion>1.2.0</barchartFeedBaseVersion>
+		<barchartFeedBaseVersion>1.2.1</barchartFeedBaseVersion>
 	
 	</properties>
 	

@@ -26,7 +26,7 @@ import com.barchart.util.bench.time.StopWatch;
 import com.barchart.util.thread.Runner;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
-import com.barchart.util.values.util.ValUtil;
+import com.barchart.util.values.util.ValueUtil;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -40,8 +40,9 @@ public class HistoricalTrendExample {
 
 	/**
 	 * The main method.
-	 *
-	 * @param args the arguments
+	 * 
+	 * @param args
+	 *            the arguments
 	 */
 	public final static void main(final String[] args) {
 
@@ -140,7 +141,7 @@ public class HistoricalTrendExample {
 				final PriceValue priceValue = ValueBuilder.newPrice(mantissa,
 						exponent);
 
-				final double priceAsDouble = ValUtil.asDouble(priceValue);
+				final double priceAsDouble = ValueUtil.asDouble(priceValue);
 
 				log.info("priceValue={}; priceAsDouble={}", priceValue,
 						priceAsDouble);
