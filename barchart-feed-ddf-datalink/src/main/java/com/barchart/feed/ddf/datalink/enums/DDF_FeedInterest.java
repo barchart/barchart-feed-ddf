@@ -13,7 +13,7 @@ import java.util.Set;
 import com.barchart.feed.base.api.market.enums.MarketEvent;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
-import com.barchart.feed.ddf.message.util.FeedDDF;
+import com.barchart.feed.ddf.util.FeedDDF;
 
 // TODO: Auto-generated Javadoc
 /**

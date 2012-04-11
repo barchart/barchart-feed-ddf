@@ -7,7 +7,18 @@
  */
 package com.barchart.feed.ddf.message.enums;
 
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.util.ascii.ASCII.NUL;
+import static com.barchart.util.ascii.ASCII._0_;
+import static com.barchart.util.ascii.ASCII._1_;
+import static com.barchart.util.ascii.ASCII._2_;
+import static com.barchart.util.ascii.ASCII._3_;
+import static com.barchart.util.ascii.ASCII._4_;
+import static com.barchart.util.ascii.ASCII._5_;
+import static com.barchart.util.ascii.ASCII._6_;
+import static com.barchart.util.ascii.ASCII._7_;
+import static com.barchart.util.ascii.ASCII._8_;
+import static com.barchart.util.ascii.ASCII._B_;
+import static com.barchart.util.ascii.ASCII._Z_;
 
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
@@ -20,8 +31,8 @@ import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.api.DDF_MarketSession;
 import com.barchart.feed.ddf.message.api.DDF_MarketSnapshot;
 import com.barchart.feed.ddf.message.api.DDF_MarketTrade;
-import com.barchart.feed.ddf.message.util.FeedDDF;
 import com.barchart.feed.ddf.util.ByteConverters;
+import com.barchart.feed.ddf.util.FeedDDF;
 import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeChar;
 import com.barchart.util.math.MathExtra;
@@ -110,17 +121,21 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 	/** place holder for unsupported message types */
 	UNKNOWN(_0_, _0_, Void.class), //
 
-	/* (non-Javadoc)
-  * @see com.barchart.util.enums.EnumByteOrdinal#ord()
-  */
- ;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+	 */
+	;
 
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.util.enums.EnumCodeChar#code()
 	 */
 	@Override
@@ -137,7 +152,10 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 	/** ddf classifier : "message sub-record". */
 	public final byte subRecord;
 
-	/** ddf classifier : "code = record (high byte) & sub-record (low byte)" packed in a char letter. */
+	/**
+	 * ddf classifier : "code = record (high byte) & sub-record (low byte)"
+	 * packed in a char letter.
+	 */
 	public final char code;
 
 	/** message interface used for this message type. */
@@ -145,10 +163,10 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/** The is control timestamp. */
 	public final boolean isControlTimestamp;
-	
+
 	/** The is control response. */
 	public final boolean isControlResponse;
-	
+
 	/** The is market message. */
 	public final boolean isMarketMessage;
 
@@ -172,7 +190,7 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/**
 	 * Values unsafe.
-	 *
+	 * 
 	 * @return the dD f_ message type[]
 	 */
 	@Deprecated
@@ -187,8 +205,9 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/**
 	 * From ord.
-	 *
-	 * @param ord the ord
+	 * 
+	 * @param ord
+	 *            the ord
 	 * @return the dD f_ message type
 	 */
 	public final static DDF_MessageType fromOrd(final byte ord) {
@@ -197,9 +216,11 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/**
 	 * From pair.
-	 *
-	 * @param record the record
-	 * @param subRecord the sub record
+	 * 
+	 * @param record
+	 *            the record
+	 * @param subRecord
+	 *            the sub record
 	 * @return the dD f_ message type
 	 */
 	public final static DDF_MessageType fromPair(final byte record,
@@ -292,8 +313,9 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/**
 	 * From code.
-	 *
-	 * @param code the code
+	 * 
+	 * @param code
+	 *            the code
 	 * @return the dD f_ message type
 	 */
 	public final static DDF_MessageType fromCode(final char code) {
@@ -327,7 +349,7 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/**
 	 * Checks if is known.
-	 *
+	 * 
 	 * @return true, if is known
 	 */
 	public final boolean isKnown() {
