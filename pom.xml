@@ -20,6 +20,14 @@
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
 	</scm>
 	
+	<properties>
+		
+		<barchartUtilVersion>2.0.0</barchartUtilVersion>
+	
+		<barchartFeedBaseVersion>1.2.0</barchartFeedBaseVersion>
+	
+	</properties>
+	
 	<modules>
 
 		<module>barchart-feed-ddf-settings</module>
@@ -34,13 +42,16 @@
 
 		<module>barchart-feed-ddf-market</module>
 
-		<module>barchart-feed-ddf-bundle</module>
-
 		<module>barchart-feed-ddf-symbol</module>
 		
 		<module>barchart-feed-ddf-util</module>
 
 		<module>barchart-feed-ddf-resolver</module>
+
+		<!-- ### -->
+
+		<module>barchart-feed-ddf-assembly</module>
+		
 	</modules>
 
 </project>

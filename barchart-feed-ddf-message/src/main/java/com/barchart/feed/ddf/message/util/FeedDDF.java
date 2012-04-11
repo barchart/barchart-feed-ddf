@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.util;
+package com.barchart.feed.ddf.message.util;
 
 import com.barchart.util.ascii.ASCII;
 

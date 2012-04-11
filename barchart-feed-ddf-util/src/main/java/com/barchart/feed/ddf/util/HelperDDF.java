@@ -7,12 +7,7 @@
  */
 package com.barchart.feed.ddf.util;
 
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.ascii.ASCII.DASH;
-import static com.barchart.util.ascii.ASCII.NUL;
-import static com.barchart.util.ascii.ASCII.STRING_DASH;
-import static com.barchart.util.ascii.ASCII.STRING_EMPTY;
-import static com.barchart.util.ascii.ASCII._0_;
+import static com.barchart.util.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
@@ -34,10 +29,17 @@ import com.barchart.util.values.provider.ValueBuilder;
  */
 public final class HelperDDF {
 
-	/** "ddf empty" value for price or size;  ddf feed: looks like ",," ; means no change from previous  xml feed: looks like missing/optional tag attribute. */
+	/**
+	 * "ddf empty" value for price or size; ddf feed: looks like ",," ; means no
+	 * change from previous xml feed: looks like missing/optional tag attribute.
+	 */
 	public static final long DDF_EMPTY = Long.MIN_VALUE + 1;
-	
-	/** "ddf clear" value for price or size; really is a command in data path;  ddf feed: looks like ",-," ; means value no longer available  xml feed: no representation; treat same as "ddf blank". */
+
+	/**
+	 * "ddf clear" value for price or size; really is a command in data path;
+	 * ddf feed: looks like ",-," ; means value no longer available xml feed: no
+	 * representation; treat same as "ddf blank".
+	 */
 	public static final long DDF_CLEAR = Long.MIN_VALUE + 2;
 
 	private HelperDDF() {
@@ -47,9 +49,11 @@ public final class HelperDDF {
 	// into 10.25 (mantissa=1025, fraction=1/100)
 	/**
 	 * From binary to decimal.
-	 *
-	 * @param value the value
-	 * @param frac the frac
+	 * 
+	 * @param value
+	 *            the value
+	 * @param frac
+	 *            the frac
 	 * @return the long
 	 */
 	public final static long fromBinaryToDecimal(final long value,
@@ -92,9 +96,11 @@ public final class HelperDDF {
 
 	/**
 	 * From decimal to binary.
-	 *
-	 * @param value the value
-	 * @param frac the frac
+	 * 
+	 * @param value
+	 *            the value
+	 * @param frac
+	 *            the frac
 	 * @return the long
 	 */
 	public final static long fromDecimalToBinary(final long value,
@@ -130,11 +136,15 @@ public final class HelperDDF {
 
 	/**
 	 * Decimal encode.
-	 *
-	 * @param mantissa the mantissa
-	 * @param frac the frac
-	 * @param buffer the buffer
-	 * @param marker the marker
+	 * 
+	 * @param mantissa
+	 *            the mantissa
+	 * @param frac
+	 *            the frac
+	 * @param buffer
+	 *            the buffer
+	 * @param marker
+	 *            the marker
 	 */
 	public final static void decimalEncode(/* local */long mantissa,
 			final DDF_Fraction frac, final ByteBuffer buffer, final byte marker) {
@@ -144,10 +154,13 @@ public final class HelperDDF {
 
 	/**
 	 * Decimal decode.
-	 *
-	 * @param frac the frac
-	 * @param buffer the buffer
-	 * @param marker the marker
+	 * 
+	 * @param frac
+	 *            the frac
+	 * @param buffer
+	 *            the buffer
+	 * @param marker
+	 *            the marker
 	 * @return the long
 	 */
 	public final static long decimalDecode(final DDF_Fraction frac,
@@ -159,9 +172,11 @@ public final class HelperDDF {
 
 	/**
 	 * New decimal ddf.
-	 *
-	 * @param mantissa the mantissa
-	 * @param frac the frac
+	 * 
+	 * @param mantissa
+	 *            the mantissa
+	 * @param frac
+	 *            the frac
 	 * @return the decimal value
 	 */
 	public final static DecimalValue newDecimalDDF(final long mantissa,
@@ -177,9 +192,11 @@ public final class HelperDDF {
 
 	/**
 	 * New price ddf.
-	 *
-	 * @param mantissa the mantissa
-	 * @param frac the frac
+	 * 
+	 * @param mantissa
+	 *            the mantissa
+	 * @param frac
+	 *            the frac
 	 * @return the price value
 	 */
 	public final static PriceValue newPriceDDF(final long mantissa,
@@ -195,8 +212,9 @@ public final class HelperDDF {
 
 	/**
 	 * New size ddf.
-	 *
-	 * @param sizeValue the size value
+	 * 
+	 * @param sizeValue
+	 *            the size value
 	 * @return the size value
 	 */
 	public final static SizeValue newSizeDDF(final long sizeValue) {
@@ -211,8 +229,9 @@ public final class HelperDDF {
 
 	/**
 	 * New time ddf.
-	 *
-	 * @param millisUTC the millis utc
+	 * 
+	 * @param millisUTC
+	 *            the millis utc
 	 * @return the time value
 	 */
 	public final static TimeValue newTimeDDF(final long millisUTC) {
@@ -227,9 +246,11 @@ public final class HelperDDF {
 
 	/**
 	 * Decimal decode.
-	 *
-	 * @param string the string
-	 * @param frac the frac
+	 * 
+	 * @param string
+	 *            the string
+	 * @param frac
+	 *            the frac
 	 * @return the long
 	 */
 	public static final long decimalDecode(final String string,
@@ -241,9 +262,11 @@ public final class HelperDDF {
 
 	/**
 	 * Decimal encode.
-	 *
-	 * @param value the value
-	 * @param frac the frac
+	 * 
+	 * @param value
+	 *            the value
+	 * @param frac
+	 *            the frac
 	 * @return the string
 	 */
 	public static final String decimalEncode(/* local */long value,
@@ -255,10 +278,13 @@ public final class HelperDDF {
 
 	/**
 	 * Long encode.
-	 *
-	 * @param value the value
-	 * @param buffer the buffer
-	 * @param marker the marker
+	 * 
+	 * @param value
+	 *            the value
+	 * @param buffer
+	 *            the buffer
+	 * @param marker
+	 *            the marker
 	 */
 	public final static void longEncode(final long value,
 			final ByteBuffer buffer, final byte marker) {
@@ -283,9 +309,11 @@ public final class HelperDDF {
 
 	/**
 	 * note: NUL marker does not consume; while non NUL does.
-	 *
-	 * @param buffer the buffer
-	 * @param marker the marker
+	 * 
+	 * @param buffer
+	 *            the buffer
+	 * @param marker
+	 *            the marker
 	 * @return the long
 	 */
 	public final static long longDecode(final ByteBuffer buffer,
@@ -350,8 +378,9 @@ public final class HelperDDF {
 
 	/**
 	 * Checks if is empty ddf.
-	 *
-	 * @param string the string
+	 * 
+	 * @param string
+	 *            the string
 	 * @return true, if is empty ddf
 	 */
 	public static final boolean isEmptyDDF(final String string) {
@@ -360,8 +389,9 @@ public final class HelperDDF {
 
 	/**
 	 * Checks if is dash ddf.
-	 *
-	 * @param string the string
+	 * 
+	 * @param string
+	 *            the string
 	 * @return true, if is dash ddf
 	 */
 	public static final boolean isDashDDF(final String string) {
@@ -370,8 +400,9 @@ public final class HelperDDF {
 
 	/**
 	 * Price decode.
-	 *
-	 * @param string the string
+	 * 
+	 * @param string
+	 *            the string
 	 * @return the price value
 	 */
 	public final static PriceValue priceDecode(final String string) {
@@ -384,8 +415,9 @@ public final class HelperDDF {
 
 	/**
 	 * Price encode.
-	 *
-	 * @param price the price
+	 * 
+	 * @param price
+	 *            the price
 	 * @return the string
 	 */
 	public final static String priceEncode(final PriceValue price) {
@@ -416,8 +448,9 @@ public final class HelperDDF {
 
 	/**
 	 * Byte as string.
-	 *
-	 * @param marker the marker
+	 * 
+	 * @param marker
+	 *            the marker
 	 * @return the string
 	 */
 	public static final String byteAsString(final byte marker) {
@@ -426,8 +459,9 @@ public final class HelperDDF {
 
 	/**
 	 * filter special ddf values.
-	 *
-	 * @param string the string
+	 * 
+	 * @param string
+	 *            the string
 	 * @return the long
 	 */
 	public static final long longDecode(final String string) {
@@ -442,8 +476,9 @@ public final class HelperDDF {
 
 	/**
 	 * filter special ddf values.
-	 *
-	 * @param value the value
+	 * 
+	 * @param value
+	 *            the value
 	 * @return the string
 	 */
 	public static final String longEncode(final long value) {
@@ -458,9 +493,11 @@ public final class HelperDDF {
 
 	/**
 	 * from ddf "20100616124807" into millisUTC.
-	 *
-	 * @param value the value
-	 * @param zone the zone
+	 * 
+	 * @param value
+	 *            the value
+	 * @param zone
+	 *            the zone
 	 * @return the long
 	 */
 	public static final long timeDecode(/* local */long value,
@@ -483,9 +520,11 @@ public final class HelperDDF {
 
 	/**
 	 * from millisUTC into ddf "20100616124807".
-	 *
-	 * @param millisUTC the millis utc
-	 * @param zone the zone
+	 * 
+	 * @param millisUTC
+	 *            the millis utc
+	 * @param zone
+	 *            the zone
 	 * @return the long
 	 */
 	public static final long timeEncode(final long millisUTC,

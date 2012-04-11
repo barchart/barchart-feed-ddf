@@ -28,7 +28,7 @@ import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.market.provider.DDF_MarketService;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
-import com.barchart.feed.ddf.util.FeedDDF;
+import com.barchart.feed.ddf.message.util.FeedDDF;
 
 // TODO: Auto-generated Javadoc
 /**

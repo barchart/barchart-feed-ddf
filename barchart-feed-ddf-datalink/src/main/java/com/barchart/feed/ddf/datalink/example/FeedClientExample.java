@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedHandler;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedService;
-import com.barchart.feed.ddf.util.FeedDDF;
+import com.barchart.feed.ddf.message.util.FeedDDF;
 
 // TODO: Auto-generated Javadoc
 /**

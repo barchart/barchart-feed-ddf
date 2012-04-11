@@ -33,11 +33,11 @@ import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
+import com.barchart.feed.ddf.message.util.FeedDDF;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 import com.barchart.feed.ddf.settings.provider.DDF_SettingsService;
-import com.barchart.feed.ddf.util.FeedDDF;
 
 // TODO: Auto-generated Javadoc
 /**

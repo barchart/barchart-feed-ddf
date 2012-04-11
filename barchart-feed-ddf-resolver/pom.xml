@@ -19,6 +19,7 @@
   </scm>
   
   <dependencies>
+  
   	<dependency>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed-ddf-instrument</artifactId>
@@ -27,10 +28,10 @@
 		
 	<dependency>
     	<groupId>org.apache.lucene</groupId>
-    	<artifactId>lucene-analyzers</artifactId>
+    	<artifactId>lucene-core</artifactId>
     	<version>3.5.0</version>
-    	<scope>provided</scope>
 	</dependency>
 	
   </dependencies>
+  
 </project>

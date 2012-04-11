@@ -46,17 +46,21 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	UNKNOWN(QUEST, 0, DEC_Z00), //
 
-	/* (non-Javadoc)
-  * @see com.barchart.util.enums.EnumByteOrdinal#ord()
-  */
- ;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
+	 */
+	;
 
 	@Override
 	public final byte ord() {
 		return ord;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.util.enums.EnumCodeByte#code()
 	 */
 	@Override
@@ -75,13 +79,13 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	/** base-10 exponent and denominator, regardless of enum base. */
 	public final int decimalExponent;
-	
+
 	/** The decimal denominator. */
 	public final long decimalDenominator;
 
 	/** base-2 or base-10 exponent and denominator, depending on enum base. */
 	public final int nativeExponent;
-	
+
 	/** The native denominator. */
 	public final long nativeDenominator;
 
@@ -128,7 +132,7 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * Values unsafe.
-	 *
+	 * 
 	 * @return the dD f_ fraction[]
 	 */
 	@Deprecated
@@ -145,8 +149,9 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 	// http://java.sun.com/docs/books/jvms/second_edition/html/Compiling.doc.html#14942
 	/**
 	 * From base code.
-	 *
-	 * @param baseCode the base code
+	 * 
+	 * @param baseCode
+	 *            the base code
 	 * @return the dD f_ fraction
 	 */
 	public final static DDF_Fraction fromBaseCode(final byte baseCode) {
@@ -162,8 +167,9 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 	// http://java.sun.com/docs/books/jvms/second_edition/html/Compiling.doc.html#14942
 	/**
 	 * From unit code.
-	 *
-	 * @param unitCode the unit code
+	 * 
+	 * @param unitCode
+	 *            the unit code
 	 * @return the dD f_ fraction
 	 */
 	public final static DDF_Fraction fromUnitCode(final int unitCode) {
@@ -178,8 +184,9 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 	// TODO optimize; replace with 1 tableswitch block
 	/**
 	 * From fraction.
-	 *
-	 * @param fraction the fraction
+	 * 
+	 * @param fraction
+	 *            the fraction
 	 * @return the dD f_ fraction
 	 */
 	public final static DDF_Fraction fromFraction(final Fraction fraction) {
@@ -193,8 +200,9 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * From ord.
-	 *
-	 * @param ord the ord
+	 * 
+	 * @param ord
+	 *            the ord
 	 * @return the dD f_ fraction
 	 */
 	public final static DDF_Fraction fromOrd(final byte ord) {
@@ -203,7 +211,7 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * Checks if is known.
-	 *
+	 * 
 	 * @return true, if is known
 	 */
 	public final boolean isKnown() {

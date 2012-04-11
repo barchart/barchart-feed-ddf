@@ -7,20 +7,8 @@
  */
 package com.barchart.feed.ddf.util;
 
-import static com.barchart.feed.ddf.util.HelperDDF.DDF_CLEAR;
-import static com.barchart.feed.ddf.util.HelperDDF.DDF_EMPTY;
-import static com.barchart.feed.ddf.util.HelperDDF.byteAsString;
-import static com.barchart.feed.ddf.util.HelperDDF.fromBinaryToDecimal;
-import static com.barchart.feed.ddf.util.HelperDDF.fromDecimalToBinary;
-import static com.barchart.feed.ddf.util.HelperDDF.longDecode;
-import static com.barchart.feed.ddf.util.HelperDDF.longEncode;
-import static com.barchart.feed.ddf.util.HelperDDF.priceDecode;
-import static com.barchart.feed.ddf.util.HelperDDF.priceEncode;
-import static com.barchart.feed.ddf.util.HelperDDF.timeDecode;
-import static com.barchart.feed.ddf.util.HelperDDF.timeEncode;
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.ascii.ASCII.NUL;
-import static com.barchart.util.ascii.ASCII.STRING_DASH;
+import static com.barchart.feed.ddf.util.HelperDDF.*;
+import static com.barchart.util.ascii.ASCII.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -62,7 +50,7 @@ public final class HelperXML {
 
 	/** throw exceptions on mandatory xml fields, stops parsing. */
 	public static final boolean XML_STOP = true;
-	
+
 	/** no exceptions on optional xml fields, return default instead. */
 	public static final boolean XML_PASS = !XML_STOP;
 
@@ -108,10 +96,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml first child.
-	 *
-	 * @param parent the parent
-	 * @param childName the child name
-	 * @param isThrow the is throw
+	 * 
+	 * @param parent
+	 *            the parent
+	 * @param childName
+	 *            the child name
+	 * @param isThrow
+	 *            the is throw
 	 * @return the element
 	 */
 	public static final Element xmlFirstChild(final Element parent,
@@ -138,10 +129,12 @@ public final class HelperXML {
 
 	/**
 	 * Xml document decode.
-	 *
-	 * @param xmlURI the xml uri
+	 * 
+	 * @param xmlURI
+	 *            the xml uri
 	 * @return the element
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	public static final Element xmlDocumentDecode(final String xmlURI)
 			throws Exception {
@@ -150,11 +143,15 @@ public final class HelperXML {
 
 	/**
 	 * Xml dodument decode.
-	 *
-	 * @param array the array
-	 * @param start the start
-	 * @param finish the finish
-	 * @param isThrow the is throw
+	 * 
+	 * @param array
+	 *            the array
+	 * @param start
+	 *            the start
+	 * @param finish
+	 *            the finish
+	 * @param isThrow
+	 *            the is throw
 	 * @return the element
 	 */
 	public static final Element xmlDodumentDecode(final byte[] array,
@@ -176,9 +173,11 @@ public final class HelperXML {
 
 	/**
 	 * Xml document encode.
-	 *
-	 * @param root the root
-	 * @param isThrow the is throw
+	 * 
+	 * @param root
+	 *            the root
+	 * @param isThrow
+	 *            the is throw
 	 * @return the byte[]
 	 */
 	public static final byte[] xmlDocumentEncode(final Element root,
@@ -203,10 +202,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml string decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the string
 	 */
 	public static final String xmlStringDecode(final Element tag,
@@ -224,10 +226,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml string decode.
-	 *
-	 * @param atr the atr
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param atr
+	 *            the atr
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the string
 	 */
 	public static final String xmlStringDecode(final Attributes atr,
@@ -245,10 +250,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml string encode.
-	 *
-	 * @param string the string
-	 * @param tag the tag
-	 * @param attribute the attribute
+	 * 
+	 * @param string
+	 *            the string
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
 	 */
 	public static final void xmlStringEncode(final String string,
 			final Element tag, final String attribute) {
@@ -257,10 +265,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml text encode.
-	 *
-	 * @param text the text
-	 * @param tag the tag
-	 * @param attribute the attribute
+	 * 
+	 * @param text
+	 *            the text
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
 	 */
 	public static final void xmlTextEncode(final StringBuilder text,
 			final Element tag, final String attribute) {
@@ -269,8 +280,9 @@ public final class HelperXML {
 
 	/**
 	 * Xml new document.
-	 *
-	 * @param tagName the tag name
+	 * 
+	 * @param tagName
+	 *            the tag name
 	 * @return the element
 	 */
 	public static final Element xmlNewDocument(final String tagName) {
@@ -281,9 +293,11 @@ public final class HelperXML {
 
 	/**
 	 * Xml new element.
-	 *
-	 * @param root the root
-	 * @param tagName the tag name
+	 * 
+	 * @param root
+	 *            the root
+	 * @param tagName
+	 *            the tag name
 	 * @return the element
 	 */
 	public static final Element xmlNewElement(final Element root,
@@ -295,9 +309,11 @@ public final class HelperXML {
 
 	/**
 	 * Xml check tag name.
-	 *
-	 * @param tag the tag
-	 * @param name the name
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param name
+	 *            the name
 	 */
 	public static final void xmlCheckTagName(final Element tag,
 			final String name) {
@@ -310,9 +326,11 @@ public final class HelperXML {
 
 	/**
 	 * Checks if is xml name match.
-	 *
-	 * @param root the root
-	 * @param tag the tag
+	 * 
+	 * @param root
+	 *            the root
+	 * @param tag
+	 *            the tag
 	 * @return true, if is xml name match
 	 */
 	public static final boolean isXmlNameMatch(final Element root,
@@ -323,10 +341,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml integer decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the int
 	 */
 	public static final int xmlIntegerDecode(final Element tag,
@@ -348,10 +369,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml integer encode.
-	 *
-	 * @param value the value
-	 * @param tag the tag
-	 * @param attribute the attribute
+	 * 
+	 * @param value
+	 *            the value
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
 	 */
 	public static final void xmlIntegerEncode(final int value,
 			final Element tag, final String attribute) {
@@ -361,10 +385,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml price decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the price value
 	 */
 	public static final PriceValue xmlPriceDecode(final Element tag,
@@ -384,10 +411,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml price decode.
-	 *
-	 * @param ats the ats
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param ats
+	 *            the ats
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the price value
 	 */
 	public static final PriceValue xmlPriceDecode(final Attributes ats,
@@ -407,10 +437,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml price encode.
-	 *
-	 * @param price the price
-	 * @param tag the tag
-	 * @param attribute the attribute
+	 * 
+	 * @param price
+	 *            the price
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
 	 */
 	public static final void xmlPriceEncode(final PriceValue price,
 			final Element tag, final String attribute) {
@@ -420,10 +453,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml byte decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the byte
 	 */
 	public static final byte xmlByteDecode(final Element tag,
@@ -441,10 +477,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml byte decode.
-	 *
-	 * @param atr the atr
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param atr
+	 *            the atr
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the byte
 	 */
 	public static final byte xmlByteDecode(final Attributes atr,
@@ -463,12 +502,17 @@ public final class HelperXML {
 	// decimal array
 	/**
 	 * Xml decimal array decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param marker the marker
-	 * @param frac the frac
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param marker
+	 *            the marker
+	 * @param frac
+	 *            the frac
+	 * @param isThrow
+	 *            the is throw
 	 * @return the long[]
 	 */
 	public static final long[] xmlDecimalArrayDecode(final Element tag,
@@ -488,11 +532,15 @@ public final class HelperXML {
 	// long array
 	/**
 	 * Xml long array decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param marker the marker
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param marker
+	 *            the marker
+	 * @param isThrow
+	 *            the is throw
 	 * @return the long[]
 	 */
 	public static final long[] xmlLongArrayDecode(final Element tag,
@@ -521,10 +569,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml ascii decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the byte[]
 	 */
 	public static final byte[] xmlAsciiDecode(final Element tag,
@@ -542,10 +593,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml ascii encode.
-	 *
-	 * @param array the array
-	 * @param tag the tag
-	 * @param attribute the attribute
+	 * 
+	 * @param array
+	 *            the array
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
 	 */
 	public static final void xmlAsciiEncode(final byte[] array,
 			final Element tag, final String attribute) {
@@ -557,10 +611,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml byte encode.
-	 *
-	 * @param code the code
-	 * @param tag the tag
-	 * @param attribute the attribute
+	 * 
+	 * @param code
+	 *            the code
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
 	 */
 	public static final void xmlByteEncode(final byte code, final Element tag,
 			final String attribute) {
@@ -570,10 +627,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml time decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the time value
 	 */
 	public static final TimeValue xmlTimeDecode(final Element tag,
@@ -601,10 +661,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml time decode.
-	 *
-	 * @param atr the atr
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param atr
+	 *            the atr
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the time value
 	 */
 	public static final TimeValue xmlTimeDecode(final Attributes atr,
@@ -632,11 +695,15 @@ public final class HelperXML {
 
 	/**
 	 * Xml time decode.
-	 *
-	 * @param zone the zone
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param zone
+	 *            the zone
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the long
 	 */
 	public static final long xmlTimeDecode(final DateTimeZone zone,
@@ -650,11 +717,15 @@ public final class HelperXML {
 
 	/**
 	 * Xml time encode.
-	 *
-	 * @param millisUTC the millis utc
-	 * @param zone the zone
-	 * @param tag the tag
-	 * @param attribute the attribute
+	 * 
+	 * @param millisUTC
+	 *            the millis utc
+	 * @param zone
+	 *            the zone
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
 	 */
 	public static final void xmlTimeEncode(final long millisUTC,
 			final DateTimeZone zone, final Element tag, final String attribute) {
@@ -668,10 +739,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml long decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the long
 	 */
 	public static final long xmlLongDecode(final Element tag,
@@ -694,10 +768,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml long decode.
-	 *
-	 * @param ats the ats
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param ats
+	 *            the ats
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the long
 	 */
 	public static final long xmlLongDecode(final Attributes ats,
@@ -720,10 +797,13 @@ public final class HelperXML {
 
 	/**
 	 * Xml long encode.
-	 *
-	 * @param value the value
-	 * @param tag the tag
-	 * @param attribute the attribute
+	 * 
+	 * @param value
+	 *            the value
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
 	 */
 	public static final void xmlLongEncode(final long value, final Element tag,
 			final String attribute) {
@@ -741,11 +821,15 @@ public final class HelperXML {
 
 	/**
 	 * Xml decimal decode.
-	 *
-	 * @param frac the frac
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param frac
+	 *            the frac
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the long
 	 */
 	public static final long xmlDecimalDecode(final DDF_Fraction frac,
@@ -757,11 +841,15 @@ public final class HelperXML {
 
 	/**
 	 * Xml decimal decode.
-	 *
-	 * @param frac the frac
-	 * @param ats the ats
-	 * @param attribute the attribute
-	 * @param isThrow the is throw
+	 * 
+	 * @param frac
+	 *            the frac
+	 * @param ats
+	 *            the ats
+	 * @param attribute
+	 *            the attribute
+	 * @param isThrow
+	 *            the is throw
 	 * @return the long
 	 */
 	public static final long xmlDecimalDecode(final DDF_Fraction frac,
@@ -773,11 +861,15 @@ public final class HelperXML {
 
 	/**
 	 * Xml decimal encode.
-	 *
-	 * @param mantissa the mantissa
-	 * @param frac the frac
-	 * @param tag the tag
-	 * @param attribute the attribute
+	 * 
+	 * @param mantissa
+	 *            the mantissa
+	 * @param frac
+	 *            the frac
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
 	 */
 	public static final void xmlDecimalEncode(/* local */long mantissa,
 			final DDF_Fraction frac, final Element tag, final String attribute) {
@@ -787,11 +879,15 @@ public final class HelperXML {
 
 	/**
 	 * Xml integer array decode.
-	 *
-	 * @param tag the tag
-	 * @param attribute the attribute
-	 * @param marker the marker
-	 * @param isThrow the is throw
+	 * 
+	 * @param tag
+	 *            the tag
+	 * @param attribute
+	 *            the attribute
+	 * @param marker
+	 *            the marker
+	 * @param isThrow
+	 *            the is throw
 	 * @return the int[]
 	 */
 	public static final int[] xmlIntegerArrayDecode(final Element tag,
@@ -820,8 +916,9 @@ public final class HelperXML {
 
 	/**
 	 * Log.
-	 *
-	 * @param attributes the attributes
+	 * 
+	 * @param attributes
+	 *            the attributes
 	 */
 	public static void log(final Attributes attributes) {
 

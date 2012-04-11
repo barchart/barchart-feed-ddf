@@ -21,7 +21,7 @@ import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.message.api.DDF_MarketCuvol;
 import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
-import com.barchart.feed.ddf.util.FeedDDF;
+import com.barchart.feed.ddf.message.util.FeedDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.PriceValue;
