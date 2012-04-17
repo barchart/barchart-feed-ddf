@@ -15,9 +15,8 @@ import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.util.FeedDDF;
 
-// TODO: Auto-generated Javadoc
 /**
- * flags for ddf jerq "go" command to activate specific information channels in
+ * Flags for ddf jerq "go" command to activate specific information channels in
  * the feed.
  */
 public enum DDF_FeedInterest {
@@ -42,23 +41,8 @@ public enum DDF_FeedInterest {
 
 	private static final DDF_FeedInterest[] ENUM_VALS = values();
 
-	/**
-	 * Size.
-	 * 
-	 * @return the int
-	 */
 	public static final int size() {
 		return ENUM_VALS.length;
-	}
-
-	/**
-	 * Values unsafe.
-	 * 
-	 * @return the dD f_ feed interest[]
-	 */
-	@Deprecated
-	public static final DDF_FeedInterest[] valuesUnsafe() {
-		return ENUM_VALS;
 	}
 
 	/** The code. */
@@ -68,13 +52,6 @@ public enum DDF_FeedInterest {
 		this.code = code;
 	}
 
-	/**
-	 * Of.
-	 * 
-	 * @param code
-	 *            the code
-	 * @return the dD f_ feed interest
-	 */
 	public static final DDF_FeedInterest of(final char code) {
 		for (final DDF_FeedInterest known : values()) {
 			if (known.code == code) {
@@ -86,13 +63,6 @@ public enum DDF_FeedInterest {
 
 	private static final String NONE = "";
 
-	/**
-	 * From.
-	 * 
-	 * @param eventSet
-	 *            the event set
-	 * @return the string
-	 */
 	public static final String from(final Set<MarketEvent> eventSet) {
 
 		if (eventSet == null || eventSet.isEmpty()) {

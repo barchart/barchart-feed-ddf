@@ -11,14 +11,28 @@ import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 
 /**
- * The Interface DDF_FeedHandler.
+ * Specifies the handling of feed events and data messages from the server.
+ * <p>
+ * All calls are handles asynchronously by the feed client which the feed
+ * handler is bound to.
+ * 
  */
 public interface DDF_FeedHandler {
 
-	/** called from pool thread */
+	/**
+	 * Asynchronous server event callback.
+	 * 
+	 * @param event
+	 *            The event to be handled.
+	 */
 	void handleEvent(DDF_FeedEvent event);
 
-	/** called from pool thread */
+	/**
+	 * Asynchronous data receipt callback.
+	 * 
+	 * @param message
+	 *            The data message produced by server.
+	 */
 	void handleMessage(DDF_BaseMessage message);
 
 }

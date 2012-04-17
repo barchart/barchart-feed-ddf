@@ -10,34 +10,41 @@ package com.barchart.feed.ddf.datalink.api;
 import com.barchart.util.anno.UsedOnce;
 
 /**
- * The Interface DDF_FeedClient.
+ * Client responsible for lowest level connectivity to the data server.
+ * 
+ * Permits blocking and nonblocking commands.
+ * 
+ * Implementation should handle all communications from server asynchronously.
+ * 
+ * User is required to bind a FeedHandler to the client, specifying feed event
+ * behavior and data processing behavior.
  */
 public interface DDF_FeedClient {
 
 	/**
-	 * initiate login; blocking call;
+	 * Initiate login; blocking call.
 	 * 
 	 * @return false initial client setup failed
 	 */
 	boolean login(String username, String password);
 
 	/**
-	 * initiate logout; non blocking call;
+	 * Initiate logout; non blocking call.
 	 */
 	void logout();
 
 	/**
-	 * send a DDF TCP command to JERQ; blocking call;
+	 * Send a DDF TCP command to data server; blocking call.
 	 */
 	boolean send(CharSequence command);
 
 	/**
-	 * post a DDF TCP command to JERQ; non blocking call
+	 * Post a DDF TCP command to data server; non blocking call.
 	 */
 	boolean post(CharSequence command);
 
 	/**
-	 * attach single feed handler to the client
+	 * Attach single feed handler to the client.
 	 */
 	@UsedOnce
 	void bind(DDF_FeedHandler handler);
