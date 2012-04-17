@@ -88,7 +88,6 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 	private final RunnerDDF eventTask = new RunnerDDF() {
 		@Override
 		protected void runCore() {
-			// Thread.currentThread().setName("# ddf-events");
 			while (true) {
 				try {
 					final DDF_FeedEvent event = eventQueue.take();
@@ -108,7 +107,6 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 	private final RunnerDDF messageTask = new RunnerDDF() {
 		@Override
 		protected void runCore() {
-			// Thread.currentThread().setName("# ddf-messages");
 			while (true) {
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
@@ -128,7 +126,6 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 	private final RunnerDDF commandTask = new RunnerDDF() {
 		@Override
 		protected void runCore() {
-			// Thread.currentThread().setName("# ddf-command");
 			while (true) {
 				try {
 					final CharSequence command = commandQueue.take();

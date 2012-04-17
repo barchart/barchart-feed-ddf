@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedHandler;
-import com.barchart.feed.ddf.datalink.provider.DDF_FeedService;
+import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.util.FeedDDF;
 
 // TODO: Auto-generated Javadoc
@@ -39,7 +39,7 @@ public class FeedClientExample {
 
 		final Executor runner = Executors.newCachedThreadPool();
 
-		final DDF_FeedClient client = DDF_FeedService.newInstance(runner);
+		final DDF_FeedClient client = DDF_FeedClientFactory.newInstance(runner);
 
 		final DDF_FeedHandler handler = new LoggingHandler();
 

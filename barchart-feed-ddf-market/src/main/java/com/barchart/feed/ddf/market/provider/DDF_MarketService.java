@@ -31,8 +31,8 @@ public class DDF_MarketService extends MakerBase<DDF_MarketBase> implements
 
 	/**
 	 * New instance.
-	 *
-	 * @return the dD f_ market provider
+	 * 
+	 * @return the DDF market provider
 	 */
 	public static final DDF_MarketProvider newInstance() {
 		return new DDF_MarketService();
