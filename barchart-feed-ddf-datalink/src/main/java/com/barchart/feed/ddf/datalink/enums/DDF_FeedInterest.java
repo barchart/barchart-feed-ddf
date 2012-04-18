@@ -23,18 +23,19 @@ public enum DDF_FeedInterest {
 
 	UNKNOWN('?'), //
 
-	//
-
+	/** A one-time snapshot of a symbol's full book */
 	BOOK_SNAPSHOT('b'), //
+	/** A stream of the symbol's top of book */
 	BOOK_UPDATE('B'), // only book top
 
 	//
-
+	/** A one-time cumulative volume snapshot */
 	CUVOL_SNAPSHOT('c'), //
 
 	//
-
+	/** A one-time snapshot quote for a symbol */
 	QUOTE_SNAPSHOT('s'), //
+	/** A stream of quote updates for a symbol */
 	QUOTE_UPDATE('S'), //
 
 	;
@@ -63,6 +64,13 @@ public enum DDF_FeedInterest {
 
 	private static final String NONE = "";
 
+	/**
+	 * Parses a set of MarketEvents to a String of FeedInterest names.
+	 * 
+	 * @param eventSet
+	 *            The set of events to parse.
+	 * @return a String of FeedInterest names.
+	 */
 	public static final String from(final Set<MarketEvent> eventSet) {
 
 		if (eventSet == null || eventSet.isEmpty()) {

@@ -22,7 +22,7 @@
 
 		<exec executable="${executable}">
 
-			<arg value="site:run" />
+			<arg value="site" />
 
 		</exec>
 	</target>

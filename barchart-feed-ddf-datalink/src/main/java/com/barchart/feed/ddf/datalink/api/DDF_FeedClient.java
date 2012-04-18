@@ -11,11 +11,10 @@ import com.barchart.util.anno.UsedOnce;
 
 /**
  * Client responsible for lowest level connectivity to the data server.
- * 
- * Permits blocking and nonblocking commands.
- * 
+ * <p>
  * Implementation should handle all communications from server asynchronously.
- * 
+ * Permits blocking and nonblocking commands.
+ * <p>
  * User is required to bind a FeedHandler to the client, specifying feed event
  * behavior and data processing behavior.
  */
@@ -24,7 +23,7 @@ public interface DDF_FeedClient {
 	/**
 	 * Initiate login; blocking call.
 	 * 
-	 * @return false initial client setup failed
+	 * @return False if initial client setup fails.
 	 */
 	boolean login(String username, String password);
 
@@ -35,11 +34,15 @@ public interface DDF_FeedClient {
 
 	/**
 	 * Send a DDF TCP command to data server; blocking call.
+	 * 
+	 * @return True if successful.
 	 */
 	boolean send(CharSequence command);
 
 	/**
 	 * Post a DDF TCP command to data server; non blocking call.
+	 * 
+	 * @return True if successful.
 	 */
 	boolean post(CharSequence command);
 
