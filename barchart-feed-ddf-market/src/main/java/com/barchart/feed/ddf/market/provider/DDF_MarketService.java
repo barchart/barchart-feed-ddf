@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import com.barchart.feed.base.provider.market.provider.MakerBase;
-import com.barchart.feed.base.provider.market.provider.MarketDo;
-import com.barchart.feed.base.provider.market.provider.MarketType;
+import com.barchart.feed.base.market.api.MarketDo;
+import com.barchart.feed.base.market.api.MarketFactory;
+import com.barchart.feed.base.market.provider.MakerBase;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
@@ -23,11 +23,15 @@ import com.barchart.util.anno.ThreadSafe;
 public class DDF_MarketService extends MakerBase<DDF_MarketBase> implements
 		DDF_MarketProvider {
 
-	private final DDF_MessageVisitor<Void, MarketDo> visitor = new MapperDDF();
-
-	private DDF_MarketService() {
-		super(MarketType.DDF);
+	/**
+	 * @param factory
+	 */
+	protected DDF_MarketService(final MarketFactory factory) {
+		super(factory);
+		// TODO Auto-generated constructor stub
 	}
+
+	private final DDF_MessageVisitor<Void, MarketDo> visitor = new MapperDDF();
 
 	/**
 	 * New instance.
@@ -35,7 +39,14 @@ public class DDF_MarketService extends MakerBase<DDF_MarketBase> implements
 	 * @return the DDF market provider
 	 */
 	public static final DDF_MarketProvider newInstance() {
-		return new DDF_MarketService();
+		return new DDF_MarketService(new MarketFactory() {
+
+			@Override
+			public MarketDo newMarket() {
+				return new VarMarketDDF();
+			}
+
+		});
 	}
 
 	@Override

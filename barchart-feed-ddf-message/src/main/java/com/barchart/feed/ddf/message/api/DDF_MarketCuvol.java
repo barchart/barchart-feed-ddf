@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.api;
 
-import com.barchart.feed.base.provider.market.provider.MarketDoCuvolEntry;
+import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;

@@ -12,7 +12,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.api.instrument.enums.InstrumentField;
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.feed.ddf.resolver.provider.DDF_ResolverProvider;
@@ -36,13 +36,13 @@ public class MainResolverSearch {
 		// resolver.searchSimple("mini nasd 100 08");
 
 		// List<DDF_Instrument> result = resolver.searchSimple("es*1 *450c");
-		List<DDF_Instrument> result = resolver.searchSimple("msft");
+		final List<DDF_Instrument> result = resolver.searchSimple("msft");
 
 		log.debug("finish");
 
 		log.debug("result.size : {}", result.size());
 
-		for (DDF_Instrument inst : result) {
+		for (final DDF_Instrument inst : result) {
 
 			log.debug("instrument {} {}", inst.get(InstrumentField.ID),
 					inst.get(InstrumentField.DESCRIPTION));
@@ -53,14 +53,16 @@ public class MainResolverSearch {
 
 	/**
 	 * The main method.
-	 *
-	 * @param args the arguments
-	 * @throws Exception the exception
+	 * 
+	 * @param args
+	 *            the arguments
+	 * @throws Exception
+	 *             the exception
 	 */
-	public static void main(String... args) throws Exception {
+	public static void main(final String... args) throws Exception {
 
-		String folder = MainConst.FOLDER;
-		int limit = MainConst.LIMIT;
+		final String folder = MainConst.FOLDER;
+		final int limit = MainConst.LIMIT;
 
 		resolver = DDF_ResolverProvider.newInstance(null, folder, limit);
 

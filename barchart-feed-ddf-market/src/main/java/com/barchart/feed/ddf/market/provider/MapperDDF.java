@@ -7,33 +7,33 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import static com.barchart.feed.base.api.market.enums.MarketBarType.CURRENT;
-import static com.barchart.feed.base.api.market.enums.MarketBarType.PREVIOUS;
-import static com.barchart.feed.base.api.market.enums.MarketBookAction.MODIFY;
-import static com.barchart.feed.base.api.market.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.api.market.enums.MarketBookSide.BID;
-import static com.barchart.feed.base.api.market.enums.MarketBookType.DEFAULT;
-import static com.barchart.feed.base.api.market.values.MarketBook.ENTRY_TOP;
+import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
+import static com.barchart.feed.base.bar.enums.MarketBarType.PREVIOUS;
+import static com.barchart.feed.base.book.api.MarketBook.ENTRY_TOP;
+import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
+import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
+import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
+import static com.barchart.feed.base.book.enums.MarketBookType.DEFAULT;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isClear;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.api.market.enums.MarketBarField;
-import com.barchart.feed.base.api.market.enums.MarketBarType;
-import com.barchart.feed.base.api.market.enums.MarketBookAction;
-import com.barchart.feed.base.api.market.enums.MarketBookSide;
-import com.barchart.feed.base.api.market.enums.MarketBookType;
-import com.barchart.feed.base.api.market.enums.MarketField;
-import com.barchart.feed.base.api.market.enums.MarketStateEntry;
-import com.barchart.feed.base.api.market.values.MarketBook;
-import com.barchart.feed.base.api.market.values.MarketBookTop;
-import com.barchart.feed.base.provider.market.provider.DefBookEntry;
-import com.barchart.feed.base.provider.market.provider.MarketDo;
-import com.barchart.feed.base.provider.market.provider.MarketDoBar;
-import com.barchart.feed.base.provider.market.provider.MarketDoBookEntry;
-import com.barchart.feed.base.provider.market.provider.MarketDoCuvolEntry;
+import com.barchart.feed.base.bar.api.MarketDoBar;
+import com.barchart.feed.base.bar.enums.MarketBarField;
+import com.barchart.feed.base.bar.enums.MarketBarType;
+import com.barchart.feed.base.book.api.MarketBook;
+import com.barchart.feed.base.book.api.MarketBookTop;
+import com.barchart.feed.base.book.api.MarketDoBookEntry;
+import com.barchart.feed.base.book.enums.MarketBookAction;
+import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.feed.base.book.enums.MarketBookType;
+import com.barchart.feed.base.book.provider.DefBookEntry;
+import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
+import com.barchart.feed.base.market.api.MarketDo;
+import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;

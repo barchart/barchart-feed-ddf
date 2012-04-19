@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.api;
 
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.DESCRIPTION;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.END_OF_DAY;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_FORM_T;
@@ -31,8 +31,9 @@ import com.barchart.util.clone.PublicCloneable;
 // TODO: Auto-generated Javadoc
 /**
  * ddf historical market data query builder.
- *
- * @param <E> the element type
+ * 
+ * @param <E>
+ *            the element type
  */
 @Mutable
 public final class DDF_Query<E extends DDF_Entry> implements
@@ -40,8 +41,9 @@ public final class DDF_Query<E extends DDF_Entry> implements
 
 	/**
 	 * Instantiates a new dD f_ query.
-	 *
-	 * @param queryType the query type
+	 * 
+	 * @param queryType
+	 *            the query type
 	 */
 	public DDF_Query(final DDF_QueryType<E> queryType) {
 		this.type = queryType;
@@ -88,7 +90,9 @@ public final class DDF_Query<E extends DDF_Entry> implements
 	/** The eod volume. */
 	public DDF_QueryEodVolume eodVolume;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	// public boolean isTrend;
@@ -151,7 +155,9 @@ public final class DDF_Query<E extends DDF_Entry> implements
 		return volume.toString();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -171,7 +177,7 @@ public final class DDF_Query<E extends DDF_Entry> implements
 
 	/**
 	 * Description.
-	 *
+	 * 
 	 * @return the string
 	 */
 	public final String description() {
@@ -218,8 +224,9 @@ public final class DDF_Query<E extends DDF_Entry> implements
 
 	/**
 	 * Inits the from.
-	 *
-	 * @param that the that
+	 * 
+	 * @param that
+	 *            the that
 	 */
 	public final void initFrom(final DDF_Query<E> that) {
 		this.type = that.type;

@@ -7,19 +7,29 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.base.api.market.enums.MarketBookAction.*;
-import static com.barchart.feed.base.api.market.enums.MarketBookSide.*;
-import static com.barchart.feed.base.api.market.enums.MarketBookType.*;
-import static com.barchart.feed.ddf.message.provider.CodecHelper.*;
+import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
+import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
+import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
+import static com.barchart.feed.base.book.enums.MarketBookType.DEFAULT;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_BOOK_LIMIT;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_COUNT;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_PRICES;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_SIZES;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.bookAskCodeFrom;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.bookAskIndexFrom;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.bookBidCodeFrom;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.bookBidIndexFrom;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.decodeUnsigned_1_book;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeUnsigned_1_book;
 import static com.barchart.util.ascii.ASCII.COMMA;
 import static com.barchart.util.ascii.ASCII.ETX;
 import static com.barchart.util.ascii.ASCII.NUL;
 
 import java.nio.ByteBuffer;
 
-import com.barchart.feed.base.api.market.values.MarketBook;
-import com.barchart.feed.base.provider.market.provider.DefBookEntry;
-import com.barchart.feed.base.provider.market.provider.MarketDoBookEntry;
+import com.barchart.feed.base.book.api.MarketBook;
+import com.barchart.feed.base.book.api.MarketDoBookEntry;
+import com.barchart.feed.base.book.provider.DefBookEntry;
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -32,8 +42,12 @@ import com.barchart.util.values.api.SizeValue;
 /** zero size in size array means an empty book entry for this place */
 class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.
+	 * ddf.message.api.DDF_MessageVisitor, java.lang.Object)
 	 */
 	@Override
 	public <Result, Param> Result accept(
@@ -66,7 +80,7 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 	 * TODO @see TestData
 	 * 
 	 * XXX note: {@link MarketBook#ENTRY_TOP}.
-	 *
+	 * 
 	 * @return the market do book entry[]
 	 */
 	@Override

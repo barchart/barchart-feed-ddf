@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.splitCSV;
 
-import com.barchart.feed.base.api.instrument.enums.InstrumentField;
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
@@ -35,7 +35,9 @@ abstract class Entry implements DDF_Entry, Codec {
 
 	//
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.historical.api.DDF_Entry#getMillisUTC()
 	 */
 	@Override
@@ -43,7 +45,9 @@ abstract class Entry implements DDF_Entry, Codec {
 		return millisUTC;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.historical.api.DDF_Entry#getInstrument()
 	 */
 	@Override
@@ -51,7 +55,9 @@ abstract class Entry implements DDF_Entry, Codec {
 		return instrument;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.historical.api.DDF_Entry#priceExponent()
 	 */
 	@Override
@@ -69,8 +75,11 @@ abstract class Entry implements DDF_Entry, Codec {
 		throw new UnsupportedOperationException();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.historical.provider.Codec#decode(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.historical.provider.Codec#decode(java.lang.String)
 	 */
 	@Override
 	public void decode(final String inputLine) {
@@ -89,7 +98,9 @@ abstract class Entry implements DDF_Entry, Codec {
 
 	//
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.historical.provider.Codec#encode()
 	 */
 	@Override
@@ -99,7 +110,9 @@ abstract class Entry implements DDF_Entry, Codec {
 
 	//
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -107,7 +120,9 @@ abstract class Entry implements DDF_Entry, Codec {
 		return encode();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.historical.api.DDF_Entry#csvHeader()
 	 */
 	@Override
@@ -115,7 +130,9 @@ abstract class Entry implements DDF_Entry, Codec {
 		throw new UnsupportedOperationException();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.historical.api.DDF_Entry#csvEntry()
 	 */
 	@Override
@@ -123,7 +140,9 @@ abstract class Entry implements DDF_Entry, Codec {
 		throw new UnsupportedOperationException();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.historical.api.DDF_Entry#getIndex()
 	 */
 	@Override
@@ -131,7 +150,9 @@ abstract class Entry implements DDF_Entry, Codec {
 		return index;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.historical.api.DDF_Entry#getTradeDay()
 	 */
 	@Override

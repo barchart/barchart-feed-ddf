@@ -7,17 +7,17 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.api.instrument.values.MarketInstrument;
-import com.barchart.feed.base.api.market.MarketTaker;
-import com.barchart.feed.base.api.market.enums.MarketEvent;
-import com.barchart.feed.base.api.market.enums.MarketField;
-import com.barchart.feed.base.api.market.values.MarketBook;
+import com.barchart.feed.base.book.api.MarketBook;
+import com.barchart.feed.base.instrument.values.MarketInstrument;
+import com.barchart.feed.base.market.api.MarketTaker;
+import com.barchart.feed.base.market.enums.MarketEvent;
+import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
@@ -41,8 +41,9 @@ public class TestDDF_MarketService {
 
 	/**
 	 * Test make dd f_ market base market do.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test
 	public void testMakeDDF_MarketBaseMarketDo() throws Exception {

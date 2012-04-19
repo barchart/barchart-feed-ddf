@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.*;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.lookupFromSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.api.instrument.enums.InstrumentField;
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.util.anno.ThreadSafe;
@@ -37,7 +37,9 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 	public ServiceBasicDDF() {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.base.api.instrument.DefinitionService#clear()
 	 */
 	@Override
@@ -46,8 +48,9 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	/**
 	 * TODO add more fields via symbol parser.
-	 *
-	 * @param symbol the symbol
+	 * 
+	 * @param symbol
+	 *            the symbol
 	 * @return the dD f_ instrument
 	 */
 	@Override
@@ -68,8 +71,12 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.instrument.api.DDF_DefinitionService#lookup(java.util.List)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.instrument.api.DDF_DefinitionService#lookup(java
+	 * .util.List)
 	 */
 	@Override
 	public List<DDF_Instrument> lookup(final List<String> symbolList) {
@@ -98,12 +105,16 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.instrument.api.DDF_DefinitionService#lookupDDF(com.barchart.util.values.api.TextValue)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.instrument.api.DDF_DefinitionService#lookupDDF(
+	 * com.barchart.util.values.api.TextValue)
 	 */
 	@Override
-	public DDF_Instrument lookupDDF(TextValue symbol) {
-		
+	public DDF_Instrument lookupDDF(final TextValue symbol) {
+
 		return null;
 
 	}

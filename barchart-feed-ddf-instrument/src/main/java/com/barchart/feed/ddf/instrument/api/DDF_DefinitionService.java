@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.instrument.api;
 
 import java.util.List;
 
-import com.barchart.feed.base.api.instrument.DefinitionService;
+import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.util.values.api.TextValue;
 
 /**

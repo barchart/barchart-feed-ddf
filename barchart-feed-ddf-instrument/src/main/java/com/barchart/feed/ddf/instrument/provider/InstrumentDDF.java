@@ -7,14 +7,14 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.BOOK_SIZE;
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.CURRENCY;
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.DATE_FINISH;
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.FRACTION;
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.PRICE_POINT;
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.base.api.instrument.enums.InstrumentField.TYPE;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.BOOK_SIZE;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.CURRENCY;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.DATE_FINISH;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.DESCRIPTION;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.FRACTION;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.PRICE_POINT;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.base.instrument.enums.InstrumentField.TYPE;
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_EXCHANGE;
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_EXCH_DESC;
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SPREAD;
@@ -23,8 +23,8 @@ import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYM
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_UNIVERSAL;
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_ZONE;
 
-import com.barchart.feed.base.api.instrument.enums.MarketDisplay;
-import com.barchart.feed.base.provider.instrument.provider.VarInstrument;
+import com.barchart.feed.base.instrument.enums.MarketDisplay;
+import com.barchart.feed.base.instrument.provider.VarInstrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.api.TimeValue;
@@ -50,8 +50,12 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
 	//
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.instrument.api.DDF_Instrument#get(com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.instrument.api.DDF_Instrument#get(com.barchart.
+	 * feed.ddf.instrument.enums.DDF_InstrumentField)
 	 */
 	@Override
 	public <V extends Value<V>> V get(final DDF_InstrumentField<V> field) {
@@ -67,8 +71,13 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.instrument.provider.DDF_InstrumentDo#set(com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField, com.barchart.util.values.api.Value)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.instrument.provider.DDF_InstrumentDo#set(com.barchart
+	 * .feed.ddf.instrument.enums.DDF_InstrumentField,
+	 * com.barchart.util.values.api.Value)
 	 */
 	@Override
 	public <V extends Value<V>> V set(final DDF_InstrumentField<V> field,
@@ -85,24 +94,36 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.base.provider.instrument.provider.VarInstrument#isFrozen()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.base.provider.instrument.provider.VarInstrument#isFrozen
+	 * ()
 	 */
 	@Override
 	public boolean isFrozen() {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.base.provider.instrument.provider.VarInstrument#freeze()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.base.provider.instrument.provider.VarInstrument#freeze
+	 * ()
 	 */
 	@Override
 	public final InstrumentDDF freeze() {
 		return this;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.base.provider.instrument.provider.BaseInstrument#isNull()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.base.provider.instrument.provider.BaseInstrument#isNull
+	 * ()
 	 */
 	@Override
 	public final boolean isNull() {
@@ -119,8 +140,12 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 		return frac + " (" + frac.fraction.description + ")";
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.base.provider.instrument.provider.BaseInstrument#toString()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.base.provider.instrument.provider.BaseInstrument#toString
+	 * ()
 	 */
 	@Override
 	public final String toString() {
@@ -159,7 +184,9 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.instrument.api.DDF_Instrument#fullText()
 	 */
 	@Override

@@ -3,6 +3,7 @@
 	<name>barchart-feed-ddf</name>
 	<comment></comment>
 	<projects>
+		<project>barchart-feed-base</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

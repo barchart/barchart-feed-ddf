@@ -33,8 +33,8 @@ import static com.barchart.util.values.provider.ValueBuilder.newText;
 
 import org.w3c.dom.Element;
 
-import com.barchart.feed.base.api.instrument.enums.CodeCFI;
-import com.barchart.feed.base.api.instrument.enums.InstrumentField;
+import com.barchart.feed.base.instrument.enums.CodeCFI;
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
@@ -44,8 +44,12 @@ import com.barchart.util.values.api.TimeValue;
 
 class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.instrument.provider.CodecDOM#decodeXML(org.w3c.dom.Element)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.instrument.provider.CodecDOM#decodeXML(org.w3c.
+	 * dom.Element)
 	 */
 	@Override
 	public void decodeXML(final Element tag) throws Exception {

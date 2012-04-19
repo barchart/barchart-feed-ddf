@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.base.api.market.enums.MarketBookAction.MODIFY;
-import static com.barchart.feed.base.api.market.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.api.market.enums.MarketBookSide.BID;
-import static com.barchart.feed.base.api.market.enums.MarketBookType.DEFAULT;
+import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
+import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
+import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
+import static com.barchart.feed.base.book.enums.MarketBookType.DEFAULT;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
@@ -23,9 +23,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.base.api.market.enums.MarketBookSide;
-import com.barchart.feed.base.api.market.values.MarketBookEntry;
-import com.barchart.feed.base.provider.market.provider.DefBookEntry;
+import com.barchart.feed.base.book.api.MarketBookEntry;
+import com.barchart.feed.base.book.enums.MarketBookSide;
+import com.barchart.feed.base.book.provider.DefBookEntry;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
@@ -42,8 +42,9 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 	/**
 	 * Sets the up.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -51,8 +52,9 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 	/**
 	 * Tear down.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@After
 	public void tearDown() throws Exception {

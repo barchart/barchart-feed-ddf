@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.ddf.historical.example;
 
-import com.barchart.feed.base.api.instrument.enums.InstrumentField;
-import com.barchart.feed.base.api.instrument.enums.MarketDisplay;
-import com.barchart.feed.base.api.instrument.enums.MarketDisplay.Fraction;
+import com.barchart.feed.base.instrument.enums.InstrumentField;
+import com.barchart.feed.base.instrument.enums.MarketDisplay;
+import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -29,7 +29,9 @@ class PriceExtreme {
 
 	long mantissaMax = Long.MIN_VALUE;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

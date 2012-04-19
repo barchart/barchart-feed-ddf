@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.api;
 
-import com.barchart.feed.base.provider.market.provider.MarketDoBookEntry;
+import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.util.anno.NotMutable;
 
 /**

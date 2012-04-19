@@ -20,8 +20,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.base.api.market.values.MarketCuvolEntry;
-import com.barchart.feed.base.provider.market.provider.DefCuvolEntry;
+import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
+import com.barchart.feed.base.cuvol.provider.DefCuvolEntry;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
@@ -40,8 +40,9 @@ public class TestDX_XC_Cuvol extends TestDDFBase {
 
 	/**
 	 * Sets the up.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -49,8 +50,9 @@ public class TestDX_XC_Cuvol extends TestDDFBase {
 
 	/**
 	 * Tear down.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@After
 	public void tearDown() throws Exception {

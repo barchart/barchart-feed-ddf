@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.api;
 
-import com.barchart.feed.base.api.message.MarketMessage;
+import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;

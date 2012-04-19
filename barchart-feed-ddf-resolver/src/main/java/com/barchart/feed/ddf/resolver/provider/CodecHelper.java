@@ -21,7 +21,7 @@ import org.apache.lucene.search.WildcardQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.api.instrument.enums.InstrumentField;
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentDo;
@@ -64,7 +64,7 @@ class CodecHelper {
 	static <T extends Enum<T>> T enumFrom(final Class<T> klaz, final String name) {
 		try {
 			return Enum.valueOf(klaz, name);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -180,7 +180,7 @@ class CodecHelper {
 	}
 
 	static String removeLeading(final String value, final char alpha) {
-		char[] chars = value.toCharArray();
+		final char[] chars = value.toCharArray();
 		int index = 0;
 		for (; index < value.length(); index++) {
 			if (chars[index] != alpha) {
@@ -245,7 +245,7 @@ class CodecHelper {
 
 	}
 
-	static boolean isValid(String text) {
+	static boolean isValid(final String text) {
 		if (text == null || text.length() == 0) {
 			return false;
 		}
@@ -386,7 +386,7 @@ class CodecHelper {
 
 		final Query query = new TermQuery(term);
 
-		int hits = searcher.search(query, 1).totalHits;
+		final int hits = searcher.search(query, 1).totalHits;
 
 		return hits > 0;
 
@@ -402,7 +402,7 @@ class CodecHelper {
 
 		final Query query = new TermQuery(term);
 
-		int hits = searcher.search(query, 1).totalHits;
+		final int hits = searcher.search(query, 1).totalHits;
 
 		return hits > 0;
 
