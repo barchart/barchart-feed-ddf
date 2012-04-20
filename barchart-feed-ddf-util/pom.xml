@@ -6,7 +6,7 @@
     <version>3.2.4-SNAPSHOT</version>
   </parent>
   
-  <name>util</name>
+  <name>barchart-feed-ddf-util</name>
   <artifactId>barchart-feed-ddf-util</artifactId>
   <packaging>bundle</packaging>
   
@@ -38,7 +38,8 @@
       	  <version>0.5</version>
       	  <configuration>
         	<message>Creating site for ${project.version}</message>
-        	<path>barchart-feed-ddf/util</path>
+        	<repositoryName>barchart-feed-ddf-util</repositoryName>
+        	<repositoryOwner>barchart</repositoryOwner>
         	<merge>true</merge>
       	  </configuration>
       	  <executions>

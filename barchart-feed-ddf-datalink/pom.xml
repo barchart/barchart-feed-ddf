@@ -52,7 +52,6 @@
       	  <version>0.5</version>
       	  <configuration>
         	<message>Creating site for ${project.version}</message>
-        	<path>barchart-feed-ddf/barchart-feed-ddf-datalink</path>
         	<merge>true</merge>
       	  </configuration>
       	  <executions>
