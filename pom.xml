@@ -52,5 +52,39 @@
 		<module>barchart-feed-ddf-assembly</module>
 		
 	</modules>
+	
+	<!--  This should be moved to archon, when Andrei gets back -->
+	<pluginRepositories>
+  		<pluginRepository>
+    		<id>oss-sonatype-snapshots</id>
+    		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+  		</pluginRepository>
+	</pluginRepositories>
+	
+	<build>
+	
+  	  <plugins>
+  	  
+  	    <!-- publishes module's maven site to github  -->
+    	<plugin>
+      	  <groupId>com.github.github</groupId>
+      	  <artifactId>site-maven-plugin</artifactId>
+      	  <version>0.5</version>
+      	  <configuration>
+        	<message>Creating site for ${project.version}</message>
+      	  </configuration>
+      	  <executions>
+        	<execution>
+          	  <goals>
+            	<goal>site</goal>
+          	  </goals>
+          	  <phase>site</phase>
+        	</execution>
+      	  </executions>
+    	</plugin>
+    	
+  	  </plugins>
+  	  
+	</build>
 
 </project>

@@ -39,8 +39,9 @@ public class TestDF_20_Param extends TestDDFBase {
 
 	/**
 	 * Sets the up.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -48,8 +49,9 @@ public class TestDF_20_Param extends TestDDFBase {
 
 	/**
 	 * Tear down.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@After
 	public void tearDown() throws Exception {
@@ -203,6 +205,13 @@ public class TestDF_20_Param extends TestDDFBase {
 
 		// DDF_BLANK
 		final PriceValue value = msg.getAsPrice();
+
+		final PriceValue p1 = ValueBuilder.newPrice(0, 0);
+		final PriceValue p2 = ValueBuilder.newPrice(0, 0);
+
+		assertEquals(p1, p2);
+		assertTrue(p1.equals(p2));
+
 		assertTrue(DDF_MessageService.isEmpty(value));
 		assertEquals(value, ValueBuilder.newPrice(0, 0));
 
@@ -214,6 +223,7 @@ public class TestDF_20_Param extends TestDDFBase {
 
 		final byte[] arraySource = buffer.array();
 		final byte[] arrayTarget = result.getBytes(ASCII_CHARSET);
+
 		assertTrue(Arrays.equals(arraySource, arrayTarget));
 
 	}
@@ -240,8 +250,9 @@ public class TestDF_20_Param extends TestDDFBase {
 
 	/**
 	 * Test decode1.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test
 	public void testDecode1() throws Exception {

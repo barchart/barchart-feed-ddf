@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.ascii.ASCII.*;
-import static org.junit.Assert.*;
+import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,6 +22,8 @@ import com.barchart.feed.ddf.message.api.DDF_MarketParameter;
 import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.api.DDF_MarketSnapshot;
 import com.barchart.feed.ddf.message.api.DDF_MarketTrade;
+import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
+import com.barchart.feed.ddf.util.provider.DDF_NulVal;
 import com.barchart.util.values.provider.ValueConst;
 
 // TODO: Auto-generated Javadoc
@@ -32,8 +34,9 @@ public class TestDDF_MessageService {
 
 	/**
 	 * Sets the up.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -41,8 +44,9 @@ public class TestDDF_MessageService {
 
 	/**
 	 * Tear down.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@After
 	public void tearDown() throws Exception {
@@ -89,8 +93,9 @@ public class TestDDF_MessageService {
 
 	/**
 	 * Test decode.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test
 	public void testDecode() throws Exception {
@@ -131,26 +136,27 @@ public class TestDDF_MessageService {
 
 	/**
 	 * Test constants.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Test
 	public void testConstants() throws Exception {
 
-		assertTrue(DDF_MessageService.DECIMAL_CLEAR != DDF_MessageService.DECIMAL_EMPTY);
-		assertTrue(DDF_MessageService.PRICE_CLEAR != DDF_MessageService.PRICE_EMPTY);
-		assertTrue(DDF_MessageService.SIZE_CLEAR != DDF_MessageService.SIZE_EMPTY);
-		assertTrue(DDF_MessageService.TIME_CLEAR != DDF_MessageService.TIME_EMPTY);
+		assertTrue(DDF_ClearVal.DECIMAL_CLEAR != DDF_NulVal.DECIMAL_EMPTY);
+		assertTrue(DDF_ClearVal.PRICE_CLEAR != DDF_NulVal.PRICE_EMPTY);
+		assertTrue(DDF_ClearVal.SIZE_CLEAR != DDF_NulVal.SIZE_EMPTY);
+		assertTrue(DDF_ClearVal.TIME_CLEAR != DDF_NulVal.TIME_EMPTY);
 
-		assertTrue(DDF_MessageService.DECIMAL_CLEAR != ValueConst.NULL_DECIMAL);
-		assertTrue(DDF_MessageService.PRICE_CLEAR != ValueConst.NULL_PRICE);
-		assertTrue(DDF_MessageService.SIZE_CLEAR != ValueConst.NULL_SIZE);
-		assertTrue(DDF_MessageService.TIME_CLEAR != ValueConst.NULL_TIME);
+		assertTrue(DDF_ClearVal.DECIMAL_CLEAR != ValueConst.NULL_DECIMAL);
+		assertTrue(DDF_ClearVal.PRICE_CLEAR != ValueConst.NULL_PRICE);
+		assertTrue(DDF_ClearVal.SIZE_CLEAR != ValueConst.NULL_SIZE);
+		assertTrue(DDF_ClearVal.TIME_CLEAR != ValueConst.NULL_TIME);
 
-		assertTrue(DDF_MessageService.DECIMAL_EMPTY != ValueConst.NULL_DECIMAL);
-		assertTrue(DDF_MessageService.PRICE_EMPTY != ValueConst.NULL_PRICE);
-		assertTrue(DDF_MessageService.SIZE_EMPTY != ValueConst.NULL_SIZE);
-		assertTrue(DDF_MessageService.TIME_EMPTY != ValueConst.NULL_TIME);
+		assertTrue(DDF_NulVal.DECIMAL_EMPTY != ValueConst.NULL_DECIMAL);
+		assertTrue(DDF_NulVal.PRICE_EMPTY != ValueConst.NULL_PRICE);
+		assertTrue(DDF_NulVal.SIZE_EMPTY != ValueConst.NULL_SIZE);
+		assertTrue(DDF_NulVal.TIME_EMPTY != ValueConst.NULL_TIME);
 
 	}
 

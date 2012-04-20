@@ -7,7 +7,12 @@
  */
 package com.barchart.feed.ddf.util;
 
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
+import static com.barchart.util.ascii.ASCII.DASH;
+import static com.barchart.util.ascii.ASCII.NUL;
+import static com.barchart.util.ascii.ASCII.STRING_DASH;
+import static com.barchart.util.ascii.ASCII.STRING_EMPTY;
+import static com.barchart.util.ascii.ASCII._0_;
 
 import java.nio.ByteBuffer;
 
@@ -15,6 +20,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
+import com.barchart.feed.ddf.util.provider.DDF_NulVal;
 import com.barchart.util.ascii.ASCII;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.DecimalValue;
@@ -182,10 +189,10 @@ public final class HelperDDF {
 	public final static DecimalValue newDecimalDDF(final long mantissa,
 			final DDF_Fraction frac) {
 		if (mantissa == HelperDDF.DDF_EMPTY) {
-			return ValueBuilder.newDecimalMutable(0, 0);
+			return DDF_NulVal.DECIMAL_EMPTY;
 		}
 		if (mantissa == HelperDDF.DDF_CLEAR) {
-			return ValueBuilder.newDecimalMutable(0, 0);
+			return DDF_ClearVal.DECIMAL_CLEAR;
 		}
 		return ValueBuilder.newDecimal(mantissa, frac.decimalExponent);
 	}
@@ -202,10 +209,10 @@ public final class HelperDDF {
 	public final static PriceValue newPriceDDF(final long mantissa,
 			final DDF_Fraction frac) {
 		if (mantissa == HelperDDF.DDF_EMPTY) {
-			return ValueBuilder.newPriceMutable(0, 0);
+			return DDF_NulVal.PRICE_EMPTY;
 		}
 		if (mantissa == HelperDDF.DDF_CLEAR) {
-			return ValueBuilder.newPriceMutable(0, 0);
+			return DDF_ClearVal.PRICE_CLEAR;
 		}
 		return ValueBuilder.newPrice(mantissa, frac.decimalExponent);
 	}
@@ -219,10 +226,10 @@ public final class HelperDDF {
 	 */
 	public final static SizeValue newSizeDDF(final long sizeValue) {
 		if (sizeValue == HelperDDF.DDF_EMPTY) {
-			return ValueBuilder.newSizeMutable(0);
+			return DDF_NulVal.SIZE_EMPTY;
 		}
 		if (sizeValue == HelperDDF.DDF_CLEAR) {
-			return ValueBuilder.newSizeMutable(0);
+			return DDF_ClearVal.SIZE_CLEAR;
 		}
 		return ValueBuilder.newSize(sizeValue);
 	}
@@ -236,10 +243,10 @@ public final class HelperDDF {
 	 */
 	public final static TimeValue newTimeDDF(final long millisUTC) {
 		if (millisUTC == HelperDDF.DDF_EMPTY) {
-			return ValueBuilder.newTimeMutable(0);
+			return DDF_NulVal.TIME_EMPTY;
 		}
 		if (millisUTC == HelperDDF.DDF_CLEAR) {
-			return ValueBuilder.newTimeMutable(0);
+			return DDF_ClearVal.TIME_CLEAR;
 		}
 		return ValueBuilder.newTime(millisUTC);
 	}

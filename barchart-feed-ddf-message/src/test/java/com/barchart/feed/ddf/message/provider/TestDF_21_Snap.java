@@ -7,9 +7,6 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.ddf.message.provider.DDF_MessageService.PRICE_CLEAR;
-import static com.barchart.feed.ddf.message.provider.DDF_MessageService.PRICE_EMPTY;
-import static com.barchart.feed.ddf.message.provider.DDF_MessageService.SIZE_EMPTY;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isClear;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isEmpty;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
@@ -35,6 +32,8 @@ import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
+import com.barchart.feed.ddf.util.provider.DDF_NulVal;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -44,8 +43,9 @@ public class TestDF_21_Snap extends TestDDFBase {
 
 	/**
 	 * Sets the up.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -53,8 +53,9 @@ public class TestDF_21_Snap extends TestDDFBase {
 
 	/**
 	 * Tear down.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@After
 	public void tearDown() throws Exception {
@@ -119,21 +120,21 @@ public class TestDF_21_Snap extends TestDDFBase {
 		assertEquals(msg.getTime().asMillisUTC(), new DateTime(
 				"2010-06-20T16:04:55.569Z").getMillis());
 
-		assertTrue(msg.getPriceOpen() == PRICE_EMPTY);
+		assertTrue(msg.getPriceOpen() == DDF_NulVal.PRICE_EMPTY);
 		assertTrue(isEmpty(msg.getPriceHigh()));
-		assertTrue(msg.getPriceLow() == PRICE_EMPTY);
-		assertTrue(msg.getPriceLast() == PRICE_EMPTY);
-		assertTrue(msg.getPriceBid() == PRICE_CLEAR); // XXX
+		assertTrue(msg.getPriceLow() == DDF_NulVal.PRICE_EMPTY);
+		assertTrue(msg.getPriceLast() == DDF_NulVal.PRICE_EMPTY);
+		assertTrue(msg.getPriceBid() == DDF_ClearVal.PRICE_CLEAR);
 		assertTrue(isClear(msg.getPriceAsk())); // XXX
-		assertTrue(msg.getPriceOpen2() == PRICE_EMPTY);
-		assertTrue(msg.getPriceLastPrevious() == PRICE_EMPTY);
-		assertTrue(msg.getPriceClose() == PRICE_EMPTY);
-		assertTrue(msg.getPriceClose2() == PRICE_EMPTY);
+		assertTrue(msg.getPriceOpen2() == DDF_NulVal.PRICE_EMPTY);
+		assertTrue(msg.getPriceLastPrevious() == DDF_NulVal.PRICE_EMPTY);
+		assertTrue(msg.getPriceClose() == DDF_NulVal.PRICE_EMPTY);
+		assertTrue(msg.getPriceClose2() == DDF_NulVal.PRICE_EMPTY);
 		assertTrue(isEmpty(msg.getPriceSettle()));
 
-		assertTrue(msg.getSizeVolumePrevious() == SIZE_EMPTY);
-		assertTrue(msg.getSizeInterest() == SIZE_EMPTY);
-		assertTrue(msg.getSizeVolume() == SIZE_EMPTY);
+		assertTrue(msg.getSizeVolumePrevious() == DDF_NulVal.SIZE_EMPTY);
+		assertTrue(msg.getSizeInterest() == DDF_NulVal.SIZE_EMPTY);
+		assertTrue(msg.getSizeVolume() == DDF_NulVal.SIZE_EMPTY);
 
 	}
 
@@ -237,8 +238,8 @@ public class TestDF_21_Snap extends TestDDFBase {
 		assertEquals(msg.getPriceOpen2(), newPrice(0, -2));
 		assertEquals(msg.getPriceLastPrevious(), newPrice(0, -2));
 		assertEquals(msg.getPriceClose(), newPrice(0, -2));
-		assertEquals(msg.getPriceClose2(), PRICE_CLEAR);
-		assertEquals(msg.getPriceSettle(), PRICE_EMPTY);
+		assertEquals(msg.getPriceClose2(), DDF_ClearVal.PRICE_CLEAR);
+		assertEquals(msg.getPriceSettle(), DDF_NulVal.PRICE_EMPTY);
 
 		assertTrue(isEmpty(msg.getPriceBid()));
 		assertTrue(isEmpty(msg.getPriceAsk()));

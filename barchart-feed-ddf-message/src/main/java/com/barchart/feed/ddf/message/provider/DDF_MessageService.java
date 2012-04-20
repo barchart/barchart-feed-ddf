@@ -11,10 +11,6 @@ import static com.barchart.feed.ddf.message.provider.CodecHelper.find;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.isXmlBook;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.isXmlCuvol;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.isXmlQuote;
-import static com.barchart.util.values.provider.ValueBuilder.newDecimalMutable;
-import static com.barchart.util.values.provider.ValueBuilder.newPriceMutable;
-import static com.barchart.util.values.provider.ValueBuilder.newSizeMutable;
-import static com.barchart.util.values.provider.ValueBuilder.newTimeMutable;
 
 import java.nio.ByteBuffer;
 
@@ -29,6 +25,8 @@ import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.FeedDDF;
 import com.barchart.feed.ddf.util.HelperXML;
+import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
+import com.barchart.feed.ddf.util.provider.DDF_NulVal;
 import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -50,18 +48,6 @@ public final class DDF_MessageService {
 
 	/* corresponds to DDF_EMPTY "comma-nothing-comma" values */
 
-	/** The Constant DECIMAL_EMPTY. */
-	public static final DecimalValue DECIMAL_EMPTY = newDecimalMutable(0, 0);
-
-	/** The Constant PRICE_EMPTY. */
-	public static final PriceValue PRICE_EMPTY = newPriceMutable(0, 0);
-
-	/** The Constant SIZE_EMPTY. */
-	public static final SizeValue SIZE_EMPTY = newSizeMutable(0);
-
-	/** The Constant TIME_EMPTY. */
-	public static final TimeValue TIME_EMPTY = newTimeMutable(0);
-
 	/**
 	 * Checks if is blank.
 	 * 
@@ -70,7 +56,7 @@ public final class DDF_MessageService {
 	 * @return true, if is blank
 	 */
 	public static final boolean isBlank(final DecimalValue value) {
-		return value == DECIMAL_EMPTY;
+		return value == DDF_NulVal.DECIMAL_EMPTY;
 	}
 
 	/**
@@ -81,7 +67,7 @@ public final class DDF_MessageService {
 	 * @return true, if is empty
 	 */
 	public static final boolean isEmpty(final PriceValue value) {
-		return value == PRICE_EMPTY;
+		return value == DDF_NulVal.PRICE_EMPTY;
 	}
 
 	/**
@@ -92,7 +78,7 @@ public final class DDF_MessageService {
 	 * @return true, if is empty
 	 */
 	public static final boolean isEmpty(final SizeValue value) {
-		return value == SIZE_EMPTY;
+		return value == DDF_NulVal.SIZE_EMPTY;
 	}
 
 	/**
@@ -103,24 +89,10 @@ public final class DDF_MessageService {
 	 * @return true, if is empty
 	 */
 	public static final boolean isEmpty(final TimeValue value) {
-		return value == TIME_EMPTY;
+		return value == DDF_NulVal.TIME_EMPTY;
 	}
 
 	/* ############################################ */
-
-	/* corresponds to DDF_CLEAR "comma-dash-comma" values */
-
-	/** The Constant DECIMAL_CLEAR. */
-	public static final DecimalValue DECIMAL_CLEAR = newDecimalMutable(0, 0);
-
-	/** The Constant PRICE_CLEAR. */
-	public static final PriceValue PRICE_CLEAR = newPriceMutable(0, 0);
-
-	/** The Constant SIZE_CLEAR. */
-	public static final SizeValue SIZE_CLEAR = newSizeMutable(0);
-
-	/** The Constant TIME_CLEAR. */
-	public static final TimeValue TIME_CLEAR = newTimeMutable(0);
 
 	/**
 	 * Checks if is clear.
@@ -130,7 +102,7 @@ public final class DDF_MessageService {
 	 * @return true, if is clear
 	 */
 	public static final boolean isClear(final DecimalValue value) {
-		return value == DECIMAL_CLEAR;
+		return value == DDF_ClearVal.DECIMAL_CLEAR;
 	}
 
 	/**
@@ -141,7 +113,7 @@ public final class DDF_MessageService {
 	 * @return true, if is clear
 	 */
 	public static final boolean isClear(final PriceValue value) {
-		return value == PRICE_CLEAR;
+		return value == DDF_ClearVal.PRICE_CLEAR;
 	}
 
 	/**
@@ -152,7 +124,7 @@ public final class DDF_MessageService {
 	 * @return true, if is clear
 	 */
 	public static final boolean isClear(final SizeValue value) {
-		return value == SIZE_CLEAR;
+		return value == DDF_ClearVal.SIZE_CLEAR;
 	}
 
 	/**
@@ -163,7 +135,7 @@ public final class DDF_MessageService {
 	 * @return true, if is clear
 	 */
 	public static final boolean isClear(final TimeValue value) {
-		return value == TIME_CLEAR;
+		return value == DDF_ClearVal.TIME_CLEAR;
 	}
 
 	/* ############################################ */
