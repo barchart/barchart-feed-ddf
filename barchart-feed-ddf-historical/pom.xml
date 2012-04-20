@@ -8,6 +8,7 @@
 		<version>3.2.4-SNAPSHOT</version>
 	</parent>
 
+	<name>barchart-feed-ddf-historical</name>
 	<artifactId>barchart-feed-ddf-historical</artifactId>
 	<packaging>bundle</packaging>
 

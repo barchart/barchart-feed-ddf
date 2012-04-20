@@ -8,6 +8,7 @@
 		<version>3.2.4-SNAPSHOT</version>
 	</parent>
 
+	<name>barchart-feed-ddf-assembly</name>
 	<artifactId>barchart-feed-ddf-assembly</artifactId>
 	<packaging>bundle</packaging>
 
