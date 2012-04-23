@@ -24,7 +24,7 @@ public interface DDF_FeedClient {
 	 * Initiate login; blocking call.
 	 * <p>
 	 * Success or failure description passed as DDF_FeedEvent and should be
-	 * handled by a DDF_FeedHandler
+	 * handled by a DDF_FeedHandler.
 	 */
 	void login(String username, String password);
 
