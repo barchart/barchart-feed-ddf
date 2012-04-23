@@ -48,12 +48,13 @@ public class FeedClientExample {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 
-		final boolean isLogin = client.login(username, password);
+		client.login(username, password);
 
-		if (!isLogin) {
-			log.error("invalid login");
-			return;
-		}
+		// TODO Add feed handler
+		// if (isLogin == DDF_FeedEvent.LOGIN_SUCCESS) {
+		// log.error("invalid login");
+		// return;
+		// }
 
 		final CharSequence request = "" + //
 				"ORCL=bBsScCvVqQ," + //

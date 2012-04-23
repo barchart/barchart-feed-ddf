@@ -22,10 +22,11 @@ public interface DDF_FeedClient {
 
 	/**
 	 * Initiate login; blocking call.
-	 * 
-	 * @return False if initial client setup fails.
+	 * <p>
+	 * Success or failure description passed as DDF_FeedEvent and should be
+	 * handled by a DDF_FeedHandler
 	 */
-	boolean login(String username, String password);
+	void login(String username, String password);
 
 	/**
 	 * Initiate logout; non blocking call.

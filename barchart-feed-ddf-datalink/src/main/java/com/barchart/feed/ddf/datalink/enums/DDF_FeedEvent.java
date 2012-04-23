@@ -52,6 +52,21 @@ public enum DDF_FeedEvent {
 	LINK_DISCONNECT, //
 
 	/**
+	 * Attempt to retrieve user settings failed.
+	 */
+	SETTINGS_RETRIEVAL_FAILURE,
+
+	/**
+	 * Posted after attempt to make channel connection timed out
+	 */
+	CHANNEL_CONNECT_TIMEOUT,
+
+	/**
+	 * Posted after attempt to make channel connection timed out
+	 */
+	CHANNEL_CONNECT_FAILURE,
+
+	/**
 	 * Link heart beat; posted for each DDF time stamp message.
 	 */
 	HEART_BEAT, //

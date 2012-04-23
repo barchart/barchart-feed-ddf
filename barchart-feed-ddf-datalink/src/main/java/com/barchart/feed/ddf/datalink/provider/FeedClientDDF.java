@@ -52,6 +52,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	/** channel operation time out */
 	private static final long TIMEOUT = 2 * 1000;
+	private static final String TIMEOUT_OPTION = "connectTimeoutMillis";
 
 	//
 
@@ -72,6 +73,8 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 				this);
 
 		boot.setPipelineFactory(pipelineFactory);
+
+		boot.setOption(TIMEOUT_OPTION, TIMEOUT);
 
 	}
 
@@ -185,7 +188,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	private boolean login(final String host, final int port,
+	private DDF_FeedEvent login(final String host, final int port,
 			final String username, final String password) {
 
 		final InetSocketAddress address = new InetSocketAddress(host, port);
@@ -194,12 +197,16 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 		channel = futureConnect.getChannel();
 
-		final boolean isGoodConnect = futureConnect
-				.awaitUninterruptibly(TIMEOUT);
+		futureConnect.awaitUninterruptibly();
 
-		if (!isGoodConnect) {
-			log.warn("connect timeout; {}:{} ", host, port);
-			return false;
+		if (!futureConnect.isDone()) {
+			log.warn("channel connect timeout; {}:{} ", host, port);
+			return DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT;
+		}
+
+		if (!futureConnect.isSuccess()) {
+			log.warn("channel connect unsuccessful; {}:{} ", host, port);
+			return DDF_FeedEvent.CHANNEL_CONNECT_FAILURE;
 		}
 
 		final boolean isLoginSent = true && //
@@ -209,17 +216,30 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 				true;
 
 		if (!isLoginSent) {
-			log.warn("startup timeout; {}:{} ", host, port);
-			return false;
+			log.warn("login startup timeout; {}:{} ", host, port);
+			return DDF_FeedEvent.LOGIN_FAILURE;
 		}
 
-		return true;
+		return DDF_FeedEvent.LOGIN_SUCCESS;
 
 	}
 
+	/**
+	 * Can post to the FeedEventHandler the following events:
+	 * <p>
+	 * CHANNEL_CONNECT_TIMEOUT {@link DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT}
+	 * <p>
+	 * CHANNEL_CONNECT_FAILURE {@link DDF_FeedEvent.CHANNEL_CONNECT_FAILURE}
+	 * <p>
+	 * SETTINGS_RETRIEVAL_FAILURE
+	 * {@link DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE}
+	 * <p>
+	 * LOGIN_FAILURE {@link DDF_FeedEvent.LOGIN_FAILURE}
+	 * <p>
+	 * LOGIN_SUCCESS {@link DDF_FeedEvent.LOGIN_SUCCESS}
+	 */
 	@Override
-	public synchronized boolean login(final String username,
-			final String password) {
+	public synchronized void login(final String username, final String password) {
 
 		terminate();
 
@@ -229,8 +249,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 				password);
 
 		if (!settings.isValidLogin()) {
-			postEvent(DDF_FeedEvent.LOGIN_INVALID);
-			return false;
+			postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
 		}
 
 		final DDF_Server server = settings.getServer(_serverType);
@@ -238,19 +257,24 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		final String secondary = server.getSecondary();
 		final int port = 7500;
 
-		final boolean isGoodOne = login(primary, port, username, password);
+		final DDF_FeedEvent eventOne = login(primary, port, username, password);
 
-		if (isGoodOne) {
-			return true;
+		if (eventOne == DDF_FeedEvent.LOGIN_SUCCESS) {
+			postEvent(DDF_FeedEvent.LOGIN_SUCCESS);
+			return;
 		}
 
-		final boolean isGoodTwo = login(secondary, port, username, password);
+		final DDF_FeedEvent eventTwo = login(secondary, port, username,
+				password);
 
-		if (isGoodTwo) {
-			return true;
+		if (eventTwo == DDF_FeedEvent.LOGIN_SUCCESS) {
+			postEvent(DDF_FeedEvent.LOGIN_SUCCESS);
+			return;
 		}
 
-		return false;
+		// For simplicity, we only return the error message from the primary
+		// server in the event both logins fail.
+		postEvent(eventOne);
 
 	}
 
