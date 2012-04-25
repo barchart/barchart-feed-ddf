@@ -46,10 +46,10 @@
 			<plugin>
       	  		<groupId>com.github.github</groupId>
       	  		<artifactId>site-maven-plugin</artifactId>
-      	  		<version>0.5</version>
+      	  		<version>0.6</version>
       	  		<configuration>
-        			<message>Creating site for ${project.version}</message>
-        			<path>barchart-feed-ddf/barchart-feed-ddf-historical</path>
+        			<message>Creating site for ${project.artifactId} ${project.version}</message>
+        			<path>barchart-feed-ddf-historical</path>
         			<merge>true</merge>
       	  		</configuration>
       	  		<executions>

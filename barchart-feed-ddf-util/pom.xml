@@ -35,11 +35,10 @@
     	<plugin>
       	  <groupId>com.github.github</groupId>
       	  <artifactId>site-maven-plugin</artifactId>
-      	  <version>0.5</version>
+      	  <version>0.6</version>
       	  <configuration>
-        	<message>Creating site for ${project.version}</message>
-        	<repositoryName>barchart-feed-ddf/barchart-feed-ddf-util/</repositoryName>
-        	<repositoryOwner>barchart</repositoryOwner>
+        	<message>Creating site for ${project.artifactId} ${project.version}</message>
+        	<path>barchart-feed-ddf-util</path>
         	<merge>true</merge>
       	  </configuration>
       	  <executions>
