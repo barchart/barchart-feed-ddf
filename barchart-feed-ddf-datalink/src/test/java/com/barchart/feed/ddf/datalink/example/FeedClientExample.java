@@ -42,7 +42,7 @@ public class FeedClientExample {
 
 		final DDF_MessageListener handler = new LoggingHandler();
 
-		client.bind(handler);
+		client.bindMessageListener(handler);
 
 		client.login();
 

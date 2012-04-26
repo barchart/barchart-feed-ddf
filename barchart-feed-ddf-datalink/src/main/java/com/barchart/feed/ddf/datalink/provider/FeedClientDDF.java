@@ -32,9 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
+import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+import com.barchart.feed.ddf.datalink.enums.DDF_FeedState;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -71,6 +73,12 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 	//
 
 	private final LoginHandler loginHandler = new LoginHandler();
+
+	//
+
+	private volatile DDF_MessageListener msgListener = null;
+
+	private volatile DDF_FeedStateListener stateListener = null;
 
 	//
 
@@ -122,6 +130,8 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		eventPolicy.put(DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT,
 				new DefaultReloginPolicy());
 
+		// Set state?
+
 	}
 
 	private class DefaultReloginPolicy implements EventPolicy {
@@ -145,6 +155,12 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 			while (true) {
 				try {
 					final DDF_FeedEvent event = eventQueue.take();
+
+					if (DDF_FeedEvent.isError(event)) {
+						log.debug("Setting feed state to logged out");
+						stateListener.stateUpdate(DDF_FeedState.LOGGED_OUT);
+					}
+
 					log.debug("Enacting policy for :{}", event.name());
 					eventPolicy.get(event).newEvent();
 				} catch (final InterruptedException e) {
@@ -163,8 +179,8 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 			while (true) {
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
-					if (isActive()) {
-						handler.handleMessage(message);
+					if (msgListener != null) {
+						msgListener.handleMessage(message);
 					}
 				} catch (final InterruptedException e) {
 					log.trace("terminated");
@@ -298,16 +314,16 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 		final DDF_FeedEvent eventOne = login(primary, PORT);
 
-		if (eventOne == DDF_FeedEvent.LOGIN_SUCCESS) {
+		if (eventOne == DDF_FeedEvent.LOGIN_SENT) {
 			log.debug("Posting LOGIN_SUCCESS for primary server");
-			return DDF_FeedEvent.LOGIN_SUCCESS;
+			return DDF_FeedEvent.LOGIN_SENT;
 		}
 
 		final DDF_FeedEvent eventTwo = login(secondary, PORT);
 
-		if (eventTwo == DDF_FeedEvent.LOGIN_SUCCESS) {
+		if (eventTwo == DDF_FeedEvent.LOGIN_SENT) {
 			log.debug("Posting LOGIN_SUCCESS for secondary server");
-			return DDF_FeedEvent.LOGIN_SUCCESS;
+			return DDF_FeedEvent.LOGIN_SENT;
 		}
 
 		// For simplicity, we only return the error message from the primary
@@ -355,7 +371,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 			return DDF_FeedEvent.LOGIN_FAILURE;
 		}
 
-		return DDF_FeedEvent.LOGIN_SUCCESS;
+		return DDF_FeedEvent.LOGIN_SENT;
 
 	}
 
@@ -422,11 +438,16 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	private DDF_MessageListener handler;
+	@Override
+	public synchronized void bindMessageListener(
+			final DDF_MessageListener handler) {
+		this.msgListener = handler;
+	}
 
 	@Override
-	public synchronized void bind(final DDF_MessageListener handler) {
-		this.handler = handler;
+	public synchronized void bindStateListener(
+			final DDF_FeedStateListener stateListener) {
+		this.stateListener = stateListener;
 	}
 
 	@Override
@@ -468,7 +489,6 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	// Should be linked to login...
 	private void doResponse(final DDF_BaseMessage message) {
 
 		postMessage(message);
@@ -479,13 +499,17 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 		switch (type) {
 		case TCP_ACCEPT:
+			// Note: This is the only place a login sucess is set
 			if (comment.contains(FeedDDF.RESPONSE_LOGIN_SUCCESS)) {
 				postEvent(DDF_FeedEvent.LOGIN_SUCCESS);
+				log.debug("Setting feed state to logged in");
+				stateListener.stateUpdate(DDF_FeedState.LOGGED_IN);
 			}
 			break;
 		case TCP_REJECT:
 			if (comment.contains(FeedDDF.RESPONSE_LOGIN_FAILURE)) {
 				postEvent(DDF_FeedEvent.LOGIN_FAILURE);
+				stateListener.stateUpdate(DDF_FeedState.LOGGED_OUT);
 			}
 			break;
 		case TCP_COMMAND:
@@ -540,17 +564,6 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	private boolean isActive() {
-
-		if (handler == null) {
-			log.error("handler == null");
-			return false;
-		}
-
-		return true;
-
-	}
-
 	private class LoginHandler {
 
 		private Thread loginThread = null;
@@ -577,6 +590,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 						}
 					});
 					loginThread.start();
+
+					log.debug("Setting feed state to attempting login");
+					stateListener.stateUpdate(DDF_FeedState.ATTEMPTING_LOGIN);
 				}
 			}
 		}
@@ -600,6 +616,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 						}
 					});
 					loginThread.start();
+
+					log.debug("Setting feed state to attempting login");
+					stateListener.stateUpdate(DDF_FeedState.ATTEMPTING_LOGIN);
 				}
 			}
 		}

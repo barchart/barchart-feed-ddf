@@ -9,6 +9,8 @@
 -->
 
 ### 3.3.0
+Changed constructor to require username and password, and removed those fields from login.  Changed FeedClientFactory accordingly.
+
 FeedClientDDF now maintains an enum map of DDF_FeedEvents to EventPolicy objects.  The EventPolicy for an event is called when that event is posted internally.
 
 There is a default relogin policy after for 3 seconds for any connection or login error event.

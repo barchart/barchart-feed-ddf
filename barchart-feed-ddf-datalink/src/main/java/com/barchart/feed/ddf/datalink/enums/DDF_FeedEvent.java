@@ -21,6 +21,11 @@ public enum DDF_FeedEvent {
 	LOGIN_INVALID, //
 
 	/**
+	 * Posted after sucessful transmission of login request.
+	 */
+	LOGIN_SENT, //
+
+	/**
 	 * Posted after {@link DDF_FeedClient#login} success to remote feed server.
 	 */
 	LOGIN_SUCCESS, //
@@ -72,5 +77,14 @@ public enum DDF_FeedEvent {
 	HEART_BEAT, //
 
 	;
+
+	public static boolean isError(final DDF_FeedEvent event) {
+
+		return event == LOGIN_FAILURE || event == SESSION_LOCKOUT
+				|| event == SETTINGS_RETRIEVAL_FAILURE
+				|| event == CHANNEL_CONNECT_TIMEOUT
+				|| event == CHANNEL_CONNECT_FAILURE;
+
+	}
 
 }

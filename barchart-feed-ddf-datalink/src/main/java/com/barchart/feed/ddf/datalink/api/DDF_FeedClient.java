@@ -56,9 +56,15 @@ public interface DDF_FeedClient {
 	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
 
 	/**
-	 * Attach single feed handler to the client.
+	 * Attach single message listener to the client.
 	 */
 	@UsedOnce
-	void bind(DDF_MessageListener handler);
+	void bindMessageListener(DDF_MessageListener msgListener);
+
+	/**
+	 * Attach single feed state listener to the client.
+	 */
+	@UsedOnce
+	void bindStateListener(DDF_FeedStateListener stateListener);
 
 }
