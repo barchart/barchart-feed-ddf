@@ -8,6 +8,9 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -19,6 +22,7 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
@@ -28,7 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedHandler;
+import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
+import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
@@ -40,6 +45,9 @@ import com.barchart.feed.ddf.settings.provider.DDF_SettingsService;
 import com.barchart.feed.ddf.util.FeedDDF;
 
 class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
+
+	private static final int PORT = 7500;
+	private static final int LOGIN_DELAY = 3000;
 
 	/** use slf4j for internal NETTY LoggingHandler facade */
 	static {
@@ -56,12 +64,27 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	//
 
-	private final DDF_ServerType _serverType;
+	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy = Collections
+			.synchronizedMap(new EnumMap<DDF_FeedEvent, EventPolicy>(
+					DDF_FeedEvent.class));
+
+	//
+
+	private final LoginHandler loginHandler = new LoginHandler();
+
+	//
+
+	private final String username;
+	private final String password;
+	private final DDF_ServerType serverType;
 	private final Executor runner;
 
-	FeedClientDDF(final DDF_ServerType serverType, final Executor executor) {
+	FeedClientDDF(final String username, final String password,
+			final DDF_ServerType serverType, final Executor executor) {
 
-		_serverType = serverType;
+		this.username = username;
+		this.password = password;
+		this.serverType = serverType;
 		this.runner = executor;
 
 		final ChannelFactory channelFactory = new NioClientSocketChannelFactory(
@@ -75,6 +98,38 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		boot.setPipelineFactory(pipelineFactory);
 
 		boot.setOption(TIMEOUT_OPTION, TIMEOUT);
+
+		// Initialize event policy with event policies that do nothing.
+		for (final DDF_FeedEvent event : DDF_FeedEvent.values()) {
+			eventPolicy.put(event, new EventPolicy() {
+
+				@Override
+				public void newEvent() {
+					// Do nothing
+				}
+			});
+		}
+
+		// Add DefaultReloginPolicy to selected events
+		eventPolicy
+				.put(DDF_FeedEvent.LOGIN_FAILURE, new DefaultReloginPolicy());
+		eventPolicy.put(DDF_FeedEvent.LINK_DISCONNECT,
+				new DefaultReloginPolicy());
+		eventPolicy.put(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE,
+				new DefaultReloginPolicy());
+		eventPolicy.put(DDF_FeedEvent.CHANNEL_CONNECT_FAILURE,
+				new DefaultReloginPolicy());
+		eventPolicy.put(DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT,
+				new DefaultReloginPolicy());
+
+	}
+
+	private class DefaultReloginPolicy implements EventPolicy {
+
+		@Override
+		public void newEvent() {
+			loginHandler.loginWithDelay(LOGIN_DELAY);
+		}
 
 	}
 
@@ -90,9 +145,8 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 			while (true) {
 				try {
 					final DDF_FeedEvent event = eventQueue.take();
-					if (isActive()) {
-						handler.handleEvent(event);
-					}
+					log.debug("Enacting policy for :{}", event.name());
+					eventPolicy.get(event).newEvent();
 				} catch (final InterruptedException e) {
 					log.trace("terminated");
 					return;
@@ -141,6 +195,12 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		}
 	};
 
+	@Override
+	public void setPolicy(final DDF_FeedEvent event, final EventPolicy policy) {
+		log.debug("Setting policy for :{}", event.name());
+		eventPolicy.put(event, policy);
+	}
+
 	private void postEvent(final DDF_FeedEvent event) {
 		try {
 			eventQueue.put(event);
@@ -188,13 +248,88 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	private DDF_FeedEvent login(final String host, final int port,
-			final String username, final String password) {
+	/**
+	 * Can post to the FeedEventHandler the following events:
+	 * <p>
+	 * CHANNEL_CONNECT_TIMEOUT {@link DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT}
+	 * <p>
+	 * CHANNEL_CONNECT_FAILURE {@link DDF_FeedEvent.CHANNEL_CONNECT_FAILURE}
+	 * <p>
+	 * SETTINGS_RETRIEVAL_FAILURE
+	 * {@link DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE}
+	 * <p>
+	 * LOGIN_FAILURE {@link DDF_FeedEvent.LOGIN_FAILURE}
+	 * <p>
+	 * LOGIN_SUCCESS {@link DDF_FeedEvent.LOGIN_SUCCESS}
+	 */
+	@Override
+	public synchronized void login() {
+
+		log.debug("Public login called");
+		loginHandler.enableLogins();
+		loginHandler.login();
+
+	}
+
+	// Explain
+	private synchronized DDF_FeedEvent loginSomething() {
+
+		log.debug("LoginSomething called");
+
+		terminate();
+
+		initialize();
+
+		DDF_Settings settings = null;
+		try {
+			settings = DDF_SettingsService.newSettings(username, password);
+			if (!settings.isValidLogin()) {
+				log.warn("Posting SETTINGS_RETRIEVAL_FAILURE");
+				return DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE;
+			}
+		} catch (final Exception e) {
+			log.warn("Posting SETTINGS_RETRIEVAL_FAILURE");
+			return DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE;
+		}
+
+		final DDF_Server server = settings.getServer(serverType);
+		final String primary = server.getPrimary();
+		final String secondary = server.getSecondary();
+
+		final DDF_FeedEvent eventOne = login(primary, PORT);
+
+		if (eventOne == DDF_FeedEvent.LOGIN_SUCCESS) {
+			log.debug("Posting LOGIN_SUCCESS for primary server");
+			return DDF_FeedEvent.LOGIN_SUCCESS;
+		}
+
+		final DDF_FeedEvent eventTwo = login(secondary, PORT);
+
+		if (eventTwo == DDF_FeedEvent.LOGIN_SUCCESS) {
+			log.debug("Posting LOGIN_SUCCESS for secondary server");
+			return DDF_FeedEvent.LOGIN_SUCCESS;
+		}
+
+		// For simplicity, we only return the error message from the primary
+		// server in the event both logins fail.
+		log.warn("Posting {}", eventOne.name());
+		return eventOne;
+
+	}
+
+	// Explain
+	private DDF_FeedEvent login(final String host, final int port) {
 
 		final InetSocketAddress address = new InetSocketAddress(host, port);
 
-		final ChannelFuture futureConnect = boot.connect(address);
+		ChannelFuture futureConnect = null;
 
+		try {
+			futureConnect = boot.connect(address);
+		} catch (final Exception e) {
+			log.warn("channel connect unsuccessful; {}:{} ", host, port);
+			return DDF_FeedEvent.CHANNEL_CONNECT_FAILURE;
+		}
 		channel = futureConnect.getChannel();
 
 		futureConnect.awaitUninterruptibly();
@@ -224,62 +359,10 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	/**
-	 * Can post to the FeedEventHandler the following events:
-	 * <p>
-	 * CHANNEL_CONNECT_TIMEOUT {@link DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT}
-	 * <p>
-	 * CHANNEL_CONNECT_FAILURE {@link DDF_FeedEvent.CHANNEL_CONNECT_FAILURE}
-	 * <p>
-	 * SETTINGS_RETRIEVAL_FAILURE
-	 * {@link DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE}
-	 * <p>
-	 * LOGIN_FAILURE {@link DDF_FeedEvent.LOGIN_FAILURE}
-	 * <p>
-	 * LOGIN_SUCCESS {@link DDF_FeedEvent.LOGIN_SUCCESS}
-	 */
-	@Override
-	public synchronized void login(final String username, final String password) {
-
-		terminate();
-
-		initialize();
-
-		final DDF_Settings settings = DDF_SettingsService.newSettings(username,
-				password);
-
-		if (!settings.isValidLogin()) {
-			postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
-		}
-
-		final DDF_Server server = settings.getServer(_serverType);
-		final String primary = server.getPrimary();
-		final String secondary = server.getSecondary();
-		final int port = 7500;
-
-		final DDF_FeedEvent eventOne = login(primary, port, username, password);
-
-		if (eventOne == DDF_FeedEvent.LOGIN_SUCCESS) {
-			postEvent(DDF_FeedEvent.LOGIN_SUCCESS);
-			return;
-		}
-
-		final DDF_FeedEvent eventTwo = login(secondary, port, username,
-				password);
-
-		if (eventTwo == DDF_FeedEvent.LOGIN_SUCCESS) {
-			postEvent(DDF_FeedEvent.LOGIN_SUCCESS);
-			return;
-		}
-
-		// For simplicity, we only return the error message from the primary
-		// server in the event both logins fail.
-		postEvent(eventOne);
-
-	}
-
 	@Override
 	public synchronized void logout() {
+
+		loginHandler.disableLogins();
 
 		postEvent(DDF_FeedEvent.LOGOUT);
 
@@ -339,10 +422,10 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	private DDF_FeedHandler handler;
+	private DDF_MessageListener handler;
 
 	@Override
-	public synchronized void bind(final DDF_FeedHandler handler) {
+	public synchronized void bind(final DDF_MessageListener handler) {
 		this.handler = handler;
 	}
 
@@ -350,6 +433,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 	public void channelConnected(final ChannelHandlerContext ctx,
 			final ChannelStateEvent e) throws Exception {
 
+		log.debug("Posting LINK_CONNECT");
 		postEvent(DDF_FeedEvent.LINK_CONNECT);
 
 		ctx.sendUpstream(e);
@@ -360,7 +444,19 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 	public void channelDisconnected(final ChannelHandlerContext ctx,
 			final ChannelStateEvent e) throws Exception {
 
+		log.warn("Posting LINK_DISCONNECT");
 		postEvent(DDF_FeedEvent.LINK_DISCONNECT);
+
+		ctx.sendUpstream(e);
+
+	}
+
+	@Override
+	public void exceptionCaught(final ChannelHandlerContext ctx,
+			final ExceptionEvent e) throws Exception {
+
+		log.warn("SimpleChannelHandler caught exception");
+		postEvent(DDF_FeedEvent.CHANNEL_CONNECT_FAILURE);
 
 		ctx.sendUpstream(e);
 
@@ -372,6 +468,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
+	// Should be linked to login...
 	private void doResponse(final DDF_BaseMessage message) {
 
 		postMessage(message);
@@ -451,6 +548,61 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		}
 
 		return true;
+
+	}
+
+	private class LoginHandler {
+
+		private Thread loginThread = null;
+		private boolean enabled = true;
+
+		void enableLogins() {
+			enabled = true;
+		}
+
+		void disableLogins() {
+			enabled = false;
+		}
+
+		void login() {
+
+			if (enabled) {
+				if (loginThread == null || !loginThread.isAlive()) {
+					loginThread = new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							log.debug("From LoginHandler.login()");
+							postEvent(loginSomething());
+						}
+					});
+					loginThread.start();
+				}
+			}
+		}
+
+		void loginWithDelay(final int delay) {
+
+			if (enabled) {
+				if (loginThread == null || !loginThread.isAlive()) {
+
+					loginThread = new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(delay);
+							} catch (final InterruptedException e) {
+								e.printStackTrace();
+							}
+							log.debug("From LoginHandler.loginWithDelay");
+							postEvent(loginSomething());
+						}
+					});
+					loginThread.start();
+				}
+			}
+		}
 
 	}
 

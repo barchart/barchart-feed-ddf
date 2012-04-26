@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.ddf.datalink.api;
 
+import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.util.anno.UsedOnce;
 
 /**
@@ -26,7 +27,7 @@ public interface DDF_FeedClient {
 	 * Success or failure description passed as DDF_FeedEvent and should be
 	 * handled by a DDF_FeedHandler.
 	 */
-	void login(String username, String password);
+	void login();
 
 	/**
 	 * Initiate logout; non blocking call.
@@ -48,9 +49,16 @@ public interface DDF_FeedClient {
 	boolean post(CharSequence command);
 
 	/**
+	 * 
+	 * @param event
+	 * @param policy
+	 */
+	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
+
+	/**
 	 * Attach single feed handler to the client.
 	 */
 	@UsedOnce
-	void bind(DDF_FeedHandler handler);
+	void bind(DDF_MessageListener handler);
 
 }

@@ -11,6 +11,9 @@
 
 barchart data feed projects -- ddf 
 
+Link to project's Mavent site:
+(http://barchart.github.com/barchart-feed-ddf/)
+
 ### repo
 
 maven central has

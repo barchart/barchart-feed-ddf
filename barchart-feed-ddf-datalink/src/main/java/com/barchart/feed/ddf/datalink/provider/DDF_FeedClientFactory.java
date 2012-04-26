@@ -38,14 +38,16 @@ public class DDF_FeedClientFactory {
 	 * 
 	 * @return The DDF_FeedClient
 	 */
-	public static DDF_FeedClient newInstance() {
+	public static DDF_FeedClient newInstance(final String username,
+			final String password) {
 
-		return new FeedClientDDF(DDF_ServerType.STREAM, new Executor() {
-			@Override
-			public void execute(final Runnable task) {
-				new Thread(task).start();
-			}
-		});
+		return new FeedClientDDF(username, password, DDF_ServerType.STREAM,
+				new Executor() {
+					@Override
+					public void execute(final Runnable task) {
+						new Thread(task).start();
+					}
+				});
 	}
 
 	/**
@@ -57,11 +59,13 @@ public class DDF_FeedClientFactory {
 	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
 	 * @return the DDF_FeedClient
 	 */
-	public static DDF_FeedClient newInstance(final Executor runner) {
+	public static DDF_FeedClient newInstance(final String username,
+			final String password, final Executor runner) {
 
 		log.debug("Built new DDF_FeedClient, default to DDF_ServerType.STREAM");
 
-		return new FeedClientDDF(DDF_ServerType.STREAM, runner);
+		return new FeedClientDDF(username, password, DDF_ServerType.STREAM,
+				runner);
 
 	}
 
@@ -76,13 +80,14 @@ public class DDF_FeedClientFactory {
 	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
 	 * @return the DDF_FeedClient
 	 */
-	public static DDF_FeedClient newInstance(final DDF_ServerType serverType,
+	public static DDF_FeedClient newInstance(final String username,
+			final String password, final DDF_ServerType serverType,
 			final Executor runner) {
 
 		log.debug("Built new DDF_FeedClient, DDF_ServerType.{}",
 				serverType.name());
 
-		return new FeedClientDDF(serverType, runner);
+		return new FeedClientDDF(username, password, serverType, runner);
 
 	}
 

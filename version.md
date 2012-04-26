@@ -7,6 +7,23 @@
     http://www.opensource.org/licenses/bsd-license.php
 
 -->
+
+### 3.3.0
+FeedClientDDF now maintains an enum map of DDF_FeedEvents to EventPolicy objects.  The EventPolicy for an event is called when that event is posted internally.
+
+There is a default relogin policy after for 3 seconds for any connection or login error event.
+
+All login calls, either from user or as a result of an event policy are now handled by a LoginHandler.  
+
+The LoginHandler maintains a thread which attempts to login on login() and loginWithDelay(mills) and posts the attempt result.  
+
+It ignores all attempts to log in if the thread is active, preventing multiple logins.
+
+Continued login attempts are disabled on a logout and reenabled on user login.
+
+
+Changed the behavior of DDF_FeedHandler.  DDF_FeedHandler is now DDF_MessageListener.  It is only responsible for handling messages, not DDF_FeedEvents.
+
 ### 3.2.3
 Created DDF_NulVal and DDF_ClearVal classes so that the static null and clear instances of DDF values can be global to ddf-feed
 
