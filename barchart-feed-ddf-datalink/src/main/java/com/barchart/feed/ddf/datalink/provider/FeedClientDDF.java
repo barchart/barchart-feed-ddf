@@ -130,8 +130,6 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		eventPolicy.put(DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT,
 				new DefaultReloginPolicy());
 
-		// Set state?
-
 	}
 
 	private class DefaultReloginPolicy implements EventPolicy {

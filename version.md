@@ -26,6 +26,9 @@ Continued login attempts are disabled on a logout and reenabled on user login.
 
 Changed the behavior of DDF_FeedHandler.  DDF_FeedHandler is now DDF_MessageListener.  It is only responsible for handling messages, not DDF_FeedEvents.
 
+Added the bindStateListener to DDF_FeedHandler.  This allows user to bind a callback when the feed changes state.  States are Logged in, logged out, and
+attempting to login.
+
 ### 3.2.3
 Created DDF_NulVal and DDF_ClearVal classes so that the static null and clear instances of DDF values can be global to ddf-feed
 
