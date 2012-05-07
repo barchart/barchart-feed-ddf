@@ -66,6 +66,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	//
 
+	// FIXME use ConcurrentHashMap instead
 	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy = Collections
 			.synchronizedMap(new EnumMap<DDF_FeedEvent, EventPolicy>(
 					DDF_FeedEvent.class));
@@ -497,7 +498,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 		switch (type) {
 		case TCP_ACCEPT:
-			// Note: This is the only place a login sucess is set
+			// Note: This is the only place a login success is set
 			if (comment.contains(FeedDDF.RESPONSE_LOGIN_SUCCESS)) {
 				postEvent(DDF_FeedEvent.LOGIN_SUCCESS);
 				log.debug("Setting feed state to logged in");
@@ -562,6 +563,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
+	// FIXME avoid use of ad hoc threads
 	private class LoginHandler {
 
 		private Thread loginThread = null;
@@ -586,7 +588,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 							log.debug("From LoginHandler.login()");
 							postEvent(loginSomething());
 						}
-					});
+					}, "# DDF Login");
 					loginThread.start();
 
 					log.debug("Setting feed state to attempting login");
@@ -612,7 +614,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 							log.debug("From LoginHandler.loginWithDelay");
 							postEvent(loginSomething());
 						}
-					});
+					}, "# DDF Login");
 					loginThread.start();
 
 					log.debug("Setting feed state to attempting login");

@@ -8,6 +8,7 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,13 +42,22 @@ public class DDF_FeedClientFactory {
 	public static DDF_FeedClient newInstance(final String username,
 			final String password) {
 
+		final Executor runner = new Executor() {
+
+			private final AtomicLong counter = new AtomicLong(0);
+
+			final String name = "# DDF Feed Client - "
+					+ counter.getAndIncrement();
+
+			@Override
+			public void execute(final Runnable task) {
+				new Thread(task, name).start();
+			}
+
+		};
+
 		return new FeedClientDDF(username, password, DDF_ServerType.STREAM,
-				new Executor() {
-					@Override
-					public void execute(final Runnable task) {
-						new Thread(task, "# DDF Feed Client Executor").start();
-					}
-				});
+				runner);
 	}
 
 	/**
