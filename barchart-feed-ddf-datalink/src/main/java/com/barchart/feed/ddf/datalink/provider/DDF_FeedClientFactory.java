@@ -45,7 +45,7 @@ public class DDF_FeedClientFactory {
 				new Executor() {
 					@Override
 					public void execute(final Runnable task) {
-						new Thread(task).start();
+						new Thread(task, "# DDF Feed Client Executor").start();
 					}
 				});
 	}
