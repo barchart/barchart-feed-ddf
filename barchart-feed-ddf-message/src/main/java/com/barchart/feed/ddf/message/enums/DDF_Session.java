@@ -7,8 +7,49 @@
  */
 package com.barchart.feed.ddf.message.enums;
 
-import static com.barchart.feed.ddf.message.enums.DDF_Session.Market.*;
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.feed.ddf.message.enums.DDF_Session.Market.DEF;
+import static com.barchart.feed.ddf.message.enums.DDF_Session.Market.EXT;
+import static com.barchart.feed.ddf.message.enums.DDF_Session.Market.NET;
+import static com.barchart.feed.ddf.message.enums.DDF_Session.Market.PIT;
+import static com.barchart.util.ascii.ASCII.AT;
+import static com.barchart.util.ascii.ASCII.QUEST;
+import static com.barchart.util.ascii.ASCII.SPACE;
+import static com.barchart.util.ascii.ASCII._0_;
+import static com.barchart.util.ascii.ASCII._1_;
+import static com.barchart.util.ascii.ASCII._2_;
+import static com.barchart.util.ascii.ASCII._3_;
+import static com.barchart.util.ascii.ASCII._4_;
+import static com.barchart.util.ascii.ASCII._5_;
+import static com.barchart.util.ascii.ASCII._6_;
+import static com.barchart.util.ascii.ASCII._7_;
+import static com.barchart.util.ascii.ASCII._8_;
+import static com.barchart.util.ascii.ASCII._9_;
+import static com.barchart.util.ascii.ASCII._A_;
+import static com.barchart.util.ascii.ASCII._B_;
+import static com.barchart.util.ascii.ASCII._C_;
+import static com.barchart.util.ascii.ASCII._D_;
+import static com.barchart.util.ascii.ASCII._E_;
+import static com.barchart.util.ascii.ASCII._F_;
+import static com.barchart.util.ascii.ASCII._G_;
+import static com.barchart.util.ascii.ASCII._H_;
+import static com.barchart.util.ascii.ASCII._I_;
+import static com.barchart.util.ascii.ASCII._J_;
+import static com.barchart.util.ascii.ASCII._K_;
+import static com.barchart.util.ascii.ASCII._L_;
+import static com.barchart.util.ascii.ASCII._M_;
+import static com.barchart.util.ascii.ASCII._N_;
+import static com.barchart.util.ascii.ASCII._O_;
+import static com.barchart.util.ascii.ASCII._P_;
+import static com.barchart.util.ascii.ASCII._Q_;
+import static com.barchart.util.ascii.ASCII._R_;
+import static com.barchart.util.ascii.ASCII._S_;
+import static com.barchart.util.ascii.ASCII._T_;
+import static com.barchart.util.ascii.ASCII._U_;
+import static com.barchart.util.ascii.ASCII._V_;
+import static com.barchart.util.ascii.ASCII._W_;
+import static com.barchart.util.ascii.ASCII._X_;
+import static com.barchart.util.ascii.ASCII._Y_;
+import static com.barchart.util.ascii.ASCII._Z_;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -258,9 +299,9 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 	UNKNOWN(QUEST, DEF), //
 
 	/**
-  * The Enum Market.
-  */
- ;
+	 * The Enum Market.
+	 */
+	;
 
 	public static enum Market {
 
@@ -300,8 +341,9 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * The main method.
-	 *
-	 * @param strings the arguments
+	 * 
+	 * @param strings
+	 *            the arguments
 	 */
 	public static void main(final String... strings) {
 
@@ -319,7 +361,9 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Enum#toString()
 	 */
 	@Override
@@ -327,7 +371,9 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 		return String.format("%40s '%c' %4s", name(), code, market);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
 	 */
 	@Override
@@ -335,7 +381,9 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 		return ord;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.util.enums.EnumCodeByte#code()
 	 */
 	@Override
@@ -362,7 +410,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * Values unsafe.
-	 *
+	 * 
 	 * @return the dD f_ session[]
 	 */
 	@Deprecated
@@ -377,8 +425,9 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * From ord.
-	 *
-	 * @param ord the ord
+	 * 
+	 * @param ord
+	 *            the ord
 	 * @return the dD f_ session
 	 */
 	public final static DDF_Session fromOrd(final byte ord) {
@@ -408,9 +457,11 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * NOTE: ORD vs CODE.
-	 *
-	 * @param exchOrd the exch ord
-	 * @param sessCode the sess code
+	 * 
+	 * @param exchOrd
+	 *            the exch ord
+	 * @param sessCode
+	 *            the sess code
 	 * @return the dD f_ session
 	 */
 	public final static DDF_Session fromPair(final byte exchOrd,
@@ -430,7 +481,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * Checks if is known.
-	 *
+	 * 
 	 * @return true, if is known
 	 */
 	public final boolean isKnown() {

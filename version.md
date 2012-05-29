@@ -8,6 +8,11 @@
 
 -->
 
+### 3.3.1
+VarMarketDDF now applys Form-T trades, type DDF_Session.Market.EXT, to CURRENT_EXT bar.
+
+Removed the unused PIT and NET types.
+
 ### 3.3.0
 Changed constructor to require username and password, and removed those fields from login.  Changed FeedClientFactory accordingly.
 

@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.ddf.datalink.provider;
 
+import java.util.Arrays;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
@@ -71,11 +73,14 @@ class MsgDecoderDDF extends SimpleChannelHandler {
 				messageDDF = DDF_MessageService.decode(array);
 			} catch (final Exception e) {
 				log.debug("decode failed : {} ", new String(array), e);
+				// Delete after debugging
+				log.debug("decode failed : {} ", Arrays.toString(array));
 				return;
 			}
 
-			final MessageEvent eventOut = new UpstreamMessageEvent(
-					eventIn.getChannel(), messageDDF, null);
+			final MessageEvent eventOut =
+					new UpstreamMessageEvent(eventIn.getChannel(), messageDDF,
+							null);
 
 			context.sendUpstream(eventOut);
 

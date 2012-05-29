@@ -11,6 +11,7 @@ import static com.barchart.feed.base.bar.enums.MarketBarField.BAR_TIME;
 import static com.barchart.feed.base.bar.enums.MarketBarField.CLOSE;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
+import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_EXT;
 import static com.barchart.feed.base.instrument.enums.InstrumentField.BOOK_TYPE;
 import static com.barchart.feed.base.instrument.enums.InstrumentField.PRICE_STEP;
 import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_UPDATED;
@@ -231,9 +232,6 @@ class VarMarketDDF extends VarMarket {
 		bar.set(VOLUME, volumeNew);
 		eventAdd(NEW_VOLUME);
 
-		// log.debug("####### type=" + type + " old=" + volumeOld + " new="
-		// + volumeNew);
-
 		// ### high
 
 		// XXX disable for dd2 compatibility
@@ -308,39 +306,19 @@ class VarMarketDDF extends VarMarket {
 		trade.set(SIZE, size);
 		trade.set(TRADE_TIME, time);
 
-		// switch (type) {
-		// case CURRENT_NET:
-		// eventAdd(NEW_TRADE_NET);
-		// break;
-		// case CURRENT_PIT:
-		// eventAdd(NEW_TRADE_PIT);
-		// break;
-		// default:
-		// // must subscribe to combo event
-		// break;
-		// }
-
-		// always combo
 		eventAdd(NEW_TRADE);
 
 		// ### bar
 
-		// switch (type) {
-		// case CURRENT_NET:
-		// case CURRENT_PIT:
-		// makeBar(type, price, size, time);
-		// break;
-		// default:
-		// // ignore unknown volume sources
-		// break;
-		// }
-
-		// always combo
-		applyTradeToBar(CURRENT, price, size, time);
+		// apply Form-T trades to CURRENT_EXT bar
+		if (type == CURRENT_EXT) {
+			applyTradeToBar(CURRENT_EXT, price, size, time);
+		} else {
+			applyTradeToBar(CURRENT, price, size, time);
+		}
 
 		// ### cuvol
 
-		// always combo
 		makeCuvol(price, size);
 
 		// ### time

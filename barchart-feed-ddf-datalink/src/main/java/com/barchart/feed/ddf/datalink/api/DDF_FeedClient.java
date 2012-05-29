@@ -19,20 +19,20 @@ import com.barchart.util.anno.UsedOnce;
  * User is required to bind a FeedHandler to the client, specifying feed event
  * behavior and data processing behavior.
  */
-public interface DDF_FeedClient {
+public interface DDF_FeedClient extends DDF_FeedClientBase {
 
 	/**
-	 * Initiate login; blocking call.
-	 * <p>
-	 * Success or failure description passed as DDF_FeedEvent and should be
-	 * handled by a DDF_FeedHandler.
+	 * Attach single feed state listener to the client.
 	 */
-	void login();
+	@UsedOnce
+	void bindStateListener(DDF_FeedStateListener stateListener);
 
 	/**
-	 * Initiate logout; non blocking call.
+	 * 
+	 * @param event
+	 * @param policy
 	 */
-	void logout();
+	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
 
 	/**
 	 * Send a DDF TCP command to data server; blocking call.
@@ -47,24 +47,5 @@ public interface DDF_FeedClient {
 	 * @return True if successful.
 	 */
 	boolean post(CharSequence command);
-
-	/**
-	 * 
-	 * @param event
-	 * @param policy
-	 */
-	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
-
-	/**
-	 * Attach single message listener to the client.
-	 */
-	@UsedOnce
-	void bindMessageListener(DDF_MessageListener msgListener);
-
-	/**
-	 * Attach single feed state listener to the client.
-	 */
-	@UsedOnce
-	void bindStateListener(DDF_FeedStateListener stateListener);
 
 }

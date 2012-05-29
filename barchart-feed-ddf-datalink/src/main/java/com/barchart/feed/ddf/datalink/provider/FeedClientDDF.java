@@ -8,10 +8,9 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
-import java.util.Collections;
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -66,10 +65,8 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	//
 
-	// FIXME use ConcurrentHashMap instead
-	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy = Collections
-			.synchronizedMap(new EnumMap<DDF_FeedEvent, EventPolicy>(
-					DDF_FeedEvent.class));
+	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
+			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
 	//
 
@@ -96,13 +93,13 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		this.serverType = serverType;
 		this.runner = executor;
 
-		final ChannelFactory channelFactory = new NioClientSocketChannelFactory(
-				runner, runner);
+		final ChannelFactory channelFactory =
+				new NioClientSocketChannelFactory(runner, runner);
 
 		boot = new ClientBootstrap(channelFactory);
 
-		final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(
-				this);
+		final ChannelPipelineFactory pipelineFactory =
+				new PipelineFactoryDDF(this);
 
 		boot.setPipelineFactory(pipelineFactory);
 
@@ -142,11 +139,14 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	private final BlockingQueue<DDF_FeedEvent> eventQueue = new LinkedBlockingQueue<DDF_FeedEvent>();
+	private final BlockingQueue<DDF_FeedEvent> eventQueue =
+			new LinkedBlockingQueue<DDF_FeedEvent>();
 
-	private final BlockingQueue<DDF_BaseMessage> messageQueue = new LinkedBlockingQueue<DDF_BaseMessage>();
+	private final BlockingQueue<DDF_BaseMessage> messageQueue =
+			new LinkedBlockingQueue<DDF_BaseMessage>();
 
-	private final BlockingQueue<CharSequence> commandQueue = new LinkedBlockingQueue<CharSequence>();
+	private final BlockingQueue<CharSequence> commandQueue =
+			new LinkedBlockingQueue<CharSequence>();
 
 	private final RunnerDDF eventTask = new RunnerDDF() {
 		@Override
@@ -278,7 +278,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 	 * LOGIN_SUCCESS {@link DDF_FeedEvent.LOGIN_SUCCESS}
 	 */
 	@Override
-	public synchronized void login() {
+	public synchronized void startup() {
 
 		log.debug("Public login called");
 		loginHandler.enableLogins();
@@ -286,10 +286,11 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	// Explain
-	private synchronized DDF_FeedEvent loginSomething() {
+	// Attempts to make a connection to data server based on the FeedClient's
+	// parameters
+	private synchronized DDF_FeedEvent makeConnection() {
 
-		log.debug("LoginSomething called");
+		log.debug("makeConnection called");
 
 		terminate();
 
@@ -332,7 +333,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	}
 
-	// Explain
+	// Attempts to log in to a specific server
 	private DDF_FeedEvent login(final String host, final int port) {
 
 		final InetSocketAddress address = new InetSocketAddress(host, port);
@@ -375,7 +376,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 	}
 
 	@Override
-	public synchronized void logout() {
+	public synchronized void shutdown() {
 
 		loginHandler.disableLogins();
 
@@ -496,6 +497,10 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		final DDF_ControlResponse control = (DDF_ControlResponse) message;
 		final String comment = control.getComment().toString();
 
+		//
+		System.out.println("Message from JERQ: " + comment);
+		//
+
 		switch (type) {
 		case TCP_ACCEPT:
 			// Note: This is the only place a login success is set
@@ -586,7 +591,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 						@Override
 						public void run() {
 							log.debug("From LoginHandler.login()");
-							postEvent(loginSomething());
+							postEvent(makeConnection());
 						}
 					}, "# DDF Login");
 					loginThread.start();
@@ -612,7 +617,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 								e.printStackTrace();
 							}
 							log.debug("From LoginHandler.loginWithDelay");
-							postEvent(loginSomething());
+							postEvent(makeConnection());
 						}
 					}, "# DDF Login");
 					loginThread.start();

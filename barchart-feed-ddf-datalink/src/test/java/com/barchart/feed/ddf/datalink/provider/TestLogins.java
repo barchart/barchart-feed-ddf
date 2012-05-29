@@ -37,7 +37,7 @@ public class TestLogins {
 		client.bindMessageListener(handler);
 
 		// Initial login
-		client.login();
+		client.startup();
 
 		while (true) {
 

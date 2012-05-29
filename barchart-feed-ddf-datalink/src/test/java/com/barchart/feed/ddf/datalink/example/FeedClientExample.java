@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
+import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.util.FeedDDF;
@@ -37,14 +38,19 @@ public class FeedClientExample {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 
-		final DDF_FeedClient client = DDF_FeedClientFactory.newInstance(
-				username, password);
+		final DDF_FeedClient client =
+				DDF_FeedClientFactory.newInstance(username, password);
 
 		final DDF_MessageListener handler = new LoggingHandler();
 
 		client.bindMessageListener(handler);
 
-		client.login();
+		final DDF_FeedStateListener stateListener =
+				new ExampleFeedStateListener();
+
+		client.bindStateListener(stateListener);
+
+		client.startup();
 
 		// TODO Add feed handler
 		// if (isLogin == DDF_FeedEvent.LOGIN_SUCCESS) {
@@ -52,13 +58,15 @@ public class FeedClientExample {
 		// return;
 		// }
 
+		Thread.sleep(5000);
+
 		final CharSequence request = "" + //
-				"ORCL=bBsScCvVqQ," + //
 				"GOOG=bBsScCvVqQ," + //
-				"IBM=bBsScCvVqQ," + //
-				"ESH2=bBsScCvVqQ," + //
-				"XFK2=bBsScCvVqQ," + //
-				"KCH2=bBsScCvVqQ," + //
+				"CLM2=bBsScCvVqQ," + //
+				"NGM2=bBsScCvVqQ," + //
+				"ESM2=bBsScCvVqQ," + //
+				"XFM2=bBsScCvVqQ," + //
+				"KCM2=bBsScCvVqQ," + //
 				"";
 
 		final boolean isSent = client.send(FeedDDF.tcpGo(request));
@@ -67,9 +75,9 @@ public class FeedClientExample {
 			return;
 		}
 
-		Thread.sleep(10 * 1000);
+		Thread.sleep(1000 * 1000);
 
-		client.logout();
+		client.shutdown();
 
 	}
 

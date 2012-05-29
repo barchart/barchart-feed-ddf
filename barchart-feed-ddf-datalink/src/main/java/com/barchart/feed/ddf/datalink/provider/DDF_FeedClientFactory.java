@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
+import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 
 /**
@@ -98,6 +99,50 @@ public class DDF_FeedClientFactory {
 				serverType.name());
 
 		return new FeedClientDDF(username, password, serverType, runner);
+
+	}
+
+	/**
+	 * Returns a stateless UDP listener client with a default executor
+	 * 
+	 * @param port
+	 *            The port to listen to
+	 * @return the DDF_FeedClientBase
+	 */
+	public static DDF_FeedClientBase newStatelessUDPListenerClient(
+			final int port) {
+
+		final Executor runner = new Executor() {
+
+			private final AtomicLong counter = new AtomicLong(0);
+
+			final String name = "# DDF Feed Client - "
+					+ counter.getAndIncrement();
+
+			@Override
+			public void execute(final Runnable task) {
+				new Thread(task, name).start();
+			}
+
+		};
+
+		return new ListenerClientDDF(port, runner);
+
+	}
+
+	/**
+	 * Returns a stateless UDP listener client with a user specified executor
+	 * 
+	 * @param port
+	 *            The port to lisen to
+	 * @param executor
+	 *            The executor used by the NioDatagramChannel
+	 * @return
+	 */
+	public static DDF_FeedClientBase newStatelessUDPListenerClient(
+			final int port, final Executor executor) {
+
+		return new ListenerClientDDF(port, executor);
 
 	}
 

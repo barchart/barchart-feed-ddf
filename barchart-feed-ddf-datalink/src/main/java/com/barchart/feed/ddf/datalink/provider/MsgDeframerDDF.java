@@ -58,12 +58,14 @@ class MsgDeframerDDF extends FrameDecoder {
 
 		final ChannelBuffer frame = buffer.readBytes(count);
 
+		// Keep for debugging
 		// log.debug("###############################################");
 		// log.debug("### stage : {}", stage);
 		// log.debug("### buffer.readerIndex : {}", buffer.readerIndex());
 		// log.debug("### buffer :\n{}", new String(buffer.array()));
 		// log.debug("### frame :\n{}", new String(frame.array()));
 		// log.debug("### frame array :{}", Arrays.toString(frame.array()));
+		// log.debug("### remaing buffer:{}", Arrays.toString(buffer.array()));
 
 		this.stage = S0_INIT;
 		this.count = 0;
@@ -95,8 +97,11 @@ class MsgDeframerDDF extends FrameDecoder {
 			final int index = buffer.readerIndex() + count++;
 			final byte alpha = buffer.getByte(index);
 
-			/* handle state transitions */
+			if (alpha == FeedDDF.DDF_START && count != 1) {
+				return init(buffer, count - 1);
+			}
 
+			/* handle state transitions */
 			switch (stage) {
 
 			case S0_INIT:

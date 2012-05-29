@@ -11,6 +11,8 @@ import org.jboss.netty.channel.ChannelHandler;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
+import org.jboss.netty.handler.execution.ExecutionHandler;
+import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
 
 /**
  */
@@ -22,13 +24,19 @@ class PipelineFactoryDDF implements ChannelPipelineFactory {
 		this.handler = handler;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.jboss.netty.channel.ChannelPipelineFactory#getPipeline()
 	 */
 	@Override
 	public ChannelPipeline getPipeline() throws Exception {
 
+		// TODO consider StaticChannelPipeline
 		final ChannelPipeline pipeline = Channels.pipeline();
+
+		pipeline.addFirst("execution-handler", new ExecutionHandler(
+				new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576)));
 
 		// ### Decoders ###
 
@@ -50,5 +58,4 @@ class PipelineFactoryDDF implements ChannelPipelineFactory {
 		return pipeline;
 
 	}
-
 }
