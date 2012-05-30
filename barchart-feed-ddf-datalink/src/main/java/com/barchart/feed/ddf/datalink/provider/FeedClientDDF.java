@@ -9,8 +9,10 @@ package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -34,6 +36,7 @@ import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.EventPolicy;
+import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedState;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
@@ -67,6 +70,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
 			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
+
+	private final Set<Subscription> subscriptions =
+			new CopyOnWriteArraySet<Subscription>();
 
 	//
 
@@ -128,6 +134,21 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		eventPolicy.put(DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT,
 				new DefaultReloginPolicy());
 
+		// Add SubscribeAfterLogin to LOGIN_SUCCESS
+		eventPolicy.put(DDF_FeedEvent.LOGIN_SUCCESS, new SubscribeAfterLogin());
+
+	}
+
+	private class SubscribeAfterLogin implements EventPolicy {
+
+		@Override
+		public void newEvent() {
+
+			log.debug("Requesting current subscriptions");
+			subscribe(subscriptions);
+
+		}
+
 	}
 
 	private class DefaultReloginPolicy implements EventPolicy {
@@ -157,7 +178,9 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 					if (DDF_FeedEvent.isError(event)) {
 						log.debug("Setting feed state to logged out");
-						stateListener.stateUpdate(DDF_FeedState.LOGGED_OUT);
+						if (stateListener != null) {
+							stateListener.stateUpdate(DDF_FeedState.LOGGED_OUT);
+						}
 					}
 
 					log.debug("Enacting policy for :{}", event.name());
@@ -198,6 +221,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 				try {
 					final CharSequence command = commandQueue.take();
 					if (isConnected()) {
+						log.debug("Sending command " + command);
 						send(command);
 					}
 				} catch (final InterruptedException e) {
@@ -396,6 +420,67 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 	}
 
 	@Override
+	public boolean subscribe(final Set<Subscription> subs) {
+
+		boolean success = true;
+
+		for (final Subscription sub : subs) {
+
+			success = success && subscribe(sub);
+
+		}
+		return success;
+	}
+
+	@Override
+	public boolean subscribe(final Subscription sub) {
+
+		/* Check for null */
+		if (sub == null) {
+			log.error("Null subscription request recieved");
+			return false;
+		}
+
+		log.debug("Attempting to send reqeust to JERQ : {}", sub.toString());
+
+		/*
+		 * If offline, only update the collection of subscriptions.
+		 * Subscriptions are quested from JERQ on login automatically
+		 */
+		if (!isConnected()) {
+			if (sub.isUnsubscriber()) {
+				subscriptions.remove(sub);
+			} else {
+				subscriptions.add(sub);
+			}
+			return true;
+		}
+
+		/* If an unsubscriber, remove from subscription set */
+		if (sub.isUnsubscriber()) {
+			unsubscribe(sub);
+			subscriptions.remove(sub);
+			return true;
+		}
+
+		/* Request subscription from JERQ */
+		try {
+			commandQueue.put(sub.toString());
+		} catch (final InterruptedException e) {
+			log.trace("interrupted");
+			return false;
+		}
+
+		/*
+		 * Add subscription to set. This will overwrite an existing subscription
+		 * for the same instrument due to overridden hashcode.
+		 */
+		subscriptions.add(sub);
+
+		return true;
+	}
+
+	@Override
 	public boolean send(final CharSequence command) {
 
 		if (command == null) {
@@ -436,6 +521,14 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 		return true;
 
+	}
+
+	/*
+	 * Blocking request to unsubscribe an instrument from JERQ
+	 */
+	private boolean unsubscribe(final Subscription sub) {
+		final ChannelFuture write = channel.write(sub.unsibscribe());
+		return write.awaitUninterruptibly(TIMEOUT);
 	}
 
 	@Override
@@ -498,22 +591,28 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		final String comment = control.getComment().toString();
 
 		//
-		System.out.println("Message from JERQ: " + comment);
+		log.debug("Message from JERQ: " + comment + " type " + type.toString());
 		//
 
 		switch (type) {
 		case TCP_ACCEPT:
 			// Note: This is the only place a login success is set
-			if (comment.contains(FeedDDF.RESPONSE_LOGIN_SUCCESS)) {
+			if (comment.contains(FeedDDF.RESPONSE_VERSION_SET_3)) {
 				postEvent(DDF_FeedEvent.LOGIN_SUCCESS);
 				log.debug("Setting feed state to logged in");
-				stateListener.stateUpdate(DDF_FeedState.LOGGED_IN);
+				if (stateListener != null) {
+					stateListener.stateUpdate(DDF_FeedState.LOGGED_IN);
+				}
+				/* On login, attempt to request all subscriptions */
+
 			}
 			break;
 		case TCP_REJECT:
 			if (comment.contains(FeedDDF.RESPONSE_LOGIN_FAILURE)) {
 				postEvent(DDF_FeedEvent.LOGIN_FAILURE);
-				stateListener.stateUpdate(DDF_FeedState.LOGGED_OUT);
+				if (stateListener != null) {
+					stateListener.stateUpdate(DDF_FeedState.LOGGED_OUT);
+				}
 			}
 			break;
 		case TCP_COMMAND:
@@ -597,7 +696,10 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 					loginThread.start();
 
 					log.debug("Setting feed state to attempting login");
-					stateListener.stateUpdate(DDF_FeedState.ATTEMPTING_LOGIN);
+					if (stateListener != null) {
+						stateListener
+								.stateUpdate(DDF_FeedState.ATTEMPTING_LOGIN);
+					}
 				}
 			}
 		}
@@ -623,7 +725,10 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 					loginThread.start();
 
 					log.debug("Setting feed state to attempting login");
-					stateListener.stateUpdate(DDF_FeedState.ATTEMPTING_LOGIN);
+					if (stateListener != null) {
+						stateListener
+								.stateUpdate(DDF_FeedState.ATTEMPTING_LOGIN);
+					}
 				}
 			}
 		}

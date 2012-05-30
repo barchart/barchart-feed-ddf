@@ -7,7 +7,9 @@
  */
 package com.barchart.feed.ddf.datalink.enums;
 
+import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -41,6 +43,15 @@ public enum DDF_FeedInterest {
 	;
 
 	private static final DDF_FeedInterest[] ENUM_VALS = values();
+
+	public static final Set<DDF_FeedInterest> setValues() {
+		final Set<DDF_FeedInterest> vals = new HashSet<DDF_FeedInterest>();
+		for (final DDF_FeedInterest i : values()) {
+			vals.add(i);
+		}
+		vals.remove(DDF_FeedInterest.UNKNOWN);
+		return vals;
+	}
 
 	public static final int size() {
 		return ENUM_VALS.length;
@@ -77,8 +88,8 @@ public enum DDF_FeedInterest {
 			return NONE;
 		}
 
-		final Set<DDF_FeedInterest> result = EnumSet
-				.noneOf(DDF_FeedInterest.class);
+		final Set<DDF_FeedInterest> result =
+				EnumSet.noneOf(DDF_FeedInterest.class);
 
 		for (final MarketEvent event : eventSet) {
 			switch (event) {
@@ -128,6 +139,14 @@ public enum DDF_FeedInterest {
 
 	}
 
+	public static String from(final Collection<DDF_FeedInterest> interests) {
+		final StringBuilder sb = new StringBuilder();
+		for (final DDF_FeedInterest i : interests) {
+			sb.append(i.code);
+		}
+		return sb.toString();
+	}
+
 	/**
 	 * Command.
 	 * 
@@ -140,8 +159,8 @@ public enum DDF_FeedInterest {
 	public static CharSequence command(final DDF_Instrument instrumentDDF,
 			final Set<MarketEvent> eventSet) {
 
-		final CharSequence symbol = instrumentDDF
-				.get(DDF_InstrumentField.DDF_SYMBOL_REALTIME);
+		final CharSequence symbol =
+				instrumentDDF.get(DDF_InstrumentField.DDF_SYMBOL_REALTIME);
 
 		final CharSequence interest = DDF_FeedInterest.from(eventSet);
 

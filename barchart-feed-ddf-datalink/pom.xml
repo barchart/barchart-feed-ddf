@@ -33,9 +33,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jboss.netty</groupId>
+			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
-			<version>3.2.7.Final</version>
+			<version>3.4.6.Final</version>
 		</dependency>
 
 	</dependencies>

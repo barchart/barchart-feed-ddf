@@ -136,5 +136,6 @@ public class FeedDDF {
 	public static final String RESPONSE_LOGIN_FAILURE = "Login Failed";
 	public static final String RESPONSE_SESSION_LOCKOUT = "IP Lockout";
 	public static final String RESPONSE_UNKNOWN_COMMAND = "Unknown Command";
+	public static final String RESPONSE_VERSION_SET_3 = "Version set to 3";
 
 }

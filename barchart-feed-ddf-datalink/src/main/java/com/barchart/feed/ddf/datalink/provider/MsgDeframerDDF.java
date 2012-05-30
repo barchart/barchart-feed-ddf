@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.ddf.datalink.provider;
 
+import java.util.Arrays;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -93,11 +95,12 @@ class MsgDeframerDDF extends FrameDecoder {
 			}
 
 			/* read next byte; do not advance buffer */
-
 			final int index = buffer.readerIndex() + count++;
 			final byte alpha = buffer.getByte(index);
 
-			if (alpha == FeedDDF.DDF_START && count != 1) {
+			/* UDP is not \n delimited, so must check for message start */
+			if (alpha == FeedDDF.DDF_START && count != 1
+					&& stage != S3_DDF_TIMESTAMP) {
 				return init(buffer, count - 1);
 			}
 
@@ -136,13 +139,27 @@ class MsgDeframerDDF extends FrameDecoder {
 				case FeedDDF.DDF_TERMINATE:
 					// no time stamp send frame
 					return init(buffer, count);
+					// case FeedDDF.DDF_START:
+					// /* for UDP */
+					// return init(buffer, count - 1);
 				}
 
 			case S3_DDF_TIMESTAMP:
 				ender++;
 				/* continue stamp count, including terminator */
 				if (ender == TIME_STAMP_SIZE + 1) {
-					return init(buffer, count);
+					if (alpha == FeedDDF.DDF_TERMINATE) {
+						return init(buffer, count);
+					} else if (alpha == FeedDDF.DDF_START) {
+						return init(buffer, count - 1);
+					} else {
+						log.debug("***********ERROR ON "
+								+ Arrays.toString(buffer.array()));
+						buffer.readBytes(count);
+						this.stage = S0_INIT;
+						this.count = 0;
+						return null;
+					}
 				} else {
 					continue;
 				}
