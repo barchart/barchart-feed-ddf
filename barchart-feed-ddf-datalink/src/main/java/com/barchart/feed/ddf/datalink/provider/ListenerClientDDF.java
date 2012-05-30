@@ -70,12 +70,11 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 		boot.setPipelineFactory(pipelineFactory);
 
 		boot.setOption("broadcast", "false");
-		boot.setOption("sendBufferSize", 1048576);
-		boot.setOption("receiveBufferSize", 1048576);
+		// boot.setOption("receiveBufferSize", 2097152);
 
 		boot.setOption("receiveBufferSizePredictorFactory",
-				new AdaptiveReceiveBufferSizePredictorFactory(1048576, 1048576,
-						2097152));
+				new AdaptiveReceiveBufferSizePredictorFactory(1048576, 2097152,
+						4194304));
 
 	}
 
