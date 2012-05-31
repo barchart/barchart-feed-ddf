@@ -46,20 +46,20 @@ public class Subscription {
 	/**
 	 * Helper method returning the JERQ command to unsubscribe this subscription
 	 * 
-	 * @return TThe JERQ command to unsubscribe this subscription.
+	 * @return The JERQ command to unsubscribe this subscription.
 	 */
-	public String unsibscribe() {
+	public String unsubscribe() {
 		return "STOP " + instrument + "=" + DDF_FeedInterest.from(interests);
 	}
 
 	/**
-	 * Helper method to determine if this subscription is an unsibscribe
-	 * request.
+	 * Helper method returning the JERQ command to subscribe this subscription
 	 * 
-	 * @return Returns true if successful.
+	 * @return The JERQ command to subscribe this subscription.
 	 */
-	public boolean isUnsubscriber() {
-		return interests.size() == 0;
+	public String subscribe() {
+		return (String) FeedDDF.tcpGo(instrument,
+				DDF_FeedInterest.from(interests));
 	}
 
 	/**
@@ -67,8 +67,7 @@ public class Subscription {
 	 */
 	@Override
 	public String toString() {
-		return (String) FeedDDF.tcpGo(instrument,
-				DDF_FeedInterest.from(interests));
+		return instrument + " " + DDF_FeedInterest.from(interests);
 	}
 
 	/**

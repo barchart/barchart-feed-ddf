@@ -62,14 +62,19 @@ public enum DDF_FeedEvent {
 	SETTINGS_RETRIEVAL_FAILURE,
 
 	/**
-	 * Posted after attempt to make channel connection timed out
+	 * Posted after attempt to make channel connection timed out.
 	 */
 	CHANNEL_CONNECT_TIMEOUT,
 
 	/**
-	 * Posted after attempt to make channel connection timed out
+	 * Posted after attempt to make channel connection timed out.
 	 */
 	CHANNEL_CONNECT_FAILURE,
+
+	/**
+	 * Posted if an attempt to write to JERQ is unsuccessful.
+	 */
+	COMMAND_WRITE_ERROR,
 
 	/**
 	 * Link heart beat; posted for each DDF time stamp message.
@@ -78,7 +83,7 @@ public enum DDF_FeedEvent {
 
 	;
 
-	public static boolean isError(final DDF_FeedEvent event) {
+	public static boolean isConnectionError(final DDF_FeedEvent event) {
 
 		return event == LOGIN_FAILURE || event == SESSION_LOCKOUT
 				|| event == SETTINGS_RETRIEVAL_FAILURE

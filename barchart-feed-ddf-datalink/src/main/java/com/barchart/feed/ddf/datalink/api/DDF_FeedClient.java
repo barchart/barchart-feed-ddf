@@ -8,6 +8,7 @@
 package com.barchart.feed.ddf.datalink.api;
 
 import java.util.Set;
+import java.util.concurrent.Future;
 
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.util.anno.UsedOnce;
@@ -29,20 +30,33 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 * @param subscriptions
 	 * @return
 	 */
-	boolean subscribe(Set<Subscription> subscriptions);
+	Future<Boolean> subscribe(Set<Subscription> subscriptions);
 
 	/**
 	 * Handles a subscription request.
 	 * <p>
 	 * If the client already has a subscription for the instrument then this
-	 * will overwrite it. If the subscription has an empty set of interests,
-	 * this will unsubscribe it.
+	 * will overwrite it.
 	 * 
 	 * @param subscription
 	 *            The subscription for the client to handle.
 	 * @return Returns true if successful.
 	 */
-	boolean subscribe(Subscription subscription);
+	Future<Boolean> subscribe(Subscription subscription);
+
+	/**
+	 * 
+	 * @param subscriptions
+	 * @return
+	 */
+	Future<Boolean> unsubscribe(Set<Subscription> subscriptions);
+
+	/**
+	 * 
+	 * @param subscription
+	 * @return
+	 */
+	Future<Boolean> unsubscribe(Subscription subscription);
 
 	/**
 	 * Attach single feed state listener to the client.

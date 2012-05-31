@@ -32,12 +32,14 @@ import com.barchart.util.thread.Runner;
 
 public class HistoricalEodExample {
 
-	private static final Logger log = LoggerFactory.getLogger(HistoricalEodExample.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(HistoricalEodExample.class);
 
 	/**
 	 * The main method.
-	 *
-	 * @param args the arguments
+	 * 
+	 * @param args
+	 *            the arguments
 	 */
 	public final static void main(final String[] args) {
 
@@ -49,24 +51,24 @@ public class HistoricalEodExample {
 		final String password = System.getProperty("barchart.password");
 
 		final DDF_Settings settings = //
-		DDF_SettingsService.newSettings(username, password);
+				DDF_SettingsService.newSettings(username, password);
 		if (!settings.isValidLogin()) {
 			log.error("can not get settings : {}", settings);
 			return;
 		}
 
 		final DDF_Server server = //
-		settings.getServer(DDF_ServerType.HISTORICAL_V2);
+				settings.getServer(DDF_ServerType.HISTORICAL_V2);
 		log.info("historical ddfplus server : {}", server);
 
 		/*
 		 * 2) lookup instrument definition
 		 */
 
-		final String symbol = "esz11";
+		final String symbol = "EGM2";
 
 		final DDF_Instrument instrument = //
-		DDF_InstrumentProvider.find(symbol);
+				DDF_InstrumentProvider.find(symbol);
 
 		if (instrument.isNull()) {
 			log.error("can not get insrument for : {}", symbol);
@@ -80,15 +82,15 @@ public class HistoricalEodExample {
 		 */
 
 		final DDF_Query<DDF_EntryBarEod> query = //
-		DDF_HistoricalService.newQueryEod();
+				DDF_HistoricalService.newQueryEod();
 
 		query.instrument = instrument;
 
 		query.timeStart = //
-		new DateTime(2011, 06, 01, /**/00, 00, 00, /**/
-		000, DDF_TimeZone.CHICAGO.zone);
+				new DateTime(2012, 04, 20, /**/00, 00, 00, /**/
+				000, DDF_TimeZone.CHICAGO.zone);
 
-		query.timeEnd = query.timeStart.plusDays(10);
+		query.timeEnd = query.timeStart.plusDays(20);
 
 		/*
 		 * 4) obtain query result
@@ -99,7 +101,7 @@ public class HistoricalEodExample {
 		timer.start();
 
 		final DDF_Result<DDF_EntryBarEod> result = //
-		DDF_HistoricalService.newResultEod(settings, query, null);
+				DDF_HistoricalService.newResultEod(settings, query, null);
 
 		timer.stop();
 
@@ -121,19 +123,13 @@ public class HistoricalEodExample {
 		final PriceExtreme extreme = new PriceExtreme(instrument);
 
 		final Runner<Void, DDF_EntryBarEod> taskFindExtreme = //
-		new Runner<Void, DDF_EntryBarEod>() {
-			@Override
-			public Void run(final DDF_EntryBarEod entry) {
-				final long mantissa = entry.priceHighMantissa();
-				if (mantissa > extreme.mantissaMax) {
-					extreme.mantissaMax = mantissa;
-				}
-				if (mantissa < extreme.mantissaMin) {
-					extreme.mantissaMin = mantissa;
-				}
-				return null;
-			}
-		};
+				new Runner<Void, DDF_EntryBarEod>() {
+					@Override
+					public Void run(final DDF_EntryBarEod entry) {
+						log.debug(String.valueOf(entry.sizeVolume()));
+						return null;
+					}
+				};
 
 		result.runLoop(taskFindExtreme, null);
 

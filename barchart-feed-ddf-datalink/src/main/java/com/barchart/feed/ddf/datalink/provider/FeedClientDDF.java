@@ -14,12 +14,14 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.ChannelStateEvent;
@@ -32,6 +34,7 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -176,7 +179,7 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 				try {
 					final DDF_FeedEvent event = eventQueue.take();
 
-					if (DDF_FeedEvent.isError(event)) {
+					if (DDF_FeedEvent.isConnectionError(event)) {
 						log.debug("Setting feed state to logged out");
 						if (stateListener != null) {
 							stateListener.stateUpdate(DDF_FeedState.LOGGED_OUT);
@@ -339,14 +342,14 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		final DDF_FeedEvent eventOne = login(primary, PORT);
 
 		if (eventOne == DDF_FeedEvent.LOGIN_SENT) {
-			log.debug("Posting LOGIN_SUCCESS for primary server");
+			log.debug("Posting LOGIN_SENT for primary server");
 			return DDF_FeedEvent.LOGIN_SENT;
 		}
 
 		final DDF_FeedEvent eventTwo = login(secondary, PORT);
 
 		if (eventTwo == DDF_FeedEvent.LOGIN_SENT) {
-			log.debug("Posting LOGIN_SUCCESS for secondary server");
+			log.debug("Posting LOGIN_SENT for secondary server");
 			return DDF_FeedEvent.LOGIN_SENT;
 		}
 
@@ -419,56 +422,68 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		return channel.isConnected();
 	}
 
-	@Override
-	public boolean subscribe(final Set<Subscription> subs) {
+	/*
+	 * Adds a COMMAND_WRITE_ERROR to the event queue if an attempt to write to
+	 * the channel fails.
+	 */
+	private class CommandFailureListener implements ChannelFutureListener {
 
-		boolean success = true;
-
-		for (final Subscription sub : subs) {
-
-			success = success && subscribe(sub);
-
+		@Override
+		public void operationComplete(final ChannelFuture future)
+				throws Exception {
+			if (!future.isSuccess()) {
+				postEvent(DDF_FeedEvent.COMMAND_WRITE_ERROR);
+			}
 		}
-		return success;
+
+	}
+
+	private Future<Boolean> write(final String message) {
+		log.debug("Attempting to send reqeust to JERQ : {}", message);
+		final ChannelFuture future = channel.write(message + "\n");
+		future.addListener(new CommandFailureListener());
+		return new CommandFuture(future);
 	}
 
 	@Override
-	public boolean subscribe(final Subscription sub) {
+	public Future<Boolean> subscribe(final Set<Subscription> subs) {
 
 		/* Check for null */
-		if (sub == null) {
-			log.error("Null subscription request recieved");
-			return false;
+		if (subs == null) {
+			log.error("Null subscribes request recieved");
+			return null;
 		}
-
-		log.debug("Attempting to send reqeust to JERQ : {}", sub.toString());
 
 		/*
 		 * If offline, only update the collection of subscriptions.
-		 * Subscriptions are quested from JERQ on login automatically
+		 * Subscriptions are quested from JERQ on login automatically. The
+		 * returned Future returns true for all method calls.
 		 */
 		if (!isConnected()) {
-			if (sub.isUnsubscriber()) {
-				subscriptions.remove(sub);
-			} else {
+			return new CommandFuture(null);
+		}
+
+		/*
+		 * Creates a single JERQ command from the set
+		 */
+		final StringBuffer sb = new StringBuffer();
+		for (final Subscription sub : subs) {
+
+			if (sub != null) {
 				subscriptions.add(sub);
+				sb.append(sub.subscribe() + ",");
 			}
-			return true;
 		}
+		return write(sb.toString());
+	}
 
-		/* If an unsubscriber, remove from subscription set */
-		if (sub.isUnsubscriber()) {
-			unsubscribe(sub);
-			subscriptions.remove(sub);
-			return true;
-		}
+	@Override
+	public Future<Boolean> subscribe(final Subscription sub) {
 
-		/* Request subscription from JERQ */
-		try {
-			commandQueue.put(sub.toString());
-		} catch (final InterruptedException e) {
-			log.trace("interrupted");
-			return false;
+		/* Check for null */
+		if (sub == null) {
+			log.error("Null subscribe request recieved");
+			return null;
 		}
 
 		/*
@@ -477,7 +492,75 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 		 */
 		subscriptions.add(sub);
 
-		return true;
+		/*
+		 * If offline, only update the collection of subscriptions.
+		 * Subscriptions are quested from JERQ on login automatically. The
+		 * returned Future returns true for all method calls.
+		 */
+		if (!isConnected()) {
+			return new CommandFuture(null);
+		}
+
+		/* Request subscription from JERQ and return the future */
+		return write(sub.subscribe());
+	}
+
+	@Override
+	public Future<Boolean> unsubscribe(final Set<Subscription> subs) {
+		/* Check for null */
+		if (subs == null) {
+			log.error("Null subscribes request recieved");
+			return null;
+		}
+
+		/*
+		 * If offline, only update the collection of subscriptions.
+		 * Subscriptions are quested from JERQ on login automatically. The
+		 * returned Future returns true for all method calls.
+		 */
+		if (!isConnected()) {
+			return new CommandFuture(null);
+		}
+
+		/*
+		 * Creates a single JERQ command from the set
+		 */
+		final StringBuffer sb = new StringBuffer();
+		for (final Subscription sub : subs) {
+
+			if (sub != null) {
+				subscriptions.add(sub);
+				sb.append(sub.unsubscribe() + ",");
+			}
+		}
+		return write(sb.toString());
+	}
+
+	@Override
+	public Future<Boolean> unsubscribe(final Subscription sub) {
+
+		/* Check for null */
+		if (sub == null) {
+			log.error("Null subscribe request recieved");
+			return null;
+		}
+
+		/*
+		 * Removes subscription from set.
+		 */
+		subscriptions.remove(sub);
+
+		/*
+		 * If offline, only update the collection of subscriptions.
+		 * Subscriptions are quested from JERQ on login automatically. The
+		 * returned Future returns true for all method calls.
+		 */
+		if (!isConnected()) {
+			return new CommandFuture(null);
+		}
+
+		/* Request subscription from JERQ and return the future */
+		return write(sub.unsubscribe());
 	}
 
 	@Override
@@ -521,14 +604,6 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 		return true;
 
-	}
-
-	/*
-	 * Blocking request to unsubscribe an instrument from JERQ
-	 */
-	private boolean unsubscribe(final Subscription sub) {
-		final ChannelFuture write = channel.write(sub.unsibscribe());
-		return write.awaitUninterruptibly(TIMEOUT);
 	}
 
 	@Override
@@ -603,7 +678,6 @@ class FeedClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 				if (stateListener != null) {
 					stateListener.stateUpdate(DDF_FeedState.LOGGED_IN);
 				}
-				/* On login, attempt to request all subscriptions */
 
 			}
 			break;

@@ -30,7 +30,6 @@ class PipelineFactoryDDF implements ChannelPipelineFactory {
 	@Override
 	public ChannelPipeline getPipeline() throws Exception {
 
-		// TODO consider StaticChannelPipeline
 		final ChannelPipeline pipeline = Channels.pipeline();
 
 		// pipeline.addFirst("execution-handler", new ExecutionHandler(

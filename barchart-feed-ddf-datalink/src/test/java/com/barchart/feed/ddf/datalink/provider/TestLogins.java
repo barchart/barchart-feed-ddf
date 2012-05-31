@@ -48,16 +48,13 @@ public class TestLogins {
 		interests.addAll(DDF_FeedInterest.setValues());
 		final Subscription sub = new Subscription("GOOG", interests);
 
-		sleep(3000);
-
 		client.subscribe(sub);
 
 		sleep(10000);
 
 		log.debug("*****************************************  Unsubscribing");
 
-		final Subscription stopSub = Subscription.makeUnsubscriber("GOOG");
-		client.subscribe(stopSub);
+		client.unsubscribe(sub);
 
 		sleep(10000);
 
@@ -65,9 +62,9 @@ public class TestLogins {
 
 		client.subscribe(sub);
 
-		while (true) {
+		sleep(10000);
 
-		}
+		client.shutdown();
 	}
 
 	private static void sleep(final int mills) {

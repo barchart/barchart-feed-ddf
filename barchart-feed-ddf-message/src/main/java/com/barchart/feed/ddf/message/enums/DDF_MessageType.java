@@ -278,6 +278,10 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 			default:
 				return UNKNOWN;
 			}
+
+		case FeedDDF.XML_SUB_SESSION:
+			return SESSION_SNAP_XML;
+
 		case FeedDDF.TCP_ACCEPT:
 			switch (subRecord) {
 			case NUL:
