@@ -1,0 +1,910 @@
+Specifications for Digital Data Feed Plus
+
+
+Sep 16th, 2009
+
+2/22/07 - updated sale condition information for Nasdaq securities
+2/23/07 - updated sale condition information for Nyse/Amex securities
+7/30/07 - updated sale condition information for Nasdaq securities
+7/30/07 - updated sale condition information for Nyse/Amex securities
+10/05/07 - removed session code 1 and 2 from futures feed
+10/19/07 - added record type Z for stocks
+11/07/07 - add support for Futures Options Extended Symbology
+11/14/07 - add support for Exchange Traded Spreads - Record Type S
+11/26/07 - updated sale condition information for NYSE/Amex securities
+07/08/08 - updated exchange definitions
+09/19/08 - revised sale condition 4 for NYSE/AMEX
+09/19/08 - added sale condition V for NYSE/AMEX
+03/11/09 - added in exchange codes for CFE and CBOE-Indexes
+09/16/09 - added in new Nasdaq Participant ID's
+
+Overview
+
+ddfplus is a broadcast datafeed covering all North American commodities 
+and equities exchanges. Delivery is by dedicated T1 circuit, frame relay, 
+or Internet in a realtime or delayed format.
+
+The data elements transmitted are opening range, high, low, last, 
+closing range, and settlement. Best bid and size, best offer and size, 
+trade volume and open interest are included as they are reported by the 
+exchanges.
+
+All exchange generated live quote messages (bid, ask, trade, size, etc.) 
+will be relayed on ddfplus as live quotes with a record type 2, 
+Sub-Record 0, 5, 6, 7, 8, or A message.
+
+All exchange generated refresh messages are relayed as a record type 2, 
+Sub-Record 1 message, even in cases where none of the data elements are 
+changed.
+
+Quote elements that are altered, but not reported directly by incoming 
+exchange messages, (bids making new highs, etc.) are inserted into the 
+data stream as record type 2, Sub-Record 2 messages.
+
+ddfplus will generate background refresh messages independently as 
+record type 2 Sub-Record 3 and 4 messages and insert them into the 
+data stream on a bandwidth available basis. Each symbol with a last price
+greater than zero will be reported at least once every two hours.
+
+ddfplus will process special format, non quote content as record type 3. 
+Examples of these message types are Market Depth, and end-of-day recap 
+messages.
+
+Futures spread messages are bring transmitted as record type S. 
+
+Most ddfplus messages are complete, containing all information necessary 
+for processing. There is no need to keep look up tables for options 
+strikes or base codes. File access requests and user processing logic is 
+reduced to an absolute minimum, and will speed up throughput 
+accordingly. The user can map each quote element directly into the 
+database without considering the idiosyncratic rules of processing 
+required by each exchange.
+
+New futures and options contracts are transmitted on the first report of 
+listing by the exchange, there is no wait for overnight processing to 
+update a database to include these items. Symbols are not altered to 
+identify different trading sessions. Expired contracts are not 
+transmitted, enabling the user to create accurate weekly and monthly 
+nearest futures data without the need to maintain a list of expiration 
+dates for purging unwanted data.
+
+Session timing and synchronization messages and the use of pseudo 
+exchanges are eliminated, the exchange day and session is clearly 
+identified in each message. This ensures that in the event of your 
+ticker plant going down for loss of power or any reason, you will be 
+sure of having a complete current database within two hours of restart. 
+
+Exchange Codes
+
+A: American Stock Exchange
+a: American Stock Exchange Bid/Ask
+B: Chicago Board of Trade
+C: Intercontinental Exchange - US (formally NYBOT)
+c: CME Special Products
+D: Nasdaq OTC BB
+E: Comex
+F: Mutual Funds
+f: Money Market Funds
+G: Minneapolis Grain Exchange
+I: Indexes (excluding the Dow and S&P)
+J: New York Mercantile Exchange (NYMEX)
+j: NYMEX Swaps 
+K: Kansas City Board of Trade
+L: Intercontinental Exchange - Europe
+M: Chicago Mercantile Exchange
+m: Chicago Mercantile Exchange - Weather Futures
+N: New York Stock Exchange
+n: New York Stock Exchange Bid/Ask
+O: Dow Jones Index Feed
+o: Dow Jones Index Feed - Full Feed
+P: S&P Index Feed
+Q: NASDAQ National Market
+q: NASDAQ National Market Bid/Ask
+R: CBOE Futures Exchange (CFE)
+r: CBOE Index Feed
+U: Nasdaq OTC PinkSheets
+W: Winnipeg Commodity Exchange
+Y: NYSE/Liffe Metals
+Z: Futures Market Depth Feed
+$: Forex
+
+Data formats
+
+Time stamp message: once per second
+
+<soh>#ccyymmddhhmmss<etx>
+
+soh:1 = start of header 
+cc:2 = century 
+yy:2 = year 
+mm:2 = month      
+dd:2 = day 
+hh:2 = hour (24 hour clock) 
+mm:2 = minute 
+ss:2 = second 
+etx:1 = end of text      
+
+The start of header <soh> control character (x01) indicates the beginning of the block,
+whereas the end of text <etx> control character (x03) signified the end of the block.
+<stx> is control character (x02).
+
+
+Record Type 2 Messages
+======================
+
+Sub-Record 0: Price
+
+ <soh>2<symbol>,<sub-record><stx><base><exchange ID><delay time><price>,
+  <element><modifier><day/session><etx>
+
+soh:1 = start of header 
+symbol:v = exchange symbol; v indicates variable length field; 
+stx:1 = start of text 
+base:1 = base code for quote 
+exchange ID:1 = exchange identifier 
+delay time:2 = exchange requirement for delayed data 
+price:v = live (or delayed) price; v indicates variable length field; 
+element:1 = price bate code (bid, ask, trade, etc.) 
+modifier:1 = price bate code modifier for open/high/low/last/close etc.
+ used to identify prices derived from bid or ask. 
+day/session:2 = message day and session identifier 
+etx:1 = end of text 
+
+Session is also used to indicate sale condition for stocks trades, 
+and quote condition for stock bid/ask messages. For additional information
+please refer to Appendix A and Appendix B respectively.
+
+- live price message
+
+
+Sub-Record 5: Insert Message Last Price
+
+Exactly the same as Sub-Record 0, except generated by exchange insert message, 
+and will normally be followed by a Sub-Record type 1 exchange refresh message.
+
+
+Sub-Record 7: Trade Price, Trade Price Size
+
+ <soh>2<symbol>,<sub-record><stx><base><exchange ID><delay time><price>,
+  <size>,<day/session><etx>
+
+Same as Sub-Record 0, except: 
+trade price:v,size:v = trade price, trade price size.
+- live price message, comma delimited element and modifier are not required
+  see Appendix A for special processing rules for stocks.
+
+
+Sub-Record Z: Trade Price, Trade Price Size  (stocks only)
+
+ <soh>2<symbol>,<sub-record><stx><base><exchange ID><delay time><price>,
+  <size>,<day/session><etx>
+
+Same as Sub-Record 0, except: 
+trade price:v,size:v = trade price, trade price size.
+- live price message, comma delimited element and modifier are not required
+  see Appendix A for special processing rules for stocks.
+
+Sub-Record Z is the same as Sub-Record 7 but should not to be processed 
+as a price record. Sub-Record Z is used to pass down volume on sale
+conditions (session) not intended to update the high, low or last values
+
+
+Sub-Record 8: Bid, BidSize, Ask, AskSize
+
+ <soh>2<symbol>,<sub-record><stx><base><exchange ID><delay time><bid>,
+  <size>,<ask>,<size>,<day/session><etx>
+  
+Same as Sub-Record 0, except:
+bid:v,size:v,ask:v,size:v = live bid price, bid size, ask price, ask size.
+- live price message, comma delimited element and modifier are not required.
+  see Appendix B for special processing rules for stocks.
+
+Sub-Record 8 for stocks only applies to the best available bids and asks at
+the national level.
+
+
+Sub-Record E: Bid, BidSize, Ask, AskSize (stocks only)
+
+ <soh>2<symbol>,<sub-record><stx><base><exchange ID><delay time><bid>,
+  <size>,<ask>,<size>,<bbo><marketid><bidid><askid><day/session><etx>
+  
+Same as Sub-Record 0, except:
+bid:v,size:v,ask:v,size:v = live bid price, bid size, ask price, ask size.
+- live price message, comma delimited element and modifier are not required.
+
+bbo:1 = national best bid offer indicator
+marketid:1 = market center ID of the message
+bidid:1 = market center ID of the national best bid
+askid:1 = market center ID of the national best ask
+Should this message have any effect on the national best bid or ask, it will
+automatically be preceding by a Sub-Record 8 message. This is reflected by
+the national best bid offer indicator.
+  see Appendix C for special processing rules for stocks.
+
+
+Sub-Record A: Bid, BidSize, Ask, AskSize, Trade, TradeSize, Cumulative Volume 
+
+ <soh>2<symbol>,<sub-record><stx><base><exchange ID><delay time><bid>,
+  <size>,<ask>,<size>,<price>,<size>,<cumulative vol>,<day/session><etx>
+
+Same as Sub-Record 0, except:
+bid:v,size:v,ask:v,size:v,price:v,size:v,cumulative vol:v = live bid price, 
+bid size, ask price, ask size, trade price, trade price size, cumulative volume.
+- live price message, comma delimited element and modifier are not required.
+
+
+Sub-Record 1: Exchange Generated Refresh Message
+
+ <soh>2,<symbol>,<sub-record><stx><base><exchange ID><delay time>, 
+  <open>,<high>,<low>,<last>,<bid>,<ask>,<open2>,<prev>,<close>,
+  <close2>,<settle>,<prev volume>,<prev open int>,<cur volume>,<day/session><etx>
+
+Sub-Record 2 - 4: ddfplus Generated Refresh Messages
+
+ddfplus generated refresh messages: record type 2, Sub-Record 2 - 4
+Sub-Record 2: Updates additional data elements changed by live message.
+Sub-Record 3: Cyclical database refresh for current active session(s).
+Sub-Record 4: Cyclical database refresh for previous closed session(s).
+
+<soh>2,<symbol>,<sub-record><stx><base><exchange ID><delay time>, 
+  <open>,<high>,<low>,<last>,<bid>,<ask>,<open2>,<prev>,<close>,
+  <close2>,<settle>,<prev volume>,<prev open int>,<cur volume>,<day/session><etx>
+
+Cyclical database refresh messages are sent at least once every two hours
+for every contract inside our database that has traded that day.
+
+- please refer to the commodities session codes and refresh messages 
+sections for additional information on processing of refresh messages.
+
+
+Sub-Record 6: Open, High, Low, Last Message.
+
+ <soh>2,<symbol>,<sub-record><stx><base><exchange ID><delay time>, 
+  <open>,<high>,<low>,<last>,<bid>,<ask>,<open2>,<prev>,<close>,
+  <close2>,<settle>,<prev volume>,<prev open int>,<cur volume>,<day/session><etx>
+
+Sub-Record messages 1, 2, 3, 4 and 6 all use the same message structure.
+All price fields are variable length fields, and all prices should be
+treated as current live prices, but whereas Sub-Record 1, 2, 3 and 4 are 
+true refresh messages, Sub-Record 6 messages should be treated and 
+processed as live trade price messages.
+
+cur volume:v = current volume for contract
+prev volume:v = previous trading session volume for contract
+prev open int:v = previous trading session open interest for contract
+
+Previous volume and open interest records contain the previous trading days 
+volume and open interest. Final volume and open interest for commodities is
+only available with the next trading day.
+
+Current volume contains the current volume as published by the exchange
+when available.
+
+
+Sub-Record 9: Market Condition Message
+
+ <soh>2<symbol>,<sub-record><stx><base><exchange ID><delay time>
+  <market condition>,<space><space><day/session><etx>
+
+soh:1 = start of header 
+symbol:v =exchange symbol; v indicates variable length field;  
+stx:1 = start of text 
+base:1 = base code for quote 
+exchange ID:1 = exchange identifier 
+delay time:2 = exchange requirement for delayed data 
+market condition:1=market condition indicator
+day/session:2 = message day and session identifier 
+etx:1 = end of text 
+
+The base code is set to '*' for Market Condition Message for all securities.
+
+Note: symbol can be for specific stock or commodity or specific contract 
+month, indicating that the condition applies to a stock, a commodity or 
+a specific commodity contract. If the symbol applies for all contracts
+within a commodity, ddf will append an '*' to the end of the symbol.
+
+Example:
+CN8 - Corn July 2008
+C* - Corn All contracts
+C - CitiGroup, Inc
+
+Market condition indicator
+
+A = trading halt; 
+B = trading resumption;
+C = quotation resumption; (1)
+E = end fast market; (2)
+F = fast market; (2)
+L = late market;  (2)
+M = end late market; (2)
+P = post suspension/close/settle session;  (2)
+Q = end post suspension/close/settle session; (2)
+1 = opening delay (3)
+4 = no open/no resume (3)
+
+(1) - Nasdaq only
+(2) - Futures only
+(3) - Nyse/Amex only
+
+Currently ddf does not transmit the reason code for the market condition,
+however we have left the 2 bytes <space><space> deliberately empty so we 
+can add this information to the feed at a later date, without disruption 
+to our current users.
+
+
+Sub-Record F: Market Symbol Message
+
+ <soh>2<symbol>,<sub-record><stx><base><exchange ID><delay time>,
+  <security name>,<exc><fsi><space><space><day/session><etx>
+
+soh:1 = start of header 
+symbol:v = exchange symbol; v indicates variable length field;  
+stx:1 = start of text 
+base:1 = base code for quote 
+exchange ID:1 = exchange identifier 
+delay time:2 = exchange requirement for delayed data 
+security name:v = "security name as passed down by exchange"
+exc:1 = q - Nasdaq Global Select Market, g - Nasdaq Global Market, s - Nasdaq Capital Market
+fsi:1 = financial status indicator
+day/session:2 = message day and session identifier 
+etx:1 = end of text 
+
+The base code is set to '*' for Market Symbol Message for all securities.
+
+Currently this message is only utilized for Nasdaq Securities. 
+The exc identifier is the only notification of whether a security 
+is a Nasdaq capital market issue.
+
+The financial status indicator. 
+
+For Nasdaq securities the allowable values will be as follows: 
+
+D Deficient: Issuer Failed to Meet NASDAQ Continued Listing Requirements
+E Delinquent: Issuer Missed Regulatory Filing Deadline
+Q Bankrupt: Issuer Has Filed for Bankruptcy 
+N Normal (Default): Issue is not currently deficient, delinquent, or bankrupt.
+G Deficient and Bankrupt 
+H Deficient and Delinquent 
+J Delinquent and Bankrupt
+K Deficient, Delinquent, and Bankrupt
+
+For NYSE/AMEX securities the allowable values will be as follows: 
+
+1: Bankrupt
+2: Below continuing listing standards
+3: Bankrupt & below continuing listing standards
+4: Late filing
+5: Bankrupt & late filing
+6: Below continuing listing standards & late filing
+7: Bankrupt, below continuing listing standards & late filing
+
+If the code is blank then the message contains no information on the financial
+status of the security.
+
+
+Record Type S Messages
+======================
+
+Record Type S Messages are used exclusively for futures and futures options 
+exchange traded spreads. Spreads will follow the basic same characteristics 
+as regular futures and utilize the same messages with minor adjustments.
+
+Spreads can be a combination of Futures or Futures Options contracts. Futures 
+Symbols will be the same as regular futures contracts. Futures Options will 
+use the Extended Futures Options Symbology 
+
+CCCMY|SSSSSC or CCCMY|SSSSSP
+
+Example: JAOV7|10050P
+
+Up to 12 bytes, where CCCMY is the futures symbol.
+CCC - commodity code, M - month, Y - year
+| - delimiter 
+SSSSS is the strike price, left justified, zero padded to the right.
+C = Call, P = Put
+
+
+For all Sub-Record types spreads will always start
+
+<soh>s<symbol1>,<sub-record><stx><base><exchange ID><delay time><spread type>
+<nolegs><symbol2>,<symbol3>,<symbol4>,
+
+soh:1 = start of header 
+symbol1:v = 1st spread symbol; v indicates variable length field; 
+stx:1 = start of text 
+base:1 = base code for quote 
+exchange ID:1 = exchange identifier 
+delay time:2 = exchange requirement for delayed data 
+spread type: 2 = spread type. 
+nolegs: 1 = no of legs of spread
+symbol2:v = 2nd spread symbol
+symbol3:v = 3rd spread symbol (if applicable - see nolegs)
+symbol4:v = 4th spread symbol (if applicable - see nolegs)
+
+After the total number of symbols, determined by nolegs, there will be a comma before 
+the price information begins, this is different from the regular processing of 
+Sub-Records 0,5,7,8,A which do not currently have a comma before the price information, 
+but the same for Sub-Records 1,2,3,4,6 which do have a comma before the price information.
+
+Below are the specifications for the rest of the messages which are the same defined above
+for Record Type 2 messages.
+
+Sub-Record: 0,5 <price>,<element><modifier><day/session><etx>
+Sub-Record: 7 <price>,<size>,<day/session><etx>
+Sub-Record: 8 <bid>,<size>,<ask>,<size>,<day/session><etx>
+Sub-Record: A <bid>,<size>,<ask>,<size>,<price>,<size>,<cumulative vol>,<day/session><etx>
+Sub-Record: 1,2,3,4,6 <open>,<high>,<low>,<last>,<bid>,<ask>,<open2>,<prev>,<close>,
+  <close2>,<settle>,<prev volume>,<prev open int>,<cur volume>,<day/session><etx>
+
+
+
+Record Type 3 Messages
+======================
+
+Market Depth: Record type <3>, Sub-Record <B>ook
+
+<soh>3<symbol>,B<stx><base><exchange ID><#bid><#ask>,<price*size><etx>
+
+exchange ID:1 = exchange header
+#bid:1        = # of bid prices in book
+#ask:1        = # of ask prices in book
+price*size:v  = price*size block for each book elements
+
+Note: up to a max of 20 price*size blocks, comma separated in the book.
+The "*" determines the position.
+A-J is ask #10 thru ask #1; K-T is bid #1 thru bid #10
+
+Note: Market Depth is available on the DDF+ realtime feed only. There 
+are separate exchange subscriber fees for this product.
+
+
+End-of-Day Summaries: Record type <3>, Sub-Records S, C, I, and T.
+
+Sub-Record <S> end-of-day stock prices and volume (not currently in use)
+Sub-Record <C> end-of-day commodity prices
+Sub-Record <I> yesterday commodity ind vol & open int.
+Sub-Record <T> yesterday commodity composite vol & open int.
+
+End-of-day stock and forex prices and volume
+<soh>3<symbol>,S<stx><base><exchange ID><reserved><reserved>,
+ <date>,<open>,<high>,<low>,<last>,<volume><etx>
+
+End-of-day commodity prices
+<soh>3<symbol>,C<stx><base><exchange ID><reserved><reserved>,
+ <date>,<open>,<high>,<low>,<last><etx>
+
+Yesterday's commodity individual vol & open int.
+<soh>3<symbol>,I<stx><base><exchange ID><reserved><reserved>,
+ <date>,<volume>,<open int><etx>
+
+Yesterday's commodity total vol & open int.
+<soh>3<commodity code>,T<stx><base><exchange ID><reserved><reserved>,
+ <date>,<volume>,<open int><etx>
+
+soh:1 = start of header 
+symbol:v = exchange symbol; v indicates variable length field;
+commodity code:v = commodity code   
+stx:1 = start of text 
+base:1 = base code for quote 
+exchange ID:1 = exchange identifier 
+reserved:1 = reserved for compatibility
+date:10 = data date mm/dd/yyyy (month,day,year)
+etx:1 = end of text
+
+open, high, low, last, open int, and volume are variable length fields.
+
+
+Futures Symbols Overview
+========================
+
+Example: CMY or CCMY;  WZ8 or CTH8
+
+Futures Symbols are 3 or 4 bytes, where C or CC is commodity code from 
+symbols list, M is contract month code and Y is contract year.
+
+Contract Months
+
+F: January
+G: February
+H: March
+J: April
+K: May
+M: June
+N: July
+Q: August
+U: September
+V: October
+X: November
+Z: December
+
+Y: Spot or cash market, contract year is 0, as in SPY0=S&P 500 index.
+
+Contract Year is the last digit of the expiration year, 2001=1, 2002=2, 
+2003=3, 2004=4, 2005=5, 2010=0, etc.
+
+
+For Futures contracts, currently only Natural Gas, that trade out more 
+than 10-years DDF will use alternate contract months 
+'A','B','C','D','E','I','L','O','P','R','S','T' = 'Jan' ... 'Dec'
+
+NGZ0 - Natural Gas Dec 2010
+NGT0 - Natural Gas Dec 2020
+
+
+For select futures, currently only NYMEX ClearPort Swaps, exchange 
+code "j" DDF will start utilizing a 3 character commodity code.
+The month and the year component will remain as before
+
+Example: CCCMY; JAOV7
+
+
+Futures Options Symbols Overview
+================================
+
+CMSSSSC or CCMSSSP; SX5300P or ESU990C
+
+8 bytes, where C or CC is commodity code from symbols list 
+SSSS or SSS is strike price
+C is Put or Call letter 
+C=call this year, D=call next year, E=call two years out, F=call 
+3 years out; G=call 4 years out
+P=put this year, Q=put next year, R=put 2 years out, S=put 3 
+years out, T=put 4 years out 
+
+
+
+Futures Options Symbols Overview - Extended Symbology
+=====================================================
+
+For exchange traded spreads and select futures options, currently only 
+NYMEX ClearPort Swaps, exchange code "j" DDF will start utilizing a new 
+format for options contracts.
+
+CCCMY|SSSSSC or CCCMY|SSSSSP
+
+Example: JAOV7|10050P
+
+Up to 12 bytes, where CCCMY is the futures symbol.
+CCC - commodity code, M - month, Y - year
+| - delimiter 
+SSSSS is the strike price, left justified, zero padded to the right.
+C = Call, P = Put
+
+
+
+
+Message Day Codes
+=================
+
+1 - 9 = 1 - 9 
+0 = 10 
+A - U = 11 - 31 
+
+
+Commodities Session Codes (other than blank)
+============================================
+
+G = CME Globex (overnight session)
+R = CME Regular Trading Hours (pit session)
+G = NYMEX/COMEX Access Session (overnight session)
+R = NYMEX/COMEX Regular Trading Hours (pit session)
+
+The KCBT, CBOT & WCE do not have session codes.
+
+For all refresh messages, Sub-Records 1, 2, 3, and 4 commodities session codes 
+are to used to differentiate between composite market prices, overnight session prices,
+and day session prices. 
+
+If the session code is a 'R' then the message is specific to pit session pricing.
+If you are not collating "pit session only prices" then disregard refresh messages 
+with a session code 'R'.
+
+If applicable ddfplus will send session code 'G' for overnight refresh messages. These
+messages will immediately be followed by a composite refresh message with a blank session code.
+
+
+Refresh Messages
+================
+
+All refresh messages contain current live price information.
+
+Sub-Record 1 - exchange generated refresh messages are normally passed down by an exchange when a 
+contract makes a new high or low for the day. They can also used by the exchange for corrections. 
+
+Sub-Record 2 - ddfplus generated refresh messages are passed down whenever a contract opens or makes a new 
+high or new low price for the session. If a market has two sessions and the contract makes a new composite 
+high then ddfplus will send down two messages for that contract, the first of which will apply to only the 
+day or overnight session and the second for the composite session.
+
+Sub-Record 3 - ddfplus generated cyclical refresh message for the current market session are passed down 
+once every two hours for every record in the database. If a market has two sessions and the contract 
+is still trading for the current day then ddfplus will send down two messages for that contract, the first 
+of which will apply to only the day session and the second for the composite session. When the market is 
+trading for the next days "overnight trading" session, for that message the session code will be blank and 
+the day code will be adjusted to reflect the next trading day.
+
+Sub-Record 4 - ddfplus generated cyclical refresh message for previous trading sessions are passed down 
+once every two hours until midnight Chicago time. This message provides the previous session summary
+message. If a market has two sessions and the contract is currently trading for the next day session then 
+ddfplus will send out two messages. The first of which will apply to only the day session that has closed
+and the second for the composite session that has just closed. Squeezed between these messages will be a 
+Sub-Record 3 message with the current active trading session.
+
+Notes:
+
+ - Previous Volume and Previous Open Interest only applies for commodities.
+
+ - Bid and Ask values are not included for previous closed sessions on commodities, Sub-Record 4.
+
+ - Previous Volume, Previous Open Interest and Current Volume are not passed down for a pit session specific
+refresh message (session code 'R') as the information technically applies to the composite session, 
+which is normally passed down immediately after the pit session refresh message. 
+
+ - Previous Volume and Previous Open Interest are not passed down for next session refresh messages as the 
+information technically applies to the previous, previous session, but current Volume will be included. 
+Next session refresh messages are messages for contracts settling tomorrow.
+
+
+Base Codes
+==========
+
+2 = 1/8 = one digit fraction, range is 0 - 7
+3 = 1/16 = two digit fraction, range is 0 - 15
+4 = 1/32 = two digit fraction, range is 0 - 31
+5 = 1/64 = two digit fraction, range is 0 - 63
+6 = 1/128 = three digit fraction, range is 0 - 127
+7 = 1/256 = three digit fraction, range is 0 - 255
+8 = 0 = no decimal places, a whole number
+9 = 0.1 = one decimal place
+A = 0.01 = two decimal places
+B = 0.001 = three decimal places
+C = 0.0001 = four decimal places
+D = 0.00001 = five decimal places
+E = 0.000001 = six decimal places
+F = 0.0000001 = seven decimal places
+* = unchanged = transmitted by ddfplus with size only data
+
+note: Base codes in ddfplus messages indicate the incoming message 
+precision only. Display requirements are independent of the incoming 
+base code. Five year notes (FV) are transmitted with base code "5" 
+indicating 64ths, but are normally displayed in 32nds and halves. 30 
+year bond (US) options also carry base code "5", but these are 
+traditionally displayed in 64ths.
+
+
+Quote Element Codes
+===================
+
+0 = trade
+1 = ask
+2 = bid
+3 = close; 31 is offer; 32 is bid
+4 = 2nd of closing range; 41 is offer; 42 is bid
+5 = high; 52 is high made by valid bid
+6 = low; 61 is low made by valid offer
+7 = volume; 71 = yesterday's volume; 76 = today's cumulative volume
+A = open; A1 is offer; A2 is bid
+B = 2nd of opening range; B1 is offer; B2 is bid
+C = open interest; C1 = yesterday's open interest
+D = settlement
+d = settlement (during market trading)
+E = previous
+X = cancelled trade message 
+
+note: volume and open interest are calculated once per day for the 
+previous day, cumulative volume is reported for electronic sessions by 
+some exchanges.
+
+
+Quote Element Modifiers
+=======================
+
+0 = last
+1 = ask
+2 = bid
+< = bid size
+= = ask size
+> = trade size
+
+note: bid, ask and trade size is only reported for electronic sessions 
+by some exchanges
+
+
+Appendix A - ddfplus Processing of Special Sale Conditions
+==========================================================
+
+Record 2, Sub-Record 7 messages relay trade reports with price and 
+incremental volume. The session byte on the record will indicate the 
+sale condition. The sale condition is important because all trades 
+messages count towards the daily volume, but not all trades should be 
+processed as the last price. The different processing rules are 
+explained below.
+
+To assist in processing of sale conditions ddfplus will always supply 
+a refresh message each time a quote element other than last price is changed.
+
+
+NYSE/AMEX - processing rules.
+
+The following sale conditions are live trade messages and should be processed as such.
+
+@ - Regular Sale
+E - Automatic Execution
+F - InterMarket Sweep
+K - Rule 127 (NYSE Only) or Rule 155 (Amex Only)
+V - Stock Option Trade
+X - Cross Trade
+5 - Market Center Reopening Trade
+6 - Market Center Closing Trade
+9 - Reserved
+
+The following sale conditions are trade messages that will update the high/low values
+but will only update the last price if they are the first trades of the day. 
+
+L - Sold Last
+O - Opened
+P - Prior Reference Price
+Z - Sold (out of sequence)
+4 - Derivatively Priced
+
+Nasdaq/OTC - processing rules.
+
+The following sale conditions are live trade messages and should be processed as such.
+
+@ - Regular Sale
+A - Acquisition
+B - Bunched Trade
+D - Distribution
+E - Future Place Holder
+F - InterMarket Sweep
+K - Rule 155 Trade (Amex Only)
+O - Opening Prints
+S - Split Trade
+V - Stock-Option Trade
+X - Cross Trade
+Y - Yellow Flag
+1 - Stopped Stock - Regular Trade
+5 - Re-Opening Prints
+6 - Closing Prints
+
+The following sale conditions are trade messages that will update the high/low values
+but will only update the last price if they are the first trades of the day. 
+
+G - Bunched Sold Trade
+P - Prior Reference Price
+Z - Sold out of Sequence
+3 - Stopped Stock - Sold (out of sequence)
+4 - Derivatively Priced
+
+The following sale conditions are trade messages that will update the high/low values
+and last prices if the market is opened. After market only update the high/low values.
+
+L - Sold Last
+2 - Stopped Stock - Sold Last
+
+
+Form T trades (NYSE/AMEX/Nasdaq/OTC)
+
+Common to all exchanges are the pre and post market trades also known as Form T 
+trades, which are passed down with session code 'T' and session code 'U'. Form T 
+trades do not update the daily open, high, low or last fields, and are normally 
+presented as their own field element.
+
+T - Pre/Post Market Trade
+U - Pre/Post Market Trade - Sold out of Sequence
+
+The ddfplus refresh message sent after every Form T trade does not include the
+Form T trade price, but it will contain the regular session o/h/l/c prices.
+
+
+Appendix B - ddfplus Processing of Special Quote Conditions
+==========================================================
+
+Record 2, Sub-Record 8 messages relay bid, bid size, ask and ask size.
+The session byte on the record will indicate the quote condition. 
+
+Please note the quote condition is not the same as the sale condition, 
+or session code for commodities, and should not be treated as such.
+
+ddfplus takes and processes all quote conditions, and unlike the sale
+condition all quote conditions are value for display on quote boards.
+
+For complete information on what the quote condition means for NYSE/AMEX
+securities please refer to:
+http://www.ddfplus.com/docs/ddfplus_feedspecs_cqs_quotecondition.txt
+
+For complete information on what the quote condition means for Nasdaq
+securities please refer to:
+http://www.ddfplus.com/docs/ddfplus_feedspecs_uqdf_quotecondition.txt
+
+
+Appendix C - ddfplus Record type:2 Sub-Record: E message
+=======================================================
+
+This message contains all the participants information for Nasdaq/NYSE 
+and AMEX bid/ask messages.
+
+Should one of the participant messages qualify as the national best bid or
+ask ("BBO") ddf will automatically send down a subsequent bid/ask Sub-Record 
+8 message containing the national best available bid and ask messages.
+
+ddf will include the market participant ID for the national best bid and 
+best ask within the Sub-Record E message as fields <bidid> and <askid>. 
+
+Value for the BBO are as follows:
+
+0: this message has no effect on the national BBO
+1: the national BBO cannot be calculated
+2 or 3: a new national bbo was generated as a result of this message
+4: current message contains national bbo information
+
+For anything other than a BBO value of '0' the BBO indicator will be 
+reflected by the subsequent Sub-Record 8 message.
+
+The rules for calculating the national BBO are as follows:
+
+The highest available bid or lowest available ask. 
+If two participants have the same bid or ask, then the participant with 
+the greatest size.
+If both participants have the same size then the first posted.
+
+The available list of Market Participant ID's are:
+
+Nasdaq - Market Center Originator ID
+A: American Stock Exchange
+B: Boston Stock Exchange
+C: National Stock Exchange
+D: National Association of Securities Dealer (NASD ADF)
+E: Market Independent (SIP)
+I: International Securities Exchange
+M: Chicago Stock Exchange
+P: Archipelago/Pacific Stock Exchange
+Q: Nasdaq (nasdaq only)
+W: CBOE Stock Exchange
+X: Philadelphia Stock Exchange
+Y: BATS Y Exchange, Inc. (BATY)
+J: EDGA Exchange, Inc. (EDGA)
+K: EDGX Exchange, Inc. (EDGX)
+
+Nyse/Amex - Participant ID
+A: American Stock Exchange
+B: Boston Stock Exchange
+C: National Stock Exchange
+D: National Association of Securities Dealer (NASD)
+I: International Securities Exchange
+M: Chicago Stock Exchange
+N: New York Stock Exchange
+P: Archipelago/Pacific Stock Exchange
+T: Nasdaq Stock Exchange
+S: Consolidated Tape System
+W: CBOE Stock Exchange
+X: Philadelphia Stock Exchange
+Z: BATS Exchange
+
+
+ddfplus rules for special processing of stocks
+==============================================
+
+Whenever possible ddfplus will retain the exchange symbol for a given security, 
+however there are circumstances, detailed below, where ddfplus has to convert the 
+incoming exchange symbol to conform to our standards.
+
+Preferred stocks are notated on the ddfplus feed with a "-" within the symbol. 
+The exchange will pass down a lower case "p" which ddfplus will convert to a "-".
+
+Example: Ford Motor Corp Preferred "FpS" can be viewed as "F-S"
+
+Warrant stocks are notated with a ".W" at the end of the symbol. The exchange will 
+pass down "/WS" which ddfplus will convert to ".W".
+
+Example: Conseco Warrant "CNO/WS" can be viewed as "CNO.W"
+
+Class A and Class B shares are noted with a ".A" or ".B" at the end of the symbol. 
+The exchange will send down "/A" or "/B" which ddfplus will convert to a period and then 
+a letter following the ticker symbol. 
+
+Example: Berkshire Hathaway Class A "BRK/A" can be viewed as "BRK.A"
+Example: Viacom Class B "VIA/B" can be viewed as "VIA.B"
+
+Copyright (C) 2008 ddfplus. All Rights Reserved.
+

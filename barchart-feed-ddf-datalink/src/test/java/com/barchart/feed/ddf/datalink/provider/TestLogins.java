@@ -50,19 +50,19 @@ public class TestLogins {
 
 		client.subscribe(sub);
 
-		sleep(10000);
+		sleep(1000000);
 
-		log.debug("*****************************************  Unsubscribing");
-
-		client.unsubscribe(sub);
-
-		sleep(10000);
-
-		log.debug("*****************************************  Resubscribing");
-
-		client.subscribe(sub);
-
-		sleep(10000);
+		// log.debug("*****************************************  Unsubscribing");
+		//
+		// client.unsubscribe(sub);
+		//
+		// sleep(10000);
+		//
+		// log.debug("*****************************************  Resubscribing");
+		//
+		// client.subscribe(sub);
+		//
+		// sleep(10000);
 
 		client.shutdown();
 	}

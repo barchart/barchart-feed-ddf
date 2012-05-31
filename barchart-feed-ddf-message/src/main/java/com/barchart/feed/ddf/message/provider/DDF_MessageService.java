@@ -279,8 +279,8 @@ public final class DDF_MessageService {
 		// System.out.println("record=" + (char) record);
 		// System.out.println("subRecord=" + (char) subRecord);
 
-		final DDF_MessageType type = DDF_MessageType
-				.fromPair(record, subRecord);
+		final DDF_MessageType type =
+				DDF_MessageType.fromPair(record, subRecord);
 
 		final Base message = newInstance(type);
 
@@ -317,8 +317,9 @@ public final class DDF_MessageService {
 
 		// System.out.println(new String(xmlEncode(root, false)));
 
-		final Element tag = HelperXML.xmlFirstChild(root, XmlTagBook.TAG,
-				HelperXML.XML_STOP);
+		final Element tag =
+				HelperXML.xmlFirstChild(root, XmlTagBook.TAG,
+						HelperXML.XML_STOP);
 
 		final DX_XB_Book message = new DX_XB_Book();
 
@@ -344,8 +345,9 @@ public final class DDF_MessageService {
 
 		// System.out.println(new String(xmlEncode(root, false)));
 
-		final Element tag = HelperXML.xmlFirstChild(root, XmlTagCuvol.TAG,
-				HelperXML.XML_STOP);
+		final Element tag =
+				HelperXML.xmlFirstChild(root, XmlTagCuvol.TAG,
+						HelperXML.XML_STOP);
 
 		final DX_XC_Cuvol message = new DX_XC_Cuvol();
 
@@ -371,8 +373,9 @@ public final class DDF_MessageService {
 
 		// System.out.println(new String(xmlEncode(root, false)));
 
-		final Element tag = HelperXML.xmlFirstChild(root, XmlTagQuote.TAG,
-				HelperXML.XML_STOP);
+		final Element tag =
+				HelperXML.xmlFirstChild(root, XmlTagQuote.TAG,
+						HelperXML.XML_STOP);
 
 		final DX_XQ_Quote message = new DX_XQ_Quote();
 

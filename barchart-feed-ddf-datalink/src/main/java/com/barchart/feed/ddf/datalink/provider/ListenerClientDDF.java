@@ -9,10 +9,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.jboss.netty.bootstrap.ConnectionlessBootstrap;
-import org.jboss.netty.channel.AdaptiveReceiveBufferSizePredictorFactory;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.ExceptionEvent;
+import org.jboss.netty.channel.FixedReceiveBufferSizePredictorFactory;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.DatagramChannel;
@@ -70,9 +70,8 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 		boot.setPipelineFactory(pipelineFactory);
 
 		boot.setOption("broadcast", "false");
-		boot.setOption("receiveBufferSizePredictorFactory",
-				new AdaptiveReceiveBufferSizePredictorFactory(1048576, 2097152,
-						4194304));
+		boot.setOption("receiveBufferSizePredictorFactory", //
+				new FixedReceiveBufferSizePredictorFactory(2 * 1024));
 
 	}
 

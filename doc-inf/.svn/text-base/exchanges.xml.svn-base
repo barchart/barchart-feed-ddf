@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<exchanges>
+	<exchange
+		id="AMEX"
+		ddfcode="A"
+		delay="15"
+		description="American Stock Exchange"
+		codes="AMEX" />
+	<exchange
+		id="CBOT"
+		ddfcode="B"
+		delay="10"
+		description="CMEGroup CBOT"
+		codes="CBOT"
+		feewaiver="yes" />
+	<exchange
+		id="CBOTM"
+		delay="10"
+		description="CMEGroup CBOT Mini"
+		codes="CBOTM"
+		feewaiver="yes" />
+	<exchange
+		id="CFE"
+		ddfcode="R"
+		delay="10"
+		description="CBOE Futures Exchange"
+		codes="CFE"
+		feewaiver="yes" />
+	<exchange
+		id="CME"
+		ddfcode="M"
+		delay="10"
+		description="CMEGroup CME"
+		codes="CME,IOM,IMM,WEA"
+		feewaiver="yes" />
+	<exchange
+		id="COMEX"
+		ddfcode="E"
+		delay="10"
+		description="CMEGroup COMEX"
+		codes="COMEX"
+		feewaiver="yes" />
+	<exchange
+		id="CXMI"
+		delay="10"
+		description="CMEGroup COMEX emiNY"
+		codes="CXMI"
+		feewaiver="yes" />
+	<exchange
+		id="DME"
+		delay="10"
+		description="Dubai Mercantile Exchange"
+		codes="DME"
+		feewaiver="yes" />
+	<exchange
+		id="EUREX"
+		delay="99"
+		description="EUREX"
+		codes="EUREX" />
+	<exchange
+		id="FOREX"
+		ddfcode="$"
+		delay="10"
+		description="Foreign Exchange"
+		codes="FOREX" />
+	<exchange
+		id="FUND"
+		delay="15"
+		description="Mutual Funds"
+		codes="FUND" />
+	<exchange
+		id="GBLX"
+		delay="10"
+		description="CMEGroup CME eMinis"
+		codes="GBLX,ZZZ"
+		feewaiver="yes" />
+	<exchange
+		id="ICE"
+		ddfcode="L"
+		delay="10"
+		description="Intercontinental Exchange"
+		codes="ICE" />
+	<exchange
+		id="ICEFI"
+		delay="10"
+		description="Intercontinental Exchange"
+		codes="ICEFI"
+		feewaiver="yes" />
+	<exchange
+		id="WPG"
+		ddfcode="W"
+		delay="10"
+		description="ICE: Winnipeg Commodity Exchange"
+		codes="ICECA,WPG,WCE" />
+	<exchange
+		id="NYBOT"
+		ddfcode="C"
+		delay="10"
+		description="ICE: NYBOT"
+		codes="ICEUS,NYBOT,CSCE,FINEX,NYCE,NYFE" />
+	<exchange
+		id="IDX"
+		ddfcode="I"
+		delay="10"
+		description="Indices"
+		codes="IDX,INDEX" />
+	<exchange
+		id="IDX_CFE"
+		ddfcode="r"
+		delay="10"
+		description="Indices: CFE"
+		codes="IDX_CFE,INDEX-CFE" />
+	<exchange
+		id="IDX_DOW"
+		ddfcode="p"
+		delay="10"
+		description="Indices: Dow Jones"
+		codes="IDX_DOW,INDEX-DOW" />
+	<exchange
+		id="IDX_SP"
+		ddfcode="o"
+		delay="10"
+		description="Indices: S&amp;P"
+		codes="IDX_SP,INDEX-SP" />
+	<exchange
+		id="KCBT"
+		ddfcode="K"
+		delay="10"
+		description="Kansas City Board of Trade"
+		codes="KCBT"
+		feewaiver="yes" />
+	<exchange
+		id="MGEX"
+		ddfcode="G"
+		delay="10"
+		description="Minneapolis Grain Exchange"
+		codes="MGEX"
+		feewaiver="yes" />
+	<exchange
+		id="NASDAQ"
+		ddfcode="Q"
+		delay="15"
+		description="Nasdaq"
+		codes="NASDAQ,NTDS" />
+	<exchange
+		id="NYMEX"
+		ddfcode="J"
+		delay="10"
+		description="CMEGroup NYMEX"
+		codes="NYMEX"
+		feewaiver="yes" />
+	<exchange
+		id="NYMI"
+		delay="10"
+		description="CMEGroup NYMEX emiNY"
+		codes="NYMI"
+		feewaiver="yes" />
+	<exchange
+		id="NYSE"
+		ddfcode="N"
+		delay="15"
+		description="NYSE"
+		codes="NYSE" />
+	<exchange
+		id="NLIF"
+		delay="10"
+		description="NYSE Liffe"
+		codes="NLIF" />
+	<exchange
+		id="OTCBB"
+		ddfcode="D"
+		delay="10"
+		description="Nasdaq"
+		codes="OTCBB,OTC-BB" />
+	<exchange
+		id="PINKSHEETS"
+		ddfcode="U"
+		delay="10"
+		description="Pinksheets"
+		codes="PINKSHEETS" />
+	<exchange
+		id="TEST"
+		ddfcode="_"
+		delay="0"
+		description="Test"
+		codes="DDF,TEST" />
+	<exchange
+		id="BROCK"
+		delay="0"
+		description="Brock Report"
+		codes="BROCK" />
+</exchanges>
