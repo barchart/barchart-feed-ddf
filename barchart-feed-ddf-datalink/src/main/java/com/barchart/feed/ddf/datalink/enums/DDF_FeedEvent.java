@@ -74,7 +74,12 @@ public enum DDF_FeedEvent {
 	/**
 	 * Posted if an attempt to write to JERQ is unsuccessful.
 	 */
-	COMMAND_WRITE_ERROR,
+	COMMAND_WRITE_FAILURE,
+
+	/**
+	 * Posted if an attempt to write to JERQ is successful.
+	 */
+	COMMAND_WRITE_SUCCESS,
 
 	/**
 	 * Link heart beat; posted for each DDF time stamp message.

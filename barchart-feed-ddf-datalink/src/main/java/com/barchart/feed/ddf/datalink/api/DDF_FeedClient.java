@@ -17,7 +17,7 @@ import com.barchart.util.anno.UsedOnce;
  * Client responsible for lowest level connectivity to the data server.
  * <p>
  * Implementation should handle all communications from server asynchronously.
- * Permits blocking and nonblocking commands.
+ * Permits only nonblocking commands.
  * <p>
  * User is required to bind a StateListener to the client, creating a callback
  * for login state changes for the client.
@@ -26,9 +26,17 @@ import com.barchart.util.anno.UsedOnce;
 public interface DDF_FeedClient extends DDF_FeedClientBase {
 
 	/**
+	 * Handles multiple subscription requests.
+	 * <p>
+	 * If the client already has a subscription for any instrument of the set
+	 * then this will overwrite it.
+	 * <p>
+	 * If called while the client is offline, registers the subscriptions and
+	 * returns a future which immediately succeeds.
 	 * 
-	 * @param subscriptions
-	 * @return
+	 * @param subscription
+	 *            The set of subscriptions to subscribe.
+	 * @return Returns true if successful.
 	 */
 	Future<Boolean> subscribe(Set<Subscription> subscriptions);
 
@@ -37,24 +45,37 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 * <p>
 	 * If the client already has a subscription for the instrument then this
 	 * will overwrite it.
+	 * <p>
+	 * If called while the client is offline, registers the subscription and
+	 * returns a future which immediately succeeds.
 	 * 
 	 * @param subscription
-	 *            The subscription for the client to handle.
+	 *            The subscription to subscribe.
 	 * @return Returns true if successful.
 	 */
 	Future<Boolean> subscribe(Subscription subscription);
 
 	/**
+	 * Handles multiple unsubscription requests.
+	 * <p>
+	 * If called while the client is offline, unregisters the subscriptions and
+	 * returns a future which immediately succeeds.
 	 * 
-	 * @param subscriptions
-	 * @return
+	 * @param subscription
+	 *            The set of subscriptions to unsubscribe.
+	 * @return Returns true if successful.
 	 */
 	Future<Boolean> unsubscribe(Set<Subscription> subscriptions);
 
 	/**
+	 * Handles an unsubscription request.
+	 * <p>
+	 * If called while the client is offline, unregisters the subscription and
+	 * returns a future which immediately succeeds.
 	 * 
 	 * @param subscription
-	 * @return
+	 *            The subscription to unsubscribe.
+	 * @return Returns true if successful.
 	 */
 	Future<Boolean> unsubscribe(Subscription subscription);
 
@@ -70,19 +91,5 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 * @param policy
 	 */
 	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
-
-	/**
-	 * Send a DDF TCP command to data server; blocking call.
-	 * 
-	 * @return True if successful.
-	 */
-	boolean send(CharSequence command);
-
-	/**
-	 * Post a DDF TCP command to data server; non blocking call.
-	 * 
-	 * @return True if successful.
-	 */
-	boolean post(CharSequence command);
 
 }

@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.ddf.datalink.example;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +17,6 @@ import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
-import com.barchart.feed.ddf.util.FeedDDF;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -38,8 +40,22 @@ public class FeedClientExample {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 
+		final Executor runner = new Executor() {
+
+			private final AtomicLong counter = new AtomicLong(0);
+
+			final String name = "# DDF Feed Client - "
+					+ counter.getAndIncrement();
+
+			@Override
+			public void execute(final Runnable task) {
+				new Thread(task, name).start();
+			}
+
+		};
+
 		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newInstance(username, password);
+				DDF_FeedClientFactory.newInstance(username, password, runner);
 
 		final DDF_MessageListener handler = new LoggingHandler();
 
@@ -69,15 +85,15 @@ public class FeedClientExample {
 				"KCM2=bBsScCvVqQ," + //
 				"";
 
-		final boolean isSent = client.send(FeedDDF.tcpGo(request));
-		if (!isSent) {
-			log.error("invalid session");
-			return;
-		}
-
-		Thread.sleep(1000 * 1000);
-
-		client.shutdown();
+		// final boolean isSent = client.send(FeedDDF.tcpGo(request));
+		// if (!isSent) {
+		// log.error("invalid session");
+		// return;
+		// }
+		//
+		// Thread.sleep(1000 * 1000);
+		//
+		// client.shutdown();
 
 	}
 

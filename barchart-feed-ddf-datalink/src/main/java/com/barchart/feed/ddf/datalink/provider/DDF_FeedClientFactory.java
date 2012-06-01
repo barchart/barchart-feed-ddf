@@ -8,7 +8,6 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,36 +28,6 @@ public class DDF_FeedClientFactory {
 
 	private DDF_FeedClientFactory() {
 		//
-	}
-
-	/**
-	 * Default factory method for DDF_FeedClient.
-	 * <p>
-	 * Defaults server type to STREAM.
-	 * <p>
-	 * Defaults channel executor to "create new thread and run."
-	 * 
-	 * @return The DDF_FeedClient
-	 */
-	public static DDF_FeedClient newInstance(final String username,
-			final String password) {
-
-		final Executor runner = new Executor() {
-
-			private final AtomicLong counter = new AtomicLong(0);
-
-			final String name = "# DDF Feed Client - "
-					+ counter.getAndIncrement();
-
-			@Override
-			public void execute(final Runnable task) {
-				new Thread(task, name).start();
-			}
-
-		};
-
-		return new FeedClientDDF(username, password, DDF_ServerType.STREAM,
-				runner);
 	}
 
 	/**
@@ -99,34 +68,6 @@ public class DDF_FeedClientFactory {
 				serverType.name());
 
 		return new FeedClientDDF(username, password, serverType, runner);
-
-	}
-
-	/**
-	 * Returns a stateless UDP listener client with a default executor
-	 * 
-	 * @param port
-	 *            The port to listen to
-	 * @return the DDF_FeedClientBase
-	 */
-	public static DDF_FeedClientBase newStatelessUDPListenerClient(
-			final int port) {
-
-		final Executor runner = new Executor() {
-
-			private final AtomicLong counter = new AtomicLong(0);
-
-			final String name = "# DDF Feed Client - "
-					+ counter.getAndIncrement();
-
-			@Override
-			public void execute(final Runnable task) {
-				new Thread(task, name).start();
-			}
-
-		};
-
-		return new ListenerClientDDF(port, runner);
 
 	}
 

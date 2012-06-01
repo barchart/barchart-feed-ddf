@@ -5,6 +5,8 @@ package com.barchart.feed.ddf.datalink.provider;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +30,22 @@ public class TestLogins {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 
+		final Executor runner = new Executor() {
+
+			private final AtomicLong counter = new AtomicLong(0);
+
+			final String name = "# DDF Feed Client - "
+					+ counter.getAndIncrement();
+
+			@Override
+			public void execute(final Runnable task) {
+				new Thread(task, name).start();
+			}
+
+		};
+
 		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newInstance(username, password);
+				DDF_FeedClientFactory.newInstance(username, password, runner);
 
 		final DDF_MessageListener handler = new DDF_MessageListener() {
 
@@ -50,19 +66,19 @@ public class TestLogins {
 
 		client.subscribe(sub);
 
-		sleep(1000000);
+		sleep(10000);
 
-		// log.debug("*****************************************  Unsubscribing");
-		//
-		// client.unsubscribe(sub);
-		//
-		// sleep(10000);
-		//
-		// log.debug("*****************************************  Resubscribing");
-		//
-		// client.subscribe(sub);
-		//
-		// sleep(10000);
+		log.debug("*****************************************  Unsubscribing");
+
+		client.unsubscribe(sub);
+
+		sleep(10000);
+
+		log.debug("*****************************************  Resubscribing");
+
+		client.subscribe(sub);
+
+		sleep(10000);
 
 		client.shutdown();
 	}
