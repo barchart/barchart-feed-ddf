@@ -28,7 +28,7 @@ public class DDF_MarketService extends MakerBase<DDF_MarketBase> implements
 	 */
 	protected DDF_MarketService(final MarketFactory factory) {
 		super(factory);
-		// TODO Auto-generated constructor stub
+
 	}
 
 	private final DDF_MessageVisitor<Void, MarketDo> visitor = new MapperDDF();

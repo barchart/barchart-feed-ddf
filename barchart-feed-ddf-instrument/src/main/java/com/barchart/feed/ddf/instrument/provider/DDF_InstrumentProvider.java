@@ -10,7 +10,6 @@ package com.barchart.feed.ddf.instrument.provider;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlDocumentDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
-import static com.barchart.util.values.provider.ValueBuilder.newText;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -19,6 +18,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -36,6 +39,7 @@ import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
+import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -102,8 +106,9 @@ public final class DDF_InstrumentProvider {
 
 	/**
 	 * bind weak reference to resolver instance.
-	 *
-	 * @param instance the instance
+	 * 
+	 * @param instance
+	 *            the instance
 	 */
 	public static void bind(final DDF_DefinitionService instance) {
 
@@ -113,8 +118,9 @@ public final class DDF_InstrumentProvider {
 
 	/**
 	 * cache via instrument service;.
-	 *
-	 * @param symbol the symbol
+	 * 
+	 * @param symbol
+	 *            the symbol
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
 	public static DDF_Instrument find(final TextValue symbol) {
@@ -123,8 +129,9 @@ public final class DDF_InstrumentProvider {
 
 	/**
 	 * Find ddf.
-	 *
-	 * @param symbol the symbol
+	 * 
+	 * @param symbol
+	 *            the symbol
 	 * @return the dD f_ instrument
 	 */
 	public static DDF_Instrument findDDF(final TextValue symbol) {
@@ -133,18 +140,151 @@ public final class DDF_InstrumentProvider {
 
 	/**
 	 * NOTE: cache via instrument service;.
-	 *
-	 * @param symbol the symbol
+	 * 
+	 * @param symbol
+	 *            the symbol
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
 	public static DDF_Instrument find(final String symbol) {
-		return find(newText(symbol));
+		return instance().lookupDDF(ValueBuilder.newText(symbol));
+	}
+
+	class RetrieveInstrument implements Future<DDF_Instrument> {
+
+		private final String symbol;
+
+		RetrieveInstrument(final String symbol) {
+			this.symbol = symbol;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#cancel(boolean)
+		 */
+		@Override
+		public boolean cancel(final boolean mayInterruptIfRunning) {
+			return false;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#get()
+		 */
+		@Override
+		public DDF_Instrument get() throws InterruptedException,
+				ExecutionException {
+			return null;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#get(long,
+		 * java.util.concurrent.TimeUnit)
+		 */
+		@Override
+		public DDF_Instrument get(final long timeout, final TimeUnit unit)
+				throws InterruptedException, ExecutionException,
+				TimeoutException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#isCancelled()
+		 */
+		@Override
+		public boolean isCancelled() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#isDone()
+		 */
+		@Override
+		public boolean isDone() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+	}
+
+	class RetrieveInstrumentList implements Future<List<DDF_Instrument>> {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#cancel(boolean)
+		 */
+		@Override
+		public boolean cancel(final boolean mayInterruptIfRunning) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#get()
+		 */
+		@Override
+		public List<DDF_Instrument> get() throws InterruptedException,
+				ExecutionException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#get(long,
+		 * java.util.concurrent.TimeUnit)
+		 */
+		@Override
+		public List<DDF_Instrument>
+				get(final long timeout, final TimeUnit unit)
+						throws InterruptedException, ExecutionException,
+						TimeoutException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#isCancelled()
+		 */
+		@Override
+		public boolean isCancelled() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.concurrent.Future#isDone()
+		 */
+		@Override
+		public boolean isDone() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
 	}
 
 	/**
 	 * NOTE: cache via instrument service;.
-	 *
-	 * @param symbolList the symbol list
+	 * 
+	 * @param symbolList
+	 *            the symbol list
 	 * @return list with instruments or empty list;
 	 */
 	public static List<DDF_Instrument> find(final List<String> symbolList) {
@@ -153,8 +293,9 @@ public final class DDF_InstrumentProvider {
 
 	/**
 	 * NOTE: does NOT cache NOR use instrument service.
-	 *
-	 * @param symbolList the symbol list
+	 * 
+	 * @param symbolList
+	 *            the symbol list
 	 * @return the list
 	 */
 	public static List<DDF_Instrument> fetch(final List<String> symbolList) {
@@ -174,7 +315,7 @@ public final class DDF_InstrumentProvider {
 
 	/**
 	 * modifiable instrument.
-	 *
+	 * 
 	 * @return the dD f_ instrument do
 	 */
 	public static DDF_InstrumentDo newInstrumentDDF() {
@@ -185,8 +326,9 @@ public final class DDF_InstrumentProvider {
 
 	/**
 	 * Override lookup url.
-	 *
-	 * @param b the b
+	 * 
+	 * @param b
+	 *            the b
 	 */
 	public static void overrideLookupURL(final boolean b) {
 		overrideURL = b;
@@ -239,8 +381,8 @@ public final class DDF_InstrumentProvider {
 	static List<DDF_Instrument> remoteLookup(final List<String> symbolList)
 			throws Exception {
 
-		final List<DDF_Instrument> list = new ArrayList<DDF_Instrument>(
-				symbolList.size());
+		final List<DDF_Instrument> list =
+				new ArrayList<DDF_Instrument>(symbolList.size());
 
 		final String symbolString = concatenate(symbolList);
 
@@ -274,7 +416,8 @@ public final class DDF_InstrumentProvider {
 
 						try {
 
-							final InstrumentSAX instruement = new InstrumentSAX();
+							final InstrumentSAX instruement =
+									new InstrumentSAX();
 
 							instruement.decodeSAX(attributes);
 

@@ -7,8 +7,10 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.*;
-import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.*;
+import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_HISTORICAL;
+import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_REALTIME;
+import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_UNIVERSAL;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.lookupFromSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,18 +35,20 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 	static final Logger log = LoggerFactory.getLogger(ServiceMemoryDDF.class);
 
 	private final ConcurrentMap<TextValue, DDF_Instrument> instrumentMap = //
-	new ConcurrentHashMap<TextValue, DDF_Instrument>();
+			new ConcurrentHashMap<TextValue, DDF_Instrument>();
 
 	private final ConcurrentMap<TextValue, DDF_Instrument> ddfInstrumentMap = //
-	new ConcurrentHashMap<TextValue, DDF_Instrument>();
-	
+			new ConcurrentHashMap<TextValue, DDF_Instrument>();
+
 	/**
 	 * Instantiates a new service memory ddf.
 	 */
 	public ServiceMemoryDDF() {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#clear()
 	 */
 	@Override
@@ -81,43 +85,48 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 		 * 
 		 */
 
-		final TextValue symbolDDF = instrument.get(DDF_SYMBOL_REALTIME)
-				.toUpperCase();
-		final TextValue symbolHIST = instrument.get(DDF_SYMBOL_HISTORICAL)
-				.toUpperCase();
-		final TextValue symbolGUID = instrument.get(DDF_SYMBOL_UNIVERSAL)
-				.toUpperCase();
+		final TextValue symbolDDF =
+				instrument.get(DDF_SYMBOL_REALTIME).toUpperCase();
+		final TextValue symbolHIST =
+				instrument.get(DDF_SYMBOL_HISTORICAL).toUpperCase();
+		final TextValue symbolGUID =
+				instrument.get(DDF_SYMBOL_UNIVERSAL).toUpperCase();
 
 		ddfInstrumentMap.put(symbolDDF, instrument);
-		
-		// hack for bats 
-	
-		if(symbolDDF.toString().contains(".BZ")){
-			final TextValue lookup = ValueBuilder
-					.newText(symbolDDF.toString().replace(".BZ", ""));
-			
+
+		// hack for bats
+
+		if (symbolDDF.toString().contains(".BZ")) {
+			final TextValue lookup =
+					ValueBuilder.newText(symbolDDF.toString()
+							.replace(".BZ", ""));
+
 			instrumentMap.put(lookup, instrument);
 		}
-		
+
 		instrumentMap.put(symbolHIST, instrument);
 		instrumentMap.put(symbolGUID, instrument);
 
 		log.debug("defined instrument={}", symbolGUID);
 
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookupDDF(com.barchart.util.values.api.TextValue)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookupDDF(com
+	 * .barchart.util.values.api.TextValue)
 	 */
 	@Override
-	public DDF_Instrument lookupDDF(TextValue symbol) {
+	public DDF_Instrument lookupDDF(final TextValue symbol) {
 
 		if (CodecHelper.isEmpty(symbol)) {
 			return DDF_InstrumentProvider.NULL_INSTRUMENT;
 		}
 
 		final TextValue lookup = symbol.toUpperCase();
-		
+
 		DDF_Instrument instrument = ddfInstrumentMap.get(lookup);
 
 		if (instrument == null) {
@@ -129,7 +138,8 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 				store(instrument);
 
 			} catch (final Exception e) {
-				log.warn("lookupDDF : instrument lookup failed; symbol : {}", symbol);
+				log.warn("lookupDDF : instrument lookup failed; symbol : {}",
+						symbol);
 				return DDF_InstrumentProvider.NULL_INSTRUMENT;
 			}
 
@@ -137,11 +147,14 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 
 		return instrument;
 
-
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookup(com.barchart.util.values.api.TextValue)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookup(com.
+	 * barchart.util.values.api.TextValue)
 	 */
 	@Override
 	public final DDF_Instrument lookup(final TextValue symbol) {
@@ -171,8 +184,12 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookup(java.util.List)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookup(java
+	 * .util.List)
 	 */
 	@Override
 	public List<DDF_Instrument> lookup(final List<String> symbolList) {
@@ -185,7 +202,8 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 
 		final List<String> fetchList = new ArrayList<String>(size);
 
-		final List<DDF_Instrument> oldList = new ArrayList<DDF_Instrument>(size);
+		final List<DDF_Instrument> oldList =
+				new ArrayList<DDF_Instrument>(size);
 
 		for (final String symbol : symbolList) {
 
@@ -201,8 +219,8 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 
 		}
 
-		final List<DDF_Instrument> newList = DDF_InstrumentProvider
-				.fetch(fetchList);
+		final List<DDF_Instrument> newList =
+				DDF_InstrumentProvider.fetch(fetchList);
 
 		for (final DDF_Instrument instrument : newList) {
 			store(instrument);

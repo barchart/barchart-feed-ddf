@@ -36,7 +36,7 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 * 
 	 * @param subscription
 	 *            The set of subscriptions to subscribe.
-	 * @return Returns true if successful.
+	 * @return A Future which returns true if successful.
 	 */
 	Future<Boolean> subscribe(Set<Subscription> subscriptions);
 
@@ -51,7 +51,7 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 * 
 	 * @param subscription
 	 *            The subscription to subscribe.
-	 * @return Returns true if successful.
+	 * @return A Future which returns true if successful.
 	 */
 	Future<Boolean> subscribe(Subscription subscription);
 
@@ -63,7 +63,7 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 * 
 	 * @param subscription
 	 *            The set of subscriptions to unsubscribe.
-	 * @return Returns true if successful.
+	 * @return A Future which returns true if successful.
 	 */
 	Future<Boolean> unsubscribe(Set<Subscription> subscriptions);
 
@@ -75,7 +75,7 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 * 
 	 * @param subscription
 	 *            The subscription to unsubscribe.
-	 * @return Returns true if successful.
+	 * @return A Future which returns true if successful.
 	 */
 	Future<Boolean> unsubscribe(Subscription subscription);
 

@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
-import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 
 /**
  * Factory class for building FeedClientDDF.
@@ -33,41 +32,19 @@ public class DDF_FeedClientFactory {
 	/**
 	 * Factory which defaults the DDF_ServerType to STREAM.
 	 * 
-	 * @param runner
+	 * @param executor
 	 *            The executor used by the ClientSocketChannel as both the boss
 	 *            and worker executor. See
 	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
 	 * @return the DDF_FeedClient
 	 */
-	public static DDF_FeedClient newInstance(final String username,
-			final String password, final Executor runner) {
+	public static DDF_FeedClient newInstance(final TransportProtocol protocol,
+			final String username, final String password,
+			final Executor executor) {
 
-		log.debug("Built new DDF_FeedClient, default to DDF_ServerType.STREAM");
+		log.debug("Built new DDF_FeedClient,using to DDF_ServerType.STREAM");
 
-		return new FeedClientDDF(username, password, DDF_ServerType.STREAM,
-				runner);
-
-	}
-
-	/**
-	 * Factory which allows user specified DDF_ServerType.
-	 * 
-	 * @param serverType
-	 *            The server type
-	 * @param runner
-	 *            The executor used by the ClientSocketChannel as both the boss
-	 *            and worker executor. See
-	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
-	 * @return the DDF_FeedClient
-	 */
-	public static DDF_FeedClient newInstance(final String username,
-			final String password, final DDF_ServerType serverType,
-			final Executor runner) {
-
-		log.debug("Built new DDF_FeedClient, DDF_ServerType.{}",
-				serverType.name());
-
-		return new FeedClientDDF(username, password, serverType, runner);
+		return new FeedClientDDF(username, password, executor);
 
 	}
 
@@ -80,11 +57,15 @@ public class DDF_FeedClientFactory {
 	 *            The executor used by the NioDatagramChannel
 	 * @return
 	 */
-	public static DDF_FeedClientBase newStatelessUDPListenerClient(
-			final int port, final Executor executor) {
+	public static DDF_FeedClientBase newStatelessListenerClient(final int port,
+			final Executor executor) {
 
 		return new ListenerClientDDF(port, executor);
 
+	}
+
+	public enum TransportProtocol {
+		TCP, UDP, SCTP, WEBSOCKETS;
 	}
 
 }

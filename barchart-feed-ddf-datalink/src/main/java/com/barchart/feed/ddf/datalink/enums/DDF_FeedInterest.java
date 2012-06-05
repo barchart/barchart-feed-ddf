@@ -139,6 +139,61 @@ public enum DDF_FeedInterest {
 
 	}
 
+	/**
+	 * Parses a set of MarketEvents to a String of FeedInterest names.
+	 * 
+	 * @param eventSet
+	 *            The set of events to parse.
+	 * @return a String of FeedInterest names.
+	 */
+	public static final Set<DDF_FeedInterest> fromEvents(
+			final Set<MarketEvent> eventSet) {
+
+		final Set<DDF_FeedInterest> result =
+				EnumSet.noneOf(DDF_FeedInterest.class);
+
+		if (eventSet == null || eventSet.isEmpty()) {
+			return result;
+		}
+
+		for (final MarketEvent event : eventSet) {
+			switch (event) {
+
+			case NEW_BOOK_ERROR:
+				// debug use only
+				continue;
+
+			case NEW_BOOK_SNAPSHOT:
+				result.add(BOOK_SNAPSHOT);
+				continue;
+
+			case NEW_BOOK_UPDATE:
+			case NEW_BOOK_TOP:
+				result.add(BOOK_UPDATE);
+				continue;
+
+			case NEW_CUVOL_SNAPSHOT:
+				result.add(CUVOL_SNAPSHOT);
+				continue;
+
+			case NEW_BAR_CURRENT_NET:
+			case NEW_BAR_CURRENT_PIT:
+			case NEW_BAR_CURRENT_EXT:
+			case NEW_BAR_CURRENT:
+			case NEW_BAR_PREVIOUS:
+				result.add(QUOTE_SNAPSHOT);
+				continue;
+
+			default:
+				result.add(QUOTE_UPDATE);
+				continue;
+			}
+		}
+
+		return result;
+
+	}
+
 	public static String from(final Collection<DDF_FeedInterest> interests) {
 		final StringBuilder sb = new StringBuilder();
 		for (final DDF_FeedInterest i : interests) {

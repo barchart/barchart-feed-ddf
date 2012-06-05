@@ -102,15 +102,14 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private final String username;
 	private final String password;
-	private final DDF_ServerType serverType;
+	private final DDF_ServerType serverType = DDF_ServerType.STREAM;
 	private final Executor runner;
 
 	FeedClientDDF(final String username, final String password,
-			final DDF_ServerType serverType, final Executor executor) {
+			final Executor executor) {
 
 		this.username = username;
 		this.password = password;
-		this.serverType = serverType;
 		this.runner = executor;
 
 		final ChannelFactory channelFactory =
@@ -329,6 +328,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	}
 
+	/* Asynchronous write to the channel, future returns true on success */
 	private Future<Boolean> write(final String message) {
 		log.debug("Attempting to send reqeust to JERQ : {}", message);
 		final ChannelFuture future = channel.write(message + "\n");
@@ -505,6 +505,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 	}
 
+	/* Runnable which handles connection, login, and initializaion */
 	class LoginRunnable implements Runnable {
 
 		@Override
@@ -562,6 +563,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			return;
 		}
 
+		/* Handles the login for an individual server */
 		private DDF_FeedEvent login(final String host, final int port) {
 			final InetSocketAddress address = new InetSocketAddress(host, port);
 

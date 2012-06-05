@@ -3,6 +3,8 @@
  */
 package com.barchart.feed.ddf.datalink.provider;
 
+import static com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory.TransportProtocol.TCP;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -45,7 +47,8 @@ public class TestLogins {
 		};
 
 		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newInstance(username, password, runner);
+				DDF_FeedClientFactory.newInstance(TCP, username, password,
+						runner);
 
 		final DDF_MessageListener handler = new DDF_MessageListener() {
 
