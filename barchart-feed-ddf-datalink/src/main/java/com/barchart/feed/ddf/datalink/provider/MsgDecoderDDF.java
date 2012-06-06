@@ -19,9 +19,15 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
+import com.barchart.feed.ddf.message.provider.DDF_SpreadParser;
+import com.barchart.util.ascii.ASCII;
 
 /**
  * convert DDF message frames into {@link DDF_BaseMessage} messages
+ * <p>
+ * Note on performance: DDF_MessageService decodes a byte array. It should be
+ * faster to parse the ByteBuffer itself, saving the array creation, copy, and
+ * GC.
  */
 class MsgDecoderDDF extends SimpleChannelHandler {
 
@@ -57,7 +63,7 @@ class MsgDecoderDDF extends SimpleChannelHandler {
 			final ChannelBuffer frameBuffer = (ChannelBuffer) messageRAW;
 
 			/* underlying frame array */
-			final byte[] array = frameBuffer.array();
+			byte[] array = frameBuffer.array();
 
 			/*
 			 * silent ignore of invalid chunks sometimes sent by JERQ; DDF must
@@ -65,6 +71,11 @@ class MsgDecoderDDF extends SimpleChannelHandler {
 			 */
 			if (array.length < 2) {
 				return;
+			}
+
+			/* If message is a spread, rebuild headder */
+			if (array[1] == ASCII._S_) {
+				array = DDF_SpreadParser.stripSpreadPreamble(array);
 			}
 
 			final DDF_BaseMessage messageDDF;

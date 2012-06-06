@@ -37,26 +37,29 @@ public class InstrumentLookupExample {
 
 	/**
 	 * The main method.
-	 *
-	 * @param args the arguments
+	 * 
+	 * @param args
+	 *            the arguments
 	 */
-	public final static void main(String[] args) {
+	public final static void main(final String[] args) {
 
-		find("esu10");
+		find("_S_SP_CLM2_CLN2");
 
-		find("esu0");
-		find("zcn9");
-		find("rjm8");
-
-		find("ibm");
-		find("goog");
-		find("orcl");
-
-		find("$inx");
-		find("$dowi");
-		find("$nasx");
-
-		find("rjz1");
+		// find("esu10");
+		//
+		// find("esu0");
+		// find("zcn9");
+		// find("rjm8");
+		//
+		// find("ibm");
+		// find("goog");
+		// find("orcl");
+		//
+		// find("$inx");
+		// find("$dowi");
+		// find("$nasx");
+		//
+		// find("rjz1");
 
 		find("_S_FX_A6H2_A6Z1");
 

@@ -60,7 +60,8 @@
 		<!-- ### -->
 
 		<module>barchart-feed-ddf-assembly</module>
-		
+
+		<module>barchart-feed-ddf-client</module>
 	</modules>
 	
 	<!--  This should be moved to archon, when Andrei gets back -->

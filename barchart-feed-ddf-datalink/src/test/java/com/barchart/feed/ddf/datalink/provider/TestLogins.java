@@ -65,23 +65,23 @@ public class TestLogins {
 
 		final Set<DDF_FeedInterest> interests = new HashSet<DDF_FeedInterest>();
 		interests.addAll(DDF_FeedInterest.setValues());
-		final Subscription sub = new Subscription("GOOG", interests);
+		final Subscription sub = new Subscription("_S_SP_CLM2_CLN2", interests);
 
 		client.subscribe(sub);
 
-		sleep(10000);
+		sleep(100000);
 
-		log.debug("*****************************************  Unsubscribing");
-
-		client.unsubscribe(sub);
-
-		sleep(10000);
-
-		log.debug("*****************************************  Resubscribing");
-
-		client.subscribe(sub);
-
-		sleep(10000);
+		// log.debug("*****************************************  Unsubscribing");
+		//
+		// client.unsubscribe(sub);
+		//
+		// sleep(10000);
+		//
+		// log.debug("*****************************************  Resubscribing");
+		//
+		// client.subscribe(sub);
+		//
+		// sleep(10000);
 
 		client.shutdown();
 	}

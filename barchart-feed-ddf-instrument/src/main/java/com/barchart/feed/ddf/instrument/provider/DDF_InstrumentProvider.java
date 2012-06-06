@@ -151,131 +151,45 @@ public final class DDF_InstrumentProvider {
 
 	class RetrieveInstrument implements Future<DDF_Instrument> {
 
-		private final String symbol;
+		private final TextValue symbol;
+
+		private volatile DDF_Instrument result = null;
 
 		RetrieveInstrument(final String symbol) {
+			this.symbol = ValueBuilder.newText(symbol);
+		}
+
+		RetrieveInstrument(final TextValue symbol) {
 			this.symbol = symbol;
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#cancel(boolean)
-		 */
 		@Override
 		public boolean cancel(final boolean mayInterruptIfRunning) {
-			return false;
+			throw new UnsupportedOperationException("Not Supported");
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#get()
-		 */
 		@Override
 		public DDF_Instrument get() throws InterruptedException,
 				ExecutionException {
-			return null;
+			result = instance().lookupDDF(symbol);
+			return result;
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#get(long,
-		 * java.util.concurrent.TimeUnit)
-		 */
 		@Override
 		public DDF_Instrument get(final long timeout, final TimeUnit unit)
 				throws InterruptedException, ExecutionException,
 				TimeoutException {
-			// TODO Auto-generated method stub
-			return null;
+			throw new UnsupportedOperationException("Not Supported");
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#isCancelled()
-		 */
 		@Override
 		public boolean isCancelled() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#isDone()
-		 */
 		@Override
 		public boolean isDone() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-	}
-
-	class RetrieveInstrumentList implements Future<List<DDF_Instrument>> {
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#cancel(boolean)
-		 */
-		@Override
-		public boolean cancel(final boolean mayInterruptIfRunning) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#get()
-		 */
-		@Override
-		public List<DDF_Instrument> get() throws InterruptedException,
-				ExecutionException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#get(long,
-		 * java.util.concurrent.TimeUnit)
-		 */
-		@Override
-		public List<DDF_Instrument>
-				get(final long timeout, final TimeUnit unit)
-						throws InterruptedException, ExecutionException,
-						TimeoutException {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#isCancelled()
-		 */
-		@Override
-		public boolean isCancelled() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.util.concurrent.Future#isDone()
-		 */
-		@Override
-		public boolean isDone() {
-			// TODO Auto-generated method stub
-			return false;
+			return result != null;
 		}
 
 	}
@@ -289,6 +203,48 @@ public final class DDF_InstrumentProvider {
 	 */
 	public static List<DDF_Instrument> find(final List<String> symbolList) {
 		return instance().lookup(symbolList);
+	}
+
+	class RetrieveInstrumentList implements Future<List<DDF_Instrument>> {
+
+		private final List<String> symbolList;
+
+		private volatile List<DDF_Instrument> result;
+
+		RetrieveInstrumentList(final List<String> symbolList) {
+			this.symbolList = symbolList;
+		}
+
+		@Override
+		public boolean cancel(final boolean mayInterruptIfRunning) {
+			throw new UnsupportedOperationException("Not Supported");
+		}
+
+		@Override
+		public List<DDF_Instrument> get() throws InterruptedException,
+				ExecutionException {
+			result = instance().lookup(symbolList);
+			return result;
+		}
+
+		@Override
+		public List<DDF_Instrument>
+				get(final long timeout, final TimeUnit unit)
+						throws InterruptedException, ExecutionException,
+						TimeoutException {
+			throw new UnsupportedOperationException("Not Supported");
+		}
+
+		@Override
+		public boolean isCancelled() {
+			return false;
+		}
+
+		@Override
+		public boolean isDone() {
+			return result != null;
+		}
+
 	}
 
 	/**

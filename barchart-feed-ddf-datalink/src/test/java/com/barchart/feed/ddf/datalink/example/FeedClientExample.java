@@ -81,7 +81,7 @@ public class FeedClientExample {
 
 		final CharSequence request = "" + //
 				"GOOG=bBsScCvVqQ," + //
-				"CLM2=bBsScCvVqQ," + //
+				"CLM2-CLN2=bBsScCvVqQ," + //
 				"NGM2=bBsScCvVqQ," + //
 				"ESM2=bBsScCvVqQ," + //
 				"XFM2=bBsScCvVqQ," + //

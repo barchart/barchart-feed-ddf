@@ -103,17 +103,17 @@ class FeedClientDDF implements DDF_FeedClient {
 	private final String username;
 	private final String password;
 	private final DDF_ServerType serverType = DDF_ServerType.STREAM;
-	private final Executor runner;
+	private final Executor executor;
 
 	FeedClientDDF(final String username, final String password,
 			final Executor executor) {
 
 		this.username = username;
 		this.password = password;
-		this.runner = executor;
+		this.executor = executor;
 
 		final ChannelFactory channelFactory =
-				new NioClientSocketChannelFactory(runner, runner);
+				new NioClientSocketChannelFactory(executor, executor);
 
 		boot = new ClientBootstrap(channelFactory);
 
@@ -237,8 +237,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private void initialize() {
 
-		runner.execute(eventTask);
-		runner.execute(messageTask);
+		executor.execute(eventTask);
+		executor.execute(messageTask);
 
 	}
 
@@ -329,7 +329,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	/* Asynchronous write to the channel, future returns true on success */
-	private Future<Boolean> write(final String message) {
+	private Future<Boolean> writeAsync(final String message) {
 		log.debug("Attempting to send reqeust to JERQ : {}", message);
 		final ChannelFuture future = channel.write(message + "\n");
 		future.addListener(new CommandFailureListener());
@@ -360,7 +360,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				sb.append(sub.subscribe() + ",");
 			}
 		}
-		return write(sb.toString());
+		return writeAsync(sb.toString());
 	}
 
 	@Override
@@ -382,7 +382,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* Request subscription from JERQ and return the future */
-		return write(sub.subscribe());
+		return writeAsync(sub.subscribe());
 	}
 
 	@Override
@@ -409,7 +409,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				sb.append(sub.unsubscribe() + ",");
 			}
 		}
-		return write(sb.toString());
+		return writeAsync(sb.toString());
 	}
 
 	@Override
@@ -428,7 +428,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* Request subscription from JERQ and return the future */
-		return write(sub.unsubscribe());
+		return writeAsync(sub.unsubscribe());
 	}
 
 	@Override
@@ -463,7 +463,7 @@ class FeedClientDDF implements DDF_FeedClient {
 					loginThread =
 							new Thread(new LoginRunnable(), "# DDF Login");
 
-					runner.execute(loginThread);
+					executor.execute(loginThread);
 
 					log.debug("Setting feed state to attempting login");
 					if (stateListener != null) {
@@ -493,7 +493,7 @@ class FeedClientDDF implements DDF_FeedClient {
 						}
 					}, "# DDF Login");
 
-					runner.execute(loginThread);
+					executor.execute(loginThread);
 
 					log.debug("Setting feed state to attempting login");
 					if (stateListener != null) {
