@@ -8,7 +8,9 @@
     	<version>3.4.2-SNAPSHOT</version>
   	</parent>
   
+  	<name>barchart-feed-ddf-client</name>
  	<artifactId>barchart-feed-ddf-client</artifactId>
+	<packaging>bundle</packaging>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-feed-ddf</url>
