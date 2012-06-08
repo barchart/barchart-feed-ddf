@@ -11,7 +11,6 @@ import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
-import com.barchart.feed.ddf.util.FeedDDF;
 
 /**
  * Represents a subscription to a single instrument for JERQ
@@ -64,7 +63,7 @@ public class Subscription {
 	 * @return The JERQ command to unsubscribe this subscription.
 	 */
 	public String unsubscribe() {
-		return "STOP " + instrument + "=" + DDF_FeedInterest.from(interests);
+		return instrument + "=" + DDF_FeedInterest.from(interests);
 	}
 
 	/**
@@ -73,8 +72,7 @@ public class Subscription {
 	 * @return The JERQ command to subscribe this subscription.
 	 */
 	public String subscribe() {
-		return (String) FeedDDF.tcpGo(instrument,
-				DDF_FeedInterest.from(interests));
+		return instrument + "=" + DDF_FeedInterest.from(interests);
 	}
 
 	/**

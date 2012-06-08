@@ -161,8 +161,10 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@Override
 		public void newEvent() {
-			log.debug("Requesting current subscriptions");
-			subscribe(subscriptions);
+			if (subscriptions.size() > 0) {
+				log.debug("Requesting current subscriptions");
+				subscribe(subscriptions);
+			}
 		}
 	}
 
@@ -184,6 +186,10 @@ class FeedClientDDF implements DDF_FeedClient {
 					if (DDF_FeedEvent.isConnectionError(event)) {
 						log.debug("Setting feed state to logged out");
 						updateFeedStateListeners(DDF_FeedState.LOGGED_OUT);
+					}
+					if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
+						log.debug("Login success, feed state updated");
+						updateFeedStateListeners(DDF_FeedState.LOGGED_IN);
 					}
 
 					log.debug("Enacting policy for :{}", event.name());
@@ -353,6 +359,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		 * indivually.
 		 */
 		final StringBuffer sb = new StringBuffer();
+		sb.append("GO ");
 		for (final Subscription sub : subs) {
 
 			if (sub != null) {
@@ -382,7 +389,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* Request subscription from JERQ and return the future */
-		return writeAsync(sub.subscribe());
+		return writeAsync("GO " + sub.subscribe());
 	}
 
 	@Override
@@ -402,6 +409,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		 * individually.
 		 */
 		final StringBuffer sb = new StringBuffer();
+		sb.append("STOP ");
 		for (final Subscription sub : subs) {
 
 			if (sub != null) {
@@ -428,7 +436,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* Request subscription from JERQ and return the future */
-		return writeAsync(sub.unsubscribe());
+		return writeAsync("STOP " + sub.unsubscribe());
 	}
 
 	@Override

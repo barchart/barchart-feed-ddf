@@ -10,6 +10,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
@@ -32,11 +36,9 @@ import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.util.values.api.Value;
 
-/**
- * 
- *
- */
 public class ClientDDF implements DDF_Client {
+
+	private static final Logger log = LoggerFactory.getLogger(ClientDDF.class);
 
 	private final DDF_FeedClient feed;
 
@@ -58,6 +60,7 @@ public class ClientDDF implements DDF_Client {
 
 	};
 
+	/* User obtains instances through DDF_ClientFactory static method */
 	ClientDDF(final TP tp, final String username, final String password,
 			final Executor executor) {
 
@@ -100,8 +103,12 @@ public class ClientDDF implements DDF_Client {
 						final Set<MarketEvent> events) {
 
 					if (events.isEmpty()) {
+						log.debug("Unsubsctibing to "
+								+ instrument.get(InstrumentField.ID));
 						feed.unsubscribe(new Subscription(instrument, events));
 					} else {
+						log.debug("Subsctibing to "
+								+ instrument.get(InstrumentField.ID));
 						feed.subscribe(new Subscription(instrument, events));
 					}
 

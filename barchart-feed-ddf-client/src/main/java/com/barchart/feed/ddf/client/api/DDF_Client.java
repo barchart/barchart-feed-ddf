@@ -11,12 +11,31 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.util.values.api.Value;
 
+/**
+ * 
+ * The penultimate DDF class which encapsulates all the core functionality a new
+ * user will need to get started.
+ * <p>
+ * Instances are created using the factory class DDF_ClientFactory and require a
+ * valid username and password. Optional parameters include specifying the
+ * transport protocol and providing an executor.
+ * <p>
+ * The price feed is started and stopped using the startup() and shutdown()
+ * methods. Note that these are non-blocking calls. Applications requiring
+ * actions upon sucessful login should instanciate and bind a FeedStatusListener
+ * to the client.
+ * <p>
+ * 
+ * 
+ */
 public interface DDF_Client {
 
 	/**
+	 * Determines if a market taker was sucessfully registered.
 	 * 
 	 * @param taker
-	 * @return
+	 *            The market taker.
+	 * @return True if the taker has been registered.
 	 */
 	boolean isRegistered(MarketTaker<?> taker);
 
@@ -32,12 +51,16 @@ public interface DDF_Client {
 	void shutdown();
 
 	/**
+	 * Applications which need to react to the conectivity state of the feed
+	 * instanciate a DDF_FeedStateListener and bind it to the client.
 	 * 
 	 * @param listener
+	 *            The listener to be bound.
 	 */
 	void bindFeedStateListener(final DDF_FeedStateListener listener);
 
 	/**
+	 * 
 	 * 
 	 * @param taker
 	 * @return

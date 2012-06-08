@@ -147,19 +147,11 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 			// Note: This is the only place a login success is set
 			if (comment.contains(FeedDDF.RESPONSE_VERSION_SET_3)) {
 				eventQueue.put(DDF_FeedEvent.LOGIN_SUCCESS);
-				// log.debug("Setting feed state to logged in");
-				// if (stateListener != null) {
-				// stateListener.stateUpdate(DDF_FeedState.LOGGED_IN);
-				// }
-
 			}
 			break;
 		case TCP_REJECT:
 			if (comment.contains(FeedDDF.RESPONSE_LOGIN_FAILURE)) {
 				eventQueue.put(DDF_FeedEvent.LOGIN_FAILURE);
-				// if (stateListener != null) {
-				// stateListener.stateUpdate(DDF_FeedState.LOGGED_OUT);
-				// }
 			}
 			break;
 		case TCP_COMMAND:
