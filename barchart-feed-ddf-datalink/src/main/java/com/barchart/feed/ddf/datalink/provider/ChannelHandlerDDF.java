@@ -21,10 +21,6 @@ import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.FeedDDF;
 
-/**
- * @author g-litchfield
- * 
- */
 public class ChannelHandlerDDF extends SimpleChannelHandler {
 
 	/** use slf4j for internal NETTY LoggingHandler facade */
@@ -144,7 +140,7 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 
 		switch (type) {
 		case TCP_ACCEPT:
-			// Note: This is the only place a login success is set
+			/* Note: This is the only place a login success is set */
 			if (comment.contains(FeedDDF.RESPONSE_VERSION_SET_3)) {
 				eventQueue.put(DDF_FeedEvent.LOGIN_SUCCESS);
 			}

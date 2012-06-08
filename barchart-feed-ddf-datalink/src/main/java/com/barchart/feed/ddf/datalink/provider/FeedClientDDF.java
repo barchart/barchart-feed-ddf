@@ -119,6 +119,10 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		boot = new ClientBootstrap(channelFactory);
 
+		/*
+		 * The vector for data leaving the netty channel and entering the
+		 * application logic.
+		 */
 		final SimpleChannelHandler ddfHandler =
 				new ChannelHandlerDDF(eventQueue, messageQueue);
 
@@ -135,7 +139,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 				@Override
 				public void newEvent() {
-					// Do nothing
+					/* Do nothing */
 				}
 			});
 		}
@@ -157,6 +161,10 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	}
 
+	/*
+	 * This policy ensures that all subscribed instruments are requested from
+	 * JERQ upon login or relogin after a dicsonnect
+	 */
 	private class SubscribeAfterLogin implements EventPolicy {
 
 		@Override

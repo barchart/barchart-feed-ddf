@@ -4,7 +4,7 @@
 package com.barchart.feed.ddf.datalink.enums;
 
 /**
- * @author g-litchfield
+ * Enum denoting the connection state of the data feed.
  * 
  */
 public enum DDF_FeedState {

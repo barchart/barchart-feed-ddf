@@ -56,7 +56,7 @@ public class FeedClientExample {
 		};
 
 		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newInstance(TP.TCP, username, password,
+				DDF_FeedClientFactory.newConnectionClient(TP.TCP, username, password,
 						runner);
 
 		final DDF_MessageListener handler = new LoggingHandler();

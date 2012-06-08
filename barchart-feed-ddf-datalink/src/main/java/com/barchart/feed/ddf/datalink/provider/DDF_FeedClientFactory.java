@@ -18,8 +18,6 @@ import com.barchart.feed.ddf.datalink.enums.TP;
 
 /**
  * Factory class for building FeedClientDDF.
- * 
- * @author g-litchfield
  */
 public class DDF_FeedClientFactory {
 
@@ -31,7 +29,7 @@ public class DDF_FeedClientFactory {
 	}
 
 	/**
-	 * Factory which defaults the DDF_ServerType to STREAM.
+	 * Returns a stateful two way connection to a data source.
 	 * 
 	 * @param executor
 	 *            The executor used by the ClientSocketChannel as both the boss
@@ -39,7 +37,7 @@ public class DDF_FeedClientFactory {
 	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
 	 * @return the DDF_FeedClient
 	 */
-	public static DDF_FeedClient newInstance(final TP protocol,
+	public static DDF_FeedClient newConnectionClient(final TP protocol,
 			final String username, final String password,
 			final Executor executor) {
 
@@ -53,7 +51,7 @@ public class DDF_FeedClientFactory {
 	 * Returns a stateless UDP listener client with a user specified executor
 	 * 
 	 * @param port
-	 *            The port to lisen to
+	 *            The port to listen to
 	 * @param executor
 	 *            The executor used by the NioDatagramChannel
 	 * @return

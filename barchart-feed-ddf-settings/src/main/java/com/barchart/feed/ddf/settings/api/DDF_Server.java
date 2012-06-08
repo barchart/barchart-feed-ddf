@@ -13,7 +13,6 @@ import com.barchart.util.anno.NotMutable;
 /**
  * Encapsulates all necessary data on the server to which a connection is made.
  * <p>
- * How does this work? What is primary vs secondary?
  * 
  */
 @NotMutable

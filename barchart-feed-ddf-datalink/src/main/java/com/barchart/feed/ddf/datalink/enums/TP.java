@@ -4,7 +4,7 @@
 package com.barchart.feed.ddf.datalink.enums;
 
 /**
- * @author g-litchfield
+ * Enum for specifying the transport protocol to be used in the data feed.
  * 
  */
 public enum TP {

@@ -13,31 +13,22 @@ import com.barchart.util.values.api.Value;
 
 /**
  * 
- * The penultimate DDF class which encapsulates all the core functionality a new
- * user will need to get started.
+ * The core DDF class which encapsulates all the core functionality a new user
+ * will need to get started.
  * <p>
  * Instances are created using the factory class DDF_ClientFactory and require a
- * valid username and password. Optional parameters include specifying the
+ * valid user name and password. Optional parameters include specifying the
  * transport protocol and providing an executor.
  * <p>
  * The price feed is started and stopped using the startup() and shutdown()
  * methods. Note that these are non-blocking calls. Applications requiring
- * actions upon sucessful login should instanciate and bind a FeedStatusListener
- * to the client.
+ * actions upon successful login should instantiate and bind a
+ * FeedStatusListener to the client.
  * <p>
  * 
  * 
  */
 public interface DDF_Client {
-
-	/**
-	 * Determines if a market taker was sucessfully registered.
-	 * 
-	 * @param taker
-	 *            The market taker.
-	 * @return True if the taker has been registered.
-	 */
-	boolean isRegistered(MarketTaker<?> taker);
 
 	/**
 	 * Starts the data feed asynchronously. Notification of login success is
@@ -46,13 +37,13 @@ public interface DDF_Client {
 	void startup();
 
 	/**
-	 * Shuts down the data feed.
+	 * Shuts down the data feed and clears all registered market takers.
 	 */
 	void shutdown();
 
 	/**
-	 * Applications which need to react to the conectivity state of the feed
-	 * instanciate a DDF_FeedStateListener and bind it to the client.
+	 * Applications which need to react to the connectivity state of the feed
+	 * Instantiate a DDF_FeedStateListener and bind it to the client.
 	 * 
 	 * @param listener
 	 *            The listener to be bound.
@@ -60,48 +51,63 @@ public interface DDF_Client {
 	void bindFeedStateListener(final DDF_FeedStateListener listener);
 
 	/**
-	 * 
+	 * Determines if a market taker was successfully registered.
 	 * 
 	 * @param taker
-	 * @return
+	 *            The market taker.
+	 * @return True if the taker has been registered.
 	 */
 	boolean isTakerRegistered(final MarketTaker<?> taker);
 
 	/**
-	 * add taker; do instrument registration
+	 * Adds a market taker to the client. This performs instrument registration
+	 * with the market maker as well as subscribing to the required data from
+	 * the feed.
+	 * 
+	 * @param taker
+	 *            The market taker to be added.
+	 * @return True if the taker was successfully added.
 	 */
 	<V extends Value<V>> boolean addTaker(MarketTaker<V> taker);
 
 	/**
-	 * remove taker; do instrument un-registration
+	 * Removes a market taker from the client. If no other takers require its
+	 * instruments, they are unsubscribed from the feed.
+	 * 
+	 * @param taker
+	 *            THe market taker to be removed.
+	 * @return True if the taker was successfully removed.
 	 */
 	<V extends Value<V>> boolean removeTaker(MarketTaker<V> taker);
 
 	//
 
 	/**
-	 * locate instrument from remote symbol resolution service; uses local
-	 * instrument cache;
+	 * Retrieves the instrument object denoted by symbol. The local instrument
+	 * cache will be checked first. If the instrument is not stored locally, a
+	 * remote call to the instrument service is made.
 	 * 
-	 * @return NULL_INSTRUMENT if symbol not resolved;
+	 * @return NULL_INSTRUMENT if the symbol is not resolved.
 	 */
 	MarketInstrument lookup(String symbol);
 
 	/**
-	 * locate instrument from remote symbol resolution service; uses local
-	 * instrument cache;
+	 * Retrieves a list of instrument objects denoted by symbols provided. The
+	 * local instrument cache will be checked first. If any instruments are not
+	 * stored locally, a remote call to the instrument service is made.
 	 * 
-	 * @return empty list, if no symbols resolved;
+	 * @return An empty list if no symbols can be resolved.
 	 */
 	List<MarketInstrument> lookup(List<String> symbolList);
 
 	//
 
 	/**
-	 * obtain market field value snapshot; returned values are frozen and
-	 * disconnected from live market;
+	 * Makes a query to the market maker for a snapshot of a market field for a
+	 * specific instrument. The returned values are frozen and disconnected from
+	 * live market.
 	 * 
-	 * @return NULL_VALUE for all fields if market is not present
+	 * @return NULL_VALUE for all fields if market is not present.
 	 */
 	<S extends MarketInstrument, V extends Value<V>> V //
 			take(S instrument, MarketField<V> field);

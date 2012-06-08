@@ -67,13 +67,13 @@ public class ClientDDF implements DDF_Client {
 		if (executor == null) {
 
 			feed =
-					DDF_FeedClientFactory.newInstance(tp, username, password,
+					DDF_FeedClientFactory.newConnectionClient(tp, username, password,
 							defaultExecutor);
 
 		} else {
 
 			feed =
-					DDF_FeedClientFactory.newInstance(tp, username, password,
+					DDF_FeedClientFactory.newConnectionClient(tp, username, password,
 							executor);
 		}
 
@@ -94,6 +94,13 @@ public class ClientDDF implements DDF_Client {
 		feed.shutdown();
 	}
 
+	/*
+	 * This is where the instruments are registered and unregistered as needed
+	 * by the market maker. Subscribe events are sent when the instrument has
+	 * not been bound by a previously registered market taker. Unsubscribe
+	 * events are sent only when the instrument is not needed by any previousl
+	 * registerd market takers.
+	 */
 	private final MarketRegListener instrumentSubscriptionListener =
 			new MarketRegListener() {
 
@@ -102,6 +109,10 @@ public class ClientDDF implements DDF_Client {
 						final MarketInstrument instrument,
 						final Set<MarketEvent> events) {
 
+					/*
+					 * The market maker denotes 'unsubscribe' with an empty
+					 * event set
+					 */
 					if (events.isEmpty()) {
 						log.debug("Unsubsctibing to "
 								+ instrument.get(InstrumentField.ID));
@@ -116,6 +127,10 @@ public class ClientDDF implements DDF_Client {
 
 			};
 
+	/*
+	 * This is the default message listener. Users wishing to handle raw
+	 * messages will need to implement their own feed client.
+	 */
 	private final DDF_MessageListener msgListener = new DDF_MessageListener() {
 
 		@Override
@@ -174,11 +189,6 @@ public class ClientDDF implements DDF_Client {
 	public <S extends MarketInstrument, V extends Value<V>> V take(
 			final S instrument, final MarketField<V> field) {
 		return maker.take(instrument, field);
-	}
-
-	@Override
-	public boolean isRegistered(final MarketTaker<?> taker) {
-		return maker.isRegistered(taker);
 	}
 
 }

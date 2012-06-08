@@ -4,7 +4,8 @@
 package com.barchart.feed.ddf.datalink.api;
 
 /**
- * @author g-litchfield
+ * A callback action to be fired on a specific event. Registered with a feed
+ * client along with an event type.
  * 
  */
 public interface EventPolicy {

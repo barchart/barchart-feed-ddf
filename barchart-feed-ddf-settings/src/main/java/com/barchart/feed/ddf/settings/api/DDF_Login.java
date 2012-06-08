@@ -14,8 +14,6 @@ import com.barchart.util.anno.NotMutable;
 /**
  * Encapsulates all necessary data for a user login.
  * 
- * @author g-litchfield
- * 
  */
 @NotMutable
 public interface DDF_Login {

@@ -13,7 +13,7 @@ import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedState;
 
 /**
- * @author g-litchfield
+ * 
  * 
  */
 public class TestClientDDF {
@@ -52,7 +52,7 @@ public class TestClientDDF {
 
 		client.startup();
 
-		Thread.sleep(60 * 1000);
+		Thread.sleep(20 * 1000);
 
 		client.shutdown();
 
@@ -82,6 +82,7 @@ public class TestClientDDF {
 				public MarketInstrument[] bindInstruments() {
 
 					return new MarketInstrument[] { instrument };
+
 				}
 
 				@Override

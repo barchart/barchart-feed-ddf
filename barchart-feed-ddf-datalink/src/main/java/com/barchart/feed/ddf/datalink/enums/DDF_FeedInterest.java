@@ -18,7 +18,7 @@ import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.util.FeedDDF;
 
 /**
- * Flags for ddf jerq "go" command to activate specific information channels in
+ * Flags for ddf JERQ "go" command to activate specific information channels in
  * the feed.
  */
 public enum DDF_FeedInterest {

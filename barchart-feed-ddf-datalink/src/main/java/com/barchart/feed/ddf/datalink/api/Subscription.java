@@ -4,7 +4,6 @@
 package com.barchart.feed.ddf.datalink.api;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Set;
 
 import com.barchart.feed.base.instrument.enums.InstrumentField;
@@ -13,7 +12,7 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
 
 /**
- * Represents a subscription to a single instrument for JERQ
+ * Represents a subscription to a single instrument for JERQ.
  * 
  */
 public class Subscription {
@@ -36,6 +35,7 @@ public class Subscription {
 	}
 
 	/**
+	 * A feed-base friendly constructor for convenience.
 	 * 
 	 * @param instrument
 	 * @param events
@@ -47,18 +47,8 @@ public class Subscription {
 	}
 
 	/**
-	 * Static helper method making an 'unsubscribe' subscription.
-	 * 
-	 * @param instrument
-	 *            The instrument to unsibscribe.
-	 * @return
-	 */
-	public static Subscription makeUnsubscriber(final String instrument) {
-		return new Subscription(instrument, new LinkedList<DDF_FeedInterest>());
-	}
-
-	/**
-	 * Helper method returning the JERQ command to unsubscribe this subscription
+	 * Helper method returning the JERQ command to unsubscribe this
+	 * subscription. Note: the "STOP " header is omitted for chaining requests.
 	 * 
 	 * @return The JERQ command to unsubscribe this subscription.
 	 */
@@ -67,7 +57,8 @@ public class Subscription {
 	}
 
 	/**
-	 * Helper method returning the JERQ command to subscribe this subscription
+	 * Helper method returning the JERQ command to subscribe this subscription.
+	 * Note: the "GO " header is omitted for chaining requests.
 	 * 
 	 * @return The JERQ command to subscribe this subscription.
 	 */

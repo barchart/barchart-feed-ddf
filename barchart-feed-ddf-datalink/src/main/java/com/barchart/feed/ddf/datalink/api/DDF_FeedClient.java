@@ -86,9 +86,13 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	void bindStateListener(DDF_FeedStateListener stateListener);
 
 	/**
+	 * Sets the event policy for a specific feed event. Default policies are set
+	 * by the constructor to handle disconnects and login success.
 	 * 
 	 * @param event
+	 *            The feed event on which to enact the policy.
 	 * @param policy
+	 *            The even policy to register.
 	 */
 	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
 
