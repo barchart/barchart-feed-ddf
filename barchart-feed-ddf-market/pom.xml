@@ -26,6 +26,12 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-ddf-datalink</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+
 	</dependencies>
 	
 	<build>

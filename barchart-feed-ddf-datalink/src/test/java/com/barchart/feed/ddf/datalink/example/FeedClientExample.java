@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.ddf.datalink.example;
 
-import static com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory.TransportProtocol.TCP;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -18,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
+import com.barchart.feed.ddf.datalink.enums.TP;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 
 // TODO: Auto-generated Javadoc
@@ -57,7 +56,7 @@ public class FeedClientExample {
 		};
 
 		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newInstance(TCP, username, password,
+				DDF_FeedClientFactory.newInstance(TP.TCP, username, password,
 						runner);
 
 		final DDF_MessageListener handler = new LoggingHandler();

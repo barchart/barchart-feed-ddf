@@ -5,7 +5,11 @@ package com.barchart.feed.ddf.datalink.api;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Set;
 
+import com.barchart.feed.base.instrument.enums.InstrumentField;
+import com.barchart.feed.base.instrument.values.MarketInstrument;
+import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
 import com.barchart.feed.ddf.util.FeedDDF;
 
@@ -30,6 +34,17 @@ public class Subscription {
 			final Collection<DDF_FeedInterest> interests) {
 		this.instrument = instrument;
 		this.interests = interests;
+	}
+
+	/**
+	 * 
+	 * @param instrument
+	 * @param events
+	 */
+	public Subscription(final MarketInstrument instrument,
+			final Set<MarketEvent> events) {
+		this.instrument = instrument.get(InstrumentField.ID).toString();
+		this.interests = DDF_FeedInterest.fromEvents(events);
 	}
 
 	/**

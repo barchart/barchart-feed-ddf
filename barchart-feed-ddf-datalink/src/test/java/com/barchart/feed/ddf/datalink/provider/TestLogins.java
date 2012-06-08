@@ -3,8 +3,6 @@
  */
 package com.barchart.feed.ddf.datalink.provider;
 
-import static com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory.TransportProtocol.TCP;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -17,6 +15,7 @@ import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
+import com.barchart.feed.ddf.datalink.enums.TP;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 
 /**
@@ -47,7 +46,7 @@ public class TestLogins {
 		};
 
 		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newInstance(TCP, username, password,
+				DDF_FeedClientFactory.newInstance(TP.TCP, username, password,
 						runner);
 
 		final DDF_MessageListener handler = new DDF_MessageListener() {

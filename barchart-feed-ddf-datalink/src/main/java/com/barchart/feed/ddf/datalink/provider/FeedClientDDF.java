@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
@@ -90,7 +91,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private volatile DDF_MessageListener msgListener = null;
 
-	private volatile DDF_FeedStateListener stateListener = null;
+	private final CopyOnWriteArrayList<DDF_FeedStateListener> feedListeners =
+			new CopyOnWriteArrayList<DDF_FeedStateListener>();
 
 	//
 
@@ -181,9 +183,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					if (DDF_FeedEvent.isConnectionError(event)) {
 						log.debug("Setting feed state to logged out");
-						if (stateListener != null) {
-							stateListener.stateUpdate(DDF_FeedState.LOGGED_OUT);
-						}
+						updateFeedStateListeners(DDF_FeedState.LOGGED_OUT);
 					}
 
 					log.debug("Enacting policy for :{}", event.name());
@@ -440,7 +440,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	@Override
 	public synchronized void bindStateListener(
 			final DDF_FeedStateListener stateListener) {
-		this.stateListener = stateListener;
+		feedListeners.add(stateListener);
 	}
 
 	private class LoginHandler {
@@ -466,10 +466,7 @@ class FeedClientDDF implements DDF_FeedClient {
 					executor.execute(loginThread);
 
 					log.debug("Setting feed state to attempting login");
-					if (stateListener != null) {
-						stateListener
-								.stateUpdate(DDF_FeedState.ATTEMPTING_LOGIN);
-					}
+					updateFeedStateListeners(DDF_FeedState.ATTEMPTING_LOGIN);
 				}
 			}
 		}
@@ -496,12 +493,16 @@ class FeedClientDDF implements DDF_FeedClient {
 					executor.execute(loginThread);
 
 					log.debug("Setting feed state to attempting login");
-					if (stateListener != null) {
-						stateListener
-								.stateUpdate(DDF_FeedState.ATTEMPTING_LOGIN);
-					}
+					updateFeedStateListeners(DDF_FeedState.ATTEMPTING_LOGIN);
+
 				}
 			}
+		}
+	}
+
+	private void updateFeedStateListeners(final DDF_FeedState state) {
+		for (final DDF_FeedStateListener listener : feedListeners) {
+			listener.stateUpdate(state);
 		}
 	}
 

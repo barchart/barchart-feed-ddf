@@ -8,27 +8,51 @@ import java.util.List;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.util.values.api.Value;
 
-public interface MarketService_DDF {
+public interface DDF_Client {
 
+	/**
+	 * 
+	 * @param taker
+	 * @return
+	 */
 	boolean isRegistered(MarketTaker<?> taker);
+
+	/**
+	 * Starts the data feed asynchronously. Notification of login success is
+	 * reported by FeedStateListeners which are bound to this object.
+	 */
+	void startup();
+
+	/**
+	 * Shuts down the data feed.
+	 */
+	void shutdown();
+
+	/**
+	 * 
+	 * @param listener
+	 */
+	void bindFeedStateListener(final DDF_FeedStateListener listener);
+
+	/**
+	 * 
+	 * @param taker
+	 * @return
+	 */
+	boolean isTakerRegistered(final MarketTaker<?> taker);
 
 	/**
 	 * add taker; do instrument registration
 	 */
-	<V extends Value<V>> boolean add(MarketTaker<V> taker);
-
-	/**
-	 * re-register same taker with new field, new events, new instruments;
-	 */
-
-	<V extends Value<V>> boolean update(MarketTaker<V> taker);
+	<V extends Value<V>> boolean addTaker(MarketTaker<V> taker);
 
 	/**
 	 * remove taker; do instrument un-registration
 	 */
-	<V extends Value<V>> boolean remove(MarketTaker<V> taker);
+	<V extends Value<V>> boolean removeTaker(MarketTaker<V> taker);
 
 	//
 
