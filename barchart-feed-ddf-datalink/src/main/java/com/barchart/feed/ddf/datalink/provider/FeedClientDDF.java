@@ -121,7 +121,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		/*
 		 * The vector for data leaving the netty channel and entering the
-		 * application logic.
+		 * buisness application logic.
 		 */
 		final SimpleChannelHandler ddfHandler =
 				new ChannelHandlerDDF(eventQueue, messageQueue);
@@ -176,6 +176,10 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 	}
 
+	/*
+	 * This policy pauses a runner thread for a specified time interval and then
+	 * attempts to log in.
+	 */
 	private class DefaultReloginPolicy implements EventPolicy {
 
 		@Override

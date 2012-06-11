@@ -8,7 +8,6 @@ import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.ddf.client.api.DDF_Client;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedState;
 
@@ -16,7 +15,7 @@ import com.barchart.feed.ddf.datalink.enums.DDF_FeedState;
  * 
  * 
  */
-public class TestClientDDF {
+public class TestBarchartFeedClient {
 
 	/**
 	 * @param args
@@ -26,8 +25,8 @@ public class TestClientDDF {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 
-		final DDF_Client client =
-				DDF_ClientFactory.makeClient(username, password);
+		final BarchartFeedClient client =
+				new BarchartFeedClient(username, password);
 
 		final String symbol = "GOOG";
 
