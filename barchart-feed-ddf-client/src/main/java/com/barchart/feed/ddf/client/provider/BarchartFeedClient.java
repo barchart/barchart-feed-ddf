@@ -249,7 +249,7 @@ public class BarchartFeedClient {
 	 *            A user defined action to be performed on a specific feed
 	 *            event.
 	 */
-	public void setFeedEventpolicy(final DDF_FeedEvent event,
+	public void setFeedEventPolicy(final DDF_FeedEvent event,
 			final EventPolicy policy) {
 		feed.setPolicy(event, policy);
 	}
