@@ -66,8 +66,7 @@ public class BarchartFeedClient {
 
 	private final DDF_MarketProvider maker = DDF_MarketService.newInstance();
 
-	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
-			new CopyOnWriteArrayList<TimestampListener>();
+	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners = new CopyOnWriteArrayList<TimestampListener>();
 
 	private final Executor defaultExecutor = new Executor() {
 
@@ -81,6 +80,8 @@ public class BarchartFeedClient {
 		}
 
 	};
+
+	private FeedStateListener stateListener;
 
 	public BarchartFeedClient() {
 		maker.add(instrumentSubscriptionListener);
@@ -113,8 +114,7 @@ public class BarchartFeedClient {
 	 * @param password
 	 * @param tp
 	 */
-	public void
-			login(final String username, final String password, final TP tp) {
+	public void login(final String username, final String password, final TP tp) {
 
 		loginMain(username, password, tp, defaultExecutor);
 
@@ -157,11 +157,14 @@ public class BarchartFeedClient {
 			feed.shutdown();
 		}
 
-		feed =
-				DDF_FeedClientFactory.newConnectionClient(tp, username,
-						password, executor);
+		feed = DDF_FeedClientFactory.newConnectionClient(tp, username,
+				password, executor);
 
 		feed.bindMessageListener(msgListener);
+
+		if (stateListener != null) {
+			feed.bindStateListener(stateListener);
+		}
 
 		feed.startup();
 
@@ -199,9 +202,8 @@ public class BarchartFeedClient {
 
 		feed = null;
 
-		listener =
-				DDF_FeedClientFactory.newStatelessListenerClient(socketAddress,
-						defaultExecutor);
+		listener = DDF_FeedClientFactory.newStatelessListenerClient(
+				socketAddress, defaultExecutor);
 
 		listener.bindMessageListener(msgListener);
 	}
@@ -213,31 +215,28 @@ public class BarchartFeedClient {
 	 * events are sent only when the instrument is not needed by any previously
 	 * registered market takers.
 	 */
-	private final MarketRegListener instrumentSubscriptionListener =
-			new MarketRegListener() {
+	private final MarketRegListener instrumentSubscriptionListener = new MarketRegListener() {
 
-				@Override
-				public void onRegistrationChange(
-						final MarketInstrument instrument,
-						final Set<MarketEvent> events) {
+		@Override
+		public void onRegistrationChange(final MarketInstrument instrument,
+				final Set<MarketEvent> events) {
 
-					/*
-					 * The market maker denotes 'unsubscribe' with an empty
-					 * event set
-					 */
-					if (events.isEmpty()) {
-						log.debug("Unsubsctibing to "
-								+ instrument.get(InstrumentField.ID));
-						feed.unsubscribe(new Subscription(instrument, events));
-					} else {
-						log.debug("Subsctibing to "
-								+ instrument.get(InstrumentField.ID));
-						feed.subscribe(new Subscription(instrument, events));
-					}
+			/*
+			 * The market maker denotes 'unsubscribe' with an empty event set
+			 */
+			if (events.isEmpty()) {
+				log.debug("Unsubsctibing to "
+						+ instrument.get(InstrumentField.ID));
+				feed.unsubscribe(new Subscription(instrument, events));
+			} else {
+				log.debug("Subsctibing to "
+						+ instrument.get(InstrumentField.ID));
+				feed.subscribe(new Subscription(instrument, events));
+			}
 
-				}
+		}
 
-			};
+	};
 
 	/*
 	 * This is the default message listener. Users wishing to handle raw
@@ -266,17 +265,16 @@ public class BarchartFeedClient {
 
 	/**
 	 * Applications which need to react to the connectivity state of the feed
-	 * instantiate a DDF_FeedStateListener and bind it to the client.
+	 * instantiate a FeedStateListener and bind it to the client.
 	 * 
 	 * @param listener
 	 *            The listener to be bound.
 	 */
 	public void bindFeedStateListener(final FeedStateListener listener) {
-		if (feed == null) {
-			throw new UnsupportedOperationException(
-					"Cannot bind feed listener before a sucessful login");
+		stateListener = listener;
+		if (feed != null) {
+			feed.bindStateListener(listener);
 		}
-		feed.bindStateListener(listener);
 	}
 
 	/**
@@ -374,8 +372,8 @@ public class BarchartFeedClient {
 	 * @return An empty list if no symbols can be resolved.
 	 */
 	public List<MarketInstrument> lookup(final List<String> symbolList) {
-		final List<DDF_Instrument> list =
-				DDF_InstrumentProvider.find(symbolList);
+		final List<DDF_Instrument> list = DDF_InstrumentProvider
+				.find(symbolList);
 
 		return new ArrayList<MarketInstrument>(list);
 	}
