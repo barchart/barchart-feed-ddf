@@ -280,8 +280,9 @@ public class BarchartFeedClient {
 	}
 
 	/**
-	 * Applications which require timestamp or hearbeat messages from the data
-	 * server instantiate a DDF_TimestampListener and bind it to the client.
+	 * Applications which require time-stamp or heart-beat messages from the
+	 * data server instantiate a DDF_TimestampListener and bind it to the
+	 * client.
 	 * 
 	 * @param listener
 	 */

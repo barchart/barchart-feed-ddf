@@ -29,7 +29,7 @@ import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 
 /**
- * @author g-litchfield
+ * A stateless, connectionless UDP listener with startup and shutdown methods.
  * 
  */
 public class ListenerClientDDF extends SimpleChannelHandler implements

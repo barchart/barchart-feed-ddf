@@ -7,9 +7,8 @@ import com.barchart.util.anno.UsedOnce;
 
 /**
  * Base interface for DDF feed clients. Classes directly implementing this
- * interface should be connectionless listeners. Feeds requireing 2 way
- * communication and a mannaged connection should implement DDF_FeedClient.
- * 
+ * interface should be connectionless listeners. Feeds requiring 2 way
+ * communication and a managed connection should implement DDF_FeedClient.
  */
 public interface DDF_FeedClientBase {
 

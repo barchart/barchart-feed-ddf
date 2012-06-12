@@ -275,7 +275,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	}
 
-	/**
+	/*
 	 * Can post to the FeedEventHandler the following events:
 	 * <p>
 	 * CHANNEL_CONNECT_TIMEOUT {@link DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT}
