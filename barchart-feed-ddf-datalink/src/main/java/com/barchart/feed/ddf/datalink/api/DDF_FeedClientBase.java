@@ -16,7 +16,6 @@ public interface DDF_FeedClientBase {
 	/**
 	 * Binds the feed client to a port or other data source and begins
 	 * listening.
-	 * 
 	 */
 	void startup();
 

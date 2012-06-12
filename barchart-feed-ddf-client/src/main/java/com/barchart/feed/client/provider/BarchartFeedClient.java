@@ -15,7 +15,7 @@
  * 
  * 
  */
-package com.barchart.feed.ddf.client.provider;
+package com.barchart.feed.client.provider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,11 @@ import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.client.api.FeedStateListener;
+import com.barchart.feed.client.api.TimestampListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
+import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
-import com.barchart.feed.ddf.datalink.api.DDF_TimestampListener;
 import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
@@ -51,17 +52,22 @@ import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.util.values.api.Value;
 
+/**
+ * The entry point for Barchart data feed services.
+ */
 public class BarchartFeedClient {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartFeedClient.class);
 
-	private final DDF_FeedClient feed;
+	private volatile DDF_FeedClient feed = null;
+
+	private volatile DDF_FeedClientBase listener = null;
 
 	private final DDF_MarketProvider maker = DDF_MarketService.newInstance();
 
-	private final CopyOnWriteArrayList<DDF_TimestampListener> timeStampListeners =
-			new CopyOnWriteArrayList<DDF_TimestampListener>();
+	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
+			new CopyOnWriteArrayList<TimestampListener>();
 
 	private final Executor defaultExecutor = new Executor() {
 
@@ -76,26 +82,30 @@ public class BarchartFeedClient {
 
 	};
 
+	public BarchartFeedClient() {
+		maker.add(instrumentSubscriptionListener);
+	}
+
 	/**
+	 * Starts the data feed asynchronously. Notification of login success is
+	 * reported by FeedStateListeners which are bound to this object.
+	 * <p>
 	 * Constructs a new feed client with the user's user name and password. The
 	 * transport protocol defaults to TCP and a default executor are used.
 	 * 
 	 * @param username
 	 * @param password
 	 */
-	public BarchartFeedClient(final String username, final String password) {
+	public void login(final String username, final String password) {
 
-		feed =
-				DDF_FeedClientFactory.newConnectionClient(TP.TCP, username,
-						password, defaultExecutor);
-
-		feed.bindMessageListener(msgListener);
-
-		maker.add(instrumentSubscriptionListener);
+		loginMain(username, password, TP.TCP, defaultExecutor);
 
 	}
 
 	/**
+	 * Starts the data feed asynchronously. Notification of login success is
+	 * reported by FeedStateListeners which are bound to this object.
+	 * <p>
 	 * Constructs a new feed client with the user's user name, password, and
 	 * desired transport protocol. A default executor is used.
 	 * 
@@ -103,20 +113,17 @@ public class BarchartFeedClient {
 	 * @param password
 	 * @param tp
 	 */
-	public BarchartFeedClient(final String username, final String password,
-			final TP tp) {
+	public void
+			login(final String username, final String password, final TP tp) {
 
-		feed =
-				DDF_FeedClientFactory.newConnectionClient(tp, username,
-						password, defaultExecutor);
-
-		feed.bindMessageListener(msgListener);
-
-		maker.add(instrumentSubscriptionListener);
+		loginMain(username, password, tp, defaultExecutor);
 
 	}
 
 	/**
+	 * Starts the data feed asynchronously. Notification of login success is
+	 * reported by FeedStateListeners which are bound to this object.
+	 * <p>
 	 * Constructs a new feed client with the user's user name, password, desired
 	 * transport protocol, and framework executor.
 	 * 
@@ -125,8 +132,30 @@ public class BarchartFeedClient {
 	 * @param tp
 	 * @param executor
 	 */
-	public BarchartFeedClient(final String username, final String password,
+	public void login(final String username, final String password,
 			final TP tp, final Executor executor) {
+
+		loginMain(username, password, tp, executor);
+
+	}
+
+	/*
+	 * Handles login. Non-blocking.
+	 */
+	private void loginMain(final String username, final String password,
+			final TP tp, final Executor executor) {
+
+		/* Enforce single connection */
+		if (listener != null) {
+			listener.shutdown();
+			listener = null;
+		}
+
+		maker.clearAll();
+
+		if (feed != null) {
+			feed.shutdown();
+		}
 
 		feed =
 				DDF_FeedClientFactory.newConnectionClient(tp, username,
@@ -134,16 +163,8 @@ public class BarchartFeedClient {
 
 		feed.bindMessageListener(msgListener);
 
-		maker.add(instrumentSubscriptionListener);
-
-	}
-
-	/**
-	 * Starts the data feed asynchronously. Notification of login success is
-	 * reported by FeedStateListeners which are bound to this object.
-	 */
-	public void startup() {
 		feed.startup();
+
 	}
 
 	/**
@@ -151,7 +172,38 @@ public class BarchartFeedClient {
 	 */
 	public void shutdown() {
 		maker.clearAll();
-		feed.shutdown();
+
+		if (feed != null) {
+			feed.shutdown();
+			feed = null;
+		}
+
+		if (listener != null) {
+			listener.shutdown();
+			listener = null;
+		}
+	}
+
+	/**
+	 * Starts a stateless connection to the specified port. If the user is
+	 * already logged in, this call will end the previous connection and reset
+	 * all registered market takers.
+	 * 
+	 * @param socketAddress
+	 */
+	public void startListener(final int socketAddress) {
+
+		if (feed != null) {
+			feed.shutdown();
+		}
+
+		feed = null;
+
+		listener =
+				DDF_FeedClientFactory.newStatelessListenerClient(socketAddress,
+						defaultExecutor);
+
+		listener.bindMessageListener(msgListener);
 	}
 
 	/*
@@ -197,7 +249,7 @@ public class BarchartFeedClient {
 		public void handleMessage(final DDF_BaseMessage message) {
 
 			if (message instanceof DDF_ControlTimestamp) {
-				for (final DDF_TimestampListener listener : timeStampListeners) {
+				for (final TimestampListener listener : timeStampListeners) {
 					listener.handleTimestamp(((DDF_ControlTimestamp) message)
 							.getStampUTC());
 				}
@@ -219,7 +271,11 @@ public class BarchartFeedClient {
 	 * @param listener
 	 *            The listener to be bound.
 	 */
-	public void bindFeedStateListener(final DDF_FeedStateListener listener) {
+	public void bindFeedStateListener(final FeedStateListener listener) {
+		if (feed == null) {
+			throw new UnsupportedOperationException(
+					"Cannot bind feed listener before a sucessful login");
+		}
 		feed.bindStateListener(listener);
 	}
 
@@ -229,7 +285,7 @@ public class BarchartFeedClient {
 	 * 
 	 * @param listener
 	 */
-	public void bindTimestampListener(final DDF_TimestampListener listener) {
+	public void bindTimestampListener(final TimestampListener listener) {
 		timeStampListeners.add(listener);
 	}
 
@@ -251,6 +307,10 @@ public class BarchartFeedClient {
 	 */
 	public void setFeedEventPolicy(final DDF_FeedEvent event,
 			final EventPolicy policy) {
+		if (feed == null) {
+			throw new UnsupportedOperationException(
+					"Cannot set feed event policy before a sucessful login");
+		}
 		feed.setPolicy(event, policy);
 	}
 

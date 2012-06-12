@@ -8,12 +8,13 @@ import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedState;
+import com.barchart.feed.client.api.FeedStateListener;
+import com.barchart.feed.client.enums.FeedState;
+import com.barchart.feed.client.provider.BarchartFeedClient;
 
 /**
  * 
- * 
+ * Stress test to try and break the login/logout lifecycle
  */
 public class TestBarchartFeedClient {
 
@@ -25,8 +26,7 @@ public class TestBarchartFeedClient {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 
-		final BarchartFeedClient client =
-				new BarchartFeedClient(username, password);
+		final BarchartFeedClient client = new BarchartFeedClient();
 
 		final String symbol = "GOOG";
 
@@ -34,12 +34,12 @@ public class TestBarchartFeedClient {
 
 		System.out.println(instrument.toString());
 
-		final DDF_FeedStateListener feedListener = new DDF_FeedStateListener() {
+		final FeedStateListener feedListener = new FeedStateListener() {
 
 			@Override
-			public void stateUpdate(final DDF_FeedState state) {
+			public void stateUpdate(final FeedState state) {
 
-				if (state == DDF_FeedState.LOGGED_IN) {
+				if (state == FeedState.LOGGED_IN) {
 					client.addTaker(TakerFactory.makeFactory(instrument));
 				}
 
@@ -47,11 +47,21 @@ public class TestBarchartFeedClient {
 
 		};
 
-		client.bindFeedStateListener(feedListener);
+		for (int i = 0; i < 100; i++) {
 
-		client.startup();
+			if (Math.random() < 0.5) {
 
-		Thread.sleep(20 * 1000);
+				client.login(username, password);
+
+				client.bindFeedStateListener(feedListener);
+
+			} else {
+				client.shutdown();
+			}
+
+			Thread.sleep((long) (Math.random() * 3000));
+
+		}
 
 		client.shutdown();
 

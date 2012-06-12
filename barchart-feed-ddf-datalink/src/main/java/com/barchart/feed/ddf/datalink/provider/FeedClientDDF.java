@@ -32,15 +32,15 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.client.api.FeedStateListener;
+import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.DummyFuture;
 import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedState;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
@@ -91,8 +91,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private volatile DDF_MessageListener msgListener = null;
 
-	private final CopyOnWriteArrayList<DDF_FeedStateListener> feedListeners =
-			new CopyOnWriteArrayList<DDF_FeedStateListener>();
+	private final CopyOnWriteArrayList<FeedStateListener> feedListeners =
+			new CopyOnWriteArrayList<FeedStateListener>();
 
 	//
 
@@ -197,11 +197,11 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					if (DDF_FeedEvent.isConnectionError(event)) {
 						log.debug("Setting feed state to logged out");
-						updateFeedStateListeners(DDF_FeedState.LOGGED_OUT);
+						updateFeedStateListeners(FeedState.LOGGED_OUT);
 					}
 					if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
 						log.debug("Login success, feed state updated");
-						updateFeedStateListeners(DDF_FeedState.LOGGED_IN);
+						updateFeedStateListeners(FeedState.LOGGED_IN);
 					}
 
 					log.debug("Enacting policy for :{}", event.name());
@@ -315,9 +315,16 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		loginHandler.disableLogins();
 
+		/* Interrupts login thread if login is active */
+		loginHandler.interruptLogin();
+
+		/* Clear subscriptions, Jerq will stop sending data when we disconnect */
+		subscriptions.clear();
+
 		postEvent(DDF_FeedEvent.LOGOUT);
 
-		blockingWrite(FeedDDF.tcpLogout());
+		// Do we need to specifically tell JERQ we're logging out?
+		// blockingWrite(FeedDDF.tcpLogout());
 
 		terminate();
 
@@ -459,7 +466,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	@Override
 	public synchronized void bindStateListener(
-			final DDF_FeedStateListener stateListener) {
+			final FeedStateListener stateListener) {
 		feedListeners.add(stateListener);
 	}
 
@@ -476,6 +483,16 @@ class FeedClientDDF implements DDF_FeedClient {
 			enabled = false;
 		}
 
+		boolean isLoginActive() {
+			return loginThread != null && loginThread.isAlive();
+		}
+
+		void interruptLogin() {
+			if (isLoginActive()) {
+				loginThread.interrupt();
+			}
+		}
+
 		void login() {
 
 			if (enabled) {
@@ -486,7 +503,7 @@ class FeedClientDDF implements DDF_FeedClient {
 					executor.execute(loginThread);
 
 					log.debug("Setting feed state to attempting login");
-					updateFeedStateListeners(DDF_FeedState.ATTEMPTING_LOGIN);
+					updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
 				}
 			}
 		}
@@ -513,15 +530,15 @@ class FeedClientDDF implements DDF_FeedClient {
 					executor.execute(loginThread);
 
 					log.debug("Setting feed state to attempting login");
-					updateFeedStateListeners(DDF_FeedState.ATTEMPTING_LOGIN);
+					updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
 
 				}
 			}
 		}
 	}
 
-	private void updateFeedStateListeners(final DDF_FeedState state) {
-		for (final DDF_FeedStateListener listener : feedListeners) {
+	private void updateFeedStateListeners(final FeedState state) {
+		for (final FeedStateListener listener : feedListeners) {
 			listener.stateUpdate(state);
 		}
 	}

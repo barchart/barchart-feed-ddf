@@ -24,6 +24,12 @@
 			<version>${barchartFeedBaseVersion}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-client</artifactId>
+			<version>[0.0.0, 1.0.0)</version>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>

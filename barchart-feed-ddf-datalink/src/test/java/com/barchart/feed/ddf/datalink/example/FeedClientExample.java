@@ -13,8 +13,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.TP;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
@@ -56,15 +56,14 @@ public class FeedClientExample {
 		};
 
 		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newConnectionClient(TP.TCP, username, password,
-						runner);
+				DDF_FeedClientFactory.newConnectionClient(TP.TCP, username,
+						password, runner);
 
 		final DDF_MessageListener handler = new LoggingHandler();
 
 		client.bindMessageListener(handler);
 
-		final DDF_FeedStateListener stateListener =
-				new ExampleFeedStateListener();
+		final FeedStateListener stateListener = new ExampleFeedStateListener();
 
 		client.bindStateListener(stateListener);
 
