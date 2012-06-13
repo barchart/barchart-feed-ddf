@@ -82,6 +82,8 @@ public class BarchartFeedClient {
 
 	};
 
+	private FeedStateListener stateListener;
+
 	public BarchartFeedClient() {
 		maker.add(instrumentSubscriptionListener);
 	}
@@ -163,6 +165,10 @@ public class BarchartFeedClient {
 
 		feed.bindMessageListener(msgListener);
 
+		if (stateListener != null) {
+			feed.bindStateListener(stateListener);
+		}
+
 		feed.startup();
 
 	}
@@ -191,20 +197,20 @@ public class BarchartFeedClient {
 	 * 
 	 * @param socketAddress
 	 */
-	// public void startListener(final int socketAddress) {
-	//
-	// if (feed != null) {
-	// feed.shutdown();
-	// }
-	//
-	// feed = null;
-	//
-	// listener =
-	// DDF_FeedClientFactory.newStatelessListenerClient(socketAddress,
-	// defaultExecutor);
-	//
-	// listener.bindMessageListener(msgListener);
-	// }
+	public void startListener(final int socketAddress) {
+
+		if (feed != null) {
+			feed.shutdown();
+		}
+
+		feed = null;
+
+		listener =
+				DDF_FeedClientFactory.newStatelessListenerClient(socketAddress,
+						defaultExecutor);
+
+		listener.bindMessageListener(msgListener);
+	}
 
 	/*
 	 * This is where the instruments are registered and unregistered as needed
@@ -266,17 +272,16 @@ public class BarchartFeedClient {
 
 	/**
 	 * Applications which need to react to the connectivity state of the feed
-	 * instantiate a DDF_FeedStateListener and bind it to the client.
+	 * instantiate a FeedStateListener and bind it to the client.
 	 * 
 	 * @param listener
 	 *            The listener to be bound.
 	 */
 	public void bindFeedStateListener(final FeedStateListener listener) {
-		if (feed == null) {
-			throw new UnsupportedOperationException(
-					"Cannot bind feed listener before a sucessful login");
+		stateListener = listener;
+		if (feed != null) {
+			feed.bindStateListener(listener);
 		}
-		feed.bindStateListener(listener);
 	}
 
 	/**
