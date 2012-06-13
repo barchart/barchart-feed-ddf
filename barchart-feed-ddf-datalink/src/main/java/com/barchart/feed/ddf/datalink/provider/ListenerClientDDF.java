@@ -129,7 +129,6 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 			final ExceptionEvent e) throws Exception {
 		log.warn("SimpleChannelHandler caught exception");
 
-		// ctx.sendUpstream(e);
 	}
 
 	private void postMessage(final DDF_BaseMessage message) {

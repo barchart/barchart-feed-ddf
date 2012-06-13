@@ -191,20 +191,20 @@ public class BarchartFeedClient {
 	 * 
 	 * @param socketAddress
 	 */
-	public void startListener(final int socketAddress) {
-
-		if (feed != null) {
-			feed.shutdown();
-		}
-
-		feed = null;
-
-		listener =
-				DDF_FeedClientFactory.newStatelessListenerClient(socketAddress,
-						defaultExecutor);
-
-		listener.bindMessageListener(msgListener);
-	}
+	// public void startListener(final int socketAddress) {
+	//
+	// if (feed != null) {
+	// feed.shutdown();
+	// }
+	//
+	// feed = null;
+	//
+	// listener =
+	// DDF_FeedClientFactory.newStatelessListenerClient(socketAddress,
+	// defaultExecutor);
+	//
+	// listener.bindMessageListener(msgListener);
+	// }
 
 	/*
 	 * This is where the instruments are registered and unregistered as needed

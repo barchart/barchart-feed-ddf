@@ -24,7 +24,7 @@ public interface DDF_FeedClientBase {
 	void shutdown();
 
 	/**
-	 * Attachs a message listener to the client for data consumption.
+	 * Attaches a message listener to the client for data consumption.
 	 */
 	@UsedOnce
 	void bindMessageListener(DDF_MessageListener msgListener);
