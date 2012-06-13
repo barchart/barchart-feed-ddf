@@ -23,6 +23,7 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
@@ -59,13 +60,13 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 		this.socketAddress = socketAddress;
 		runner = executor;
 
-		final DatagramChannelFactory channelFactory =
-				new NioDatagramChannelFactory(runner);
+		final DatagramChannelFactory channelFactory = new NioDatagramChannelFactory(
+				runner);
 
 		boot = new ConnectionlessBootstrap(channelFactory);
 
-		final ChannelPipelineFactory pipelineFactory =
-				new PipelineFactoryDDF(this);
+		final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(
+				this);
 
 		boot.setPipelineFactory(pipelineFactory);
 
@@ -75,8 +76,7 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 
 	}
 
-	private final BlockingQueue<DDF_BaseMessage> messageQueue =
-			new LinkedBlockingQueue<DDF_BaseMessage>();
+	private final BlockingQueue<DDF_BaseMessage> messageQueue = new LinkedBlockingQueue<DDF_BaseMessage>();
 
 	private final RunnerDDF messageTask = new RunnerDDF() {
 
@@ -182,6 +182,11 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	@Override
 	public void bindMessageListener(final DDF_MessageListener msgListener) {
 		this.msgListener = msgListener;
+	}
+
+	@Override
+	public void bindStateListener(final FeedStateListener stateListener) {
+		// TODO Implement connection notifications for TCP listeners
 	}
 
 }

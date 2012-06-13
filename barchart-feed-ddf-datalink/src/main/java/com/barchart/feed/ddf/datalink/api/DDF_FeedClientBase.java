@@ -3,6 +3,7 @@
  */
 package com.barchart.feed.ddf.datalink.api;
 
+import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.util.anno.UsedOnce;
 
 /**
@@ -28,5 +29,11 @@ public interface DDF_FeedClientBase {
 	 */
 	@UsedOnce
 	void bindMessageListener(DDF_MessageListener msgListener);
+
+	/**
+	 * Attach single feed state listener to the client.
+	 */
+	@UsedOnce
+	void bindStateListener(FeedStateListener stateListener);
 
 }

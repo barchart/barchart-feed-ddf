@@ -10,9 +10,7 @@ package com.barchart.feed.ddf.datalink.api;
 import java.util.Set;
 import java.util.concurrent.Future;
 
-import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
-import com.barchart.util.anno.UsedOnce;
 
 /**
  * Client responsible for lowest level connectivity to the data server.
@@ -79,12 +77,6 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 * @return A Future which returns true if successful.
 	 */
 	Future<Boolean> unsubscribe(Subscription subscription);
-
-	/**
-	 * Attach single feed state listener to the client.
-	 */
-	@UsedOnce
-	void bindStateListener(FeedStateListener stateListener);
 
 	/**
 	 * Sets the event policy for a specific feed event. Default policies are set
