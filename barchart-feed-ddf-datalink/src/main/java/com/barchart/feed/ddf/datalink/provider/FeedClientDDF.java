@@ -69,11 +69,9 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	//
 
-	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
-			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
+	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy = new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
-	private final Set<Subscription> subscriptions =
-			new CopyOnWriteArraySet<Subscription>();
+	private final Set<Subscription> subscriptions = new CopyOnWriteArraySet<Subscription>();
 
 	//
 
@@ -81,18 +79,15 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	//
 
-	private final BlockingQueue<DDF_FeedEvent> eventQueue =
-			new LinkedBlockingQueue<DDF_FeedEvent>();
+	private final BlockingQueue<DDF_FeedEvent> eventQueue = new LinkedBlockingQueue<DDF_FeedEvent>();
 
-	private final BlockingQueue<DDF_BaseMessage> messageQueue =
-			new LinkedBlockingQueue<DDF_BaseMessage>();
+	private final BlockingQueue<DDF_BaseMessage> messageQueue = new LinkedBlockingQueue<DDF_BaseMessage>();
 
 	//
 
 	private volatile DDF_MessageListener msgListener = null;
 
-	private final CopyOnWriteArrayList<FeedStateListener> feedListeners =
-			new CopyOnWriteArrayList<FeedStateListener>();
+	private final CopyOnWriteArrayList<FeedStateListener> feedListeners = new CopyOnWriteArrayList<FeedStateListener>();
 
 	//
 
@@ -114,8 +109,8 @@ class FeedClientDDF implements DDF_FeedClient {
 		this.password = password;
 		this.executor = executor;
 
-		final ChannelFactory channelFactory =
-				new NioClientSocketChannelFactory(executor, executor);
+		final ChannelFactory channelFactory = new NioClientSocketChannelFactory(
+				executor, executor);
 
 		boot = new ClientBootstrap(channelFactory);
 
@@ -123,11 +118,11 @@ class FeedClientDDF implements DDF_FeedClient {
 		 * The vector for data leaving the netty channel and entering the
 		 * buisness application logic.
 		 */
-		final SimpleChannelHandler ddfHandler =
-				new ChannelHandlerDDF(eventQueue, messageQueue);
+		final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(
+				eventQueue, messageQueue);
 
-		final ChannelPipelineFactory pipelineFactory =
-				new PipelineFactoryDDF(ddfHandler);
+		final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(
+				ddfHandler);
 
 		boot.setPipelineFactory(pipelineFactory);
 
@@ -198,10 +193,12 @@ class FeedClientDDF implements DDF_FeedClient {
 					if (DDF_FeedEvent.isConnectionError(event)) {
 						log.debug("Setting feed state to logged out");
 						updateFeedStateListeners(FeedState.LOGGED_OUT);
-					}
-					if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
+					} else if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
 						log.debug("Login success, feed state updated");
 						updateFeedStateListeners(FeedState.LOGGED_IN);
+					} else if (event == DDF_FeedEvent.LOGOUT) {
+						log.debug("Setting feed state to logged out");
+						updateFeedStateListeners(FeedState.LOGGED_OUT);
 					}
 
 					log.debug("Enacting policy for :{}", event.name());
@@ -276,18 +273,13 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	/*
-	 * Can post to the FeedEventHandler the following events:
-	 * <p>
-	 * CHANNEL_CONNECT_TIMEOUT {@link DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT}
-	 * <p>
-	 * CHANNEL_CONNECT_FAILURE {@link DDF_FeedEvent.CHANNEL_CONNECT_FAILURE}
-	 * <p>
-	 * SETTINGS_RETRIEVAL_FAILURE
-	 * {@link DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE}
-	 * <p>
-	 * LOGIN_FAILURE {@link DDF_FeedEvent.LOGIN_FAILURE}
-	 * <p>
-	 * LOGIN_SUCCESS {@link DDF_FeedEvent.LOGIN_SUCCESS}
+	 * Can post to the FeedEventHandler the following events: <p>
+	 * CHANNEL_CONNECT_TIMEOUT {@link DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT} <p>
+	 * CHANNEL_CONNECT_FAILURE {@link DDF_FeedEvent.CHANNEL_CONNECT_FAILURE} <p>
+	 * SETTINGS_RETRIEVAL_FAILURE {@link
+	 * DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE} <p> LOGIN_FAILURE {@link
+	 * DDF_FeedEvent.LOGIN_FAILURE} <p> LOGIN_SUCCESS {@link
+	 * DDF_FeedEvent.LOGIN_SUCCESS}
 	 */
 	@Override
 	public synchronized void startup() {
@@ -497,8 +489,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (enabled) {
 				if (loginThread == null || !loginThread.isAlive()) {
-					loginThread =
-							new Thread(new LoginRunnable(), "# DDF Login");
+					loginThread = new Thread(new LoginRunnable(), "# DDF Login");
 
 					executor.execute(loginThread);
 
@@ -626,8 +617,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			}
 
 			/* Send login command to JERQ */
-			DDF_FeedEvent writeEvent =
-					blockingWrite(FeedDDF.tcpLogin(username, password));
+			DDF_FeedEvent writeEvent = blockingWrite(FeedDDF.tcpLogin(username,
+					password));
 
 			if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
 				return DDF_FeedEvent.COMMAND_WRITE_FAILURE;

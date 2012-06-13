@@ -76,7 +76,7 @@
 	<build>
 	
   	  <plugins>
-  	  
+		
   	    <!-- publishes module's maven site to github  -->
     	<plugin>
       	  <groupId>com.github.github</groupId>

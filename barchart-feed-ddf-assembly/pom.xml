@@ -139,6 +139,13 @@
 							<goal>jar-no-fork</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>bundle-sources</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 
@@ -153,6 +160,12 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+						<configuration>
+							<includeDependencySources>true</includeDependencySources>
+							<dependencySourceIncludes>
+								<dependencySourceInclude>com.barchart.feed:*</dependencySourceInclude>
+							</dependencySourceIncludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -179,7 +192,8 @@
 						<Embed-Transitive>true</Embed-Transitive>
 						<Export-Package>
 							com.barchart.util.*;version=${barchartUtilVersion},
-							com.barchart.feed.base*;version=${barchartFeedBaseVersion},
+							com.barchart.feed.base.*;version=${barchartFeedBaseVersion},
+							com.barchart.feed.client.*;version=${project.parent.version},
 							com.barchart.feed.ddf.*;version=${project.parent.version},
 						</Export-Package>
 					</instructions>
