@@ -15,31 +15,31 @@
 <FONT color="green">012</FONT>    <a name="line.12"></a>
 <FONT color="green">013</FONT>    import com.barchart.feed.ddf.instrument.api.DDF_Instrument;<a name="line.13"></a>
 <FONT color="green">014</FONT>    <a name="line.14"></a>
-<FONT color="green">015</FONT>    // TODO: Auto-generated Javadoc<a name="line.15"></a>
-<FONT color="green">016</FONT>    /**<a name="line.16"></a>
-<FONT color="green">017</FONT>     * The Interface DDF_Resolver.<a name="line.17"></a>
-<FONT color="green">018</FONT>     */<a name="line.18"></a>
-<FONT color="green">019</FONT>    public interface DDF_Resolver {<a name="line.19"></a>
-<FONT color="green">020</FONT>    <a name="line.20"></a>
-<FONT color="green">021</FONT>            enum Mode {<a name="line.21"></a>
-<FONT color="green">022</FONT>    <a name="line.22"></a>
-<FONT color="green">023</FONT>                    /** start index update only if index is old */<a name="line.23"></a>
-<FONT color="green">024</FONT>                    DEFAULT, //<a name="line.24"></a>
-<FONT color="green">025</FONT>    <a name="line.25"></a>
-<FONT color="green">026</FONT>                    /** remove and create the index anew */<a name="line.26"></a>
-<FONT color="green">027</FONT>                    REBUILD, //<a name="line.27"></a>
-<FONT color="green">028</FONT>    <a name="line.28"></a>
-<FONT color="green">029</FONT>                    /** start index update now, even if not due */<a name="line.29"></a>
-<FONT color="green">030</FONT>                    REINDEX, //<a name="line.30"></a>
-<FONT color="green">031</FONT>    <a name="line.31"></a>
-<FONT color="green">032</FONT>            }<a name="line.32"></a>
-<FONT color="green">033</FONT>    <a name="line.33"></a>
-<FONT color="green">034</FONT>            /**<a name="line.34"></a>
-<FONT color="green">035</FONT>             * start index;<a name="line.35"></a>
-<FONT color="green">036</FONT>             * <a name="line.36"></a>
-<FONT color="green">037</FONT>             * TODO @return readiness future.<a name="line.37"></a>
-<FONT color="green">038</FONT>             *<a name="line.38"></a>
-<FONT color="green">039</FONT>             * @param mode the mode<a name="line.39"></a>
+<FONT color="green">015</FONT>    /**<a name="line.15"></a>
+<FONT color="green">016</FONT>     * The Interface DDF_Resolver.<a name="line.16"></a>
+<FONT color="green">017</FONT>     */<a name="line.17"></a>
+<FONT color="green">018</FONT>    public interface DDF_Resolver {<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>            enum Mode {<a name="line.20"></a>
+<FONT color="green">021</FONT>    <a name="line.21"></a>
+<FONT color="green">022</FONT>                    /** start index update only if index is old */<a name="line.22"></a>
+<FONT color="green">023</FONT>                    DEFAULT, //<a name="line.23"></a>
+<FONT color="green">024</FONT>    <a name="line.24"></a>
+<FONT color="green">025</FONT>                    /** remove and create the index anew */<a name="line.25"></a>
+<FONT color="green">026</FONT>                    REBUILD, //<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>                    /** start index update now, even if not due */<a name="line.28"></a>
+<FONT color="green">029</FONT>                    REINDEX, //<a name="line.29"></a>
+<FONT color="green">030</FONT>    <a name="line.30"></a>
+<FONT color="green">031</FONT>            }<a name="line.31"></a>
+<FONT color="green">032</FONT>    <a name="line.32"></a>
+<FONT color="green">033</FONT>            /**<a name="line.33"></a>
+<FONT color="green">034</FONT>             * start index;<a name="line.34"></a>
+<FONT color="green">035</FONT>             * <a name="line.35"></a>
+<FONT color="green">036</FONT>             * TODO @return readiness future.<a name="line.36"></a>
+<FONT color="green">037</FONT>             * <a name="line.37"></a>
+<FONT color="green">038</FONT>             * @param mode<a name="line.38"></a>
+<FONT color="green">039</FONT>             *            the mode<a name="line.39"></a>
 <FONT color="green">040</FONT>             * @return the future<a name="line.40"></a>
 <FONT color="green">041</FONT>             */<a name="line.41"></a>
 <FONT color="green">042</FONT>            public Future&lt;?&gt; open(Mode mode);<a name="line.42"></a>
