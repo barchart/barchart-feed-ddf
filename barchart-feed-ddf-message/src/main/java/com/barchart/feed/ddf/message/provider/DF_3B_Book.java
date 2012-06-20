@@ -249,12 +249,32 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 
 	@Override
 	protected void appedFields(final StringBuilder text) {
-
+		
 		super.appedFields(text);
 
-		// TODO
-		text.append("TODO : ");
-
+		text.append("Bid qty\tprice\tAsk qty\n");
+		text.append("--------------------------------\n");
+		if (priceAskArray.length == sizeBidArray.length) {
+			for (int i = priceAskArray.length -1; i > 0; i--) {
+				long askPrice = priceAskArray[i];
+				long askSize = sizeAskArray[i];
+				if (askSize != 0) {
+					text.append(" \t" + askPrice + "\t" + askSize + "\n");
+				}
+			}
+		}
+		
+		if (priceBidArray.length == sizeBidArray.length) {
+			for (int i = 0; i < priceBidArray.length; i++) {
+				long bidPrice = priceBidArray[i];
+				long bidSize = sizeBidArray[i];
+				if (bidSize != 0) {
+					text.append(bidSize + "\t" + bidPrice + "\t\n");
+				}
+			}
+		}
+		
+		
 	}
 
 }
