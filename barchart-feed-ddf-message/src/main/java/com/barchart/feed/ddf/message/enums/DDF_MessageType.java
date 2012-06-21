@@ -18,10 +18,16 @@ import static com.barchart.util.ascii.ASCII._6_;
 import static com.barchart.util.ascii.ASCII._7_;
 import static com.barchart.util.ascii.ASCII._8_;
 import static com.barchart.util.ascii.ASCII._B_;
+import static com.barchart.util.ascii.ASCII._C_;
+import static com.barchart.util.ascii.ASCII._I_;
+import static com.barchart.util.ascii.ASCII._S_;
+import static com.barchart.util.ascii.ASCII._T_;
 import static com.barchart.util.ascii.ASCII._Z_;
 
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
+import com.barchart.feed.ddf.message.api.DDF_EOD_Commodity;
+import com.barchart.feed.ddf.message.api.DDF_EOD_EquityForex;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.message.api.DDF_MarketBookTop;
@@ -31,6 +37,8 @@ import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.api.DDF_MarketSession;
 import com.barchart.feed.ddf.message.api.DDF_MarketSnapshot;
 import com.barchart.feed.ddf.message.api.DDF_MarketTrade;
+import com.barchart.feed.ddf.message.api.DDF_Prior_IndividCmdy;
+import com.barchart.feed.ddf.message.api.DDF_Prior_TotCmdy;
 import com.barchart.feed.ddf.util.ByteConverters;
 import com.barchart.feed.ddf.util.FeedDDF;
 import com.barchart.util.enums.EnumByteOrdinal;
@@ -99,6 +107,18 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/** 3B: book snapshot */
 	BOOK_SNAP(_3_, _B_, DDF_MarketBook.class), //
+
+	/** 3S: end-of-day stock and forex prices and volume */
+	EOD_EQTY_FORE(_3_, _S_, DDF_EOD_EquityForex.class), //
+
+	/** 3C: end-of-day commodity prices */
+	EOD_CMDY(_3_, _C_, DDF_EOD_Commodity.class), //
+
+	/** prior day's commodity individual vol & open int. */
+	PRIOR_INDIV_CMDY(_3_, _I_, DDF_Prior_IndividCmdy.class), //
+
+	/** prior day's total vol & open int for a commodity group */
+	PRIOR_TOTAL_CMDY(_3_, _T_, DDF_Prior_TotCmdy.class), //
 
 	/** XB: book snapshot */
 	BOOK_SNAP_XML(FeedDDF.XML_RECORD, FeedDDF.XML_SUB_BOOK,
@@ -255,6 +275,14 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 			switch (subRecord) {
 			case _B_:
 				return BOOK_SNAP;
+			case _S_:
+				return EOD_EQTY_FORE;
+			case _C_:
+				return EOD_CMDY;
+			case _I_:
+				return PRIOR_INDIV_CMDY;
+			case _T_:
+				return PRIOR_TOTAL_CMDY;
 			default:
 				return UNKNOWN;
 			}

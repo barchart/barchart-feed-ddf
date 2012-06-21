@@ -193,6 +193,16 @@ public final class DDF_MessageService {
 			assert type.klaz.isAssignableFrom(DF_C1_Response.class);
 			return new DF_C1_Response(type);
 
+		case EOD_EQTY_FORE:
+			assert type.klaz.isAssignableFrom(DF_3S_StockEOD.class);
+			return new DF_3S_StockEOD(type);
+		case EOD_CMDY:
+			assert type.klaz.isAssignableFrom(DF_3C_CmdyEOD.class);
+			return new DF_3C_CmdyEOD(type);
+		case PRIOR_INDIV_CMDY:
+			assert type.klaz.isAssignableFrom(DF_3I_PriorCmdy.class);
+			return new DF_3I_PriorCmdy(type);
+
 		default:
 			throw new IllegalArgumentException("unknown type=" + type);
 
@@ -310,8 +320,8 @@ public final class DDF_MessageService {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public static final DDF_MarketBook marketBookFromUrl(final String symbolURI)
-			throws Exception {
+	public static final DDF_MarketBook
+			marketBookFromUrl(final String symbolURI) throws Exception {
 
 		final Element root = HelperXML.xmlDocumentDecode(symbolURI);
 
