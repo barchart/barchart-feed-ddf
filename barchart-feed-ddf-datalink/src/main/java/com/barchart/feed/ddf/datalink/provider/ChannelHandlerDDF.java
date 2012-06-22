@@ -109,8 +109,14 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 		try {
 
 			if (type.isMarketMessage) {
-				messageQueue.put(message);
-				return;
+				if (!type.isNonInstrumentMarketMessage) {
+					messageQueue.put(message);
+					return;
+				} else {
+					// Handle non instrument message
+					// for now do nothing
+					return;
+				}
 			}
 
 			if (type.isControlTimestamp) {

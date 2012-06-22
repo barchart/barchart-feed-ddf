@@ -190,6 +190,9 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 	/** The is market message. */
 	public final boolean isMarketMessage;
 
+	/** A market message not specific to an instrument */
+	public final boolean isNonInstrumentMarketMessage;
+
 	private DDF_MessageType(final int record, final int subRecord,
 			final Class<?> klaz) {
 
@@ -203,7 +206,7 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 		this.isControlTimestamp = isControlTimestamp();
 		this.isControlResponse = isControlResponse();
 		this.isMarketMessage = isMarketMessage();
-
+		this.isNonInstrumentMarketMessage = isNonInstrumentmarketMessage();
 	}
 
 	private final static DDF_MessageType[] ENUM_VALUES = values();
@@ -394,6 +397,10 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	private boolean isControlTimestamp() {
 		return DDF_ControlTimestamp.class.isAssignableFrom(klaz);
+	}
+
+	private boolean isNonInstrumentmarketMessage() {
+		return this == PRIOR_TOTAL_CMDY;
 	}
 
 }
