@@ -52,7 +52,8 @@ public abstract class BarchartFeedClientBase {
 
 	protected final DDF_MarketProvider maker = DDF_MarketService.newInstance();
 
-	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners = new CopyOnWriteArrayList<TimestampListener>();
+	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
+			new CopyOnWriteArrayList<TimestampListener>();
 
 	private FeedStateListener stateListener;
 
@@ -176,6 +177,17 @@ public abstract class BarchartFeedClientBase {
 	}
 
 	/**
+	 * Updates a taker. This handles any instrument registration/unregistration
+	 * needed with the feed client.
+	 * 
+	 * @param taker
+	 * @return
+	 */
+	public <V extends Value<V>> boolean updateTaker(final MarketTaker<V> taker) {
+		return maker.update(taker);
+	}
+
+	/**
 	 * Removes a market taker from the client. If no other takers require its
 	 * instruments, they are unsubscribed from the feed.
 	 * 
@@ -206,8 +218,8 @@ public abstract class BarchartFeedClientBase {
 	 * @return An empty list if no symbols can be resolved.
 	 */
 	public List<MarketInstrument> lookup(final List<String> symbolList) {
-		final List<DDF_Instrument> list = DDF_InstrumentProvider
-				.find(symbolList);
+		final List<DDF_Instrument> list =
+				DDF_InstrumentProvider.find(symbolList);
 
 		return new ArrayList<MarketInstrument>(list);
 	}
