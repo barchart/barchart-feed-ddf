@@ -1,60 +1,61 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
-  <modelVersion>4.0.0</modelVersion>
-  
-  <parent>
-    <artifactId>barchart-feed-ddf</artifactId>
-    <groupId>com.barchart.feed</groupId>
-    <version>3.4.3-SNAPSHOT</version>
-  </parent>
-  
-  <name>barchart-feed-ddf-symbol</name>
-  <artifactId>barchart-feed-ddf-symbol</artifactId>
-  <packaging>bundle</packaging>
-  
-  <scm>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>barchart-feed-ddf</artifactId>
+		<groupId>com.barchart.feed</groupId>
+		<version>3.4.3-SNAPSHOT</version>
+	</parent>
+
+	<name>barchart-feed-ddf-symbol</name>
+	<artifactId>barchart-feed-ddf-symbol</artifactId>
+	<packaging>bundle</packaging>
+
+	<scm>
 		<url>https://github.com/barchart/barchart-feed-ddf</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
-  </scm>
-  
-  <dependencies>
-  
-  		<dependency>
+	</scm>
+
+	<dependencies>
+
+		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-util</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 
 	</dependencies>
-	
+
 	<build>
-	
-  	  <plugins>
-  	  
-  	    <!-- publishes module's maven site to github  -->
-  	    <!-- merge = true for all modules -->
-    	<plugin>
-      	  <groupId>com.github.github</groupId>
-      	  <artifactId>site-maven-plugin</artifactId>
-      	  <version>0.6</version>
-      	  <configuration>
-        	<message>Creating site for ${project.artifactId} ${project.version}</message>
-        	<path>barchart-feed-ddf-symbol</path>
-        	<merge>true</merge>
-      	  </configuration>
-      	  <executions>
-        	<execution>
-          	  <goals>
-            	<goal>site</goal>
-          	  </goals>
-          	  <phase>site</phase>
-        	</execution>
-      	  </executions>
-    	</plugin>
-    	
-  	  </plugins>
-  	  
+
+		<plugins>
+
+			<!-- publishes module's maven site to github -->
+			<!-- merge = true for all modules -->
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.6</version>
+				<configuration>
+					<message>Creating site for ${project.artifactId} ${project.version}</message>
+					<path>barchart-feed-ddf-symbol</path>
+					<merge>true</merge>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
 	</build>
-  
+
 </project>

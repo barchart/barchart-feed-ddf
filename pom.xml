@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -18,25 +19,33 @@
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
 	</scm>
-	
+
 	<properties>
-		
-		<barchartUtilVersion>2.0.2</barchartUtilVersion>
-	
-		<barchartFeedBaseVersion>1.3.5</barchartFeedBaseVersion>
-	
+
+		<!-- <groupId>com.barchart.util</groupId> -->
+		<!-- <artifactId>barchart-util</artifactId> -->
+		<barchartUtilVersion>2.0.3</barchartUtilVersion>
+
+		<!-- <groupId>com.barchart.feed</groupId> -->
+		<!-- <artifactId>barchart-feed-base</artifactId> -->
+		<barchartFeedBaseVersion>1.3.7</barchartFeedBaseVersion>
+
+		<!-- <groupId>io.netty</groupId> -->
+		<!-- <artifactId>netty</artifactId> -->
+		<barchartNettyVersion>3.5.1.Final</barchartNettyVersion>
+
 	</properties>
-	
+
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<scope>test</scope>
 		</dependency>
-	
+
 	</dependencies>
-	
+
 	<modules>
 
 		<module>barchart-feed-ddf-settings</module>
@@ -52,7 +61,7 @@
 		<module>barchart-feed-ddf-market</module>
 
 		<module>barchart-feed-ddf-symbol</module>
-		
+
 		<module>barchart-feed-ddf-util</module>
 
 		<module>barchart-feed-ddf-resolver</module>
@@ -62,44 +71,42 @@
 		<module>barchart-feed-ddf-assembly</module>
 
 		<module>barchart-feed-ddf-client</module>
-		
+
 	</modules>
-	
-	<!--  This should be moved to archon, when Andrei gets back -->
+
+	<!-- This should be moved to archon, when Andrei gets back -->
 	<pluginRepositories>
-  		<pluginRepository>
-    		<id>oss-sonatype-snapshots</id>
-    		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-  		</pluginRepository>
+		<pluginRepository>
+			<id>oss-sonatype-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</pluginRepository>
 	</pluginRepositories>
-	
+
 	<build>
-	
-  	  <plugins>
-		
-  	    <!-- publishes module's maven site to github  -->
-    	<plugin>
-      	  <groupId>com.github.github</groupId>
-      	  <artifactId>site-maven-plugin</artifactId>
-      	  <version>0.6</version>
-      	  <configuration>
-        	<message>Creating site for ${project.artifactId} ${project.version}</message>
-        	<merge>false</merge>
-      	  </configuration>
-      	  <executions>
-        	<execution>
-          	  <goals>
-            	<goal>site</goal>
-          	  </goals>
-          	  <phase>site</phase>
-        	</execution>
-      	  </executions>
-    	</plugin>
-    	
-  	  </plugins>
-  	  
+
+		<plugins>
+
+			<!-- publishes module's maven site to github -->
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.6</version>
+				<configuration>
+					<message>Creating site for ${project.artifactId} ${project.version}</message>
+					<merge>false</merge>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
 	</build>
-	
-	
 
 </project>
