@@ -40,6 +40,13 @@
 
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-ddf-message</artifactId>
+			<version>${project.parent.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-market</artifactId>
 			<version>${project.parent.version}</version>
 			<optional>true</optional>
@@ -193,7 +200,7 @@
 						<Export-Package>
 							com.barchart.util.*;version=${barchartUtilVersion},
 							com.barchart.feed.base.*;version=${barchartFeedBaseVersion},
-							com.barchart.feed.client.*;version=${project.parent.version},
+							com.barchart.feed.client.*;version=${barchartFeedClientVersion},
 							com.barchart.feed.ddf.*;version=${project.parent.version},
 						</Export-Package>
 					</instructions>
