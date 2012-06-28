@@ -47,21 +47,21 @@ public class TestBarchartFeedClient {
 
 		};
 
-		for (int i = 0; i < 100; i++) {
+		// for (int i = 0; i < 100; i++) {
+		//
+		// if (Math.random() < 0.5) {
 
-			if (Math.random() < 0.5) {
+		client.login(username, password);
 
-				client.login(username, password);
+		client.bindFeedStateListener(feedListener);
+		//
+		// } else {
+		// client.shutdown();
+		// }
 
-				client.bindFeedStateListener(feedListener);
+		Thread.sleep((20000));
 
-			} else {
-				client.shutdown();
-			}
-
-			Thread.sleep((long) (Math.random() * 3000));
-
-		}
+		// }
 
 		client.shutdown();
 

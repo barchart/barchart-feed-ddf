@@ -94,7 +94,8 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * @param password
 	 * @param tp
 	 */
-	public void login(final String username, final String password, final TP tp) {
+	public void
+			login(final String username, final String password, final TP tp) {
 
 		loginMain(username, password, tp, executor);
 
@@ -127,8 +128,9 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 
 		maker.clearAll();
 
-		feed = DDF_FeedClientFactory.newConnectionClient(tp, username,
-				password, executor);
+		feed =
+				DDF_FeedClientFactory.newConnectionClient(tp, username,
+						password, executor);
 
 		setClient(feed);
 
@@ -141,28 +143,42 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * events are sent only when the instrument is not needed by any previously
 	 * registered market takers.
 	 */
-	private final MarketRegListener instrumentSubscriptionListener = new MarketRegListener() {
+	private final MarketRegListener instrumentSubscriptionListener =
+			new MarketRegListener() {
 
-		@Override
-		public void onRegistrationChange(final MarketInstrument instrument,
-				final Set<MarketEvent> events) {
+				@Override
+				public void onRegistrationChange(
+						final MarketInstrument instrument,
+						final Set<MarketEvent> events) {
 
-			/*
-			 * The market maker denotes 'unsubscribe' with an empty event set
-			 */
-			if (events.isEmpty()) {
-				log.debug("Unsubscribing to "
-						+ instrument.get(InstrumentField.ID));
-				feed.unsubscribe(new Subscription(instrument, events));
-			} else {
-				log.debug("Subscribing to "
-						+ instrument.get(InstrumentField.ID));
-				feed.subscribe(new Subscription(instrument, events));
-			}
+					/*
+					 * The market maker denotes 'unsubscribe' with an empty
+					 * event set
+					 */
+					if (events.isEmpty()) {
+						log.debug("Unsubscribing to "
+								+ instrument.get(InstrumentField.ID));
+						feed.unsubscribe(new Subscription(instrument, events));
+					} else {
+						log.debug("Subscribing to "
+								+ instrument.get(InstrumentField.ID)
+								+ " Events: " + printEvents(events));
+						feed.subscribe(new Subscription(instrument, events));
+					}
 
+				}
+
+			};
+
+	private String printEvents(final Set<MarketEvent> events) {
+		final StringBuffer sb = new StringBuffer();
+
+		for (final MarketEvent me : events) {
+			sb.append(me.name() + ", ");
 		}
 
-	};
+		return sb.toString();
+	}
 
 	/**
 	 * Users wishing to modify the feed client's response to feed connectivity
