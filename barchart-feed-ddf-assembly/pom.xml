@@ -5,20 +5,20 @@
 	<parent>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed-ddf</artifactId>
-		<version>3.4.3-SNAPSHOT</version>
+		<version>3.4.7-SNAPSHOT</version>
 	</parent>
 
-	<name>barchart-feed-ddf-assembly</name>
 	<artifactId>barchart-feed-ddf-assembly</artifactId>
 	<packaging>bundle</packaging>
+
+	<name>barchart-feed-ddf-assembly</name>
+	<description>barchart module assembly</description>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-feed-ddf</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
 	</scm>
-
-	<description>barchart module assembly</description>
 
 	<dependencies>
 
@@ -34,6 +34,13 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-datalink</artifactId>
+			<version>${project.parent.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-ddf-message</artifactId>
 			<version>${project.parent.version}</version>
 			<optional>true</optional>
 		</dependency>
@@ -65,11 +72,11 @@
 			<artifactId>joda-time</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>org.jboss.netty</groupId>
+			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
-			<version>3.2.7.Final</version>
+			<version>${barchartNettyVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -193,32 +200,32 @@
 						<Export-Package>
 							com.barchart.util.*;version=${barchartUtilVersion},
 							com.barchart.feed.base.*;version=${barchartFeedBaseVersion},
-							com.barchart.feed.client.*;version=${project.parent.version},
+							com.barchart.feed.client.*;version=${barchartFeedClientVersion},
 							com.barchart.feed.ddf.*;version=${project.parent.version},
 						</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
-			
-			<!-- publishes module's maven site to github  -->
+
+			<!-- publishes module's maven site to github -->
 			<plugin>
-      	  		<groupId>com.github.github</groupId>
-      	  		<artifactId>site-maven-plugin</artifactId>
-      	  		<version>0.6</version>
-      	  		<configuration>
-        			<message>Creating site for ${project.artifactId} ${project.version}</message>
-        			<path>barchart-feed-ddf-assembly</path>
-        			<merge>true</merge>
-      	  		</configuration>
-      	  		<executions>
-        			<execution>
-          	  			<goals>
-            				<goal>site</goal>
-          	  			</goals>
-          	  			<phase>site</phase>
-        			</execution>
-      	  		</executions>
-    		</plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.6</version>
+				<configuration>
+					<message>Creating site for ${project.artifactId} ${project.version}</message>
+					<path>barchart-feed-ddf-assembly</path>
+					<merge>true</merge>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
+				</executions>
+			</plugin>
 
 		</plugins>
 
