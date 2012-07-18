@@ -7,12 +7,13 @@
  */
 package com.barchart.feed.ddf.message.example;
 
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
+import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
 
 // TODO: Auto-generated Javadoc
@@ -22,13 +23,15 @@ import com.barchart.feed.ddf.message.provider.DDF_MessageService;
 
 public class MessageCodecExample {
 
-	private static final Logger log = LoggerFactory.getLogger(MessageCodecExample.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(MessageCodecExample.class);
 
 	/**
 	 * sample DDF_MarketParameter message with NO time stamp
 	 */
-	final static byte[] ba20 = "3KCK2,BAC55,18390K1,18385L4,18380M3,18375N11,18370O4,18400J1,18410I1,18415H2,18420G3,18425F2"
-			.getBytes(ASCII_CHARSET);
+	final static byte[] ba20 =
+			"3KCK2,BAC55,18390K1,18385L4,18380M3,18375N11,18370O4,18400J1,18410I1,18415H2,18420G3,18425F2"
+					.getBytes(ASCII_CHARSET);
 
 	/**
 	 * sample DDF_MarketParameter message WITH time stamp
@@ -50,20 +53,29 @@ public class MessageCodecExample {
 
 	final static byte[] r2 = "- Login failure".getBytes(ASCII_CHARSET);
 
-	final static byte[] s0 = (""
-			+ //
-			"%<QUOTE symbol=\"MSFT\" name=\"Microsoft Corp.\" exchange=\"NASDAQ\" basecode=\"A\" pointvalue=\"1.0\" tickincrement=\"1\" ddfexchange=\"Q\" flag=\"s\" lastupdate=\"20110924022417\" bid=\"2502\" bidsize=\"4\" ask=\"2504\" asksize=\"4\" mode=\"R\"><SESSION day=\"M\" session=\" \" timestamp=\"20110923172217\" open=\"2490\" high=\"2515\" low=\"2469\" last=\"2506\" previous=\"2506\" tradesize=\"53900\" volume=\"64729752\" tradetime=\"20110923161147\" id=\"combined\"/>"
-			+ //
-			"<SESSION last=\"2506\" id=\"previous\"/>" + //
-			"</QUOTE>" + //
-			"").getBytes(ASCII_CHARSET);
+	// final static byte[] s0 =
+	// (""
+	// + //
+	// "%<QUOTE symbol=\"MSFT\" name=\"Microsoft Corp.\" exchange=\"NASDAQ\" basecode=\"A\" pointvalue=\"1.0\" tickincrement=\"1\" ddfexchange=\"Q\" flag=\"s\" lastupdate=\"20110924022417\" bid=\"2502\" bidsize=\"4\" ask=\"2504\" asksize=\"4\" mode=\"R\"><SESSION day=\"M\" session=\" \" timestamp=\"20110923172217\" open=\"2490\" high=\"2515\" low=\"2469\" last=\"2506\" previous=\"2506\" tradesize=\"53900\" volume=\"64729752\" tradetime=\"20110923161147\" id=\"combined\"/>"
+	// + //
+	// "<SESSION last=\"2506\" id=\"previous\"/>" + //
+	// "</QUOTE>" + //
+	// "").getBytes(ASCII_CHARSET);
+
+	final static byte[] s0 =
+			(""
+					+ //
+					"%<QUOTE symbol=\"MSFT\" name=\"Microsoft Corp.\" exchange=\"NASDAQ\" basecode=\"A\" pointvalue=\"1.0\" tickincrement=\"1\" ddfexchange=\"O\" flag=\"s\" mode=\"D\"><SESSION day=\"3\" timestamp=\"20120703000000\" open=\"2490\" high=\"2515\" low=\"2469\" last=\"2506\" previous=\"2506\" volume=\"64729752\" id=\"combined\"/>"
+					+ //
+					"</QUOTE>" + //
+					"").getBytes(ASCII_CHARSET);
 
 	static void decodeMessage(final byte[] array) {
 
 		final DDF_BaseMessage message;
 		try {
 			message = DDF_MessageService.decode(array);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			log.error("decode failed", e);
 			return;
 		}
@@ -72,28 +84,31 @@ public class MessageCodecExample {
 
 		log.info("message fields : {}", message.toStringFields());
 
+		final DDF_MarketQuote quote = (DDF_MarketQuote) message;
+
 	}
 
 	/**
 	 * The main method.
-	 *
-	 * @param args the arguments
+	 * 
+	 * @param args
+	 *            the arguments
 	 */
-	public final static void main(String[] args) {
+	public final static void main(final String[] args) {
 
-		decodeMessage(ba20);
-
-		decodeMessage(ba20ts);
-
-		decodeMessage(ba20sp);
-
+		// decodeMessage(ba20);
 		//
-
-		decodeMessage(ts0);
-
-		decodeMessage(r0);
-		decodeMessage(r1);
-		decodeMessage(r2);
+		// decodeMessage(ba20ts);
+		//
+		// decodeMessage(ba20sp);
+		//
+		// //
+		//
+		// decodeMessage(ts0);
+		//
+		// decodeMessage(r0);
+		// decodeMessage(r1);
+		// decodeMessage(r2);
 
 		decodeMessage(s0);
 

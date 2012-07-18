@@ -86,8 +86,12 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.provider.DF_28_BookTop#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.message.provider.DF_28_BookTop#accept(com.barchart
+	 * .feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
 	 */
 	@Override
 	public <Result, Param> Result accept(
@@ -124,7 +128,9 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	// //////////////////////////////////////
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getState()
 	 */
 	@Override
@@ -134,14 +140,17 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/**
 	 * Sets the state.
-	 *
-	 * @param state the new state
+	 * 
+	 * @param state
+	 *            the new state
 	 */
 	public final void setState(final DDF_QuoteState state) {
 		ordState = state.ord;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getCondition()
 	 */
 	@Override
@@ -149,7 +158,9 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 		return DDF_Condition.fromOrd(ordCondition);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getMode()
 	 */
 	@Override
@@ -159,14 +170,17 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/**
 	 * Sets the mode.
-	 *
-	 * @param mode the new mode
+	 * 
+	 * @param mode
+	 *            the new mode
 	 */
 	public final void setMode(final DDF_QuoteMode mode) {
 		ordMode = mode.ord;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getPointValue()
 	 */
 	@Override
@@ -177,7 +191,9 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 		return pricePoint;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getSymbolName()
 	 */
 	@Override
@@ -187,14 +203,16 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/**
 	 * Gets the name bytes.
-	 *
+	 * 
 	 * @return the name bytes
 	 */
 	public final byte[] getNameBytes() {
 		return symbolName;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getPriceStep()
 	 */
 	@Override
@@ -202,7 +220,9 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 		return newPriceDDF(priceStep, getFraction());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#sessions()
 	 */
 	@Override
@@ -220,8 +240,12 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 		return TAG;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.provider.Base#decodeXML(org.w3c.dom.Element)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.message.provider.Base#decodeXML(org.w3c.dom.Element
+	 * )
 	 */
 	@Override
 	public final void decodeXML(final Element tag) {
@@ -287,14 +311,18 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 		//
 
-		final long millisUTC = xmlTimeDecode(exch.kind.time.zone, tag,
-				TIME_UPDATE, XML_PASS);
+		final long millisUTC =
+				xmlTimeDecode(exch.kind.time.zone, tag, TIME_UPDATE, XML_PASS);
 		setDecodeDefaults(millisUTC);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.provider.Base#encodeXML(org.w3c.dom.Element)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.message.provider.Base#encodeXML(org.w3c.dom.Element
+	 * )
 	 */
 	@Override
 	public final void encodeXML(final Element tag) {
@@ -347,7 +375,9 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.provider.Base#toString()
 	 */
 	@Override
