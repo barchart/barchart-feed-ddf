@@ -18,6 +18,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
@@ -67,6 +68,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	private static final String TIMEOUT_OPTION = "connectTimeoutMillis";
 	private static final TimeUnit TIME_UNIT = TimeUnit.MILLISECONDS;
 
+	private static final long HEARTBEAT_TIMEOUT = 30 * 1000;
+
 	//
 
 	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
@@ -86,6 +89,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private final BlockingQueue<DDF_BaseMessage> messageQueue =
 			new LinkedBlockingQueue<DDF_BaseMessage>();
+
+	private final AtomicLong lastHeartbeat = new AtomicLong(0);
 
 	//
 
@@ -159,6 +164,12 @@ class FeedClientDDF implements DDF_FeedClient {
 		/* Add SubscribeAfterLogin to LOGIN_SUCCESS */
 		eventPolicy.put(DDF_FeedEvent.LOGIN_SUCCESS, new SubscribeAfterLogin());
 
+		/* Add HeartbeatPolicy to HEART_BEAT */
+		eventPolicy.put(DDF_FeedEvent.HEART_BEAT, new HeartbeatPolicy());
+
+		/* Start heart beat listener */
+		executor.execute(new HeartbeatListener());
+
 	}
 
 	/*
@@ -185,6 +196,17 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void newEvent() {
 			loginHandler.loginWithDelay(LOGIN_DELAY);
+		}
+	}
+
+	/*
+	 * This policy updates the lastHeartbeat to the current local clock on every
+	 * heart beat event received.
+	 */
+	private class HeartbeatPolicy implements EventPolicy {
+		@Override
+		public void newEvent() {
+			lastHeartbeat.set(System.currentTimeMillis());
 		}
 	}
 
@@ -332,6 +354,10 @@ class FeedClientDDF implements DDF_FeedClient {
 			return false;
 		}
 		return channel.isConnected();
+	}
+
+	private void disconnect() {
+		channel.disconnect();
 	}
 
 	/*
@@ -645,6 +671,54 @@ class FeedClientDDF implements DDF_FeedClient {
 			}
 
 			return DDF_FeedEvent.LOGIN_SENT;
+		}
+
+	}
+
+	private class HeartbeatListener implements Runnable {
+
+		private long delta;
+
+		@Override
+		public void run() {
+
+			try {
+				while (!Thread.interrupted()) {
+					checkTime();
+					Thread.sleep(2000); // This must be less than
+										// HEARTBEAT_TIMEOUT
+				}
+
+			} catch (final Exception e) {
+				log.error(e.getMessage());
+				Thread.currentThread().interrupt();
+			}
+
+		}
+
+		private void checkTime() {
+
+			/*
+			 * If not currently logged in, keep the last heart beat updated so
+			 * when we do query it, it will be fresh.
+			 */
+			if (loginHandler.isLoginActive() || !isConnected()) {
+				lastHeartbeat.set(System.currentTimeMillis());
+			} else {
+				delta = System.currentTimeMillis() - lastHeartbeat.get();
+
+				/*
+				 * Close channel if time delta is greater than threshold and
+				 * reset last heart beat.
+				 */
+				if (delta > HEARTBEAT_TIMEOUT) {
+					log.debug("Heartbeat check failed - posting LINK_DISCONNECT event");
+					log.debug("Heartbeat delta: " + delta);
+					disconnect();
+					lastHeartbeat.set(System.currentTimeMillis());
+				}
+
+			}
 		}
 
 	}

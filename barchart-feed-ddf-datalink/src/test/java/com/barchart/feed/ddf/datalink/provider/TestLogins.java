@@ -46,8 +46,8 @@ public class TestLogins {
 		};
 
 		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newConnectionClient(TP.TCP, username, password,
-						runner);
+				DDF_FeedClientFactory.newConnectionClient(TP.TCP, username,
+						password, runner);
 
 		final DDF_MessageListener handler = new DDF_MessageListener() {
 
@@ -64,23 +64,23 @@ public class TestLogins {
 
 		final Set<DDF_FeedInterest> interests = new HashSet<DDF_FeedInterest>();
 		interests.addAll(DDF_FeedInterest.setValues());
-		final Subscription sub = new Subscription("_S_SP_CLM2_CLN2", interests);
+		final Subscription sub = new Subscription("GOOG", interests);
 
 		client.subscribe(sub);
 
-		sleep(100000);
+		sleep(45000);
 
-		// log.debug("*****************************************  Unsubscribing");
-		//
-		// client.unsubscribe(sub);
-		//
-		// sleep(10000);
-		//
-		// log.debug("*****************************************  Resubscribing");
-		//
-		// client.subscribe(sub);
-		//
-		// sleep(10000);
+		log.debug("*****************************************  Unsubscribing");
+
+		client.unsubscribe(sub);
+
+		sleep(10000);
+
+		log.debug("*****************************************  Resubscribing");
+
+		client.subscribe(sub);
+
+		sleep(45000);
 
 		client.shutdown();
 	}

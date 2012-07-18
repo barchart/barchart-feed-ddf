@@ -79,11 +79,11 @@ public class FeedClientExample {
 
 		final CharSequence request = "" + //
 				"GOOG=bBsScCvVqQ," + //
-				"CLM2-CLN2=bBsScCvVqQ," + //
-				"NGM2=bBsScCvVqQ," + //
-				"ESM2=bBsScCvVqQ," + //
-				"XFM2=bBsScCvVqQ," + //
-				"KCM2=bBsScCvVqQ," + //
+				"CLQ2-CLU2=bBsScCvVqQ," + //
+				"NGQ2=bBsScCvVqQ," + //
+				"ESQ2=bBsScCvVqQ," + //
+				"XFQ2=bBsScCvVqQ," + //
+				"KCQ2=bBsScCvVqQ," + //
 				"";
 
 		// final boolean isSent = client.send(FeedDDF.tcpGo(request));
