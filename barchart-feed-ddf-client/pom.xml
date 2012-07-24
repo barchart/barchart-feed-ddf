@@ -39,7 +39,14 @@
 			<artifactId>barchart-feed-ddf-market</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty</artifactId>
+			<version>${barchartNettyVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

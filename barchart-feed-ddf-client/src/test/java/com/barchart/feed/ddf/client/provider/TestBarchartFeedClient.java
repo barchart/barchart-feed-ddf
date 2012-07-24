@@ -3,11 +3,17 @@
  */
 package com.barchart.feed.ddf.client.provider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.barchart.feed.base.bar.api.MarketBar;
+import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.client.provider.BarchartFeedClient;
@@ -17,6 +23,9 @@ import com.barchart.feed.client.provider.BarchartFeedClient;
  * Stress test to try and break the login/logout lifecycle
  */
 public class TestBarchartFeedClient {
+
+	private static final Logger log = LoggerFactory
+			.getLogger(TestBarchartFeedClient.class);
 
 	/**
 	 * @param args
@@ -28,7 +37,7 @@ public class TestBarchartFeedClient {
 
 		final BarchartFeedClient client = new BarchartFeedClient();
 
-		final String symbol = "GOOG";
+		final String symbol = "RMU12";
 
 		final MarketInstrument instrument = client.lookup(symbol);
 
@@ -47,21 +56,17 @@ public class TestBarchartFeedClient {
 
 		};
 
-		// for (int i = 0; i < 100; i++) {
-		//
-		// if (Math.random() < 0.5) {
-
 		client.login(username, password);
 
 		client.bindFeedStateListener(feedListener);
-		//
-		// } else {
-		// client.shutdown();
-		// }
 
-		Thread.sleep((20000));
-
-		// }
+		try {
+			while (true) {
+				Thread.sleep(1000);
+			}
+		} catch (final Exception e) {
+			// Interrupted
+		}
 
 		client.shutdown();
 
@@ -69,8 +74,7 @@ public class TestBarchartFeedClient {
 
 	private static class TakerFactory {
 
-		static MarketTaker<Market>
-				makeFactory(final MarketInstrument instrument) {
+		static MarketTaker<Market> makeFactory(final MarketInstrument instrument) {
 			return new MarketTaker<Market>() {
 
 				@Override
@@ -84,6 +88,7 @@ public class TestBarchartFeedClient {
 				public MarketEvent[] bindEvents() {
 
 					return MarketEvent.in(MarketEvent.values());
+					// return new MarketEvent[] { MarketEvent.NEW_TRADE };
 
 				}
 
@@ -98,8 +103,29 @@ public class TestBarchartFeedClient {
 				public void onMarketEvent(final MarketEvent event,
 						final MarketInstrument instrument, final Market value) {
 
-					System.out.println(value.get(MarketField.BOOK_TOP)
-							.toString());
+					final StringBuilder sb = new StringBuilder("Event: ")
+							.append(event);
+
+					final MarketBar barCurrent = value
+							.get(MarketField.BAR_CURRENT);
+
+					if (!barCurrent.isNull()) {
+						sb.append("; price=")
+								.append(barCurrent.get(MarketBarField.CLOSE)
+										.mantissa())
+								.append("; time=")
+								.append(barCurrent.get(MarketBarField.BAR_TIME)
+										.asDateTime())
+								.append("; day=")
+								.append(barCurrent.get(
+										MarketBarField.TRADE_DATE).asDateTime())
+								.append("; settled="
+										+ value.get(MarketField.STATE)
+												.contains(
+														MarketStateEntry.IS_SETTLED));
+					}
+
+					log.debug(sb.toString());
 
 				}
 

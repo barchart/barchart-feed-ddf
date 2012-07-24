@@ -78,8 +78,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	}
 
 	@Override
-	public Void
-			visit(final DDF_ControlTimestamp message, final MarketDo market) {
+	public Void visit(final DDF_ControlTimestamp message, final MarketDo market) {
 		// not used
 		return null;
 	}
@@ -132,6 +131,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		final DDF_ParamType param = message.getParamType();
 
 		final TimeValue time = message.getTime();
+		final TimeValue date = message.getTradeDay().tradeDate();
 
 		final DDF_ParamType.Kind kind = param.kind;
 
@@ -162,34 +162,30 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		switch (param) {
 
 		case TRADE_LAST_PRICE:
-			market.setTrade(CURRENT, price, size, time);
+			market.setTrade(CURRENT, price, size, time, date);
 			return null;
 
 		case ASK_LAST_PRICE:
-			final DefBookEntry topAskPrice =
-					new DefBookEntry(MODIFY, ASK, DEFAULT, ENTRY_TOP, price,
-							top.side(ASK).size());
+			final DefBookEntry topAskPrice = new DefBookEntry(MODIFY, ASK,
+					DEFAULT, ENTRY_TOP, price, top.side(ASK).size());
 			applyTop(topAskPrice, time, market);
 			return null;
 
 		case ASK_LAST_SIZE:
-			final DefBookEntry topAskSize =
-					new DefBookEntry(MODIFY, ASK, DEFAULT, ENTRY_TOP, top.side(
-							ASK).price(), size);
+			final DefBookEntry topAskSize = new DefBookEntry(MODIFY, ASK,
+					DEFAULT, ENTRY_TOP, top.side(ASK).price(), size);
 			applyTop(topAskSize, time, market);
 			return null;
 
 		case BID_LAST_PRICE:
-			final DefBookEntry topBidPrice =
-					new DefBookEntry(MODIFY, BID, DEFAULT, ENTRY_TOP, price,
-							top.side(BID).size());
+			final DefBookEntry topBidPrice = new DefBookEntry(MODIFY, BID,
+					DEFAULT, ENTRY_TOP, price, top.side(BID).size());
 			applyTop(topBidPrice, time, market);
 			return null;
 
 		case BID_LAST_SIZE:
-			final DefBookEntry topBidSize =
-					new DefBookEntry(MODIFY, BID, DEFAULT, ENTRY_TOP, top.side(
-							BID).price(), size);
+			final DefBookEntry topBidSize = new DefBookEntry(MODIFY, BID,
+					DEFAULT, ENTRY_TOP, top.side(BID).price(), size);
 			applyTop(topBidSize, time, market);
 			return null;
 
@@ -264,6 +260,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barPrevious.set(MarketBarField.INTEREST, size);
 			barPrevious.set(MarketBarField.BAR_TIME, time);
 			market.setBar(PREVIOUS, barPrevious);
+
 			return null;
 
 		case PREVIOUS_LAST_PRICE:
@@ -445,8 +442,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	}
 
 	@Override
-	public Void
-			visit(final DDF_Prior_IndividCmdy message, final MarketDo market) {
+	public Void visit(final DDF_Prior_IndividCmdy message, final MarketDo market) {
 
 		final MarketDoBar newBar = market.loadBar(MarketField.BAR_PREVIOUS);
 
@@ -479,7 +475,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			if (isClear(priceSettle)) {
 				// ",-, " : means remove old value
-				log.debug("Set State IS_SETTLED false inside visit MarketSnapshot because priceSettle is empty");
+				log.debug("Set State IS_SETTLED false inside visit MarketSnapshot because priceSettle is clear");
 				market.setState(MarketStateEntry.IS_SETTLED, false);
 			} else if (isEmpty(priceSettle)) {
 				// ",," : means leave alone
@@ -500,12 +496,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			/** XXX note: {@link MarketBook#ENTRY_TOP} */
 
-			final MarketDoBookEntry entryBid =
-					new DefBookEntry(MODIFY, BID, DEFAULT, ENTRY_TOP, priceBid,
-							ValueConst.NULL_SIZE);
-			final MarketDoBookEntry entryAsk =
-					new DefBookEntry(MODIFY, ASK, DEFAULT, ENTRY_TOP, priceAsk,
-							ValueConst.NULL_SIZE);
+			final MarketDoBookEntry entryBid = new DefBookEntry(MODIFY, BID,
+					DEFAULT, ENTRY_TOP, priceBid, ValueConst.NULL_SIZE);
+			final MarketDoBookEntry entryAsk = new DefBookEntry(MODIFY, ASK,
+					DEFAULT, ENTRY_TOP, priceAsk, ValueConst.NULL_SIZE);
 
 			applyTop(entryBid, time, market);
 			applyTop(entryAsk, time, market);
@@ -645,8 +639,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			final MarketBarType type = barTypeFromCurrent(message.getSession());
 			final TimeValue time = message.getTime();
+			final TimeValue tradeTime = message.getTradeDay().tradeDate();
 
-			market.setTrade(type, price, size, time);
+			market.setTrade(type, price, size, time, tradeTime);
 
 		}
 			break;
@@ -748,10 +743,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		/* ",-," a.k.a comma-dash-comma; ddf command : remove */
 		if (isClear(price)) {
-			entry =
-					new DefBookEntry(MarketBookAction.REMOVE, entry.side(),
-							MarketBookType.DEFAULT, MarketBook.ENTRY_TOP,
-							ValueConst.NULL_PRICE, ValueConst.NULL_SIZE);
+			entry = new DefBookEntry(MarketBookAction.REMOVE, entry.side(),
+					MarketBookType.DEFAULT, MarketBook.ENTRY_TOP,
+					ValueConst.NULL_PRICE, ValueConst.NULL_SIZE);
 		}
 
 		market.setBookUpdate(entry, time);

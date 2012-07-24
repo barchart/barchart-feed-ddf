@@ -7,8 +7,18 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.ddf.message.provider.CodecHelper.*;
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_DELAY;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.decodeFeedTimeStamp;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.decodeUnsigned_1;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.decodeUnsigned_2;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeFeedTimeStamp;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeUnsigned_1;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeUnsigned_2;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.read;
+import static com.barchart.util.ascii.ASCII.COMMA;
+import static com.barchart.util.ascii.ASCII.ETX;
+import static com.barchart.util.ascii.ASCII.SOH;
+import static com.barchart.util.ascii.ASCII.STX;
 
 import java.nio.ByteBuffer;
 
@@ -56,7 +66,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	// //////////////////////////////////////
 
 	// NOTE: invokes resolver
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getInstrument()
 	 */
 	@Override
@@ -65,7 +77,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	}
 
 	// NOTE: invokes parser
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getSymbol()
 	 */
 	@Override
@@ -75,7 +89,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	//
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getDelay()
 	 */
 	@Override
@@ -83,7 +99,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		return delay;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getFraction()
 	 */
 	@Override
@@ -95,7 +113,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		ordFraction = frac.ord;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getExchange()
 	 */
 	@Override
@@ -107,7 +127,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		ordExchange = exchange.ord;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getSession()
 	 */
 	@Override
@@ -119,7 +141,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		ordSession = session.ord;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getTradeDay()
 	 */
 	@Override
@@ -131,7 +155,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		ordTradeDay = day.ord;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getSpreadType()
 	 */
 	@Override
@@ -163,7 +189,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * 
 	 * for spread: <symbol1>_<symbol2>_..._<symbolN>
 	 */
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getId()
 	 */
 	@Override
@@ -180,8 +208,12 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * 
 	 * ||<day><session><etx>||<time stamp>
 	 */
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.provider.Base#encodeDDF(java.nio.ByteBuffer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.message.provider.Base#encodeDDF(java.nio.ByteBuffer
+	 * )
 	 */
 	@Override
 	public final void encodeDDF(final ByteBuffer buffer) {
@@ -229,11 +261,16 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	// ######################
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.provider.Base#decodeDDF(java.nio.ByteBuffer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.barchart.feed.ddf.message.provider.Base#decodeDDF(java.nio.ByteBuffer
+	 * )
 	 */
 	@Override
 	public final void decodeDDF(final ByteBuffer buffer) {
+		log.debug(buffer.toString());
 		decodeHead(buffer);
 		decodeBody(buffer);
 		decodeTail(buffer);

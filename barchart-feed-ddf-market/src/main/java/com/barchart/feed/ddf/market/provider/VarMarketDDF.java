@@ -9,6 +9,7 @@ package com.barchart.feed.ddf.market.provider;
 
 import static com.barchart.feed.base.bar.enums.MarketBarField.BAR_TIME;
 import static com.barchart.feed.base.bar.enums.MarketBarField.CLOSE;
+import static com.barchart.feed.base.bar.enums.MarketBarField.TRADE_DATE;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_EXT;
@@ -29,6 +30,7 @@ import static com.barchart.feed.base.market.enums.MarketField.BOOK_TOP;
 import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
+import static com.barchart.feed.base.trade.enums.MarketTradeField.SESSION_DATE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.SIZE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TRADE_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TYPE;
@@ -37,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.bar.api.MarketDoBar;
+import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBook;
@@ -213,7 +216,8 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	private final void applyTradeToBar(final MarketBarType type,
-			final PriceValue price, final SizeValue size, final TimeValue time) {
+			final PriceValue price, final SizeValue size, final TimeValue time,
+			final TimeValue date) {
 
 		final MarketDoBar bar = loadBar(type.field);
 
@@ -225,36 +229,55 @@ class VarMarketDDF extends VarMarket {
 
 		eventAdd(type.event);
 
-		// ### volume
+		// Reset current bar if session day changes
+		final TimeValue prevDate = bar.get(TRADE_DATE);
 
-		final SizeValue volumeOld = bar.get(VOLUME);
-		final SizeValue volumeNew = volumeOld.add(size);
-		bar.set(VOLUME, volumeNew);
-		eventAdd(NEW_VOLUME);
+		if (type == CURRENT && !prevDate.isNull() && !date.equals(prevDate)) {
 
-		// ### high
+			log.debug("New day code: old=" + prevDate + "; new=" + date);
 
-		// XXX disable for dd2 compatibility
-		// final PriceValue high = bar.get(HIGH);
-		// if (price.compareTo(high) > 0 || high.isNull()) {
-		// bar.set(HIGH, price);
-		// if (type == CURRENT) {
-		// // events only for combo
-		// eventAdd(NEW_HIGH);
-		// }
-		// }
+			bar.set(MarketBarField.OPEN, price);
+			bar.set(MarketBarField.HIGH, price);
+			bar.set(MarketBarField.LOW, price);
+			bar.set(MarketBarField.INTEREST, size);
+			bar.set(MarketBarField.VOLUME, size);
 
-		// ### low
+			setState(MarketStateEntry.IS_SETTLED, false);
 
-		// XXX disable for dd2 compatibility
-		// final PriceValue low = bar.get(LOW);
-		// if (price.compareTo(low) < 0 || low.isNull()) {
-		// bar.set(LOW, price);
-		// if (type == CURRENT) {
-		// // events only for combo
-		// eventAdd(NEW_LOW);
-		// }
-		// }
+		} else {
+
+			// ### volume
+
+			final SizeValue volumeOld = bar.get(VOLUME);
+			final SizeValue volumeNew = volumeOld.add(size);
+			bar.set(VOLUME, volumeNew);
+			eventAdd(NEW_VOLUME);
+
+			// ### high
+
+			// XXX disable for dd2 compatibility
+			// final PriceValue high = bar.get(HIGH);
+			// if (price.compareTo(high) > 0 || high.isNull()) {
+			// bar.set(HIGH, price);
+			// if (type == CURRENT) {
+			// // events only for combo
+			// eventAdd(NEW_HIGH);
+			// }
+			// }
+
+			// ### low
+
+			// XXX disable for dd2 compatibility
+			// final PriceValue low = bar.get(LOW);
+			// if (price.compareTo(low) < 0 || low.isNull()) {
+			// bar.set(LOW, price);
+			// if (type == CURRENT) {
+			// // events only for combo
+			// eventAdd(NEW_LOW);
+			// }
+			// }
+
+		}
 
 		// ### last
 
@@ -267,6 +290,7 @@ class VarMarketDDF extends VarMarket {
 		// ### time
 
 		bar.set(BAR_TIME, time);
+		bar.set(MarketBarField.TRADE_DATE, date);
 
 	}
 
@@ -282,12 +306,13 @@ class VarMarketDDF extends VarMarket {
 
 	@Override
 	public void setTrade(final MarketBarType type, final PriceValue price,
-			final SizeValue size, final TimeValue time) {
+			final SizeValue size, final TimeValue time, final TimeValue date) {
 
 		assert type != null;
 		assert price != null;
 		assert size != null;
 		assert time != null;
+		assert date != null;
 
 		// assert isValidPrice(price);
 
@@ -305,6 +330,7 @@ class VarMarketDDF extends VarMarket {
 		trade.set(PRICE, price);
 		trade.set(SIZE, size);
 		trade.set(TRADE_TIME, time);
+		trade.set(SESSION_DATE, date);
 
 		eventAdd(NEW_TRADE);
 
@@ -312,9 +338,9 @@ class VarMarketDDF extends VarMarket {
 
 		// apply Form-T trades to CURRENT_EXT bar
 		if (type == CURRENT_EXT) {
-			applyTradeToBar(CURRENT_EXT, price, size, time);
+			applyTradeToBar(CURRENT_EXT, price, size, time, date);
 		} else {
-			applyTradeToBar(CURRENT, price, size, time);
+			applyTradeToBar(CURRENT, price, size, time, date);
 		}
 
 		// ### cuvol
