@@ -292,10 +292,6 @@ public final class DDF_MessageService {
 		final DDF_MessageType type = DDF_MessageType
 				.fromPair(record, subRecord);
 
-		if (type != DDF_MessageType.TIME_STAMP) {
-			log.trace("DDF: " + new String(array));
-		}
-
 		final Base message = newInstance(type);
 
 		final ByteBuffer buffer = ByteBuffer.wrap(array);
