@@ -520,6 +520,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		synchronized void login(final int delay) {
 
+			log.debug("login enabled {} - logginIn - {} isLoginActive = " + isLoginActive(), enabled, loggingIn);
+			
 			if (enabled && !loggingIn && !isLoginActive()) {
 
 				loggingIn = true;
