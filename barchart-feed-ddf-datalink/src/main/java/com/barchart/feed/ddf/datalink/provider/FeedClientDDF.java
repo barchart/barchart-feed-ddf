@@ -195,7 +195,9 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@Override
 		public void newEvent() {
-			loginHandler.login(LOGIN_DELAY);
+			synchronized (loginHandler) {
+				loginHandler.login(LOGIN_DELAY);
+			}
 		}
 	}
 
@@ -495,7 +497,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private class LoginHandler {
 
-		private Thread loginThread = null;
+		private volatile Thread loginThread = null;
 		private boolean enabled = true;
 
 		void enableLogins() {
