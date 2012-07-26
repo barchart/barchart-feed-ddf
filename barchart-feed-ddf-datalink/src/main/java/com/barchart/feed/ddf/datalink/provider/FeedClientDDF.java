@@ -516,21 +516,17 @@ class FeedClientDDF implements DDF_FeedClient {
 			}
 		}
 
-		void login(final int delay) {
+		synchronized void login(final int delay) {
 
-			synchronized (loginThread) {
+			if (enabled && !isLoginActive()) {
 
-				if (enabled && !isLoginActive()) {
+				loginThread = new Thread(new LoginRunnable(0), "# DDF Login");
 
-					loginThread =
-							new Thread(new LoginRunnable(0), "# DDF Login");
+				executor.execute(loginThread);
 
-					executor.execute(loginThread);
+				log.debug("Setting feed state to attempting login");
+				updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
 
-					log.debug("Setting feed state to attempting login");
-					updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
-
-				}
 			}
 		}
 
