@@ -81,7 +81,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	//
 
 	private final LoginHandler loginHandler = new LoginHandler();
-
+	private volatile boolean loggingIn = false;
 	//
 
 	private final BlockingQueue<DDF_FeedEvent> eventQueue =
@@ -195,7 +195,9 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@Override
 		public void newEvent() {
-			loginHandler.loginWithDelay(LOGIN_DELAY);
+			synchronized (loginHandler) {
+				loginHandler.login(LOGIN_DELAY);
+			}
 		}
 	}
 
@@ -313,7 +315,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		log.debug("Public login called");
 		loginHandler.enableLogins();
-		loginHandler.login();
+		loginHandler.login(0);
 
 	}
 
@@ -495,7 +497,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private class LoginHandler {
 
-		private Thread loginThread = null;
+		private volatile Thread loginThread = null;
 		private boolean enabled = true;
 
 		void enableLogins() {
@@ -516,48 +518,23 @@ class FeedClientDDF implements DDF_FeedClient {
 			}
 		}
 
-		void login() {
+		synchronized void login(final int delay) {
 
-			if (enabled) {
-				if (loginThread == null || !loginThread.isAlive()) {
-					loginThread =
-							new Thread(new LoginRunnable(), "# DDF Login");
+			if (enabled && !loggingIn && !isLoginActive()) {
 
-					executor.execute(loginThread);
+				loggingIn = true;
 
-					log.debug("Setting feed state to attempting login");
-					updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
-				}
+				loginThread =
+						new Thread(new LoginRunnable(delay), "# DDF Login");
+
+				executor.execute(loginThread);
+
+				log.debug("Setting feed state to attempting login");
+				updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
+
 			}
 		}
 
-		void loginWithDelay(final int delay) {
-
-			if (enabled) {
-				if (loginThread == null || !loginThread.isAlive()) {
-
-					loginThread = new Thread(new Runnable() {
-
-						@Override
-						public void run() {
-							try {
-								Thread.sleep(delay);
-							} catch (final InterruptedException e) {
-								e.printStackTrace();
-							}
-							final LoginRunnable login = new LoginRunnable();
-							login.run();
-						}
-					}, "# DDF Login");
-
-					executor.execute(loginThread);
-
-					log.debug("Setting feed state to attempting login");
-					updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
-
-				}
-			}
-		}
 	}
 
 	private void updateFeedStateListeners(final FeedState state) {
@@ -569,8 +546,22 @@ class FeedClientDDF implements DDF_FeedClient {
 	/* Runnable which handles connection, login, and initializaion */
 	class LoginRunnable implements Runnable {
 
+		private final int delay;
+
+		public LoginRunnable(final int delay) {
+			this.delay = delay;
+		}
+
 		@Override
 		public void run() {
+
+			loggingIn = false;
+
+			try {
+				Thread.sleep(delay);
+			} catch (final InterruptedException e1) {
+				e1.printStackTrace();
+			}
 
 			log.debug("makeing connection");
 
