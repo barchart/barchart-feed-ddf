@@ -82,7 +82,7 @@ public class TestDX_XC_Cuvol extends TestDDFBase {
 		assertEquals(msg.getExchange(), DDF_Exchange.UNKNOWN);
 		assertEquals(msg.getMessageType(), DDF_MessageType.CUVOL_SNAP_XML);
 		assertEquals(msg.getTradeDay(), DDF_TradeDay.D15);
-		assertEquals(msg.getSession(), DDF_Session.FUTURE_COMBO);
+		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getDelay(), 0);
 
 	}
@@ -111,7 +111,7 @@ public class TestDX_XC_Cuvol extends TestDDFBase {
 		assertEquals(msg.getExchange(), DDF_Exchange.CME_Main);
 		assertEquals(msg.getMessageType(), DDF_MessageType.CUVOL_SNAP_XML);
 		assertEquals(msg.getTradeDay(), DDF_TradeDay.D15);
-		assertEquals(msg.getSession(), DDF_Session.FUTURE_COMBO);
+		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getDelay(), 0);
 
 		// TODO

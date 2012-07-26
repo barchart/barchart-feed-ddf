@@ -34,6 +34,7 @@ import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
+import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_EOD_Commodity;
@@ -56,7 +57,6 @@ import com.barchart.feed.ddf.message.enums.DDF_ParamType;
 import com.barchart.feed.ddf.message.enums.DDF_QuoteMode;
 import com.barchart.feed.ddf.message.enums.DDF_QuoteState;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
-import com.barchart.feed.ddf.message.enums.DDF_Session.Market;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
@@ -162,7 +162,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		switch (param) {
 
 		case TRADE_LAST_PRICE:
-			market.setTrade(CURRENT, price, size, time, date);
+			final DDF_Session ddfSession = message.getSession();
+			market.setTrade(ddfSession.type, ddfSession.session,
+					ddfSession.sequencing, price, size, time, date);
 			return null;
 
 		case ASK_LAST_PRICE:
@@ -637,11 +639,12 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				size = ValueConst.NULL_SIZE;
 			}
 
-			final MarketBarType type = barTypeFromCurrent(message.getSession());
+			final DDF_Session ddfSession = message.getSession();
 			final TimeValue time = message.getTime();
-			final TimeValue tradeTime = message.getTradeDay().tradeDate();
+			final TimeValue date = message.getTradeDay().tradeDate();
 
-			market.setTrade(type, price, size, time, tradeTime);
+			market.setTrade(ddfSession.type, ddfSession.session,
+					ddfSession.sequencing, price, size, time, date);
 
 		}
 			break;
@@ -703,11 +706,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	/** currently does not differentiate between sources */
 	protected MarketBarType barTypeFromCurrent(final DDF_Session session) {
 
-		final Market market = session.market;
+		final MarketTradeSession tradeSession = session.session;
 
-		switch (market) {
+		switch (tradeSession) {
 
-		case EXT:
+		case EXTENDED:
 			return MarketBarType.CURRENT_EXT;
 		default:
 			return MarketBarType.CURRENT;

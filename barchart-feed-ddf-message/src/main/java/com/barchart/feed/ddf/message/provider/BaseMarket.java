@@ -400,7 +400,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	protected final void setDecodeDefaults(final long millisUTC) {
 		this.millisUTC = millisUTC;
 		setTradeDay(DDF_TradeDay.fromMillisUTC(millisUTC));
-		setSession(DDF_Session.FUTURE_COMBO);
+		setSession(DDF_Session.FUT_COMBO);
 	}
 
 	// ######################

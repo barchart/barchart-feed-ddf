@@ -42,8 +42,9 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 
 	/**
 	 * Sets the up.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -51,8 +52,9 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 
 	/**
 	 * Tear down.
-	 *
-	 * @throws Exception the exception
+	 * 
+	 * @throws Exception
+	 *             the exception
 	 */
 	@After
 	public void tearDown() throws Exception {
@@ -82,7 +84,7 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 		assertEquals(msg.getExchange(), DDF_Exchange.CME_Main);
 		assertEquals(msg.getMessageType(), DDF_MessageType.QUOTE_SNAP_XML);
 		assertEquals(msg.getTradeDay(), DDF_TradeDay.D15);
-		assertEquals(msg.getSession(), DDF_Session.FUTURE_COMBO);
+		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getDelay(), 0);
 
 	}
@@ -111,7 +113,7 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 		assertEquals(msg.getExchange(), DDF_Exchange.CME_Main);
 		assertEquals(msg.getMessageType(), DDF_MessageType.QUOTE_SNAP_XML);
 		assertEquals(msg.getTradeDay(), DDF_TradeDay.D15);
-		assertEquals(msg.getSession(), DDF_Session.FUTURE_COMBO);
+		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getDelay(), 0);
 
 		assertEquals(msg.getTime(), newTime(new DateTime(

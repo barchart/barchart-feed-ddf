@@ -86,7 +86,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 		assertEquals(msg.getFraction(), DDF_Fraction.N2);
 		assertEquals(msg.getMessageType(), DDF_MessageType.BOOK_SNAP);
 		assertEquals(msg.getTradeDay(), todayUTC);
-		assertEquals(msg.getSession(), DDF_Session.FUTURE_COMBO);
+		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getId(), "ESZ1");
 		assertEquals(msg.getSpreadType(), DDF_SpreadType.UNKNOWN);
 		assertEquals(msg.getDelay(), 0);
@@ -116,7 +116,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 		assertEquals(msg.getFraction(), DDF_Fraction.N3);
 		assertEquals(msg.getMessageType(), DDF_MessageType.BOOK_SNAP);
 		assertEquals(msg.getTradeDay(), todayUTC);
-		assertEquals(msg.getSession(), DDF_Session.FUTURE_COMBO);
+		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getId(), "XIZ9");
 		assertEquals(msg.getSpreadType(), DDF_SpreadType.UNKNOWN);
 		assertEquals(msg.getDelay(), 0);

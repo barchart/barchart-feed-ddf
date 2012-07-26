@@ -30,10 +30,14 @@ import static com.barchart.feed.base.market.enums.MarketField.BOOK_TOP;
 import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
-import static com.barchart.feed.base.trade.enums.MarketTradeField.SESSION_DATE;
+import static com.barchart.feed.base.trade.enums.MarketTradeField.SEQUENCING;
+import static com.barchart.feed.base.trade.enums.MarketTradeField.SESSION;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.SIZE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TRADE_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.TYPE;
+import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.NORMAL;
+import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
+import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +60,10 @@ import com.barchart.feed.base.market.provider.VarMarket;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
+import com.barchart.feed.base.trade.enums.MarketTradeField;
+import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
+import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -215,11 +223,13 @@ class VarMarketDDF extends VarMarket {
 
 	}
 
-	private final void applyTradeToBar(final MarketBarType type,
-			final PriceValue price, final SizeValue size, final TimeValue time,
-			final TimeValue date) {
+	private final void applyTradeToBar(final MarketTradeSession session,
+			final MarketTradeSequencing sequencing, final PriceValue price,
+			final SizeValue size, final TimeValue time, final TimeValue date) {
 
-		final MarketDoBar bar = loadBar(type.field);
+		final MarketBarType barType = session == EXTENDED ? CURRENT_EXT
+				: CURRENT;
+		final MarketDoBar bar = loadBar(barType.field);
 
 		// XXX this is disabled to force compatibility with ddf2
 		// if (bar.get(BAR_TIME).compareTo(time) > 0) {
@@ -227,12 +237,12 @@ class VarMarketDDF extends VarMarket {
 		// return;
 		// }
 
-		eventAdd(type.event);
+		eventAdd(barType.event);
 
 		// Reset current bar if session day changes
 		final TimeValue prevDate = bar.get(TRADE_DATE);
 
-		if (type == CURRENT && !prevDate.isNull() && !date.equals(prevDate)) {
+		if (session == DEFAULT && !prevDate.isNull() && !date.equals(prevDate)) {
 
 			log.debug("New day code: old=" + prevDate + "; new=" + date);
 
@@ -281,15 +291,19 @@ class VarMarketDDF extends VarMarket {
 
 		// ### last
 
-		bar.set(CLOSE, price);
-		if (type == CURRENT) {
-			// events only for combo
-			eventAdd(NEW_CLOSE);
+		// Only update last for normal in-sequence trades
+		if (sequencing == NORMAL) {
+			bar.set(CLOSE, price);
+			if (session == DEFAULT) {
+				// events only for combo
+				eventAdd(NEW_CLOSE);
+			}
+			// ### time
+			bar.set(BAR_TIME, time);
+		} else {
+			// XXX: Update high / low, or just wait for refresh?
 		}
 
-		// ### time
-
-		bar.set(BAR_TIME, time);
 		bar.set(MarketBarField.TRADE_DATE, date);
 
 	}
@@ -305,10 +319,14 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	@Override
-	public void setTrade(final MarketBarType type, final PriceValue price,
+	public void setTrade(final MarketTradeType type,
+			final MarketTradeSession session,
+			final MarketTradeSequencing sequencing, final PriceValue price,
 			final SizeValue size, final TimeValue time, final TimeValue date) {
 
 		assert type != null;
+		assert session != null;
+		assert sequencing != null;
 		assert price != null;
 		assert size != null;
 		assert time != null;
@@ -327,20 +345,22 @@ class VarMarketDDF extends VarMarket {
 		// }
 
 		trade.set(TYPE, type);
+		trade.set(SESSION, session);
+		trade.set(SEQUENCING, sequencing);
 		trade.set(PRICE, price);
 		trade.set(SIZE, size);
 		trade.set(TRADE_TIME, time);
-		trade.set(SESSION_DATE, date);
+		trade.set(MarketTradeField.TRADE_DATE, date);
 
 		eventAdd(NEW_TRADE);
 
 		// ### bar
 
 		// apply Form-T trades to CURRENT_EXT bar
-		if (type == CURRENT_EXT) {
-			applyTradeToBar(CURRENT_EXT, price, size, time, date);
+		if (session == EXTENDED) {
+			applyTradeToBar(session, sequencing, price, size, time, date);
 		} else {
-			applyTradeToBar(CURRENT, price, size, time, date);
+			applyTradeToBar(session, sequencing, price, size, time, date);
 		}
 
 		// ### cuvol
