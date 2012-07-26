@@ -195,7 +195,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@Override
 		public void newEvent() {
-			loginHandler.loginWithDelay(LOGIN_DELAY);
+			loginHandler.login(LOGIN_DELAY);
 		}
 	}
 
@@ -313,7 +313,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		log.debug("Public login called");
 		loginHandler.enableLogins();
-		loginHandler.login();
+		loginHandler.login(0);
 
 	}
 
@@ -516,39 +516,14 @@ class FeedClientDDF implements DDF_FeedClient {
 			}
 		}
 
-		void login() {
+		void login(final int delay) {
 
-			if (enabled) {
-				if (loginThread == null || !loginThread.isAlive()) {
+			synchronized (loginThread) {
+
+				if (enabled && !isLoginActive()) {
+
 					loginThread =
-							new Thread(new LoginRunnable(), "# DDF Login");
-
-					executor.execute(loginThread);
-
-					log.debug("Setting feed state to attempting login");
-					updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
-				}
-			}
-		}
-
-		void loginWithDelay(final int delay) {
-
-			if (enabled) {
-				if (loginThread == null || !loginThread.isAlive()) {
-
-					loginThread = new Thread(new Runnable() {
-
-						@Override
-						public void run() {
-							try {
-								Thread.sleep(delay);
-							} catch (final InterruptedException e) {
-								e.printStackTrace();
-							}
-							final LoginRunnable login = new LoginRunnable();
-							login.run();
-						}
-					}, "# DDF Login");
+							new Thread(new LoginRunnable(0), "# DDF Login");
 
 					executor.execute(loginThread);
 
@@ -558,6 +533,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				}
 			}
 		}
+
 	}
 
 	private void updateFeedStateListeners(final FeedState state) {
@@ -569,8 +545,20 @@ class FeedClientDDF implements DDF_FeedClient {
 	/* Runnable which handles connection, login, and initializaion */
 	class LoginRunnable implements Runnable {
 
+		private final int delay;
+
+		public LoginRunnable(final int delay) {
+			this.delay = delay;
+		}
+
 		@Override
 		public void run() {
+
+			try {
+				Thread.sleep(delay);
+			} catch (final InterruptedException e1) {
+				e1.printStackTrace();
+			}
 
 			log.debug("makeing connection");
 
