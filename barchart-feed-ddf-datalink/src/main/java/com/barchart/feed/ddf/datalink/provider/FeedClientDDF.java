@@ -222,12 +222,20 @@ class FeedClientDDF implements DDF_FeedClient {
 					if (DDF_FeedEvent.isConnectionError(event)) {
 						log.debug("Setting feed state to logged out");
 						updateFeedStateListeners(FeedState.LOGGED_OUT);
+						
+						loggingIn = false;
+						
 					} else if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
 						log.debug("Login success, feed state updated");
 						updateFeedStateListeners(FeedState.LOGGED_IN);
+					
+						loggingIn = false;
+						
 					} else if (event == DDF_FeedEvent.LOGOUT) {
 						log.debug("Setting feed state to logged out");
 						updateFeedStateListeners(FeedState.LOGGED_OUT);
+						
+						loggingIn = false;
 					}
 
 					log.debug("Enacting policy for :{}", event.name());
@@ -557,7 +565,6 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void run() {
 
-			loggingIn = false;
 
 			try {
 				Thread.sleep(delay);
