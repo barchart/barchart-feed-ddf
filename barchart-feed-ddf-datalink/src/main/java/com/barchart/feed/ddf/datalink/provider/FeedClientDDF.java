@@ -520,7 +520,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (enabled && !isLoginActive()) {
 
-				loginThread = new Thread(new LoginRunnable(0), "# DDF Login");
+				loginThread =
+						new Thread(new LoginRunnable(delay), "# DDF Login");
 
 				executor.execute(loginThread);
 
