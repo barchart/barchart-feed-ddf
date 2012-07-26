@@ -81,7 +81,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	//
 
 	private final LoginHandler loginHandler = new LoginHandler();
-
+	private volatile boolean loggingIn = false;
 	//
 
 	private final BlockingQueue<DDF_FeedEvent> eventQueue =
@@ -520,7 +520,9 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		synchronized void login(final int delay) {
 
-			if (enabled && !isLoginActive()) {
+			if (enabled && !loggingIn && !isLoginActive()) {
+
+				loggingIn = true;
 
 				loginThread =
 						new Thread(new LoginRunnable(delay), "# DDF Login");
@@ -552,6 +554,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@Override
 		public void run() {
+
+			loggingIn = false;
 
 			try {
 				Thread.sleep(delay);
