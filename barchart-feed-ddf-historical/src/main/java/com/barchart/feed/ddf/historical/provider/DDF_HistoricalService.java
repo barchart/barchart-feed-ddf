@@ -21,6 +21,7 @@ import com.barchart.feed.ddf.historical.api.DDF_EntryBarMin;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMinFormT;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMinNearby;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
+import com.barchart.feed.ddf.historical.api.DDF_EntryTickFormT;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.api.DDF_Result;
@@ -68,6 +69,10 @@ public final class DDF_HistoricalService {
 	 */
 	public static final DDF_Query<DDF_EntryTick> newQueryTicks() {
 		return newQuery(TICKS);
+	}
+	
+	public static final DDF_Query<DDF_EntryTickFormT> newQueryTicksFormT() {
+		return newQuery(TICKS_FORM_T);
 	}
 
 	/**
@@ -246,6 +251,30 @@ public final class DDF_HistoricalService {
 			final DDF_ResultListener listener) throws RuntimeException {
 
 		final DDF_Query<DDF_EntryTick> query = newQueryTicks();
+
+		query.instrument = instrument;
+		query.timeStart = timeStart;
+		query.timeEnd = timeEnd;
+		query.resultOrder = resultOrder;
+		query.maxRecords = maxRecords;
+
+		return newResult(settings, query, listener);
+
+	}
+	
+	public static final DDF_Result<DDF_EntryTickFormT> newResultTicksFormT(
+			final DDF_Settings settings, final DDF_Query<DDF_EntryTickFormT> query,
+			final DDF_ResultListener listener) {
+		return newResult(settings, query, listener);
+	}
+
+	public static final DDF_Result<DDF_EntryTickFormT> newResultTicksFormT(
+			final DDF_Settings settings, final DDF_Instrument instrument,
+			final DateTime timeStart, final DateTime timeEnd,
+			final DDF_QueryOrder resultOrder, final int maxRecords,
+			final DDF_ResultListener listener) throws RuntimeException {
+
+		final DDF_Query<DDF_EntryTickFormT> query = newQueryTicksFormT();
 
 		query.instrument = instrument;
 		query.timeStart = timeStart;

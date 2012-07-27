@@ -13,6 +13,7 @@ import com.barchart.feed.ddf.historical.api.DDF_EntryBarMin;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMinFormT;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMinNearby;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
+import com.barchart.feed.ddf.historical.api.DDF_EntryTickFormT;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.enums.DictEnum;
@@ -33,6 +34,9 @@ public class DDF_QueryType<V extends DDF_Entry> extends
 	public static final DDF_QueryType<DDF_EntryTick> TICKS = NEW(
 			"queryticks.ashx", "ticks");
 
+	public static final DDF_QueryType<DDF_EntryTickFormT> TICKS_FORM_T = NEW(
+			"queryticks.ashx", "ticks_form_t");
+	
 	/** The Constant MINUTES. */
 	public static final DDF_QueryType<DDF_EntryBarMin> MINUTES = NEW(
 			"queryminutes.ashx", "mins");
