@@ -69,6 +69,7 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
+import com.barchart.util.values.provider.ValueConst;
 
 /**
  * Logic #1
@@ -251,6 +252,7 @@ class VarMarketDDF extends VarMarket {
 			bar.set(MarketBarField.LOW, price);
 			bar.set(MarketBarField.INTEREST, size);
 			bar.set(MarketBarField.VOLUME, size);
+			bar.set(MarketBarField.SETTLE, ValueConst.NULL_PRICE);
 
 			setState(MarketStateEntry.IS_SETTLED, false);
 
