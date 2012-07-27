@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>barchart-feed-ddf</artifactId>
 		<groupId>com.barchart.feed</groupId>
-		<version>3.4.17-SNAPSHOT</version>
+		<version>3.4.17</version>
 	</parent>
 
 	<name>barchart-feed-ddf-util</name>
