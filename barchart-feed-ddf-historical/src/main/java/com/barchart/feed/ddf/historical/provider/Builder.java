@@ -10,6 +10,7 @@ package com.barchart.feed.ddf.historical.provider;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMin;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
+import com.barchart.feed.ddf.historical.api.DDF_EntryTickFormT;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryType;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
@@ -21,6 +22,17 @@ enum Builder {
 		public DDF_EntryTick newEntry(final int index, final String inputLine,
 				final DDF_Instrument instrument) {
 			final EntryTicksDetail entry = new EntryTicksDetail(instrument);
+			entry.decode(inputLine);
+			entry.index = index;
+			return entry;
+		}
+	}, //
+	
+	TICKS_FORM_T {
+		@Override
+		public DDF_EntryTickFormT newEntry(final int index, final String inputLine,
+				final DDF_Instrument instrument) {
+			final EntryTicksFormT entry = new EntryTicksFormT(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
 			return entry;
