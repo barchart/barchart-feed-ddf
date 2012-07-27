@@ -245,7 +245,7 @@ class FeedClientDDF implements DDF_FeedClient {
 						loggingIn = false;
 						
 					}else if(event == DDF_FeedEvent.LINK_DISCONNECT){
-						
+
 						loggingIn = false;
 						
 					}
