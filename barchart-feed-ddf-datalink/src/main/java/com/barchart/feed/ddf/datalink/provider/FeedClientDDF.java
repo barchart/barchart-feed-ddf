@@ -25,7 +25,9 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
+import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.logging.InternalLoggerFactory;
@@ -38,6 +40,7 @@ import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
+import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.api.DummyFuture;
 import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.api.Subscription;
@@ -68,15 +71,13 @@ class FeedClientDDF implements DDF_FeedClient {
 	private static final String TIMEOUT_OPTION = "connectTimeoutMillis";
 	private static final TimeUnit TIME_UNIT = TimeUnit.MILLISECONDS;
 
-	private static final long HEARTBEAT_TIMEOUT = 30 * 1000;
+	private static final long HEARTBEAT_TIMEOUT = 10 * 1000;
 
 	//
 
-	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
-			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
+	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy = new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
-	private final Set<Subscription> subscriptions =
-			new CopyOnWriteArraySet<Subscription>();
+	private final Set<Subscription> subscriptions = new CopyOnWriteArraySet<Subscription>();
 
 	//
 
@@ -84,11 +85,9 @@ class FeedClientDDF implements DDF_FeedClient {
 	private volatile boolean loggingIn = false;
 	//
 
-	private final BlockingQueue<DDF_FeedEvent> eventQueue =
-			new LinkedBlockingQueue<DDF_FeedEvent>();
+	private final BlockingQueue<DDF_FeedEvent> eventQueue = new LinkedBlockingQueue<DDF_FeedEvent>();
 
-	private final BlockingQueue<DDF_BaseMessage> messageQueue =
-			new LinkedBlockingQueue<DDF_BaseMessage>();
+	private final BlockingQueue<DDF_BaseMessage> messageQueue = new LinkedBlockingQueue<DDF_BaseMessage>();
 
 	private final AtomicLong lastHeartbeat = new AtomicLong(0);
 
@@ -96,45 +95,82 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private volatile DDF_MessageListener msgListener = null;
 
-	private final CopyOnWriteArrayList<FeedStateListener> feedListeners =
-			new CopyOnWriteArrayList<FeedStateListener>();
+	private final CopyOnWriteArrayList<FeedStateListener> feedListeners = new CopyOnWriteArrayList<FeedStateListener>();
 
 	//
 
-	private final ClientBootstrap boot;
+	private ClientBootstrap boot;
 
 	private Channel channel;
 
 	//
 
-	private final String username;
-	private final String password;
-	private final DDF_ServerType serverType = DDF_ServerType.STREAM;
-	private final Executor executor;
+	private String username;
+	private String password;
+	private DDF_ServerType serverType = DDF_ServerType.STREAM;
+	private Executor executor;
+
+	// SOCKS5
+
+	private DDF_SocksProxy proxySettings = null;
+	private final BlockingQueue<Boolean> socksConnectResult = new LinkedBlockingQueue<Boolean>();
+
+	//
 
 	FeedClientDDF(final String username, final String password,
 			final Executor executor) {
 
+		startup(username, password, executor, null);
+
+	}
+
+	public FeedClientDDF(String username, String password, Executor executor,
+			DDF_SocksProxy proxySettings) {
+
+		startup(username, password, executor, proxySettings);
+
+	}
+
+	private void startup(final String username, final String password,
+			final Executor exec, final DDF_SocksProxy proxy) {
+
 		this.username = username;
 		this.password = password;
-		this.executor = executor;
+		this.executor = exec;
 
-		final ChannelFactory channelFactory =
-				new NioClientSocketChannelFactory(executor, executor);
+		this.proxySettings = proxy;
+
+		final ChannelFactory channelFactory = new NioClientSocketChannelFactory(
+				executor, executor);
 
 		boot = new ClientBootstrap(channelFactory);
 
-		/*
-		 * The vector for data leaving the netty channel and entering the
-		 * buisness application logic.
-		 */
-		final SimpleChannelHandler ddfHandler =
-				new ChannelHandlerDDF(eventQueue, messageQueue);
+		if (proxySettings == null) {
 
-		final ChannelPipelineFactory pipelineFactory =
-				new PipelineFactoryDDF(ddfHandler);
+			/*
+			 * The vector for data leaving the netty channel and entering the
+			 * business application logic.
+			 */
+			final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(
+					eventQueue, messageQueue);
 
-		boot.setPipelineFactory(pipelineFactory);
+			final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(
+					ddfHandler);
+
+			boot.setPipelineFactory(pipelineFactory);
+
+		} else {
+
+			final ChannelPipelineFactory socksPipelineFactory = new PipelineFactorySocks(
+					executor, this, proxy);
+
+			boot.setPipelineFactory(socksPipelineFactory);
+			boot.setOption("child.tcpNoDelay", true);
+			boot.setOption("child.keepAlive", true);
+			boot.setOption("child.reuseAddress", true);
+			boot.setOption("readWriteFair", true);
+
+		}
 
 		boot.setOption(TIMEOUT_OPTION, TIMEOUT);
 
@@ -150,16 +186,18 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* Add DefaultReloginPolicy to selected events */
-		eventPolicy
-				.put(DDF_FeedEvent.LOGIN_FAILURE, new DefaultReloginPolicy());
-		eventPolicy.put(DDF_FeedEvent.LINK_DISCONNECT,
-				new DefaultReloginPolicy());
+		eventPolicy.put(DDF_FeedEvent.LOGIN_FAILURE, reconnectionPolicy);
+
+		eventPolicy.put(DDF_FeedEvent.LINK_DISCONNECT, reconnectionPolicy);
 		eventPolicy.put(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE,
-				new DefaultReloginPolicy());
+				reconnectionPolicy);
+
 		eventPolicy.put(DDF_FeedEvent.CHANNEL_CONNECT_FAILURE,
-				new DefaultReloginPolicy());
+				reconnectionPolicy);
 		eventPolicy.put(DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT,
-				new DefaultReloginPolicy());
+				reconnectionPolicy);
+		eventPolicy.put(DDF_FeedEvent.LINK_CONNECT_PROXY_TIMEOUT,
+				reconnectionPolicy);
 
 		/* Add SubscribeAfterLogin to LOGIN_SUCCESS */
 		eventPolicy.put(DDF_FeedEvent.LOGIN_SUCCESS, new SubscribeAfterLogin());
@@ -169,6 +207,97 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		/* Start heart beat listener */
 		executor.execute(new HeartbeatListener());
+
+		executor.execute(eventTask);
+		executor.execute(messageTask);
+	}
+
+	private final DefaultReloginPolicy reconnectionPolicy = new DefaultReloginPolicy();
+
+	private boolean loginProxy(String username, String password,
+			DDF_Server feedServers) {
+
+		terminate();
+
+		initialize();
+
+		// do socks connection
+
+		log.error("connect to proxy - address {} port {}",
+				proxySettings.getProxyAddress(), proxySettings.getProxyPort());
+
+		final InetSocketAddress address = new InetSocketAddress(
+				proxySettings.getProxyAddress(), proxySettings.getProxyPort());
+
+		final ChannelFuture futureConnect = boot.connect(address);
+
+		channel = futureConnect.getChannel();
+
+		final boolean isGoodConnect = futureConnect
+				.awaitUninterruptibly(TIMEOUT);
+
+		if (!isGoodConnect) {
+			log.error("proxy connect error {}", futureConnect.getCause());
+			log.error("proxy; {}:{} ", proxySettings.getProxyAddress(),
+					proxySettings.getProxyPort());
+
+			postEvent(DDF_FeedEvent.LINK_CONNECT_PROXY_TIMEOUT);
+
+			channel.close();
+			return false;
+		}
+
+		log.debug("server = {}", feedServers.getPrimary());
+
+		// set the ddf servers
+
+		proxySettings.setFeedServer(feedServers);
+
+		// block until we get proxy_connect_command result
+
+		Boolean proxyResult = false;
+
+		try {
+			proxyResult = socksConnectResult.take();
+		} catch (InterruptedException e) {
+		}
+
+		if (proxyResult == false) {
+
+			log.error("Socks connect error");
+			// postEvent(DDF_FeedEvent.LINK_CONNECT_PROXY_TIMEOUT);
+
+			return false;
+		}
+
+		/* Send login command to JERQ */
+		DDF_FeedEvent writeEvent = blockingWrite(FeedDDF.tcpLogin(username,
+				password));
+
+		if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
+			log.error("error sending login command to jerq");
+			return false;
+		}
+
+		/* Send VERSION 3 command to JERQ */
+		writeEvent = blockingWrite(FeedDDF.tcpVersion(FeedDDF.VERSION_3));
+
+		if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
+			log.error("error sending VERSION 3 command to jerq");
+			return false;
+		}
+
+		/* Send timestamp command to JERQ */
+		writeEvent = blockingWrite(FeedDDF.tcpGo(FeedDDF.SYMBOL_TIMESTAMP));
+
+		if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
+			log.error("error sending login GO TIMESTAMP to jerq");
+			return false;
+		}
+
+		// all is good
+
+		return true;
 
 	}
 
@@ -212,41 +341,39 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 	}
 
-	// TODO make this nicer, quick fix for OOME
-	// loggingIn
-	
 	private final RunnerDDF eventTask = new RunnerDDF() {
+
 		@Override
 		protected void runCore() {
+
+			Thread.currentThread().setName("# EVENT TASK");
+
 			while (true) {
+
 				try {
+
 					final DDF_FeedEvent event = eventQueue.take();
 
 					if (DDF_FeedEvent.isConnectionError(event)) {
+
 						log.debug("Setting feed state to logged out");
 						updateFeedStateListeners(FeedState.LOGGED_OUT);
-						
-						loggingIn = false;
-						
+
 					} else if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
+
 						log.debug("Login success, feed state updated");
 						updateFeedStateListeners(FeedState.LOGGED_IN);
-					
-						loggingIn = false;
-						
+
 					} else if (event == DDF_FeedEvent.LOGOUT) {
+
 						log.debug("Setting feed state to logged out");
 						updateFeedStateListeners(FeedState.LOGGED_OUT);
-						
-						loggingIn = false;
-						
-					}else if(event == DDF_FeedEvent.LINK_DISCONNECT){
-						loggingIn = false;
-						
+
 					}
 
 					log.debug("Enacting policy for :{}", event.name());
 					eventPolicy.get(event).newEvent();
+
 				} catch (final InterruptedException e) {
 					log.trace("terminated");
 					return;
@@ -260,6 +387,9 @@ class FeedClientDDF implements DDF_FeedClient {
 	private final RunnerDDF messageTask = new RunnerDDF() {
 		@Override
 		protected void runCore() {
+
+			Thread.currentThread().setName("# DDF MessageTask");
+
 			while (true) {
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
@@ -284,7 +414,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	//
 
-	private void postEvent(final DDF_FeedEvent event) {
+	void postEvent(final DDF_FeedEvent event) {
 		try {
 			eventQueue.put(event);
 		} catch (final InterruptedException e) {
@@ -292,19 +422,26 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 	}
 
-	//
+	/**
+	 * the calls to initialize() and terminate were causing the threading issue,
+	 * as the runnables were never getting shutdown...
+	 */
 
 	private void initialize() {
 
-		executor.execute(eventTask);
-		executor.execute(messageTask);
+		// do this once
+
+		// executor.execute(eventTask);
+		// executor.execute(messageTask);
 
 	}
 
 	private void terminate() {
 
-		eventTask.interrupt();
-		messageTask.interrupt();
+		// did not work, maybe because the while(true)
+
+		// eventTask.interrupt();
+		// messageTask.interrupt();
 
 		eventQueue.clear();
 		messageQueue.clear();
@@ -510,9 +647,12 @@ class FeedClientDDF implements DDF_FeedClient {
 		feedListeners.add(stateListener);
 	}
 
+	private volatile Thread loginThread = null;
+
+	int i = 0;
+
 	private class LoginHandler {
 
-		private volatile Thread loginThread = null;
 		private boolean enabled = true;
 
 		void enableLogins() {
@@ -535,18 +675,30 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		synchronized void login(final int delay) {
 
-			log.debug("login enabled {} - logginIn - {} isLoginActive = " + isLoginActive(), enabled, loggingIn);
-			
-			if (enabled && !loggingIn && !isLoginActive()) {
+			log.warn("login enabled {} - logginIn - {} isLoginActive = "
+					+ isLoginActive(), enabled, loggingIn
+					+ " reconnect attempt count = " + i++);
+
+			if (proxySettings != null) {
+
+				startUpProxy();
+
+				return;
+			}
+
+			if (enabled && loggingIn == false) {
+
+				log.warn("logging in regular, starting new thread..");
 
 				loggingIn = true;
 
-				loginThread =
-						new Thread(new LoginRunnable(delay), "# DDF Login");
+				loginThread = new Thread(new LoginRunnable(delay),
+						"# DDF Login " + i++);
 
 				executor.execute(loginThread);
 
-				log.debug("Setting feed state to attempting login");
+				log.warn("Setting feed state to attempting login");
+
 				updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
 
 			}
@@ -572,14 +724,13 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void run() {
 
-
 			try {
 				Thread.sleep(delay);
 			} catch (final InterruptedException e1) {
 				e1.printStackTrace();
 			}
 
-			log.debug("makeing connection");
+			log.warn("making connection");
 
 			terminate();
 
@@ -592,11 +743,17 @@ class FeedClientDDF implements DDF_FeedClient {
 				if (!settings.isValidLogin()) {
 					log.warn("Posting SETTINGS_RETRIEVAL_FAILURE");
 					postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
+
+					loggingIn = false;
+
 					return;
 				}
 			} catch (final Exception e) {
 				log.warn("Posting SETTINGS_RETRIEVAL_FAILURE");
 				postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
+
+				loggingIn = false;
+
 				return;
 			}
 
@@ -610,6 +767,9 @@ class FeedClientDDF implements DDF_FeedClient {
 			if (eventOne == DDF_FeedEvent.LOGIN_SENT) {
 				log.debug("Posting LOGIN_SENT for primary server");
 				postEvent(DDF_FeedEvent.LOGIN_SENT);
+
+				loggingIn = false;
+
 				return;
 			}
 
@@ -619,6 +779,9 @@ class FeedClientDDF implements DDF_FeedClient {
 			if (eventTwo == DDF_FeedEvent.LOGIN_SENT) {
 				log.debug("Posting LOGIN_SENT for secondary server");
 				postEvent(DDF_FeedEvent.LOGIN_SENT);
+
+				loggingIn = false;
+
 				return;
 			}
 
@@ -628,6 +791,9 @@ class FeedClientDDF implements DDF_FeedClient {
 			 */
 			log.warn("Posting {}", eventOne.name());
 			postEvent(eventOne);
+
+			loggingIn = false;
+
 			return;
 		}
 
@@ -656,8 +822,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			}
 
 			/* Send login command to JERQ */
-			DDF_FeedEvent writeEvent =
-					blockingWrite(FeedDDF.tcpLogin(username, password));
+			DDF_FeedEvent writeEvent = blockingWrite(FeedDDF.tcpLogin(username,
+					password));
 
 			if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
 				return DDF_FeedEvent.COMMAND_WRITE_FAILURE;
@@ -688,6 +854,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@Override
 		public void run() {
+
+			Thread.currentThread().setName("# ddf-heartbeat listener");
 
 			try {
 				while (!Thread.interrupted()) {
@@ -727,6 +895,88 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			}
 		}
+
+	}
+
+	// change how this is done
+
+	public void setProxiedChannel(ChannelHandlerContext ctx, MessageEvent e,
+			boolean success) {
+
+		if (success) {
+			this.channel = e.getChannel();
+
+			// post ddf link connect
+			postEvent(DDF_FeedEvent.LINK_CONNECT);
+
+			final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(
+					eventQueue, messageQueue);
+
+			channel.getPipeline().addLast("ddf frame decoder",
+					new MsgDeframerDDF());
+
+			channel.getPipeline().addLast("ddf message decoder",
+					new MsgDecoderDDF());
+
+			// ### Encoders ###
+
+			channel.getPipeline().addLast("ddf command encoder",
+					new MsgEncoderDDF());
+
+			channel.getPipeline().addLast("ddf data feed client", ddfHandler);
+
+			socksConnectResult.add(true);
+		} else {
+			socksConnectResult.add(false);
+		}
+	}
+
+	boolean connecting = false;
+
+	@Override
+	public void startUpProxy() {
+
+		if (connecting == true) {
+			log.error("Still connecting");
+			return;
+		}
+
+		connecting = true;
+
+		log.warn("startUpProxy() - connecting...");
+
+		if (proxySettings == null) {
+			log.error("Poxysettings are null, starting direct connect");
+			startup();
+			return;
+		}
+
+		/* Attempt to get current data server settings */
+		DDF_Settings ddf_settings = null;
+		try {
+			ddf_settings = DDF_SettingsService.newSettings(username, password);
+			if (!ddf_settings.isValidLogin()) {
+				log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
+				postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
+
+				connecting = false;
+				return;
+			}
+		} catch (final Exception e) {
+			log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
+			postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
+
+			connecting = false;
+			return;
+		}
+
+		final DDF_Server server = ddf_settings.getServer(serverType);
+
+		loginProxy(username, password, server);
+
+		log.warn("startUpProxy() done connecting...");
+
+		connecting = false;
 
 	}
 

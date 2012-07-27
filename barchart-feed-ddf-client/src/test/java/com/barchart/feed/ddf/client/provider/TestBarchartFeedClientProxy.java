@@ -17,15 +17,16 @@ import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.client.provider.BarchartFeedClient;
+import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 
 /**
  * 
  * Stress test to try and break the login/logout lifecycle
  */
-public class TestBarchartFeedClient {
+public class TestBarchartFeedClientProxy {
 
 	private static final Logger log = LoggerFactory
-			.getLogger(TestBarchartFeedClient.class);
+			.getLogger(TestBarchartFeedClientProxy.class);
 
 	/**
 	 * @param args
@@ -51,13 +52,22 @@ public class TestBarchartFeedClient {
 				if (state == FeedState.LOGGED_IN) {
 					client.addTaker(TakerFactory.makeFactory(instrument));
 				}
+				
+				log.error("STATE = " + state);
 
 			}
 
 		};
 
-		client.login(username, password);
+		
+		final DDF_SocksProxy proxySettings = new DDF_SocksProxy("10.222.4.184", 1080);
+		
+		proxySettings.setProxyUsername("");
+		proxySettings.setProxyPassword("");
+		
+		//client.login(username, password);
 
+		client.login(username, password, proxySettings);
 		
 		client.bindFeedStateListener(feedListener);
 

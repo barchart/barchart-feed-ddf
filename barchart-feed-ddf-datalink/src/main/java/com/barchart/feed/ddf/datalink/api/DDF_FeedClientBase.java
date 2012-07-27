@@ -18,6 +18,8 @@ public interface DDF_FeedClientBase {
 	 * listening.
 	 */
 	void startup();
+	
+	void startUpProxy();
 
 	/**
 	 * Stops listening to the data source.
