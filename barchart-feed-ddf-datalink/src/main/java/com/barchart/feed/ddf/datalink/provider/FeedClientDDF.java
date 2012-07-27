@@ -212,34 +212,47 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 	}
 
+	// TODO make this nicer, quick fix for OOME
+	// loggingIn
+	
 	private final RunnerDDF eventTask = new RunnerDDF() {
 		@Override
 		protected void runCore() {
 			while (true) {
 				try {
+					
 					final DDF_FeedEvent event = eventQueue.take();
 
 					if (DDF_FeedEvent.isConnectionError(event)) {
+						
 						log.debug("Setting feed state to logged out");
 						updateFeedStateListeners(FeedState.LOGGED_OUT);
 						
 						loggingIn = false;
 						
 					} else if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
+					
 						log.debug("Login success, feed state updated");
 						updateFeedStateListeners(FeedState.LOGGED_IN);
 					
 						loggingIn = false;
 						
 					} else if (event == DDF_FeedEvent.LOGOUT) {
+						
 						log.debug("Setting feed state to logged out");
 						updateFeedStateListeners(FeedState.LOGGED_OUT);
 						
 						loggingIn = false;
+						
+					}else if(event == DDF_FeedEvent.LINK_DISCONNECT){
+						
+						loggingIn = false;
+						
 					}
 
 					log.debug("Enacting policy for :{}", event.name());
 					eventPolicy.get(event).newEvent();
+				
 				} catch (final InterruptedException e) {
 					log.trace("terminated");
 					return;
@@ -530,7 +543,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			log.debug("login enabled {} - logginIn - {} isLoginActive = " + isLoginActive(), enabled, loggingIn);
 			
-			if (enabled && !loggingIn && !isLoginActive()) {
+			if (enabled && !loggingIn) {
 
 				loggingIn = true;
 
