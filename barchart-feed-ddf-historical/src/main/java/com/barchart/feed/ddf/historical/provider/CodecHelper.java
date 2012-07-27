@@ -142,6 +142,14 @@ final class CodecHelper {
 
 		}
 
+		if (query.type.isIn(TICKS_FORM_T)) {
+
+			text.append("&");
+
+			text.append("sessionfilter=%2Bt");
+			// text.append(sessionFilter);
+		}
+
 		//
 
 		if (query.type.isIn(END_OF_DAY)) {
