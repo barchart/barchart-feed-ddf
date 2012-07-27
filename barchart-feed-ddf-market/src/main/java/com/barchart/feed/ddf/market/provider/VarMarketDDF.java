@@ -334,6 +334,10 @@ class VarMarketDDF extends VarMarket {
 		assert time != null;
 		assert date != null;
 
+		log.debug("Trade: symbol="
+				+ get(MarketField.INSTRUMENT).get(InstrumentField.SYMBOL)
+				+ "; type=" + type + "; session=" + session + "; sequencing="
+				+ sequencing + "; price=" + price);
 		// assert isValidPrice(price);
 
 		// ### trade

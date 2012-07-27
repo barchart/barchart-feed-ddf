@@ -37,11 +37,9 @@ public class TestBarchartFeedClient {
 
 		final BarchartFeedClient client = new BarchartFeedClient();
 
-		final String symbol = "RMU12";
-
-		final MarketInstrument instrument = client.lookup(symbol);
-
-		System.out.println(instrument.toString());
+		final MarketInstrument[] instruments = { client.lookup("INTC"),
+				client.lookup("SPY"), client.lookup("FB"), client.lookup("S"),
+				client.lookup("ESU12"), };
 
 		final FeedStateListener feedListener = new FeedStateListener() {
 
@@ -49,7 +47,7 @@ public class TestBarchartFeedClient {
 			public void stateUpdate(final FeedState state) {
 
 				if (state == FeedState.LOGGED_IN) {
-					client.addTaker(TakerFactory.makeFactory(instrument));
+					client.addTaker(TakerFactory.makeFactory(instruments));
 				}
 
 			}
@@ -74,7 +72,8 @@ public class TestBarchartFeedClient {
 
 	private static class TakerFactory {
 
-		static MarketTaker<Market> makeFactory(final MarketInstrument instrument) {
+		static MarketTaker<Market> makeFactory(
+				final MarketInstrument[] instruments) {
 			return new MarketTaker<Market>() {
 
 				@Override
@@ -95,7 +94,7 @@ public class TestBarchartFeedClient {
 				@Override
 				public MarketInstrument[] bindInstruments() {
 
-					return new MarketInstrument[] { instrument };
+					return instruments;
 
 				}
 
@@ -125,7 +124,7 @@ public class TestBarchartFeedClient {
 														MarketStateEntry.IS_SETTLED));
 					}
 
-					log.debug(sb.toString());
+					// log.debug(sb.toString());
 
 				}
 
