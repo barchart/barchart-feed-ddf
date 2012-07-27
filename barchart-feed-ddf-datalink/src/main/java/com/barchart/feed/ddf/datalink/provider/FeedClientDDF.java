@@ -212,6 +212,9 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 	}
 
+	// TODO make this nicer, quick fix for OOME
+	// loggingIn
+	
 	private final RunnerDDF eventTask = new RunnerDDF() {
 		@Override
 		protected void runCore() {
@@ -236,6 +239,10 @@ class FeedClientDDF implements DDF_FeedClient {
 						updateFeedStateListeners(FeedState.LOGGED_OUT);
 						
 						loggingIn = false;
+						
+					}else if(event == DDF_FeedEvent.LINK_DISCONNECT){
+						loggingIn = false;
+						
 					}
 
 					log.debug("Enacting policy for :{}", event.name());
