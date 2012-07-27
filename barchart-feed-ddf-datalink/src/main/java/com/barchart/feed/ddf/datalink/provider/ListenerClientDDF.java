@@ -189,4 +189,10 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 		// TODO Implement connection notifications for TCP listeners
 	}
 
+	@Override
+	public void startUpProxy() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

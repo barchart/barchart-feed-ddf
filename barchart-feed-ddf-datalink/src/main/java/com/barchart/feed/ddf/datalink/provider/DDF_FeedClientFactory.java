@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
+import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.enums.TP;
 
 /**
@@ -44,6 +45,25 @@ public class DDF_FeedClientFactory {
 		log.debug("Built new DDF_FeedClient,using to DDF_ServerType.STREAM");
 
 		return new FeedClientDDF(username, password, executor);
+
+	}
+	
+	/**
+	 * Returns a stateful two way connection to a data source.
+	 * 
+	 * @param executor
+	 *            The executor used by the ClientSocketChannel as both the boss
+	 *            and worker executor. See
+	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
+	 * @return the DDF_FeedClient
+	 */
+	public static DDF_FeedClient newConnectionClient(final TP protocol,
+			final String username, final String password,
+			final Executor executor, final DDF_SocksProxy proxySettings) {
+
+		log.debug("Built new DDF_FeedClient with Socks5 connection,using to DDF_ServerType.STREAM");
+
+		return new FeedClientDDF(username, password, executor, proxySettings);
 
 	}
 

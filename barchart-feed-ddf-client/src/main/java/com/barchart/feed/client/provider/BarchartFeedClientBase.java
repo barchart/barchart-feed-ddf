@@ -45,6 +45,7 @@ import com.barchart.util.values.api.Value;
  */
 public abstract class BarchartFeedClientBase {
 
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartFeedClientBase.class);
 
@@ -63,7 +64,7 @@ public abstract class BarchartFeedClientBase {
 	/*
 	 * Handles login. Non-blocking.
 	 */
-	protected void setClient(final DDF_FeedClientBase client) {
+	protected void setClient(final DDF_FeedClientBase client, final boolean proxy) {
 
 		maker.clearAll();
 
@@ -79,9 +80,16 @@ public abstract class BarchartFeedClientBase {
 			feed.bindStateListener(stateListener);
 		}
 
-		feed.startup();
+		if(proxy){
+			feed.startUpProxy();
+		}else{
+			feed.startup();
+		}
+
 
 	}
+	
+	
 
 	/**
 	 * Shuts down the data feed and clears all registered market takers.

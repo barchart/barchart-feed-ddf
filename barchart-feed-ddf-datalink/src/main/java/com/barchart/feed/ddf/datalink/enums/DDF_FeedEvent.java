@@ -86,11 +86,17 @@ public enum DDF_FeedEvent {
 	 */
 	HEART_BEAT, //
 
+	LINK_CONNECT_PROXY,
+
+	LINK_CONNECT_PROXY_TIMEOUT
+
 	;
 
 	public static boolean isConnectionError(final DDF_FeedEvent event) {
 
 		return event == LOGIN_FAILURE || event == SESSION_LOCKOUT
+				|| event == LINK_DISCONNECT
+				|| event == LINK_CONNECT_PROXY_TIMEOUT
 				|| event == SETTINGS_RETRIEVAL_FAILURE
 				|| event == CHANNEL_CONNECT_TIMEOUT
 				|| event == CHANNEL_CONNECT_FAILURE;

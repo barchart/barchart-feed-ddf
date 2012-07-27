@@ -29,6 +29,7 @@ import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
+import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.TP;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
@@ -55,6 +56,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 
 			@Override
 			public void execute(final Runnable task) {
+				log.error("executing new Runnabled = " + task.toString());
 				new Thread(task, name).start();
 			}
 
@@ -65,6 +67,25 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	public BarchartFeedClient(final Executor ex) {
 		maker.add(instrumentSubscriptionListener);
 		executor = ex;
+	}
+
+	/**
+	 * Starts the data feed asynchronously. Notification of login success is
+	 * reported by FeedStateListeners which are bound to this object.
+	 * <p>
+	 * Constructs a new feed client with the user's user name and password and a
+	 * Socks5 proxy. The transport protocol defaults to TCP and a default
+	 * executor are used.
+	 * 
+	 * @param username
+	 * @param password
+	 */
+
+	public void login(final String username, final String password,
+			final DDF_SocksProxy proxySettings) {
+
+		loginProxy(username, password, TP.TCP, executor, proxySettings);
+		
 	}
 
 	/**
@@ -94,8 +115,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * @param password
 	 * @param tp
 	 */
-	public void
-			login(final String username, final String password, final TP tp) {
+	public void login(final String username, final String password, final TP tp) {
 
 		loginMain(username, password, tp, executor);
 
@@ -128,12 +148,23 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 
 		maker.clearAll();
 
-		feed =
-				DDF_FeedClientFactory.newConnectionClient(tp, username,
-						password, executor);
+		feed = DDF_FeedClientFactory.newConnectionClient(tp, username,
+				password, executor);
 
-		setClient(feed);
+		setClient(feed, false);
 
+	}
+
+	private void loginProxy(final String username, final String password,
+			final TP tp, final Executor executor,
+			final DDF_SocksProxy proxySettings) {
+
+		maker.clearAll();
+
+		feed = DDF_FeedClientFactory.newConnectionClient(tp, username,
+				password, executor, proxySettings);
+
+		setClient(feed, true);
 	}
 
 	/*
@@ -143,32 +174,29 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * events are sent only when the instrument is not needed by any previously
 	 * registered market takers.
 	 */
-	private final MarketRegListener instrumentSubscriptionListener =
-			new MarketRegListener() {
+	private final MarketRegListener instrumentSubscriptionListener = new MarketRegListener() {
 
-				@Override
-				public void onRegistrationChange(
-						final MarketInstrument instrument,
-						final Set<MarketEvent> events) {
+		@Override
+		public void onRegistrationChange(final MarketInstrument instrument,
+				final Set<MarketEvent> events) {
 
-					/*
-					 * The market maker denotes 'unsubscribe' with an empty
-					 * event set
-					 */
-					if (events.isEmpty()) {
-						log.debug("Unsubscribing to "
-								+ instrument.get(InstrumentField.ID));
-						feed.unsubscribe(new Subscription(instrument, events));
-					} else {
-						log.debug("Subscribing to "
-								+ instrument.get(InstrumentField.ID)
-								+ " Events: " + printEvents(events));
-						feed.subscribe(new Subscription(instrument, events));
-					}
+			/*
+			 * The market maker denotes 'unsubscribe' with an empty event set
+			 */
+			if (events.isEmpty()) {
+				log.debug("Unsubscribing to "
+						+ instrument.get(InstrumentField.ID));
+				feed.unsubscribe(new Subscription(instrument, events));
+			} else {
+				log.debug("Subscribing to "
+						+ instrument.get(InstrumentField.ID) + " Events: "
+						+ printEvents(events));
+				feed.subscribe(new Subscription(instrument, events));
+			}
 
-				}
+		}
 
-			};
+	};
 
 	private String printEvents(final Set<MarketEvent> events) {
 		final StringBuffer sb = new StringBuffer();
