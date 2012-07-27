@@ -56,7 +56,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 
 			@Override
 			public void execute(final Runnable task) {
-				log.error("executing new Runnabled = " + task.toString());
+				log.error("executing new runnable = " + task.toString());
 				new Thread(task, name).start();
 			}
 
