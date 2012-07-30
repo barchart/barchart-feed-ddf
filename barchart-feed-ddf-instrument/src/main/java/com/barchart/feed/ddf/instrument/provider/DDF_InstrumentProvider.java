@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
+import static com.barchart.util.values.provider.ValueBuilder.*;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlDocumentDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
@@ -146,7 +147,7 @@ public final class DDF_InstrumentProvider {
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
 	public static DDF_Instrument find(final String symbol) {
-		return instance().lookupDDF(ValueBuilder.newText(symbol));
+		return find(newText(symbol));
 	}
 
 	class RetrieveInstrument implements Future<DDF_Instrument> {
