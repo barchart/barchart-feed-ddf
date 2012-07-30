@@ -130,7 +130,7 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 		DDF_Instrument instrument = ddfInstrumentMap.get(lookup);
 
 		if (instrument == null) {
-
+			
 			try {
 
 				instrument = DDF_InstrumentProvider.remoteLookup(symbol);
