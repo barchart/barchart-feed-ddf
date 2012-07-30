@@ -10,7 +10,7 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-ddf</artifactId>
-	<version>3.4.19</version>
+	<version>3.4.20-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<scm>
