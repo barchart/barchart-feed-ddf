@@ -129,6 +129,10 @@ enum Builder {
 			return TICKS;
 		}
 
+		if (queryType.is(DDF_QueryType.TICKS_FORM_T)) {
+			return TICKS_FORM_T;
+		}
+		
 		if (queryType.is(DDF_QueryType.MINUTES)) {
 			return MINUTES;
 		}
