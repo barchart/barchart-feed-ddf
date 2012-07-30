@@ -159,14 +159,16 @@ final class CodecHelper {
 			text.append("data=");
 			text.append(data);
 
-			if (query.instrument.get(DDF_InstrumentField.DDF_EXCHANGE).kind == DDF_ExchangeKind.FUTURE) {
+			// if (query.instrument.get(DDF_InstrumentField.DDF_EXCHANGE).kind
+			// == DDF_ExchangeKind.FUTURE) {
+			// }
 
-				text.append("&");
+			// equities now support sum
 
-				text.append("volume=");
-				text.append(volume);
+			text.append("&");
 
-			}
+			text.append("volume=");
+			text.append(volume);
 
 		}
 

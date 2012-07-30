@@ -16,18 +16,23 @@ import com.barchart.util.enums.EnumCodeString;
 public enum DDF_QueryEodVolume implements EnumCodeString {
 
 	/** default */
-	CONTRACT("contract"), // 
+	CONTRACT("contract"), //
 
 	TOTAL("total"), //
 
+	SUMTOTAL("sumtotal"), //
+
+	SUMCONTRACT("sumcontract"), //
+
+	SUM("sum"), //
 	/** The code. */
- ;
+	;
 
 	public final String code;
 
 	/**
 	 * used in page url and as xml code.
-	 *
+	 * 
 	 * @return the string
 	 */
 	@Override
@@ -43,7 +48,7 @@ public enum DDF_QueryEodVolume implements EnumCodeString {
 
 	/**
 	 * Values unsafe.
-	 *
+	 * 
 	 * @return the dD f_ query eod volume[]
 	 */
 	@Deprecated
@@ -53,8 +58,9 @@ public enum DDF_QueryEodVolume implements EnumCodeString {
 
 	/**
 	 * From code.
-	 *
-	 * @param code the code
+	 * 
+	 * @param code
+	 *            the code
 	 * @return the dD f_ query eod volume
 	 */
 	public static final DDF_QueryEodVolume fromCode(final String code) {
