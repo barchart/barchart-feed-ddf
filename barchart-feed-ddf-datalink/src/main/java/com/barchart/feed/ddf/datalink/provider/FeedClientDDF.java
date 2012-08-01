@@ -935,10 +935,10 @@ class FeedClientDDF implements DDF_FeedClient {
 				 * reset last heart beat.
 				 */
 				if (delta > HEARTBEAT_TIMEOUT) {
-					log.debug("Heartbeat check failed - forcing fresh start");
+					log.debug("Heartbeat check failed - calling terminate");
 					log.debug("Heartbeat delta: " + delta);
 					
-					disconnect();
+					terminate();
 					
 					lastHeartbeat.set(System.currentTimeMillis());
 				}
