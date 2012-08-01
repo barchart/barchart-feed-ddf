@@ -686,7 +686,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				return;
 			}
 
-			if (enabled && loggingIn == false) {
+			if (enabled && !isLoginActive()) {
 
 				log.warn("logging in regular, starting new thread..");
 
