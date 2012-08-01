@@ -461,13 +461,47 @@ class FeedClientDDF implements DDF_FeedClient {
 			
 			log.warn("channel NOT null, isOpen {}", channel.isOpen());
 			
-			channel.close();
-			
 			log.warn("called channel.close(), channel isOpen() {}", channel.isOpen());
 			
 			channel = null;
 		}
 
+	}
+	
+	private void hardRestart(){
+		
+		eventQueue.clear();
+		messageQueue.clear();
+		
+		// kill all threads
+		
+		if(heartbeatTask!=null){
+			heartbeatTask.interrupt();
+		}
+
+		if(messageTask!=null){
+			messageTask.interrupt();
+		}
+		
+		if(eventTask!=null){
+			eventTask.interrupt();
+		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		/* Start heart beat listener */
+		executor.execute(heartbeatTask);
+		executor.execute(eventTask);
+		executor.execute(messageTask);
+		
+		log.error("triggering disconnect from hardRestart()");
+		
+		postEvent(DDF_FeedEvent.LINK_DISCONNECT);
+		
 	}
 
 	/*
@@ -943,10 +977,10 @@ class FeedClientDDF implements DDF_FeedClient {
 				 * reset last heart beat.
 				 */
 				if (delta > HEARTBEAT_TIMEOUT) {
-					log.debug("Heartbeat check failed - calling terminate");
+					log.debug("Heartbeat check failed - calling hardRestart()");
 					log.debug("Heartbeat delta: " + delta);
 					
-					terminate();
+					hardRestart();
 					
 					lastHeartbeat.set(System.currentTimeMillis());
 				}
