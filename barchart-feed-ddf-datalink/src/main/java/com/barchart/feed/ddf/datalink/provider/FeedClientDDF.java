@@ -861,8 +861,6 @@ class FeedClientDDF implements DDF_FeedClient {
 	private class HeartbeatListener implements Runnable {
 
 		private long delta;
-
-		private Boolean stop = false;
 		
 		@Override
 		public void run() {
@@ -870,7 +868,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			Thread.currentThread().setName("# ddf-heartbeat listener");
 
 			try {
-				while (!Thread.interrupted() || stop) {
+				while (!Thread.interrupted()) {
 					checkTime();
 					Thread.sleep(2000); // This must be less than
 										// HEARTBEAT_TIMEOUT
