@@ -371,7 +371,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					}
 
-					log.debug("Enacting policy for :{}", event.name());
+					log.warn("Enacting policy for :{}", event.name());
 					eventPolicy.get(event).newEvent();
 
 				} catch (final InterruptedException e) {
@@ -730,7 +730,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				e1.printStackTrace();
 			}
 
-			log.warn("making connection");
+			log.error("making connection");
 
 			terminate();
 
@@ -741,7 +741,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			try {
 				settings = DDF_SettingsService.newSettings(username, password);
 				if (!settings.isValidLogin()) {
-					log.warn("Posting SETTINGS_RETRIEVAL_FAILURE");
+					log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
 					postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
 
 					loggingIn = false;
@@ -749,7 +749,7 @@ class FeedClientDDF implements DDF_FeedClient {
 					return;
 				}
 			} catch (final Exception e) {
-				log.warn("Posting SETTINGS_RETRIEVAL_FAILURE");
+				log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
 				postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
 
 				loggingIn = false;
@@ -789,7 +789,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			 * For simplicity, we only return the error message from the primary
 			 * server in the event both logins fail.
 			 */
-			log.warn("Posting {}", eventOne.name());
+			log.error("Posting {}", eventOne.name());
 			postEvent(eventOne);
 
 			loggingIn = false;
@@ -812,12 +812,12 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			/* Handle connection attempt errors */
 			if (!futureConnect.isDone()) {
-				log.warn("channel connect timeout; {}:{} ", host, port);
+				log.error("channel connect timeout; {}:{} ", host, port);
 				return DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT;
 			}
 
 			if (!futureConnect.isSuccess()) {
-				log.warn("channel connect unsuccessful; {}:{} ", host, port);
+				log.error("channel connect unsuccessful; {}:{} ", host, port);
 				return DDF_FeedEvent.CHANNEL_CONNECT_FAILURE;
 			}
 
