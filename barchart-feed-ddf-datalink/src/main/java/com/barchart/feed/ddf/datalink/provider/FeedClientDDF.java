@@ -89,6 +89,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private final BlockingQueue<DDF_BaseMessage> messageQueue = new LinkedBlockingQueue<DDF_BaseMessage>();
 
+	private Thread heartbeat;
+	
 	private final AtomicLong lastHeartbeat = new AtomicLong(0);
 
 	//
@@ -205,8 +207,10 @@ class FeedClientDDF implements DDF_FeedClient {
 		/* Add HeartbeatPolicy to HEART_BEAT */
 		eventPolicy.put(DDF_FeedEvent.HEART_BEAT, new HeartbeatPolicy());
 
+		heartbeat = new Thread(new HeartbeatListener());
+		
 		/* Start heart beat listener */
-		executor.execute(new HeartbeatListener());
+		executor.execute(heartbeat);
 
 		executor.execute(eventTask);
 		executor.execute(messageTask);
@@ -348,7 +352,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			Thread.currentThread().setName("# EVENT TASK");
 
-			while (true) {
+			while (!Thread.interrupted()) {
 
 				try {
 
@@ -381,6 +385,8 @@ class FeedClientDDF implements DDF_FeedClient {
 					log.error("event delivery failed", e);
 				}
 			}
+			
+			log.debug("Event thread death");
 		}
 	};
 
@@ -390,7 +396,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			Thread.currentThread().setName("# DDF MessageTask");
 
-			while (true) {
+			while (!Thread.interrupted()) {
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 					if (msgListener != null) {
@@ -403,6 +409,8 @@ class FeedClientDDF implements DDF_FeedClient {
 					log.error("message delivery failed", e);
 				}
 			}
+			
+			log.debug("MessageTask thread death");
 		}
 	};
 
@@ -431,8 +439,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		// do this once
 
-		// executor.execute(eventTask);
-		// executor.execute(messageTask);
+		executor.execute(eventTask);
+		executor.execute(messageTask);
 
 	}
 
@@ -440,8 +448,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		// did not work, maybe because the while(true)
 
-		// eventTask.interrupt();
-		// messageTask.interrupt();
+		eventTask.interrupt();
+		messageTask.interrupt();
 
 		eventQueue.clear();
 		messageQueue.clear();
@@ -493,7 +501,9 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		/* Clear subscriptions, Jerq will stop sending data when we disconnect */
 		subscriptions.clear();
-
+		
+		heartbeat.interrupt();
+		
 		postEvent(DDF_FeedEvent.LOGOUT);
 
 		// Do we need to specifically tell JERQ we're logging out?
@@ -852,13 +862,15 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		private long delta;
 
+		private Boolean stop = false;
+		
 		@Override
 		public void run() {
 
 			Thread.currentThread().setName("# ddf-heartbeat listener");
 
 			try {
-				while (!Thread.interrupted()) {
+				while (!Thread.interrupted() || stop) {
 					checkTime();
 					Thread.sleep(2000); // This must be less than
 										// HEARTBEAT_TIMEOUT
@@ -877,7 +889,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			 * If not currently logged in, keep the last heart beat updated so
 			 * when we do query it, it will be fresh.
 			 */
-			if (loginHandler.isLoginActive() || !isConnected()) {
+			if (loginHandler.isLoginActive()) {
 				lastHeartbeat.set(System.currentTimeMillis());
 			} else {
 				delta = System.currentTimeMillis() - lastHeartbeat.get();
@@ -887,7 +899,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				 * reset last heart beat.
 				 */
 				if (delta > HEARTBEAT_TIMEOUT) {
-					log.debug("Heartbeat check failed - posting LINK_DISCONNECT event");
+					log.debug("Heartbeat check failed - disconnecting");
 					log.debug("Heartbeat delta: " + delta);
 					disconnect();
 					lastHeartbeat.set(System.currentTimeMillis());
