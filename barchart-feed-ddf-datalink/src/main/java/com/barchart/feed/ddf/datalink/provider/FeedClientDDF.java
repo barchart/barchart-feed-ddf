@@ -88,8 +88,6 @@ class FeedClientDDF implements DDF_FeedClient {
 	private final BlockingQueue<DDF_FeedEvent> eventQueue = new LinkedBlockingQueue<DDF_FeedEvent>();
 
 	private final BlockingQueue<DDF_BaseMessage> messageQueue = new LinkedBlockingQueue<DDF_BaseMessage>();
-
-	private Thread heartbeat;
 	
 	private final AtomicLong lastHeartbeat = new AtomicLong(0);
 
@@ -191,6 +189,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		eventPolicy.put(DDF_FeedEvent.LOGIN_FAILURE, reconnectionPolicy);
 
 		eventPolicy.put(DDF_FeedEvent.LINK_DISCONNECT, reconnectionPolicy);
+		
 		eventPolicy.put(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE,
 				reconnectionPolicy);
 
@@ -207,10 +206,8 @@ class FeedClientDDF implements DDF_FeedClient {
 		/* Add HeartbeatPolicy to HEART_BEAT */
 		eventPolicy.put(DDF_FeedEvent.HEART_BEAT, new HeartbeatPolicy());
 
-		heartbeat = new Thread(new HeartbeatListener());
-		
 		/* Start heart beat listener */
-		executor.execute(heartbeat);
+		executor.execute(heartbeatTask);
 
 		executor.execute(eventTask);
 		executor.execute(messageTask);
@@ -352,7 +349,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			Thread.currentThread().setName("# EVENT TASK");
 
-			while (!Thread.interrupted()) {
+			while (!Thread.currentThread().isInterrupted()) {
 
 				try {
 
@@ -396,13 +393,14 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			Thread.currentThread().setName("# DDF MessageTask");
 
-			while (!Thread.interrupted()) {
+			while (!Thread.currentThread().isInterrupted()) {
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 					if (msgListener != null) {
 						msgListener.handleMessage(message);
 					}
 				} catch (final InterruptedException e) {
+					log.debug("MessageTask thread death");
 					log.trace("terminated");
 					return;
 				} catch (final Throwable e) {
@@ -437,10 +435,14 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private void initialize() {
 
+
 		// do this once
 
-		executor.execute(eventTask);
-		executor.execute(messageTask);
+		//log.debug("initialize called");
+		
+		
+		//executor.execute(eventTask);
+		//executor.execute(messageTask);
 
 	}
 
@@ -448,8 +450,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		// did not work, maybe because the while(true)
 
-		eventTask.interrupt();
-		messageTask.interrupt();
+		log.debug("terminate called");
 
 		eventQueue.clear();
 		messageQueue.clear();
@@ -494,6 +495,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	@Override
 	public synchronized void shutdown() {
 
+		log.warn("public shutdown() has been called, shutting down now.");
+		
 		loginHandler.disableLogins();
 
 		/* Interrupts login thread if login is active */
@@ -501,8 +504,21 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		/* Clear subscriptions, Jerq will stop sending data when we disconnect */
 		subscriptions.clear();
+
+		// kill all threads
 		
-		heartbeat.interrupt();
+		if(heartbeatTask!=null){
+			heartbeatTask.interrupt();
+		}
+
+		if(messageTask!=null){
+			messageTask.interrupt();
+		}
+		
+		if(eventTask!=null){
+			eventTask.interrupt();
+		}
+
 		
 		postEvent(DDF_FeedEvent.LOGOUT);
 
@@ -733,15 +749,16 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@Override
 		public void run() {
+			
 
+			log.error("starting LoginRunnable " + Thread.currentThread().getName());
+			
 			try {
 				Thread.sleep(delay);
 			} catch (final InterruptedException e1) {
 				e1.printStackTrace();
 			}
-
-			log.error("making connection");
-
+			
 			terminate();
 
 			initialize();
@@ -771,6 +788,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			final String primary = server.getPrimary();
 			final String secondary = server.getSecondary();
 
+			log.debug("trying primary server login " + primary);
+			
 			/* Attempt to connect and login to primary server */
 			final DDF_FeedEvent eventOne = login(primary, PORT);
 
@@ -782,7 +801,13 @@ class FeedClientDDF implements DDF_FeedClient {
 
 				return;
 			}
+			
+			log.warn("failed to connect to primary server " + primary);
+			
 
+			log.debug("trying secondary server login " + secondary);
+			
+			
 			/* Attempt to connect and login to secondary server */
 			final DDF_FeedEvent eventTwo = login(secondary, PORT);
 
@@ -799,7 +824,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			 * For simplicity, we only return the error message from the primary
 			 * server in the event both logins fail.
 			 */
-			log.error("Posting {}", eventOne.name());
+			log.error("Failed to connect to both servers , Posting {}", eventOne.name());
+			
 			postEvent(eventOne);
 
 			loggingIn = false;
@@ -818,7 +844,10 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			channel = futureConnect.getChannel();
 
-			futureConnect.awaitUninterruptibly(TIMEOUT, TIME_UNIT);
+			if(!futureConnect.awaitUninterruptibly(TIMEOUT, TIME_UNIT)){
+				log.error("channel connect timeout; {}:{} ", host, port);
+				return DDF_FeedEvent.CHANNEL_CONNECT_TIMEOUT;
+			}
 
 			/* Handle connection attempt errors */
 			if (!futureConnect.isDone()) {
@@ -858,26 +887,34 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	}
 
-	private class HeartbeatListener implements Runnable {
+	private final RunnerDDF heartbeatTask = new RunnerDDF() {
 
 		private long delta;
 		
 		@Override
-		public void run() {
+		public void runCore() {
 
 			Thread.currentThread().setName("# ddf-heartbeat listener");
 
+			log.warn("starting # ddf-heartbeat listener");
+			
 			try {
-				while (!Thread.interrupted()) {
+				while (!Thread.currentThread().isInterrupted()) {
 					checkTime();
 					Thread.sleep(2000); // This must be less than
 										// HEARTBEAT_TIMEOUT
 				}
 
 			} catch (final Exception e) {
-				log.error(e.getMessage());
-				Thread.currentThread().interrupt();
+				
+				log.warn("# ddf-heartbeat listener thread death");
+				return;
+
 			}
+			
+			
+			log.warn("# ddf-heartbeat listener thread death");
+
 
 		}
 
@@ -887,7 +924,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			 * If not currently logged in, keep the last heart beat updated so
 			 * when we do query it, it will be fresh.
 			 */
-			if (loginHandler.isLoginActive()) {
+
+			if (loginHandler.isLoginActive() || !isConnected()) {
 				lastHeartbeat.set(System.currentTimeMillis());
 			} else {
 				delta = System.currentTimeMillis() - lastHeartbeat.get();
@@ -897,16 +935,18 @@ class FeedClientDDF implements DDF_FeedClient {
 				 * reset last heart beat.
 				 */
 				if (delta > HEARTBEAT_TIMEOUT) {
-					log.debug("Heartbeat check failed - disconnecting");
+					log.debug("Heartbeat check failed - forcing fresh start");
 					log.debug("Heartbeat delta: " + delta);
+					
 					disconnect();
+					
 					lastHeartbeat.set(System.currentTimeMillis());
 				}
 
 			}
 		}
 
-	}
+	};
 
 	// change how this is done
 

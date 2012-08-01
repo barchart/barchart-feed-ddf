@@ -80,15 +80,16 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 	public void exceptionCaught(final ChannelHandlerContext ctx,
 			final ExceptionEvent e) throws Exception {
 
-		log.warn("SimpleChannelHandler caught exception");
+		log.warn("SimpleChannelHandler caught exception ");
+		//e.getCause().printStackTrace();
 
-		try {
+		/*try {
 			eventQueue.put(DDF_FeedEvent.CHANNEL_CONNECT_FAILURE);
 		} catch (final InterruptedException ex) {
 			log.trace("terminated");
 		}
 
-		ctx.sendUpstream(e);
+		ctx.sendUpstream(e);*/
 
 	}
 
