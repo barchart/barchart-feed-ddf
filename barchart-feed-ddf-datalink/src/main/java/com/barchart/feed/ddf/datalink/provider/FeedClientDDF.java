@@ -455,8 +455,16 @@ class FeedClientDDF implements DDF_FeedClient {
 		eventQueue.clear();
 		messageQueue.clear();
 
+		log.warn("terminate channel {}", channel);
+		
 		if (channel != null) {
+			
+			log.warn("channel NOT null, isOpen {}", channel.isOpen());
+			
 			channel.close();
+			
+			log.warn("called channel.close(), channel isOpen() {}", channel.isOpen());
+			
 			channel = null;
 		}
 
