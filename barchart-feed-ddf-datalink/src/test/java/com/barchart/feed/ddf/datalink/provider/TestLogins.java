@@ -82,7 +82,11 @@ public class TestLogins {
 
 		sleep(45000);
 
-		client.shutdown();
+		while(true){
+			sleep(1000);
+		}
+		
+		//client.shutdown();
 	}
 
 	private static void sleep(final int mills) {

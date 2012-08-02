@@ -474,8 +474,13 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		if (channel != null) {
 
+			log.warn("channel NOT null, isOpen {}", channel.isOpen());
+
 			channel.close();
 
+			log.warn("called channel.close(), channel isOpen() {}",
+					channel.isOpen());
+			
 			channel = null;
 		}
 
