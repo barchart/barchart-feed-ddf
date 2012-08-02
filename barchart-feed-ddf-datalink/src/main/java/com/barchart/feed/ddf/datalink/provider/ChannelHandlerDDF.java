@@ -64,13 +64,13 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 	public void channelDisconnected(final ChannelHandlerContext ctx,
 			final ChannelStateEvent e) throws Exception {
 
-		log.warn(" channelDisconnected not posting LINK_DISCONNECT");
+		log.warn("channelDisconnected posting LINK_DISCONNECT");
 
-		//try {
-			//eventQueue.put(DDF_FeedEvent.LINK_DISCONNECT);
-		//} catch (final InterruptedException ex) {
-			////log.trace("terminated");
-		//}
+		try {
+			eventQueue.put(DDF_FeedEvent.LINK_DISCONNECT);
+		} catch (final InterruptedException ex) {
+			log.trace("terminated");
+		}
 
 		ctx.sendUpstream(e);
 
