@@ -82,7 +82,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	//
 
 	private final LoginHandler loginHandler = new LoginHandler();
-	private volatile boolean loggingIn = false;
+
 	//
 
 	private final BlockingQueue<DDF_FeedEvent> eventQueue = new LinkedBlockingQueue<DDF_FeedEvent>();
@@ -349,6 +349,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			Thread.currentThread().setName("# EVENT TASK");
 
+			log.warn("# starting ddf-EventTask thread");
+			
 			while (!Thread.currentThread().isInterrupted()) {
 
 				try {
@@ -376,14 +378,14 @@ class FeedClientDDF implements DDF_FeedClient {
 					eventPolicy.get(event).newEvent();
 
 				} catch (final InterruptedException e) {
-					log.debug("Event thread death");
+					log.warn("# ddf-EventTask thread death");
 					return;
 				} catch (final Throwable e) {
 					log.error("event delivery failed", e);
 				}
 			}
 
-			log.debug("Event thread death");
+			log.warn("# ddf-EventTask thread death");
 		}
 	};
 
@@ -393,6 +395,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			Thread.currentThread().setName("# DDF MessageTask");
 
+			log.warn("# started ddf-MessageTask ");
+			
 			while (!Thread.currentThread().isInterrupted()) {
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
@@ -400,15 +404,15 @@ class FeedClientDDF implements DDF_FeedClient {
 						msgListener.handleMessage(message);
 					}
 				} catch (final InterruptedException e) {
-					log.debug("MessageTask thread death");
-					log.trace("terminated");
+					log.warn("# ddf-MessageTask thread InterruptedException", e);
 					return;
 				} catch (final Throwable e) {
-					log.error("message delivery failed", e);
+					log.warn("# ddf-MessageTask thread death", e);
+					return;
 				}
 			}
 
-			log.debug("MessageTask thread death");
+			log.warn("# ddf-MessageTask thread death");
 		}
 	};
 
@@ -435,12 +439,11 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private void initialize() {
 
-		// do this once
+		log.debug("initialize called");
 
-		// log.debug("initialize called");
-
-		// executor.execute(eventTask);
-		// executor.execute(messageTask);
+		executor.execute(heartbeatTask);
+		executor.execute(eventTask);
+		executor.execute(messageTask);
 
 	}
 
@@ -453,40 +456,9 @@ class FeedClientDDF implements DDF_FeedClient {
 		eventQueue.clear();
 		messageQueue.clear();
 
-		log.warn("terminate channel {}", channel);
-
-		if (channel != null) {
-
-			log.warn("channel NOT null, isOpen {}", channel.isOpen());
-
-
-			log.warn("called channel.close(), channel isOpen() {}",
-					channel.isOpen());
-			
-			channel = null;
-		}
-
-	}
-
-	private void hardRestart() {
-
-		eventQueue.clear();
-		messageQueue.clear();
-
-		if (channel != null) {
-
-			log.warn("channel NOT null, isOpen {}", channel.isOpen());
-
-			log.warn("called channel.close(), channel isOpen() {}",
-					channel.isOpen());
-
-			channel = null;
-		}
-
 		// kill all threads
 
 		if (heartbeatTask != null) {
-			log.warn("interruting heartbeatTask");
 			heartbeatTask.interrupt();
 		}
 
@@ -498,18 +470,46 @@ class FeedClientDDF implements DDF_FeedClient {
 			eventTask.interrupt();
 		}
 
-		/* Start heart beat listener */
-		executor.execute(heartbeatTask);
-		executor.execute(eventTask);
-		executor.execute(messageTask);
+		log.warn("terminate - closing channel, channel = {}", channel);
 
-		log.error("triggering disconnect from hardRestart()");
+		if (channel != null) {
 
-		postEvent(DDF_FeedEvent.LINK_DISCONNECT);
+			channel.close();
+
+			channel = null;
+		}
 
 	}
-	
 
+	/**
+	 * blocks
+	 * 
+	 */
+	private void hardRestart() {
+
+		log.error("#### interupt logins");
+
+		loginHandler.disableLogins();
+
+		/* Interrupts login thread if login is active */
+		loginHandler.interruptLogin();
+
+		log.error("#### terminate");
+		terminate();
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+		}
+
+		// login
+
+		log.error("#### enabling logins");
+
+		loginHandler.enableLogins();
+		loginHandler.login(0);
+
+	}
 
 	/*
 	 * Can post to the FeedEventHandler the following events: <p>
@@ -546,27 +546,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		log.warn("public shutdown() has been called, shutting down now.");
 
-		loginHandler.disableLogins();
-
-		/* Interrupts login thread if login is active */
-		loginHandler.interruptLogin();
-
 		/* Clear subscriptions, Jerq will stop sending data when we disconnect */
 		subscriptions.clear();
-
-		// kill all threads
-
-		if (heartbeatTask != null) {
-			heartbeatTask.interrupt();
-		}
-
-		if (messageTask != null) {
-			messageTask.interrupt();
-		}
-
-		if (eventTask != null) {
-			eventTask.interrupt();
-		}
 
 		postEvent(DDF_FeedEvent.LOGOUT);
 
@@ -582,10 +563,6 @@ class FeedClientDDF implements DDF_FeedClient {
 			return false;
 		}
 		return channel.isConnected();
-	}
-
-	private void disconnect() {
-		channel.disconnect();
 	}
 
 	/*
@@ -749,9 +726,10 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		synchronized void login(final int delay) {
 
-			log.warn("login enabled {} - logginIn - {} isLoginActive = "
-					+ isLoginActive(), enabled, loggingIn
-					+ " reconnect attempt count = " + i++);
+			log.warn(
+					"login called in LoginHandler. login enabled = {} isLoginActive = {} ",
+					enabled, isLoginActive() + " reconnect attempt count = "
+							+ i++);
 
 			if (proxySettings != null) {
 
@@ -761,20 +739,16 @@ class FeedClientDDF implements DDF_FeedClient {
 			}
 
 			if (enabled && !isLoginActive()) {
+				
+				log.warn("Setting feed state to attempting login");
 
-				log.warn("logging in regular, starting new thread..");
-
-				loggingIn = true;
-
+				updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
+				
 				loginThread = new Thread(new LoginRunnable(delay),
 						"# DDF Login " + i++);
 
 				executor.execute(loginThread);
-
-				log.warn("Setting feed state to attempting login");
-
-				updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
-
+				
 			}
 		}
 
@@ -789,6 +763,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	/* Runnable which handles connection, login, and initializaion */
 	class LoginRunnable implements Runnable {
 
+		@SuppressWarnings("unused")
 		private final int delay;
 
 		public LoginRunnable(final int delay) {
@@ -798,21 +773,15 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void run() {
 
-			log.error("starting LoginRunnable "
+			log.warn("starting LoginRunnable "
 					+ Thread.currentThread().getName());
-
-			//try {
-				//Thread.sleep(delay);
-			//} catch (final InterruptedException e1) {
-				//e1.printStackTrace();
-			//}
-
+			
 			terminate();
 
 			initialize();
 
 			log.warn("trying to connect to setting service...");
-			
+
 			/* Attempt to get current data server settings */
 			DDF_Settings settings = null;
 			try {
@@ -821,19 +790,15 @@ class FeedClientDDF implements DDF_FeedClient {
 					log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
 					postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
 
-					loggingIn = false;
-
 					return;
 				}
 			} catch (final Exception e) {
 				log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
 				postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
 
-				loggingIn = false;
-
 				return;
 			}
-			
+
 			log.debug("got settings from settings service");
 
 			final DDF_Server server = settings.getServer(serverType);
@@ -849,8 +814,6 @@ class FeedClientDDF implements DDF_FeedClient {
 				log.debug("Posting LOGIN_SENT for primary server");
 				postEvent(DDF_FeedEvent.LOGIN_SENT);
 
-				loggingIn = false;
-
 				return;
 			}
 
@@ -865,8 +828,6 @@ class FeedClientDDF implements DDF_FeedClient {
 				log.debug("Posting LOGIN_SENT for secondary server");
 				postEvent(DDF_FeedEvent.LOGIN_SENT);
 
-				loggingIn = false;
-
 				return;
 			}
 
@@ -878,8 +839,6 @@ class FeedClientDDF implements DDF_FeedClient {
 					eventOne.name());
 
 			postEvent(eventOne);
-
-			loggingIn = false;
 
 			return;
 		}
@@ -957,7 +916,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				}
 
 			} catch (final InterruptedException e) {
-				log.debug("Heartbeat thread death");
+				log.debug("# ddf-heartbeat listener thread death");
 				return;
 
 			} catch (final Exception e) {
@@ -1002,17 +961,16 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 	};
-	
-	private class Disconnector implements Runnable{
+
+	private class Disconnector implements Runnable {
 
 		@Override
 		public void run() {
-			//hardRestart();
-			disconnect();
-			log.warn("about to post LINK_DISCONNECT in thread");
-			postEvent(DDF_FeedEvent.LINK_DISCONNECT);
+
+			hardRestart();
+
 		}
-		
+
 	}
 
 	// change how this is done
