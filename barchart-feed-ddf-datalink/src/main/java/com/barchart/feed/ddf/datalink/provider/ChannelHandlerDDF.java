@@ -64,7 +64,7 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 	public void channelDisconnected(final ChannelHandlerContext ctx,
 			final ChannelStateEvent e) throws Exception {
 
-		log.warn("Posting LINK_DISCONNECT");
+		log.warn("Posting channelDisconnected LINK_DISCONNECT");
 
 		try {
 			eventQueue.put(DDF_FeedEvent.LINK_DISCONNECT);

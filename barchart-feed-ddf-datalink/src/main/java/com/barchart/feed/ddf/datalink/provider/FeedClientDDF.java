@@ -424,7 +424,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		try {
 			eventQueue.put(event);
 		} catch (final InterruptedException e) {
-			log.trace("terminated");
+			log.error("could not post event - interrupted");
 		}
 	}
 
@@ -801,11 +801,11 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.error("starting LoginRunnable "
 					+ Thread.currentThread().getName());
 
-			try {
-				Thread.sleep(delay);
-			} catch (final InterruptedException e1) {
-				e1.printStackTrace();
-			}
+			//try {
+				//Thread.sleep(delay);
+			//} catch (final InterruptedException e1) {
+				//e1.printStackTrace();
+			//}
 
 			terminate();
 
@@ -992,13 +992,10 @@ class FeedClientDDF implements DDF_FeedClient {
 					log.debug("Heartbeat delta: " + delta);
 
 					// any calls here will happen in this thread
-					// sleep was blocking the channelDisconnected event
-					
+
 					executor.execute(new Thread(new Disconnector()));
 
-					return;
-
-					
+					lastHeartbeat.set(System.currentTimeMillis());
 				}
 
 			}
@@ -1011,7 +1008,9 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void run() {
 			//hardRestart();
-			disconnect();
+			//disconnect(t;
+			log.warn("about to post LINK_DISCONNECT in thread");
+			postEvent(DDF_FeedEvent.LINK_DISCONNECT);
 		}
 		
 	}
