@@ -459,8 +459,12 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			log.warn("channel NOT null, isOpen {}", channel.isOpen());
 
+
 			log.warn("called channel.close(), channel isOpen() {}",
 					channel.isOpen());
+			
+			log.warn("called channel.close(), channel isOpen() {}", channel.isOpen());
+			
 
 			channel = null;
 		}
@@ -507,6 +511,8 @@ class FeedClientDDF implements DDF_FeedClient {
 		postEvent(DDF_FeedEvent.LINK_DISCONNECT);
 
 	}
+	
+
 
 	/*
 	 * Can post to the FeedEventHandler the following events: <p>
@@ -992,6 +998,8 @@ class FeedClientDDF implements DDF_FeedClient {
 					executor.execute(new Thread(new Disconnector()));
 
 					return;
+
+					
 				}
 
 			}
