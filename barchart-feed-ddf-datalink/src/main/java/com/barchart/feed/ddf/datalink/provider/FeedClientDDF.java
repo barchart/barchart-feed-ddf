@@ -1008,7 +1008,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void run() {
 			//hardRestart();
-			//disconnect(t;
+			disconnect();
 			log.warn("about to post LINK_DISCONNECT in thread");
 			postEvent(DDF_FeedEvent.LINK_DISCONNECT);
 		}
