@@ -424,7 +424,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		try {
 			eventQueue.put(event);
 		} catch (final InterruptedException e) {
-			log.trace("terminated");
+			log.error("could not post event - interrupted");
 		}
 	}
 
@@ -463,9 +463,6 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.warn("called channel.close(), channel isOpen() {}",
 					channel.isOpen());
 			
-			log.warn("called channel.close(), channel isOpen() {}", channel.isOpen());
-			
-
 			channel = null;
 		}
 
@@ -836,6 +833,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 				return;
 			}
+			
+			log.debug("got settings from settings service");
 
 			final DDF_Server server = settings.getServer(serverType);
 			final String primary = server.getPrimary();
@@ -1012,7 +1011,9 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void run() {
 			//hardRestart();
-			disconnect();
+			//disconnect(t;
+			log.warn("about to post LINK_DISCONNECT in thread");
+			postEvent(DDF_FeedEvent.LINK_DISCONNECT);
 		}
 		
 	}
