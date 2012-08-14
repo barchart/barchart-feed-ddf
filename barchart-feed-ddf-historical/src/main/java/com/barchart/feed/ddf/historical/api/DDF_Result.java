@@ -20,9 +20,12 @@ import com.barchart.util.thread.RunnerLoop;
  */
 public interface DDF_Result<E extends DDF_Entry> extends RunnerLoop<E> {
 
+	
 	/** clone of original query */
 	DDF_Query<E> getQuery();
 
+	String getQueryURL();
+	
 	//
 
 	DDF_ResultStatus getStatus();

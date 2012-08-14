@@ -145,6 +145,10 @@ public final class DDF_HistoricalService {
 
 		final Result<E> result = new Result<E>(query, entryReference, listener);
 
+		// set url query for debugging
+		
+		result.urlQuery = stringURL;
+		
 		String firstLine = "";
 		int index = 0;
 

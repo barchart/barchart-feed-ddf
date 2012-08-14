@@ -25,6 +25,8 @@ class Result<E extends DDF_Entry> implements DDF_Result<E> {
 
 	protected String statusComment;
 	protected DDF_ResultStatus status;
+	
+	protected String urlQuery;
 
 	//
 
@@ -188,6 +190,12 @@ class Result<E extends DDF_Entry> implements DDF_Result<E> {
 	@Override
 	public DDF_Query<E> getQuery() {
 		return query.clone();
+	}
+
+	@Override
+	public String getQueryURL() {
+		
+		return urlQuery;
 	}
 
 	//
