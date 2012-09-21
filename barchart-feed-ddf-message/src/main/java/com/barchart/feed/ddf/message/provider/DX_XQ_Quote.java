@@ -264,7 +264,8 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 		final DDF_Fraction frac = DDF_Fraction.fromBaseCode(baseCode);
 		setFraction(frac);
 
-		final byte exchCode = xmlByteDecode(tag, EXCHANGE_DDF, XML_STOP);
+		// FIXME, MDEX ddfexchange code missing
+		final byte exchCode = xmlByteDecode(tag, EXCHANGE_DDF, XML_PASS);
 		final DDF_Exchange exch = DDF_Exchange.fromCode(exchCode);
 		setExchange(exch);
 
