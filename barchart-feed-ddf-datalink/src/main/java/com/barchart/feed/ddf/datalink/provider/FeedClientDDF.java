@@ -407,8 +407,7 @@ class FeedClientDDF implements DDF_FeedClient {
 					log.warn("# ddf-MessageTask thread InterruptedException", e);
 					return;
 				} catch (final Throwable e) {
-					log.warn("# ddf-MessageTask thread death", e);
-					return;
+					log.error("message delivery failed", e);
 				}
 			}
 
