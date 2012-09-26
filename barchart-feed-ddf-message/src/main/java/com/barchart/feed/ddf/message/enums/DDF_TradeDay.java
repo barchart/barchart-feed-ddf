@@ -279,20 +279,26 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 
 		//
 
-		final DateTime generated;
+		DateTime generated;
 
-		if (isSameMonthSameDay) {
-			generated = todayDate;
-		} else if (isSameMonthPastDay) {
-			generated = todayDate.withDayOfMonth(tradingDayNum);
-		} else if (isSameMonthNextDay) {
-			generated = todayDate.withDayOfMonth(tradingDayNum);
-		} else if (isPastMonthPastDay) {
-			generated = todayDate.minusMonths(1).withDayOfMonth(tradingDayNum);
-		} else if (isNextMonthNextDay) {
-			generated = todayDate.plusMonths(1).withDayOfMonth(tradingDayNum);
-		} else {
-			logger.error("should not happen");
+		try {
+			if (isSameMonthSameDay) {
+				generated = todayDate;
+			} else if (isSameMonthPastDay) {
+				generated = todayDate.withDayOfMonth(tradingDayNum);
+			} else if (isSameMonthNextDay) {
+				generated = todayDate.withDayOfMonth(tradingDayNum);
+			} else if (isPastMonthPastDay) {
+				generated = todayDate.minusMonths(1).withDayOfMonth(tradingDayNum);
+			} else if (isNextMonthNextDay) {
+				generated = todayDate.plusMonths(1).withDayOfMonth(tradingDayNum);
+			} else {
+				logger.error("should not happen");
+				generated = todayDate;
+			}
+		} catch (Exception e) {
+			logger.error("error parsing date, day code = " + tradeDay.code);
+			e.printStackTrace();
 			generated = todayDate;
 		}
 
