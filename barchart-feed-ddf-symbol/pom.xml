@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>barchart-feed-ddf</artifactId>
 		<groupId>com.barchart.feed</groupId>
-		<version>3.4.24-SNAPSHOT</version>
+		<version>3.4.24</version>
 	</parent>
 
 	<name>barchart-feed-ddf-symbol</name>
