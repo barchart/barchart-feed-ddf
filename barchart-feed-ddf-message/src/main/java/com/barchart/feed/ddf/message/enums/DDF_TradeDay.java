@@ -298,7 +298,6 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 			}
 		} catch (Exception e) {
 			logger.error("error parsing date, day code = " + tradeDay.code + " day = " + tradeDay.day);
-			e.printStackTrace();
 			generated = todayDate;
 		}
 
