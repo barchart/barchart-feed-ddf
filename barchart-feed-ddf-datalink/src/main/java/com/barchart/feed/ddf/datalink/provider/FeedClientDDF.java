@@ -378,7 +378,7 @@ class FeedClientDDF implements DDF_FeedClient {
 					eventPolicy.get(event).newEvent();
 
 				} catch (final InterruptedException e) {
-					log.warn("# ddf-EventTask thread death");
+					log.warn("# ddf-EventTask thread InterruptedException");
 					return;
 				} catch (final Throwable e) {
 					log.error("event delivery failed", e);
@@ -404,7 +404,7 @@ class FeedClientDDF implements DDF_FeedClient {
 						msgListener.handleMessage(message);
 					}
 				} catch (final InterruptedException e) {
-					log.warn("# ddf-MessageTask thread InterruptedException", e);
+					log.warn("# ddf-MessageTask thread InterruptedException");
 					return;
 				} catch (final Throwable e) {
 					log.error("message delivery failed", e);
@@ -438,11 +438,33 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private void initialize() {
 
-		log.debug("initialize called");
+		log.warn("initialize called");
 
-		executor.execute(heartbeatTask);
-		executor.execute(eventTask);
-		executor.execute(messageTask);
+		try {
+			executor.execute(heartbeatTask);
+		} catch (Exception e) {
+			log.error("error starting DDF_Heartbeat Thread: {} ", e);
+			
+			hardRestart();
+			return;
+		}
+		try {
+			executor.execute(eventTask);
+		} catch (Exception e) {
+			log.error("error starting DDF_Event Thread: {} ", e);
+			
+			hardRestart();
+			return;
+		}
+		try {
+			executor.execute(messageTask);
+		} catch (Exception e) {
+			log.error("error starting DDF_Message Thread: {} ", e);
+			
+			hardRestart();
+			return;
+		}
+
 
 	}
 
@@ -782,6 +804,13 @@ class FeedClientDDF implements DDF_FeedClient {
 			
 			terminate();
 
+			log.warn("sleeping for 1200 ms after terminate()");
+			
+			try {
+				Thread.sleep(1200);
+			} catch (InterruptedException e1) {
+			}
+			
 			initialize();
 
 			log.warn("trying to connect to setting service...");
