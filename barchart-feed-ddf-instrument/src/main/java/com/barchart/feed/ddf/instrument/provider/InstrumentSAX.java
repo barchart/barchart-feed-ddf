@@ -16,6 +16,8 @@ import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_TICK_
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.STATUS;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_CODE_CFI;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_COMMENT;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_MONTH;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_YEAR;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPIRE;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REAL;
@@ -94,6 +96,11 @@ class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 
 		//
 
+		final String ddf_expire_month = xmlStringDecode(ats,
+				SYMBOL_DDF_EXPIRE_MONTH, XML_PASS);
+		final String ddf_expire_year = xmlStringDecode(ats,
+				SYMBOL_DDF_EXPIRE_YEAR, XML_PASS);
+		
 		final DDF_TimeZone zone = DDF_TimeZone.fromCode(zoneCode);
 
 		final DDF_Exchange exchange = DDF_Exchange.fromCode(exchCode);
@@ -128,6 +135,9 @@ class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 
 		/* PROPRIETARY */
 
+		set(DDF_InstrumentField.DDF_EXPIRE_MONTH, newText(ddf_expire_month));
+		set(DDF_InstrumentField.DDF_EXPIRE_YEAR, newText(ddf_expire_year));
+		
 		set(DDF_InstrumentField.DDF_ZONE, zone);
 		set(DDF_InstrumentField.DDF_EXCHANGE, exchange);
 		set(DDF_InstrumentField.DDF_EXCH_DESC, newText(exchangeComment));

@@ -94,6 +94,7 @@ interface XmlTagExtras {
 	/** expiration date, if any */
 	String SYMBOL_EXPIRE = "symbol_expire";
 
+
 	String SYMBOL_COMMENT = "symbol_description";
 
 	/** price step expressed as ddf base code fraction */

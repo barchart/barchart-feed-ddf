@@ -22,8 +22,9 @@ import com.barchart.util.values.api.Value;
 // TODO: Auto-generated Javadoc
 /**
  * The Class DDF_InstrumentField.
- *
- * @param <V> the value type
+ * 
+ * @param <V>
+ *            the value type
  */
 @NotMutable
 public final class DDF_InstrumentField<V extends Value<V>> extends
@@ -53,11 +54,15 @@ public final class DDF_InstrumentField<V extends Value<V>> extends
 	/** ddf special time zone info. */
 	public static final DDF_InstrumentField<DDF_TimeZone> DDF_ZONE = NEW(DDF_TimeZone.LOCAL);
 
+	public static final DDF_InstrumentField<TextValue> DDF_EXPIRE_MONTH = NEW(NULL_TEXT);
+
+	public static final DDF_InstrumentField<TextValue> DDF_EXPIRE_YEAR = NEW(NULL_TEXT);
+
 	// ##################################
 
 	/**
 	 * Size.
-	 *
+	 * 
 	 * @return the int
 	 */
 	public static int size() {
@@ -66,7 +71,7 @@ public final class DDF_InstrumentField<V extends Value<V>> extends
 
 	/**
 	 * Values.
-	 *
+	 * 
 	 * @return the dD f_ instrument field[]
 	 */
 	public static DDF_InstrumentField<?>[] values() {
@@ -75,7 +80,9 @@ public final class DDF_InstrumentField<V extends Value<V>> extends
 
 	private final long mask;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.barchart.util.collections.BitSetEnum#mask()
 	 */
 	@Override

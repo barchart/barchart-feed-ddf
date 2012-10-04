@@ -21,6 +21,8 @@ import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REAL;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_UNI;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.TIME_ZONE_DDF;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_MONTH;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_YEAR;
 import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlByteDecode;
@@ -56,6 +58,8 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 
 		// lookup status
 
+		System.out.println("##############################################DDF EXP MONTH");
+		
 		final String statusCode = xmlStringDecode(tag, STATUS, XML_STOP);
 
 		final StatusXML status = StatusXML.fromCode(statusCode);
@@ -94,6 +98,14 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 
 		//
 
+		// month code for exp of futures contract
+
+		final String ddf_expire_month = xmlStringDecode(tag,
+				SYMBOL_DDF_EXPIRE_MONTH, XML_PASS);
+		final String ddf_expire_year = xmlStringDecode(tag,
+				SYMBOL_DDF_EXPIRE_YEAR, XML_PASS);
+
+		
 		final DDF_TimeZone zone = DDF_TimeZone.fromCode(zoneCode);
 
 		final DDF_Exchange exchange = DDF_Exchange.fromCode(exchCode);
@@ -127,6 +139,9 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 		set(InstrumentField.DATE_FINISH, expire);
 
 		/* PROPRIETARY */
+
+		set(DDF_InstrumentField.DDF_EXPIRE_MONTH, newText(ddf_expire_month));
+		set(DDF_InstrumentField.DDF_EXPIRE_YEAR, newText(ddf_expire_year));
 
 		set(DDF_InstrumentField.DDF_ZONE, zone);
 		set(DDF_InstrumentField.DDF_EXCHANGE, exchange);
