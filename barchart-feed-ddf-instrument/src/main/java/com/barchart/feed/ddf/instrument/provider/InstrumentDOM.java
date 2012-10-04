@@ -57,8 +57,6 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 	public void decodeXML(final Element tag) throws Exception {
 
 		// lookup status
-
-		System.out.println("##############################################DDF EXP MONTH");
 		
 		final String statusCode = xmlStringDecode(tag, STATUS, XML_STOP);
 
