@@ -23,11 +23,11 @@
 
 		<!-- <groupId>com.barchart.util</groupId> -->
 		<!-- <artifactId>barchart-util</artifactId> -->
-		<barchartUtilVersion>2.0.4</barchartUtilVersion>
+		<barchartUtilVersion>2.0.7</barchartUtilVersion>
 
 		<!-- <groupId>com.barchart.feed</groupId> -->
 		<!-- <artifactId>barchart-feed-base</artifactId> -->
-		<barchartFeedBaseVersion>1.3.10</barchartFeedBaseVersion>
+		<barchartFeedBaseVersion>1.3.11</barchartFeedBaseVersion>
 
 		<!-- <groupId>com.barchart.feed</groupId> -->
 		<!-- <artifactId>barchart-feed-base</artifactId> -->
