@@ -313,6 +313,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
 				subscribe(subscriptions);
+			} else {
+				log.error("subscriptions set is empty.");
 			}
 		}
 	}
@@ -350,7 +352,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			Thread.currentThread().setName("# EVENT TASK");
 
 			log.warn("# starting ddf-EventTask thread");
-			
+
 			while (!Thread.currentThread().isInterrupted()) {
 
 				try {
@@ -396,7 +398,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			Thread.currentThread().setName("# DDF MessageTask");
 
 			log.warn("# started ddf-MessageTask ");
-			
+
 			while (!Thread.currentThread().isInterrupted()) {
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
@@ -444,7 +446,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			executor.execute(heartbeatTask);
 		} catch (Exception e) {
 			log.error("error starting DDF_Heartbeat Thread: {} ", e);
-			
+
 			hardRestart();
 			return;
 		}
@@ -452,7 +454,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			executor.execute(eventTask);
 		} catch (Exception e) {
 			log.error("error starting DDF_Event Thread: {} ", e);
-			
+
 			hardRestart();
 			return;
 		}
@@ -460,11 +462,10 @@ class FeedClientDDF implements DDF_FeedClient {
 			executor.execute(messageTask);
 		} catch (Exception e) {
 			log.error("error starting DDF_Message Thread: {} ", e);
-			
+
 			hardRestart();
 			return;
 		}
-
 
 	}
 
@@ -472,7 +473,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		// did not work, maybe because the while(true)
 
-		log.debug("terminate called");
+		log.warn("terminate called");
 
 		eventQueue.clear();
 		messageQueue.clear();
@@ -501,7 +502,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			log.warn("called channel.close(), channel isOpen() {}",
 					channel.isOpen());
-			
+
 			channel = null;
 		}
 
@@ -752,6 +753,12 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		synchronized void login(final int delay) {
 
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
 			log.warn(
 					"login called in LoginHandler. login enabled = {} isLoginActive = {} ",
 					enabled, isLoginActive() + " reconnect attempt count = "
@@ -765,16 +772,18 @@ class FeedClientDDF implements DDF_FeedClient {
 			}
 
 			if (enabled && !isLoginActive()) {
-				
+
 				log.warn("Setting feed state to attempting login");
 
 				updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
-				
+
 				loginThread = new Thread(new LoginRunnable(delay),
 						"# DDF Login " + i++);
 
-				executor.execute(loginThread);
-				
+				// use .start() not executor..
+
+				loginThread.start();
+
 			}
 		}
 
@@ -801,16 +810,16 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			log.warn("starting LoginRunnable "
 					+ Thread.currentThread().getName());
-			
+
 			terminate();
 
-			log.warn("sleeping for 1200 ms after terminate()");
-			
+			log.warn("sleeping for 2000 ms after terminate()");
+
 			try {
-				Thread.sleep(1200);
+				Thread.sleep(2000);
 			} catch (InterruptedException e1) {
 			}
-			
+
 			initialize();
 
 			log.warn("trying to connect to setting service...");
@@ -949,12 +958,12 @@ class FeedClientDDF implements DDF_FeedClient {
 				}
 
 			} catch (final InterruptedException e) {
-				log.debug("# ddf-heartbeat listener thread death");
+				log.warn("# ddf-heartbeat listener thread InterruptedException");
 				return;
 
 			} catch (final Exception e) {
 
-				log.warn("# ddf-heartbeat listener thread death");
+				log.warn("# ddf-heartbeat exception: {}", e);
 				return;
 
 			}
@@ -980,8 +989,8 @@ class FeedClientDDF implements DDF_FeedClient {
 				 * reset last heart beat.
 				 */
 				if (delta > HEARTBEAT_TIMEOUT) {
-					log.debug("Heartbeat check failed - calling hardRestart()");
-					log.debug("Heartbeat delta: " + delta);
+					log.error("Heartbeat check failed - calling hardRestart()");
+					log.error("Heartbeat delta: " + delta);
 
 					// any calls here will happen in this thread
 
