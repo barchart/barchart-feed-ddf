@@ -23,7 +23,9 @@ import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
 import com.barchart.feed.ddf.util.provider.DDF_NulVal;
 import com.barchart.util.ascii.ASCII;
+import com.barchart.util.math.DoubleParts;
 import com.barchart.util.math.MathExtra;
+import com.barchart.util.math.MathIEEE754;
 import com.barchart.util.values.api.DecimalValue;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -420,6 +422,7 @@ public final class HelperDDF {
 		return ValueBuilder.newPrice(mantissa, exponent);
 	}
 
+	
 	/**
 	 * Price encode.
 	 * 

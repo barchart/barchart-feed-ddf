@@ -27,12 +27,12 @@ import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlByteDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlPriceDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlTimeDecode;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 
+import org.omg.CORBA.portable.ValueBase;
 import org.w3c.dom.Element;
 
 import com.barchart.feed.base.instrument.enums.CodeCFI;
@@ -43,6 +43,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;
+import com.barchart.util.values.provider.ValueBuilder;
 
 class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 
@@ -57,7 +58,7 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 	public void decodeXML(final Element tag) throws Exception {
 
 		// lookup status
-		
+
 		final String statusCode = xmlStringDecode(tag, STATUS, XML_STOP);
 
 		final StatusXML status = StatusXML.fromCode(statusCode);
@@ -103,7 +104,6 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 		final String ddf_expire_year = xmlStringDecode(tag,
 				SYMBOL_DDF_EXPIRE_YEAR, XML_PASS);
 
-		
 		final DDF_TimeZone zone = DDF_TimeZone.fromCode(zoneCode);
 
 		final DDF_Exchange exchange = DDF_Exchange.fromCode(exchCode);
@@ -113,8 +113,20 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 		final long priceStepMantissa = xmlDecimalDecode(frac, tag,
 				PRICE_TICK_INCREMENT, XML_STOP);
 
-		final PriceValue pricePoint = xmlPriceDecode(tag, PRICE_POINT_VALUE,
+		final String pricePointString = xmlStringDecode(tag, PRICE_POINT_VALUE,
 				XML_PASS);
+
+		PriceValue pricePoint = ValueBuilder.newPrice(0);
+
+		if (pricePointString != null) {
+
+			try {
+				pricePoint = ValueBuilder.newPrice(Double
+						.valueOf(pricePointString));
+			} catch (Exception e) {
+			}
+
+		}
 
 		final PriceValue priceStep = newPrice(priceStepMantissa,
 				frac.decimalExponent);

@@ -32,14 +32,14 @@ public class TestBarchartFeedClient {
 	 */
 	public static void main(final String[] args) throws Exception {
 
-		final String username = System.getProperty("barchart.username");
-		final String password = System.getProperty("barchart.password");
+		final String username = "mehb1"; //System.getProperty("barchart.username");
+		final String password = "mehb1"; //System.getProperty("barchart.password");
 
 		final BarchartFeedClient client = new BarchartFeedClient();
 
 		final MarketInstrument[] instruments = { client.lookup("INTC"),
 				client.lookup("SPY"), client.lookup("FB"), client.lookup("S"),
-				client.lookup("ESU12"), };
+				client.lookup("ESZ12"), };
 
 		final FeedStateListener feedListener = new FeedStateListener() {
 
