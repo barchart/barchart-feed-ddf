@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>barchart-feed-ddf</artifactId>
 		<groupId>com.barchart.feed</groupId>
-		<version>3.4.27-SNAPSHOT</version>
+		<version>3.4.27</version>
 	</parent>
 
 	<name>barchart-feed-ddf-resolver</name>
