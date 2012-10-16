@@ -37,9 +37,7 @@ public class TestBarchartFeedClient {
 
 		final BarchartFeedClient client = new BarchartFeedClient();
 
-		final MarketInstrument[] instruments = { client.lookup("INTC"),
-				client.lookup("SPY"), client.lookup("FB"), client.lookup("S"),
-				client.lookup("ESU12"), };
+		final MarketInstrument[] instruments = { client.lookup("$INX")};
 
 		final FeedStateListener feedListener = new FeedStateListener() {
 
@@ -125,7 +123,7 @@ public class TestBarchartFeedClient {
 														MarketStateEntry.IS_SETTLED));
 					}
 
-					// log.debug(sb.toString());
+					log.debug(sb.toString());
 
 				}
 

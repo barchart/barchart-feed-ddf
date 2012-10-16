@@ -128,6 +128,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	@Override
 	public Void visit(final DDF_MarketParameter message, final MarketDo market) {
 
+		log.debug("Visiting DDF_MarketParameter : " + message.toStringFields());
+		
 		final DDF_ParamType param = message.getParamType();
 
 		final TimeValue time = message.getTime();

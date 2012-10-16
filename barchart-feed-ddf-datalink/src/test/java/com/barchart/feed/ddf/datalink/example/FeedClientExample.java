@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.ddf.datalink.example;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -16,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
+import com.barchart.feed.ddf.datalink.api.Subscription;
+import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
 import com.barchart.feed.ddf.datalink.enums.TP;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 
@@ -78,23 +82,23 @@ public class FeedClientExample {
 		Thread.sleep(5000);
 
 		final CharSequence request = "" + //
-				"GOOG=bBsScCvVqQ," + //
-				"CLQ2-CLU2=bBsScCvVqQ," + //
-				"NGQ2=bBsScCvVqQ," + //
-				"ESQ2=bBsScCvVqQ," + //
-				"XFQ2=bBsScCvVqQ," + //
-				"KCQ2=bBsScCvVqQ," + //
+				"$OEX=BbSs" +
 				"";
 
-		// final boolean isSent = client.send(FeedDDF.tcpGo(request));
-		// if (!isSent) {
-		// log.error("invalid session");
-		// return;
-		// }
-		//
-		// Thread.sleep(1000 * 1000);
-		//
-		// client.shutdown();
+		Set<DDF_FeedInterest> insts = new HashSet<DDF_FeedInterest>();
+		insts.add(DDF_FeedInterest.BOOK_SNAPSHOT);
+		insts.add(DDF_FeedInterest.BOOK_UPDATE);
+		insts.add(DDF_FeedInterest.QUOTE_SNAPSHOT);
+		insts.add(DDF_FeedInterest.QUOTE_UPDATE);
+		client.subscribe(new Subscription("$OEX", insts));
+//		 if (!isSent) {
+//		 log.error("invalid session");
+//		 return;
+//		 }
+		
+		 Thread.sleep(1000 * 1000);
+		
+		 client.shutdown();
 
 	}
 
