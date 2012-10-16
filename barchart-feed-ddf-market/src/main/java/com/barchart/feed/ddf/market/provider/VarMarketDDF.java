@@ -293,13 +293,17 @@ class VarMarketDDF extends VarMarket {
 
 		// Only update last for normal in-sequence trades
 		if (sequencing == NORMAL) {
-			bar.set(CLOSE, price);
-			if (session == DEFAULT) {
-				// events only for combo
-				eventAdd(NEW_CLOSE);
+			if (price.isNull() || price.isZero()) {
+				log.warn("null or zero price on trade message, not applying to bar");
+			} else {
+				bar.set(CLOSE, price);
+				if (session == DEFAULT) {
+					// events only for combo
+					eventAdd(NEW_CLOSE);
+				}
+				// ### time
+				bar.set(BAR_TIME, time);
 			}
-			// ### time
-			bar.set(BAR_TIME, time);
 		} else {
 			// XXX: Update high / low, or just wait for refresh?
 		}

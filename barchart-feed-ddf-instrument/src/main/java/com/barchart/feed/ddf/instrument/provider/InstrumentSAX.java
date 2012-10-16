@@ -27,7 +27,6 @@ import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlByteDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlPriceDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlTimeDecode;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
@@ -43,6 +42,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;
+import com.barchart.util.values.provider.ValueBuilder;
 
 class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 
@@ -100,7 +100,7 @@ class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 				SYMBOL_DDF_EXPIRE_MONTH, XML_PASS);
 		final String ddf_expire_year = xmlStringDecode(ats,
 				SYMBOL_DDF_EXPIRE_YEAR, XML_PASS);
-		
+
 		final DDF_TimeZone zone = DDF_TimeZone.fromCode(zoneCode);
 
 		final DDF_Exchange exchange = DDF_Exchange.fromCode(exchCode);
@@ -110,8 +110,20 @@ class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 		final long priceStepMantissa = xmlDecimalDecode(frac, ats,
 				PRICE_TICK_INCREMENT, XML_STOP);
 
-		final PriceValue pricePoint = xmlPriceDecode(ats, PRICE_POINT_VALUE,
+		final String pricePointString = xmlStringDecode(ats, PRICE_POINT_VALUE,
 				XML_PASS);
+
+		PriceValue pricePoint = ValueBuilder.newPrice(0);
+
+		if (pricePointString != null) {
+
+			try {
+				pricePoint = ValueBuilder.newPrice(Double
+						.valueOf(pricePointString));
+			} catch (Exception e) {
+			}
+
+		}
 
 		final PriceValue priceStep = newPrice(priceStepMantissa,
 				frac.decimalExponent);
@@ -137,7 +149,7 @@ class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 
 		set(DDF_InstrumentField.DDF_EXPIRE_MONTH, newText(ddf_expire_month));
 		set(DDF_InstrumentField.DDF_EXPIRE_YEAR, newText(ddf_expire_year));
-		
+
 		set(DDF_InstrumentField.DDF_ZONE, zone);
 		set(DDF_InstrumentField.DDF_EXCHANGE, exchange);
 		set(DDF_InstrumentField.DDF_EXCH_DESC, newText(exchangeComment));
