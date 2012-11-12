@@ -71,7 +71,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	private static final String TIMEOUT_OPTION = "connectTimeoutMillis";
 	private static final TimeUnit TIME_UNIT = TimeUnit.MILLISECONDS;
 
-	private static final long HEARTBEAT_TIMEOUT = 10 * 1000;
+	private static final long HEARTBEAT_TIMEOUT = 30 * 1000;
 
 	//
 
@@ -380,14 +380,18 @@ class FeedClientDDF implements DDF_FeedClient {
 					eventPolicy.get(event).newEvent();
 
 				} catch (final InterruptedException e) {
-					log.warn("# ddf-EventTask thread InterruptedException");
+					log.error("# ddf-EventTask thread InterruptedException");
+
+					log.warn("Setting feed state to logged out");
+					updateFeedStateListeners(FeedState.LOGGED_OUT);
+
 					return;
 				} catch (final Throwable e) {
 					log.error("event delivery failed", e);
 				}
 			}
 
-			log.warn("# ddf-EventTask thread death");
+			log.error("# ddf-EventTask thread death");
 		}
 	};
 
