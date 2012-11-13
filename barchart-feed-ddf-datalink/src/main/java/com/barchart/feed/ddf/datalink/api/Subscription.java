@@ -50,6 +50,22 @@ public class Subscription {
 		this.interests = DDF_FeedInterest.fromEvents(events);
 	}
 
+	public Collection<DDF_FeedInterest> getInterests() {
+		return interests;
+	}
+	
+	public String getInstrument() {
+		return instrument;
+	}
+
+	public void addInterests(final Collection<DDF_FeedInterest> insts) {
+		interests.addAll(insts);
+	}
+	
+	public void removeInterests(final Collection<DDF_FeedInterest> insts) {
+		interests.removeAll(insts);
+	}
+	
 	/**
 	 * Helper method returning the JERQ command to unsubscribe this
 	 * subscription. Note: the "STOP " header is omitted for chaining requests.
@@ -78,30 +94,4 @@ public class Subscription {
 		return instrument + " " + DDF_FeedInterest.from(interests);
 	}
 
-	/**
-	 * Returns the hash code of the instrument.
-	 */
-	@Override
-	public int hashCode() {
-		return instrument.hashCode();
-	}
-
-	/**
-	 * Two subscriptions are equal if their instruments are the same, regardless
-	 * of their interests.
-	 */
-	@Override
-	public boolean equals(final Object o) {
-		if (o == null) {
-			return false;
-		}
-
-		if (!(o instanceof Subscription)) {
-			return false;
-		}
-
-		final Subscription s = (Subscription) o;
-
-		return (this.hashCode() == s.hashCode());
-	}
 }

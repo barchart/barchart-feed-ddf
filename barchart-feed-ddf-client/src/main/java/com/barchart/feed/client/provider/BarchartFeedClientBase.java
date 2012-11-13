@@ -7,9 +7,9 @@
  * valid user name and password. Optional parameters include specifying the
  * transport protocol and providing an executor.
  * <p>
- * The price feed is started and stopped using the startup() and shutdown()
- * methods. Note that these are non-blocking calls. Applications requiring
- * actions upon successful login should instantiate and bind a
+ * The data feed is started and stopped using the startup() and shutdown()
+ * methods. Note that these are non-blocking calls, therefore applications 
+ * requiring actions upon successful login should instantiate and bind a
  * FeedStatusListener to the client.
  * <p>
  * 
@@ -82,15 +82,12 @@ public abstract class BarchartFeedClientBase {
 
 		if(proxy){
 			feed.startUpProxy();
-		}else{
+		} else {
 			feed.startup();
 		}
 
-
 	}
 	
-	
-
 	/**
 	 * Shuts down the data feed and clears all registered market takers.
 	 */

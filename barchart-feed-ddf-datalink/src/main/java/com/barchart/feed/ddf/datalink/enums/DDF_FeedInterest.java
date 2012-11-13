@@ -94,6 +94,10 @@ public enum DDF_FeedInterest {
 		for (final MarketEvent event : eventSet) {
 			switch (event) {
 
+			case MARKET_UPDATED:
+				result.addAll(DDF_FeedInterest.setValues());
+				break;
+				
 			case NEW_BOOK_ERROR:
 				// debug use only
 				continue;
@@ -118,7 +122,7 @@ public enum DDF_FeedInterest {
 			case NEW_BAR_PREVIOUS:
 				result.add(QUOTE_SNAPSHOT);
 				continue;
-
+			
 			default:
 				result.add(QUOTE_UPDATE);
 				continue;
@@ -158,6 +162,10 @@ public enum DDF_FeedInterest {
 
 		for (final MarketEvent event : eventSet) {
 			switch (event) {
+			
+			case MARKET_UPDATED:
+				result.addAll(DDF_FeedInterest.setValues());
+				break;
 
 			case NEW_BOOK_ERROR:
 				// debug use only

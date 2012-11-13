@@ -32,12 +32,12 @@ public class TestBarchartFeedClient {
 	 */
 	public static void main(final String[] args) throws Exception {
 
-		final String username = "mehb1"; //System.getProperty("barchart.username");
-		final String password = "mehb1"; //System.getProperty("barchart.password");
+		final String username = System.getProperty("barchart.username");
+		final String password = System.getProperty("barchart.password");
 
 		final BarchartFeedClient client = new BarchartFeedClient();
 
-		final MarketInstrument[] instruments = { client.lookup("$INX")};
+		final MarketInstrument[] instruments = { client.lookup("GOOG")};
 		final FeedStateListener feedListener = new FeedStateListener() {
 
 			@Override
@@ -52,7 +52,6 @@ public class TestBarchartFeedClient {
 		};
 
 		client.login(username, password);
-
 		
 		client.bindFeedStateListener(feedListener);
 
@@ -72,20 +71,19 @@ public class TestBarchartFeedClient {
 
 		static MarketTaker<Market> makeFactory(
 				final MarketInstrument[] instruments) {
+			
 			return new MarketTaker<Market>() {
 
 				@Override
 				public MarketField<Market> bindField() {
-
 					return MarketField.MARKET;
-
 				}
 
 				@Override
 				public MarketEvent[] bindEvents() {
 
-					return MarketEvent.in(MarketEvent.values());
-					// return new MarketEvent[] { MarketEvent.NEW_TRADE };
+					//return MarketEvent.in(MarketEvent.values());
+					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
 
 				}
 

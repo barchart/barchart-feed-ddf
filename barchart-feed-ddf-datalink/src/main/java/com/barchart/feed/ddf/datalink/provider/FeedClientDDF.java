@@ -8,12 +8,13 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -77,7 +78,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy = new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
-	private final Set<Subscription> subscriptions = new CopyOnWriteArraySet<Subscription>();
+	private final Map<String, Subscription> subscriptions = new ConcurrentHashMap<String, Subscription>();
 
 	//
 
@@ -190,6 +191,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		eventPolicy.put(DDF_FeedEvent.LINK_DISCONNECT, reconnectionPolicy);
 
+		//no
 		eventPolicy.put(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE,
 				reconnectionPolicy);
 
@@ -312,9 +314,13 @@ class FeedClientDDF implements DDF_FeedClient {
 		public void newEvent() {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
-				subscribe(subscriptions);
+				final Set<Subscription> subs = new HashSet<Subscription>();
+				for(final Entry<String, Subscription> e : subscriptions.entrySet()) {
+					subs.add(e.getValue());
+				}
+				subscribe(subs);
 			} else {
-				log.error("subscriptions set is empty.");
+				log.warn("subscriptions set is empty.");
 			}
 		}
 	}
@@ -351,7 +357,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			Thread.currentThread().setName("# EVENT TASK");
 
-			log.warn("# starting ddf-EventTask thread");
+			log.info("# starting ddf-EventTask thread");
 
 			while (!Thread.currentThread().isInterrupted()) {
 
@@ -376,13 +382,13 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					}
 
-					log.warn("Enacting policy for :{}", event.name());
+					log.info("Enacting policy for :{}", event.name());
 					eventPolicy.get(event).newEvent();
 
 				} catch (final InterruptedException e) {
-					log.error("# ddf-EventTask thread InterruptedException");
+					log.warn("# ddf-EventTask thread InterruptedException");
 
-					log.warn("Setting feed state to logged out");
+					log.info("Setting feed state to logged out");
 					updateFeedStateListeners(FeedState.LOGGED_OUT);
 
 					return;
@@ -437,14 +443,17 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 	}
 
-	/**
+	/*
 	 * the calls to initialize() and terminate were causing the threading issue,
 	 * as the runnables were never getting shutdown...
 	 */
-
 	private void initialize() {
 
 		log.warn("initialize called");
+		final StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+		for(final StackTraceElement e : trace) {
+			log.debug(e.getClassName() + ":" + e.getLineNumber());
+		}
 
 		try {
 			executor.execute(heartbeatTask);
@@ -641,8 +650,17 @@ class FeedClientDDF implements DDF_FeedClient {
 		for (final Subscription sub : subs) {
 
 			if (sub != null) {
-				subscriptions.add(sub);
-				sb.append(sub.subscribe() + ",");
+				
+				final String inst = sub.getInstrument();
+				
+				/* If we're subscribed already, add new interests, otherwise add  */
+				if(subscriptions.containsKey(inst)) {
+					subscriptions.get(inst).addInterests(sub.getInterests());
+				} else {
+					subscriptions.put(inst, sub);
+				}
+				
+				sb.append(subscriptions.get(inst).subscribe() + ",");
 			}
 		}
 		return writeAsync(sb.toString());
@@ -656,12 +674,14 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
-		/*
-		 * Add subscription to set. This will overwrite an existing subscription
-		 * for the same instrument.
-		 */
-		subscriptions.add(sub);
-
+		/* If we're subscribed already, add new interests, otherwise add */
+		final String inst = sub.getInstrument();
+		if(subscriptions.containsKey(inst)) {
+			subscriptions.get(inst).addInterests(sub.getInterests());
+		} else {
+			subscriptions.put(inst, sub);
+		}
+		
 		if (!isConnected()) {
 			return new DummyFuture();
 		}
@@ -691,7 +711,18 @@ class FeedClientDDF implements DDF_FeedClient {
 		for (final Subscription sub : subs) {
 
 			if (sub != null) {
-				subscriptions.remove(sub);
+				
+				final String inst = sub.getInstrument();
+				
+				/* Remove interests from the instrument's subscription */
+				if(subscriptions.containsKey(inst)) {
+					subscriptions.get(inst).removeInterests(sub.getInterests());
+				}
+				/* If no more interests, remove entirely */
+				if(subscriptions.get(inst).getInterests().size() == 0) {
+					subscriptions.remove(inst);
+				}
+				/* Only unsubscribe to what was passed in each sub */
 				sb.append(sub.unsubscribe() + ",");
 			}
 		}
@@ -706,8 +737,17 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
-		/* Removes subscription from set */
-		subscriptions.remove(sub);
+		final String inst = sub.getInstrument();
+		
+		/* Remove interests from the instrument's subscription */
+		if(subscriptions.containsKey(inst)) {
+			subscriptions.get(inst).removeInterests(sub.getInterests());
+		}
+		
+		/* If no more interests, remove entirely */
+		if(subscriptions.get(inst).getInterests().size() == 0) {
+			subscriptions.remove(inst);
+		}
 
 		if (!isConnected()) {
 			return new DummyFuture();
@@ -812,7 +852,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void run() {
 
-			log.warn("starting LoginRunnable "
+			log.info("starting LoginRunnable "
 					+ Thread.currentThread().getName());
 
 			terminate();
@@ -826,7 +866,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			initialize();
 
-			log.warn("trying to connect to setting service...");
+			log.info("trying to connect to setting service...");
 
 			/* Attempt to get current data server settings */
 			DDF_Settings settings = null;

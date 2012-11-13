@@ -56,7 +56,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 
 			@Override
 			public void execute(final Runnable task) {
-				log.error("executing new runnable = " + task.toString());
+				log.debug("executing new runnable = " + task.toString());
 				new Thread(task, name).start();
 			}
 
@@ -80,7 +80,6 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * @param username
 	 * @param password
 	 */
-
 	public void login(final String username, final String password,
 			final DDF_SocksProxy proxySettings) {
 
@@ -207,30 +206,5 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 
 		return sb.toString();
 	}
-
-	/**
-	 * Users wishing to modify the feed client's response to feed connectivity
-	 * or other events can bind an instance of EventPolicy to a specific
-	 * DDF_FeedEvent.
-	 * <p>
-	 * Note: There are two default behaviors set initially for convenience. On
-	 * any disconnect or failed login, the feed client will wait two seconds and
-	 * then attempt to reconnect. On successful login, all instruments which had
-	 * been subscribed to by registered market takers will be resubscribed.
-	 * 
-	 * @param event
-	 *            The event to specify a policy for.
-	 * @param policy
-	 *            A user defined action to be performed on a specific feed
-	 *            event.
-	 */
-	// public void setFeedEventPolicy(final DDF_FeedEvent event,
-	// final EventPolicy policy) {
-	// if (feed == null) {
-	// throw new UnsupportedOperationException(
-	// "Cannot set feed event policy before a sucessful login");
-	// }
-	// feed.setPolicy(event, policy);
-	// }
 
 }
