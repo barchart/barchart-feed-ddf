@@ -713,16 +713,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			if (sub != null) {
 				
 				final String inst = sub.getInstrument();
-				
-				/* Remove interests from the instrument's subscription */
-				if(subscriptions.containsKey(inst)) {
-					subscriptions.get(inst).removeInterests(sub.getInterests());
-				}
-				/* If no more interests, remove entirely */
-				if(subscriptions.get(inst).getInterests().size() == 0) {
-					subscriptions.remove(inst);
-				}
-				/* Only unsubscribe to what was passed in each sub */
+				subscriptions.remove(inst);
 				sb.append(sub.unsubscribe() + ",");
 			}
 		}
@@ -739,15 +730,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		final String inst = sub.getInstrument();
 		
-		/* Remove interests from the instrument's subscription */
-		if(subscriptions.containsKey(inst)) {
-			subscriptions.get(inst).removeInterests(sub.getInterests());
-		}
-		
-		/* If no more interests, remove entirely */
-		if(subscriptions.get(inst).getInterests().size() == 0) {
-			subscriptions.remove(inst);
-		}
+		subscriptions.remove(inst);
 
 		if (!isConnected()) {
 			return new DummyFuture();
