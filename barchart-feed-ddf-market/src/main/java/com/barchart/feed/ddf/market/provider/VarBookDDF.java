@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.market.provider;
 
 import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
 import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
-import static com.barchart.feed.base.market.provider.MarketConst.NULL_BOOK_ENTRY;
+import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -22,8 +22,8 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.book.enums.UniBookResult;
-import com.barchart.feed.base.book.provider.DefBook;
-import com.barchart.feed.base.book.provider.DefBookEntry;
+import com.barchart.feed.base.provider.DefBook;
+import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;

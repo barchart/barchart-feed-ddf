@@ -88,10 +88,9 @@ public enum DDF_FeedInterest {
 			return NONE;
 		}
 
-		final Set<DDF_FeedInterest> result =
-				EnumSet.noneOf(DDF_FeedInterest.class);
+		final Set<DDF_FeedInterest> result = fromEvents(eventSet);
 
-		for (final MarketEvent event : eventSet) {
+/*		for (final MarketEvent event : eventSet) {
 			switch (event) {
 
 			case MARKET_UPDATED:
@@ -128,7 +127,7 @@ public enum DDF_FeedInterest {
 				continue;
 			}
 		}
-
+*/
 		if (result.isEmpty()) {
 			return NONE;
 		}
@@ -144,11 +143,11 @@ public enum DDF_FeedInterest {
 	}
 
 	/**
-	 * Parses a set of MarketEvents to a String of FeedInterest names.
+	 * Parses a set of MarketEvents to a Set of FeedInterest enums.
 	 * 
 	 * @param eventSet
 	 *            The set of events to parse.
-	 * @return a String of FeedInterest names.
+	 * @return a Set of FeedInterest enums.
 	 */
 	public static final Set<DDF_FeedInterest> fromEvents(
 			final Set<MarketEvent> eventSet) {
@@ -166,7 +165,26 @@ public enum DDF_FeedInterest {
 			case MARKET_UPDATED:
 				result.addAll(DDF_FeedInterest.setValues());
 				break;
-
+				
+			//MARKET_STATUS_* not supported by ddf
+				
+			case NEW_TRADE:
+				result.add(QUOTE_UPDATE);
+				continue;
+				
+			case NEW_BAR_CURRENT:
+			case NEW_BAR_PREVIOUS:
+			case NEW_OPEN:
+			case NEW_HIGH:
+			case NEW_LOW:
+			case NEW_CLOSE:
+			case NEW_SETTLE:
+			case NEW_VOLUME:
+			case NEW_INTEREST:
+				result.add(QUOTE_SNAPSHOT);
+				result.add(QUOTE_UPDATE);
+				continue;
+				
 			case NEW_BOOK_ERROR:
 				// debug use only
 				continue;
@@ -178,18 +196,13 @@ public enum DDF_FeedInterest {
 			case NEW_BOOK_UPDATE:
 			case NEW_BOOK_TOP:
 				result.add(BOOK_UPDATE);
+				result.add(BOOK_SNAPSHOT);
 				continue;
 
+			//NEW_CUVOL_UPDATE not supported by ddf
+				
 			case NEW_CUVOL_SNAPSHOT:
 				result.add(CUVOL_SNAPSHOT);
-				continue;
-
-			case NEW_BAR_CURRENT_NET:
-			case NEW_BAR_CURRENT_PIT:
-			case NEW_BAR_CURRENT_EXT:
-			case NEW_BAR_CURRENT:
-			case NEW_BAR_PREVIOUS:
-				result.add(QUOTE_SNAPSHOT);
 				continue;
 
 			default:

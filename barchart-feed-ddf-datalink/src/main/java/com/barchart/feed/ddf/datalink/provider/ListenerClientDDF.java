@@ -4,8 +4,12 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.jboss.netty.bootstrap.ConnectionlessBootstrap;
@@ -23,15 +27,21 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
+import com.barchart.feed.ddf.datalink.api.DummyFuture;
+import com.barchart.feed.ddf.datalink.api.EventPolicy;
+import com.barchart.feed.ddf.datalink.api.FailedFuture;
+import com.barchart.feed.ddf.datalink.api.Subscription;
+import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
+import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 
 /**
  * A stateless, connectionless UDP listener with startup and shutdown methods.
- * 
  */
 public class ListenerClientDDF extends SimpleChannelHandler implements
 		DDF_FeedClientBase {
@@ -55,6 +65,9 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 
 	private final int socketAddress;
 
+	private final Map<String, Subscription> subscriptions = 
+			new ConcurrentHashMap<String, Subscription>();
+	
 	ListenerClientDDF(final int socketAddress, final Executor executor) {
 
 		this.socketAddress = socketAddress;
@@ -86,7 +99,9 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 
-					if (msgListener != null) {
+					log.debug("Message: " + message.toStringFields());
+					
+					if (msgListener != null && filter(message)) {
 						msgListener.handleMessage(message);
 					}
 
@@ -100,6 +115,26 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 		}
 
 	};
+	
+	private boolean filter(final DDF_BaseMessage message) {
+		
+		/* Filter by market message */
+		if(message.getMessageType().isMarketMessage) {
+			return false;
+		}
+		
+		final DDF_MarketBase marketMsg = (DDF_MarketBase) message;
+		
+		/* Filter by instrument */
+		if(subscriptions.containsKey(marketMsg.getInstrument().get(
+				InstrumentField.SYMBOL).toString())) {
+			
+			// Do we care about msg types?
+			return true;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public void startup() {
@@ -113,6 +148,8 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	@Override
 	public void shutdown() {
 
+		//In FeedClientDDF, subscriptions are cleared on logout, do we want to do this here?
+		
 		messageTask.interrupt();
 
 		messageQueue.clear();
@@ -140,15 +177,11 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	private void doMarket(final DDF_BaseMessage message) {
-
 		postMessage(message);
-
 	}
 
 	private void doTimestamp(final DDF_BaseMessage message) {
-
 		postMessage(message);
-
 	}
 
 	@Override
@@ -194,5 +227,90 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public Future<Boolean> subscribe(Set<Subscription> subs) {
+		
+		if (subs == null) {
+			log.error("Null subscribes request recieved");
+			return new FailedFuture();
+		}
+		
+		for (final Subscription sub : subs) {
 
+			if (sub != null) {
+				
+				final String inst = sub.getInstrument();
+				
+				/* If we're subscribed already, add new interests, otherwise add */
+				if(subscriptions.containsKey(inst)) {
+					subscriptions.get(inst).addInterests(sub.getInterests());
+				} else {
+					subscriptions.put(inst, sub);
+				}
+				
+			}
+		}
+		
+		return new DummyFuture();
+	}
+
+	@Override
+	public Future<Boolean> subscribe(Subscription sub) {
+		
+		if (sub == null) {
+			log.error("Null subscribe request recieved");
+			return new FailedFuture();
+		}
+		
+		final String inst = sub.getInstrument();
+		if(subscriptions.containsKey(inst)) {
+			subscriptions.get(inst).addInterests(sub.getInterests());
+		} else {
+			subscriptions.put(inst, sub);
+		}
+		
+		return new DummyFuture();
+	}
+	
+	// Unsubscribe is somewhat ambiguous, there is shared behavior between
+	// the registration and unregistration of instruments in the 
+	// market maker and the feed.  
+	@Override
+	public Future<Boolean> unsubscribe(Set<Subscription> subs) {
+		
+		if (subs == null) {
+			log.error("Null subscribes request recieved");
+			return new FailedFuture();
+		}
+		
+		for (final Subscription sub : subs) {
+
+			if (sub != null) {
+				subscriptions.remove(sub.getInstrument());
+			}
+		}
+		
+		return new DummyFuture();
+	}
+	
+	@Override
+	public Future<Boolean> unsubscribe(Subscription sub) {
+		
+		if (sub == null) {
+			log.error("Null subscribe request recieved");
+			return new FailedFuture();
+		}
+		
+		subscriptions.remove(sub.getInstrument());
+		
+		return new DummyFuture();
+	}
+	
+	@Override
+	public void setPolicy(DDF_FeedEvent event, EventPolicy policy) {
+		// Does nothing for now, some functionality will be added
+		// for tcp listeners
+	}
+	
 }

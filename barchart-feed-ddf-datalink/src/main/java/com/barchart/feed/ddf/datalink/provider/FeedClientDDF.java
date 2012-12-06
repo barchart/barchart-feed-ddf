@@ -669,6 +669,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	@Override
 	public Future<Boolean> subscribe(final Subscription sub) {
 
+		//TODO Should these just return DummyFutures? NULL seems bad
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
 			return null;
@@ -711,9 +712,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		for (final Subscription sub : subs) {
 
 			if (sub != null) {
-				
-				final String inst = sub.getInstrument();
-				subscriptions.remove(inst);
+				subscriptions.remove(sub.getInstrument());
 				sb.append(sub.unsubscribe() + ",");
 			}
 		}
@@ -728,9 +727,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
-		final String inst = sub.getInstrument();
-		
-		subscriptions.remove(inst);
+		subscriptions.remove(sub.getInstrument());
 
 		if (!isConnected()) {
 			return new DummyFuture();

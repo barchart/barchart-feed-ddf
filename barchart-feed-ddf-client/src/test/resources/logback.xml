@@ -10,7 +10,7 @@
       <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
     </encoder>
   </appender> -->
-  <root level="INFO">
+  <root level="DEBUG">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </root>

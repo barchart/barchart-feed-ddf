@@ -6,59 +6,66 @@ import java.util.List;
 import java.util.Set;
 
 import com.barchart.feed.base.instrument.values.MarketInstrument;
-import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.util.values.api.Value;
 
-public class MarketTakerFactory {
+public class MarketTakerFactory<V extends Value<V>> {
 
 	private Set<MarketEvent> events = new HashSet<MarketEvent>();
 	private Set<MarketInstrument> instruments = new HashSet<MarketInstrument>();
-	private List<MarketEventCallback> eventCallbacks = new ArrayList<MarketEventCallback>();
+	private List<MarketEventCallback<V>> eventCallbacks = new ArrayList<MarketEventCallback<V>>();
+	private MarketField<V> field = null;
 	
-	public MarketTakerFactory addEvent(final MarketEvent event) {
+	public MarketTakerFactory<V> addMarketField(final MarketField<V> field) {
+		this.field = field;
+		return this;
+	}
+	
+	public MarketTakerFactory<V> addEvent(final MarketEvent event) {
 		events.add(event);
 		return this;
 	}
 	
-	public MarketTakerFactory addInstrument(final MarketInstrument inst) {
+	public MarketTakerFactory<V> addInstrument(final MarketInstrument inst) {
 		instruments.add(inst);
 		return this;
 	}
 	
-	public MarketTakerFactory addSymbol(final String symbol) {
+	public MarketTakerFactory<V> addSymbol(final String symbol) {
 		instruments.add(DDF_InstrumentProvider.find(symbol));
 		return this;
 	}
 	
-	public MarketTakerFactory addInstruments(final List<MarketInstrument> insts) {
+	public MarketTakerFactory<V> addInstruments(final List<MarketInstrument> insts) {
 		instruments.addAll(insts);
 		return this;
 	}
 	
-	public MarketTakerFactory addSymbols(final List<String> symbols) {
+	public MarketTakerFactory<V> addSymbols(final List<String> symbols) {
 		instruments.addAll(DDF_InstrumentProvider.find(symbols));
 		return this;
 	}
 	
-	public MarketTakerFactory addEventCallback(final MarketEventCallback eventCallback) {
+	public MarketTakerFactory<V> addEventCallback(final MarketEventCallback<V> eventCallback) {
 		eventCallbacks.add(eventCallback);
 		return this;
 	}
 	
-	public MarketTaker<Market> build() {	
+	public MarketTaker<V> build() {	
 		
-		final MarketTaker<Market> taker =  new MarketTaker<Market>() {
+		final MarketTaker<V> taker =  new MarketTaker<V>() {
 		
 			final MarketEvent[] eventArray = events.toArray(new MarketEvent[0]);
 			final MarketInstrument[] instArray = instruments.toArray(new MarketInstrument[0]);
- 			final MarketEventCallback[] callbackArray = eventCallbacks.toArray(new MarketEventCallback[0]);
-			
+ 			final MarketEventCallback<V>[] callbackArray = eventCallbacks.toArray(new MarketEventCallback[0]);
+			final MarketField<V> boundField = field;
+ 			
 			@Override
-			public MarketField<Market> bindField() {
-				return MarketField.MARKET;
+			public MarketField<V> bindField() {
+				return boundField;
 			}
 	
 			@Override
@@ -73,8 +80,8 @@ public class MarketTakerFactory {
 	
 			@Override
 			public void onMarketEvent(MarketEvent event,
-					MarketInstrument instrument, Market value) {
-				for(final MarketEventCallback e : callbackArray) {
+					MarketInstrument instrument, V value) {
+				for(final MarketEventCallback<V> e : callbackArray) {
 					e.onMarketEvent(event, instrument, value);
 				}
 			}

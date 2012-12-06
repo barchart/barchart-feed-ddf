@@ -45,7 +45,7 @@ import java.nio.ByteBuffer;
 import org.w3c.dom.Element;
 
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
-import com.barchart.feed.base.cuvol.provider.DefCuvolEntry;
+import com.barchart.feed.base.provider.DefCuvolEntry;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.api.DDF_MarketCuvol;

@@ -14,7 +14,6 @@ import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 
 /**
  * Represents a subscription to a single instrument for JERQ.
- * 
  */
 public class Subscription {
 

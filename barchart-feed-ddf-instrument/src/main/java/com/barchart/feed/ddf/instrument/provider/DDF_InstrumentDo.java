@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import com.barchart.feed.base.instrument.provider.MarketDoInstrument;
+import com.barchart.feed.base.provider.MarketDoInstrument;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.util.anno.Mutable;

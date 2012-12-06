@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.provider.DefBookEntry;
+import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.ddf.message.api.DDF_MarketBookTop;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;

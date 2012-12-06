@@ -98,9 +98,9 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * @param password
 	 */
 	public void login(final String username, final String password) {
-
+		
 		loginMain(username, password, TP.TCP, executor);
-
+		
 	}
 
 	/**

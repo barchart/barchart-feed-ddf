@@ -49,7 +49,7 @@ public abstract class BarchartFeedClientBase {
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartFeedClientBase.class);
 
-	private volatile DDF_FeedClientBase feed = null;
+	protected volatile DDF_FeedClientBase feed = null;
 
 	protected final DDF_MarketProvider maker = DDF_MarketService.newInstance();
 

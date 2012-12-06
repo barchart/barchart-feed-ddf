@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.market.provider;
 
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
-import com.barchart.feed.base.market.provider.MakerBase;
+import com.barchart.feed.base.provider.MakerBase;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;

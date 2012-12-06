@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.provider.DefBookEntry;
+import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;

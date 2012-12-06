@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
-import com.barchart.feed.base.cuvol.provider.DefCuvolEntry;
+import com.barchart.feed.base.provider.DefCuvolEntry;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;

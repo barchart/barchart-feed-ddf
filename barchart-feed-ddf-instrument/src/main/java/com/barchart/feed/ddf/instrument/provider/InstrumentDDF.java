@@ -24,7 +24,7 @@ import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYM
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_ZONE;
 
 import com.barchart.feed.base.instrument.enums.MarketDisplay;
-import com.barchart.feed.base.instrument.provider.VarInstrument;
+import com.barchart.feed.base.provider.VarInstrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.api.TimeValue;

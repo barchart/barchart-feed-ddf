@@ -3,7 +3,11 @@
  */
 package com.barchart.feed.ddf.datalink.api;
 
+import java.util.Set;
+import java.util.concurrent.Future;
+
 import com.barchart.feed.client.api.FeedStateListener;
+import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.util.anno.UsedOnce;
 
 /**
@@ -37,5 +41,70 @@ public interface DDF_FeedClientBase {
 	 */
 	@UsedOnce
 	void bindStateListener(FeedStateListener stateListener);
+	
+	/**
+	 * Handles multiple subscription requests.
+	 * <p>
+	 * If the client already has a subscription for any instrument of the set
+	 * then this will overwrite it.
+	 * <p>
+	 * If called while the client is offline, registers the subscriptions and
+	 * returns a future which immediately succeeds.
+	 * 
+	 * @param subscription
+	 *            The set of subscriptions to subscribe.
+	 * @return A Future which returns true if successful.
+	 */
+	Future<Boolean> subscribe(Set<Subscription> subscriptions);
+
+	/**
+	 * Handles a subscription request.
+	 * <p>
+	 * If the client already has a subscription for the instrument then this
+	 * will overwrite it.
+	 * <p>
+	 * If called while the client is offline, registers the subscription and
+	 * returns a future which immediately succeeds.
+	 * 
+	 * @param subscription
+	 *            The subscription to subscribe.
+	 * @return A Future which returns true if successful.
+	 */
+	Future<Boolean> subscribe(Subscription subscription);
+
+	/**
+	 * Handles multiple unsubscription requests.
+	 * <p>
+	 * If called while the client is offline, unregisters the subscriptions and
+	 * returns a future which immediately succeeds.
+	 * 
+	 * @param subscription
+	 *            The set of subscriptions to unsubscribe.
+	 * @return A Future which returns true if successful.
+	 */
+	Future<Boolean> unsubscribe(Set<Subscription> subscriptions);
+
+	/**
+	 * Handles an unsubscription request.
+	 * <p>
+	 * If called while the client is offline, unregisters the subscription and
+	 * returns a future which immediately succeeds.
+	 * 
+	 * @param subscription
+	 *            The subscription to unsubscribe.
+	 * @return A Future which returns true if successful.
+	 */
+	Future<Boolean> unsubscribe(Subscription subscription);
+
+	/**
+	 * Sets the event policy for a specific feed event. Default policies are set
+	 * by the constructor to handle disconnects and login success.
+	 * 
+	 * @param event
+	 *            The feed event on which to enact the policy.
+	 * @param policy
+	 *            The even policy to register.
+	 */
+	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
 
 }
