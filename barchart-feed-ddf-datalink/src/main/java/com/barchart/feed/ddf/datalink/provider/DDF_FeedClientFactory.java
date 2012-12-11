@@ -79,7 +79,7 @@ public class DDF_FeedClientFactory {
 	public static DDF_FeedClientBase newStatelessListenerClient(final int port,
 			final Executor executor) {
 
-		return new ListenerClientDDF(port, executor);
+		return new UDPListenerClientDDF(port, executor);
 
 	}
 	

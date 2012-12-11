@@ -43,7 +43,7 @@ import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 /**
  * A stateless, connectionless UDP listener with startup and shutdown methods.
  */
-public class ListenerClientDDF extends SimpleChannelHandler implements
+public class UDPListenerClientDDF extends SimpleChannelHandler implements
 		DDF_FeedClientBase {
 
 	/** use slf4j for internal NETTY LoggingHandler facade */
@@ -53,7 +53,7 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	private static final Logger log = LoggerFactory
-			.getLogger(ListenerClientDDF.class);
+			.getLogger(UDPListenerClientDDF.class);
 
 	private final ConnectionlessBootstrap boot;
 
@@ -68,7 +68,7 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	private final Map<String, Subscription> subscriptions = 
 			new ConcurrentHashMap<String, Subscription>();
 	
-	ListenerClientDDF(final int socketAddress, final Executor executor) {
+	UDPListenerClientDDF(final int socketAddress, final Executor executor) {
 
 		this.socketAddress = socketAddress;
 		runner = executor;

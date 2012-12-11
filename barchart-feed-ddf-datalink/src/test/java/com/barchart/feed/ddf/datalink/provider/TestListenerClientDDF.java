@@ -50,7 +50,7 @@ public class TestListenerClientDDF {
 
 		};
 
-		final ListenerClientDDF client = new ListenerClientDDF(8000, runner);
+		final UDPListenerClientDDF client = new UDPListenerClientDDF(8000, runner);
 
 		client.bindMessageListener(msgListener);
 
