@@ -87,9 +87,6 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 
-					// delete 
-					//log.debug("Message: " + message.toStringFields());
-					
 					if (msgListener != null && filter(message)) {
 						msgListener.handleMessage(message);
 					}
