@@ -84,7 +84,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 */
 	private void startListener(final int socketAddress) {
 
-		setClient(DDF_FeedClientFactory.newStatelessListenerClient(
+		//Temp Hack for Testing
+		setClient(DDF_FeedClientFactory.newStatelessTCPListenerClient(
 				socketAddress, executor), false);
 
 	}

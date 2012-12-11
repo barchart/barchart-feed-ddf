@@ -82,5 +82,21 @@ public class DDF_FeedClientFactory {
 		return new ListenerClientDDF(port, executor);
 
 	}
+	
+	/**
+	 * Returns a stateless TCP listener client with a user specified executor
+	 * 
+	 * @param port
+	 *            The port to listen to
+	 * @param executor
+	 *            The executor used by the NioDatagramChannel
+	 * @return
+	 */
+	public static DDF_FeedClientBase newStatelessTCPListenerClient(final int port, 
+			final Executor executor) {
+		
+		return new TCPListenerClientDDF(port, executor);
+		
+	}
 
 }

@@ -23,12 +23,12 @@ public class TestBarchartFeedReciever {
 		
 		BarchartFeedReceiver client = new BarchartFeedReceiver();
 		
-		final MarketInstrument[] instruments = { client.lookup("$DOWI")};
+		final MarketInstrument[] instruments = { client.lookup("ESZ2")};
 		
-		client.listen(6969); // Blame Mike
+		client.listen(7000); 
 		client.addTaker(TakerFactory.makeFactory(instruments));
 		
-		Thread.sleep(15 * 1000);
+		Thread.sleep(60 * 1000);
 		client.shutdown();		
 		System.exit(0);
 		

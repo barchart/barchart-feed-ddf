@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
@@ -12,16 +9,14 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.jboss.netty.bootstrap.ConnectionlessBootstrap;
+import org.jboss.netty.bootstrap.ServerBootstrap;
+import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.FixedReceiveBufferSizePredictorFactory;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
-import org.jboss.netty.channel.socket.DatagramChannel;
-import org.jboss.netty.channel.socket.DatagramChannelFactory;
-import org.jboss.netty.channel.socket.nio.NioDatagramChannelFactory;
+import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
@@ -36,14 +31,13 @@ import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.api.FailedFuture;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 
-/**
- * A stateless, connectionless UDP listener with startup and shutdown methods.
- */
-public class ListenerClientDDF extends SimpleChannelHandler implements
+public class TCPListenerClientDDF extends SimpleChannelHandler implements
 		DDF_FeedClientBase {
 
 	/** use slf4j for internal NETTY LoggingHandler facade */
@@ -53,11 +47,9 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	private static final Logger log = LoggerFactory
-			.getLogger(ListenerClientDDF.class);
+			.getLogger(TCPListenerClientDDF.class);
 
-	private final ConnectionlessBootstrap boot;
-
-	private DatagramChannel channel;
+	private final ServerBootstrap boot;
 
 	private volatile DDF_MessageListener msgListener = null;
 
@@ -68,24 +60,19 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	private final Map<String, Subscription> subscriptions = 
 			new ConcurrentHashMap<String, Subscription>();
 	
-	ListenerClientDDF(final int socketAddress, final Executor executor) {
+	TCPListenerClientDDF(final int socketAddress, final Executor executor) {
 
 		this.socketAddress = socketAddress;
 		runner = executor;
 
-		final DatagramChannelFactory channelFactory = new NioDatagramChannelFactory(
-				runner);
+		final ChannelFactory channelFactory = new NioServerSocketChannelFactory(executor, executor); 
 
-		boot = new ConnectionlessBootstrap(channelFactory);
+		boot = new ServerBootstrap(channelFactory);
 
 		final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(
 				this);
 
 		boot.setPipelineFactory(pipelineFactory);
-
-		boot.setOption("broadcast", "false");
-		boot.setOption("receiveBufferSizePredictorFactory", //
-				new FixedReceiveBufferSizePredictorFactory(2 * 1024));
 
 	}
 
@@ -96,9 +83,13 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 		@Override
 		protected void runCore() {
 			while (true) {
+				
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 
+					// delete 
+					//log.debug("Message: " + message.toStringFields());
+					
 					if (msgListener != null && filter(message)) {
 						msgListener.handleMessage(message);
 					}
@@ -117,7 +108,7 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	private boolean filter(final DDF_BaseMessage message) {
 		
 		/* Filter by market message */
-		if(message.getMessageType().isMarketMessage) {
+		if(!message.getMessageType().isMarketMessage) {
 			return false;
 		}
 		
@@ -125,7 +116,7 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 		
 		/* Filter by instrument */
 		if(subscriptions.containsKey(marketMsg.getInstrument().get(
-				InstrumentField.SYMBOL).toString())) {
+				DDF_InstrumentField.DDF_SYMBOL_REALTIME).toString())) {
 			
 			// Do we care about msg types?
 			return true;
@@ -151,11 +142,6 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 		messageTask.interrupt();
 
 		messageQueue.clear();
-
-		if (channel != null) {
-			channel.close();
-			channel = null;
-		}
 
 	}
 
@@ -227,7 +213,7 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	}
 	
 	@Override
-	public Future<Boolean> subscribe(Set<Subscription> subs) {
+	public Future<Boolean> subscribe(final Set<Subscription> subs) {
 		
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -254,7 +240,7 @@ public class ListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(Subscription sub) {
+	public Future<Boolean> subscribe(final Subscription sub) {
 		
 		if (sub == null) {
 			log.error("Null subscribe request recieved");

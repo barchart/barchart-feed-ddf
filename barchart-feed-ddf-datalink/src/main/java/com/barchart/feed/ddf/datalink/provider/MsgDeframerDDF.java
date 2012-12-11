@@ -93,7 +93,7 @@ class MsgDeframerDDF extends FrameDecoder {
 			if (buffer.readableBytes() <= count) {
 				return null;
 			}
-
+			
 			/* read next byte; do not advance buffer */
 			final int index = buffer.readerIndex() + count++;
 			final byte alpha = buffer.getByte(index);
