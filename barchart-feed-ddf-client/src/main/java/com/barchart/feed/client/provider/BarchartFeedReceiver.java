@@ -63,28 +63,28 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	}
 
 	/**
-	 * Starts a stateless connection to the specified port. If the user is
+	 * Starts a stateless UDP connection to the specified port. If the user is
 	 * already logged in, this call will end the previous connection and reset
 	 * all registered market takers.
 	 * 
 	 * @param socketAddress
 	 */
-	public void listen(final int socketAddress) {
+	public void listenUDP(final int socketAddress) {
 
-		startListener(socketAddress);
+		setClient(DDF_FeedClientFactory.newStatelessUDPListenerClient(
+				socketAddress, executor), false);
 
 	}
 
 	/**
-	 * Starts a stateless connection to the specified port. If the user is
+	 * Starts a stateless TCP connection to the specified port. If the user is
 	 * already logged in, this call will end the previous connection and reset
 	 * all registered market takers.
 	 * 
 	 * @param socketAddress
 	 */
-	private void startListener(final int socketAddress) {
+	public void listenTCP(final int socketAddress) {
 
-		//Temp Hack for Testing
 		setClient(DDF_FeedClientFactory.newStatelessTCPListenerClient(
 				socketAddress, executor), false);
 

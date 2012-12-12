@@ -115,7 +115,6 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 		if(subscriptions.containsKey(marketMsg.getInstrument().get(
 				DDF_InstrumentField.DDF_SYMBOL_REALTIME).toString())) {
 			
-			// Do we care about msg types?
 			return true;
 		}
 		

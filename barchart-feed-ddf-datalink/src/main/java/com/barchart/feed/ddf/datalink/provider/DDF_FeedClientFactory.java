@@ -76,7 +76,7 @@ public class DDF_FeedClientFactory {
 	 *            The executor used by the NioDatagramChannel
 	 * @return
 	 */
-	public static DDF_FeedClientBase newStatelessListenerClient(final int port,
+	public static DDF_FeedClientBase newStatelessUDPListenerClient(final int port,
 			final Executor executor) {
 
 		return new UDPListenerClientDDF(port, executor);
