@@ -13,7 +13,7 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.provider.BarchartFeedReceiver;
 import com.barchart.util.values.util.ValueUtil;
 
-public class TestReciever {
+public class TestReceiver {
 	
 	/**
 	 * 
