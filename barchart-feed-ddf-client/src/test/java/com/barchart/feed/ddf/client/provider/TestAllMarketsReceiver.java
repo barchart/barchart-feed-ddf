@@ -22,12 +22,18 @@ public class TestAllMarketsReceiver {
 		
 		BarchartFeedReceiver client = new BarchartFeedReceiver();
 		
-		//final MarketInstrument[] instruments = { client.lookup("ESZ2")};
 		final MarketInstrument[] instruments = {};
 		
 		client.listenTCP(7000, false, true);
-		client.addTaker(TakerFactory.makeFactory1(instruments));
 		
+		final MarketTaker<Market> taker1 = TakerFactory.makeFactory1(instruments);
+		final MarketTaker<Market> taker2 = TakerFactory.makeFactory2(instruments);
+		
+		client.addTaker(taker1);
+		client.addTaker(taker2);
+		
+		Thread.sleep(10 * 1000);
+		client.removeTaker(taker2);
 		Thread.sleep(10 * 60 * 1000);
 		client.shutdown();		
 		System.exit(0);
@@ -78,7 +84,48 @@ public class TestAllMarketsReceiver {
 			};
 
 		}
-		
+
+		static MarketTaker<Market> makeFactory2(final MarketInstrument[] instruments) {
+			
+			return new MarketTaker<Market>() {
+
+				@Override
+				public MarketField<Market> bindField() {
+					return MarketField.MARKET;
+				}
+
+				@Override
+				public MarketEvent[] bindEvents() {
+
+					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
+
+				}
+
+				@Override
+				public MarketInstrument[] bindInstruments() {
+
+					return instruments;
+
+				}
+
+				@Override
+				public void onMarketEvent(final MarketEvent event,
+						final MarketInstrument instrument, final Market value) {
+
+					final StringBuilder sb = new StringBuilder(" *** TAKER 2 EVENT: ")
+							.append(event);
+
+					sb.append(" " + instrument.get(InstrumentField.ID));
+
+					sb.append(" BID " + ValueUtil.asDouble(value.get(MarketField.BOOK_TOP).side(MarketBookSide.ASK).price()));
+					
+					log.debug(sb.toString());
+
+				}
+
+			};
+
+		}
 		
 	}
 }
