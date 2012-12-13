@@ -56,13 +56,16 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	private final Executor runner;
 
 	private final int socketAddress;
+	private final boolean filterBySub;
 
 	private final Map<String, Subscription> subscriptions = 
 			new ConcurrentHashMap<String, Subscription>();
 	
-	TCPListenerClientDDF(final int socketAddress, final Executor executor) {
+	TCPListenerClientDDF(final int socketAddress, final boolean filterBySub,
+			final Executor executor) {
 
 		this.socketAddress = socketAddress;
+		this.filterBySub = filterBySub;
 		runner = executor;
 
 		final ChannelFactory channelFactory = new NioServerSocketChannelFactory(executor, executor); 
@@ -87,8 +90,12 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 
-					if (msgListener != null && filter(message)) {
-						msgListener.handleMessage(message);
+					if (msgListener != null) {
+						
+						if(!filterBySub || filter(message)) {
+							msgListener.handleMessage(message);
+						}
+						
 					}
 
 				} catch (final InterruptedException e) {

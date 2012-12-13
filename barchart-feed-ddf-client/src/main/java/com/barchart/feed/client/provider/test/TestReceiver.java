@@ -38,10 +38,12 @@ public class TestReceiver {
 			instruments[i-INST_START] = client.lookup(args[i]);
 		}
 		
+		// Handle Subscriptions Boolean
+		
 		if(args[0].equals("TCP")) {
-			client.listenTCP(Integer.parseInt(args[1]));
+			client.listenTCP(Integer.parseInt(args[1]), false, true);
 		} else if(args[0].equals("UDP")) {
-			client.listenUDP(Integer.parseInt(args[1]));
+			client.listenUDP(Integer.parseInt(args[1]), false, true);
 		} else {
 			throw new RuntimeException("Bad protocol, expecting UDP or TCP");
 		}

@@ -25,7 +25,7 @@ public class TestBarchartFeedReciever {
 		
 		final MarketInstrument[] instruments = { client.lookup("ESZ2")};
 		
-		client.listenTCP(7000); 
+		client.listenTCP(7000, true, true); 
 		client.addTaker(TakerFactory.makeFactory(instruments));
 		
 		Thread.sleep(60 * 1000);

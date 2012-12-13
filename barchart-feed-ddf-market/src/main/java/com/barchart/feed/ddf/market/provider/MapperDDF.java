@@ -643,8 +643,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			final TimeValue time = message.getTime();
 			final TimeValue date = message.getTradeDay().tradeDate();
 
-			log.debug("DDF Session: code="
-					+ new String(new byte[] { ddfSession.code }));
+//			log.debug("DDF Session: code="
+//					+ new String(new byte[] { ddfSession.code }));
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
 

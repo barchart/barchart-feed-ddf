@@ -29,6 +29,8 @@ import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+import com.barchart.feed.ddf.market.provider.DDF_MarketService;
+import com.barchart.feed.ddf.market.provider.DDF_MarketServiceAllMarkets;
 
 /**
  * The entry point for Barchart data feed services.
@@ -56,7 +58,7 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 		});
 
 	}
-
+	
 	public BarchartFeedReceiver(final Executor ex) {
 		maker.add(instrumentSubscriptionListener);
 		executor = ex;
@@ -69,10 +71,17 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * 
 	 * @param socketAddress
 	 */
-	public void listenUDP(final int socketAddress) {
+	public void listenUDP(final int socketAddress, final boolean filterBySub, 
+			final boolean allMarkets) {
 
-		setClient(DDF_FeedClientFactory.newStatelessUDPListenerClient(
-				socketAddress, executor), false);
+		if(allMarkets) {
+			maker = DDF_MarketServiceAllMarkets.newInstance();
+		} else {
+			maker = DDF_MarketService.newInstance();
+		}
+		
+		setClient(DDF_FeedClientFactory.newUDPListenerClient(
+				socketAddress, filterBySub, executor), false);
 
 	}
 
@@ -83,10 +92,17 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * 
 	 * @param socketAddress
 	 */
-	public void listenTCP(final int socketAddress) {
+	public void listenTCP(final int socketAddress, final boolean filterBySub, 
+			final boolean allMarkets) {
+		
+		if(allMarkets) {
+			maker = DDF_MarketServiceAllMarkets.newInstance();
+		} else {
+			maker = DDF_MarketService.newInstance();
+		}
 
 		setClient(DDF_FeedClientFactory.newStatelessTCPListenerClient(
-				socketAddress, executor), false);
+				socketAddress, filterBySub, executor), false);
 
 	}
 
