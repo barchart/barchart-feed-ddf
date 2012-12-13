@@ -28,7 +28,7 @@ public class TestAllMarketsReceiver {
 		client.listenTCP(7000, false, true);
 		client.addTaker(TakerFactory.makeFactory1(instruments));
 		
-		Thread.sleep(5 * 60 * 1000);
+		Thread.sleep(10 * 60 * 1000);
 		client.shutdown();		
 		System.exit(0);
 		
