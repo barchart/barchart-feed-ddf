@@ -88,20 +88,6 @@
 
 	</properties>
 
-	<profiles>
-		<profile>
-			<id>eclipse</id>
-			<activation>
-				<file>
-					<exists>.project</exists>
-				</file>
-			</activation>
-			<properties>
-				<XXX>XXX</XXX>
-			</properties>
-		</profile>
-	</profiles>
-
 	<build>
 
 		<plugins>
