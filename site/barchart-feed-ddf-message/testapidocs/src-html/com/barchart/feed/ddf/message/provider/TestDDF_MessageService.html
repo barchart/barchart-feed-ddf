@@ -1,0 +1,234 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    /**<a name="line.1"></a>
+<FONT color="green">002</FONT>     * Copyright (C) 2011-2012 Barchart, Inc. &lt;http://www.barchart.com/&gt;<a name="line.2"></a>
+<FONT color="green">003</FONT>     *<a name="line.3"></a>
+<FONT color="green">004</FONT>     * All rights reserved. Licensed under the OSI BSD License.<a name="line.4"></a>
+<FONT color="green">005</FONT>     *<a name="line.5"></a>
+<FONT color="green">006</FONT>     * http://www.opensource.org/licenses/bsd-license.php<a name="line.6"></a>
+<FONT color="green">007</FONT>     */<a name="line.7"></a>
+<FONT color="green">008</FONT>    package com.barchart.feed.ddf.message.provider;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import static org.junit.Assert.assertTrue;<a name="line.11"></a>
+<FONT color="green">012</FONT>    <a name="line.12"></a>
+<FONT color="green">013</FONT>    import org.junit.After;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import org.junit.Before;<a name="line.14"></a>
+<FONT color="green">015</FONT>    import org.junit.Test;<a name="line.15"></a>
+<FONT color="green">016</FONT>    <a name="line.16"></a>
+<FONT color="green">017</FONT>    import com.barchart.feed.ddf.message.api.DDF_BaseMessage;<a name="line.17"></a>
+<FONT color="green">018</FONT>    import com.barchart.feed.ddf.message.api.DDF_MarketBook;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import com.barchart.feed.ddf.message.api.DDF_MarketBookTop;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import com.barchart.feed.ddf.message.api.DDF_MarketCuvol;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import com.barchart.feed.ddf.message.api.DDF_MarketParameter;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import com.barchart.feed.ddf.message.api.DDF_MarketQuote;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import com.barchart.feed.ddf.message.api.DDF_MarketSnapshot;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import com.barchart.feed.ddf.message.api.DDF_MarketTrade;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import com.barchart.feed.ddf.util.provider.DDF_ClearVal;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import com.barchart.feed.ddf.util.provider.DDF_NulVal;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import com.barchart.util.values.provider.ValueConst;<a name="line.27"></a>
+<FONT color="green">028</FONT>    <a name="line.28"></a>
+<FONT color="green">029</FONT>    /**<a name="line.29"></a>
+<FONT color="green">030</FONT>     * The Class TestDDF_MessageService.<a name="line.30"></a>
+<FONT color="green">031</FONT>     */<a name="line.31"></a>
+<FONT color="green">032</FONT>    public class TestDDF_MessageService {<a name="line.32"></a>
+<FONT color="green">033</FONT>    <a name="line.33"></a>
+<FONT color="green">034</FONT>            /**<a name="line.34"></a>
+<FONT color="green">035</FONT>             * Sets the up.<a name="line.35"></a>
+<FONT color="green">036</FONT>             * <a name="line.36"></a>
+<FONT color="green">037</FONT>             * @throws Exception<a name="line.37"></a>
+<FONT color="green">038</FONT>             *             the exception<a name="line.38"></a>
+<FONT color="green">039</FONT>             */<a name="line.39"></a>
+<FONT color="green">040</FONT>            @Before<a name="line.40"></a>
+<FONT color="green">041</FONT>            public void setUp() throws Exception {<a name="line.41"></a>
+<FONT color="green">042</FONT>            }<a name="line.42"></a>
+<FONT color="green">043</FONT>    <a name="line.43"></a>
+<FONT color="green">044</FONT>            /**<a name="line.44"></a>
+<FONT color="green">045</FONT>             * Tear down.<a name="line.45"></a>
+<FONT color="green">046</FONT>             * <a name="line.46"></a>
+<FONT color="green">047</FONT>             * @throws Exception<a name="line.47"></a>
+<FONT color="green">048</FONT>             *             the exception<a name="line.48"></a>
+<FONT color="green">049</FONT>             */<a name="line.49"></a>
+<FONT color="green">050</FONT>            @After<a name="line.50"></a>
+<FONT color="green">051</FONT>            public void tearDown() throws Exception {<a name="line.51"></a>
+<FONT color="green">052</FONT>            }<a name="line.52"></a>
+<FONT color="green">053</FONT>    <a name="line.53"></a>
+<FONT color="green">054</FONT>            // 20<a name="line.54"></a>
+<FONT color="green">055</FONT>            final static byte[] ba20 = "2SF0,02B1010533,D0Q "<a name="line.55"></a>
+<FONT color="green">056</FONT>                            .getBytes(ASCII_CHARSET);<a name="line.56"></a>
+<FONT color="green">057</FONT>    <a name="line.57"></a>
+<FONT color="green">058</FONT>            // 21<a name="line.58"></a>
+<FONT color="green">059</FONT>            final static byte[] ba21 = "2SF0,12B10,,,,,-,-,,,,,,,,,Q "<a name="line.59"></a>
+<FONT color="green">060</FONT>                            .getBytes(ASCII_CHARSET);<a name="line.60"></a>
+<FONT color="green">061</FONT>    <a name="line.61"></a>
+<FONT color="green">062</FONT>            // 22<a name="line.62"></a>
+<FONT color="green">063</FONT>            final static byte[] ba22 =<a name="line.63"></a>
+<FONT color="green">064</FONT>                            "2HIG,2AN15,2445,2604,2404,2582,,,,2481,,,2582,,,12196949,3 "<a name="line.64"></a>
+<FONT color="green">065</FONT>                                            .getBytes(ASCII_CHARSET);<a name="line.65"></a>
+<FONT color="green">066</FONT>    <a name="line.66"></a>
+<FONT color="green">067</FONT>            // 26<a name="line.67"></a>
+<FONT color="green">068</FONT>            final static byte[] ba26 =<a name="line.68"></a>
+<FONT color="green">069</FONT>                            "2$DJUBSSO,6Ao10,5515,5642,5501,5631,,,,,,,,,,,S "<a name="line.69"></a>
+<FONT color="green">070</FONT>                                            .getBytes(ASCII_CHARSET);<a name="line.70"></a>
+<FONT color="green">071</FONT>    <a name="line.71"></a>
+<FONT color="green">072</FONT>            final static byte[] ba27 = "2HOZ9,7CJ1021371,5,SG"<a name="line.72"></a>
+<FONT color="green">073</FONT>                            .getBytes(ASCII_CHARSET);<a name="line.73"></a>
+<FONT color="green">074</FONT>    <a name="line.74"></a>
+<FONT color="green">075</FONT>            // 28<a name="line.75"></a>
+<FONT color="green">076</FONT>            final byte[] ba28 = "2HOZ9,8CJ1020911,5,20919,1,SG"<a name="line.76"></a>
+<FONT color="green">077</FONT>                            .getBytes(ASCII_CHARSET);<a name="line.77"></a>
+<FONT color="green">078</FONT>    <a name="line.78"></a>
+<FONT color="green">079</FONT>            // 3B<a name="line.79"></a>
+<FONT color="green">080</FONT>            final byte[] ba3B =<a name="line.80"></a>
+<FONT color="green">081</FONT>                            "3XIZ9,BBX55,63795K25,63790L5,63780M1000,63775N35,63765O5,63800J20,63815I5,63820H10,63825G5,63830F7"<a name="line.81"></a>
+<FONT color="green">082</FONT>                                            .getBytes(ASCII_CHARSET);<a name="line.82"></a>
+<FONT color="green">083</FONT>    <a name="line.83"></a>
+<FONT color="green">084</FONT>            // XB<a name="line.84"></a>
+<FONT color="green">085</FONT>            final byte[] baXB =<a name="line.85"></a>
+<FONT color="green">086</FONT>                            "%&lt;BOOK askcount=\"10\" askprices=\"110000,110025,110050,110075,110100,110125,110150,110175,110200,110225\" asksizes=\"247,794,646,868,811,1049,830,1244,2287,694\" basecode=\"A\" bidcount=\"10\" bidprices=\"109975,109950,109925,109900,109875,109850,109825,109800,109775,109750\" bidsizes=\"162,582,692,698,953,680,819,931,958,1166\" symbol=\"ESM0\"/&gt;"<a name="line.86"></a>
+<FONT color="green">087</FONT>                                            .getBytes(ASCII_CHARSET);<a name="line.87"></a>
+<FONT color="green">088</FONT>    <a name="line.88"></a>
+<FONT color="green">089</FONT>            // XC<a name="line.89"></a>
+<FONT color="green">090</FONT>            final byte[] baXC =<a name="line.90"></a>
+<FONT color="green">091</FONT>                            "%&lt;CV symbol=\"ESM0\" basecode=\"A\" tickincrement=\"25\" last=\"109975\" lastsize=\"2\" lastcvol=\"12\" date=\"20100615123857\" count=\"54\" data=\"109275,1076:108900,437:109950,3813:109325,1429:108950,899:109925,6629:109875,5131:109225,1007:109800,5046:109125,1327:109075,1865:109750,5931:110050,2579:109025,1616:109975,2886:109200,1619:109550,875:109300,2010:109525,1691:109375,1504:109850,5318:109450,1163:109500,1899:109000,1906:110150,209:109625,2055:108850,38:109700,3787:110175,219:109350,1901:108975,476:109600,3659:109575,1799:110025,3751:110075,3451:110000,5387:109825,5224:109900,10427:109775,4809:109650,2887:109050,1817:109725,4396:109175,1807:109100,1835:108875,110:109400,1777:109425,1617:109150,1662:109475,938:110125,446:109250,1215:110100,2035:108925,751:109675,2493\"/&gt;"<a name="line.91"></a>
+<FONT color="green">092</FONT>                                            .getBytes(ASCII_CHARSET);<a name="line.92"></a>
+<FONT color="green">093</FONT>    <a name="line.93"></a>
+<FONT color="green">094</FONT>            // XQ<a name="line.94"></a>
+<FONT color="green">095</FONT>            final byte[] baXQ =<a name="line.95"></a>
+<FONT color="green">096</FONT>                            "%&lt;QUOTE symbol=\"ESM0\" name=\"E-Mini S&amp;amp;P 500\" exchange=\"GBLX\" basecode=\"A\" pointvalue=\"50.0\" tickincrement=\"25\" ddfexchange=\"M\" lastupdate=\"20100615144110\" bid=\"109975\" bidsize=\"162\" ask=\"110000\" asksize=\"248\" mode=\"R\"&gt;&lt;SESSION day=\"E\" session=\"G\" timestamp=\"20100615094112\" open=\"109025\" high=\"110175\" low=\"108850\" last=\"109975\" previous=\"109050\" tradesize=\"2\" volume=\"362318\" tradetime=\"20100615094111\" id=\"combined\"/&gt;&lt;SESSION day=\"D\" session=\"G\" timestamp=\"20100614205606\" open=\"109050\" high=\"110600\" low=\"108875\" last=\"109050\" previous=\"108925\" tradesize=\"1\" openinterest=\"1482925\" volume=\"887313\" tradetime=\"20100614151457\" id=\"previous\"/&gt;&lt;/QUOTE&gt;"<a name="line.96"></a>
+<FONT color="green">097</FONT>                                            .getBytes(ASCII_CHARSET);<a name="line.97"></a>
+<FONT color="green">098</FONT>    <a name="line.98"></a>
+<FONT color="green">099</FONT>            /**<a name="line.99"></a>
+<FONT color="green">100</FONT>             * Test decode.<a name="line.100"></a>
+<FONT color="green">101</FONT>             * <a name="line.101"></a>
+<FONT color="green">102</FONT>             * @throws Exception<a name="line.102"></a>
+<FONT color="green">103</FONT>             *             the exception<a name="line.103"></a>
+<FONT color="green">104</FONT>             */<a name="line.104"></a>
+<FONT color="green">105</FONT>            @Test<a name="line.105"></a>
+<FONT color="green">106</FONT>            public void testDecode() throws Exception {<a name="line.106"></a>
+<FONT color="green">107</FONT>    <a name="line.107"></a>
+<FONT color="green">108</FONT>                    DDF_BaseMessage msg;<a name="line.108"></a>
+<FONT color="green">109</FONT>    <a name="line.109"></a>
+<FONT color="green">110</FONT>                    msg = DDF_MessageService.decode(ba20);<a name="line.110"></a>
+<FONT color="green">111</FONT>                    assertTrue(msg instanceof DDF_MarketParameter);<a name="line.111"></a>
+<FONT color="green">112</FONT>    <a name="line.112"></a>
+<FONT color="green">113</FONT>                    msg = DDF_MessageService.decode(ba21);<a name="line.113"></a>
+<FONT color="green">114</FONT>                    assertTrue(msg instanceof DDF_MarketSnapshot);<a name="line.114"></a>
+<FONT color="green">115</FONT>    <a name="line.115"></a>
+<FONT color="green">116</FONT>                    msg = DDF_MessageService.decode(ba22);<a name="line.116"></a>
+<FONT color="green">117</FONT>                    assertTrue(msg instanceof DDF_MarketSnapshot);<a name="line.117"></a>
+<FONT color="green">118</FONT>    <a name="line.118"></a>
+<FONT color="green">119</FONT>                    msg = DDF_MessageService.decode(ba26);<a name="line.119"></a>
+<FONT color="green">120</FONT>                    assertTrue(msg instanceof DDF_MarketSnapshot);<a name="line.120"></a>
+<FONT color="green">121</FONT>    <a name="line.121"></a>
+<FONT color="green">122</FONT>                    msg = DDF_MessageService.decode(ba27);<a name="line.122"></a>
+<FONT color="green">123</FONT>                    assertTrue(msg instanceof DDF_MarketTrade);<a name="line.123"></a>
+<FONT color="green">124</FONT>    <a name="line.124"></a>
+<FONT color="green">125</FONT>                    msg = DDF_MessageService.decode(ba28);<a name="line.125"></a>
+<FONT color="green">126</FONT>                    assertTrue(msg instanceof DDF_MarketBookTop);<a name="line.126"></a>
+<FONT color="green">127</FONT>    <a name="line.127"></a>
+<FONT color="green">128</FONT>                    msg = DDF_MessageService.decode(ba3B);<a name="line.128"></a>
+<FONT color="green">129</FONT>                    assertTrue(msg instanceof DDF_MarketBook);<a name="line.129"></a>
+<FONT color="green">130</FONT>    <a name="line.130"></a>
+<FONT color="green">131</FONT>                    msg = DDF_MessageService.decode(baXB);<a name="line.131"></a>
+<FONT color="green">132</FONT>                    assertTrue(msg instanceof DDF_MarketBook);<a name="line.132"></a>
+<FONT color="green">133</FONT>    <a name="line.133"></a>
+<FONT color="green">134</FONT>                    msg = DDF_MessageService.decode(baXC);<a name="line.134"></a>
+<FONT color="green">135</FONT>                    assertTrue(msg instanceof DDF_MarketCuvol);<a name="line.135"></a>
+<FONT color="green">136</FONT>    <a name="line.136"></a>
+<FONT color="green">137</FONT>                    msg = DDF_MessageService.decode(baXQ);<a name="line.137"></a>
+<FONT color="green">138</FONT>                    assertTrue(msg instanceof DDF_MarketQuote);<a name="line.138"></a>
+<FONT color="green">139</FONT>    <a name="line.139"></a>
+<FONT color="green">140</FONT>            }<a name="line.140"></a>
+<FONT color="green">141</FONT>    <a name="line.141"></a>
+<FONT color="green">142</FONT>            /**<a name="line.142"></a>
+<FONT color="green">143</FONT>             * Test constants.<a name="line.143"></a>
+<FONT color="green">144</FONT>             * <a name="line.144"></a>
+<FONT color="green">145</FONT>             * @throws Exception<a name="line.145"></a>
+<FONT color="green">146</FONT>             *             the exception<a name="line.146"></a>
+<FONT color="green">147</FONT>             */<a name="line.147"></a>
+<FONT color="green">148</FONT>            @Test<a name="line.148"></a>
+<FONT color="green">149</FONT>            public void testConstants() throws Exception {<a name="line.149"></a>
+<FONT color="green">150</FONT>    <a name="line.150"></a>
+<FONT color="green">151</FONT>                    assertTrue(DDF_ClearVal.DECIMAL_CLEAR != DDF_NulVal.DECIMAL_EMPTY);<a name="line.151"></a>
+<FONT color="green">152</FONT>                    assertTrue(DDF_ClearVal.PRICE_CLEAR != DDF_NulVal.PRICE_EMPTY);<a name="line.152"></a>
+<FONT color="green">153</FONT>                    assertTrue(DDF_ClearVal.SIZE_CLEAR != DDF_NulVal.SIZE_EMPTY);<a name="line.153"></a>
+<FONT color="green">154</FONT>                    assertTrue(DDF_ClearVal.TIME_CLEAR != DDF_NulVal.TIME_EMPTY);<a name="line.154"></a>
+<FONT color="green">155</FONT>    <a name="line.155"></a>
+<FONT color="green">156</FONT>                    assertTrue(DDF_ClearVal.DECIMAL_CLEAR != ValueConst.NULL_DECIMAL);<a name="line.156"></a>
+<FONT color="green">157</FONT>                    assertTrue(DDF_ClearVal.PRICE_CLEAR != ValueConst.NULL_PRICE);<a name="line.157"></a>
+<FONT color="green">158</FONT>                    assertTrue(DDF_ClearVal.SIZE_CLEAR != ValueConst.NULL_SIZE);<a name="line.158"></a>
+<FONT color="green">159</FONT>                    assertTrue(DDF_ClearVal.TIME_CLEAR != ValueConst.NULL_TIME);<a name="line.159"></a>
+<FONT color="green">160</FONT>    <a name="line.160"></a>
+<FONT color="green">161</FONT>                    assertTrue(DDF_NulVal.DECIMAL_EMPTY != ValueConst.NULL_DECIMAL);<a name="line.161"></a>
+<FONT color="green">162</FONT>                    assertTrue(DDF_NulVal.PRICE_EMPTY != ValueConst.NULL_PRICE);<a name="line.162"></a>
+<FONT color="green">163</FONT>                    assertTrue(DDF_NulVal.SIZE_EMPTY != ValueConst.NULL_SIZE);<a name="line.163"></a>
+<FONT color="green">164</FONT>                    assertTrue(DDF_NulVal.TIME_EMPTY != ValueConst.NULL_TIME);<a name="line.164"></a>
+<FONT color="green">165</FONT>    <a name="line.165"></a>
+<FONT color="green">166</FONT>            }<a name="line.166"></a>
+<FONT color="green">167</FONT>    <a name="line.167"></a>
+<FONT color="green">168</FONT>    }<a name="line.168"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>
