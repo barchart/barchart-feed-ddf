@@ -76,10 +76,10 @@ public class DDF_FeedClientFactory {
 	 *            The executor used by the NioDatagramChannel
 	 * @return
 	 */
-	public static DDF_FeedClientBase newStatelessUDPListenerClient(final int port,
-			final Executor executor) {
+	public static DDF_FeedClientBase newUDPListenerClient(final int port, 
+			final boolean filterBySub, final Executor executor) {
 
-		return new UDPListenerClientDDF(port, executor);
+		return new UDPListenerClientDDF(port, filterBySub, executor);
 
 	}
 	
@@ -93,9 +93,9 @@ public class DDF_FeedClientFactory {
 	 * @return
 	 */
 	public static DDF_FeedClientBase newStatelessTCPListenerClient(final int port, 
-			final Executor executor) {
+			final boolean filterBySub, final Executor executor) {
 		
-		return new TCPListenerClientDDF(port, executor);
+		return new TCPListenerClientDDF(port, filterBySub, executor);
 		
 	}
 

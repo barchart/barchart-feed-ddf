@@ -44,6 +44,8 @@ public class DDF_MarketService extends MakerBase<DDF_MarketBase> implements
 		});
 	}
 
+	
+	
 	@Override
 	protected void make(final DDF_MarketBase message, final MarketDo market) {
 

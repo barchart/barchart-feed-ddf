@@ -58,7 +58,7 @@ public abstract class BarchartFeedClientBase {
 
 	protected volatile DDF_FeedClientBase feed = null;
 
-	protected final DDF_MarketProvider maker = DDF_MarketService.newInstance();
+	protected DDF_MarketProvider maker = DDF_MarketService.newInstance();
 
 	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
 			new CopyOnWriteArrayList<TimestampListener>();
@@ -67,7 +67,7 @@ public abstract class BarchartFeedClientBase {
 
 	public BarchartFeedClientBase() {
 	}
-
+	
 	/*
 	 * Handles login. Non-blocking.
 	 */

@@ -29,7 +29,6 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -38,7 +37,6 @@ import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.api.FailedFuture;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
@@ -63,13 +61,16 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	private final Executor runner;
 
 	private final int socketAddress;
+	private final boolean filterBySub;
 
 	private final Map<String, Subscription> subscriptions = 
 			new ConcurrentHashMap<String, Subscription>();
 	
-	TCPListenerClientDDF(final int socketAddress, final Executor executor) {
+	TCPListenerClientDDF(final int socketAddress, final boolean filterBySub,
+			final Executor executor) {
 
 		this.socketAddress = socketAddress;
+		this.filterBySub = filterBySub;
 		runner = executor;
 
 		final ChannelFactory channelFactory = new NioServerSocketChannelFactory(executor, executor); 
@@ -94,8 +95,12 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 
-					if (msgListener != null && filter(message)) {
-						msgListener.handleMessage(message);
+					if (msgListener != null) {
+						
+						if(!filterBySub || filter(message)) {
+							msgListener.handleMessage(message);
+						}
+						
 					}
 
 				} catch (final InterruptedException e) {

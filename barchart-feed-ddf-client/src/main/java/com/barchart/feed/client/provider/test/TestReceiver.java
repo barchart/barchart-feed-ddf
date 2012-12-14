@@ -46,14 +46,14 @@ public class TestReceiver {
 		}
 		
 		if(args[0].equals("TCP")) {
-			client.listenTCP(Integer.parseInt(args[1]));
+			client.listenTCP(Integer.parseInt(args[1]), false);
 		} else if(args[0].equals("UDP")) {
-			client.listenUDP(Integer.parseInt(args[1]));
+			client.listenUDP(Integer.parseInt(args[1]), false);
 		} else {
 			throw new RuntimeException("Bad protocol, expecting UDP or TCP");
 		}
 		
-		client.addTaker(TakerFactory.makeTaker(instruments));
+		client.addAllMarketsTaker(TakerFactory.makeTaker(instruments));
 		
 		System.in.read();
 		client.shutdown();

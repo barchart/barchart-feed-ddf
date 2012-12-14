@@ -72,13 +72,16 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 	private final Executor runner;
 
 	private final int socketAddress;
+	private final boolean filterBySub;
 
 	private final Map<String, Subscription> subscriptions = 
 			new ConcurrentHashMap<String, Subscription>();
 	
-	UDPListenerClientDDF(final int socketAddress, final Executor executor) {
+	UDPListenerClientDDF(final int socketAddress, final boolean filterBySub, 
+			final Executor executor) {
 
 		this.socketAddress = socketAddress;
+		this.filterBySub = filterBySub;
 		runner = executor;
 
 		final DatagramChannelFactory channelFactory = new NioDatagramChannelFactory(
@@ -107,8 +110,12 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 
-					if (msgListener != null && filter(message)) {
-						msgListener.handleMessage(message);
+					if (msgListener != null) {
+						
+						if(!filterBySub || filter(message)) {
+							msgListener.handleMessage(message);
+						}
+						
 					}
 
 				} catch (final InterruptedException e) {
@@ -234,7 +241,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 	}
 	
 	@Override
-	public Future<Boolean> subscribe(Set<Subscription> subs) {
+	public Future<Boolean> subscribe(final Set<Subscription> subs) {
 		
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -261,7 +268,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(Subscription sub) {
+	public Future<Boolean> subscribe(final Subscription sub) {
 		
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
@@ -278,11 +285,8 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 		return new DummyFuture();
 	}
 	
-	// Unsubscribe is somewhat ambiguous, there is shared behavior between
-	// the registration and unregistration of instruments in the 
-	// market maker and the feed.  
 	@Override
-	public Future<Boolean> unsubscribe(Set<Subscription> subs) {
+	public Future<Boolean> unsubscribe(final Set<Subscription> subs) {
 		
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -300,7 +304,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 	}
 	
 	@Override
-	public Future<Boolean> unsubscribe(Subscription sub) {
+	public Future<Boolean> unsubscribe(final Subscription sub) {
 		
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
@@ -313,7 +317,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 	}
 	
 	@Override
-	public void setPolicy(DDF_FeedEvent event, EventPolicy policy) {
+	public void setPolicy(final DDF_FeedEvent event, final EventPolicy policy) {
 		// Does nothing for now, some functionality will be added
 		// for tcp listeners
 	}
