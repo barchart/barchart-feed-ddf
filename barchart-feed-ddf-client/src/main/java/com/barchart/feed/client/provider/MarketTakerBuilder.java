@@ -19,44 +19,44 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.util.values.api.Value;
 
-public class MarketTakerFactory<V extends Value<V>> {
+public class MarketTakerBuilder<V extends Value<V>> {
 
 	private Set<MarketEvent> events = new HashSet<MarketEvent>();
 	private Set<MarketInstrument> instruments = new HashSet<MarketInstrument>();
 	private List<MarketEventCallback<V>> eventCallbacks = new ArrayList<MarketEventCallback<V>>();
 	private MarketField<V> field = null;
 	
-	public MarketTakerFactory<V> addMarketField(final MarketField<V> field) {
+	public MarketTakerBuilder<V> addMarketField(final MarketField<V> field) {
 		this.field = field;
 		return this;
 	}
 	
-	public MarketTakerFactory<V> addEvent(final MarketEvent event) {
+	public MarketTakerBuilder<V> addEvent(final MarketEvent event) {
 		events.add(event);
 		return this;
 	}
 	
-	public MarketTakerFactory<V> addInstrument(final MarketInstrument inst) {
+	public MarketTakerBuilder<V> addInstrument(final MarketInstrument inst) {
 		instruments.add(inst);
 		return this;
 	}
 	
-	public MarketTakerFactory<V> addSymbol(final String symbol) {
+	public MarketTakerBuilder<V> addSymbol(final String symbol) {
 		instruments.add(DDF_InstrumentProvider.find(symbol));
 		return this;
 	}
 	
-	public MarketTakerFactory<V> addInstruments(final List<MarketInstrument> insts) {
+	public MarketTakerBuilder<V> addInstruments(final List<MarketInstrument> insts) {
 		instruments.addAll(insts);
 		return this;
 	}
 	
-	public MarketTakerFactory<V> addSymbols(final List<String> symbols) {
+	public MarketTakerBuilder<V> addSymbols(final List<String> symbols) {
 		instruments.addAll(DDF_InstrumentProvider.find(symbols));
 		return this;
 	}
 	
-	public MarketTakerFactory<V> addEventCallback(final MarketEventCallback<V> eventCallback) {
+	public MarketTakerBuilder<V> addEventCallback(final MarketEventCallback<V> eventCallback) {
 		eventCallbacks.add(eventCallback);
 		return this;
 	}
