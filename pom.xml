@@ -38,6 +38,8 @@
 		<!-- <artifactId>netty</artifactId> -->
 		<barchartNettyVersion>3.5.2.Final</barchartNettyVersion>
 
+		<!-- maven site only via profile -->
+		<maven.site.skip>true</maven.site.skip>
 
 	</properties>
 
@@ -79,34 +81,49 @@
 
 	</modules>
 
-	<build>
+	<!-- publish maven site to github -->
+	<profiles>
 
-		<plugins>
+		<profile>
+			<id>maven-site</id>
+			<activation>
+				<!-- selectively enable maven site -->
+				<file>
+					<exists>maven-site.md</exists>
+				</file>
+			</activation>
+			<properties>
+				<maven.site.skip>false</maven.site.skip>
+			</properties>
+			<build>
+				<plugins>
 
-			<!-- publish maven site to github -->
-			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-				<version>0.7</version>
-				<executions>
-					<execution>
-						<id>maven-site</id>
-						<goals>
-							<goal>site</goal>
-						</goals>
-						<phase>site</phase>
-						<configuration>
-							<merge>true</merge>
-							<server>github</server>
-							<path>site/${project.artifactId}</path>
-							<message>site ${project.artifactId}-${project.version}</message>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+					<!-- subject to github rate limit 5k/hr -->
+					<plugin>
+						<groupId>com.github.github</groupId>
+						<artifactId>site-maven-plugin</artifactId>
+						<version>0.7</version>
+						<executions>
+							<execution>
+								<id>maven-site</id>
+								<goals>
+									<goal>site</goal>
+								</goals>
+								<phase>site</phase>
+								<configuration>
+									<merge>true</merge>
+									<server>github</server>
+									<path>site/${project.artifactId}</path>
+									<message>site ${project.artifactId}-${project.version}</message>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 
-		</plugins>
+				</plugins>
+			</build>
+		</profile>
 
-	</build>
+	</profiles>
 
 </project>
