@@ -33,11 +33,14 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketRegListener;
+import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
+import com.barchart.feed.base.provider.MakerBaseAllMarkets;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.market.provider.DDF_MarketService;
 import com.barchart.feed.ddf.market.provider.DDF_MarketServiceAllMarkets;
+import com.barchart.util.values.api.Value;
 
 /**
  * The entry point for Barchart data feed services.
@@ -50,7 +53,7 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	private Executor executor = null;
 
 	public BarchartFeedReceiver() {
-
+		
 		this(new Executor() {
 
 			private final AtomicLong counter = new AtomicLong(0);
@@ -63,12 +66,13 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 			}
 
 		});
-
+		
 	}
 	
 	public BarchartFeedReceiver(final Executor ex) {
 		maker.add(instrumentSubscriptionListener);
 		executor = ex;
+		maker = DDF_MarketServiceAllMarkets.newInstance();
 	}
 
 	/**
@@ -81,15 +85,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * market takers
 	 * @param allMarkets True if markets will be built for all instruments
 	 */
-	public void listenUDP(final int socketAddress, final boolean filterBySub, 
-			final boolean allMarkets) {
+	public void listenUDP(final int socketAddress, final boolean filterBySub) {
 
-		if(allMarkets) {
-			maker = DDF_MarketServiceAllMarkets.newInstance();
-		} else {
-			maker = DDF_MarketService.newInstance();
-		}
-		
 		setClient(DDF_FeedClientFactory.newUDPListenerClient(
 				socketAddress, filterBySub, executor), false);
 
@@ -105,20 +102,25 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * market takers
 	 * @param allMarkets True if markets will be built for all instruments
 	 */
-	public void listenTCP(final int socketAddress, final boolean filterBySub, 
-			final boolean allMarkets) {
+	public void listenTCP(final int socketAddress, final boolean filterBySub) {
 		
-		if(allMarkets) {
-			maker = DDF_MarketServiceAllMarkets.newInstance();
-		} else {
-			maker = DDF_MarketService.newInstance();
-		}
-
 		setClient(DDF_FeedClientFactory.newStatelessTCPListenerClient(
 				socketAddress, filterBySub, executor), false);
 
 	}
 
+	public <V extends Value<V>> boolean addAllMarketsTaker(final MarketTaker<V> taker) {
+		return ((MakerBaseAllMarkets)maker).registerForAll(taker);
+	}
+	
+	public <V extends Value<V>> boolean updateAllMarketsTaker(final MarketTaker<V> taker) {
+		return ((MakerBaseAllMarkets)maker).updateForAll(taker);
+	}
+	
+	public <V extends Value<V>> boolean removeAllMarketsTaker(final MarketTaker<V> taker) {
+		return ((MakerBaseAllMarkets)maker).unregisterForAll(taker);
+	}
+	
 	/*
 	 * This is where the instruments are registered and unregistered as needed
 	 * by the market maker. Subscribe events are sent when the instrument has

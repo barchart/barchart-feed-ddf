@@ -22,18 +22,19 @@ public class TestAllMarketsReceiver {
 		
 		BarchartFeedReceiver client = new BarchartFeedReceiver();
 		
-		final MarketInstrument[] instruments = {};
+		final MarketInstrument[] instruments1 = {};
+		final MarketInstrument[] instruments2 = {client.lookup("ESZ2")};
 		
-		client.listenTCP(7000, false, true);
+		client.listenTCP(7000, false);
 		
-		final MarketTaker<Market> taker1 = TakerFactory.makeFactory1(instruments);
-		final MarketTaker<Market> taker2 = TakerFactory.makeFactory2(instruments);
+		final MarketTaker<Market> taker1 = TakerFactory.makeFactory1(instruments1);
+		final MarketTaker<Market> taker2 = TakerFactory.makeFactory2(instruments2);
 		
-		client.addTaker(taker1);
+		client.addAllMarketsTaker(taker1);
 		client.addTaker(taker2);
 		
-		Thread.sleep(10 * 1000);
-		client.removeTaker(taker2);
+		//Thread.sleep(10 * 1000);
+		//client.removeTaker(taker2);
 		Thread.sleep(10 * 60 * 1000);
 		client.shutdown();		
 		System.exit(0);
@@ -113,12 +114,11 @@ public class TestAllMarketsReceiver {
 						final MarketInstrument instrument, final Market value) {
 
 					final StringBuilder sb = new StringBuilder(" *** TAKER 2 EVENT: ")
-							.append(event);
+							.append(instrument.get(InstrumentField.ID).toString())
+							.append("******************************************************************************/n")
+							.append("******************************************************************************/n")
+							.append("******************************************************************************/n");
 
-					sb.append(" " + instrument.get(InstrumentField.ID));
-
-					sb.append(" BID " + ValueUtil.asDouble(value.get(MarketField.BOOK_TOP).side(MarketBookSide.ASK).price()));
-					
 					log.debug(sb.toString());
 
 				}

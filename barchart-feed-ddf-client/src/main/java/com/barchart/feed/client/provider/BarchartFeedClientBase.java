@@ -95,10 +95,6 @@ public abstract class BarchartFeedClientBase {
 
 	}
 	
-	protected void setMarketProvider(final DDF_MarketProvider maker) {
-		this.maker = maker;
-	}
-	
 	/**
 	 * Shuts down the data feed and clears all registered market takers.
 	 */

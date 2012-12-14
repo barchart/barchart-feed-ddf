@@ -45,17 +45,15 @@ public class TestReceiver {
 			instruments[i-INST_START] = client.lookup(args[i]);
 		}
 		
-		// Handle Subscriptions Boolean
-		
 		if(args[0].equals("TCP")) {
-			client.listenTCP(Integer.parseInt(args[1]), false, true);
+			client.listenTCP(Integer.parseInt(args[1]), false);
 		} else if(args[0].equals("UDP")) {
-			client.listenUDP(Integer.parseInt(args[1]), false, true);
+			client.listenUDP(Integer.parseInt(args[1]), false);
 		} else {
 			throw new RuntimeException("Bad protocol, expecting UDP or TCP");
 		}
 		
-		client.addTaker(TakerFactory.makeTaker(instruments));
+		client.addAllMarketsTaker(TakerFactory.makeTaker(instruments));
 		
 		System.in.read();
 		client.shutdown();
