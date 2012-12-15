@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>barchart-feed-ddf</artifactId>
 		<groupId>com.barchart.feed</groupId>
-		<version>3.4.35-SNAPSHOT</version>
+		<version>3.4.35</version>
 	</parent>
 
 	<name>barchart-feed-ddf-symbol</name>
@@ -16,7 +16,7 @@
 		<url>https://github.com/barchart/barchart-feed-ddf</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
-	  <tag>HEAD</tag>
+	  <tag>barchart-feed-ddf-3.4.35</tag>
   </scm>
 
 	<dependencies>
