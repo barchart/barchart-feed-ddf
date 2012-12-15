@@ -9,10 +9,8 @@
 -->
 ## info
 
-barchart data feed projects -- ddf 
-
-Link to project's Mavent site:
-(http://barchart.github.com/barchart-feed-ddf/)
+[barchart data feed projects - wiki]
+(https://github.com/barchart/barchart-feed-ddf/wiki) 
 
 ### repo
 
