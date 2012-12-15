@@ -94,12 +94,27 @@ public enum DDF_FeedEvent {
 
 	public static boolean isConnectionError(final DDF_FeedEvent event) {
 
-		return event == LOGIN_FAILURE || event == SESSION_LOCKOUT
-				|| event == LINK_DISCONNECT
-				|| event == LINK_CONNECT_PROXY_TIMEOUT
-				|| event == SETTINGS_RETRIEVAL_FAILURE
-				|| event == CHANNEL_CONNECT_TIMEOUT
-				|| event == CHANNEL_CONNECT_FAILURE;
+		switch (event) {
+
+		case LOGIN_FAILURE:
+
+		case SESSION_LOCKOUT:
+
+		case LINK_DISCONNECT:
+		case LINK_CONNECT_PROXY_TIMEOUT:
+
+		case SETTINGS_RETRIEVAL_FAILURE:
+
+		case CHANNEL_CONNECT_TIMEOUT:
+		case CHANNEL_CONNECT_FAILURE:
+
+			return true;
+
+		default:
+
+			return false;
+
+		}
 
 	}
 
