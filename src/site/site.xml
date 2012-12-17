@@ -19,8 +19,8 @@
   <custom>
     <fluidoSkin>
       <gitHub>
-        <projectId>barchart/barchart-udt</projectId>
-        <ribbonOrientation>left</ribbonOrientation>
+        <projectId>barchart/barchart-feed-ddf</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
         <ribbonColor>orange</ribbonColor>
       </gitHub>
     </fluidoSkin>
