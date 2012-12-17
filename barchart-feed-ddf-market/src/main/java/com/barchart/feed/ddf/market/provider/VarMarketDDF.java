@@ -293,7 +293,7 @@ class VarMarketDDF extends VarMarket {
 
 		// Only update last for normal in-sequence trades
 		if (sequencing == NORMAL) {
-			if (price.isNull() || price.isZero()) {
+			if (price.isNull()) {
 				log.warn("null or zero price on trade message, not applying to bar");
 			} else {
 				bar.set(CLOSE, price);
@@ -316,6 +316,7 @@ class VarMarketDDF extends VarMarket {
 
 		final MarketDoCuvol cuvol = loadCuvol();
 
+		log.debug("Adding cuvol for " + get(INSTRUMENT).get(InstrumentField.ID).toString());
 		cuvol.add(price, size);
 
 		eventAdd(NEW_CUVOL_UPDATE);

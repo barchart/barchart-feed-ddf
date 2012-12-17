@@ -77,15 +77,15 @@ public class TestAllMarketsReceiver {
 				@Override
 				public void onMarketEvent(final MarketEvent event,
 						final MarketInstrument instrument, final Market value) {
-
-					final StringBuilder sb = new StringBuilder("Taker 1 Event: ")
-							.append(event);
-
-					sb.append(" " + instrument.get(InstrumentField.ID));
-
-					sb.append(" BID " + ValueUtil.asDouble(value.get(MarketField.BOOK_TOP).side(MarketBookSide.BID).price()));
-					
-					log.debug(sb.toString());
+//
+//					final StringBuilder sb = new StringBuilder("Taker 1 Event: ")
+//							.append(event);
+//
+//					sb.append(" " + instrument.get(InstrumentField.ID));
+//
+//					sb.append(" BID " + ValueUtil.asDouble(value.get(MarketField.BOOK_TOP).side(MarketBookSide.BID).price()));
+//					
+//					log.debug(sb.toString());
 
 				}
 
@@ -120,13 +120,13 @@ public class TestAllMarketsReceiver {
 				public void onMarketEvent(final MarketEvent event,
 						final MarketInstrument instrument, final Market value) {
 
-					final StringBuilder sb = new StringBuilder(" *** TAKER 2 EVENT: ")
-							.append(instrument.get(InstrumentField.ID).toString())
-							.append("******************************************************************************/n")
-							.append("******************************************************************************/n")
-							.append("******************************************************************************/n");
-
-					log.debug(sb.toString());
+//					final StringBuilder sb = new StringBuilder(" *** TAKER 2 EVENT: ")
+//							.append(instrument.get(InstrumentField.ID).toString())
+//							.append("******************************************************************************/n")
+//							.append("******************************************************************************/n")
+//							.append("******************************************************************************/n");
+//
+//					log.debug(sb.toString());
 
 				}
 
