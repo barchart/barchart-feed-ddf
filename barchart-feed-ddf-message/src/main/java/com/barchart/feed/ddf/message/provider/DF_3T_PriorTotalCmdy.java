@@ -10,7 +10,7 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.ascii.ASCII.COMMA;
+import static com.barchart.util.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
@@ -23,8 +23,7 @@ import com.barchart.util.values.api.SizeValue;
  * This should not be a BaseMarket message. Will revisit when it's needed. For
  * now this is just ignored by the ChannelHandlerDDF
  */
-public class DF_3T_PriorTotalCmdy extends BaseMarket implements
-		DDF_Prior_TotCmdy {
+class DF_3T_PriorTotalCmdy extends BaseMarket implements DDF_Prior_TotCmdy {
 
 	DF_3T_PriorTotalCmdy() {
 		super(DDF_MessageType.PRIOR_TOTAL_CMDY);

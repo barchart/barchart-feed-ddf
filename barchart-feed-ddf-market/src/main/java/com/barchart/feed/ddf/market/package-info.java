@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * TODO 
+ * market state 
  */
 package com.barchart.feed.ddf.market;
 

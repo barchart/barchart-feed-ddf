@@ -38,7 +38,7 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.api.Subscription;
-import com.barchart.feed.ddf.datalink.enums.TP;
+import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 
 /**
@@ -90,7 +90,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	public void login(final String username, final String password,
 			final DDF_SocksProxy proxySettings) {
 
-		loginProxy(username, password, TP.TCP, executor, proxySettings);
+		loginProxy(username, password, DDF_Transport.TCP, executor, proxySettings);
 		
 	}
 
@@ -106,7 +106,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 */
 	public void login(final String username, final String password) {
 		
-		loginMain(username, password, TP.TCP, executor);
+		loginMain(username, password, DDF_Transport.TCP, executor);
 		
 	}
 
@@ -121,7 +121,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * @param password
 	 * @param tp
 	 */
-	public void login(final String username, final String password, final TP tp) {
+	public void login(final String username, final String password, final DDF_Transport tp) {
 
 		loginMain(username, password, tp, executor);
 
@@ -140,7 +140,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * @param executor
 	 */
 	public void login(final String username, final String password,
-			final TP tp, final Executor executor) {
+			final DDF_Transport tp, final Executor executor) {
 
 		loginMain(username, password, tp, executor);
 
@@ -150,7 +150,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * Handles login. Non-blocking.
 	 */
 	private void loginMain(final String username, final String password,
-			final TP tp, final Executor executor) {
+			final DDF_Transport tp, final Executor executor) {
 
 		maker.clearAll();
 
@@ -162,7 +162,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	}
 
 	private void loginProxy(final String username, final String password,
-			final TP tp, final Executor executor,
+			final DDF_Transport tp, final Executor executor,
 			final DDF_SocksProxy proxySettings) {
 
 		maker.clearAll();

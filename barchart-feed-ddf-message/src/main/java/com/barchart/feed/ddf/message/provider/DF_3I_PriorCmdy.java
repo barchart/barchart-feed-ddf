@@ -10,7 +10,7 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.ascii.ASCII.COMMA;
+import static com.barchart.util.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
@@ -23,8 +23,7 @@ import com.barchart.util.values.api.SizeValue;
  * @author g-litchfield
  * 
  */
-public class DF_3I_PriorCmdy extends BaseMarket implements
-		DDF_Prior_IndividCmdy {
+class DF_3I_PriorCmdy extends BaseMarket implements DDF_Prior_IndividCmdy {
 
 	DF_3I_PriorCmdy() {
 		super(DDF_MessageType.PRIOR_INDIV_CMDY);

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
-import com.barchart.feed.ddf.datalink.enums.TP;
+import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 
 /**
  * Factory class for building FeedClientDDF.
@@ -38,7 +38,7 @@ public class DDF_FeedClientFactory {
 	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
 	 * @return the DDF_FeedClient
 	 */
-	public static DDF_FeedClient newConnectionClient(final TP protocol,
+	public static DDF_FeedClient newConnectionClient(final DDF_Transport protocol,
 			final String username, final String password,
 			final Executor executor) {
 
@@ -57,7 +57,7 @@ public class DDF_FeedClientFactory {
 	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
 	 * @return the DDF_FeedClient
 	 */
-	public static DDF_FeedClient newConnectionClient(final TP protocol,
+	public static DDF_FeedClient newConnectionClient(final DDF_Transport protocol,
 			final String username, final String password,
 			final Executor executor, final DDF_SocksProxy proxySettings) {
 

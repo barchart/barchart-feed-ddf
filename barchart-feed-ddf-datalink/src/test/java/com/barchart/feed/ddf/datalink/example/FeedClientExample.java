@@ -20,7 +20,7 @@ import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
-import com.barchart.feed.ddf.datalink.enums.TP;
+import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 
 // TODO: Auto-generated Javadoc
@@ -60,7 +60,7 @@ public class FeedClientExample {
 		};
 
 		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newConnectionClient(TP.TCP, username,
+				DDF_FeedClientFactory.newConnectionClient(DDF_Transport.TCP, username,
 						password, runner);
 
 		final DDF_MessageListener handler = new LoggingHandler();

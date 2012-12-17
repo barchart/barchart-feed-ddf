@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * TODO 
+ * public api for message codec
  */
 package com.barchart.feed.ddf.message.api;
 

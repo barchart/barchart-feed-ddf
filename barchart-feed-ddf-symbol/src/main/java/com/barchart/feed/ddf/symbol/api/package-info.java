@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * TODO 
+ * public symbology api
  */
 package com.barchart.feed.ddf.symbol.api;
 
