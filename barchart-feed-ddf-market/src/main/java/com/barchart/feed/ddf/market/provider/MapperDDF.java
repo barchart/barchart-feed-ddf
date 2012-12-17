@@ -645,6 +645,13 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 //			log.debug("DDF Session: code="
 //					+ new String(new byte[] { ddfSession.code }));
+			
+//			final StringBuilder sb = new StringBuilder();
+//			sb.append("Visit Trade: ").append(ddfSession.type).append(" ")
+//				.append(ddfSession.session).append(" ").append(ddfSession.sequencing)
+//				.append(" ").append(size.asLong()).append(" ").append(time.asDateTime().toString());
+//			log.debug(sb.toString());
+			
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
 
