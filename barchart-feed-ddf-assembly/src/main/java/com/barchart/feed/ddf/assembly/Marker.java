@@ -7,8 +7,9 @@
  */
 package com.barchart.feed.ddf.assembly;
 
-
-
-public class Dummy {
+/**
+ * build marker class
+ */
+public class Marker {
 
 }
