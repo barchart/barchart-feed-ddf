@@ -9,7 +9,7 @@
 -->
 ## info
 
-barchart data feed api - market state
+barchart ddf data feed api - market state
 
 ### repo
 

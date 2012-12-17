@@ -9,7 +9,7 @@
 -->
 ## info
 
-barchart data feed api - historical data access
+barchart ddf data feed api - historical data access
 
 ### repo
 
