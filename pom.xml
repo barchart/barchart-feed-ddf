@@ -41,7 +41,7 @@
 
 		<!-- <groupId>com.barchart.util</groupId> -->
 		<!-- <artifactId>barchart-util</artifactId> -->
-		<barchartUtilVersion>2.0.11</barchartUtilVersion>
+		<barchartUtilVersion>2.0.12</barchartUtilVersion>
 
 		<!-- <groupId>com.barchart.feed</groupId> -->
 		<!-- <artifactId>barchart-feed-base</artifactId> -->
