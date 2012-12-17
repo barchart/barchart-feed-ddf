@@ -53,7 +53,7 @@
 
 		<!-- <groupId>io.netty</groupId> -->
 		<!-- <artifactId>netty</artifactId> -->
-		<barchartNettyVersion>3.5.1.Final</barchartNettyVersion>
+		<barchartNettyVersion>3.5.11.Final</barchartNettyVersion>
 
 		<!-- maven site only via profile -->
 		<maven.site.skip>true</maven.site.skip>
