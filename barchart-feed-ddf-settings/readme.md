@@ -9,7 +9,7 @@
 -->
 ## info
 
-barchart data feed api - user settings lookup
+barchart ddf data feed api - ddf user settings lookup
 
 ### repo
 

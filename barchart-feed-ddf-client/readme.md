@@ -9,7 +9,7 @@
 -->
 ## info
 
-barchart ddf data feed api - market data client, low level
+barchart ddf data feed api - market data client, high level
 
 ### repo
 

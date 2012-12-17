@@ -9,7 +9,7 @@
 -->
 ## info
 
-barchart data feed api - instrument lookup
+barchart ddf data feed api - instrument lookup
 
 ### repo
 

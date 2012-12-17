@@ -9,7 +9,7 @@
 -->
 ## info
 
-barchart data feed api bundle; includes all ddf libraries in a single package
+barchart ddf data feed api bundle - includes all ddf libraries in a single package
 
 ### repo
 

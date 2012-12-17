@@ -9,7 +9,7 @@
 -->
 ## info
 
-barchart data feed api - message codec
+barchart ddf data feed api - ddf utilities
 
 ### repo
 
