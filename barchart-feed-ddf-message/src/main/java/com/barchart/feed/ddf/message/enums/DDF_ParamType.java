@@ -209,6 +209,7 @@ public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 				return known;
 			}
 		}
+		log.debug("UNKNOWN PARAM CODE = " + String.valueOf(code));
 		return UNKNOWN;
 	}
 

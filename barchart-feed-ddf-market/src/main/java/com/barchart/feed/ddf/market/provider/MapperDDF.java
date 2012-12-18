@@ -477,14 +477,14 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			if (isClear(priceSettle)) {
 				// ",-, " : means remove old value
-				log.debug("Set State IS_SETTLED false inside visit MarketSnapshot because priceSettle is clear");
+				//log.debug("Set State IS_SETTLED false inside visit MarketSnapshot because priceSettle is clear");
 				market.setState(MarketStateEntry.IS_SETTLED, false);
 			} else if (isEmpty(priceSettle)) {
 				// ",," : means leave alone
 				// no change of current value
 			} else {
 				// ",12345," : means replace with new value
-				log.debug("Set State IS_SETTLED true inside visit MarketSnapshot because priceSettle is not empty");
+				//log.debug("Set State IS_SETTLED true inside visit MarketSnapshot because priceSettle is not empty");
 				market.setState(MarketStateEntry.IS_SETTLED, true);
 			}
 
@@ -643,15 +643,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			final TimeValue time = message.getTime();
 			final TimeValue date = message.getTradeDay().tradeDate();
 
-//			log.debug("DDF Session: code="
-//					+ new String(new byte[] { ddfSession.code }));
-			
-//			final StringBuilder sb = new StringBuilder();
-//			sb.append("Visit Trade: ").append(ddfSession.type).append(" ")
-//				.append(ddfSession.session).append(" ").append(ddfSession.sequencing)
-//				.append(" ").append(size.asLong()).append(" ").append(time.asDateTime().toString());
-//			log.debug(sb.toString());
-			
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
 
