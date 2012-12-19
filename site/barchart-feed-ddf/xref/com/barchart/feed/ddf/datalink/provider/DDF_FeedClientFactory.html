@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.enums.TP;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 <a class="jxr_linenumber" name="19" href="#19">19</a>  
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_javadoccomment"> * Factory class for building FeedClientDDF.</em>
@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_javadoccomment">	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory</em>
 <a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">	 * @return the DDF_FeedClient</em>
 <a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="41" href="#41">41</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/api/DDF_FeedClient.html">DDF_FeedClient</a> newConnectionClient(<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/enums/TP.html">TP</a> protocol,
+<a class="jxr_linenumber" name="41" href="#41">41</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/api/DDF_FeedClient.html">DDF_FeedClient</a> newConnectionClient(<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/enums/DDF_Transport.html">DDF_Transport</a> protocol,
 <a class="jxr_linenumber" name="42" href="#42">42</a>  			<strong class="jxr_keyword">final</strong> String username, <strong class="jxr_keyword">final</strong> String password,
 <a class="jxr_linenumber" name="43" href="#43">43</a>  			<strong class="jxr_keyword">final</strong> Executor executor) {
 <a class="jxr_linenumber" name="44" href="#44">44</a>  
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment">	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory</em>
 <a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment">	 * @return the DDF_FeedClient</em>
 <a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="60" href="#60">60</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/api/DDF_FeedClient.html">DDF_FeedClient</a> newConnectionClient(<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/enums/TP.html">TP</a> protocol,
+<a class="jxr_linenumber" name="60" href="#60">60</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/api/DDF_FeedClient.html">DDF_FeedClient</a> newConnectionClient(<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/enums/DDF_Transport.html">DDF_Transport</a> protocol,
 <a class="jxr_linenumber" name="61" href="#61">61</a>  			<strong class="jxr_keyword">final</strong> String username, <strong class="jxr_keyword">final</strong> String password,
 <a class="jxr_linenumber" name="62" href="#62">62</a>  			<strong class="jxr_keyword">final</strong> Executor executor, <strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/api/DDF_SocksProxy.html">DDF_SocksProxy</a> proxySettings) {
 <a class="jxr_linenumber" name="63" href="#63">63</a>  

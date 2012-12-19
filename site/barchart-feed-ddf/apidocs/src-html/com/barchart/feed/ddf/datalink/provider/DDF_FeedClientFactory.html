@@ -18,7 +18,7 @@
 <FONT color="green">015</FONT>    import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;<a name="line.15"></a>
 <FONT color="green">016</FONT>    import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;<a name="line.16"></a>
 <FONT color="green">017</FONT>    import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;<a name="line.17"></a>
-<FONT color="green">018</FONT>    import com.barchart.feed.ddf.datalink.enums.TP;<a name="line.18"></a>
+<FONT color="green">018</FONT>    import com.barchart.feed.ddf.datalink.enums.DDF_Transport;<a name="line.18"></a>
 <FONT color="green">019</FONT>    <a name="line.19"></a>
 <FONT color="green">020</FONT>    /**<a name="line.20"></a>
 <FONT color="green">021</FONT>     * Factory class for building FeedClientDDF.<a name="line.21"></a>
@@ -41,7 +41,7 @@
 <FONT color="green">038</FONT>             *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory<a name="line.38"></a>
 <FONT color="green">039</FONT>             * @return the DDF_FeedClient<a name="line.39"></a>
 <FONT color="green">040</FONT>             */<a name="line.40"></a>
-<FONT color="green">041</FONT>            public static DDF_FeedClient newConnectionClient(final TP protocol,<a name="line.41"></a>
+<FONT color="green">041</FONT>            public static DDF_FeedClient newConnectionClient(final DDF_Transport protocol,<a name="line.41"></a>
 <FONT color="green">042</FONT>                            final String username, final String password,<a name="line.42"></a>
 <FONT color="green">043</FONT>                            final Executor executor) {<a name="line.43"></a>
 <FONT color="green">044</FONT>    <a name="line.44"></a>
@@ -60,7 +60,7 @@
 <FONT color="green">057</FONT>             *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory<a name="line.57"></a>
 <FONT color="green">058</FONT>             * @return the DDF_FeedClient<a name="line.58"></a>
 <FONT color="green">059</FONT>             */<a name="line.59"></a>
-<FONT color="green">060</FONT>            public static DDF_FeedClient newConnectionClient(final TP protocol,<a name="line.60"></a>
+<FONT color="green">060</FONT>            public static DDF_FeedClient newConnectionClient(final DDF_Transport protocol,<a name="line.60"></a>
 <FONT color="green">061</FONT>                            final String username, final String password,<a name="line.61"></a>
 <FONT color="green">062</FONT>                            final Executor executor, final DDF_SocksProxy proxySettings) {<a name="line.62"></a>
 <FONT color="green">063</FONT>    <a name="line.63"></a>

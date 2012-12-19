@@ -30,7 +30,7 @@
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 <a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.Subscription;
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.enums.TP;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 <a class="jxr_linenumber" name="25" href="#25">25</a>  
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_comment">// TODO: Auto-generated Javadoc</em>
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="60" href="#60">60</a>  		};
 <a class="jxr_linenumber" name="61" href="#61">61</a>  
 <a class="jxr_linenumber" name="62" href="#62">62</a>  		<strong class="jxr_keyword">final</strong> DDF_FeedClient client =
-<a class="jxr_linenumber" name="63" href="#63">63</a>  				DDF_FeedClientFactory.newConnectionClient(TP.TCP, username,
+<a class="jxr_linenumber" name="63" href="#63">63</a>  				DDF_FeedClientFactory.newConnectionClient(DDF_Transport.TCP, username,
 <a class="jxr_linenumber" name="64" href="#64">64</a>  						password, runner);
 <a class="jxr_linenumber" name="65" href="#65">65</a>  
 <a class="jxr_linenumber" name="66" href="#66">66</a>  		<strong class="jxr_keyword">final</strong> DDF_MessageListener handler = <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/example/LoggingHandler.html">LoggingHandler</a>();

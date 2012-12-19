@@ -1,5 +1,5 @@
+bench
 com.barchart.feed.client.provider
-com.barchart.feed.client.provider.test
 com.barchart.feed.ddf.assembly
 com.barchart.feed.ddf.datalink
 com.barchart.feed.ddf.datalink.api

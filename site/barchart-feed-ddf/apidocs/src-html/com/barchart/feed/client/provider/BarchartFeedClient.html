@@ -41,7 +41,7 @@
 <FONT color="green">038</FONT>    import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;<a name="line.38"></a>
 <FONT color="green">039</FONT>    import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;<a name="line.39"></a>
 <FONT color="green">040</FONT>    import com.barchart.feed.ddf.datalink.api.Subscription;<a name="line.40"></a>
-<FONT color="green">041</FONT>    import com.barchart.feed.ddf.datalink.enums.TP;<a name="line.41"></a>
+<FONT color="green">041</FONT>    import com.barchart.feed.ddf.datalink.enums.DDF_Transport;<a name="line.41"></a>
 <FONT color="green">042</FONT>    import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;<a name="line.42"></a>
 <FONT color="green">043</FONT>    <a name="line.43"></a>
 <FONT color="green">044</FONT>    /**<a name="line.44"></a>
@@ -93,7 +93,7 @@
 <FONT color="green">090</FONT>            public void login(final String username, final String password,<a name="line.90"></a>
 <FONT color="green">091</FONT>                            final DDF_SocksProxy proxySettings) {<a name="line.91"></a>
 <FONT color="green">092</FONT>    <a name="line.92"></a>
-<FONT color="green">093</FONT>                    loginProxy(username, password, TP.TCP, executor, proxySettings);<a name="line.93"></a>
+<FONT color="green">093</FONT>                    loginProxy(username, password, DDF_Transport.TCP, executor, proxySettings);<a name="line.93"></a>
 <FONT color="green">094</FONT>                    <a name="line.94"></a>
 <FONT color="green">095</FONT>            }<a name="line.95"></a>
 <FONT color="green">096</FONT>    <a name="line.96"></a>
@@ -109,7 +109,7 @@
 <FONT color="green">106</FONT>             */<a name="line.106"></a>
 <FONT color="green">107</FONT>            public void login(final String username, final String password) {<a name="line.107"></a>
 <FONT color="green">108</FONT>                    <a name="line.108"></a>
-<FONT color="green">109</FONT>                    loginMain(username, password, TP.TCP, executor);<a name="line.109"></a>
+<FONT color="green">109</FONT>                    loginMain(username, password, DDF_Transport.TCP, executor);<a name="line.109"></a>
 <FONT color="green">110</FONT>                    <a name="line.110"></a>
 <FONT color="green">111</FONT>            }<a name="line.111"></a>
 <FONT color="green">112</FONT>    <a name="line.112"></a>
@@ -124,7 +124,7 @@
 <FONT color="green">121</FONT>             * @param password<a name="line.121"></a>
 <FONT color="green">122</FONT>             * @param tp<a name="line.122"></a>
 <FONT color="green">123</FONT>             */<a name="line.123"></a>
-<FONT color="green">124</FONT>            public void login(final String username, final String password, final TP tp) {<a name="line.124"></a>
+<FONT color="green">124</FONT>            public void login(final String username, final String password, final DDF_Transport tp) {<a name="line.124"></a>
 <FONT color="green">125</FONT>    <a name="line.125"></a>
 <FONT color="green">126</FONT>                    loginMain(username, password, tp, executor);<a name="line.126"></a>
 <FONT color="green">127</FONT>    <a name="line.127"></a>
@@ -143,7 +143,7 @@
 <FONT color="green">140</FONT>             * @param executor<a name="line.140"></a>
 <FONT color="green">141</FONT>             */<a name="line.141"></a>
 <FONT color="green">142</FONT>            public void login(final String username, final String password,<a name="line.142"></a>
-<FONT color="green">143</FONT>                            final TP tp, final Executor executor) {<a name="line.143"></a>
+<FONT color="green">143</FONT>                            final DDF_Transport tp, final Executor executor) {<a name="line.143"></a>
 <FONT color="green">144</FONT>    <a name="line.144"></a>
 <FONT color="green">145</FONT>                    loginMain(username, password, tp, executor);<a name="line.145"></a>
 <FONT color="green">146</FONT>    <a name="line.146"></a>
@@ -153,7 +153,7 @@
 <FONT color="green">150</FONT>             * Handles login. Non-blocking.<a name="line.150"></a>
 <FONT color="green">151</FONT>             */<a name="line.151"></a>
 <FONT color="green">152</FONT>            private void loginMain(final String username, final String password,<a name="line.152"></a>
-<FONT color="green">153</FONT>                            final TP tp, final Executor executor) {<a name="line.153"></a>
+<FONT color="green">153</FONT>                            final DDF_Transport tp, final Executor executor) {<a name="line.153"></a>
 <FONT color="green">154</FONT>    <a name="line.154"></a>
 <FONT color="green">155</FONT>                    maker.clearAll();<a name="line.155"></a>
 <FONT color="green">156</FONT>    <a name="line.156"></a>
@@ -165,7 +165,7 @@
 <FONT color="green">162</FONT>            }<a name="line.162"></a>
 <FONT color="green">163</FONT>    <a name="line.163"></a>
 <FONT color="green">164</FONT>            private void loginProxy(final String username, final String password,<a name="line.164"></a>
-<FONT color="green">165</FONT>                            final TP tp, final Executor executor,<a name="line.165"></a>
+<FONT color="green">165</FONT>                            final DDF_Transport tp, final Executor executor,<a name="line.165"></a>
 <FONT color="green">166</FONT>                            final DDF_SocksProxy proxySettings) {<a name="line.166"></a>
 <FONT color="green">167</FONT>    <a name="line.167"></a>
 <FONT color="green">168</FONT>                    maker.clearAll();<a name="line.168"></a>
