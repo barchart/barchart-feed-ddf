@@ -273,13 +273,13 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			/** only "final" sets the flag */
 		case SETTLE_FINAL_PRICE:
-			log.debug("Set State IS_SETTLED true inside VISIT MARKET PARAMETER, SETTLE_FINAL_PRICE");
+			//log.debug("Set State IS_SETTLED true inside VISIT MARKET PARAMETER, SETTLE_FINAL_PRICE");
 			market.setState(MarketStateEntry.IS_SETTLED, true);
 			/** falls through */
 
 			/** "early" does NOT set the flag */
 		case SETTLE_EARLY_PRICE:
-			log.debug("Set prelim settle value but not IS_SETTLED flag inside VISIT MARKET PARAMETER, SETTLE_EARLY_PRICE");
+			//log.debug("Set prelim settle value but not IS_SETTLED flag inside VISIT MARKET PARAMETER, SETTLE_EARLY_PRICE");
 			barCurrent.set(MarketBarField.SETTLE, price);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
 			market.setBar(CURRENT, barCurrent);
@@ -289,7 +289,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			break;
 		}
 
-		log.error("@@@ TODO : {} \n{}", param, message);
+		log.debug("@@@ TODO : {} \n{}", param, message.getTime().toString() + " " + message);
 
 		return null;
 

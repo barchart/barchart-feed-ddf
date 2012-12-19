@@ -89,7 +89,9 @@ public class TestDF_20_Param extends TestDDFBase {
 	// 20
 	final static byte[] ba20 = "2SF0,02B1010533,D0Q JFTKDw9"
 			.getBytes(ASCII_CHARSET);
-
+	
+//	final static byte[] ba20 = "2LCQ1300D,0BM104900,??HRLLRMAf"
+//			.getBytes(ASCII_CHARSET);
 	/**
 	 * Test decode.
 	 */

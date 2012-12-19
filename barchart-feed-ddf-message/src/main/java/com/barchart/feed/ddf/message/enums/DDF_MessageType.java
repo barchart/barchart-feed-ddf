@@ -85,8 +85,8 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 	/** 24: ddfplus generated, background refresh for previous session */
 	SNAP_BACK_PLUS_PREV(_2_, _4_, DDF_MarketSnapshot.class), //
 
-	/** 25: TODO */
-	DDF_25(_2_, _5_, Void.class), //
+	/** 25: TODO exchange generated, insert message last price */
+	DDF_25(_2_, _5_, DDF_MarketParameter.class), //
 
 	/** 26: live foreground quote message. */
 	SNAP_FORE_PLUS_QUOTE(_2_, _6_, DDF_MarketSnapshot.class), //

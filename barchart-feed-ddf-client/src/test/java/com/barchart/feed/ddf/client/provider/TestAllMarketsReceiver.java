@@ -42,12 +42,11 @@ public class TestAllMarketsReceiver {
 		
 		//Thread.sleep(10 * 1000);
 		//client.removeTaker(taker2);
-		Thread.sleep(10 * 60 * 1000);
+		Thread.sleep(10 * 10 * 60 * 1000);
 		client.shutdown();		
 		System.exit(0);
 		
 	}
-
 	
 	private static class TakerFactory {
 

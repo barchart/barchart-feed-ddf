@@ -1,13 +1,6 @@
-/**
- * Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com/>
- *
- * All rights reserved. Licensed under the OSI BSD License.
- *
- * http://www.opensource.org/licenses/bsd-license.php
- */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.util.ascii.ASCII.COMMA;
 
 import java.nio.ByteBuffer;
 
@@ -19,26 +12,22 @@ import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
-// TODO: Auto-generated Javadoc
-class DF_20_Param extends BaseMarket implements DDF_MarketParameter {
+public class DF_25_Param extends BaseMarket implements DDF_MarketParameter {
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
-	 */
 	@Override
 	public <Result, Param> Result accept(
 			DDF_MessageVisitor<Result, Param> visitor, Param param) {
 		return visitor.visit(this, param);
 	}
-
-	DF_20_Param() {
-		super(DDF_MessageType.PARAM);
+	
+	DF_25_Param() {
+		super(DDF_MessageType.DDF_25);
 	}
-
-	DF_20_Param(final DDF_MessageType messageType) {
+	
+	DF_25_Param(final DDF_MessageType messageType) {
 		super(messageType);
 	}
-
+	
 	// //////////////////////////////////////
 
 	private byte ordParam = DDF_ParamType.UNKNOWN.ord;
@@ -54,14 +43,12 @@ class DF_20_Param extends BaseMarket implements DDF_MarketParameter {
 
 	// //////////////////////////////////////
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.api.DDF_MarketParameter#getParamType()
-	 */
+	
 	@Override
-	public final DDF_ParamType getParamType() {
+	public DDF_ParamType getParamType() {
 		return DDF_ParamType.fromOrd(ordParam);
 	}
-
+	
 	/**
 	 * Sets the param type.
 	 *
@@ -71,29 +58,16 @@ class DF_20_Param extends BaseMarket implements DDF_MarketParameter {
 		ordParam = type.ord;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.api.DDF_MarketParameter#getAsPrice()
-	 */
 	@Override
-	public final PriceValue getAsPrice() {
+	public PriceValue getAsPrice() {
 		return HelperDDF.newPriceDDF(value, getFraction());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.api.DDF_MarketParameter#getAsSize()
-	 */
 	@Override
-	public final SizeValue getAsSize() {
+	public SizeValue getAsSize() {
 		return HelperDDF.newSizeDDF(value);
 	}
 
-	/*
-	 * <soh><rec><symbol>,<subrec><stx><base><exch>(<delay>)(,)(<spread>)||
-	 * 
-	 * <value>,<element><modifier>
-	 * 
-	 * ||<day><session><etx>||<time stamp>
-	 */
 	@Override
 	protected final void encodeBody(final ByteBuffer buffer) {
 
@@ -112,7 +86,7 @@ class DF_20_Param extends BaseMarket implements DDF_MarketParameter {
 		buffer.putChar(param.code); // <element> <modifier>
 
 	}
-
+	
 	@Override
 	protected final void decodeBody(final ByteBuffer buffer) {
 
@@ -122,10 +96,6 @@ class DF_20_Param extends BaseMarket implements DDF_MarketParameter {
 
 		final DDF_ParamType param = DDF_ParamType.fromCode(code);
 
-		if(param == DDF_ParamType.UNKNOWN) {
-			log.debug("UNKNOWN PARAM FROM " + toString());
-		}
-		
 		ordParam = param.ord;
 
 		switch (param.kind) {
@@ -154,5 +124,5 @@ class DF_20_Param extends BaseMarket implements DDF_MarketParameter {
 		text.append("\n");
 
 	}
-
+	
 }

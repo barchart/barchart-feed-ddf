@@ -5,10 +5,8 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.assembly;
+/**
+ * settings access implementation
+ */
+package com.barchart.feed.ddf.settings.provider;
 
-
-
-public class Dummy {
-
-}

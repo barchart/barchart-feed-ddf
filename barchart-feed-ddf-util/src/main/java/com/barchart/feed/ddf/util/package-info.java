@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * TODO 
+ * DDF specific utilites 
  */
 package com.barchart.feed.ddf.util;
 

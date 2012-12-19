@@ -317,7 +317,6 @@ class VarMarketDDF extends VarMarket {
 
 		final MarketDoCuvol cuvol = loadCuvol();
 
-		log.debug("Adding cuvol for " + get(INSTRUMENT).get(InstrumentField.ID).toString());
 		cuvol.add(price, size);
 
 		eventAdd(NEW_CUVOL_UPDATE);

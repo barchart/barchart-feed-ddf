@@ -10,7 +10,7 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.ascii.ASCII.COMMA;
+import static com.barchart.util.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
@@ -25,7 +25,7 @@ import com.barchart.util.values.api.SizeValue;
  * @author g-litchfield
  * 
  */
-public class DF_3S_StockEOD extends BaseMarket implements DDF_EOD_EquityForex {
+class DF_3S_StockEOD extends BaseMarket implements DDF_EOD_EquityForex {
 
 	DF_3S_StockEOD() {
 		super(DDF_MessageType.EOD_EQTY_FORE);

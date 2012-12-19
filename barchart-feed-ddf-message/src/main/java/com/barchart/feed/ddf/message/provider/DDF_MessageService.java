@@ -162,6 +162,10 @@ public final class DDF_MessageService {
 			assert type.klaz.isAssignableFrom(DF_20_Param.class);
 			return new DF_20_Param(type);
 
+		case DDF_25:
+			assert type.klaz.isAssignableFrom(DF_25_Param.class);
+			return new DF_25_Param(type);
+			
 		case TIME_STAMP:
 			assert type.klaz.isAssignableFrom(DF_C0_Time.class);
 			return new DF_C0_Time(type);

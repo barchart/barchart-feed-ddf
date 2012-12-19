@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * public api for message codec
+ * market state implementation
  */
-package com.barchart.feed.ddf.message.api;
+package com.barchart.feed.ddf.market.provider;
 

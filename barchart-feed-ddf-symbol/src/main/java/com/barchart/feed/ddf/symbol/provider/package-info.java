@@ -6,16 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * 
+ * symbology implementation 
  */
-package com.barchart.feed.ddf.datalink.enums;
+package com.barchart.feed.ddf.symbol.provider;
 
-/**
- * Enum for specifying the transport protocol to be used in the data feed.
- * 
- */
-public enum TP {
-
-	TCP, UDP, SCTP, WEBSOCKETS;
-
-}

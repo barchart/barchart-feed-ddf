@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * TODO 
+ * low level data feed access api
  */
 package com.barchart.feed.ddf.datalink;
 

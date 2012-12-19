@@ -10,7 +10,7 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.ascii.ASCII.COMMA;
+import static com.barchart.util.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
@@ -24,7 +24,7 @@ import com.barchart.util.values.api.PriceValue;
  * @author g-litchfield
  * 
  */
-public class DF_3C_CmdyEOD extends BaseMarket implements DDF_EOD_Commodity {
+class DF_3C_CmdyEOD extends BaseMarket implements DDF_EOD_Commodity {
 
 	DF_3C_CmdyEOD() {
 		super(DDF_MessageType.EOD_CMDY);
