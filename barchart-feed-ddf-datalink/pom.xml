@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed-ddf</artifactId>
-		<version>3.4.40-SNAPSHOT</version>
+		<version>3.4.41-SNAPSHOT</version>
 	</parent>
 
 	<name>barchart-feed-ddf-datalink</name>
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-client</artifactId>
-			<version>${barchartFeedClientVersion}</version>
+			<version>${barchartFeedVersion}</version>
 		</dependency>
 
 		<dependency>

@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed-ddf</artifactId>
-		<version>3.4.40-SNAPSHOT</version>
+		<version>3.4.41-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>barchart-feed-ddf-assembly</artifactId>
@@ -204,8 +204,8 @@
 						<Embed-Transitive>true</Embed-Transitive>
 						<Export-Package>
 							com.barchart.util.*;version=${barchartUtilVersion},
-							com.barchart.feed.base.*;version=${barchartFeedBaseVersion},
-							com.barchart.feed.client.*;version=${barchartFeedClientVersion},
+							com.barchart.feed.base.*;version=${barchartFeedVersion},
+							com.barchart.feed.client.*;version=${barchartFeedVersion},
 							com.barchart.feed.ddf.*;version=${project.parent.version},
 						</Export-Package>
 					</instructions>
