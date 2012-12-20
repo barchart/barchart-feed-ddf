@@ -30,6 +30,7 @@ import com.barchart.feed.base.book.enums.MarketBookAction;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.DefBookEntry;
@@ -151,6 +152,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			break;
 		}
 
+		final DDF_Session ddfSession = message.getSession();
+		
 		//
 
 		final MarketBookTop top = market.get(MarketField.BOOK_TOP);
@@ -158,15 +161,38 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		final MarketDoBar barPrevious = market.loadBar(PREVIOUS.field);
 
 		//
-
 		switch (param) {
-
+		
+		case TRADE_ASK_PRICE:  // NEW
+			log.debug("Mapper saw TRADE_ASK_PRICE - Price=" + price.toString() + 
+					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
+					+ message.getInstrument().get(InstrumentField.SYMBOL).toString());
+			
+			market.setTrade(ddfSession.type, ddfSession.session,
+					ddfSession.sequencing, price, size, time, date);
+			
+			return null;
+			
+		case TRADE_BID_PRICE:  // NEW
+			log.debug("Mapper saw TRADE_BID_PRICE - Price=" + price.toString() + 
+					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
+					+ message.getInstrument().get(InstrumentField.SYMBOL).toString());
+			
+			market.setTrade(ddfSession.type, ddfSession.session,
+					ddfSession.sequencing, price, size, time, date);
+			
+			return null;
+		
 		case TRADE_LAST_PRICE:
-			final DDF_Session ddfSession = message.getSession();
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
 			return null;
-
+			
+		case ASK_LAST: // NEW
+			log.debug("Mapper saw ASK_LAST - Price=" + price.toString() + 
+					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
+					+ message.getInstrument().get(InstrumentField.SYMBOL).toString());
+			
 		case ASK_LAST_PRICE:
 			final DefBookEntry topAskPrice = new DefBookEntry(MODIFY, ASK,
 					DEFAULT, ENTRY_TOP, price, top.side(ASK).size());
@@ -179,6 +205,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			applyTop(topAskSize, time, market);
 			return null;
 
+		case BID_LAST: // NEW
+			log.debug("Mapper saw BID_LAST - Price=" + price.toString() + 
+					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
+					+ message.getInstrument().get(InstrumentField.SYMBOL).toString());
+			
 		case BID_LAST_PRICE:
 			final DefBookEntry topBidPrice = new DefBookEntry(MODIFY, BID,
 					DEFAULT, ENTRY_TOP, price, top.side(BID).size());
@@ -191,6 +222,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			applyTop(topBidSize, time, market);
 			return null;
 
+		case CLOSE_LAST: // NEW
+		case CLOSE_2_LAST: // NEW
 		case CLOSE_ASK_PRICE:
 		case CLOSE_BID_PRICE:
 		case CLOSE_2_ASK_PRICE:
