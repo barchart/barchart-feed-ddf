@@ -27,22 +27,34 @@ public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 
 	/** 00 : last trade price */
 	TRADE_LAST_PRICE(TRADE, LAST, PRICE), //
-
+	/** 01 : trade ask price */
+	TRADE_ASK_PRICE(TRADE, ASK_PRICE, PRICE), //
+	/** 02 : trade bid price */
+	TRADE_BID_PRICE(TRADE, BID_PRICE, PRICE), //
+	
+	/** 10 : last ask */
+	ASK_LAST(ASK, LAST, PRICE), //
 	/** 11 : last ask price */
 	ASK_LAST_PRICE(ASK, ASK_PRICE, PRICE), //
 	/** 1= : last ask size */
 	ASK_LAST_SIZE(ASK, ASK_SIZE, SIZE), //
 
+	/** 20 : last bid */
+	BID_LAST(BID, LAST, PRICE), //
 	/** 22 : last bid price */
 	BID_LAST_PRICE(BID, BID_PRICE, PRICE), //
 	/** 2< : last bid size */
 	BID_LAST_SIZE(BID, BID_SIZE, SIZE), //
 
+	/** 30 : close last */
+	CLOSE_LAST(CLOSE, LAST, PRICE), //
 	/** 31 : close ask price */
 	CLOSE_ASK_PRICE(CLOSE, ASK_PRICE, PRICE), //
 	/** 32 : close bid price */
 	CLOSE_BID_PRICE(CLOSE, BID_PRICE, PRICE), //
 
+	/** 40 : close last */
+	CLOSE_2_LAST(CLOSE_2, LAST, PRICE),
 	/** 41 : close ask price */
 	CLOSE_2_ASK_PRICE(CLOSE_2, ASK_PRICE, PRICE), //
 	/** 42 : close bid price */
