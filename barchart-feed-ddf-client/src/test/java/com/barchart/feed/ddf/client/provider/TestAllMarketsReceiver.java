@@ -32,7 +32,7 @@ public class TestAllMarketsReceiver {
 		final MarketInstrument[] instruments1 = {};
 		final MarketInstrument[] instruments2 = {client.lookup("ESZ2")};
 		
-		client.listenTCP(7000, false);
+		client.listenTCP(7001, false);
 		
 		final MarketTaker<Market> taker1 = TakerFactory.makeFactory1(instruments1);
 		final MarketTaker<Market> taker2 = TakerFactory.makeFactory2(instruments2);
@@ -76,15 +76,15 @@ public class TestAllMarketsReceiver {
 				@Override
 				public void onMarketEvent(final MarketEvent event,
 						final MarketInstrument instrument, final Market value) {
-//
-//					final StringBuilder sb = new StringBuilder("Taker 1 Event: ")
-//							.append(event);
-//
-//					sb.append(" " + instrument.get(InstrumentField.ID));
-//
-//					sb.append(" BID " + ValueUtil.asDouble(value.get(MarketField.BOOK_TOP).side(MarketBookSide.BID).price()));
-//					
-//					log.debug(sb.toString());
+
+					final StringBuilder sb = new StringBuilder("Taker 1 Event: ")
+							.append(event);
+
+					sb.append(" " + instrument.get(InstrumentField.ID));
+
+					sb.append(" BID " + ValueUtil.asDouble(value.get(MarketField.BOOK_TOP).side(MarketBookSide.BID).price()));
+					
+					log.debug(sb.toString());
 
 				}
 

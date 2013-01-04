@@ -54,7 +54,7 @@ public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 	CLOSE_BID_PRICE(CLOSE, BID_PRICE, PRICE), //
 
 	/** 40 : close last */
-	CLOSE_2_LAST(CLOSE_2, LAST, PRICE),
+	CLOSE_2_LAST(CLOSE_2, LAST, PRICE), //
 	/** 41 : close ask price */
 	CLOSE_2_ASK_PRICE(CLOSE_2, ASK_PRICE, PRICE), //
 	/** 42 : close bid price */

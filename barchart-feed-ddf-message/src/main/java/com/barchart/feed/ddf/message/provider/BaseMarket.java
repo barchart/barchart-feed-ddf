@@ -274,15 +274,6 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		decodeHead(buffer);
 		decodeBody(buffer);
 		decodeTail(buffer);
-		
-		
-		//DELETE
-		if(getMessageType() == DDF_MessageType.PARAM) {
-			DF_20_Param param = (DF_20_Param)this;
-			if(param.getParamType() == DDF_ParamType.UNKNOWN) {
-				log.debug("Unknown param type " + param.getTime().toString() + " " + param.toString());
-			}
-		}
 	}
 
 	/*

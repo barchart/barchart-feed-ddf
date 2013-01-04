@@ -95,6 +95,8 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 
+					log.debug(message.toStringFields());
+					
 					if (msgListener != null) {
 						
 						if(!filterBySub || filter(message)) {

@@ -83,7 +83,6 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @param socketAddress The socket the feed receiver will listen to
 	 * @param filterBySub True if the receiver will filter messages based on registered
 	 * market takers
-	 * @param allMarkets True if markets will be built for all instruments
 	 */
 	public void listenUDP(final int socketAddress, final boolean filterBySub) {
 
@@ -100,7 +99,6 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @param socketAddress The socket the feed receiver will listen to
 	 * @param filterBySub True if the receiver will filter messages based on registered
 	 * market takers
-	 * @param allMarkets True if markets will be built for all instruments
 	 */
 	public void listenTCP(final int socketAddress, final boolean filterBySub) {
 		
