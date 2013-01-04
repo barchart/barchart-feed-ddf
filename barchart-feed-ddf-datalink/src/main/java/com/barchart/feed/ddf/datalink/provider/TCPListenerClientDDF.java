@@ -255,6 +255,8 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 			log.error("Null subscribe request recieved");
 			return new FailedFuture();
 		}
+
+		log.debug("Subscription registered {}", sub.toString());
 		
 		final String inst = sub.getInstrument();
 		if(subscriptions.containsKey(inst)) {
