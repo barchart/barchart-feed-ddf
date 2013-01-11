@@ -30,7 +30,7 @@ public class TestAllMarketsReceiver {
 		BarchartFeedReceiver client = new BarchartFeedReceiver();
 		
 		final MarketInstrument[] instruments1 = {};
-		final MarketInstrument[] instruments2 = {client.lookup("ESZ2")};
+		final MarketInstrument[] instruments2 = {client.lookup("ESH13")};
 		
 		client.listenTCP(7001, false);
 		
@@ -61,16 +61,12 @@ public class TestAllMarketsReceiver {
 
 				@Override
 				public MarketEvent[] bindEvents() {
-
 					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
-
 				}
 
 				@Override
 				public MarketInstrument[] bindInstruments() {
-
 					return instruments;
-
 				}
 
 				@Override

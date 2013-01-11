@@ -98,7 +98,6 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 					if (msgListener != null) {
 						
 						if(!filterBySub || filter(message)) {
-							log.debug(message.toStringFields());
 							msgListener.handleMessage(message);
 						}
 						
@@ -127,7 +126,6 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 		/* Filter by instrument */
 		if(subscriptions.containsKey(marketMsg.getInstrument().get(
 				DDF_InstrumentField.DDF_SYMBOL_REALTIME).toString())) {
-			
 			return true;
 		}
 		
@@ -137,6 +135,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	@Override
 	public void startup() {
 
+		log.debug("TCP Listener Client startup called");
 		runner.execute(messageTask);
 
 		boot.bind(new InetSocketAddress(socketAddress));

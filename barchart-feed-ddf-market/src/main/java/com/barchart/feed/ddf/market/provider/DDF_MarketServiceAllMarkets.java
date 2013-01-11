@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.provider.MakerBaseAllMarkets;
@@ -16,6 +19,9 @@ import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 
 public class DDF_MarketServiceAllMarkets extends MakerBaseAllMarkets<DDF_MarketBase> implements
 		DDF_MarketProvider {
+	
+	private static final Logger log = LoggerFactory
+			.getLogger(DDF_MarketServiceAllMarkets.class);
 
 	protected DDF_MarketServiceAllMarkets(final MarketFactory factory) {
 		super(factory);

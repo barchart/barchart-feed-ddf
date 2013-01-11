@@ -70,9 +70,9 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	}
 	
 	public BarchartFeedReceiver(final Executor ex) {
+		maker = DDF_MarketServiceAllMarkets.newInstance();
 		maker.add(instrumentSubscriptionListener);
 		executor = ex;
-		maker = DDF_MarketServiceAllMarkets.newInstance();
 	}
 
 	/**
