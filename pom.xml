@@ -19,7 +19,7 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-ddf</artifactId>
-	<version>3.4.42-SNAPSHOT</version>
+	<version>3.4.43-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/barchart/barchart-feed-ddf</url>
