@@ -31,6 +31,12 @@
 	<dependencies>
 
 		<dependency>
+        	<groupId>com.yammer.metrics</groupId>
+        	<artifactId>metrics-core</artifactId>
+        	<version>2.2.0</version>
+    	</dependency>
+
+		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-client</artifactId>
 			<version>${barchartFeedVersion}</version>

@@ -41,6 +41,8 @@ import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
+import com.barchart.util.values.api.TextValue;
+import com.barchart.util.values.provider.ValueBuilder;
 
 public class TCPListenerClientDDF extends SimpleChannelHandler implements
 		DDF_FeedClientBase {
@@ -77,8 +79,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 
 		boot = new ServerBootstrap(channelFactory);
 
-		final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(
-				this);
+		final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(this);
 
 		boot.setPipelineFactory(pipelineFactory);
 
@@ -102,7 +103,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 						}
 						
 					}
-
+					
 				} catch (final InterruptedException e) {
 					log.trace("terminated");
 					return;
@@ -145,8 +146,6 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	@Override
 	public void shutdown() {
 
-		//In FeedClientDDF, subscriptions are cleared on logout, do we want to do this here?
-		
 		messageTask.interrupt();
 
 		messageQueue.clear();
