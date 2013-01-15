@@ -38,7 +38,6 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.provider.MakerBaseAllMarkets;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
-import com.barchart.feed.ddf.market.provider.DDF_MarketService;
 import com.barchart.feed.ddf.market.provider.DDF_MarketServiceAllMarkets;
 import com.barchart.util.values.api.Value;
 
@@ -53,7 +52,7 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	private Executor executor = null;
 
 	public BarchartFeedReceiver() {
-		
+
 		this(new Executor() {
 
 			private final AtomicLong counter = new AtomicLong(0);
@@ -66,9 +65,9 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 			}
 
 		});
-		
+
 	}
-	
+
 	public BarchartFeedReceiver(final Executor ex) {
 		maker = DDF_MarketServiceAllMarkets.newInstance();
 		maker.add(instrumentSubscriptionListener);
@@ -80,13 +79,47 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * already logged in, this call will end the previous connection and reset
 	 * all registered market takers.
 	 * 
-	 * @param socketAddress The socket the feed receiver will listen to
-	 * @param filterBySub True if the receiver will filter messages based on registered
-	 * market takers
+	 * @param socketAddress
+	 *            The socket the feed receiver will listen to
+	 * @param filterBySub
+	 *            True if the receiver will filter messages based on registered
+	 *            market takers
 	 */
 	public void listenUDP(final int socketAddress, final boolean filterBySub) {
 
-		setClient(DDF_FeedClientFactory.newUDPListenerClient(
+		setClient(DDF_FeedClientFactory.newUDPListenerClient(socketAddress,
+				filterBySub, executor), false);
+
+	}
+
+	/**
+	 * Starts a stateless UDP connection to the specified port. If the user is
+	 * already logged in, this call will end the previous connection and reset
+	 * all registered market takers.
+	 * 
+	 * @param socketAddress
+	 *            The socket the feed receiver will listen to market takers
+	 */
+	public void listenUDP(final int socketAddress) {
+
+		listenUDP(socketAddress, false);
+
+	}
+
+	/**
+	 * Starts a stateless TCP connection to the specified port. If the user is
+	 * already logged in, this call will end the previous connection and reset
+	 * all registered market takers.
+	 * 
+	 * @param socketAddress
+	 *            The socket the feed receiver will listen to
+	 * @param filterBySub
+	 *            True if the receiver will filter messages based on registered
+	 *            market takers
+	 */
+	public void listenTCP(final int socketAddress, final boolean filterBySub) {
+
+		setClient(DDF_FeedClientFactory.newStatelessTCPListenerClient(
 				socketAddress, filterBySub, executor), false);
 
 	}
@@ -96,29 +129,33 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * already logged in, this call will end the previous connection and reset
 	 * all registered market takers.
 	 * 
-	 * @param socketAddress The socket the feed receiver will listen to
-	 * @param filterBySub True if the receiver will filter messages based on registered
-	 * market takers
+	 * @param socketAddress
+	 *            The socket the feed receiver will listen to
+	 * @param filterBySub
+	 *            True if the receiver will filter messages based on registered
+	 *            market takers
 	 */
-	public void listenTCP(final int socketAddress, final boolean filterBySub) {
-		
-		setClient(DDF_FeedClientFactory.newStatelessTCPListenerClient(
-				socketAddress, filterBySub, executor), false);
+	public void listenTCP(final int socketAddress) {
+
+		listenTCP(socketAddress, false);
 
 	}
 
-	public <V extends Value<V>> boolean addAllMarketsTaker(final MarketTaker<V> taker) {
-		return ((MakerBaseAllMarkets)maker).registerForAll(taker);
+	public <V extends Value<V>> boolean addAllMarketsTaker(
+			final MarketTaker<V> taker) {
+		return ((MakerBaseAllMarkets) maker).registerForAll(taker);
 	}
-	
-	public <V extends Value<V>> boolean updateAllMarketsTaker(final MarketTaker<V> taker) {
-		return ((MakerBaseAllMarkets)maker).updateForAll(taker);
+
+	public <V extends Value<V>> boolean updateAllMarketsTaker(
+			final MarketTaker<V> taker) {
+		return ((MakerBaseAllMarkets) maker).updateForAll(taker);
 	}
-	
-	public <V extends Value<V>> boolean removeAllMarketsTaker(final MarketTaker<V> taker) {
-		return ((MakerBaseAllMarkets)maker).unregisterForAll(taker);
+
+	public <V extends Value<V>> boolean removeAllMarketsTaker(
+			final MarketTaker<V> taker) {
+		return ((MakerBaseAllMarkets) maker).unregisterForAll(taker);
 	}
-	
+
 	/*
 	 * This is where the instruments are registered and unregistered as needed
 	 * by the market maker. Subscribe events are sent when the instrument has
@@ -126,30 +163,33 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * events are sent only when the instrument is not needed by any previously
 	 * registered market takers.
 	 */
-	private final MarketRegListener instrumentSubscriptionListener = new MarketRegListener() {
+	private final MarketRegListener instrumentSubscriptionListener =
+			new MarketRegListener() {
 
-		@Override
-		public void onRegistrationChange(final MarketInstrument instrument,
-				final Set<MarketEvent> events) {
+				@Override
+				public void onRegistrationChange(
+						final MarketInstrument instrument,
+						final Set<MarketEvent> events) {
 
-			/*
-			 * The market maker denotes 'unsubscribe' with an empty event set
-			 */
-			if (events.isEmpty()) {
-				log.debug("Unsubscribing to "
-						+ instrument.get(InstrumentField.ID));
-				feed.unsubscribe(new Subscription(instrument, events));
-			} else {
-				log.debug("Subscribing to "
-						+ instrument.get(InstrumentField.ID) + " Events: "
-						+ printEvents(events));
-				feed.subscribe(new Subscription(instrument, events));
-			}
+					/*
+					 * The market maker denotes 'unsubscribe' with an empty
+					 * event set
+					 */
+					if (events.isEmpty()) {
+						log.debug("Unsubscribing to "
+								+ instrument.get(InstrumentField.ID));
+						feed.unsubscribe(new Subscription(instrument, events));
+					} else {
+						log.debug("Subscribing to "
+								+ instrument.get(InstrumentField.ID)
+								+ " Events: " + printEvents(events));
+						feed.subscribe(new Subscription(instrument, events));
+					}
 
-		}
+				}
 
-	};
-	
+			};
+
 	private String printEvents(final Set<MarketEvent> events) {
 		final StringBuffer sb = new StringBuffer();
 
@@ -159,5 +199,5 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 
 		return sb.toString();
 	}
-	
+
 }
