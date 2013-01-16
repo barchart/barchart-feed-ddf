@@ -21,37 +21,40 @@ import com.barchart.feed.client.provider.BarchartFeedReceiver;
 import com.barchart.util.values.util.ValueUtil;
 
 public class TestAllMarketsReceiver {
-	
+
 	private static final Logger log = LoggerFactory
 			.getLogger(TestAllMarketsReceiver.class);
-	
+
 	public static void main(final String[] args) throws Exception {
-		
-		BarchartFeedReceiver client = new BarchartFeedReceiver();
-		
+
+		final BarchartFeedReceiver client = new BarchartFeedReceiver();
+
 		final MarketInstrument[] instruments1 = {};
-		final MarketInstrument[] instruments2 = {client.lookup("ESH13")};
-		
-		client.listenTCP(7001, false);
-		
-		final MarketTaker<Market> taker1 = TakerFactory.makeFactory1(instruments1);
-		final MarketTaker<Market> taker2 = TakerFactory.makeFactory2(instruments2);
-		
+		final MarketInstrument[] instruments2 = { client.lookup("ESH13") };
+
+		client.listenTCP(7000, false);
+
+		final MarketTaker<Market> taker1 =
+				TakerFactory.makeFactory1(instruments1);
+		final MarketTaker<Market> taker2 =
+				TakerFactory.makeFactory2(instruments2);
+
 		client.addAllMarketsTaker(taker1);
 		client.addTaker(taker2);
-		
-		//Thread.sleep(10 * 1000);
-		//client.removeTaker(taker2);
+
+		// Thread.sleep(10 * 1000);
+		// client.removeTaker(taker2);
 		Thread.sleep(10 * 10 * 60 * 1000);
-		client.shutdown();		
+		client.shutdown();
 		System.exit(0);
-		
+
 	}
-	
+
 	private static class TakerFactory {
 
-		static MarketTaker<Market> makeFactory1(final MarketInstrument[] instruments) {
-			
+		static MarketTaker<Market> makeFactory1(
+				final MarketInstrument[] instruments) {
+
 			return new MarketTaker<Market>() {
 
 				@Override
@@ -73,13 +76,16 @@ public class TestAllMarketsReceiver {
 				public void onMarketEvent(final MarketEvent event,
 						final MarketInstrument instrument, final Market value) {
 
-					final StringBuilder sb = new StringBuilder("Taker 1 Event: ")
-							.append(event);
+					final StringBuilder sb =
+							new StringBuilder("Taker 1 Event: ").append(event);
 
 					sb.append(" " + instrument.get(InstrumentField.ID));
 
-					sb.append(" BID " + ValueUtil.asDouble(value.get(MarketField.BOOK_TOP).side(MarketBookSide.BID).price()));
-					
+					sb.append(" BID "
+							+ ValueUtil.asDouble(value
+									.get(MarketField.BOOK_TOP)
+									.side(MarketBookSide.BID).price()));
+
 					log.debug(sb.toString());
 
 				}
@@ -88,8 +94,9 @@ public class TestAllMarketsReceiver {
 
 		}
 
-		static MarketTaker<Market> makeFactory2(final MarketInstrument[] instruments) {
-			
+		static MarketTaker<Market> makeFactory2(
+				final MarketInstrument[] instruments) {
+
 			return new MarketTaker<Market>() {
 
 				@Override
@@ -115,19 +122,20 @@ public class TestAllMarketsReceiver {
 				public void onMarketEvent(final MarketEvent event,
 						final MarketInstrument instrument, final Market value) {
 
-//					final StringBuilder sb = new StringBuilder(" *** TAKER 2 EVENT: ")
-//							.append(instrument.get(InstrumentField.ID).toString())
-//							.append("******************************************************************************/n")
-//							.append("******************************************************************************/n")
-//							.append("******************************************************************************/n");
-//
-//					log.debug(sb.toString());
+					// final StringBuilder sb = new
+					// StringBuilder(" *** TAKER 2 EVENT: ")
+					// .append(instrument.get(InstrumentField.ID).toString())
+					// .append("******************************************************************************/n")
+					// .append("******************************************************************************/n")
+					// .append("******************************************************************************/n");
+					//
+					// log.debug(sb.toString());
 
 				}
 
 			};
 
 		}
-		
+
 	}
 }
