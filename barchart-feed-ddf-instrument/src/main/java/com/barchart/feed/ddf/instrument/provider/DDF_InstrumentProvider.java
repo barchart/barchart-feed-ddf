@@ -112,9 +112,8 @@ public final class DDF_InstrumentProvider {
 	 *            the instance
 	 */
 	public static void bind(final DDF_DefinitionService instance) {
-
 		service = new WeakReference<DDF_DefinitionService>(instance);
-
+		DDF_InstrumentProvider.instance = instance;
 	}
 
 	/**

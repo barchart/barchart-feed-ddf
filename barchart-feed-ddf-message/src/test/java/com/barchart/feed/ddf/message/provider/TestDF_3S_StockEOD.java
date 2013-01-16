@@ -23,21 +23,29 @@ import org.junit.Test;
 public class TestDF_3S_StockEOD extends TestDDFBase {
 
 	// 3S
-	final static byte[] msg3S =
+	final static byte[] msg3S_A =
 			"3GOOG,SAM10,12112,12285,12094,12278,5967600,SGJFTKDw9"
+					.getBytes(ASCII_CHARSET);
+	
+	final static byte[] msg3S_B = 
+			"3VAP.AX,SBv>>,12/03/2012,54900,55490,54900,55360,1868"
 					.getBytes(ASCII_CHARSET);
 
 	@Test
-	public void testDecodeSpread() {
+	public void testDecodeEODStock() {
 
 		final DF_3S_StockEOD msg = new DF_3S_StockEOD();
 
-		final ByteBuffer buffer = ByteBuffer.wrap(msg3S);
+		ByteBuffer buffer = ByteBuffer.wrap(msg3S_A);
 
 		msg.decodeDDF(buffer);
 
-		System.out.println(msg.toString());
-
+//		buffer = ByteBuffer.wrap(msg3S_B);
+//		
+//		msg.decodeDDF(buffer);
+//
+//		System.out.println(msg.toString());
+		
 	}
 
 }

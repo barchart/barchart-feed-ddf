@@ -104,6 +104,9 @@ public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 	/** D0 : final settlement */
 	SETTLE_FINAL_PRICE(SETTLE_END, LAST, PRICE), //
 
+	/** FN : ETF info value */
+	ETF_INFO_VALUE(ETF_INFO, EFT_VALUE, PRICE), //
+	
 	/** SH : 52 week high price */
 	YEAR_HIGH_PRICE(YEAR_BACK, YEAR_HIGH, PRICE), //
 	/** SL : 52 week low price */
