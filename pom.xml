@@ -1,12 +1,5 @@
-<!--
-
-    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com />
-
-    All rights reserved. Licensed under the OSI BSD License.
-
-    http://www.opensource.org/licenses/bsd-license.php
-
--->
+<!-- Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com /> All 
+	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -14,12 +7,12 @@
 	<parent>
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
-		<version>2.3.7</version>
+		<version>2.3.9</version>
 	</parent>
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-ddf</artifactId>
-	<version>3.4.44-SNAPSHOT</version>
+	<version>3.4.48-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/barchart/barchart-feed-ddf</url>
@@ -53,8 +46,6 @@
 		<!-- <artifactId>netty</artifactId> -->
 		<barchartNettyVersion>3.5.11.Final</barchartNettyVersion>
 
-		<maven.site.skip>true</maven.site.skip>
-
 	</properties>
 
 	<dependencies>
@@ -82,51 +73,6 @@
 		<module>barchart-feed-ddf-assembly</module>
 
 	</modules>
-
-	<!-- publish maven site to github -->
-	<profiles>
-
-		<profile>
-			<id>maven-site</id>
-			<activation>
-				<!-- selectively enable maven site -->
-				<file>
-					<exists>maven-site.md</exists>
-				</file>
-			</activation>
-			<properties>
-				<maven.site.skip>false</maven.site.skip>
-			</properties>
-			<build>
-				<plugins>
-
-					<!-- subject to github rate limit 5k/hr -->
-					<plugin>
-						<groupId>com.github.github</groupId>
-						<artifactId>site-maven-plugin</artifactId>
-						<version>0.7</version>
-						<executions>
-							<execution>
-								<id>maven-site</id>
-								<goals>
-									<goal>site</goal>
-								</goals>
-								<phase>site</phase>
-								<configuration>
-									<merge>true</merge>
-									<server>github</server>
-									<path>site/${project.artifactId}</path>
-									<message>site ${project.artifactId}-${project.version}</message>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-				</plugins>
-			</build>
-		</profile>
-
-	</profiles>
 
 	<reporting>
 		<plugins>
