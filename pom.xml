@@ -47,8 +47,6 @@
 		<!-- <artifactId>netty</artifactId> -->
 		<barchartNettyVersion>3.5.11.Final</barchartNettyVersion>
 
-		<maven.site.skip>true</maven.site.skip>
-
 	</properties>
 
 	<dependencies>
