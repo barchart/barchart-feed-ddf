@@ -80,12 +80,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 
 		boot = new ServerBootstrap(channelFactory);
 
-<<<<<<< HEAD
 		final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(this);
-=======
-		final ChannelPipelineFactory pipelineFactory =
-				new PipelineFactoryDDF(this);
->>>>>>> cac2f0bfda9c88856d100066d023855ff2480da5
 
 		boot.setPipelineFactory(pipelineFactory);
 
@@ -153,12 +148,6 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	@Override
 	public void shutdown() {
 
-<<<<<<< HEAD
-=======
-		// In FeedClientDDF, subscriptions are cleared on logout, do we want to
-		// do this here?
-
->>>>>>> cac2f0bfda9c88856d100066d023855ff2480da5
 		messageTask.interrupt();
 
 		messageQueue.clear();
