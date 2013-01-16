@@ -87,7 +87,7 @@
 	<profiles>
 
 		<profile>
-			<id>maven-site</id>
+			<id>maven-site-github-pages</id>
 			<activation>
 				<!-- selectively enable maven site -->
 				<file>
