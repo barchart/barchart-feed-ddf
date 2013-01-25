@@ -20,8 +20,9 @@ import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_YEAR;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPIRE;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REAL;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_UNI;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REALTIME;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_REAL;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.GUID;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.TIME_ZONE_DDF;
 import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
@@ -72,11 +73,13 @@ class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 
 		// decode SAX
 
-		final String symbolUni = xmlStringDecode(ats, SYMBOL_UNI, XML_STOP);
+		final String guid = xmlStringDecode(ats, GUID, XML_STOP);
 
 		final String symbolHist = xmlStringDecode(ats, SYMBOL_HIST, XML_STOP);
 
-		final String symbolReal = xmlStringDecode(ats, SYMBOL_REAL, XML_STOP);
+		final String symbolReal = xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP);
+		
+		final String symbolDDFReal = xmlStringDecode(ats, SYMBOL_DDF_REAL, XML_STOP);
 
 		final byte exchCode = xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS); // XXX
 
@@ -130,8 +133,8 @@ class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 
 		/* GENERIC */
 
-		set(InstrumentField.ID, newText(symbolUni));
-		set(InstrumentField.SYMBOL, newText(symbolUni));
+		set(InstrumentField.ID, newText(guid));
+		set(InstrumentField.SYMBOL, newText(symbolReal));
 		set(InstrumentField.DESCRIPTION, newText(symolComment));
 		set(InstrumentField.TYPE, CodeCFI.fromCode(codeCFI));
 		set(InstrumentField.EXCHANGE_ID, newText(exchange.name()));
@@ -153,9 +156,9 @@ class InstrumentSAX extends InstrumentDDF implements CodecSAX {
 		set(DDF_InstrumentField.DDF_ZONE, zone);
 		set(DDF_InstrumentField.DDF_EXCHANGE, exchange);
 		set(DDF_InstrumentField.DDF_EXCH_DESC, newText(exchangeComment));
-		set(DDF_InstrumentField.DDF_SYMBOL_UNIVERSAL, newText(symbolUni));
+		set(DDF_InstrumentField.DDF_SYMBOL_UNIVERSAL, newText(symbolReal));
 		set(DDF_InstrumentField.DDF_SYMBOL_HISTORICAL, newText(symbolHist));
-		set(DDF_InstrumentField.DDF_SYMBOL_REALTIME, newText(symbolReal));
+		set(DDF_InstrumentField.DDF_SYMBOL_REALTIME, newText(symbolDDFReal));
 
 	}
 

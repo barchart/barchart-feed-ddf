@@ -66,14 +66,17 @@ interface XmlTagExtras {
 	String STATUS = "status";
 
 	/** barchart globally unique identifier */
-	String SYMBOL_UNI = "guid";
+	String GUID = "id";
 
+	/** barchart globally unique symbol */
+	String SYMBOL_REALTIME = "symbol_realtime";
+	
 	/** used by historical query system */
 	String SYMBOL_HIST = "symbol_historical";
 
 	/** ddf feed codes */
 	String EXCHANGE_DDF = "exchange_ddf";
-	String SYMBOL_REAL = "symbol_ddf";
+	String SYMBOL_DDF_REAL = "symbol_ddf";
 	String SYMBOL_DDF_EXPIRE_YEAR = "symbol_ddf_expire_year";
 	String SYMBOL_DDF_EXPIRE_MONTH = "symbol_ddf_expire_month";
 	String BASE_CODE_DDF = "base_code";

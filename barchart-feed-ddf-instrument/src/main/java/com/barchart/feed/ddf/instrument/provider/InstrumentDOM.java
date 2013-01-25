@@ -18,8 +18,9 @@ import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_CODE
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_COMMENT;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPIRE;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REAL;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_UNI;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REALTIME;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_REAL;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.GUID;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.TIME_ZONE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_MONTH;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_YEAR;
@@ -32,7 +33,6 @@ import static com.barchart.feed.ddf.util.HelperXML.xmlTimeDecode;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
 
-import org.omg.CORBA.portable.ValueBase;
 import org.w3c.dom.Element;
 
 import com.barchart.feed.base.instrument.enums.CodeCFI;
@@ -73,11 +73,13 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 
 		// decode DOM
 
-		final String symbolUni = xmlStringDecode(tag, SYMBOL_UNI, XML_STOP);
+		final String guid = xmlStringDecode(tag, GUID, XML_STOP);
 
 		final String symbolHist = xmlStringDecode(tag, SYMBOL_HIST, XML_STOP);
 
-		final String symbolReal = xmlStringDecode(tag, SYMBOL_REAL, XML_STOP);
+		final String symbolReal = xmlStringDecode(tag, SYMBOL_REALTIME, XML_STOP);
+		
+		final String symbolDDFReal = xmlStringDecode(tag, SYMBOL_DDF_REAL, XML_STOP);
 
 		final byte exchCode = xmlByteDecode(tag, EXCHANGE_DDF, XML_PASS); // XXX
 
@@ -133,8 +135,8 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 
 		/* GENERIC */
 
-		set(InstrumentField.ID, newText(symbolUni));
-		set(InstrumentField.SYMBOL, newText(symbolUni));
+		set(InstrumentField.ID, newText(guid));
+		set(InstrumentField.SYMBOL, newText(symbolReal));
 		set(InstrumentField.DESCRIPTION, newText(symolComment));
 		set(InstrumentField.TYPE, CodeCFI.fromCode(codeCFI));
 		set(InstrumentField.EXCHANGE_ID, newText(exchange.name()));
@@ -156,9 +158,9 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 		set(DDF_InstrumentField.DDF_ZONE, zone);
 		set(DDF_InstrumentField.DDF_EXCHANGE, exchange);
 		set(DDF_InstrumentField.DDF_EXCH_DESC, newText(exchangeComment));
-		set(DDF_InstrumentField.DDF_SYMBOL_UNIVERSAL, newText(symbolUni));
+		set(DDF_InstrumentField.DDF_SYMBOL_UNIVERSAL, newText(symbolReal));
 		set(DDF_InstrumentField.DDF_SYMBOL_HISTORICAL, newText(symbolHist));
-		set(DDF_InstrumentField.DDF_SYMBOL_REALTIME, newText(symbolReal));
+		set(DDF_InstrumentField.DDF_SYMBOL_REALTIME, newText(symbolDDFReal));
 
 	}
 
