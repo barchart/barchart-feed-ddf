@@ -25,7 +25,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
@@ -33,11 +32,14 @@ public class LocalDefinitionServiceDDF implements DDF_DefinitionService {
 	
 	private static final Logger log = LoggerFactory.getLogger(LocalDefinitionServiceDDF.class);
 	
-	private final ConcurrentMap<TextValue, DDF_Instrument> instrumentMap = //
+	private final ConcurrentMap<TextValue, DDF_Instrument> instrumentMap = 
 			new ConcurrentHashMap<TextValue, DDF_Instrument>();
 
-	private final ConcurrentMap<TextValue, DDF_Instrument> ddfInstrumentMap = //
+	private final ConcurrentMap<TextValue, DDF_Instrument> ddfInstrumentMap = 
 			new ConcurrentHashMap<TextValue, DDF_Instrument>();
+			
+	private final ConcurrentMap<TextValue, Void> failedLookups = 
+			new ConcurrentHashMap<TextValue, Void>();
 			
 	public LocalDefinitionServiceDDF(final File defFile) throws IOException {
 		this(new FileInputStream(defFile));
@@ -75,12 +77,12 @@ public class LocalDefinitionServiceDDF implements DDF_DefinitionService {
 
 						} catch (final SymbolNotFoundException e) {
 
-							log.warn("symbol not found : {}", e.getMessage());
+//							log.warn("symbol not found : {}", e.getMessage());
 
 						} catch (final Exception e) {
 
-							log.error("decode failure", e);
-							HelperXML.log(attributes);
+//							log.error("decode failure", e);
+//							HelperXML.log(attributes);
 
 						}
 
@@ -153,7 +155,7 @@ public class LocalDefinitionServiceDDF implements DDF_DefinitionService {
 		final DDF_Instrument instrument = instrumentMap.get(symbol.toUpperCase());
 		
 		if(instrument == null) {
-			log.warn("Unknown symbol {}", symbol);
+//			log.warn("Unknown symbol {}", symbol);
 			return DDF_InstrumentProvider.NULL_INSTRUMENT;
 		}
 		
@@ -184,7 +186,7 @@ public class LocalDefinitionServiceDDF implements DDF_DefinitionService {
 		final DDF_Instrument instrument = ddfInstrumentMap.get(symbol.toUpperCase());
 		
 		if(instrument == null) {
-			log.warn("Unknown symbol {}", symbol);
+//			log.warn("Unknown symbol {}", symbol);
 			return DDF_InstrumentProvider.NULL_INSTRUMENT;
 		}
 		

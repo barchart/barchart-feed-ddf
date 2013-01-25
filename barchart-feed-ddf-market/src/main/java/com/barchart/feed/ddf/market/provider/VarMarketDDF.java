@@ -69,7 +69,6 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.util.ValueUtil;
 
 /**
  * Logic #1
