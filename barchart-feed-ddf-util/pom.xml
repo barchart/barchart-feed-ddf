@@ -35,6 +35,11 @@
 			<artifactId>barchart-feed-base</artifactId>
 			<version>${barchartFeedVersion}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-inst</artifactId>
+			<version>${barchartFeedVersion}</version>
+		</dependency>
 
 	</dependencies>
 
