@@ -56,6 +56,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 	 *            the symbol
 	 * @return the dD f_ instrument
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public DDF_Instrument lookupDDF(final TextValue symbol) {
 
