@@ -154,7 +154,7 @@ public final class HelperXML {
 	 *            the is throw
 	 * @return the element
 	 */
-	public static final Element xmlDodumentDecode(final byte[] array,
+	public static final Element xmlDocumentDecode(final byte[] array,
 			final int start, final int finish, final boolean isThrow) {
 		final InputStream stream = new ByteArrayInputStream(array, start,
 				finish);

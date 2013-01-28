@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.ddf.historical.api;
 
-import static com.barchart.feed.base.instrument.enums.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.END_OF_DAY;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_FORM_T;
@@ -25,6 +24,7 @@ import com.barchart.feed.ddf.historical.enums.DDF_QueryType;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind;
+import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.clone.PublicCloneable;
 
@@ -115,7 +115,7 @@ public final class DDF_Query<E extends DDF_Entry> implements
 	}
 
 	private final CharSequence renderDescription() {
-		return instrument == null ? "NONE" : instrument.get(DESCRIPTION);
+		return instrument == null ? "NONE" : instrument.get(InstrumentField.DESCRIPTION);
 	}
 
 	private final static DateTime NULL_TIME = new DateTime(0, DateTimeZone.UTC);

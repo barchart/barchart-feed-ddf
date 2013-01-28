@@ -1,8 +1,8 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
+import com.barchart.feed.inst.api.InstrumentField;
 
 public class TestDDFExtrasRemoteLookup {
 

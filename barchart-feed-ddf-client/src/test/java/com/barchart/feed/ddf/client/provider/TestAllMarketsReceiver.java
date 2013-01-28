@@ -11,13 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.instrument.enums.InstrumentField;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.provider.BarchartFeedReceiver;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.util.values.util.ValueUtil;
 
 public class TestAllMarketsReceiver {
@@ -29,8 +29,8 @@ public class TestAllMarketsReceiver {
 
 		final BarchartFeedReceiver client = new BarchartFeedReceiver();
 
-		final MarketInstrument[] instruments1 = {};
-		final MarketInstrument[] instruments2 = { client.lookup("ESH13") };
+		final Instrument[] instruments1 = {};
+		final Instrument[] instruments2 = { client.lookup("ESH13") };
 
 		client.listenTCP(7000, false);
 
@@ -53,7 +53,7 @@ public class TestAllMarketsReceiver {
 	private static class TakerFactory {
 
 		static MarketTaker<Market> makeFactory1(
-				final MarketInstrument[] instruments) {
+				final Instrument[] instruments) {
 
 			return new MarketTaker<Market>() {
 
@@ -68,13 +68,13 @@ public class TestAllMarketsReceiver {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 					return instruments;
 				}
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 
 					final StringBuilder sb =
 							new StringBuilder("Taker 1 Event: ").append(event);
@@ -95,7 +95,7 @@ public class TestAllMarketsReceiver {
 		}
 
 		static MarketTaker<Market> makeFactory2(
-				final MarketInstrument[] instruments) {
+				final Instrument[] instruments) {
 
 			return new MarketTaker<Market>() {
 
@@ -112,7 +112,7 @@ public class TestAllMarketsReceiver {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 
 					return instruments;
 
@@ -120,7 +120,7 @@ public class TestAllMarketsReceiver {
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 
 					// final StringBuilder sb = new
 					// StringBuilder(" *** TAKER 2 EVENT: ")

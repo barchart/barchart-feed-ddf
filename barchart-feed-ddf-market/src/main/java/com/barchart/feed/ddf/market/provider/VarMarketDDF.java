@@ -13,8 +13,6 @@ import static com.barchart.feed.base.bar.enums.MarketBarField.TRADE_DATE;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_EXT;
-import static com.barchart.feed.base.instrument.enums.InstrumentField.BOOK_TYPE;
-import static com.barchart.feed.base.instrument.enums.InstrumentField.PRICE_STEP;
 import static com.barchart.feed.base.market.enums.MarketEvent.MARKET_UPDATED;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BOOK_ERROR;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_BOOK_SNAPSHOT;
@@ -48,13 +46,9 @@ import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
-import com.barchart.feed.base.instrument.api.InstrumentConst;
-import com.barchart.feed.base.instrument.enums.InstrumentField;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.VarMarket;
 import com.barchart.feed.base.state.api.MarketState;
@@ -64,6 +58,10 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentConst;
+import com.barchart.feed.inst.api.InstrumentField;
+import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -91,9 +89,9 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	@Override
-	public void setInstrument(final MarketInstrument newSymbol) {
+	public void setInstrument(final Instrument newSymbol) {
 
-		final MarketInstrument oldInst = get(INSTRUMENT);
+		final Instrument oldInst = get(INSTRUMENT);
 
 		if (InstrumentConst.NULL_INSTRUMENT.equals(oldInst)) {
 			set(INSTRUMENT, newSymbol);
@@ -178,7 +176,7 @@ class VarMarketDDF extends VarMarket {
 			break;
 		default:
 			eventAdd(NEW_BOOK_ERROR);
-			final MarketInstrument inst = get(MarketField.INSTRUMENT);
+			final Instrument inst = get(MarketField.INSTRUMENT);
 			final TextValue id = inst.get(InstrumentField.ID);
 			final TextValue comment = inst.get(InstrumentField.DESCRIPTION);
 			log.error("instrument : {} : {}", id, comment);
@@ -404,11 +402,11 @@ class VarMarketDDF extends VarMarket {
 
 		if (book.isFrozen()) {
 
-			final MarketInstrument inst = get(INSTRUMENT);
+			final Instrument inst = get(INSTRUMENT);
 
-			final MarketBookType type = inst.get(BOOK_TYPE);
+			final MarketBookType type = inst.get(InstrumentField.BOOK_TYPE);
 			final SizeValue size = LIMIT;
-			final PriceValue step = inst.get(PRICE_STEP);
+			final PriceValue step = inst.get(InstrumentField.PRICE_STEP);
 
 			final VarBookDDF varBook = new VarBookDDF(type, size, step);
 			final VarBookTopDDF varBookTop = new VarBookTopDDF(varBook);

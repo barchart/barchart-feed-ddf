@@ -257,7 +257,7 @@ public final class DDF_MessageService {
 			subRecord = find(array, 2, (byte) FeedDDF.DDF_MIDDLE);
 			break;
 		case FeedDDF.XML_SNAPSHOT:
-			element = HelperXML.xmlDodumentDecode(array, 1, array.length, true);
+			element = HelperXML.xmlDocumentDecode(array, 1, array.length, true);
 			record = FeedDDF.XML_RECORD;
 			if (isXmlBook(element)) {
 				subRecord = FeedDDF.XML_SUB_BOOK;

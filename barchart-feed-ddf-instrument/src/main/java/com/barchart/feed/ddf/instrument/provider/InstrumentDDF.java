@@ -7,15 +7,8 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.base.instrument.enums.InstrumentField.BOOK_SIZE;
-import static com.barchart.feed.base.instrument.enums.InstrumentField.CURRENCY;
-import static com.barchart.feed.base.instrument.enums.InstrumentField.DATE_FINISH;
-import static com.barchart.feed.base.instrument.enums.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.base.instrument.enums.InstrumentField.FRACTION;
-import static com.barchart.feed.base.instrument.enums.InstrumentField.PRICE_POINT;
-import static com.barchart.feed.base.instrument.enums.InstrumentField.PRICE_STEP;
-import static com.barchart.feed.base.instrument.enums.InstrumentField.TYPE;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_EXCHANGE;
+import static com.barchart.feed.ddf.instrument.enums.InstrumentField.*;
+import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.*;
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_EXCH_DESC;
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SPREAD;
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_HISTORICAL;
@@ -23,111 +16,104 @@ import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYM
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_UNIVERSAL;
 import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_ZONE;
 
-import com.barchart.feed.base.instrument.enums.MarketDisplay;
-import com.barchart.feed.base.provider.VarInstrument;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
+import com.barchart.feed.ddf.instrument.enums.InstrumentField;
+import com.barchart.feed.ddf.instrument.enums.InstrumentFieldDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentConst;
+import com.barchart.feed.inst.api.InstrumentGUID;
+import com.barchart.feed.inst.enums.MarketDisplay;
+import com.barchart.feed.inst.provider.InstrumentFactory;
+import com.barchart.missive.core.MissiveException;
+import com.barchart.missive.core.Tag;
+import com.barchart.util.enums.ParaEnumBase;
+import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
 
-// TODO: Auto-generated Javadoc
-// TODO freeze
-class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
+class InstrumentDDF implements DDF_Instrument {
 
-	// Delete if nothing is broken
-	// static final SizeValue BOOK_LIMIT = ValueBuilder
-	// .newSize(DDF_MarketBook.ENTRY_LIMIT);
+	private final Instrument inst;
+	
+	@SuppressWarnings("rawtypes")
+	private static final Map<ParaEnumBase, Tag> paraEnumMap = 
+			new HashMap<ParaEnumBase, Tag>();
 
-	private final static int ARRAY_SIZE = DDF_InstrumentField.size();
-
-	protected final Value<?>[] valueArray;
-
+	static {
+		paraEnumMap.put(ID, com.barchart.feed.inst.api.InstrumentField.ID);
+		paraEnumMap.put(GROUP_ID, com.barchart.feed.inst.api.InstrumentField.GROUP_ID);
+		paraEnumMap.put(EXCHANGE_ID, com.barchart.feed.inst.api.InstrumentField.EXCHANGE_ID);
+		paraEnumMap.put(SYMBOL, com.barchart.feed.inst.api.InstrumentField.SYMBOL);
+		paraEnumMap.put(DESCRIPTION, com.barchart.feed.inst.api.InstrumentField.DESCRIPTION);
+		paraEnumMap.put(BOOK_SIZE, com.barchart.feed.inst.api.InstrumentField.BOOK_SIZE);
+		paraEnumMap.put(BOOK_TYPE, com.barchart.feed.inst.api.InstrumentField.BOOK_TYPE);
+		paraEnumMap.put(PRICE_STEP, com.barchart.feed.inst.api.InstrumentField.PRICE_STEP);
+		paraEnumMap.put(PRICE_POINT, com.barchart.feed.inst.api.InstrumentField.PRICE_POINT);
+		paraEnumMap.put(FRACTION, com.barchart.feed.inst.api.InstrumentField.FRACTION);
+		paraEnumMap.put(CURRENCY, com.barchart.feed.inst.api.InstrumentField.CURRENCY);
+		paraEnumMap.put(TYPE, com.barchart.feed.inst.api.InstrumentField.TYPE);
+		paraEnumMap.put(TIME_ZONE, com.barchart.feed.inst.api.InstrumentField.TIME_ZONE);
+		paraEnumMap.put(TIME_OPEN, com.barchart.feed.inst.api.InstrumentField.TIME_OPEN);
+		paraEnumMap.put(TIME_CLOSE, com.barchart.feed.inst.api.InstrumentField.TIME_CLOSE);
+		paraEnumMap.put(DATE_START, com.barchart.feed.inst.api.InstrumentField.DATE_START);
+		paraEnumMap.put(DATE_FINISH, com.barchart.feed.inst.api.InstrumentField.DATE_FINISH);
+		
+		paraEnumMap.put(DDF_SYMBOL_REALTIME, InstrumentFieldDDF.DDF_SYMBOL_REALTIME);
+		paraEnumMap.put(DDF_SYMBOL_HISTORICAL, InstrumentFieldDDF.DDF_SYMBOL_HISTORICAL);
+		paraEnumMap.put(DDF_SYMBOL_UNIVERSAL, InstrumentFieldDDF.DDF_SYMBOL_UNIVERSAL);
+		paraEnumMap.put(DDF_EXCHANGE, InstrumentFieldDDF.DDF_EXCHANGE);
+		paraEnumMap.put(DDF_EXCH_DESC, InstrumentFieldDDF.DDF_EXCH_DESC);
+		paraEnumMap.put(DDF_SPREAD, InstrumentFieldDDF.DDF_SPREAD);
+		paraEnumMap.put(DDF_ZONE, InstrumentFieldDDF.DDF_ZONE);
+		paraEnumMap.put(DDF_EXPIRE_MONTH, InstrumentFieldDDF.DDF_EXPIRE_MONTH);
+		paraEnumMap.put(DDF_EXPIRE_YEAR, InstrumentFieldDDF.DDF_EXPIRE_YEAR);
+	}
+	
+	InstrumentDDF(final Instrument inst) {
+		this.inst = inst;
+	}
+	
+	// Null version
 	InstrumentDDF() {
-
-		valueArray = new Value<?>[ARRAY_SIZE];
-
+		inst = InstrumentConst.NULL_INSTRUMENT;
+	}
+	
+	// Service Basic DDF
+	InstrumentDDF(final TextValue symbol) {
+		
+		final Map<Tag, Object> map = new HashMap<Tag, Object>();
+		
+		map.put(com.barchart.feed.inst.api.InstrumentField.SYMBOL, symbol);
+		inst = InstrumentFactory.build(map);
 	}
 
 	//
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.barchart.feed.ddf.instrument.api.DDF_Instrument#get(com.barchart.
-	 * feed.ddf.instrument.enums.DDF_InstrumentField)
-	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public <V extends Value<V>> V get(final DDF_InstrumentField<V> field) {
-
-		@SuppressWarnings("unchecked")
-		final V value = (V) valueArray[field.ordinal()];
-
-		if (value == null) {
-			return field.value();
-		} else {
-			return value;
-		}
-
+		return (V) inst.get(paraEnumMap.get(field));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.barchart.feed.ddf.instrument.provider.DDF_InstrumentDo#set(com.barchart
-	 * .feed.ddf.instrument.enums.DDF_InstrumentField,
-	 * com.barchart.util.values.api.Value)
-	 */
-	@Override
-	public <V extends Value<V>> V set(final DDF_InstrumentField<V> field,
-			final V value) {
-
-		final int index = field.ordinal();
-
-		@SuppressWarnings("unchecked")
-		final V result = (V) valueArray[index];
-
-		valueArray[index] = value;
-
-		return result;
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.barchart.feed.base.provider.instrument.provider.VarInstrument#isFrozen
-	 * ()
-	 */
 	@Override
 	public boolean isFrozen() {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.barchart.feed.base.provider.instrument.provider.VarInstrument#freeze
-	 * ()
-	 */
 	@Override
 	public final InstrumentDDF freeze() {
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.barchart.feed.base.provider.instrument.provider.BaseInstrument#isNull
-	 * ()
-	 */
 	@Override
 	public final boolean isNull() {
-		return this == DDF_InstrumentProvider.NULL_INSTRUMENT;
+		return this == DDF_InstrumentProvider.NULL_INSTRUMENT || 
+				inst == DDF_InstrumentProvider.NULL_INSTRUMENT;
 	}
 
 	//
@@ -140,13 +126,6 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 		return frac + " (" + frac.fraction.description + ")";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.barchart.feed.base.provider.instrument.provider.BaseInstrument#toString
-	 * ()
-	 */
 	@Override
 	public final String toString() {
 		return "" + //
@@ -239,6 +218,37 @@ class InstrumentDDF extends VarInstrument implements DDF_InstrumentDo {
 
 		return text.toString();
 
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <V extends Value<V>> V get(final InstrumentField<V> field) {
+		return (V) inst.get(paraEnumMap.get(field));
+	}
+
+	@Override
+	public InstrumentGUID getGUID() {
+		return inst.getGUID();
+	}
+
+	@Override
+	public <V> V get(final Tag<V> tag) throws MissiveException {
+		return inst.get(tag);
+	}
+
+	@Override
+	public boolean contains(final Tag<?> tag) {
+		return inst.contains(tag);
+	}
+
+	@Override
+	public Tag<?>[] tags() {
+		return inst.tags();
+	}
+
+	@Override
+	public int size() {
+		return inst.size();
 	}
 
 }

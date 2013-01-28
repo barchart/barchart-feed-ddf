@@ -30,6 +30,13 @@
   </scm>
 
 	<dependencies>
+	
+		<dependency>
+  			<groupId>com.barchart.missive</groupId>
+			<artifactId>barchart-missive</artifactId>
+			<version>${barchartMissiveVersion}</version>
+			<scope>provided</scope>
+  		</dependency>
 
 		<dependency>
 			<groupId>com.barchart.feed</groupId>

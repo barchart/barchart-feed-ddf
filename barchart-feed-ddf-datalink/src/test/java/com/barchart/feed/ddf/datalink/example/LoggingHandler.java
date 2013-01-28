@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -25,6 +24,7 @@ import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
+import com.barchart.feed.inst.api.Instrument;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -40,12 +40,12 @@ public class LoggingHandler implements DDF_MessageListener {
 
 	BufferedWriter writer = null;
 
-	private static ArrayList<MarketInstrument> symbolList = new ArrayList<MarketInstrument>();
+	private static ArrayList<Instrument> symbolList = new ArrayList<Instrument>();
 
 	final MarketTaker<Market> taker;
 
-	private static MarketInstrument[] getSymbols() {
-		final MarketInstrument[] symbols = new MarketInstrument[symbolList
+	private static Instrument[] getSymbols() {
+		final Instrument[] symbols = new Instrument[symbolList
 				.size()];
 
 		for (int i = 0; i < symbolList.size(); i++) {
@@ -82,13 +82,13 @@ public class LoggingHandler implements DDF_MessageListener {
 			}
 
 			@Override
-			public MarketInstrument[] bindInstruments() {
+			public Instrument[] bindInstruments() {
 				return getSymbols();
 			}
 
 			@Override
 			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final Market value) {
+					final Instrument instrument, final Market value) {
 
 				try {
 					// writer.write(event.toString());

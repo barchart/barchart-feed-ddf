@@ -7,24 +7,8 @@
  */
 package com.barchart.feed.ddf.util.enums;
 
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.BIN_N01;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.BIN_N02;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.BIN_N03;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.BIN_N04;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.BIN_N05;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.BIN_N06;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.BIN_N07;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.BIN_N08;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_N01;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_N02;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_N03;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_N04;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_N05;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_N06;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_N07;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_N08;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_N09;
-import static com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction.DEC_Z00;
+import static com.barchart.feed.inst.enums.MarketDisplay.Fraction.*;
+import static com.barchart.feed.inst.enums.MarketDisplay.Fraction.BIN_N02;
 import static com.barchart.util.ascii.ASCII.QUEST;
 import static com.barchart.util.ascii.ASCII.STAR;
 import static com.barchart.util.ascii.ASCII._0_;
@@ -47,7 +31,7 @@ import static com.barchart.util.ascii.ASCII._G_;
 import static com.barchart.util.ascii.ASCII._H_;
 import static java.lang.Math.pow;
 
-import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
+import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeByte;
 import com.barchart.util.math.MathExtra;

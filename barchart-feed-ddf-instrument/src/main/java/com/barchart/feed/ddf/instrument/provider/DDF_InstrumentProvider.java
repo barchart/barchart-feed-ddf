@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.util.values.provider.ValueBuilder.*;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlDocumentDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -38,11 +38,11 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.util.HelperXML;
+import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class DDF_InstrumentProvider.
  */
@@ -124,7 +124,7 @@ public final class DDF_InstrumentProvider {
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
 	public static DDF_Instrument find(final TextValue symbol) {
-		return instance().lookup(symbol);
+		return new InstrumentDDF(instance().lookup(symbol));
 	}
 
 	/**
@@ -202,7 +202,7 @@ public final class DDF_InstrumentProvider {
 	 * @return list with instruments or empty list;
 	 */
 	public static List<DDF_Instrument> find(final List<String> symbolList) {
-		return instance().lookup(symbolList);
+		return instance().lookupDDF(symbolList);
 	}
 
 	class RetrieveInstrumentList implements Future<List<DDF_Instrument>> {
@@ -223,7 +223,7 @@ public final class DDF_InstrumentProvider {
 		@Override
 		public List<DDF_Instrument> get() throws InterruptedException,
 				ExecutionException {
-			result = instance().lookup(symbolList);
+			result = instance().lookupDDF(symbolList);
 			return result;
 		}
 
@@ -274,11 +274,11 @@ public final class DDF_InstrumentProvider {
 	 * 
 	 * @return the dD f_ instrument do
 	 */
-	public static DDF_InstrumentDo newInstrumentDDF() {
-
-		return new InstrumentDDF();
-
-	}
+//	public static DDF_InstrumentDo newInstrumentDDF() {
+//
+//		return new InstrumentDDF();
+//
+//	}
 
 	/**
 	 * Override lookup url.
@@ -308,9 +308,7 @@ public final class DDF_InstrumentProvider {
 
 		final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
 
-		final InstrumentDOM instrument = new InstrumentDOM();
-
-		instrument.decodeXML(tag);
+		final DDF_Instrument instrument = new InstrumentDDF(InstrumentXML.decodeXML(tag));
 
 		return instrument;
 
@@ -372,12 +370,9 @@ public final class DDF_InstrumentProvider {
 
 						try {
 
-							final InstrumentSAX instruement =
-									new InstrumentSAX();
-
-							instruement.decodeSAX(attributes);
-
-							list.add(instruement);
+							final Instrument instrument = InstrumentXML.decodeSAX(attributes);
+							final DDF_Instrument ddfInst = new InstrumentDDF(instrument);
+							list.add(ddfInst);
 
 						} catch (final SymbolNotFoundException e) {
 

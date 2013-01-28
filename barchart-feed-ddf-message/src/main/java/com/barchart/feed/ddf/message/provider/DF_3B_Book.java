@@ -10,7 +10,6 @@ package com.barchart.feed.ddf.message.provider;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
 import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
-import static com.barchart.feed.base.book.enums.MarketBookType.DEFAULT;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_BOOK_LIMIT;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_COUNT;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_PRICES;
@@ -35,6 +34,7 @@ import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
@@ -108,7 +108,7 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 			final SizeValue size = HelperDDF.newSizeDDF(sizeBidArray[index]);
 
 			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, BID,
-					DEFAULT, place, price, size);
+					MarketBookType.DEFAULT, place, price, size);
 
 			entries[entryIndex++] = entry;
 
@@ -128,7 +128,7 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 			final SizeValue size = HelperDDF.newSizeDDF(sizeAskArray[index]);
 
 			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, ASK,
-					DEFAULT, place, price, size);
+					MarketBookType.DEFAULT, place, price, size);
 
 			entries[entryIndex++] = entry;
 

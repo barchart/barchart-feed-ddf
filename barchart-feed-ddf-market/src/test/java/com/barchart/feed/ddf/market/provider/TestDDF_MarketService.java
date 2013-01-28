@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.book.api.MarketBook;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
@@ -23,6 +22,7 @@ import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
+import com.barchart.feed.inst.api.Instrument;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -66,13 +66,13 @@ public class TestDDF_MarketService {
 			}
 
 			@Override
-			public MarketInstrument[] bindInstruments() {
-				return new MarketInstrument[] { instrument };
+			public Instrument[] bindInstruments() {
+				return new Instrument[] { instrument };
 			}
 
 			@Override
 			public void onMarketEvent(final MarketEvent event,
-					final MarketInstrument instrument, final MarketBook book) {
+					final Instrument instrument, final MarketBook book) {
 
 				log.debug("event : {}", event);
 				log.debug("book : \n{}", book);

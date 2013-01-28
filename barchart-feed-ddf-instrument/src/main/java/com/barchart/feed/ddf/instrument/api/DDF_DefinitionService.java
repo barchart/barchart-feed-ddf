@@ -9,21 +9,22 @@ package com.barchart.feed.ddf.instrument.api;
 
 import java.util.List;
 
-import com.barchart.feed.base.instrument.api.DefinitionService;
+import com.barchart.feed.inst.api.InstrumentService;
 import com.barchart.util.values.api.TextValue;
+
 
 /**
  * contract: instrument service should cache all previous requests.
  */
 public interface DDF_DefinitionService extends
-		DefinitionService<DDF_Instrument> {
+		InstrumentService {
 
 	/**
 	 * 
 	 * @param symbolList
 	 * @return
 	 */
-	List<DDF_Instrument> lookup(List<String> symbolList);
+	List<DDF_Instrument> lookupDDF(List<String> symbolList);
 
 	/**
 	 * 

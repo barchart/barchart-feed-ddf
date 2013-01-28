@@ -11,13 +11,13 @@ import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.instrument.enums.InstrumentField;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.provider.BarchartFeedReceiver;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.util.values.util.ValueUtil;
 
 /**
@@ -48,7 +48,7 @@ public class Receiver {
 
 		final BarchartFeedReceiver client = new BarchartFeedReceiver();
 
-		final MarketInstrument[] instruments = new MarketInstrument[args.length
+		final Instrument[] instruments = new Instrument[args.length
 				- INST_START];
 
 		for (int i = INST_START; i < args.length; i++) {
@@ -74,7 +74,7 @@ public class Receiver {
 	private static class TakerFactory {
 
 		static MarketTaker<Market> makeTaker(
-				final MarketInstrument[] instruments) {
+				final Instrument[] instruments) {
 
 			return new MarketTaker<Market>() {
 
@@ -91,7 +91,7 @@ public class Receiver {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 
 					return instruments;
 
@@ -99,7 +99,7 @@ public class Receiver {
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 
 					final StringBuilder sb = new StringBuilder(value.get(
 							MarketField.INSTRUMENT).get(InstrumentField.ID))

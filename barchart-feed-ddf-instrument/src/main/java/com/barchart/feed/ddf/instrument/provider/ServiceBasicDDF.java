@@ -10,19 +10,25 @@ package com.barchart.feed.ddf.instrument.provider;
 import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.lookupFromSymbol;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentField;
+import com.barchart.feed.inst.api.InstrumentGUID;
+import com.barchart.feed.inst.provider.InstrumentFactory;
+import com.barchart.missive.core.Tag;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
-// TODO: Auto-generated Javadoc
 /**
  * creates fake unresolved instruments.
  */
@@ -30,6 +36,8 @@ import com.barchart.util.values.provider.ValueBuilder;
 public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	protected final Logger log = LoggerFactory.getLogger(getClass());
+	
+	
 
 	/**
 	 * Instantiates a new service basic ddf.
@@ -37,15 +45,10 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 	public ServiceBasicDDF() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.barchart.feed.base.api.instrument.DefinitionService#clear()
-	 */
-	@Override
 	public void clear() {
+		
 	}
-
+	
 	/**
 	 * TODO add more fields via symbol parser.
 	 * 
@@ -54,7 +57,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 	 * @return the dD f_ instrument
 	 */
 	@Override
-	public DDF_Instrument lookup(final TextValue symbol) {
+	public DDF_Instrument lookupDDF(final TextValue symbol) {
 
 		if (CodecHelper.isEmpty(symbol)) {
 			return DDF_InstrumentProvider.NULL_INSTRUMENT;
@@ -63,9 +66,9 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 		/** make an upper case id */
 		final TextValue lookup = lookupFromSymbol(symbol);
 
-		final InstrumentDDF instrument = new InstrumentDDF();
-
-		instrument.set(InstrumentField.ID, lookup);
+		final Map<Tag, Object> map = new HashMap<Tag, Object>();
+		map.put(InstrumentField.ID, lookup);
+		final DDF_Instrument instrument = new InstrumentDDF(InstrumentFactory.build(map));
 
 		return instrument;
 
@@ -79,7 +82,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 	 * .util.List)
 	 */
 	@Override
-	public List<DDF_Instrument> lookup(final List<String> symbolList) {
+	public List<DDF_Instrument> lookupDDF(final List<String> symbolList) {
 
 		if (CodecHelper.isEmpty(symbolList)) {
 			return DDF_InstrumentProvider.NULL_LIST;
@@ -90,7 +93,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 		for (final String symbol : symbolList) {
 
-			final DDF_Instrument instrument = lookup(ValueBuilder
+			final DDF_Instrument instrument = lookupDDF(ValueBuilder
 					.newText(symbol));
 
 			if (instrument.isNull()) {
@@ -105,18 +108,41 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.barchart.feed.ddf.instrument.api.DDF_DefinitionService#lookupDDF(
-	 * com.barchart.util.values.api.TextValue)
-	 */
 	@Override
-	public DDF_Instrument lookupDDF(final TextValue symbol) {
-
+	public Instrument lookup(CharSequence symbol) {
+		// TODO Auto-generated method stub
 		return null;
-
 	}
+
+	@Override
+	public Future<Instrument> lookupAsync(CharSequence symbol) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Instrument> lookup(List<CharSequence> symbols) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<List<Instrument>> lookupAsync(List<CharSequence> symbols) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Instrument lookup(InstrumentGUID guid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<Instrument> lookupAsync(InstrumentGUID guid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

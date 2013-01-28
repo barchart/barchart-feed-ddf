@@ -31,7 +31,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.api.FeedStateListener;
@@ -45,6 +44,7 @@ import com.barchart.feed.ddf.market.provider.DDF_MarketService;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
+import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.values.api.Value;
 
 /**
@@ -219,7 +219,7 @@ public abstract class BarchartFeedClientBase {
 	 * 
 	 * @return NULL_INSTRUMENT if the symbol is not resolved.
 	 */
-	public MarketInstrument lookup(final String symbol) {
+	public Instrument lookup(final String symbol) {
 		return DDF_InstrumentProvider.find(symbol);
 	}
 
@@ -230,11 +230,11 @@ public abstract class BarchartFeedClientBase {
 	 * 
 	 * @return An empty list if no symbols can be resolved.
 	 */
-	public List<MarketInstrument> lookup(final List<String> symbolList) {
+	public List<Instrument> lookup(final List<String> symbolList) {
 		final List<DDF_Instrument> list =
 				DDF_InstrumentProvider.find(symbolList);
 
-		return new ArrayList<MarketInstrument>(list);
+		return new ArrayList<Instrument>(list);
 	}
 
 	/**
@@ -244,7 +244,7 @@ public abstract class BarchartFeedClientBase {
 	 * 
 	 * @return NULL_VALUE for all fields if market is not present.
 	 */
-	public <S extends MarketInstrument, V extends Value<V>> V take(
+	public <S extends Instrument, V extends Value<V>> V take(
 			final S instrument, final MarketField<V> field) {
 		return maker.take(instrument, field);
 	}

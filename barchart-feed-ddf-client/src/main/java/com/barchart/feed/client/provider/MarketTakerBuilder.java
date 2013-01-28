@@ -12,17 +12,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.values.api.Value;
 
 public class MarketTakerBuilder<V extends Value<V>> {
 
 	private Set<MarketEvent> events = new HashSet<MarketEvent>();
-	private Set<MarketInstrument> instruments = new HashSet<MarketInstrument>();
+	private Set<Instrument> instruments = new HashSet<Instrument>();
 	private List<MarketEventCallback<V>> eventCallbacks = new ArrayList<MarketEventCallback<V>>();
 	private MarketField<V> field = null;
 	
@@ -36,7 +36,7 @@ public class MarketTakerBuilder<V extends Value<V>> {
 		return this;
 	}
 	
-	public MarketTakerBuilder<V> addInstrument(final MarketInstrument inst) {
+	public MarketTakerBuilder<V> addInstrument(final Instrument inst) {
 		instruments.add(inst);
 		return this;
 	}
@@ -46,7 +46,7 @@ public class MarketTakerBuilder<V extends Value<V>> {
 		return this;
 	}
 	
-	public MarketTakerBuilder<V> addInstruments(final List<MarketInstrument> insts) {
+	public MarketTakerBuilder<V> addInstruments(final List<Instrument> insts) {
 		instruments.addAll(insts);
 		return this;
 	}
@@ -66,7 +66,7 @@ public class MarketTakerBuilder<V extends Value<V>> {
 		final MarketTaker<V> taker =  new MarketTaker<V>() {
 		
 			final MarketEvent[] eventArray = events.toArray(new MarketEvent[0]);
-			final MarketInstrument[] instArray = instruments.toArray(new MarketInstrument[0]);
+			final Instrument[] instArray = instruments.toArray(new Instrument[0]);
  			final MarketEventCallback<V>[] callbackArray = eventCallbacks.toArray(new MarketEventCallback[0]);
 			final MarketField<V> boundField = field;
  			
@@ -81,13 +81,13 @@ public class MarketTakerBuilder<V extends Value<V>> {
 			}
 	
 			@Override
-			public MarketInstrument[] bindInstruments() {
+			public Instrument[] bindInstruments() {
 				return instArray;
 			}
 	
 			@Override
 			public void onMarketEvent(MarketEvent event,
-					MarketInstrument instrument, V value) {
+					Instrument instrument, V value) {
 				for(final MarketEventCallback<V> e : callbackArray) {
 					e.onMarketEvent(event, instrument, value);
 				}

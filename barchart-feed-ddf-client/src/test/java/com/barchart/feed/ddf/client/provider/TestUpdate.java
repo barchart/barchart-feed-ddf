@@ -10,7 +10,6 @@
  */
 package com.barchart.feed.ddf.client.provider;
 
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -18,6 +17,7 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.client.provider.BarchartFeedClient;
+import com.barchart.feed.inst.api.Instrument;
 
 /**
  * @author g-litchfield
@@ -35,13 +35,13 @@ public class TestUpdate {
 
 		final BarchartFeedClient client = new BarchartFeedClient();
 
-		final MarketInstrument[] initInsts = new MarketInstrument[3];
+		final Instrument[] initInsts = new Instrument[3];
 
 		initInsts[0] = client.lookup("GOOG");
 		initInsts[1] = client.lookup("AAPL");
 		initInsts[2] = client.lookup("FB");
 
-		final MarketInstrument[] newInsts = new MarketInstrument[3];
+		final Instrument[] newInsts = new Instrument[3];
 
 		newInsts[0] = client.lookup("AAPL");
 		newInsts[1] = client.lookup("FB");
@@ -87,11 +87,11 @@ public class TestUpdate {
 
 	public static class Switch implements MarketTaker<Market> {
 
-		MarketInstrument[] old;
-		MarketInstrument[] newI;
-		MarketInstrument[] curr;
+		Instrument[] old;
+		Instrument[] newI;
+		Instrument[] curr;
 
-		Switch(final MarketInstrument[] old, final MarketInstrument[] newI) {
+		Switch(final Instrument[] old, final Instrument[] newI) {
 			this.old = old;
 			this.newI = newI;
 			this.curr = old;
@@ -112,13 +112,13 @@ public class TestUpdate {
 		}
 
 		@Override
-		public MarketInstrument[] bindInstruments() {
+		public Instrument[] bindInstruments() {
 			return curr;
 		}
 
 		@Override
 		public void onMarketEvent(final MarketEvent event,
-				final MarketInstrument instrument, final Market value) {
+				final Instrument instrument, final Market value) {
 			System.out.println(value.get(MarketField.BOOK_TOP).toString());
 
 		}

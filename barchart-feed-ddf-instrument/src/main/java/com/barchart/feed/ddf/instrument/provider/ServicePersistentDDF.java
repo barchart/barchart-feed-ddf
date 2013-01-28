@@ -37,7 +37,7 @@ public class ServicePersistentDDF extends ServiceBasicDDF {
 	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookup(com.barchart.util.values.api.TextValue)
 	 */
 	@Override
-	public final DDF_Instrument lookup(final TextValue symbol) {
+	public final DDF_Instrument lookupDDF(final TextValue symbol) {
 
 		if (CodecHelper.isEmpty(symbol)) {
 			return DDF_InstrumentProvider.NULL_INSTRUMENT;

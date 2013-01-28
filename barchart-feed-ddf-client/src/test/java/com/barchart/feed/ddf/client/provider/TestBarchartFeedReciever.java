@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.client.provider.BarchartFeedReceiver;
+import com.barchart.feed.inst.api.Instrument;
 
 public class TestBarchartFeedReciever {
 
@@ -30,7 +30,7 @@ public class TestBarchartFeedReciever {
 		
 		BarchartFeedReceiver client = new BarchartFeedReceiver();
 		
-		final MarketInstrument[] instruments = { client.lookup("ESH13")};
+		final Instrument[] instruments = { client.lookup("ESH13")};
 		
 		client.listenTCP(7000, true); 
 		client.addTaker(TakerFactory.makeFactory(instruments));
@@ -44,7 +44,7 @@ public class TestBarchartFeedReciever {
 	private static class TakerFactory {
 
 		static MarketTaker<Market> makeFactory(
-				final MarketInstrument[] instruments) {
+				final Instrument[] instruments) {
 			
 			return new MarketTaker<Market>() {
 
@@ -62,7 +62,7 @@ public class TestBarchartFeedReciever {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 
 					return instruments;
 
@@ -70,7 +70,7 @@ public class TestBarchartFeedReciever {
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 
 					final StringBuilder sb = new StringBuilder("Event: ")
 							.append(event);

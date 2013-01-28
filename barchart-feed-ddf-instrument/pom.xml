@@ -35,6 +35,13 @@
 			<artifactId>barchart-feed-ddf-symbol</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		
+		<dependency>
+  			<groupId>com.barchart.missive</groupId>
+			<artifactId>barchart-missive</artifactId>
+			<version>${barchartMissiveVersion}</version>
+			<scope>provided</scope>
+  		</dependency>
 
 	</dependencies>
 

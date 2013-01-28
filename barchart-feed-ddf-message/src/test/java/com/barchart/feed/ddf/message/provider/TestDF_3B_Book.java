@@ -10,7 +10,6 @@ package com.barchart.feed.ddf.message.provider;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
 import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
-import static com.barchart.feed.base.book.enums.MarketBookType.DEFAULT;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
@@ -32,6 +31,7 @@ import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
@@ -189,7 +189,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 	static MarketBookEntry newEntry(final MarketBookSide side, final int place,
 			final long mant, final int exp, final int size) {
-		return new DefBookEntry(MODIFY, side, DEFAULT, place,
+		return new DefBookEntry(MODIFY, side, MarketBookType.DEFAULT, place,
 				ValueBuilder.newPrice(mant, exp), ValueBuilder.newSize(size));
 	}
 

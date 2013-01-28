@@ -21,11 +21,12 @@ import org.apache.lucene.search.WildcardQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
+import com.barchart.missive.core.Tag;
+
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentDo;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.util.enums.DictEnum;
 import com.barchart.util.enums.ParaEnumBase;
 import com.barchart.util.values.api.PriceValue;
@@ -55,7 +56,7 @@ class CodecHelper {
 
 	//
 
-	static final InstrumentField<?>[] BASE = InstrumentField.values();
+	static final Tag<?>[] BASE = InstrumentField.FIELDS;
 
 	static final DDF_InstrumentField<?>[] EXTRA = DDF_InstrumentField.values();
 
@@ -121,21 +122,21 @@ class CodecHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	static Object decode(final ParaEnumBase<?, ?> field, final String value) {
+	static Object decode(final Tag<?> field, final String value) {
 
-		if (field.value() instanceof TextValue) {
+		if (field.getClazz().equals(TextValue.class)) {
 			return ValueBuilder.newText(value);
 		}
 
-		if (field.value() instanceof PriceValue) {
+		if (field.getClazz().equals(PriceValue.class)) {
 			return decodePrice(value);
 		}
 
-		if (field.value() instanceof SizeValue) {
+		if (field.getClazz().equals(SizeValue.class)) {
 			return decodeSize(value);
 		}
 
-		if (field.value() instanceof TimeValue) {
+		if (field.getClazz().equals(TimeValue.class)) {
 			return decodeTime(value);
 		}
 
@@ -297,7 +298,7 @@ class CodecHelper {
 
 		}
 
-		for (final InstrumentField<?> field : CodecHelper.BASE) {
+		for (final Tag<?> field : CodecHelper.BASE) {
 
 			final String name = field.name();
 			final String value = encode(field, instrument.get(field));
@@ -332,10 +333,7 @@ class CodecHelper {
 	static <V extends Value<V>> DDF_Instrument instrumentDecode(
 			final Document doc) {
 
-		final DDF_InstrumentDo instrument = DDF_InstrumentProvider
-				.newInstrumentDDF();
-
-		for (final InstrumentField<?> field : CodecHelper.BASE) {
+		for (final Tag<?> field : CodecHelper.BASE) {
 
 			final String name = field.name();
 			final String value = doc.get(name);
@@ -344,8 +342,7 @@ class CodecHelper {
 				continue;
 			}
 
-			instrument
-					.set((InstrumentField<V>) field, (V) decode(field, value));
+			instrument.set(field, (V) decode(field, value));
 
 		}
 

@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Future;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -25,6 +26,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
@@ -68,10 +71,8 @@ public class LocalDefinitionServiceDDF implements DDF_DefinitionService {
 
 						try {
 
-							final InstrumentSAX instrument =
-									new InstrumentSAX();
-
-							instrument.decodeSAX(attributes);
+							final DDF_Instrument instrument =
+									new InstrumentDDF(InstrumentXML.decodeSAX(attributes));
 
 							store(instrument);
 
@@ -139,33 +140,28 @@ public class LocalDefinitionServiceDDF implements DDF_DefinitionService {
 		//log.debug("defined instrument={}", symbolGUID);
 		
 	}
-	
-	@Override
-	public void clear() {
-		
-	}
 
-	@Override
-	public DDF_Instrument lookup(final TextValue symbol) {
-		
-		if (CodecHelper.isEmpty(symbol)) {
-			return DDF_InstrumentProvider.NULL_INSTRUMENT;
-		}
-		
-		final DDF_Instrument instrument = instrumentMap.get(symbol.toUpperCase());
-		
-		if(instrument == null) {
-//			log.warn("Unknown symbol {}", symbol);
-			return DDF_InstrumentProvider.NULL_INSTRUMENT;
-		}
-		
-		return instrument;
-	}
+//	@Override
+//	public DDF_Instrument lookup(final TextValue symbol) {
+//		
+//		if (CodecHelper.isEmpty(symbol)) {
+//			return DDF_InstrumentProvider.NULL_INSTRUMENT;
+//		}
+//		
+//		final DDF_Instrument instrument = instrumentMap.get(symbol.toUpperCase());
+//		
+//		if(instrument == null) {
+////			log.warn("Unknown symbol {}", symbol);
+//			return DDF_InstrumentProvider.NULL_INSTRUMENT;
+//		}
+//		
+//		return instrument;
+//	}
 
 	
 
 	@Override
-	public List<DDF_Instrument> lookup(final List<String> symbolList) {
+	public List<DDF_Instrument> lookupDDF(final List<String> symbolList) {
 		
 		if (CodecHelper.isEmpty(symbolList)) {
 			return DDF_InstrumentProvider.NULL_LIST;
@@ -192,19 +188,41 @@ public class LocalDefinitionServiceDDF implements DDF_DefinitionService {
 		
 		return instrument;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	@Override
+	public Instrument lookup(CharSequence symbol) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<Instrument> lookupAsync(CharSequence symbol) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<List<Instrument>> lookupAsync(List<CharSequence> symbols) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Instrument lookup(InstrumentGUID guid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Future<Instrument> lookupAsync(InstrumentGUID guid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Instrument> lookup(List<CharSequence> symbols) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

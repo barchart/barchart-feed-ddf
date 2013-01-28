@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
+import static com.barchart.feed.inst.enums.MarketBookType.*;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
 import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
-import static com.barchart.feed.base.book.enums.MarketBookType.DEFAULT;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

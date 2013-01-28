@@ -109,7 +109,7 @@ abstract class Base implements DDF_BaseMessage, Codec {
 		final byte[] array = buffer.array();
 		final int start = buffer.position();
 		final int finish = buffer.limit();
-		final Element tag = HelperXML.xmlDodumentDecode(array, start, finish,
+		final Element tag = HelperXML.xmlDocumentDecode(array, start, finish,
 				true);
 		decodeXML(tag);
 	}

@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -25,6 +24,7 @@ import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.client.provider.BarchartFeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
+import com.barchart.feed.inst.api.Instrument;
 
 /**
  * 
@@ -47,7 +47,7 @@ public class TestBarchartFeedClientProxy {
 
 		final String symbol = "RMU12";
 
-		final MarketInstrument instrument = client.lookup(symbol);
+		final Instrument instrument = client.lookup(symbol);
 
 		System.out.println(instrument.toString());
 
@@ -92,7 +92,7 @@ public class TestBarchartFeedClientProxy {
 
 	private static class TakerFactory {
 
-		static MarketTaker<Market> makeFactory(final MarketInstrument instrument) {
+		static MarketTaker<Market> makeFactory(final Instrument instrument) {
 			return new MarketTaker<Market>() {
 
 				@Override
@@ -111,15 +111,15 @@ public class TestBarchartFeedClientProxy {
 				}
 
 				@Override
-				public MarketInstrument[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 
-					return new MarketInstrument[] { instrument };
+					return new Instrument[] { instrument };
 
 				}
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final MarketInstrument instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 
 					final StringBuilder sb = new StringBuilder("Event: ")
 							.append(event);

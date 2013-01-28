@@ -31,8 +31,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
-import com.barchart.feed.base.instrument.values.MarketInstrument;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
@@ -40,6 +38,8 @@ import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+import com.barchart.feed.inst.api.Instrument;
+import com.barchart.feed.inst.api.InstrumentField;
 
 /**
  * The entry point for Barchart data feed services.
@@ -183,7 +183,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	private final MarketRegListener instrumentSubscriptionListener = new MarketRegListener() {
 
 		@Override
-		public void onRegistrationChange(final MarketInstrument instrument,
+		public void onRegistrationChange(final Instrument instrument,
 				final Set<MarketEvent> events) {
 
 			/*

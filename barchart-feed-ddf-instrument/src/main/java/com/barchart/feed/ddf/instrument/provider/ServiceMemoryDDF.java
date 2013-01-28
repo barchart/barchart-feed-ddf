@@ -51,7 +51,6 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 	 * 
 	 * @see com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#clear()
 	 */
-	@Override
 	public final void clear() {
 		instrumentMap.clear();
 		ddfInstrumentMap.clear();
@@ -156,33 +155,33 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 	 * com.barchart.feed.ddf.instrument.provider.ServiceBasicDDF#lookup(com.
 	 * barchart.util.values.api.TextValue)
 	 */
-	@Override
-	public final DDF_Instrument lookup(final TextValue symbol) {
-
-		if (CodecHelper.isEmpty(symbol)) {
-			return DDF_InstrumentProvider.NULL_INSTRUMENT;
-		}
-
-		DDF_Instrument instrument = load(symbol);
-
-		if (instrument == null) {
-
-			try {
-
-				instrument = DDF_InstrumentProvider.remoteLookup(symbol);
-
-				store(instrument);
-
-			} catch (final Exception e) {
-				log.warn("instrument lookup failed; symbol : {}", symbol);
-				return DDF_InstrumentProvider.NULL_INSTRUMENT;
-			}
-
-		}
-
-		return instrument;
-
-	}
+//	@Override
+//	public final DDF_Instrument lookup(final TextValue symbol) {
+//
+//		if (CodecHelper.isEmpty(symbol)) {
+//			return DDF_InstrumentProvider.NULL_INSTRUMENT;
+//		}
+//
+//		DDF_Instrument instrument = load(symbol);
+//
+//		if (instrument == null) {
+//
+//			try {
+//
+//				instrument = DDF_InstrumentProvider.remoteLookup(symbol);
+//
+//				store(instrument);
+//
+//			} catch (final Exception e) {
+//				log.warn("instrument lookup failed; symbol : {}", symbol);
+//				return DDF_InstrumentProvider.NULL_INSTRUMENT;
+//			}
+//
+//		}
+//
+//		return instrument;
+//
+//	}
 
 	/*
 	 * (non-Javadoc)
@@ -192,7 +191,7 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 	 * .util.List)
 	 */
 	@Override
-	public List<DDF_Instrument> lookup(final List<String> symbolList) {
+	public List<DDF_Instrument> lookupDDF(final List<String> symbolList) {
 
 		if (CodecHelper.isEmpty(symbolList)) {
 			return DDF_InstrumentProvider.NULL_LIST;

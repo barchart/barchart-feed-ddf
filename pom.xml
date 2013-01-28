@@ -45,6 +45,8 @@
 		<!-- <groupId>io.netty</groupId> -->
 		<!-- <artifactId>netty</artifactId> -->
 		<barchartNettyVersion>3.5.11.Final</barchartNettyVersion>
+		
+		<barchartMissiveVersion>1.1.0</barchartMissiveVersion>
 
 	</properties>
 
