@@ -63,8 +63,8 @@ public class LoggingHandler implements DDF_MessageListener {
 			e.printStackTrace();
 		}
 
-		final DDF_Instrument instrument2 = DDF_InstrumentProvider.find("XFU2");
-		final DDF_Instrument instrument = DDF_InstrumentProvider.find("RMN2");
+		final DDF_Instrument instrument2 = DDF_InstrumentProvider.findDDF("XFU2");
+		final DDF_Instrument instrument = DDF_InstrumentProvider.findDDF("RMN2");
 
 		symbolList.add(instrument);
 		symbolList.add(instrument2);

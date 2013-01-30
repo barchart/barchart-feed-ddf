@@ -48,7 +48,7 @@ public class TestDDF_MarketService {
 	@Test
 	public void testMakeDDF_MarketBaseMarketDo() throws Exception {
 
-		final DDF_Instrument instrument = DDF_InstrumentProvider.find("RJZ1");
+		final DDF_Instrument instrument = DDF_InstrumentProvider.findDDF("RJZ1");
 
 		log.debug("instrument : {}", instrument);
 

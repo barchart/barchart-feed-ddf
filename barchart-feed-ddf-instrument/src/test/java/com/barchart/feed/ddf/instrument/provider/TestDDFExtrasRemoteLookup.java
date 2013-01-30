@@ -8,7 +8,7 @@ public class TestDDFExtrasRemoteLookup {
 
 	public static void main(final String[] args) {
 		
-		DDF_Instrument inst = DDF_InstrumentProvider.find("ESH3");
+		DDF_Instrument inst = DDF_InstrumentProvider.findDDF("ESH3");
 		
 		System.out.println(inst.toString());
 		System.out.println();

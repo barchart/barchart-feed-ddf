@@ -71,7 +71,7 @@ public class HistoricalTrendExample {
 		final String symbol = "C";
 
 		final DDF_Instrument instrument = //
-		DDF_InstrumentProvider.find(symbol);
+		DDF_InstrumentProvider.findDDF(symbol);
 
 		if (instrument.isNull()) {
 			log.error("can not get insrument for : {}", symbol);

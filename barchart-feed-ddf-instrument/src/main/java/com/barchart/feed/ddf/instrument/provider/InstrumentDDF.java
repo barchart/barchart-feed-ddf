@@ -28,6 +28,7 @@ import com.barchart.feed.inst.api.Instrument;
 import com.barchart.feed.inst.api.InstrumentConst;
 import com.barchart.feed.inst.api.InstrumentGUID;
 import com.barchart.feed.inst.enums.MarketDisplay;
+import com.barchart.feed.inst.provider.InstrumentBase;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;
@@ -36,7 +37,7 @@ import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.api.Value;
 
-class InstrumentDDF implements DDF_Instrument {
+class InstrumentDDF extends InstrumentBase implements DDF_Instrument {
 
 	private final Instrument inst;
 	

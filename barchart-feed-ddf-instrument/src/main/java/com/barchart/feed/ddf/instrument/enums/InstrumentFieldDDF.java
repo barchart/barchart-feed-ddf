@@ -33,4 +33,10 @@ public final class InstrumentFieldDDF {
 	
 	public static final Tag<TextValue> DDF_EXPIRE_YEAR = Tag.create("DDF_EXPIRE_YEAR", TextValue.class);
 	
+	public static final Tag<?>[] FIELDS = new Tag<?>[]{
+		DDF_SYMBOL_REALTIME, DDF_SYMBOL_HISTORICAL, DDF_SYMBOL_UNIVERSAL,
+		DDF_EXCHANGE, DDF_EXCH_DESC, DDF_SPREAD, DDF_ZONE, DDF_EXPIRE_MONTH,
+		DDF_EXPIRE_YEAR
+	};
+	
 }

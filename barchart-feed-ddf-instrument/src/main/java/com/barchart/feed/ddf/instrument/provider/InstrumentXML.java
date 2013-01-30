@@ -34,6 +34,7 @@ import java.util.Map;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
+import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.InstrumentFieldDDF;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
@@ -53,7 +54,7 @@ public final class InstrumentXML {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public static Instrument decodeXML(final Element tag) throws Exception {
+	public static DDF_Instrument decodeXML(final Element tag) throws Exception {
 		
 		// lookup status
 
@@ -139,12 +140,12 @@ public final class InstrumentXML {
 		map.put(InstrumentFieldDDF.DDF_SYMBOL_HISTORICAL, newText(symbolHist));
 		map.put(InstrumentFieldDDF.DDF_SYMBOL_REALTIME, newText(symbolDDFReal));
 		
-		return InstrumentFactory.build(map);
+		return new InstrumentDDF(InstrumentFactory.build(map));
 		
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public static Instrument decodeSAX(final Attributes ats) throws Exception {
+	public static DDF_Instrument decodeSAX(final Attributes ats) throws Exception {
 		
 		// lookup status
 		final String statusCode = xmlStringDecode(ats, STATUS, XML_STOP);
@@ -221,7 +222,7 @@ public final class InstrumentXML {
 		map.put(InstrumentFieldDDF.DDF_SYMBOL_HISTORICAL, newText(symbolHist));
 		map.put(InstrumentFieldDDF.DDF_SYMBOL_REALTIME, newText(symbolDDFReal));
 		
-		return InstrumentFactory.build(map);
+		return new InstrumentDDF(InstrumentFactory.build(map));
 		
 	}
 

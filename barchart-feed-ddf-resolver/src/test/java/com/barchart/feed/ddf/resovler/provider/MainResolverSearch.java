@@ -12,8 +12,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+import com.barchart.feed.ddf.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.feed.ddf.resolver.provider.DDF_ResolverProvider;
 

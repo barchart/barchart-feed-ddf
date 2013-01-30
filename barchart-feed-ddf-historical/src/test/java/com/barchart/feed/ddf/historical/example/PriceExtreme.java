@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.ddf.historical.example;
 
-import com.barchart.feed.base.instrument.enums.InstrumentField;
-import com.barchart.feed.base.instrument.enums.MarketDisplay;
-import com.barchart.feed.base.instrument.enums.MarketDisplay.Fraction;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+import com.barchart.feed.ddf.instrument.enums.InstrumentField;
+import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
+import com.barchart.feed.inst.enums.MarketDisplay;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 

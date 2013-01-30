@@ -52,7 +52,7 @@ public class MarketTakerBuilder<V extends Value<V>> {
 	}
 	
 	public MarketTakerBuilder<V> addSymbols(final List<String> symbols) {
-		instruments.addAll(DDF_InstrumentProvider.find(symbols));
+		instruments.addAll(DDF_InstrumentProvider.find(symbols).values());
 		return this;
 	}
 	

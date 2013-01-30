@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.ddf.resolver.provider;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
@@ -21,12 +24,13 @@ import org.apache.lucene.search.WildcardQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.missive.core.Tag;
-
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
+import com.barchart.feed.ddf.instrument.enums.InstrumentFieldDDF;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.inst.api.InstrumentField;
+import com.barchart.feed.inst.provider.InstrumentFactory;
+import com.barchart.missive.core.Tag;
 import com.barchart.util.enums.DictEnum;
 import com.barchart.util.enums.ParaEnumBase;
 import com.barchart.util.values.api.PriceValue;
@@ -58,7 +62,7 @@ class CodecHelper {
 
 	static final Tag<?>[] BASE = InstrumentField.FIELDS;
 
-	static final DDF_InstrumentField<?>[] EXTRA = DDF_InstrumentField.values();
+	static final Tag<?>[] EXTRA = InstrumentFieldDDF.FIELDS;
 
 	//
 
@@ -91,29 +95,29 @@ class CodecHelper {
 		return num.guid();
 	}
 
-	static String encode(final ParaEnumBase<?, ?> field, final Object value) {
+	static String encode(final Tag<?> field, final Object value) {
 
-		if (field.value() instanceof TextValue) {
+		if (field.getClazz().equals(TextValue.class)) {
 			return value.toString();
 		}
 
-		if (field.value() instanceof PriceValue) {
+		if (field.getClazz().equals(PriceValue.class)) {
 			return encode((PriceValue) value);
 		}
 
-		if (field.value() instanceof SizeValue) {
+		if (field.getClazz().equals(SizeValue.class)) {
 			return encode((SizeValue) value);
 		}
 
-		if (field.value() instanceof TimeValue) {
+		if (field.getClazz().equals(TimeValue.class)) {
 			return encode((TimeValue) value);
 		}
 
-		if (field.value() instanceof Enum) {
+		if (field.isEnum()) {
 			return encode((Enum<?>) value);
 		}
 
-		if (field.value() instanceof ParaEnumBase) {
+		if (field.getClazz().equals(ParaEnumBase.class)) {
 			return encode((ParaEnumBase<?, ?>) value);
 		}
 
@@ -140,19 +144,19 @@ class CodecHelper {
 			return decodeTime(value);
 		}
 
-		if (field.value() instanceof Enum) {
+		if (field.isEnum()) {
 			@SuppressWarnings("rawtypes")
-			final Class klaz = field.value().getClass();
+			final Class klaz = field.getClazz();
 			final Enum<?> enuma = enumFrom(klaz, value);
 			return enuma;
 		}
 
-		if (field.value() instanceof ParaEnumBase) {
+		if (field.getClazz().equals(ParaEnumBase.class)) {
 			@SuppressWarnings("rawtypes")
-			final Class klaz = field.value().getClass();
+			final Class klaz = field.getClazz();
 			final DictEnum<?>[] array = ParaEnumBase.valuesFor(klaz);
 			for (final DictEnum<?> dict : array) {
-				if (field.name().equals(dict.name())) {
+				if (field.getName().equals(dict.name())) {
 					return dict;
 				}
 			}
@@ -300,7 +304,7 @@ class CodecHelper {
 
 		for (final Tag<?> field : CodecHelper.BASE) {
 
-			final String name = field.name();
+			final String name = field.getName();
 			final String value = encode(field, instrument.get(field));
 
 			/** store; do not index */
@@ -311,9 +315,9 @@ class CodecHelper {
 
 		}
 
-		for (final DDF_InstrumentField<?> field : CodecHelper.EXTRA) {
+		for (final Tag<?> field : CodecHelper.EXTRA) {
 
-			final String name = field.name();
+			final String name = field.getName();
 			final String value = encode(field, instrument.get(field));
 
 			/** store; do not index */
@@ -332,35 +336,36 @@ class CodecHelper {
 	@SuppressWarnings("unchecked")
 	static <V extends Value<V>> DDF_Instrument instrumentDecode(
 			final Document doc) {
+		
+		Map<Tag, Object> tags = new HashMap<Tag, Object>();
 
 		for (final Tag<?> field : CodecHelper.BASE) {
 
-			final String name = field.name();
+			final String name = field.getName();
 			final String value = doc.get(name);
 
 			if (!isValid(value)) {
 				continue;
 			}
 
-			instrument.set(field, (V) decode(field, value));
+			tags.put(field, (V) decode(field, value));
 
 		}
 
-		for (final DDF_InstrumentField<?> field : CodecHelper.EXTRA) {
+		for (final Tag<?> field : CodecHelper.EXTRA) {
 
-			final String name = field.name();
+			final String name = field.getName();
 			final String value = doc.get(name);
 
 			if (!isValid(value)) {
 				continue;
 			}
 
-			instrument.set((DDF_InstrumentField<V>) field,
-					(V) decode(field, value));
+			tags.put(field, (V) decode(field, value));
 
 		}
 
-		return instrument;
+		return DDF_InstrumentProvider.wrapInstrument((InstrumentFactory.build(tags)));
 
 	}
 

@@ -7,53 +7,22 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestDDF_InstrumentProvider.
  */
 public class TestDDF_InstrumentProvider {
-
-	/**
-	 * Test0.
-	 * 
-	 * @throws Exception
-	 *             the exception
-	 */
-	@Test
-	public void test0() throws Exception {
-
-		final List<String> symbolList = new ArrayList<String>();
-
-		symbolList.add("IBM");
-		symbolList.add("ORCL");
-		symbolList.add("MSFT");
-		symbolList.add("ESZ2");
-		symbolList.add("RJZ2");
-		symbolList.add("YGZ2");
-		symbolList.add("_S_FX_A6H2_A6Z1");
-
-		final List<DDF_Instrument> list = DDF_InstrumentProvider
-				.remoteLookup(symbolList);
-
-		assertEquals(7, list.size());
-
-		for (final DDF_Instrument instrument : list) {
-
-			System.out.println(instrument);
-
-		}
-
-	}
 
 	/**
 	 * Test1.
@@ -64,7 +33,7 @@ public class TestDDF_InstrumentProvider {
 	@Test
 	public void test1() throws Exception {
 
-		final List<String> symbolList = new ArrayList<String>();
+		final Collection<CharSequence> symbolList = new ArrayList<CharSequence>();
 
 		symbolList.add("IBM");
 		symbolList.add("ORCL");
@@ -75,21 +44,21 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("_S_FX_A6H2_A6Z1");
 		symbolList.add("_S_BF_ZSQ2_ZSU2_ZSX2");
 
-		final List<DDF_Instrument> list = DDF_InstrumentProvider
-				.find(symbolList);
+		final Map<? extends CharSequence, DDF_Instrument> list = DDF_InstrumentProvider
+				.findDDF(symbolList);
 
 		assertEquals(8, list.size());
 
-		for (final DDF_Instrument instrument : list) {
+		for (final Entry<? extends CharSequence, DDF_Instrument> e : list.entrySet()) {
 
 			System.out.println("EXP Month Year DDF = "
-					+ instrument.get(DDF_InstrumentField.DDF_EXPIRE_MONTH)
+					+ e.getValue().get(DDF_InstrumentField.DDF_EXPIRE_MONTH)
 							.toString()
 					+ " "
-					+ instrument.get(DDF_InstrumentField.DDF_EXPIRE_YEAR)
+					+ e.getValue().get(DDF_InstrumentField.DDF_EXPIRE_YEAR)
 							.toString());
 
-			System.out.println(instrument);
+			System.out.println(e.getValue());
 
 		}
 

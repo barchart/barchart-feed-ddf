@@ -24,7 +24,7 @@ public class InstrumentLookupExample {
 
 	static final void find(final String symbol) {
 
-		final DDF_Instrument instrument = DDF_InstrumentProvider.find(symbol);
+		final DDF_Instrument instrument = DDF_InstrumentProvider.findDDF(symbol);
 
 		if (instrument.isNull()) {
 			log.error("instrument lookup failed for : {}", symbol);

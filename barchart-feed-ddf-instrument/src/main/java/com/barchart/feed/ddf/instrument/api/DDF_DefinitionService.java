@@ -7,30 +7,20 @@
  */
 package com.barchart.feed.ddf.instrument.api;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 import com.barchart.feed.inst.api.InstrumentService;
-import com.barchart.util.values.api.TextValue;
 
 
 /**
  * contract: instrument service should cache all previous requests.
  */
 public interface DDF_DefinitionService extends
-		InstrumentService {
+		InstrumentService<CharSequence> {
 
-	/**
-	 * 
-	 * @param symbolList
-	 * @return
-	 */
-	List<DDF_Instrument> lookupDDF(List<String> symbolList);
+	Map<CharSequence, DDF_Instrument> lookupDDF(Collection<? extends CharSequence> symbolList);
 
-	/**
-	 * 
-	 * @param symbol
-	 * @return
-	 */
-	DDF_Instrument lookupDDF(TextValue symbol);
+	DDF_Instrument lookupDDF(CharSequence symbol);
 
 }
