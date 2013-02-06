@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMin;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 
 class EntryMins extends EntryBar implements DDF_EntryBarMin {
 
@@ -17,7 +17,7 @@ class EntryMins extends EntryBar implements DDF_EntryBarMin {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryMins(final DDF_Instrument instrument) {
+	public EntryMins(final Instrument instrument) {
 		super(instrument);
 	}
 

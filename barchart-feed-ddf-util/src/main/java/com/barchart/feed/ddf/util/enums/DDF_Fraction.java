@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.ddf.util.enums;
 
-import static com.barchart.feed.inst.enums.MarketDisplay.Fraction.*;
-import static com.barchart.feed.inst.enums.MarketDisplay.Fraction.BIN_N02;
 import static com.barchart.util.ascii.ASCII.QUEST;
 import static com.barchart.util.ascii.ASCII.STAR;
 import static com.barchart.util.ascii.ASCII._0_;
@@ -31,40 +29,41 @@ import static com.barchart.util.ascii.ASCII._G_;
 import static com.barchart.util.ascii.ASCII._H_;
 import static java.lang.Math.pow;
 
-import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
 import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeByte;
 import com.barchart.util.math.MathExtra;
+import com.barchart.util.values.api.Fraction;
+import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 /** a.k.a base code */
 public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 
 	// binary range; exponent is power of 2;
-	Q2(_0_, -10, BIN_N01), // 1/2 XXX: unit code invalid
-	Q4(_1_, -11, BIN_N02), // 1/4 XXX: unit code invalid
-	Q8(_2_, -1, BIN_N03), // 1/8
-	Q16(_3_, -2, BIN_N04), // 1/16
-	Q32(_4_, -3, BIN_N05), // 1/32
-	Q64(_5_, -4, BIN_N06), // 1/64
-	Q128(_6_, -5, BIN_N07), // 1/128
-	Q256(_7_, -6, BIN_N08), // 1/256
+	Q2(_0_, -10, ValueBuilder.newFraction(2, -1)), // 1/2 XXX: unit code invalid
+	Q4(_1_, -11, ValueBuilder.newFraction(2, -2)), // 1/4 XXX: unit code invalid
+	Q8(_2_, -1, ValueBuilder.newFraction(2, -3)), // 1/8
+	Q16(_3_, -2, ValueBuilder.newFraction(2, -4)), // 1/16
+	Q32(_4_, -3, ValueBuilder.newFraction(2, -5)), // 1/32
+	Q64(_5_, -4, ValueBuilder.newFraction(2, -6)), // 1/64
+	Q128(_6_, -5, ValueBuilder.newFraction(2, -7)), // 1/128
+	Q256(_7_, -6, ValueBuilder.newFraction(2, -8)), // 1/256
 
 	// decimal range; exponent is power of 10;
-	Z0(_8_, 0, DEC_Z00), // 1
-	N1(_9_, 1, DEC_N01), // 10
-	N2(_A_, 2, DEC_N02), // 100
-	N3(_B_, 3, DEC_N03), // 1K
-	N4(_C_, 4, DEC_N04), // 10K
-	N5(_D_, 5, DEC_N05), // 100K
-	N6(_E_, 6, DEC_N06), // 1M
-	N7(_F_, 7, DEC_N07), // 10M
-	N8(_G_, 8, DEC_N08), // 100M
-	N9(_H_, 9, DEC_N09), // 1B
+	Z0(_8_, 0, ValueBuilder.newFraction(10, 0)), // 1
+	N1(_9_, 1, ValueBuilder.newFraction(10, -1)), // 10
+	N2(_A_, 2, ValueBuilder.newFraction(10, -2)), // 100
+	N3(_B_, 3, ValueBuilder.newFraction(10, -3)), // 1K
+	N4(_C_, 4, ValueBuilder.newFraction(10, -4)), // 10K
+	N5(_D_, 5, ValueBuilder.newFraction(10, -5)), // 100K
+	N6(_E_, 6, ValueBuilder.newFraction(10, -6)), // 1M
+	N7(_F_, 7, ValueBuilder.newFraction(10, -7)), // 10M
+	N8(_G_, 8, ValueBuilder.newFraction(10, -8)), // 100M
+	N9(_H_, 9, ValueBuilder.newFraction(10, -9)), // 1B
 
-	ZZ(STAR, 0, DEC_Z00), // 1
+	ZZ(STAR, 0, ValueBuilder.newFraction(10, 0)), // 1
 
-	UNKNOWN(QUEST, 0, DEC_Z00), //
+	UNKNOWN(QUEST, 0, ValueBuilder.newFraction(10, 0)), //
 
 	/*
 	 * (non-Javadoc)
@@ -133,15 +132,19 @@ public enum DDF_Fraction implements EnumCodeByte, EnumByteOrdinal {
 		this.ord = (byte) ordinal();
 
 		this.fraction = fraction;
-		this.decimalExponent = fraction.decimalExponent;
-		this.decimalDenominator = fraction.decimalDenominator;
+		this.decimalExponent = fraction.decimalExponent();
+		this.decimalDenominator = fraction.decimalDenominator();
 
-		this.isBinary = fraction.base.isBinary();
+		if(fraction.base() == 2) {
+			this.isBinary = true;
+		} else {
+			this.isBinary = false;
+		}
 
-		this.nativeExponent = fraction.exponent.value;
-		this.nativeDenominator = fraction.denominator;
+		this.nativeExponent = fraction.exponent();
+		this.nativeDenominator = fraction.denominator();
 
-		this.spaces = fraction.places;
+		this.spaces = fraction.places();
 
 		this.spacesDenomPlus = (long) pow(10, spaces);
 		this.spacesDenomMinus = (long) pow(10, -decimalExponent - spaces);

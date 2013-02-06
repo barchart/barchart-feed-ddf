@@ -8,13 +8,13 @@
 package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.*;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.util.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc
@@ -25,7 +25,7 @@ class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryTicksDetail(final DDF_Instrument instrument) {
+	public EntryTicksDetail(final Instrument instrument) {
 		super(instrument);
 	}
 
@@ -77,7 +77,7 @@ class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {
 
 		final StringBuilder text = new StringBuilder(128);
 
-		text.append(encodeTicksTime(millisUTC, instrument));
+		text.append(encodeTicksTime(millisUTC, inst));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append((char) getTradeDay().code);
@@ -118,14 +118,14 @@ class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {
 		text.append(index);
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(instrument.get(DDF_SYMBOL_UNIVERSAL));
+		text.append(inst.get(InstrumentField.SYMBOL));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(millisUTC);
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(new DateTime(millisUTC, instrument
-				.get(DDF_InstrumentField.DDF_ZONE).zone));
+		text.append(new DateTime(millisUTC, DateTimeZone.forOffsetMillis(
+				(int)inst.get(InstrumentField.TIME_ZONE_OFFSET).asLong())));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(getTradeDay());

@@ -31,6 +31,7 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -39,7 +40,6 @@ import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.api.FailedFuture;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -126,7 +126,7 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 		
 		/* Filter by instrument */
 		if(subscriptions.containsKey(marketMsg.getInstrument().get(
-				DDF_InstrumentField.DDF_SYMBOL_REALTIME).toString())) {
+				InstrumentField.SYMBOL).toString())) {
 			
 			return true;
 		}

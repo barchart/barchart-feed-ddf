@@ -16,8 +16,10 @@ import java.util.Map.Entry;
 
 import org.junit.Test;
 
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
+import com.barchart.util.values.api.TimeValue;
+import com.barchart.util.values.provider.ValueBuilder;
 
 /**
  * The Class TestDDF_InstrumentProvider.
@@ -44,19 +46,18 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("_S_FX_A6H2_A6Z1");
 		symbolList.add("_S_BF_ZSQ2_ZSU2_ZSX2");
 
-		final Map<? extends CharSequence, DDF_Instrument> list = DDF_InstrumentProvider
-				.findDDF(symbolList);
+		final Map<? extends CharSequence, Instrument> list = DDF_InstrumentProvider
+				.find(symbolList);
 
 		assertEquals(8, list.size());
 
-		for (final Entry<? extends CharSequence, DDF_Instrument> e : list.entrySet()) {
+		for (final Entry<? extends CharSequence, Instrument> e : list.entrySet()) {
 
+			final TimeValue expires = ValueBuilder.newTime(e.getValue().get(InstrumentField.LIFETIME).stopAsMillis());
 			System.out.println("EXP Month Year DDF = "
-					+ e.getValue().get(DDF_InstrumentField.DDF_EXPIRE_MONTH)
-							.toString()
+					+ (expires.asDateTime().getMonthOfYear())
 					+ " "
-					+ e.getValue().get(DDF_InstrumentField.DDF_EXPIRE_YEAR)
-							.toString());
+					+ expires.asDateTime().getYear());
 
 			System.out.println(e.getValue());
 

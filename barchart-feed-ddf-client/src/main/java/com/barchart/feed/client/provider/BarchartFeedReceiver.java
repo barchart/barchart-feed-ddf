@@ -30,6 +30,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -37,8 +39,6 @@ import com.barchart.feed.base.provider.MakerBaseAllMarkets;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.market.provider.DDF_MarketServiceAllMarkets;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.util.values.api.Value;
 
 /**
@@ -177,11 +177,11 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 					 */
 					if (events.isEmpty()) {
 						log.debug("Unsubscribing to "
-								+ instrument.get(InstrumentField.ID));
+								+ instrument.get(InstrumentField.MARKET_GUID));
 						feed.unsubscribe(new Subscription(instrument, events));
 					} else {
 						log.debug("Subscribing to "
-								+ instrument.get(InstrumentField.ID)
+								+ instrument.get(InstrumentField.MARKET_GUID)
 								+ " Events: " + printEvents(events));
 						feed.subscribe(new Subscription(instrument, events));
 					}

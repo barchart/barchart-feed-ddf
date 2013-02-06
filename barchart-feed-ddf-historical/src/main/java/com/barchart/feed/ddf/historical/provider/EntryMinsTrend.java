@@ -9,8 +9,8 @@ package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
 
@@ -22,7 +22,7 @@ class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryMinsTrend(final DDF_Instrument instrument) {
+	public EntryMinsTrend(final Instrument instrument) {
 		super(instrument);
 	}
 
@@ -61,7 +61,7 @@ class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 	@Override
 	public void decodeHead(final String[] inputArray) {
 
-		millisUTC = decodeMinsTime(inputArray[0], instrument);
+		millisUTC = decodeMinsTime(inputArray[0], inst);
 
 		ordTradeDay = DDF_TradeDay.fromMillisUTC(millisUTC).ord;
 
@@ -86,7 +86,7 @@ class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 
 		final StringBuilder text = new StringBuilder(128);
 
-		text.append(encodeMinsTime(millisUTC, instrument));
+		text.append(encodeMinsTime(millisUTC, inst));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(encodeMantissa(priceSupport(), priceExponent()));

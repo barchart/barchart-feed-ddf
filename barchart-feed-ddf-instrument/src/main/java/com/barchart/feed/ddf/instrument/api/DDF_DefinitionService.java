@@ -7,10 +7,7 @@
  */
 package com.barchart.feed.ddf.instrument.api;
 
-import java.util.Collection;
-import java.util.Map;
-
-import com.barchart.feed.inst.api.InstrumentService;
+import com.barchart.feed.api.inst.InstrumentService;
 
 
 /**
@@ -18,9 +15,5 @@ import com.barchart.feed.inst.api.InstrumentService;
  */
 public interface DDF_DefinitionService extends
 		InstrumentService<CharSequence> {
-
-	Map<CharSequence, DDF_Instrument> lookupDDF(Collection<? extends CharSequence> symbolList);
-
-	DDF_Instrument lookupDDF(CharSequence symbol);
 
 }

@@ -8,13 +8,13 @@
 package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.*;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBar;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
 
@@ -26,7 +26,7 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryBar(final DDF_Instrument instrument) {
+	public EntryBar(final Instrument instrument) {
 		super(instrument);
 	}
 
@@ -101,7 +101,7 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 
 		final String[] inputArray = splitCSV(inputLine);
 
-		millisUTC = decodeMinsTime(inputArray[0], instrument);
+		millisUTC = decodeMinsTime(inputArray[0], inst);
 
 		ordTradeDay = DDF_TradeDay.fromDay(decodeInt(inputArray[1])).ord;
 
@@ -122,7 +122,7 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 
 		final StringBuilder text = new StringBuilder(128);
 
-		text.append(encodeMinsTime(millisUTC, instrument));
+		text.append(encodeMinsTime(millisUTC, inst));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append((char) getTradeDay().code);
@@ -167,14 +167,14 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 		text.append(index);
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(instrument.get(DDF_SYMBOL_UNIVERSAL));
+		text.append(inst.get(InstrumentField.SYMBOL));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(millisUTC);
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(new DateTime(millisUTC, instrument
-				.get(DDF_InstrumentField.DDF_ZONE).zone));
+		text.append(new DateTime(millisUTC, DateTimeZone.forOffsetMillis(
+				(int)inst.get(InstrumentField.TIME_ZONE_OFFSET).asLong())));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(getTradeDay());

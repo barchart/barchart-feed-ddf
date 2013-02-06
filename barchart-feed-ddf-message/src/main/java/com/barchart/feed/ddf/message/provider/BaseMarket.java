@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
 
 import org.joda.time.DateTimeZone;
 
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -73,8 +73,8 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getInstrument()
 	 */
 	@Override
-	public final DDF_Instrument getInstrument() {
-		return DDF_InstrumentProvider.findDDF(getId());
+	public final Instrument getInstrument() {
+		return DDF_InstrumentProvider.find(getId());
 	}
 
 	// NOTE: invokes parser

@@ -7,10 +7,15 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeEodTime;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeInstrument;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeMantissa;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeEodTime;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeInstrument;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeMantissa;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
 
@@ -22,7 +27,7 @@ class EntryEodTrend extends Entry implements DDF_EntryTrend {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryEodTrend(final DDF_Instrument instrument) {
+	public EntryEodTrend(final Instrument instrument) {
 		super(instrument);
 	}
 
@@ -61,9 +66,9 @@ class EntryEodTrend extends Entry implements DDF_EntryTrend {
 	@Override
 	public void decodeHead(final String[] inputArray) {
 
-		instrument = decodeInstrument(inputArray[0]);
+		inst = decodeInstrument(inputArray[0]);
 
-		millisUTC = decodeEodTime(inputArray[1], instrument);
+		millisUTC = decodeEodTime(inputArray[1], inst);
 
 		ordTradeDay = DDF_TradeDay.fromMillisUTC(millisUTC).ord;
 
@@ -88,10 +93,10 @@ class EntryEodTrend extends Entry implements DDF_EntryTrend {
 
 		final StringBuilder text = new StringBuilder(128);
 
-		text.append(encodeInstrument(instrument, millisUTC));
+		text.append(encodeInstrument(inst, millisUTC));
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(encodeEodTime(millisUTC, instrument));
+		text.append(encodeEodTime(millisUTC, inst));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(encodeMantissa(priceSupport(), priceExponent()));

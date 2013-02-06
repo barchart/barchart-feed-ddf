@@ -9,19 +9,18 @@ package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryOrder.*;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.*;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.*;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind;
@@ -62,12 +61,12 @@ final class CodecHelper {
 		final CharSequence username = settings.getAuthUser();
 		final CharSequence password = settings.getAuthPass();
 
-		final DDF_Instrument instrument = query.instrument;
+		final Instrument instrument = query.instrument;
 		final CharSequence symbol = instrument
-				.get(DDF_InstrumentField.DDF_SYMBOL_HISTORICAL);
+				.get(InstrumentField.SYMBOL);  // TODO Need to modify symbol
 
-		final DateTimeZone timeZone = instrument
-				.get(DDF_InstrumentField.DDF_EXCHANGE).kind.time.zone;
+		final DateTimeZone timeZone = DateTimeZone.forOffsetMillis(
+				(int)instrument.get(InstrumentField.TIME_ZONE_OFFSET).asLong());
 		final CharSequence start = requestTime(query.timeStart, timeZone);
 		final CharSequence end = requestTime(query.timeEnd, timeZone);
 
@@ -218,8 +217,8 @@ final class CodecHelper {
 		return QUERY_TIME.print(queryTime);
 	}
 
-	static final boolean isFuture(final DDF_Instrument instrument) {
-		return instrument.get(DDF_InstrumentField.DDF_EXCHANGE).kind == DDF_ExchangeKind.FUTURE;
+	static final boolean isFuture(final Instrument instrument) {
+		return instrument.get(InstrumentField.CFI_CODE).charAt(0) == 'F';
 	}
 
 	final static String[] splitCSV(final String string) {
@@ -234,12 +233,12 @@ final class CodecHelper {
 	DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
 	static long decodeTicksTime(final String string,
-			final DDF_Instrument instrument) {
+			final Instrument instrument) {
 		return decodeTime(string, instrument, RESULT_TIME_TICKS);
 	}
 
 	static String encodeTicksTime(final long millisUTC,
-			final DDF_Instrument instrument) {
+			final Instrument instrument) {
 		return encodeTime(millisUTC, instrument, RESULT_TIME_TICKS);
 	}
 
@@ -251,12 +250,12 @@ final class CodecHelper {
 	DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 
 	static long decodeMinsTime(final String string,
-			final DDF_Instrument instrument) {
+			final Instrument instrument) {
 		return decodeTime(string, instrument, RESULT_TIME_MINS);
 	}
 
 	static String encodeMinsTime(final long millisUTC,
-			final DDF_Instrument instrument) {
+			final Instrument instrument) {
 		return encodeTime(millisUTC, instrument, RESULT_TIME_MINS);
 	}
 
@@ -267,12 +266,12 @@ final class CodecHelper {
 	DateTimeFormat.forPattern("yyyy-MM-dd");
 
 	static long decodeEodTime(final String string,
-			final DDF_Instrument instrument) {
+			final Instrument instrument) {
 		return decodeTime(string, instrument, RESULT_TIME_EOD);
 	}
 
 	static String encodeEodTime(final long millisUTC,
-			final DDF_Instrument instrument) {
+			final Instrument instrument) {
 		return encodeTime(millisUTC, instrument, RESULT_TIME_EOD);
 	}
 
@@ -430,14 +429,16 @@ final class CodecHelper {
 	}
 
 	static long decodeTime(final String string,
-			final DDF_Instrument instrument, final DateTimeFormatter format) {
-		final DateTimeZone zone = instrument.get(DDF_InstrumentField.DDF_ZONE).zone;
+			final Instrument instrument, final DateTimeFormatter format) {
+		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument 
+				.get(InstrumentField.TIME_ZONE_OFFSET).asLong()));
 		return format.withZone(zone).parseMillis(string);
 	}
 
 	static String encodeTime(final long millisUTC,
-			final DDF_Instrument instrument, final DateTimeFormatter format) {
-		final DateTimeZone zone = instrument.get(DDF_InstrumentField.DDF_ZONE).zone;
+			final Instrument instrument, final DateTimeFormatter format) {
+		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument 
+				.get(InstrumentField.TIME_ZONE_OFFSET).asLong()));
 		return format.withZone(zone).print(millisUTC);
 	}
 
@@ -448,18 +449,18 @@ final class CodecHelper {
 		return false;
 	}
 
-	static DDF_Instrument decodeInstrument(/* local */final String symbol) {
+	static Instrument decodeInstrument(/* local */final String symbol) {
 		if (isEmpty(symbol)) {
-			return DDF_InstrumentProvider.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		// if (DDF_Symbology.isFutureHistorical(symbol)) {
 		// symbol = DDF_Symbology.futureNormalFromHistorical(symbol);
 		// // System.out.println("### YES ###");
 		// }
-		return DDF_InstrumentProvider.findDDF(symbol);
+		return DDF_InstrumentProvider.find(symbol);
 	}
 
-	static String encodeInstrument(final DDF_Instrument instrument,
+	static String encodeInstrument(final Instrument instrument,
 			final long millisUTC) {
 		if (instrument == null) {
 			return "";
@@ -471,7 +472,7 @@ final class CodecHelper {
 		// .getSymbol();
 		// return symbolDDF.getGroup() + symbolDDF.getMonth().code + year;
 		// }
-		return instrument.get(DDF_SYMBOL_UNIVERSAL).toString();
+		return instrument.get(InstrumentField.SYMBOL).toString();
 	}
 
 }

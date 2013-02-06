@@ -26,6 +26,7 @@ import static com.barchart.util.ascii.ASCII.NUL;
 
 import java.nio.ByteBuffer;
 
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;
@@ -34,7 +35,6 @@ import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 
@@ -108,7 +108,7 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 			final SizeValue size = HelperDDF.newSizeDDF(sizeBidArray[index]);
 
 			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, BID,
-					MarketBookType.DEFAULT, place, price, size);
+					BookLiquidityType.DEFAULT, place, price, size);
 
 			entries[entryIndex++] = entry;
 
@@ -128,7 +128,7 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 			final SizeValue size = HelperDDF.newSizeDDF(sizeAskArray[index]);
 
 			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, ASK,
-					MarketBookType.DEFAULT, place, price, size);
+					BookLiquidityType.DEFAULT, place, price, size);
 
 			entries[entryIndex++] = entry;
 

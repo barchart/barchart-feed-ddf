@@ -40,12 +40,15 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
+import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
@@ -58,10 +61,6 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
-import com.barchart.feed.inst.api.InstrumentField;
-import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -93,7 +92,7 @@ class VarMarketDDF extends VarMarket {
 
 		final Instrument oldInst = get(INSTRUMENT);
 
-		if (InstrumentConst.NULL_INSTRUMENT.equals(oldInst)) {
+		if (Instrument.NULL_INSTRUMENT.equals(oldInst)) {
 			set(INSTRUMENT, newSymbol);
 		} else {
 			throw new IllegalStateException("symbol can be set only once");
@@ -177,7 +176,7 @@ class VarMarketDDF extends VarMarket {
 		default:
 			eventAdd(NEW_BOOK_ERROR);
 			final Instrument inst = get(MarketField.INSTRUMENT);
-			final TextValue id = inst.get(InstrumentField.ID);
+			final SizeValue id = inst.get(InstrumentField.GUID);
 			final TextValue comment = inst.get(InstrumentField.DESCRIPTION);
 			log.error("instrument : {} : {}", id, comment);
 			log.error("result : {} ; entry : {} ;", result, entry);
@@ -404,7 +403,8 @@ class VarMarketDDF extends VarMarket {
 
 			final Instrument inst = get(INSTRUMENT);
 
-			final MarketBookType type = inst.get(InstrumentField.BOOK_TYPE);
+			final MarketBookType type = MarketBookType.fromText(
+					inst.get(InstrumentField.BOOK_LIQUIDITY_TYPE));
 			final SizeValue size = LIMIT;
 			final PriceValue step = inst.get(InstrumentField.PRICE_STEP);
 

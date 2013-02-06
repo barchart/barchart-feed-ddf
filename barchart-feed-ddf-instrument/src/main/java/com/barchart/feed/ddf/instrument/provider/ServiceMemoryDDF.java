@@ -18,12 +18,10 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.inst.SymbologyContext;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
-import com.barchart.feed.inst.api.InstrumentGUID;
-import com.barchart.feed.inst.api.SymbologyContext;
 import com.barchart.util.anno.ThreadSafe;
 
 /**
@@ -103,48 +101,25 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	public Instrument lookup(final CharSequence symbol) {
 		
 		if(symbol == null || symbol.length() == 0) {
-			return InstrumentConst.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
 		final InstrumentGUID guid = remote.lookup(symbol.toString().toUpperCase());
 		
-		if(guid.equals(InstrumentConst.NULL_GUID)) {
-			return InstrumentConst.NULL_INSTRUMENT;
+		if(guid.equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
 		Instrument instrument = guidMap.get(guid);
 
 		if (instrument == null) {
-			return InstrumentConst.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 
 		return new InstrumentDDF(instrument);
 		
 	}
 
-	@Override
-	public DDF_Instrument lookupDDF(final CharSequence symbol) {
-
-		if (symbol == null || symbol.length() == 0) {
-			return DDF_InstrumentProvider.NULL_INSTRUMENT;
-		}
-
-		final InstrumentGUID guid = remote.lookup(symbol.toString().toUpperCase());
-		
-		if(guid.equals(InstrumentConst.NULL_GUID)) {
-			return DDF_InstrumentProvider.NULL_INSTRUMENT;
-		}
-		
-		Instrument instrument = guidMap.get(guid);
-
-		if (instrument == null) {
-			return DDF_InstrumentProvider.NULL_INSTRUMENT;
-		}
-
-		return new InstrumentDDF(instrument);
-
-	}
-	
 	@Override
 	public Map<CharSequence, Instrument> lookup(Collection<? extends CharSequence> symbols) {
 		
@@ -162,27 +137,6 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		}
 
 		return instMap;
-	}
-
-	@Override
-	public Map<CharSequence, DDF_Instrument> lookupDDF(final Collection<? extends CharSequence> symbolList) {
-
-		if (symbolList == null || symbolList.size() == 0) {
-			return DDF_InstrumentProvider.NULL_MAP;
-		}
-
-		final Map<CharSequence, InstrumentGUID> gMap = remote.lookup(symbolList);
-				
-		final Map<CharSequence, DDF_Instrument> instMap = 
-				new HashMap<CharSequence, DDF_Instrument>();
-
-		for (final CharSequence symbol : symbolList) {
-			instMap.put(symbol.toString(), new InstrumentDDF(guidMap.get(
-					gMap.get(symbol.toString().toUpperCase()))));
-		}
-
-		return instMap;
-
 	}
 
 	@Override

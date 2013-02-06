@@ -13,16 +13,15 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
-import com.barchart.feed.inst.api.Instrument;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -48,7 +47,7 @@ public class TestDDF_MarketService {
 	@Test
 	public void testMakeDDF_MarketBaseMarketDo() throws Exception {
 
-		final DDF_Instrument instrument = DDF_InstrumentProvider.findDDF("RJZ1");
+		final Instrument instrument = DDF_InstrumentProvider.find("RJZ1");
 
 		log.debug("instrument : {}", instrument);
 

@@ -16,15 +16,14 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
-import com.barchart.feed.inst.api.Instrument;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -63,8 +62,8 @@ public class LoggingHandler implements DDF_MessageListener {
 			e.printStackTrace();
 		}
 
-		final DDF_Instrument instrument2 = DDF_InstrumentProvider.findDDF("XFU2");
-		final DDF_Instrument instrument = DDF_InstrumentProvider.findDDF("RMN2");
+		final Instrument instrument2 = DDF_InstrumentProvider.find("XFU2");
+		final Instrument instrument = DDF_InstrumentProvider.find("RMN2");
 
 		symbolList.add(instrument);
 		symbolList.add(instrument2);

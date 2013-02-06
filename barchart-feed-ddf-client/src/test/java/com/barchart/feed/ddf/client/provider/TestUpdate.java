@@ -10,6 +10,7 @@
  */
 package com.barchart.feed.ddf.client.provider;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -17,7 +18,6 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.client.provider.BarchartFeedClient;
-import com.barchart.feed.inst.api.Instrument;
 
 /**
  * @author g-litchfield

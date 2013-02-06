@@ -29,7 +29,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 class TaskUpdate implements Callable<Void> {
@@ -200,10 +200,10 @@ class TaskUpdate implements Callable<Void> {
 
 			batchSize += symbolBatch.size();
 
-			final List<DDF_Instrument> instrumentList = DDF_InstrumentProvider
+			final List<Instrument> instrumentList = DDF_InstrumentProvider
 					.fetch(symbolBatch);
 
-			for (final DDF_Instrument instrument : instrumentList) {
+			for (final Instrument instrument : instrumentList) {
 
 				checkInterrupt("intrument update");
 

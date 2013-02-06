@@ -10,14 +10,14 @@ package com.barchart.feed.ddf.client.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.provider.BarchartFeedReceiver;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.util.values.util.ValueUtil;
 
 public class TestAllMarketsReceiver {
@@ -79,7 +79,7 @@ public class TestAllMarketsReceiver {
 					final StringBuilder sb =
 							new StringBuilder("Taker 1 Event: ").append(event);
 
-					sb.append(" " + instrument.get(InstrumentField.ID));
+					sb.append(" " + instrument.get(InstrumentField.MARKET_GUID));
 
 					sb.append(" BID "
 							+ ValueUtil.asDouble(value

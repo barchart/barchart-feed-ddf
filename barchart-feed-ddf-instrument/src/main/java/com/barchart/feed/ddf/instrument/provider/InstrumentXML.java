@@ -1,5 +1,6 @@
 package com.barchart.feed.ddf.instrument.provider;
 
+import static com.barchart.feed.api.fields.InstrumentField.*;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.BASE_CODE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.EXCHANGE_COMMENT;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.EXCHANGE_DDF;
@@ -25,7 +26,6 @@ import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlTimeDecode;
 import static com.barchart.util.values.provider.ValueBuilder.newPrice;
 import static com.barchart.util.values.provider.ValueBuilder.newText;
-import static com.barchart.feed.inst.api.InstrumentField.*;
 
 
 import java.util.HashMap;
@@ -34,13 +34,11 @@ import java.util.Map;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.InstrumentFieldDDF;
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.enums.CodeCFI;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.PriceValue;
@@ -54,7 +52,7 @@ public final class InstrumentXML {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public static DDF_Instrument decodeXML(final Element tag) throws Exception {
+	public static Instrument decodeXML(final Element tag) throws Exception {
 		
 		// lookup status
 
@@ -72,7 +70,7 @@ public final class InstrumentXML {
 
 		// decode DOM
 		
-		final String guid = xmlStringDecode(tag, GUID, XML_STOP);
+		final long guid = Long.parseLong(xmlStringDecode(tag, GUID, XML_STOP));
 		final String symbolHist = xmlStringDecode(tag, SYMBOL_HIST, XML_STOP);
 		final String symbolReal = xmlStringDecode(tag, SYMBOL_REALTIME, XML_STOP);
 		final String symbolDDFReal = xmlStringDecode(tag, SYMBOL_DDF_REAL, XML_STOP);
@@ -118,34 +116,23 @@ public final class InstrumentXML {
 		
 		/* GENERIC */
 		
-		map.put(ID, newText(guid));
+		map.put(MARKET_GUID, ValueBuilder.newSize(guid));
 		map.put(SYMBOL, newText(symbolReal));
 		map.put(DESCRIPTION, newText(symolComment));
-		map.put(TYPE, CodeCFI.fromCode(codeCFI));
-		map.put(EXCHANGE_ID, newText(exchange.name()));
-		map.put(FRACTION, frac.fraction);
+		map.put(CFI_CODE, newText(codeCFI));
+		map.put(EXCHANGE_CODE, newText(exchange.name()));
+		//map.put(FRACTION, frac.fraction);
 		map.put(PRICE_STEP, priceStep);
-		map.put(PRICE_POINT, pricePoint);
-		map.put(TIME_ZONE, newText(zone.code));
-		map.put(DATE_FINISH, expire);
-		
-		/* PROPRIETARY */
-
-		map.put(InstrumentFieldDDF.DDF_EXPIRE_MONTH, newText(ddf_expire_month));
-		map.put(InstrumentFieldDDF.DDF_EXPIRE_YEAR, newText(ddf_expire_year));
-		map.put(InstrumentFieldDDF.DDF_ZONE, zone);
-		map.put(InstrumentFieldDDF.DDF_EXCHANGE, exchange);
-		map.put(InstrumentFieldDDF.DDF_EXCH_DESC, newText(exchangeComment));
-		map.put(InstrumentFieldDDF.DDF_SYMBOL_UNIVERSAL, newText(symbolReal));
-		map.put(InstrumentFieldDDF.DDF_SYMBOL_HISTORICAL, newText(symbolHist));
-		map.put(InstrumentFieldDDF.DDF_SYMBOL_REALTIME, newText(symbolDDFReal));
+		map.put(POINT_VALUE, pricePoint);
+		map.put(TIME_ZONE_OFFSET, newText(zone.code));
+		//map.put(DATE_FINISH, expire);
 		
 		return new InstrumentDDF(InstrumentFactory.build(map));
 		
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public static DDF_Instrument decodeSAX(final Attributes ats) throws Exception {
+	public static Instrument decodeSAX(final Attributes ats) throws Exception {
 		
 		// lookup status
 		final String statusCode = xmlStringDecode(ats, STATUS, XML_STOP);
@@ -156,7 +143,7 @@ public final class InstrumentXML {
 		}
 
 		// decode SAX
-		final String guid = xmlStringDecode(ats, GUID, XML_STOP);
+		final long guid = Long.parseLong(xmlStringDecode(ats, GUID, XML_STOP));
 		final String symbolHist = xmlStringDecode(ats, SYMBOL_HIST, XML_STOP);
 		final String symbolReal = xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP);
 		final String symbolDDFReal = xmlStringDecode(ats, SYMBOL_DDF_REAL, XML_STOP);
@@ -199,28 +186,16 @@ public final class InstrumentXML {
 		final Map<Tag, Object> map = new HashMap<Tag, Object>();
 		
 		/* GENERIC */
-		
-		map.put(ID, newText(guid));
+		map.put(MARKET_GUID, ValueBuilder.newSize(guid));
 		map.put(SYMBOL, newText(symbolReal));
 		map.put(DESCRIPTION, newText(symolComment));
-		map.put(TYPE, CodeCFI.fromCode(codeCFI));
-		map.put(EXCHANGE_ID, newText(exchange.name()));
-		map.put(FRACTION, frac.fraction);
+		map.put(CFI_CODE, newText(codeCFI));
+		map.put(EXCHANGE_CODE, newText(exchange.name()));
+		//map.put(FRACTION, frac.fraction);
 		map.put(PRICE_STEP, priceStep);
-		map.put(PRICE_POINT, pricePoint);
-		map.put(TIME_ZONE, newText(zone.code));
-		map.put(DATE_FINISH, expire);
-		
-		/* PROPRIETARY */
-
-		map.put(InstrumentFieldDDF.DDF_EXPIRE_MONTH, newText(ddf_expire_month));
-		map.put(InstrumentFieldDDF.DDF_EXPIRE_YEAR, newText(ddf_expire_year));
-		map.put(InstrumentFieldDDF.DDF_ZONE, zone);
-		map.put(InstrumentFieldDDF.DDF_EXCHANGE, exchange);
-		map.put(InstrumentFieldDDF.DDF_EXCH_DESC, newText(exchangeComment));
-		map.put(InstrumentFieldDDF.DDF_SYMBOL_UNIVERSAL, newText(symbolReal));
-		map.put(InstrumentFieldDDF.DDF_SYMBOL_HISTORICAL, newText(symbolHist));
-		map.put(InstrumentFieldDDF.DDF_SYMBOL_REALTIME, newText(symbolDDFReal));
+		map.put(POINT_VALUE, pricePoint);
+		map.put(TIME_ZONE_OFFSET, newText(zone.code));
+		//map.put(DATE_FINISH, expire);
 		
 		return new InstrumentDDF(InstrumentFactory.build(map));
 		

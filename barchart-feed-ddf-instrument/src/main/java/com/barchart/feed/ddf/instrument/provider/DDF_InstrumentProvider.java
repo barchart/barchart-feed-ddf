@@ -33,11 +33,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.util.HelperXML;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -51,15 +49,11 @@ public final class DDF_InstrumentProvider {
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_InstrumentProvider.class);
 
-	/** The Constant NULL_INSTRUMENT. */
-	public static final DDF_Instrument NULL_INSTRUMENT = 
-			new InstrumentDDF(InstrumentConst.NULL_INSTRUMENT);
-
-	static final List<DDF_Instrument> NULL_LIST = Collections
-			.unmodifiableList(new ArrayList<DDF_Instrument>(0));
+	static final List<Instrument> NULL_LIST = Collections
+			.unmodifiableList(new ArrayList<Instrument>(0));
 	
-	static final Map<CharSequence, DDF_Instrument> NULL_MAP = Collections
-			.unmodifiableMap(new HashMap<CharSequence, DDF_Instrument>(0));
+	static final Map<CharSequence, Instrument> NULL_MAP = Collections
+			.unmodifiableMap(new HashMap<CharSequence, Instrument>(0));
 
 	static final String SERVER_EXTRAS = "extras.ddfplus.com";
 
@@ -143,38 +137,11 @@ public final class DDF_InstrumentProvider {
 		return insts;
 	}
 	
-	/**
-	 * Find ddf.
-	 * 
-	 * @param symbol
-	 *            the symbol
-	 * @return the dD f_ instrument
-	 */
-	public static DDF_Instrument findDDF(final CharSequence symbol) {
-		return instance().lookupDDF(symbol);
-	}
-
-	/**
-	 * NOTE: cache via instrument service;.
-	 * 
-	 * @param symbolList
-	 *            the symbol list
-	 * @return list with instruments or empty list;
-	 */
-	public static Map<? extends CharSequence, DDF_Instrument> findDDF(
-			final Collection<? extends CharSequence> symbolList) {
-		return instance().lookupDDF(symbolList);
-	}
-	
-	public static DDF_Instrument wrapInstrument(final Instrument inst) {
-		return new InstrumentDDF(inst);
-	}
-	
-	class RetrieveInstrument implements Future<DDF_Instrument> {
+	class RetrieveInstrument implements Future<Instrument> {
 
 		private final TextValue symbol;
 
-		private volatile DDF_Instrument result = null;
+		private volatile Instrument result = null;
 
 		RetrieveInstrument(final String symbol) {
 			this.symbol = ValueBuilder.newText(symbol);
@@ -190,14 +157,14 @@ public final class DDF_InstrumentProvider {
 		}
 
 		@Override
-		public DDF_Instrument get() throws InterruptedException,
+		public Instrument get() throws InterruptedException,
 				ExecutionException {
-			result = instance().lookupDDF(symbol);
+			result = instance().lookup(symbol);
 			return result;
 		}
 
 		@Override
-		public DDF_Instrument get(final long timeout, final TimeUnit unit)
+		public Instrument get(final long timeout, final TimeUnit unit)
 				throws InterruptedException, ExecutionException,
 				TimeoutException {
 			throw new UnsupportedOperationException("Not Supported");
@@ -215,11 +182,11 @@ public final class DDF_InstrumentProvider {
 
 	}
 
-	class RetrieveInstrumentList implements Future<Map<CharSequence, DDF_Instrument>> {
+	class RetrieveInstrumentList implements Future<Map<CharSequence, Instrument>> {
 
 		private final List<CharSequence> symbolList;
 
-		private volatile Map<CharSequence, DDF_Instrument> result;
+		private volatile Map<CharSequence, Instrument> result;
 
 		RetrieveInstrumentList(final List<CharSequence> symbolList) {
 			this.symbolList = symbolList;
@@ -231,14 +198,14 @@ public final class DDF_InstrumentProvider {
 		}
 
 		@Override
-		public Map<CharSequence, DDF_Instrument> get() throws InterruptedException,
+		public Map<CharSequence, Instrument> get() throws InterruptedException,
 				ExecutionException {
-			result = instance().lookupDDF(symbolList);
+			result = instance().lookup(symbolList);
 			return result;
 		}
 
 		@Override
-		public Map<CharSequence, DDF_Instrument> get(final long timeout, final TimeUnit unit)
+		public Map<CharSequence, Instrument> get(final long timeout, final TimeUnit unit)
 						throws InterruptedException, ExecutionException,
 						TimeoutException {
 			throw new UnsupportedOperationException("Not Supported");
@@ -263,7 +230,7 @@ public final class DDF_InstrumentProvider {
 	 *            the symbol list
 	 * @return the list
 	 */
-	public static List<DDF_Instrument> fetch(final List<String> symbolList) {
+	public static List<Instrument> fetch(final List<String> symbolList) {
 
 		if(symbolList == null || symbolList.size() == 0) {
 			return NULL_LIST;
@@ -330,11 +297,11 @@ public final class DDF_InstrumentProvider {
 
 	}
 
-	private static List<DDF_Instrument> remoteLookup(final List<String> symbolList)
+	private static List<Instrument> remoteLookup(final List<String> symbolList)
 			throws Exception {
 
-		final List<DDF_Instrument> list =
-				new ArrayList<DDF_Instrument>(symbolList.size());
+		final List<Instrument> list =
+				new ArrayList<Instrument>(symbolList.size());
 
 		final String symbolString = concatenate(symbolList);
 
@@ -369,7 +336,7 @@ public final class DDF_InstrumentProvider {
 						try {
 
 							final Instrument instrument = InstrumentXML.decodeSAX(attributes);
-							final DDF_Instrument ddfInst = new InstrumentDDF(instrument);
+							final Instrument ddfInst = new InstrumentDDF(instrument);
 							list.add(ddfInst);
 
 						} catch (final SymbolNotFoundException e) {

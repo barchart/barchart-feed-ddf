@@ -24,11 +24,8 @@ import org.apache.lucene.search.WildcardQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
-import com.barchart.feed.ddf.instrument.enums.InstrumentFieldDDF;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
-import com.barchart.feed.inst.api.InstrumentField;
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.core.Tag;
 import com.barchart.util.enums.DictEnum;
@@ -42,6 +39,7 @@ import com.barchart.util.values.provider.ValueBuilder;
 
 class CodecHelper {
 
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(CodecHelper.class);
 
 	//
@@ -61,8 +59,6 @@ class CodecHelper {
 	//
 
 	static final Tag<?>[] BASE = InstrumentField.FIELDS;
-
-	static final Tag<?>[] EXTRA = InstrumentFieldDDF.FIELDS;
 
 	//
 
@@ -258,10 +254,10 @@ class CodecHelper {
 	}
 
 	/** must be globally unique */
-	static Term getKeyTerm(final DDF_Instrument instrument) {
+	static Term getKeyTerm(final Instrument instrument) {
 
 		final String name = CodecHelper.FIELD_INST_ID;
-		final String value = instrument.get(InstrumentField.ID).toString();
+		final String value = instrument.get(InstrumentField.MARKET_GUID).toString();
 
 		final Term term = new Term(name, value);
 
@@ -270,7 +266,7 @@ class CodecHelper {
 	}
 
 	/** convert instrument into lucene document */
-	static Document instrumentEncode(final DDF_Instrument instrument) {
+	static Document instrumentEncode(final Instrument instrument) {
 
 		final Document doc = new Document();
 
@@ -292,7 +288,7 @@ class CodecHelper {
 		{
 
 			final String name = CodecHelper.FIELD_INST_BODY;
-			final String value = instrument.fullText();
+			final String value = fullText(instrument);
 
 			/** index; do not store */
 			final Field bodyField = new Field(name, value, Field.Store.NO,
@@ -315,26 +311,72 @@ class CodecHelper {
 
 		}
 
-		for (final Tag<?> field : CodecHelper.EXTRA) {
-
-			final String name = field.getName();
-			final String value = encode(field, instrument.get(field));
-
-			/** store; do not index */
-			final Field extraField = new Field(name, value, Field.Store.YES,
-					Field.Index.NO);
-
-			doc.add(extraField);
-
-		}
-
 		return doc;
 
 	}
+	
+	//TODO
+	static String fullText(final Instrument inst) {
+		
+		/*@Override
+		public String fullText() {
+
+			final StringBuilder text = new StringBuilder(256);
+
+			text.append(get(DDF_SYMBOL_UNIVERSAL));
+			text.append(SPACE);
+
+			text.append(get(DDF_SYMBOL_HISTORICAL));
+			text.append(SPACE);
+
+			text.append(get(DDF_SYMBOL_REALTIME));
+			text.append(SPACE);
+
+			text.append(get(DESCRIPTION));
+			text.append(SPACE);
+
+			text.append(get(DDF_EXCHANGE));
+			text.append(SPACE);
+
+			// text.append(get(DDF_EXCHANGE).kind);
+			// text.append(SPACE);
+
+			text.append(get(DDF_EXCHANGE).description);
+			text.append(SPACE);
+
+			text.append(get(DDF_EXCH_DESC));
+			text.append(SPACE);
+
+			text.append(get(TYPE).getDescription());
+			text.append(SPACE);
+
+			addSpreadComponents(text);
+
+			final TimeValue expire = get(DATE_FINISH);
+			if (!expire.isNull()) {
+
+				text.append(MarketDisplay.timeMonthFull(expire));
+				text.append(SPACE);
+
+				text.append(MarketDisplay.timeYearFull(expire));
+				text.append(SPACE);
+
+				text.append(MarketDisplay.timeYearShort(expire));
+				text.append(SPACE);
+
+			}
+
+			return text.toString();
+
+		}*/
+
+		
+		return null;
+	}
 
 	/** convert lucene document into instrument */
-	@SuppressWarnings("unchecked")
-	static <V extends Value<V>> DDF_Instrument instrumentDecode(
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	static <V extends Value<V>> Instrument instrumentDecode(
 			final Document doc) {
 		
 		Map<Tag, Object> tags = new HashMap<Tag, Object>();
@@ -352,25 +394,12 @@ class CodecHelper {
 
 		}
 
-		for (final Tag<?> field : CodecHelper.EXTRA) {
-
-			final String name = field.getName();
-			final String value = doc.get(name);
-
-			if (!isValid(value)) {
-				continue;
-			}
-
-			tags.put(field, (V) decode(field, value));
-
-		}
-
-		return DDF_InstrumentProvider.wrapInstrument((InstrumentFactory.build(tags)));
+		return InstrumentFactory.build(tags);
 
 	}
 
 	/** re index instrument in lucene store */
-	static void update(final IndexWriter writer, final DDF_Instrument entry)
+	static void update(final IndexWriter writer, final Instrument entry)
 			throws Exception {
 
 		final Term key = getKeyTerm(entry);
@@ -382,7 +411,7 @@ class CodecHelper {
 	}
 
 	static boolean isPresent(final IndexSearcher searcher,
-			final DDF_Instrument instrument) throws Exception {
+			final Instrument instrument) throws Exception {
 
 		final Term term = getKeyTerm(instrument);
 

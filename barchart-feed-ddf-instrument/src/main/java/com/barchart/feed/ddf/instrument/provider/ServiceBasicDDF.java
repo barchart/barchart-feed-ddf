@@ -17,10 +17,9 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.core.Tag;
 import com.barchart.util.anno.ThreadSafe;
@@ -41,70 +40,19 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 	public ServiceBasicDDF() {
 	}
 
-	/**
-	 * TODO add more fields via symbol parser.
-	 * 
-	 * @param symbol
-	 *            the symbol
-	 * @return the dD f_ instrument
-	 */
-	@SuppressWarnings("rawtypes")
-	@Override
-	public DDF_Instrument lookupDDF(final CharSequence symbol) {
-
-		if(symbol == null || symbol.length() == 0) {
-			return DDF_InstrumentProvider.NULL_INSTRUMENT;
-		}
-		
-		/** make an upper case id */
-		final TextValue lookup = lookupFromSymbol(ValueBuilder.newText(symbol.toString()));
-
-		final Map<Tag, Object> map = new HashMap<Tag, Object>();
-		map.put(InstrumentField.ID, lookup);
-		final DDF_Instrument instrument = new InstrumentDDF(InstrumentFactory.build(map));
-
-		return instrument;
-
-	}
-
-	@Override
-	public Map<CharSequence, DDF_Instrument> lookupDDF(final Collection<? extends CharSequence> symbolList) {
-
-		if(symbolList == null || symbolList.size() == 0) {
-			return DDF_InstrumentProvider.NULL_MAP;
-		}
-		
-		final Map<CharSequence, DDF_Instrument> list = new HashMap<CharSequence, DDF_Instrument>(
-				symbolList.size());
-
-		for (final CharSequence symbol : symbolList) {
-
-			final DDF_Instrument instrument = lookupDDF(ValueBuilder
-					.newText(symbol.toString()));
-
-			if (instrument.isNull()) {
-				continue;
-			}
-
-			list.put(symbol, instrument);
-		}
-
-		return list;
-	}
-
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Instrument lookup(final CharSequence symbol) {
 		if(symbol == null || symbol.length() == 0) {
-			return DDF_InstrumentProvider.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
 		/** make an upper case id */
 		final TextValue lookup = lookupFromSymbol(ValueBuilder.newText(symbol.toString()));
 
 		final Map<Tag, Object> map = new HashMap<Tag, Object>();
-		map.put(InstrumentField.ID, lookup);
-		final DDF_Instrument instrument = new InstrumentDDF(InstrumentFactory.build(map));
+		map.put(InstrumentField.MARKET_GUID, lookup);
+		final Instrument instrument = new InstrumentDDF(InstrumentFactory.build(map));
 
 		return instrument;
 	}

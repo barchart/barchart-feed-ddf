@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.inst.enums.MarketBookType.*;
+import static com.barchart.feed.api.enums.BookLiquidityType.*;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
 import static com.barchart.feed.base.book.enums.MarketBookSide.BID;

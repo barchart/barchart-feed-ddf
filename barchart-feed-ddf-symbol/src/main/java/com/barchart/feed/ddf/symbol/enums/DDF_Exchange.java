@@ -180,6 +180,11 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	public final static DDF_Exchange fromOrd(final byte ord) {
 		return ENUM_VALUES[ord];
 	}
+	
+	//TODO
+	public static final DDF_Exchange fromMICCode(final String code) {
+		return null;
+	}
 
 	/**
 	 * Checks if is known.

@@ -7,7 +7,8 @@
  */
 package bench;
 
-import com.barchart.feed.base.bar.api.MarketBar;
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.book.enums.MarketBookSide;
@@ -16,8 +17,6 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.provider.BarchartFeedReceiver;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.util.values.util.ValueUtil;
 
 /**
@@ -102,7 +101,7 @@ public class Receiver {
 						final Instrument instrument, final Market value) {
 
 					final StringBuilder sb = new StringBuilder(value.get(
-							MarketField.INSTRUMENT).get(InstrumentField.ID))
+							MarketField.INSTRUMENT).get(InstrumentField.MARKET_GUID).toString())
 							.append(" ")
 							.append(event)
 							.append(" EventTime=")
@@ -126,9 +125,6 @@ public class Receiver {
 								.append(ValueUtil.asDouble(entry.price()))
 								.append(" qty=").append(entry.size().asLong());
 					}
-
-					final MarketBar barCurrent = value
-							.get(MarketField.BAR_CURRENT);
 
 					System.out.println(sb.toString());
 

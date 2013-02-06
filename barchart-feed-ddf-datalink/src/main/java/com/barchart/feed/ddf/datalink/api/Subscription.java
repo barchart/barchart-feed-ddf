@@ -13,11 +13,10 @@ package com.barchart.feed.ddf.datalink.api;
 import java.util.Collection;
 import java.util.Set;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
-import com.barchart.feed.inst.api.Instrument;
 
 /**
  * Represents a subscription to a single instrument for JERQ.
@@ -49,9 +48,8 @@ public class Subscription {
 	 */
 	public Subscription(final Instrument instrument,
 			final Set<MarketEvent> events) {
-		final DDF_Instrument instrumentDDF = (DDF_Instrument) instrument;
 		this.instrument =
-				instrumentDDF.get(DDF_InstrumentField.DDF_SYMBOL_REALTIME)
+				instrument.get(InstrumentField.SYMBOL)
 						.toString();
 		this.interests = DDF_FeedInterest.fromEvents(events);
 	}

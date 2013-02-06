@@ -44,13 +44,14 @@ import java.nio.ByteBuffer;
 
 import org.w3c.dom.Element;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.provider.DefCuvolEntry;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.api.DDF_MarketCuvol;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
+import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
@@ -314,8 +315,8 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 		// hack to work around for lack of "exchange_ddf" attribute
 
-		final DDF_Instrument instrument = getInstrument();
-		setExchange(instrument.get(DDF_InstrumentField.DDF_EXCHANGE));
+		final Instrument instrument = getInstrument();
+		setExchange(DDF_Exchange.fromMICCode(instrument.get(InstrumentField.EXCHANGE_CODE).toString()));
 
 		final long millisUTC = xmlTimeDecode(getExchange().kind.time.zone, tag,
 				TIME_LAST, XML_PASS);

@@ -7,14 +7,26 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.*;
-import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
-import static com.barchart.feed.ddf.historical.provider.ConstHistorical.*;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.END_OF_DAY;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.END_OF_DAY_TREND;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_FORM_T;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_NEARBY;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_TREND;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS_FORM_T;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS_TREND;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.KEYWORD_ERROR;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.checkNull;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.urlQuery;
+import static com.barchart.feed.ddf.historical.provider.ConstHistorical.STATUS_COUNT;
+import static com.barchart.feed.ddf.historical.provider.ConstHistorical.STATUS_EMPTY;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMin;
@@ -33,7 +45,6 @@ import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryType;
 import com.barchart.feed.ddf.historical.enums.DDF_ResultStatus;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 
 // TODO: Auto-generated Javadoc
@@ -139,7 +150,7 @@ public final class DDF_HistoricalService {
 
 		final Builder builder = Builder.from(query.type);
 
-		final DDF_Instrument instrument = query.instrument;
+		final Instrument instrument = query.instrument;
 
 		final E entryReference = (E) builder.newEntry(0, null, instrument);
 
@@ -249,7 +260,7 @@ public final class DDF_HistoricalService {
 	 * @throws RuntimeException the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryTick> newResultTicks(
-			final DDF_Settings settings, final DDF_Instrument instrument,
+			final DDF_Settings settings, final Instrument instrument,
 			final DateTime timeStart, final DateTime timeEnd,
 			final DDF_QueryOrder resultOrder, final int maxRecords,
 			final DDF_ResultListener listener) throws RuntimeException {
@@ -273,7 +284,7 @@ public final class DDF_HistoricalService {
 	}
 
 	public static final DDF_Result<DDF_EntryTickFormT> newResultTicksFormT(
-			final DDF_Settings settings, final DDF_Instrument instrument,
+			final DDF_Settings settings, final Instrument instrument,
 			final DateTime timeStart, final DateTime timeEnd,
 			final DDF_QueryOrder resultOrder, final int maxRecords,
 			final DDF_ResultListener listener) throws RuntimeException {
@@ -322,7 +333,7 @@ public final class DDF_HistoricalService {
 	 * @throws RuntimeException the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryBarMin> newResultMins(
-			final DDF_Settings settings, final DDF_Instrument instrument,
+			final DDF_Settings settings, final Instrument instrument,
 			final DateTime timeStart, final DateTime timeEnd,
 			final DDF_QueryOrder resultOrder, final int maxRecords,
 			final int groupBy, final DDF_ResultListener listener)
@@ -373,7 +384,7 @@ public final class DDF_HistoricalService {
 	 * @throws RuntimeException the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryBarMinNearby> newResultMinsNearBy(
-			final DDF_Settings settings, final DDF_Instrument instrument,
+			final DDF_Settings settings, final Instrument instrument,
 			final DateTime timeStart, final DateTime timeEnd,
 			final DDF_QueryOrder resultOrder, final int maxRecords,
 			final int groupBy, final DDF_ResultListener listener)
@@ -426,7 +437,7 @@ public final class DDF_HistoricalService {
 	 * @throws RuntimeException the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryBarMinFormT> newResultMinsFormT(
-			final DDF_Settings settings, final DDF_Instrument instrument,
+			final DDF_Settings settings, final Instrument instrument,
 			final DateTime timeStart, final DateTime timeEnd,
 			final DDF_QueryOrder resultOrder, final int maxRecords,
 			final int groupBy, final DDF_ResultListener listener)
@@ -480,7 +491,7 @@ public final class DDF_HistoricalService {
 	 * @throws RuntimeException the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryBarEod> newResultEod(
-			final DDF_Settings settings, final DDF_Instrument instrument,
+			final DDF_Settings settings, final Instrument instrument,
 			final DateTime timeStart, final DateTime timeEnd,
 			final DDF_QueryOrder resultOrder, final int maxRecords,
 			final DDF_QueryEodType eodType, final DDF_QueryEodVolume eodVolume,

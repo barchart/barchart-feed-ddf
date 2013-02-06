@@ -12,9 +12,9 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.util.FeedDDF;
 
 /**
@@ -232,11 +232,11 @@ public enum DDF_FeedInterest {
 	 *            the event set
 	 * @return the char sequence
 	 */
-	public static CharSequence command(final DDF_Instrument instrumentDDF,
+	public static CharSequence command(final Instrument instrumentDDF,
 			final Set<MarketEvent> eventSet) {
 
 		final CharSequence symbol =
-				instrumentDDF.get(DDF_InstrumentField.DDF_SYMBOL_REALTIME);
+				instrumentDDF.get(InstrumentField.SYMBOL);
 
 		final CharSequence interest = DDF_FeedInterest.from(eventSet);
 

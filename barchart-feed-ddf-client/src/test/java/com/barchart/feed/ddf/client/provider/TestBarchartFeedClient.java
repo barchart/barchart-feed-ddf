@@ -13,6 +13,7 @@ package com.barchart.feed.ddf.client.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.market.api.Market;
@@ -23,7 +24,6 @@ import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.client.provider.BarchartFeedClient;
-import com.barchart.feed.inst.api.Instrument;
 
 /**
  * 

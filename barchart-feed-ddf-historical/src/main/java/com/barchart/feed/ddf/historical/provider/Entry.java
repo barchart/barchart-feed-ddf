@@ -9,10 +9,10 @@ package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.splitCSV;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
-import com.barchart.feed.inst.api.InstrumentField;
 
 // TODO: Auto-generated Javadoc
 abstract class Entry implements DDF_Entry, Codec {
@@ -23,14 +23,14 @@ abstract class Entry implements DDF_Entry, Codec {
 
 	protected long millisUTC;
 
-	protected DDF_Instrument instrument;
+	protected Instrument inst;
 
 	protected byte ordTradeDay = DDF_TradeDay.UNKNOWN.ord;
 
 	//
 
-	Entry(final DDF_Instrument instrument) {
-		this.instrument = instrument;
+	Entry(final Instrument instrument) {
+		this.inst = instrument;
 	}
 
 	//
@@ -51,8 +51,8 @@ abstract class Entry implements DDF_Entry, Codec {
 	 * @see com.barchart.feed.ddf.historical.api.DDF_Entry#getInstrument()
 	 */
 	@Override
-	public DDF_Instrument getInstrument() {
-		return instrument;
+	public Instrument getInstrument() {
+		return inst;
 	}
 
 	/*
@@ -62,7 +62,7 @@ abstract class Entry implements DDF_Entry, Codec {
 	 */
 	@Override
 	public int priceExponent() {
-		return instrument.get(InstrumentField.FRACTION).decimalExponent;
+		return (int)inst.get(InstrumentField.DISPLAY_FRACTION).decimalExponent();
 	}
 
 	//

@@ -12,19 +12,16 @@ import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_FORM_T;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_NEARBY;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_UNIVERSAL;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryType;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
-import com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind;
-import com.barchart.feed.inst.api.InstrumentField;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.clone.PublicCloneable;
 
@@ -53,7 +50,7 @@ public final class DDF_Query<E extends DDF_Entry> implements
 	public DDF_QueryType<E> type;
 
 	/** The instrument. */
-	public DDF_Instrument instrument;
+	public Instrument instrument;
 
 	/**
 	 * this parameter should be set to the desired START date/time for  the
@@ -111,7 +108,7 @@ public final class DDF_Query<E extends DDF_Entry> implements
 
 	private final CharSequence renderId() {
 		return instrument == null ? "NONE" : instrument
-				.get(DDF_SYMBOL_UNIVERSAL);
+				.get(InstrumentField.SYMBOL);
 	}
 
 	private final CharSequence renderDescription() {
@@ -127,8 +124,8 @@ public final class DDF_Query<E extends DDF_Entry> implements
 		if (instrument == null) {
 			return time.toString();
 		} else {
-			final DateTimeZone zone = instrument
-					.get(DDF_InstrumentField.DDF_ZONE).zone;
+			final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument 
+					.get(InstrumentField.TIME_ZONE_OFFSET).asLong()));
 			return time.withZone(zone).toString();
 		}
 	}
@@ -191,9 +188,9 @@ public final class DDF_Query<E extends DDF_Entry> implements
 			text.append(type);
 			text.append(" ");
 			text.append(renderId());
-			// text.append("(");
-			// text.append(renderDescription());
-			// text.append(")");
+			text.append("(");
+			text.append(renderDescription());
+			text.append(")");
 			text.append(" from ");
 			text.append(renderTime(timeStart));
 			text.append(" upto ");
@@ -211,7 +208,7 @@ public final class DDF_Query<E extends DDF_Entry> implements
 			}
 			if (type.is(END_OF_DAY)
 					&& instrument != null
-					&& instrument.get(DDF_InstrumentField.DDF_EXCHANGE).kind == DDF_ExchangeKind.FUTURE) {
+					&& instrument.get(InstrumentField.CFI_CODE).charAt(0) == 'F') {
 				text.append(" eodType ");
 				text.append(renderEodType(eodType));
 				text.append(" eodVolume ");

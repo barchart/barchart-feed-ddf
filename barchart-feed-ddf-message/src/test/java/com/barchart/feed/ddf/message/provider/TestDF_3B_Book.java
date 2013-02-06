@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.provider.DefBookEntry;
@@ -31,7 +32,6 @@ import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
@@ -189,7 +189,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 	static MarketBookEntry newEntry(final MarketBookSide side, final int place,
 			final long mant, final int exp, final int size) {
-		return new DefBookEntry(MODIFY, side, MarketBookType.DEFAULT, place,
+		return new DefBookEntry(MODIFY, side, BookLiquidityType.DEFAULT, place,
 				ValueBuilder.newPrice(mant, exp), ValueBuilder.newSize(size));
 	}
 

@@ -8,13 +8,13 @@
 package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.*;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
 
@@ -26,7 +26,7 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryEod(final DDF_Instrument instrument) {
+	public EntryEod(final Instrument instrument) {
 		super(instrument);
 	}
 
@@ -60,9 +60,9 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 
 		final String[] inputArray = splitCSV(inputLine);
 
-		instrument = decodeInstrument(inputArray[0]);
+		inst = decodeInstrument(inputArray[0]);
 
-		millisUTC = decodeEodTime(inputArray[1], instrument);
+		millisUTC = decodeEodTime(inputArray[1], inst);
 
 		ordTradeDay = DDF_TradeDay.fromMillisUTC(millisUTC).ord;
 
@@ -91,10 +91,10 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 
 		final StringBuilder text = new StringBuilder(128);
 
-		text.append(encodeInstrument(instrument, millisUTC));
+		text.append(encodeInstrument(inst, millisUTC));
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(encodeEodTime(millisUTC, instrument));
+		text.append(encodeEodTime(millisUTC, inst));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(encodeMantissa(priceOpenMantissa, priceExponent()));
@@ -138,14 +138,14 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 		text.append(index);
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(instrument.get(DDF_SYMBOL_UNIVERSAL));
+		text.append(inst.get(InstrumentField.SYMBOL));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(millisUTC);
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(new DateTime(millisUTC, instrument
-				.get(DDF_InstrumentField.DDF_ZONE).zone));
+		text.append(new DateTime(millisUTC, DateTimeZone.forOffsetMillis(
+				(int)inst.get(InstrumentField.TIME_ZONE_OFFSET).asLong())));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(encodeMantissa(priceOpenMantissa, priceExponent()));

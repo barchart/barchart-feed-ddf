@@ -7,73 +7,37 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.instrument.enums.InstrumentField.*;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.*;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_EXCH_DESC;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SPREAD;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_HISTORICAL;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_REALTIME;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYMBOL_UNIVERSAL;
-import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_ZONE;
+import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.api.fields.InstrumentField.CURRENCY_CODE;
+import static com.barchart.feed.api.fields.InstrumentField.DESCRIPTION;
+import static com.barchart.feed.api.fields.InstrumentField.EXCHANGE_CODE;
+import static com.barchart.feed.api.fields.InstrumentField.LIFETIME;
+import static com.barchart.feed.api.fields.InstrumentField.POINT_VALUE;
+import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
+import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE_OFFSET;
+import static com.barchart.feed.api.fields.InstrumentField.VENDOR;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
-import com.barchart.feed.ddf.instrument.enums.InstrumentField;
-import com.barchart.feed.ddf.instrument.enums.InstrumentFieldDDF;
-import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.feed.inst.api.Instrument;
-import com.barchart.feed.inst.api.InstrumentConst;
-import com.barchart.feed.inst.api.InstrumentGUID;
-import com.barchart.feed.inst.enums.MarketDisplay;
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.market.MarketDisplay;
+import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.feed.inst.provider.InstrumentBase;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;
-import com.barchart.util.enums.ParaEnumBase;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.api.Value;
 
-class InstrumentDDF extends InstrumentBase implements DDF_Instrument {
+class InstrumentDDF extends InstrumentBase implements Instrument {
 
 	private final Instrument inst;
 	
-	@SuppressWarnings("rawtypes")
-	private static final Map<ParaEnumBase, Tag> paraEnumMap = 
-			new HashMap<ParaEnumBase, Tag>();
-
-	static {
-		paraEnumMap.put(ID, com.barchart.feed.inst.api.InstrumentField.ID);
-		paraEnumMap.put(GROUP_ID, com.barchart.feed.inst.api.InstrumentField.GROUP_ID);
-		paraEnumMap.put(EXCHANGE_ID, com.barchart.feed.inst.api.InstrumentField.EXCHANGE_ID);
-		paraEnumMap.put(SYMBOL, com.barchart.feed.inst.api.InstrumentField.SYMBOL);
-		paraEnumMap.put(DESCRIPTION, com.barchart.feed.inst.api.InstrumentField.DESCRIPTION);
-		paraEnumMap.put(BOOK_SIZE, com.barchart.feed.inst.api.InstrumentField.BOOK_SIZE);
-		paraEnumMap.put(BOOK_TYPE, com.barchart.feed.inst.api.InstrumentField.BOOK_TYPE);
-		paraEnumMap.put(PRICE_STEP, com.barchart.feed.inst.api.InstrumentField.PRICE_STEP);
-		paraEnumMap.put(PRICE_POINT, com.barchart.feed.inst.api.InstrumentField.PRICE_POINT);
-		paraEnumMap.put(FRACTION, com.barchart.feed.inst.api.InstrumentField.FRACTION);
-		paraEnumMap.put(CURRENCY, com.barchart.feed.inst.api.InstrumentField.CURRENCY);
-		paraEnumMap.put(TYPE, com.barchart.feed.inst.api.InstrumentField.TYPE);
-		paraEnumMap.put(TIME_ZONE, com.barchart.feed.inst.api.InstrumentField.TIME_ZONE);
-		paraEnumMap.put(TIME_OPEN, com.barchart.feed.inst.api.InstrumentField.TIME_OPEN);
-		paraEnumMap.put(TIME_CLOSE, com.barchart.feed.inst.api.InstrumentField.TIME_CLOSE);
-		paraEnumMap.put(DATE_START, com.barchart.feed.inst.api.InstrumentField.DATE_START);
-		paraEnumMap.put(DATE_FINISH, com.barchart.feed.inst.api.InstrumentField.DATE_FINISH);
-		
-		paraEnumMap.put(DDF_SYMBOL_REALTIME, InstrumentFieldDDF.DDF_SYMBOL_REALTIME);
-		paraEnumMap.put(DDF_SYMBOL_HISTORICAL, InstrumentFieldDDF.DDF_SYMBOL_HISTORICAL);
-		paraEnumMap.put(DDF_SYMBOL_UNIVERSAL, InstrumentFieldDDF.DDF_SYMBOL_UNIVERSAL);
-		paraEnumMap.put(DDF_EXCHANGE, InstrumentFieldDDF.DDF_EXCHANGE);
-		paraEnumMap.put(DDF_EXCH_DESC, InstrumentFieldDDF.DDF_EXCH_DESC);
-		paraEnumMap.put(DDF_SPREAD, InstrumentFieldDDF.DDF_SPREAD);
-		paraEnumMap.put(DDF_ZONE, InstrumentFieldDDF.DDF_ZONE);
-		paraEnumMap.put(DDF_EXPIRE_MONTH, InstrumentFieldDDF.DDF_EXPIRE_MONTH);
-		paraEnumMap.put(DDF_EXPIRE_YEAR, InstrumentFieldDDF.DDF_EXPIRE_YEAR);
-	}
+	private static final MarketDisplay display = new MarketDisplayBaseImpl();
 	
 	InstrumentDDF(final Instrument inst) {
 		this.inst = inst;
@@ -81,25 +45,20 @@ class InstrumentDDF extends InstrumentBase implements DDF_Instrument {
 	
 	// Null version
 	InstrumentDDF() {
-		inst = InstrumentConst.NULL_INSTRUMENT;
+		inst = Instrument.NULL_INSTRUMENT;
 	}
 	
 	// Service Basic DDF
+	@SuppressWarnings("rawtypes")
 	InstrumentDDF(final TextValue symbol) {
 		
 		final Map<Tag, Object> map = new HashMap<Tag, Object>();
 		
-		map.put(com.barchart.feed.inst.api.InstrumentField.SYMBOL, symbol);
+		map.put(com.barchart.feed.api.fields.InstrumentField.SYMBOL, symbol);
 		inst = InstrumentFactory.build(map);
 	}
 
 	//
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <V extends Value<V>> V get(final DDF_InstrumentField<V> field) {
-		return (V) inst.get(paraEnumMap.get(field));
-	}
 
 	@Override
 	public boolean isFrozen() {
@@ -113,34 +72,21 @@ class InstrumentDDF extends InstrumentBase implements DDF_Instrument {
 
 	@Override
 	public final boolean isNull() {
-		return this == DDF_InstrumentProvider.NULL_INSTRUMENT || 
-				inst == DDF_InstrumentProvider.NULL_INSTRUMENT;
-	}
-
-	//
-	private DDF_Fraction getFractionDDF() {
-		return DDF_Fraction.fromFraction(get(FRACTION));
-	}
-
-	private final String getFractionDescription() {
-		final DDF_Fraction frac = getFractionDDF();
-		return frac + " (" + frac.fraction.description + ")";
+		return this == Instrument.NULL_INSTRUMENT || 
+				inst == Instrument.NULL_INSTRUMENT;
 	}
 
 	@Override
 	public final String toString() {
 		return "" + //
-				"\n id          : " + get(DDF_SYMBOL_UNIVERSAL) + //
+				"\n id          : " + get(SYMBOL) + //
 				"\n description : " + get(DESCRIPTION) + //
-				"\n book size   : " + get(BOOK_SIZE) + //
-				"\n currency    : " + get(CURRENCY) + //
-				"\n exchange    : " + get(DDF_EXCHANGE) + //
-				"\n exch  kind  : " + get(DDF_EXCHANGE).kind + //
-				"\n time zone   : " + get(DDF_ZONE).zone + //
-				"\n spreadType  : " + get(DDF_SPREAD) + //
-				"\n fraction    : " + getFractionDescription() + //
+				"\n book depth   : " + get(BOOK_DEPTH) + //
+				"\n currency    : " + get(CURRENCY_CODE) + //
+				"\n exchange    : " + get(EXCHANGE_CODE) + //
+				"\n time zone offset  : " + get(TIME_ZONE_OFFSET) + //
 				"\n priceStep   : " + get(PRICE_STEP) + //
-				"\n pointValue  : " + get(PRICE_POINT) + //
+				"\n pointValue  : " + get(POINT_VALUE) + //
 				"\n fullText    : " + fullText() + //
 				"";
 	}
@@ -149,7 +95,7 @@ class InstrumentDDF extends InstrumentBase implements DDF_Instrument {
 
 	private void addSpreadComponents(final StringBuilder text) {
 
-		String id = get(DDF_SYMBOL_UNIVERSAL).toString();
+		String id = get(InstrumentField.SYMBOL).toString();
 
 		/** ddf prefix in spread symbology */
 		if (id.startsWith("_S_")) {
@@ -169,62 +115,40 @@ class InstrumentDDF extends InstrumentBase implements DDF_Instrument {
 	 * 
 	 * @see com.barchart.feed.ddf.instrument.api.DDF_Instrument#fullText()
 	 */
-	@Override
 	public String fullText() {
 
 		final StringBuilder text = new StringBuilder(256);
 
-		text.append(get(DDF_SYMBOL_UNIVERSAL));
+		text.append(get(VENDOR));
 		text.append(SPACE);
 
-		text.append(get(DDF_SYMBOL_HISTORICAL));
-		text.append(SPACE);
-
-		text.append(get(DDF_SYMBOL_REALTIME));
+		text.append(get(SYMBOL));
 		text.append(SPACE);
 
 		text.append(get(DESCRIPTION));
 		text.append(SPACE);
 
-		text.append(get(DDF_EXCHANGE));
-		text.append(SPACE);
-
-		// text.append(get(DDF_EXCHANGE).kind);
-		// text.append(SPACE);
-
-		text.append(get(DDF_EXCHANGE).description);
-		text.append(SPACE);
-
-		text.append(get(DDF_EXCH_DESC));
-		text.append(SPACE);
-
-		text.append(get(TYPE).getDescription());
+		text.append(get(EXCHANGE_CODE));
 		text.append(SPACE);
 
 		addSpreadComponents(text);
 
-		final TimeValue expire = get(DATE_FINISH);
+		final TimeValue expire = inst.get(LIFETIME).stop();
 		if (!expire.isNull()) {
 
-			text.append(MarketDisplay.timeMonthFull(expire));
+			text.append(display.timeMonthFull(expire));
 			text.append(SPACE);
 
-			text.append(MarketDisplay.timeYearFull(expire));
+			text.append(display.timeYearFull(expire));
 			text.append(SPACE);
 
-			text.append(MarketDisplay.timeYearShort(expire));
+			text.append(display.timeYearShort(expire));
 			text.append(SPACE);
 
 		}
 
 		return text.toString();
 
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <V extends Value<V>> V get(final InstrumentField<V> field) {
-		return (V) inst.get(paraEnumMap.get(field));
 	}
 
 	@Override

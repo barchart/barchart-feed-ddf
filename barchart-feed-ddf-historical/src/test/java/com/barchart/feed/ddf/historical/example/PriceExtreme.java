@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.ddf.historical.example;
 
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
-import com.barchart.feed.ddf.instrument.enums.InstrumentField;
-import com.barchart.feed.inst.enums.MarketDisplay.Fraction;
-import com.barchart.feed.inst.enums.MarketDisplay;
+import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.market.MarketDisplay;
+import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
@@ -19,10 +19,12 @@ import com.barchart.util.values.provider.ValueBuilder;
  */
 class PriceExtreme {
 
-	DDF_Instrument instrument;
+	Instrument inst;
+	
+	static final MarketDisplay display = new MarketDisplayBaseImpl();
 
-	PriceExtreme(final DDF_Instrument instrument) {
-		this.instrument = instrument;
+	PriceExtreme(final Instrument instrument) {
+		this.inst = instrument;
 	}
 
 	long mantissaMin = Long.MAX_VALUE;
@@ -37,17 +39,17 @@ class PriceExtreme {
 	@Override
 	public String toString() {
 
-		final Fraction frac = instrument.get(InstrumentField.FRACTION);
-
-		final int exponent = frac.decimalExponent;
+		final int exponent = (int)inst.get(InstrumentField.DISPLAY_FRACTION).decimalExponent();
 
 		final PriceValue priceMin = ValueBuilder
 				.newPrice(mantissaMin, exponent);
 		final PriceValue priceMax = ValueBuilder
 				.newPrice(mantissaMax, exponent);
 
-		final String stringMin = MarketDisplay.priceText(priceMin, frac);
-		final String stringMax = MarketDisplay.priceText(priceMax, frac);
+		final String stringMin = display.priceText(priceMin, 
+				inst.get(InstrumentField.DISPLAY_FRACTION));
+		final String stringMax = display.priceText(priceMax, 
+				inst.get(InstrumentField.DISPLAY_FRACTION));
 
 		return String
 				.format("minimum : %s  maximum : %s", stringMin, stringMax);

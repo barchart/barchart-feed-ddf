@@ -12,11 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
-import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.values.api.Value;
 
 public class MarketTakerBuilder<V extends Value<V>> {

@@ -12,6 +12,7 @@ import static com.barchart.util.ascii.ASCII.COMMA;
 
 import java.nio.ByteBuffer;
 
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
@@ -21,7 +22,6 @@ import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.feed.inst.enums.MarketBookType;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueConst;
@@ -134,7 +134,7 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 		}
 
 		/** XXX note: {@link MarketBook#ENTRY_TOP} */
-		final MarketDoBookEntry entry = new DefBookEntry(MODIFY, side, MarketBookType.DEFAULT,
+		final MarketDoBookEntry entry = new DefBookEntry(MODIFY, side, BookLiquidityType.DEFAULT,
 				MarketBook.ENTRY_TOP, price, size);
 
 		return entry;

@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.client.provider;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.feed.inst.api.Instrument;
 import com.barchart.util.values.api.Value;
 
 public interface MarketEventCallback<V extends Value<V>> {

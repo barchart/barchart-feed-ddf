@@ -11,11 +11,11 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.api.DDF_Result;
 import com.barchart.feed.ddf.historical.provider.DDF_HistoricalService;
-import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
@@ -66,8 +66,8 @@ public class HistoricalTicksExample {
 
 		final String symbol = "esu10";
 
-		final DDF_Instrument instrument = //
-		DDF_InstrumentProvider.findDDF(symbol);
+		final Instrument instrument = //
+		DDF_InstrumentProvider.find(symbol);
 
 		if (instrument.isNull()) {
 			log.error("can not get insrument for : {}", symbol);
