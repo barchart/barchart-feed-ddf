@@ -32,13 +32,13 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	Fix_Me_8(_8_, FUTURE), //
 	Fix_Me_9(_9_, FUTURE), //
 
-	AMEX(_A_, STOCK), //
-	AMEX_Book_Top(_a_, STOCK), //
+	AMEX(_A_, STOCK), // XASE
+	AMEX_Book_Top(_a_, STOCK), // 
 
-	CME_CBOT(_B_, FUTURE), //
+	CME_CBOT(_B_, FUTURE), // XCBT
 	CME_CBOT_XXX(_b_, FUTURE), //
 
-	ICE_US(_C_, FUTURE), //
+	ICE_US(_C_, FUTURE), // IFUS
 	CME_Special_Products(_c_, FUTURE), //
 
 	NASDAQ_OTC_BB(_D_, STOCK), //

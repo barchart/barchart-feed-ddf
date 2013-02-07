@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.api.fields.InstrumentField.BOOK_DEPTH;
+import static com.barchart.feed.api.fields.InstrumentField.*;
 import static com.barchart.feed.api.fields.InstrumentField.CURRENCY_CODE;
 import static com.barchart.feed.api.fields.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.api.fields.InstrumentField.EXCHANGE_CODE;
@@ -76,19 +76,25 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 				inst == Instrument.NULL_INSTRUMENT;
 	}
 
+//	@Override
+//	public final String toString() {
+//		return "" + //
+//				"\n guid           : " + get(MARKET_GUID) + //
+//				"\n symbol       :" + get(SYMBOL) + //
+//				"\n description  : " + get(DESCRIPTION) + //
+//				"\n book depth   : " + get(BOOK_DEPTH) + //
+//				"\n currency     : " + get(CURRENCY_CODE) + //
+//				"\n exchange     : " + get(EXCHANGE_CODE) + //
+//				"\n time zone offset  : " + get(TIME_ZONE_OFFSET) + //
+//				"\n priceStep    : " + get(PRICE_STEP) + //
+//				"\n pointValue   : " + get(POINT_VALUE) + //
+//				"\n fullText     : " + fullText() + //
+//				"";
+//	}
+	
 	@Override
 	public final String toString() {
-		return "" + //
-				"\n id          : " + get(SYMBOL) + //
-				"\n description : " + get(DESCRIPTION) + //
-				"\n book depth   : " + get(BOOK_DEPTH) + //
-				"\n currency    : " + get(CURRENCY_CODE) + //
-				"\n exchange    : " + get(EXCHANGE_CODE) + //
-				"\n time zone offset  : " + get(TIME_ZONE_OFFSET) + //
-				"\n priceStep   : " + get(PRICE_STEP) + //
-				"\n pointValue  : " + get(POINT_VALUE) + //
-				"\n fullText    : " + fullText() + //
-				"";
+		return inst.toString();
 	}
 
 	final static String SPACE = " ";

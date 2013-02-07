@@ -118,7 +118,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 	private InstrumentGUID remoteLookup(final CharSequence symbol) throws Exception {
 		
 		final String symbolURI = urlInstrumentLookup(symbol);
-		
+		log.debug(symbolURI);
 		final Element root = HelperXML.xmlDocumentDecode(symbolURI);
 		final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
 		final Instrument instDOM = InstrumentXML.decodeXML(tag);

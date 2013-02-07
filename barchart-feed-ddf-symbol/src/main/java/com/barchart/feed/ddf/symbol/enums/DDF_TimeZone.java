@@ -60,6 +60,8 @@ public enum DDF_TimeZone implements EnumCodeString, Value<DDF_TimeZone> {
 
 	/** The zone. */
 	public final DateTimeZone zone;
+	
+	public final long utcOffsetMillis; 
 
 	private DDF_TimeZone(final String code, final DateTimeZone zone) {
 		this.ord = (byte) ordinal();
@@ -69,11 +71,16 @@ public enum DDF_TimeZone implements EnumCodeString, Value<DDF_TimeZone> {
 		// } else{
 		// this.zone = DateTimeZone.getDefault();
 		// }
+		utcOffsetMillis = zone.getOffset(0);
 		this.zone = zone;
 	}
 
 	private final static DDF_TimeZone[] ENUM_VALUES = values();
 
+	public long getUTCOffset() {
+		return utcOffsetMillis;
+	}
+	
 	/**
 	 * Values unsafe.
 	 *

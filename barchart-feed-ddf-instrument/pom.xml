@@ -28,12 +28,6 @@
 	  <tag>HEAD</tag>
   	</scm>
   
-  	<properties>
-		<bdbjeVersion>4.0.92</bdbjeVersion>
-		<protoBufVersion>2.4.1</protoBufVersion>
-		<barchartProtoInstVersion>1.0.1-SNAPSHOT</barchartProtoInstVersion>
-	</properties>
-
 	<dependencies>
 
 		<dependency>

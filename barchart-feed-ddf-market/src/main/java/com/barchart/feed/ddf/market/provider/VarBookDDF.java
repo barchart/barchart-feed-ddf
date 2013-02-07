@@ -15,12 +15,12 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.TreeMap;
 
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookSide;
-import com.barchart.feed.base.book.enums.MarketBookType;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.provider.DefBook;
 import com.barchart.feed.base.provider.DefBookEntry;
@@ -66,7 +66,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	private MarketBookEntry topBid;
 	private MarketBookEntry topAsk;
 
-	VarBookDDF(final MarketBookType type, final SizeValue size,
+	VarBookDDF(final BookLiquidityType type, final SizeValue size,
 			final PriceValue step) {
 		// XXX
 	}

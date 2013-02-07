@@ -34,7 +34,7 @@
 		<!-- http://search.maven.org/#search|ga|1|barchart-util -->
 		<!-- <groupId>com.barchart.util</groupId> -->
 		<!-- <artifactId>barchart-util</artifactId> -->
-		<barchartUtilVersion>2.0.16</barchartUtilVersion>
+		<barchartUtilVersion>2.0.24-SNAPSHOT</barchartUtilVersion>
 
 		<!-- http://search.maven.org/#search|ga|1|barchart-feed -->
 		<!-- <groupId>com.barchart.feed</groupId> -->
@@ -46,7 +46,10 @@
 		<!-- <artifactId>netty</artifactId> -->
 		<barchartNettyVersion>3.5.11.Final</barchartNettyVersion>
 		
-		<barchartMissiveVersion>1.1.1</barchartMissiveVersion>
+		<barchartMissiveVersion>1.1.2-SNAPSHOT</barchartMissiveVersion>
+		<barchartProtoInstVersion>1.2.0-SNAPSHOT</barchartProtoInstVersion>
+		<bdbjeVersion>4.0.92</bdbjeVersion>
+		<protoBufVersion>2.4.1</protoBufVersion>
 
 	</properties>
 
