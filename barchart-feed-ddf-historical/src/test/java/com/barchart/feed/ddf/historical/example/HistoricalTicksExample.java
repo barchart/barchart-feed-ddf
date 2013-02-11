@@ -64,7 +64,7 @@ public class HistoricalTicksExample {
 		 * 2) lookup instrument definition
 		 */
 
-		final String symbol = "esu10";
+		final String symbol = "ESU10";
 
 		final DDF_Instrument instrument = //
 		DDF_InstrumentProvider.find(symbol);
