@@ -93,19 +93,19 @@ class CodecHelper {
 
 	static String encode(final Tag<?> field, final Object value) {
 
-		if (field.getClazz().equals(TextValue.class)) {
+		if (field.type().equals(TextValue.class)) {
 			return value.toString();
 		}
 
-		if (field.getClazz().equals(PriceValue.class)) {
+		if (field.type().equals(PriceValue.class)) {
 			return encode((PriceValue) value);
 		}
 
-		if (field.getClazz().equals(SizeValue.class)) {
+		if (field.type().equals(SizeValue.class)) {
 			return encode((SizeValue) value);
 		}
 
-		if (field.getClazz().equals(TimeValue.class)) {
+		if (field.type().equals(TimeValue.class)) {
 			return encode((TimeValue) value);
 		}
 
@@ -113,7 +113,7 @@ class CodecHelper {
 			return encode((Enum<?>) value);
 		}
 
-		if (field.getClazz().equals(ParaEnumBase.class)) {
+		if (field.type().equals(ParaEnumBase.class)) {
 			return encode((ParaEnumBase<?, ?>) value);
 		}
 
@@ -124,35 +124,35 @@ class CodecHelper {
 	@SuppressWarnings("unchecked")
 	static Object decode(final Tag<?> field, final String value) {
 
-		if (field.getClazz().equals(TextValue.class)) {
+		if (field.type().equals(TextValue.class)) {
 			return ValueBuilder.newText(value);
 		}
 
-		if (field.getClazz().equals(PriceValue.class)) {
+		if (field.type().equals(PriceValue.class)) {
 			return decodePrice(value);
 		}
 
-		if (field.getClazz().equals(SizeValue.class)) {
+		if (field.type().equals(SizeValue.class)) {
 			return decodeSize(value);
 		}
 
-		if (field.getClazz().equals(TimeValue.class)) {
+		if (field.type().equals(TimeValue.class)) {
 			return decodeTime(value);
 		}
 
 		if (field.isEnum()) {
 			@SuppressWarnings("rawtypes")
-			final Class klaz = field.getClazz();
+			final Class klaz = field.type();
 			final Enum<?> enuma = enumFrom(klaz, value);
 			return enuma;
 		}
 
-		if (field.getClazz().equals(ParaEnumBase.class)) {
+		if (field.type().equals(ParaEnumBase.class)) {
 			@SuppressWarnings("rawtypes")
-			final Class klaz = field.getClazz();
+			final Class klaz = field.type();
 			final DictEnum<?>[] array = ParaEnumBase.valuesFor(klaz);
 			for (final DictEnum<?> dict : array) {
-				if (field.getName().equals(dict.name())) {
+				if (field.name().equals(dict.name())) {
 					return dict;
 				}
 			}
@@ -300,7 +300,7 @@ class CodecHelper {
 
 		for (final Tag<?> field : CodecHelper.BASE) {
 
-			final String name = field.getName();
+			final String name = field.name();
 			final String value = encode(field, instrument.get(field));
 
 			/** store; do not index */
@@ -383,7 +383,7 @@ class CodecHelper {
 
 		for (final Tag<?> field : CodecHelper.BASE) {
 
-			final String name = field.getName();
+			final String name = field.name();
 			final String value = doc.get(name);
 
 			if (!isValid(value)) {

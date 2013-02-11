@@ -68,7 +68,7 @@ public class HistoricalEodExample {
 		final String symbol = "EGM2";
 
 		final Instrument instrument = //
-				DDF_InstrumentProvider.find(symbol);
+				DDF_InstrumentProvider.findHistorical(symbol);
 
 		if (instrument.isNull()) {
 			log.error("can not get insrument for : {}", symbol);
@@ -87,7 +87,7 @@ public class HistoricalEodExample {
 		query.instrument = instrument;
 
 		query.timeStart = //
-				new DateTime(2012, 04, 20, /**/00, 00, 00, /**/
+				new DateTime(2012, 03, 20, /**/00, 00, 00, /**/
 				000, DDF_TimeZone.CHICAGO.zone);
 
 		query.timeEnd = query.timeStart.plusDays(20);

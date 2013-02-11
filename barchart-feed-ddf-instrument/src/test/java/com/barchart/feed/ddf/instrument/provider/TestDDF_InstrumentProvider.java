@@ -18,8 +18,8 @@ import org.junit.Test;
 
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 /**
  * The Class TestDDF_InstrumentProvider.
@@ -53,7 +53,20 @@ public class TestDDF_InstrumentProvider {
 
 		for (final Entry<? extends CharSequence, Instrument> e : list.entrySet()) {
 
-			final TimeValue expires = ValueBuilder.newTime(e.getValue().get(InstrumentField.LIFETIME).stopAsMillis());
+			if(e.getValue() == null) {
+				System.out.println(" = null");
+				continue;
+			} else if(e.getValue().isNull()) {
+				System.out.println("isNull");
+				continue;
+			}
+			
+			final Instrument inst = e.getValue();
+			if(inst.contains(InstrumentField.LIFETIME)) {
+				System.out.println("******* LIFETIME");
+			}
+			final TimeInterval lifetime = inst.get(InstrumentField.LIFETIME);
+			final TimeValue expires = e.getValue().get(InstrumentField.LIFETIME).stop();
 			System.out.println("EXP Month Year DDF = "
 					+ (expires.asDateTime().getMonthOfYear())
 					+ " "

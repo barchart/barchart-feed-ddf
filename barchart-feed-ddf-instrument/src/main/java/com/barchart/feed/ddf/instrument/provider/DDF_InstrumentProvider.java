@@ -26,6 +26,7 @@ import java.util.concurrent.TimeoutException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -35,6 +36,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
+import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
@@ -61,6 +63,19 @@ public final class DDF_InstrumentProvider {
 		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
 	}
 
+	private static final int YEAR;
+	private static final char MONTH;
+	
+	private static final char[] T_Z_O = new char[] {'2', '0', '1'};
+	private static final char[] T_Z_T = new char[] {'2', '0', '2'};
+	private static final char[] T_Z = new char[] {'2', '0'};
+	
+	static {
+		final DateTime now = new DateTime();
+		YEAR = now.year().get();
+		MONTH = DDF_ExpireMonth.fromDateTime(now).code;
+	}
+	
 	private DDF_InstrumentProvider() {
 	}
 
@@ -118,23 +133,52 @@ public final class DDF_InstrumentProvider {
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
 	public static Instrument find(final CharSequence symbol) {
-		return instance().lookup(symbol);
+		return instance().lookup(formatSymbol(symbol));
 	}
 
+	public static Instrument findHistorical(final CharSequence symbol) {
+		return instance().lookup(formatHistoricalSymbol(symbol));
+	}
+	
 	/**
 	 * cache via instrument service;.
 	 * 
 	 * @param symbols
 	 * @return a map of resolved instruments
 	 */
-	public static Map<String, Instrument> find(
+	public static Map<CharSequence, Instrument> find(
 			final Collection<? extends CharSequence> symbols) {
-		final Map<String, Instrument> insts = new HashMap<String, Instrument>();
+		
+		final Map<CharSequence, Instrument> insts = new HashMap<CharSequence, Instrument>();
 		final Map<CharSequence, Instrument> charInsts = instance().lookup(symbols);
+		
 		for(final Entry<CharSequence, Instrument> e : charInsts.entrySet()) {
 			insts.put(e.getKey().toString(), e.getValue());
 		}
+		
 		return insts;
+	}
+	
+	/**
+	 * NOTE: does NOT cache NOR use instrument service.
+	 * 
+	 * @param symbolList
+	 *            the symbol list
+	 * @return the list
+	 */
+	public static List<Instrument> fetch(final List<String> symbolList) {
+
+		if(symbolList == null || symbolList.size() == 0) {
+			return NULL_LIST;
+		}
+		
+		try {
+			return remoteLookup(symbolList);
+		} catch (final Exception e) {
+			log.error("", e);
+			return NULL_LIST;
+		}
+
 	}
 	
 	class RetrieveInstrument implements Future<Instrument> {
@@ -223,27 +267,7 @@ public final class DDF_InstrumentProvider {
 
 	}
 
-	/**
-	 * NOTE: does NOT cache NOR use instrument service.
-	 * 
-	 * @param symbolList
-	 *            the symbol list
-	 * @return the list
-	 */
-	public static List<Instrument> fetch(final List<String> symbolList) {
-
-		if(symbolList == null || symbolList.size() == 0) {
-			return NULL_LIST;
-		}
-		
-		try {
-			return remoteLookup(symbolList);
-		} catch (final Exception e) {
-			log.error("", e);
-			return NULL_LIST;
-		}
-
-	}
+	
 
 	/**
 	 * Override lookup url.
@@ -375,6 +399,79 @@ public final class DDF_InstrumentProvider {
 
 		return list;
 
+	}
+	
+	public static CharSequence formatSymbol(CharSequence symbol) {
+
+		if(symbol == null) {
+			return "";
+		}
+		
+		if(symbol.length() < 3) {
+			return symbol;
+		}
+		
+		/* e.g. GOOG */
+		if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {
+			return symbol;
+		}
+		
+		/* e.g. ESH3 */
+		if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {
+			
+			final StringBuilder sb = new StringBuilder(symbol);
+			int last = Character.getNumericValue(symbol.charAt(symbol.length() - 1));
+			if(YEAR % 2010 < last) {
+				symbol = sb.insert(symbol.length() - 1, T_Z_O);
+			} else if(YEAR % 2010 > last) {
+				symbol = sb.insert(symbol.length() - 1, T_Z_T);
+			} else {
+				if(symbol.charAt(symbol.length() - 2) >= MONTH) {
+					symbol = sb.insert(symbol.length() - 1, T_Z_O);
+				} else {
+					symbol = sb.insert(symbol.length() - 1, T_Z_T);
+				}
+			}
+			
+			return symbol;
+		}
+		
+		/* e.g. ESH13 */
+		if(!Character.isDigit(symbol.charAt(symbol.length() - 3))) {
+			
+			return new StringBuilder(symbol).insert(symbol.length()-2, T_Z);
+			
+		}
+		
+		return symbol;
+	}
+	
+	public static CharSequence formatHistoricalSymbol(CharSequence symbol) {
+		
+		if(symbol == null) {
+			return "";
+		}
+		
+		if(symbol.length() < 3) {
+			return symbol;
+		}
+		
+		/* e.g. GOOG */
+		if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {
+			return symbol;
+		}
+		
+		/* e.g. ESH3 */
+		if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {
+			return new StringBuilder(symbol).insert(symbol.length() - 1, T_Z_O);
+		}
+		
+		/* e.g. ESH13 */
+		if(!Character.isDigit(symbol.charAt(symbol.length() - 3))) {
+			return new StringBuilder(symbol).insert(symbol.length()-2, T_Z);
+		}
+		
+		return symbol;
 	}
 
 }

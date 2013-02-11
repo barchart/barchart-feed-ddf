@@ -21,15 +21,15 @@ public class TestLocalDBStore {
 		symbols.add("CLM3");
 		symbols.add("GEM3");
 		
-		Map<String, Instrument> insts = DDF_InstrumentProvider.find(symbols);  
+		Map<CharSequence, Instrument> insts = DDF_InstrumentProvider.find(symbols);  
 		
 		LocalInstDefDB db = new LocalInstDefDB(DBLocation);
 		
-		for(final Entry<String, Instrument> e : insts.entrySet()) {
+		for(final Entry<CharSequence, Instrument> e : insts.entrySet()) {
 			db.store(e.getValue().getGUID(), e.getValue());
 		}
 		
-		for(final Entry<String, Instrument> e : insts.entrySet()) {
+		for(final Entry<CharSequence, Instrument> e : insts.entrySet()) {
 			System.out.println(db.lookup(e.getValue().getGUID()).toString());
 		}
 		

@@ -9,7 +9,6 @@ package com.barchart.feed.ddf.instrument.provider;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -43,6 +42,62 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	public ServiceMemoryDDF() {
 	}
 
+	@Override
+	public Instrument lookup(final CharSequence symbol) {
+		
+		if(symbol == null || symbol.length() == 0) {
+			return Instrument.NULL_INSTRUMENT;
+		}
+		
+		final InstrumentGUID guid = remote.lookup(symbol.toString().toUpperCase());
+		
+		if(guid.equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
+			return Instrument.NULL_INSTRUMENT;
+		}
+		
+		Instrument instrument = guidMap.get(guid);
+
+		if (instrument == null) {
+			return Instrument.NULL_INSTRUMENT;
+		}
+
+		return new InstrumentDDF(instrument);
+		
+	}
+
+	@Override
+	public Map<CharSequence, Instrument> lookup(Collection<? extends CharSequence> symbols) {
+		
+		if (symbols == null || symbols.size() == 0) {
+			log.warn("Lookup called with empty collection");
+			return new HashMap<CharSequence, Instrument>(0); 
+		}
+
+		final Map<CharSequence, InstrumentGUID> gMap = remote.lookup(symbols);
+				
+		final Map<CharSequence, Instrument> instMap = 
+				new HashMap<CharSequence, Instrument>();
+
+		for (final CharSequence symbol : symbols) {
+			instMap.put(symbol.toString(), guidMap.get(gMap.get(symbol.toString().toUpperCase())));
+		}
+
+		return instMap;
+	}
+
+	@Override
+	public Future<Instrument> lookupAsync(CharSequence symbol) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<CharSequence, Future<Instrument>> lookupAsync(
+			Collection<? extends CharSequence> symbols) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 //	/** make an upper case id */
 //	private DDF_Instrument load(final TextValue symbol) {
 //
@@ -97,59 +152,4 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 //
 //	}
 	
-	@Override
-	public Instrument lookup(final CharSequence symbol) {
-		
-		if(symbol == null || symbol.length() == 0) {
-			return Instrument.NULL_INSTRUMENT;
-		}
-		
-		final InstrumentGUID guid = remote.lookup(symbol.toString().toUpperCase());
-		
-		if(guid.equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
-			return Instrument.NULL_INSTRUMENT;
-		}
-		
-		Instrument instrument = guidMap.get(guid);
-
-		if (instrument == null) {
-			return Instrument.NULL_INSTRUMENT;
-		}
-
-		return new InstrumentDDF(instrument);
-		
-	}
-
-	@Override
-	public Map<CharSequence, Instrument> lookup(Collection<? extends CharSequence> symbols) {
-		
-		if (symbols == null || symbols.size() == 0) {
-			return null; // TODO ??????????
-		}
-
-		final Map<CharSequence, InstrumentGUID> gMap = remote.lookup(symbols);
-				
-		final Map<CharSequence, Instrument> instMap = 
-				new HashMap<CharSequence, Instrument>();
-
-		for (final CharSequence symbol : symbols) {
-			instMap.put(symbol.toString(), guidMap.get(gMap.get(symbol.toString().toUpperCase())));
-		}
-
-		return instMap;
-	}
-
-	@Override
-	public Future<Instrument> lookupAsync(CharSequence symbol) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<CharSequence, Future<Instrument>> lookupAsync(
-			Collection<? extends CharSequence> symbols) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

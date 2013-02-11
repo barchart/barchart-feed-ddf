@@ -65,4 +65,9 @@ class InstrumentGUIDDDF implements InstrumentGUID {
 		return guid.subSequence(start, end);
 	}
 
+	@Override
+	public String toString() {
+		return guid.toString();
+	}
+	
 }

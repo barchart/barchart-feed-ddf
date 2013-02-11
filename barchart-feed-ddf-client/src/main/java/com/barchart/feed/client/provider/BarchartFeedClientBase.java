@@ -24,8 +24,6 @@
  */
 package com.barchart.feed.client.provider;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -231,7 +229,7 @@ public abstract class BarchartFeedClientBase {
 	 * 
 	 * @return An empty list if no symbols can be resolved.
 	 */
-	public Map<String, Instrument> lookup(final List<String> symbolList) {
+	public Map<CharSequence, Instrument> lookup(final List<String> symbolList) {
 		return DDF_InstrumentProvider.find(symbolList);
 	}
 
