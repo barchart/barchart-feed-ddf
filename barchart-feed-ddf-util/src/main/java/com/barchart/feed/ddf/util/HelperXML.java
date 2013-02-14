@@ -247,7 +247,7 @@ public final class HelperXML {
 		}
 		return "";
 	}
-
+	
 	/**
 	 * Xml string encode.
 	 * 

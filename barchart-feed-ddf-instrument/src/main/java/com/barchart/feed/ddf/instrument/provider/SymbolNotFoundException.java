@@ -8,7 +8,7 @@
 package com.barchart.feed.ddf.instrument.provider;
 
 @SuppressWarnings("serial")
-class SymbolNotFoundException extends Exception {
+public class SymbolNotFoundException extends Exception {
 
 	SymbolNotFoundException(String message) {
 		super(message);

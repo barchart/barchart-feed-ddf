@@ -47,7 +47,7 @@
 		<barchartNettyVersion>3.5.11.Final</barchartNettyVersion>
 		
 		<barchartMissiveVersion>1.1.2-SNAPSHOT</barchartMissiveVersion>
-		<barchartProtoInstVersion>1.2.0-SNAPSHOT</barchartProtoInstVersion>
+		<barchartProtoInstVersion>1.2.0</barchartProtoInstVersion>
 		<bdbjeVersion>4.0.92</bdbjeVersion>
 		<protoBufVersion>2.4.1</protoBufVersion>
 

@@ -127,7 +127,6 @@ public class HistoricalTrendExample {
 		/*
 		 * 5) utilize the result to find min/max price
 		 */
-
 		final PriceExtreme extreme = new PriceExtreme(instrument);
 
 		final Runner<Void, DDF_EntryTrend> taskFindExtreme = //

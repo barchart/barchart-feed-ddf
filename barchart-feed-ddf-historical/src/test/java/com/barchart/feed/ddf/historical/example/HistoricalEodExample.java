@@ -87,7 +87,7 @@ public class HistoricalEodExample {
 		query.instrument = instrument;
 
 		query.timeStart = //
-				new DateTime(2012, 03, 20, /**/00, 00, 00, /**/
+				new DateTime(2012, 04, 20, /**/00, 00, 00, /**/
 				000, DDF_TimeZone.CHICAGO.zone);
 
 		query.timeEnd = query.timeStart.plusDays(20);

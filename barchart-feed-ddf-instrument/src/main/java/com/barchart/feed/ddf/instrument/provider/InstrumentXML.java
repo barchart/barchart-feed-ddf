@@ -59,6 +59,13 @@ import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.core.Tag;
+import com.barchart.proto.buf.inst.BookLiquidity;
+import com.barchart.proto.buf.inst.BookStructure;
+import com.barchart.proto.buf.inst.Calendar;
+import com.barchart.proto.buf.inst.Decimal;
+import com.barchart.proto.buf.inst.InstrumentDefinition;
+import com.barchart.proto.buf.inst.InstrumentType;
+import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TextValue;
@@ -224,6 +231,114 @@ public final class InstrumentXML {
 		map.put(COMPONENT_LEGS, new TextValue[0]);
 
 		return new InstrumentDDF(InstrumentFactory.build(map));
+		
+	}
+	
+	public static InstrumentDefinition decodeSAXProto(final Attributes ats) throws Exception {
+
+		InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
+		
+		// lookup status
+		final String statusCode = xmlStringDecode(ats, STATUS, XML_STOP);
+		final StatusXML status = StatusXML.fromCode(statusCode);
+		if (!status.isFound()) {
+			final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
+			throw new SymbolNotFoundException(lookup);
+		}
+		
+		/* market identifier; must be globally unique; */
+		try {
+			builder.setMarketId(Long.parseLong(xmlStringDecode(ats, GUID, XML_STOP)));
+		} catch(Exception e) {
+			return InstrumentDefinition.getDefaultInstance();
+		}
+		/* type of security, Forex, Equity, etc. */
+		builder.setInstrumentType(InstrumentType.NO_TYPE_INST);
+		
+		/* liquidy type, default / implied / combined */
+		builder.setBookLiquidity(BookLiquidity.NO_BOOK_LIQUIDITY);
+		
+		/* structure of book */
+		builder.setBookStructure(BookStructure.NO_BOOK_STRUCTURE);
+		
+		/* book depth */
+		builder.setBookDepth(0);
+		
+		/* vendor */
+		builder.setVendorId("Barchart");
+		
+		/* market symbol; can be non unique; */
+		builder.setSymbol(xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));
+		
+		/* market free style description; can be used in full text search */
+		builder.setDescription(String.valueOf(xmlStringDecode(ats, SYMBOL_COMMENT,
+				XML_PASS)));
+		
+		/* stock vs future vs etc. */
+		builder.setCfiCode(xmlStringDecode(ats, SYMBOL_CODE_CFI, XML_PASS));
+		
+		/* price currency */
+		builder.setCurrencyCode("USD");
+		
+		/* market originating exchange identifier */
+		final DDF_Exchange exchange = DDF_Exchange.fromCode( xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS));
+		builder.setExchangeCode(exchange.name());
+		
+		final DDF_Fraction frac = DDF_Fraction.fromBaseCode(xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP));
+		
+		/* price step / increment size / tick size */
+		final long priceStepMantissa = xmlDecimalDecode(frac, ats,
+				PRICE_TICK_INCREMENT, XML_STOP);
+		builder.setMinimumPriceIncrement(buildDecimal(priceStepMantissa, frac.decimalExponent));
+		
+		/* value of a future contract / stock share */
+		final String pricePointString = xmlStringDecode(ats, PRICE_POINT_VALUE,	XML_PASS);
+		if(pricePointString == null) {
+			builder.setContractPointValue(buildDecimal(0,0));
+		} else {
+			PriceValue pricePoint = ValueBuilder.newPrice(Double
+					.valueOf(pricePointString));
+			builder.setContractPointValue(buildDecimal(pricePoint.mantissa(), pricePoint.exponent()));
+		}
+		
+		/* display fraction base : decimal(10) vs binary(2), etc. */
+		builder.setDisplayBase((int)frac.fraction.base());
+		builder.setDisplayExponent(frac.fraction.exponent());
+		
+		/* Calendar */
+		final TimeValue expire = xmlTimeDecode(ats, SYMBOL_EXPIRE, XML_PASS);
+		final Calendar.Builder calBuilder = Calendar.newBuilder();
+		final Interval.Builder intBuilder = Interval.newBuilder();
+		
+		intBuilder.setTimeStart(0);
+		if(expire == null) {
+			intBuilder.setTimeFinish(0);
+		} else {
+			intBuilder.setTimeFinish(expire.asMillisUTC());
+		}
+		
+		calBuilder.setLifeTime(intBuilder.build());
+		builder.setCalendar(calBuilder.build());
+
+		//
+		final DDF_TimeZone zone = DDF_TimeZone.fromCode(xmlStringDecode(ats, TIME_ZONE_DDF, XML_STOP));
+		
+		/* timezone represented as offset in minutes from utc */
+		builder.setTimeZoneOffset(zone.getUTCOffset());
+		
+		/* time zone name as text */
+		builder.setTimeZoneName(zone.name());
+		
+		return builder.build();
+		
+	}
+	
+	public static Decimal buildDecimal(final long mantissa, final int exponent) {
+		
+		final Decimal.Builder builder = Decimal.newBuilder();
+		builder.setMantissa(mantissa);
+		builder.setExponent(exponent);
+		return builder.build();
 		
 	}
 	
