@@ -1,6 +1,11 @@
 package com.barchart.feed.ddf.instrument.provider;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -10,34 +15,118 @@ import com.sleepycat.collections.StoredMap;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
 import com.sleepycat.je.DatabaseEntry;
+import com.sleepycat.je.Durability;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 
-public class LocalInstrumentDBMap {
+public final class LocalInstrumentDBMap {
 
-	final StoredMap<String, InstrumentDefinition> map;
+	private final StoredMap<String, InstrumentDefinition> map;
 	
+	private final Durability durability = new Durability(Durability.SyncPolicy.WRITE_NO_SYNC,
+			Durability.SyncPolicy.WRITE_NO_SYNC, Durability.ReplicaAckPolicy.NONE);
+	private final EnvironmentConfig envConfig = (EnvironmentConfig) new EnvironmentConfig()
+		.setAllowCreate(true)
+		.setTransactional(true)
+		.setDurability(durability);
+	private final DatabaseConfig dbConfig = new DatabaseConfig()
+		.setAllowCreate(true)
+		.setTransactional(true)
+		.setSortedDuplicates(false);
+	
+	/**
+	 * 
+	 * @param dbase
+	 */
 	public LocalInstrumentDBMap(final Database dbase) {
 		map = new StoredMap<String, InstrumentDefinition>(dbase, new SymbolBinding(), 
 				new InstDefBinding(), true);
 	}
 	
-	public LocalInstrumentDBMap(final File dbFile) {
+	/**
+	 * 
+	 * @param dbFolder
+	 */
+	public LocalInstrumentDBMap(final File dbFolder) {
 		
-		final EnvironmentConfig envConfig = new EnvironmentConfig()
-			.setAllowCreate(true)
-			.setTransactional(true);
-		envConfig.setTxnNoSync(true); // TODO
-		final Environment env = new Environment(dbFile, envConfig);
+		map = buildMap(dbFolder);
 		
-		final DatabaseConfig dbConfig = new DatabaseConfig()
-			.setAllowCreate(true)
-			.setTransactional(true)
-			.setSortedDuplicates(false);
+	}
+	
+	/**
+	 * 
+	 * @param dbFolder
+	 * @param inStream
+	 */
+	public LocalInstrumentDBMap(final File dbFolder, final InputStream inStream) {
+		
+		map = buildMap(dbFolder);
+		
+		populateDB(inStream);
+		
+	}
+	
+	/**
+	 * 
+	 * @param dbFolder
+	 * @param instDefZip
+	 * @throws ZipException
+	 * @throws IOException
+	 */
+	public LocalInstrumentDBMap(final File dbFolder, final File instDefZip) 
+			throws ZipException, IOException {
+		
+		map = buildMap(dbFolder);
+		
+		final ZipFile zFile = new ZipFile(instDefZip);
+		final ZipEntry entry = zFile.entries().nextElement();
+		final InputStream inStream = zFile.getInputStream(entry);
+		
+		populateDB(inStream);
+		
+	}
+	
+	private StoredMap<String, InstrumentDefinition> buildMap(final File dbFolder) {
+		
+		final Environment env = new Environment(dbFolder, envConfig);
 		final Database db = env.openDatabase(null, "InstrumentDef", dbConfig);
+	
+		return new StoredMap<String, InstrumentDefinition>(db, new SymbolBinding(), 
+			new InstDefBinding(), true);
 		
-		map = new StoredMap<String, InstrumentDefinition>(db, new SymbolBinding(), 
-				new InstDefBinding(), true);
+	}
+	
+	private void populateDB(final InputStream inStream) {
+		
+		long counter = 0;
+		while(true) {
+			InstrumentDefinition def;
+			
+			try {
+				def = InstrumentDefinition.
+						parseDelimitedFrom(inStream);
+			} catch (Exception e) {
+				e.printStackTrace();
+				break;
+			}
+			
+			if(def!= null) {
+				
+				if(def.hasSymbol()) {
+					map.put(def.getSymbol(), def);
+				}
+				
+				if(counter % 10000 == 0) {
+					System.out.println("Build count " + counter);
+				}
+				
+				counter++;
+				
+			} else {
+				break;
+			}
+		}
+		
 	}
 	
 	public boolean containsKey(final String key) {

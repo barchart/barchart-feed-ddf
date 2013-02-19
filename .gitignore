@@ -12,12 +12,14 @@
 .project
 .classpath
 .settings/
+.jdb
 
 #
 # remove build folders
 #
 bin/
 target/
+src/test/resources
 
 #
 # remove release meta data
