@@ -34,7 +34,7 @@
 		<!-- http://search.maven.org/#search|ga|1|barchart-util -->
 		<!-- <groupId>com.barchart.util</groupId> -->
 		<!-- <artifactId>barchart-util</artifactId> -->
-		<barchartUtilVersion>2.0.24-SNAPSHOT</barchartUtilVersion>
+		<barchartUtilVersion>2.0.26-SNAPSHOT</barchartUtilVersion>
 
 		<!-- http://search.maven.org/#search|ga|1|barchart-feed -->
 		<!-- <groupId>com.barchart.feed</groupId> -->

@@ -78,11 +78,21 @@ public final class LocalInstrumentDBMap {
 		
 		map = buildMap(dbFolder);
 		
-		final ZipFile zFile = new ZipFile(instDefZip);
-		final ZipEntry entry = zFile.entries().nextElement();
-		final InputStream inStream = zFile.getInputStream(entry);
+		InputStream inStream = null;
 		
-		populateDB(inStream);
+		try {
+		
+			final ZipFile zFile = new ZipFile(instDefZip);
+			final ZipEntry entry = zFile.entries().nextElement();
+			inStream = zFile.getInputStream(entry);
+			
+			populateDB(inStream);
+		
+		} finally {
+			if(inStream != null) {
+				inStream.close();
+			}
+		}
 		
 	}
 	
@@ -129,18 +139,37 @@ public final class LocalInstrumentDBMap {
 		
 	}
 	
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public boolean containsKey(final String key) {
 		return map.containsKey(key);
 	}
 	
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public InstrumentDefinition getValue(final String key) {
 		return map.get(key);
 	}
 	
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 */
 	public void put(final String key, final InstrumentDefinition value) {
 		map.put(key, value);
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int size() {
 		return map.size();
 	}
@@ -182,5 +211,5 @@ public final class LocalInstrumentDBMap {
 		}
 		
 	}
-	
+
 }
