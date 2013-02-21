@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +32,27 @@ public class TestInstrumentDBProvider {
 		
 	}
 	
+	@After
+	public void shutDown() {
+		
+		final File resourceFolder = new File(FOLDER_PATH);
+		
+		final File dbFolder = InstrumentDBProvider.getDBFolder(resourceFolder);
+		
+		File[] files = dbFolder.listFiles();
+		
+		for(final File file : files) {
+			file.delete();
+		}
+		
+		files = resourceFolder.listFiles();
+		
+		for(final File file : files) {
+			file.delete();
+		}
+		
+	}
+	
 	@Test
 	public void test() throws Exception {
 		
@@ -47,13 +69,10 @@ public class TestInstrumentDBProvider {
 		
 		assertTrue(localInstDef.getName().equals(DUMMY_INST_DEF));
 		
-		//final File dbFolder = InstrumentDBProvider.getDBFolder(resourceFolder);
-		
 		LocalInstrumentDBMap map = InstrumentDBProvider.getMap(resourceFolder);
 		
-		InstrumentDBProvider.updateDBMap(resourceFolder, map).call();
+		//InstrumentDBProvider.updateDBMap(resourceFolder, map).call();
 		
-		System.out.println("Map Size: " + map.size());
 		
 	}
 
