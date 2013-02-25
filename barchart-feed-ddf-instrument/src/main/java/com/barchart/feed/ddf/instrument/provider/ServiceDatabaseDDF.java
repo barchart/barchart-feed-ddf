@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
@@ -25,9 +26,11 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 			new ConcurrentHashMap<CharSequence, Instrument>();
 	
 	private final LocalInstrumentDBMap db;
+	private final ExecutorService executor;
 	
-	public ServiceDatabaseDDF(final LocalInstrumentDBMap map) {
+	public ServiceDatabaseDDF(final LocalInstrumentDBMap map, final ExecutorService executor) {
 		this.db = map;
+		this.executor = executor;
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 
 	@Override
 	public Future<Instrument> lookupAsync(final CharSequence symbol) {
-		return new FutureTask<Instrument>(new SymbolLookup(symbol));
+		return executor.submit(new SymbolLookup(symbol));
 	}
 
 	@Override
@@ -65,7 +68,7 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 				new HashMap<CharSequence, Future<Instrument>>();
 		
 		for(final CharSequence symbol : symbols) {
-			result.put(symbol, new FutureTask<Instrument>(new SymbolLookup(symbol)));
+			result.put(symbol, executor.submit(new SymbolLookup(symbol)));
 		}
 				
 		return result;
