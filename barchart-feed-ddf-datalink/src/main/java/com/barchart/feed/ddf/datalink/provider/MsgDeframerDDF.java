@@ -153,8 +153,6 @@ class MsgDeframerDDF extends FrameDecoder {
 					} else if (alpha == FeedDDF.DDF_START) {
 						return init(buffer, count - 1);
 					} else {
-						log.debug("***********ERROR ON "
-								+ Arrays.toString(buffer.array()));
 						buffer.readBytes(count);
 						this.stage = S0_INIT;
 						this.count = 0;

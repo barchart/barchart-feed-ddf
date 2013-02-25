@@ -99,7 +99,7 @@ public class LocalInstDefDB {
 	 * @return
 	 */
 	public InstrumentDefinition getValue(final String key) {
-		return map.getValue(key);
+		return map.get(key);
 	}
 	
 	/**

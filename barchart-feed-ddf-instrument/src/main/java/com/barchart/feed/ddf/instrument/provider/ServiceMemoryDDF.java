@@ -34,6 +34,7 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	private final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
 			new ConcurrentHashMap<InstrumentGUID, Instrument>();
 	
+	private final LocalCacheSymbologyContextDDF cache = new LocalCacheSymbologyContextDDF();
 	private final SymbologyContext<CharSequence> remote = new RemoteSymbologyContextDDF(guidMap);
 			
 	/**
@@ -49,11 +50,17 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 			return Instrument.NULL_INSTRUMENT;
 		}
 		
-		final InstrumentGUID guid = remote.lookup(symbol.toString().toUpperCase());
+		InstrumentGUID guid = cache.lookup(symbol.toString().toUpperCase()); 
+				
+		if(guid.isNull()) {
+			guid = remote.lookup(symbol.toString().toUpperCase());
+		}
 		
 		if(guid.equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
 			return Instrument.NULL_INSTRUMENT;
 		}
+		
+		cache.storeGUID(symbol, guid);
 		
 		Instrument instrument = guidMap.get(guid);
 

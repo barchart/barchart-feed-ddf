@@ -7,6 +7,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sleepycat.bind.EntityBinding;
@@ -20,6 +23,9 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 
 public final class LocalInstrumentDBMap {
+	
+	private static final Logger log = LoggerFactory
+			.getLogger(LocalInstrumentDBMap.class);
 
 	private final StoredMap<String, InstrumentDefinition> map;
 	
@@ -48,7 +54,6 @@ public final class LocalInstrumentDBMap {
 	 * @param dbFolder
 	 */
 	public LocalInstrumentDBMap(final File dbFolder) {
-		
 		map = buildMap(dbFolder);
 		
 	}
@@ -153,7 +158,7 @@ public final class LocalInstrumentDBMap {
 	 * @param key
 	 * @return
 	 */
-	public InstrumentDefinition getValue(final String key) {
+	public InstrumentDefinition get(final String key) {
 		return map.get(key);
 	}
 	

@@ -122,14 +122,14 @@ public class TestAllMarketsReceiver {
 				public void onMarketEvent(final MarketEvent event,
 						final Instrument instrument, final Market value) {
 
-					// final StringBuilder sb = new
-					// StringBuilder(" *** TAKER 2 EVENT: ")
-					// .append(instrument.get(InstrumentField.ID).toString())
-					// .append("******************************************************************************/n")
-					// .append("******************************************************************************/n")
-					// .append("******************************************************************************/n");
-					//
-					// log.debug(sb.toString());
+					 final StringBuilder sb = new
+					 StringBuilder(" *** TAKER 2 EVENT: ")
+					 .append(instrument.get(InstrumentField.MARKET_GUID).toString())
+					 .append("******************************************************************************/n")
+					 .append("******************************************************************************/n")
+					 .append("******************************************************************************/n");
+					
+					 log.debug(sb.toString());
 
 				}
 

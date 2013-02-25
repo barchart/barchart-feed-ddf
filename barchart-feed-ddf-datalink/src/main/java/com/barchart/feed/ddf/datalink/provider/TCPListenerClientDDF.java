@@ -97,7 +97,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 					final DDF_BaseMessage message = messageQueue.take();
 
 					if (msgListener != null) {
-
+						log.debug("TCPListener received message"); //
 						if (!filterBySub || filter(message)) {
 							msgListener.handleMessage(message);
 						}
@@ -155,8 +155,8 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx,
 			final ExceptionEvent e) throws Exception {
-		log.warn("SimpleChannelHandler caught exception");
-
+		log.warn("SimpleChannelHandler caught exception {}", e.getCause().getLocalizedMessage());
+		e.getCause().printStackTrace();
 	}
 
 	private void postMessage(final DDF_BaseMessage message) {
@@ -179,6 +179,8 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	public void messageReceived(final ChannelHandlerContext context,
 			final MessageEvent eventIn) throws Exception {
 
+		log.debug("Message Received");
+		
 		final Object messageIn = eventIn.getMessage();
 
 		if (!(messageIn instanceof DDF_BaseMessage)) {

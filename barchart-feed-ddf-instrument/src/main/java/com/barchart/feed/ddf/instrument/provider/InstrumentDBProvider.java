@@ -66,15 +66,15 @@ public final class InstrumentDBProvider {
 			@Override
 			public Boolean call() throws Exception {
 				
-				boolean success = new UpdateInstrumentDefinitions(resourceFolder).call();
+				boolean didUpdate = new UpdateInstrumentDefinitions(resourceFolder).call();
 				
-				if(!success) {
-					return false;
+				if(!didUpdate) {
+					return true;
 				}
 				
-				success &= new PopulateDatabase(resourceFolder, map).call();
+				boolean populateBoolean = new PopulateDatabase(resourceFolder, map).call();
 				
-				return success;
+				return populateBoolean;
 			}
 			
 		};
@@ -201,7 +201,7 @@ public final class InstrumentDBProvider {
 		@Override
 		public Boolean call() throws Exception {
 			
-			log.debug("Begin update of instrument definitions");
+			
 			
 			final File instDef = getLocalInstDef(resourceFolder);
 			
@@ -213,15 +213,25 @@ public final class InstrumentDBProvider {
 					throw new IllegalStateException("No local instrument definitions " +
 							"and unable to reach remote resource");
 				} else {
-					return true;
+					log.debug("Unable to reach remote, using local instrument definition file");
+					return false;
 				}
 				
 			}
 			
+			if(instDef == null) {
+				log.debug("No local instrument def file found, updating from remote");
+			} else {
+				log.debug("Local instrument def file version {}", instDef.getName().split("\\.")[0]);
+				log.debug("Remote instrument def file version {}", remoteVersion);
+			}
+			
 			/* If local version is different, create new from remote */
-			if(!instDef.getName().split("\\.")[0].equals(remoteVersion)) {
+			if(instDef == null || !instDef.getName().split("\\.")[0].equals(remoteVersion)) {
 				
 				// Purge old def files
+				
+				log.debug("Begin update of instrument definitions");
 				
 				final URL instDefURL = new URL(S3_URL + S3_PATH);
 				URLConnection conn = instDefURL.openConnection();
@@ -238,12 +248,14 @@ public final class InstrumentDBProvider {
 			    	out.write(b, 0, count);
 			    }
 			    out.flush(); out.close(); in.close();
+			    
+			    log.debug("Finished updating instrument definitions");
 				
+			    return true;
 			}
 			
-			log.debug("Finished updating instrument definitions");
-			
-			return true;
+			log.debug("Local instrument def file was up to date, skipping DB build");
+			return false;
 		}
 		
 	};

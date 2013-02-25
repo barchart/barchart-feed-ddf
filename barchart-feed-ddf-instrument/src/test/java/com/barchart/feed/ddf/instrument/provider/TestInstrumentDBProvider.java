@@ -71,8 +71,7 @@ public class TestInstrumentDBProvider {
 		
 		LocalInstrumentDBMap map = InstrumentDBProvider.getMap(resourceFolder);
 		
-		//InstrumentDBProvider.updateDBMap(resourceFolder, map).call();
-		
+		InstrumentDBProvider.updateDBMap(resourceFolder, map).call();
 		
 	}
 

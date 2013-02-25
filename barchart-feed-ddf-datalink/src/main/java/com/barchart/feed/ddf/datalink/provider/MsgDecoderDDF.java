@@ -83,7 +83,6 @@ class MsgDecoderDDF extends SimpleChannelHandler {
 			try {
 				messageDDF = DDF_MessageService.decode(array);
 			} catch (final Exception e) {
-				//log.debug("decode failed : {} ", new String(array), e);
 				log.debug("decode failed : {} ", new String(array));
 				log.debug(new String(Arrays.toString(array)));
 				return;
