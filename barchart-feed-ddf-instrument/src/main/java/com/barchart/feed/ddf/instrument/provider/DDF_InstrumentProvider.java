@@ -38,6 +38,7 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
+import com.barchart.missive.core.Missive;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -133,11 +134,13 @@ public final class DDF_InstrumentProvider {
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
 	public static Instrument find(final CharSequence symbol) {
-		return instance().lookup(formatSymbol(symbol));
+		return instance().lookup(formatSymbol(
+				ValueBuilder.newText(symbol.toString())));
 	}
 
 	public static Instrument findHistorical(final CharSequence symbol) {
-		return instance().lookup(formatHistoricalSymbol(symbol));
+		return instance().lookup(formatHistoricalSymbol(
+				ValueBuilder.newText(symbol.toString())));
 	}
 	
 	/**
@@ -181,91 +184,91 @@ public final class DDF_InstrumentProvider {
 
 	}
 	
-	class RetrieveInstrument implements Future<Instrument> {
-
-		private final TextValue symbol;
-
-		private volatile Instrument result = null;
-
-		RetrieveInstrument(final String symbol) {
-			this.symbol = ValueBuilder.newText(symbol);
-		}
-
-		RetrieveInstrument(final TextValue symbol) {
-			this.symbol = symbol;
-		}
-
-		@Override
-		public boolean cancel(final boolean mayInterruptIfRunning) {
-			throw new UnsupportedOperationException("Not Supported");
-		}
-
-		@Override
-		public Instrument get() throws InterruptedException,
-				ExecutionException {
-			result = instance().lookup(symbol);
-			return result;
-		}
-
-		@Override
-		public Instrument get(final long timeout, final TimeUnit unit)
-				throws InterruptedException, ExecutionException,
-				TimeoutException {
-			throw new UnsupportedOperationException("Not Supported");
-		}
-
-		@Override
-		public boolean isCancelled() {
-			return false;
-		}
-
-		@Override
-		public boolean isDone() {
-			return result != null;
-		}
-
-	}
-
-	class RetrieveInstrumentList implements Future<Map<CharSequence, Instrument>> {
-
-		private final List<CharSequence> symbolList;
-
-		private volatile Map<CharSequence, Instrument> result;
-
-		RetrieveInstrumentList(final List<CharSequence> symbolList) {
-			this.symbolList = symbolList;
-		}
-
-		@Override
-		public boolean cancel(final boolean mayInterruptIfRunning) {
-			throw new UnsupportedOperationException("Not Supported");
-		}
-
-		@Override
-		public Map<CharSequence, Instrument> get() throws InterruptedException,
-				ExecutionException {
-			result = instance().lookup(symbolList);
-			return result;
-		}
-
-		@Override
-		public Map<CharSequence, Instrument> get(final long timeout, final TimeUnit unit)
-						throws InterruptedException, ExecutionException,
-						TimeoutException {
-			throw new UnsupportedOperationException("Not Supported");
-		}
-
-		@Override
-		public boolean isCancelled() {
-			return false;
-		}
-
-		@Override
-		public boolean isDone() {
-			return result != null;
-		}
-
-	}
+//	class RetrieveInstrument implements Future<Instrument> {
+//
+//		private final TextValue symbol;
+//
+//		private volatile Instrument result = null;
+//
+//		RetrieveInstrument(final CharSequence symbol) {
+//			this.symbol = ValueBuilder.newText(symbol.toString());
+//		}
+//
+//		RetrieveInstrument(final TextValue symbol) {
+//			this.symbol = symbol;
+//		}
+//
+//		@Override
+//		public boolean cancel(final boolean mayInterruptIfRunning) {
+//			throw new UnsupportedOperationException("Not Supported");
+//		}
+//
+//		@Override
+//		public Instrument get() throws InterruptedException,
+//				ExecutionException {
+//			result = instance().lookup(symbol);
+//			return result;
+//		}
+//
+//		@Override
+//		public Instrument get(final long timeout, final TimeUnit unit)
+//				throws InterruptedException, ExecutionException,
+//				TimeoutException {
+//			throw new UnsupportedOperationException("Not Supported");
+//		}
+//
+//		@Override
+//		public boolean isCancelled() {
+//			return false;
+//		}
+//
+//		@Override
+//		public boolean isDone() {
+//			return result != null;
+//		}
+//
+//	}
+//
+//	class RetrieveInstrumentList implements Future<Map<CharSequence, Instrument>> {
+//
+//		private final List<CharSequence> symbolList;
+//
+//		private volatile Map<CharSequence, Instrument> result;
+//
+//		RetrieveInstrumentList(final List<CharSequence> symbolList) {
+//			this.symbolList = symbolList;
+//		}
+//
+//		@Override
+//		public boolean cancel(final boolean mayInterruptIfRunning) {
+//			throw new UnsupportedOperationException("Not Supported");
+//		}
+//
+//		@Override
+//		public Map<CharSequence, Instrument> get() throws InterruptedException,
+//				ExecutionException {
+//			result = instance().lookup(symbolList);
+//			return result;
+//		}
+//
+//		@Override
+//		public Map<CharSequence, Instrument> get(final long timeout, final TimeUnit unit)
+//						throws InterruptedException, ExecutionException,
+//						TimeoutException {
+//			throw new UnsupportedOperationException("Not Supported");
+//		}
+//
+//		@Override
+//		public boolean isCancelled() {
+//			return false;
+//		}
+//
+//		@Override
+//		public boolean isDone() {
+//			return result != null;
+//		}
+//
+//	}
 
 	
 
@@ -360,7 +363,7 @@ public final class DDF_InstrumentProvider {
 						try {
 
 							final Instrument instrument = InstrumentXML.decodeSAX(attributes);
-							final Instrument ddfInst = new InstrumentDDF(instrument);
+							final Instrument ddfInst = Missive.build(InstrumentDDF.class, instrument);
 							list.add(ddfInst);
 
 						} catch (final SymbolNotFoundException e) {

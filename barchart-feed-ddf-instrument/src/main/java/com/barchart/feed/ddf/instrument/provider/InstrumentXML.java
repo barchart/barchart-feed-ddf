@@ -53,11 +53,14 @@ import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
+import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.inst.provider.InstrumentFactory;
+import com.barchart.feed.inst.provider.InstrumentGUIDImpl;
+import com.barchart.missive.core.Missive;
 import com.barchart.missive.core.Tag;
 import com.barchart.proto.buf.inst.BookLiquidity;
 import com.barchart.proto.buf.inst.BookStructure;
@@ -98,8 +101,8 @@ public final class InstrumentXML {
 
 		// decode DOM
 		
-		final String guid = xmlStringDecode(tag, GUID, XML_STOP);
-		final String symbolReal = xmlStringDecode(tag, SYMBOL_REALTIME, XML_STOP);
+		final TextValue guid = ValueBuilder.newText(xmlStringDecode(tag, GUID, XML_STOP));
+		final TextValue symbolReal = ValueBuilder.newText(xmlStringDecode(tag, SYMBOL_REALTIME, XML_STOP));
 		final byte exchCode = xmlByteDecode(tag, EXCHANGE_DDF, XML_PASS); // XXX
 		final byte baseCode = xmlByteDecode(tag, BASE_CODE_DDF, XML_STOP);
 		final String codeCFI = xmlStringDecode(tag, SYMBOL_CODE_CFI, XML_PASS);
@@ -155,8 +158,9 @@ public final class InstrumentXML {
 		}
 		
 		// decode SAX
-		final String guid = xmlStringDecode(ats, GUID, XML_STOP);
-		final String symbolReal = xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP);
+		final TextValue guid = ValueBuilder.newText(xmlStringDecode(ats, GUID, XML_STOP));
+		final TextValue symbolReal = ValueBuilder.newText(
+				xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));
 		final byte exchCode = xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS); // XXX
 		final byte baseCode = xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP);
 		final String codeCFI = xmlStringDecode(ats, SYMBOL_CODE_CFI, XML_PASS);
@@ -201,8 +205,8 @@ public final class InstrumentXML {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private static final Instrument build(final String guid,
-			final String symbolReal, final String symbolComment,
+	private static final Instrument build(final TextValue guid,
+			final TextValue symbolReal, final String symbolComment,
 			final String codeCFI, final DDF_Exchange exchange,
 			final PriceValue priceStep, final PriceValue pricePoint,
 			final Fraction fraction, final TimeInterval lifetime,
@@ -210,13 +214,14 @@ public final class InstrumentXML {
 		
 		final Map<Tag, Object> map = new HashMap<Tag, Object>();
 		
-		map.put(MARKET_GUID, ValueBuilder.newText(guid));
+		map.put(InstrumentField.GUID, new InstrumentGUIDImpl(guid));
+		map.put(MARKET_GUID, guid);
 		map.put(SECURITY_TYPE, SecurityType.NULL_TYPE);
 		map.put(BOOK_LIQUIDITY, BookLiquidityType.NONE);
 		map.put(BOOK_STRUCTURE, BookStructureType.NONE);
 		map.put(BOOK_DEPTH, ValueConst.NULL_SIZE);
 		map.put(VENDOR, newText("Barchart"));
-		map.put(SYMBOL, newText(symbolReal));
+		map.put(SYMBOL, symbolReal);
 		map.put(DESCRIPTION, newText(symbolComment));
 		map.put(CFI_CODE, newText(codeCFI));
 		map.put(CURRENCY_CODE, MarketCurrency.USD);
@@ -230,7 +235,7 @@ public final class InstrumentXML {
 		map.put(TIME_ZONE_NAME, newText(zone.name()));
 		map.put(COMPONENT_LEGS, new TextValue[0]);
 
-		return new InstrumentDDF(InstrumentFactory.build(map));
+		return Missive.build(InstrumentDDF.class, map);
 		
 	}
 	
@@ -281,10 +286,12 @@ public final class InstrumentXML {
 		builder.setCurrencyCode("USD");
 		
 		/* market originating exchange identifier */
-		final DDF_Exchange exchange = DDF_Exchange.fromCode( xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS));
+		final DDF_Exchange exchange = DDF_Exchange.fromCode( 
+				xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS));
 		builder.setExchangeCode(exchange.name());
 		
-		final DDF_Fraction frac = DDF_Fraction.fromBaseCode(xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP));
+		final DDF_Fraction frac = DDF_Fraction.fromBaseCode(
+				xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP));
 		
 		/* price step / increment size / tick size */
 		final long priceStepMantissa = xmlDecimalDecode(frac, ats,
@@ -298,7 +305,8 @@ public final class InstrumentXML {
 		} else {
 			PriceValue pricePoint = ValueBuilder.newPrice(Double
 					.valueOf(pricePointString));
-			builder.setContractPointValue(buildDecimal(pricePoint.mantissa(), pricePoint.exponent()));
+			builder.setContractPointValue(buildDecimal(
+					pricePoint.mantissa(), pricePoint.exponent()));
 		}
 		
 		/* display fraction base : decimal(10) vs binary(2), etc. */
@@ -321,7 +329,8 @@ public final class InstrumentXML {
 		builder.setCalendar(calBuilder.build());
 
 		//
-		final DDF_TimeZone zone = DDF_TimeZone.fromCode(xmlStringDecode(ats, TIME_ZONE_DDF, XML_STOP));
+		final DDF_TimeZone zone = DDF_TimeZone.fromCode(xmlStringDecode(
+				ats, TIME_ZONE_DDF, XML_STOP));
 		
 		/* timezone represented as offset in minutes from utc */
 		builder.setTimeZoneOffset(zone.getUTCOffset());

@@ -7,19 +7,11 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.api.fields.InstrumentField.*;
-import static com.barchart.feed.api.fields.InstrumentField.CURRENCY_CODE;
 import static com.barchart.feed.api.fields.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.api.fields.InstrumentField.EXCHANGE_CODE;
 import static com.barchart.feed.api.fields.InstrumentField.LIFETIME;
-import static com.barchart.feed.api.fields.InstrumentField.POINT_VALUE;
-import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
 import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
-import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE_OFFSET;
 import static com.barchart.feed.api.fields.InstrumentField.VENDOR;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
@@ -27,37 +19,17 @@ import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.market.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.feed.inst.provider.InstrumentBase;
-import com.barchart.feed.inst.provider.InstrumentFactory;
-import com.barchart.missive.core.MissiveException;
 import com.barchart.missive.core.Tag;
-import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 
 class InstrumentDDF extends InstrumentBase implements Instrument {
 
-	private final Instrument inst;
+	static {
+		install(new Tag<?>[0]);
+	}
 	
 	private static final MarketDisplay display = new MarketDisplayBaseImpl();
 	
-	InstrumentDDF(final Instrument inst) {
-		this.inst = inst;
-	}
-	
-	// Null version
-	InstrumentDDF() {
-		inst = Instrument.NULL_INSTRUMENT;
-	}
-	
-	// Service Basic DDF
-	@SuppressWarnings("rawtypes")
-	InstrumentDDF(final TextValue symbol) {
-		
-		final Map<Tag, Object> map = new HashMap<Tag, Object>();
-		
-		map.put(com.barchart.feed.api.fields.InstrumentField.SYMBOL, symbol);
-		inst = InstrumentFactory.build(map);
-	}
-
 	//
 
 	@Override
@@ -72,8 +44,7 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 
 	@Override
 	public final boolean isNull() {
-		return this == Instrument.NULL_INSTRUMENT || 
-				inst == Instrument.NULL_INSTRUMENT;
+		return this == Instrument.NULL_INSTRUMENT;
 	}
 
 //	@Override
@@ -92,11 +63,6 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 //				"";
 //	}
 	
-	@Override
-	public final String toString() {
-		return inst.toString();
-	}
-
 	final static String SPACE = " ";
 
 	private void addSpreadComponents(final StringBuilder text) {
@@ -139,7 +105,7 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 
 		addSpreadComponents(text);
 
-		final TimeValue expire = inst.get(LIFETIME).stop();
+		final TimeValue expire = get(LIFETIME).stop();
 		if (!expire.isNull()) {
 
 			text.append(display.timeMonthFull(expire));
@@ -159,27 +125,7 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 
 	@Override
 	public InstrumentGUID getGUID() {
-		return inst.getGUID();
-	}
-
-	@Override
-	public <V> V get(final Tag<V> tag) throws MissiveException {
-		return inst.get(tag);
-	}
-
-	@Override
-	public boolean contains(final Tag<?> tag) {
-		return inst.contains(tag);
-	}
-
-	@Override
-	public Tag<?>[] tags() {
-		return inst.tags();
-	}
-
-	@Override
-	public int size() {
-		return inst.size();
+		return get(InstrumentField.GUID);
 	}
 
 }

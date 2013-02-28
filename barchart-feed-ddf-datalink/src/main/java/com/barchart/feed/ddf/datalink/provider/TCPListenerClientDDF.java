@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
@@ -87,6 +88,8 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	private final BlockingQueue<DDF_BaseMessage> messageQueue =
 			new LinkedBlockingQueue<DDF_BaseMessage>();
 
+	private final AtomicLong msgCounter = new AtomicLong(0);
+			
 	private final RunnerDDF messageTask = new RunnerDDF() {
 
 		@Override
@@ -97,8 +100,11 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 					final DDF_BaseMessage message = messageQueue.take();
 
 					if (msgListener != null) {
-						log.debug("TCPListener received message"); //
 						if (!filterBySub || filter(message)) {
+							if(msgCounter.incrementAndGet() % 100000 == 0) {
+								log.debug("Recieved {} messages @ {}", msgCounter.get(),
+										message.getTime().toString());
+							}
 							msgListener.handleMessage(message);
 						}
 
@@ -179,8 +185,6 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	public void messageReceived(final ChannelHandlerContext context,
 			final MessageEvent eventIn) throws Exception {
 
-		log.debug("Message Received");
-		
 		final Object messageIn = eventIn.getMessage();
 
 		if (!(messageIn instanceof DDF_BaseMessage)) {

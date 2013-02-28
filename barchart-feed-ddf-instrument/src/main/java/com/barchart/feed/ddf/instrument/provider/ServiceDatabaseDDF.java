@@ -8,15 +8,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.SymbologyContext;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
+import com.barchart.util.values.provider.ValueBuilder;
 
 public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	
@@ -28,7 +29,9 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	private final LocalInstrumentDBMap db;
 	private final ExecutorService executor;
 	
-	public ServiceDatabaseDDF(final LocalInstrumentDBMap map, final ExecutorService executor) {
+	public ServiceDatabaseDDF(final LocalInstrumentDBMap map, 
+			final ExecutorService executor) {
+		
 		this.db = map;
 		this.executor = executor;
 	}
@@ -74,7 +77,9 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 		return result;
 	}
 	
-	private Instrument lookupBase(final CharSequence symbol) {
+	private Instrument lookupBase(CharSequence symbol) {
+		
+		symbol = ValueBuilder.newText(symbol.toString());
 		
 		if(symbol == null || symbol.length() == 0) {
 			return Instrument.NULL_INSTRUMENT;
@@ -88,7 +93,12 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 		
 		final InstrumentDefinition instDef = db.get(symbol.toString());
 		
+		if(cache.size() % 10000 == 0) {
+			log.debug("Cache size = {}", cache.size());
+		}
+		
 		if(instDef == null) {
+			//log.debug("Symbol {} not in db", symbol);
 			cache.put(symbol, Instrument.NULL_INSTRUMENT);
 			return Instrument.NULL_INSTRUMENT;
 		} else {

@@ -40,9 +40,9 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("IBM");
 		symbolList.add("ORCL");
 		symbolList.add("MSFT");
-		symbolList.add("ESZ2");
-		symbolList.add("RJZ2");
-		symbolList.add("YGZ2");
+		symbolList.add("ESH3");
+		symbolList.add("RJH3");
+		symbolList.add("YGH3");
 		symbolList.add("_S_FX_A6H2_A6Z1");
 		symbolList.add("_S_BF_ZSQ2_ZSU2_ZSX2");
 
@@ -59,6 +59,8 @@ public class TestDDF_InstrumentProvider {
 			} else if(e.getValue().isNull()) {
 				System.out.println("isNull");
 				continue;
+			} else {
+				System.out.println(e.getValue().toString());
 			}
 			
 			final Instrument inst = e.getValue();
