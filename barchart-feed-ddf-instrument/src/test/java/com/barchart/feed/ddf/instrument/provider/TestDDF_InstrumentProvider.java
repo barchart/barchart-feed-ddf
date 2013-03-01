@@ -37,15 +37,13 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("IBM");
 		symbolList.add("ORCL");
 		symbolList.add("MSFT");
-		symbolList.add("ESZ2");
-		symbolList.add("RJZ2");
-		symbolList.add("YGZ2");
+		symbolList.add("GEZ2");
 		symbolList.add("_S_FX_A6H2_A6Z1");
 
 		final List<DDF_Instrument> list = DDF_InstrumentProvider
 				.remoteLookup(symbolList);
 
-		assertEquals(7, list.size());
+		assertEquals(5, list.size());
 
 		for (final DDF_Instrument instrument : list) {
 
@@ -69,16 +67,14 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("IBM");
 		symbolList.add("ORCL");
 		symbolList.add("MSFT");
-		symbolList.add("ESZ2");
-		symbolList.add("RJZ2");
-		symbolList.add("YGZ2");
+		symbolList.add("GEZ2");
 		symbolList.add("_S_FX_A6H2_A6Z1");
 		symbolList.add("_S_BF_ZSQ2_ZSU2_ZSX2");
 
 		final List<DDF_Instrument> list = DDF_InstrumentProvider
 				.find(symbolList);
 
-		assertEquals(8, list.size());
+		assertEquals(6, list.size());
 
 		for (final DDF_Instrument instrument : list) {
 
