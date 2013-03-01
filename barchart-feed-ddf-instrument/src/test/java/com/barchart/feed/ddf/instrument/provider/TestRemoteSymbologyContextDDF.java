@@ -13,14 +13,15 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
 import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
+import com.barchart.feed.inst.provider.InstrumentGUIDImpl;
 
 public class TestRemoteSymbologyContextDDF {
 
 	public static final String INST_1 = "GOOG";
-	public static final String GUID_1 = "1261904";
+	public static final InstrumentGUID GUID_1 = new InstrumentGUIDImpl("1261904");
 	
 	public static final String INST_2 = "A6H2012";
-	public static final String GUID_2 = "1004331";
+	public static final InstrumentGUID GUID_2 = new InstrumentGUIDImpl("1004331");
 	
 	public static final String FAIL_1 = "XXXGGG";
 	
@@ -34,13 +35,13 @@ public class TestRemoteSymbologyContextDDF {
 		
 		final InstrumentGUID guid1 = ctx.lookup(INST_1);
 		
-		assertTrue(guid1.toString().equals(GUID_1));
+		assertTrue(guid1.equals(GUID_1));
 		assertTrue(guidMap.containsKey(guid1));
 		assertTrue(ctx.symbolMap.containsKey(INST_1));
 		
 		final InstrumentGUID guid2 = ctx.lookup(INST_2);
 		
-		assertTrue(guid2.toString().equals(GUID_2));
+		assertTrue(guid2.equals(GUID_2));
 		assertTrue(guidMap.containsKey(guid2));
 		assertTrue(ctx.symbolMap.containsKey(INST_2));
 		

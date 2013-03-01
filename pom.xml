@@ -39,7 +39,7 @@
 		<!-- http://search.maven.org/#search|ga|1|barchart-feed -->
 		<!-- <groupId>com.barchart.feed</groupId> -->
 		<!-- <artifactId>barchart-feed</artifactId> -->
-		<barchartFeedVersion>1.4.1-SNAPSHOT</barchartFeedVersion>
+		<barchartFeedVersion>1.4.1</barchartFeedVersion>
 
 		<!-- http://search.maven.org/#search|ga|1|io.netty -->
 		<!-- <groupId>io.netty</groupId> -->
