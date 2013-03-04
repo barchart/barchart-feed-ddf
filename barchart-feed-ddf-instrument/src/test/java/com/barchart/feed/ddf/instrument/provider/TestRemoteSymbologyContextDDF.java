@@ -13,15 +13,14 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
 import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
-import com.barchart.feed.inst.provider.InstrumentGUIDImpl;
 
 public class TestRemoteSymbologyContextDDF {
 
 	public static final String INST_1 = "GOOG";
-	public static final InstrumentGUID GUID_1 = new InstrumentGUIDImpl("1261904");
+	public static final InstrumentGUID GUID_1 = new InstrumentGUID("1261904");
 	
 	public static final String INST_2 = "A6H2012";
-	public static final InstrumentGUID GUID_2 = new InstrumentGUIDImpl("1004331");
+	public static final InstrumentGUID GUID_2 = new InstrumentGUID("1004331");
 	
 	public static final String FAIL_1 = "XXXGGG";
 	

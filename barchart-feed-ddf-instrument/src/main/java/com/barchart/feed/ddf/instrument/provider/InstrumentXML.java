@@ -55,11 +55,11 @@ import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.inst.provider.InstrumentFactory;
-import com.barchart.feed.inst.provider.InstrumentGUIDImpl;
 import com.barchart.missive.core.Missive;
 import com.barchart.missive.core.Tag;
 import com.barchart.proto.buf.inst.BookLiquidity;
@@ -214,7 +214,7 @@ public final class InstrumentXML {
 		
 		final Map<Tag, Object> map = new HashMap<Tag, Object>();
 		
-		map.put(InstrumentField.GUID, new InstrumentGUIDImpl(guid));
+		map.put(InstrumentField.GUID, new InstrumentGUID(guid));
 		map.put(MARKET_GUID, guid);
 		map.put(SECURITY_TYPE, SecurityType.NULL_TYPE);
 		map.put(BOOK_LIQUIDITY, BookLiquidityType.NONE);

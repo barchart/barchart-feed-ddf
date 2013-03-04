@@ -57,10 +57,10 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.get(POINT_VALUE).equals(newPrice(1)));
 		assertTrue(IBMInst.get(DISPLAY_FRACTION).equals(newFraction(10, -2)));
 		assertTrue(IBMInst.get(LIFETIME) == (ValueConst.NULL_TIME_INTERVAL));
-		assertTrue(IBMInst.get(MARKET_HOURS).length == 0);
+		assertTrue(IBMInst.get(MARKET_HOURS).size() == 0);
 		assertTrue(IBMInst.get(TIME_ZONE_OFFSET).equals(newSize(-18000000)));
 		assertTrue(IBMInst.get(TIME_ZONE_NAME).equals(newText("NEW_YORK")));
-		assertTrue(IBMInst.get(COMPONENT_LEGS).length == 0);
+		assertTrue(IBMInst.get(COMPONENT_LEGS).size() == 0);
 		
 	}
 	

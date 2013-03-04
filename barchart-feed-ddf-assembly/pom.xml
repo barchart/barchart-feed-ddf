@@ -204,8 +204,7 @@
 						<Embed-Transitive>true</Embed-Transitive>
 						<Export-Package>
 							com.barchart.util.*;version=${barchartUtilVersion},
-							com.barchart.feed.base.*;version=${barchartFeedVersion},
-							com.barchart.feed.client.*;version=${barchartFeedVersion},
+							com.barchart.feed.*;version=${barchartFeedVersion},
 							com.barchart.feed.ddf.*;version=${project.parent.version},
 						</Export-Package>
 					</instructions>

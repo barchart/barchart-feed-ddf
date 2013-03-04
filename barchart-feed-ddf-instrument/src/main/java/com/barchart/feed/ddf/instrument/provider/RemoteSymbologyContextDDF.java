@@ -31,7 +31,6 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.SymbologyContext;
 import com.barchart.feed.ddf.util.HelperXML;
-import com.barchart.feed.inst.provider.InstrumentGUIDImpl;
 import com.barchart.missive.core.Missive;
 
 final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> {
@@ -155,7 +154,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
 			final Instrument instDOM = InstrumentXML.decodeXML(tag);
 			
-			InstrumentGUID guid = new InstrumentGUIDImpl(
+			InstrumentGUID guid = new InstrumentGUID(
 					instDOM.get(InstrumentField.MARKET_GUID));
 			
 			/* Cache symbols */
