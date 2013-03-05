@@ -154,6 +154,11 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
 			final Instrument instDOM = InstrumentXML.decodeXML(tag);
 			
+			if(instDOM == null || instDOM.isNull()) {
+				failedMap.put(symbol, "");
+				return InstrumentGUID.NULL_INSTRUMENT_GUID;
+			}
+			
 			InstrumentGUID guid = new InstrumentGUID(
 					instDOM.get(InstrumentField.MARKET_GUID));
 			
@@ -168,8 +173,12 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			
 			return guid;
 			
+		} catch (final SymbolNotFoundException se) {
+			log.debug("HTTP status failed on {}", symbol);
+			failedMap.put(symbol, "");
+			return InstrumentGUID.NULL_INSTRUMENT_GUID;
 		} catch (final Exception e) {
-			log.error("Symbol remote lookup failed for {}", symbol);
+			log.error("Symbol remote lookup failed for {}, {}", symbol, e.getMessage());
 			failedMap.put(symbol, "");
 			return InstrumentGUID.NULL_INSTRUMENT_GUID;
 		}

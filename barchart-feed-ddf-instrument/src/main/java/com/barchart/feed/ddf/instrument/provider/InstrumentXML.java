@@ -54,12 +54,12 @@ import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.core.Missive;
 import com.barchart.missive.core.Tag;
 import com.barchart.proto.buf.inst.BookLiquidity;
@@ -89,6 +89,8 @@ public final class InstrumentXML {
 	
 	public static Instrument decodeXML(final Element tag) throws Exception {
 		
+		
+		
 		// lookup status
 
 		final String statusCode = xmlStringDecode(tag, STATUS, XML_STOP);
@@ -100,10 +102,15 @@ public final class InstrumentXML {
 		}
 
 		// decode DOM
+		TextValue guid;
+		try {
+			guid = ValueBuilder.newText(xmlStringDecode(tag, GUID, XML_STOP));
+		} catch (Exception e) {
+			return Instrument.NULL_INSTRUMENT;
+		}
 		
-		final TextValue guid = ValueBuilder.newText(xmlStringDecode(tag, GUID, XML_STOP));
 		final TextValue symbolReal = ValueBuilder.newText(xmlStringDecode(tag, SYMBOL_REALTIME, XML_STOP));
-		final byte exchCode = xmlByteDecode(tag, EXCHANGE_DDF, XML_PASS); // XXX
+		final byte exchCode = xmlByteDecode(tag, EXCHANGE_DDF, XML_PASS); 
 		final byte baseCode = xmlByteDecode(tag, BASE_CODE_DDF, XML_STOP);
 		final String codeCFI = xmlStringDecode(tag, SYMBOL_CODE_CFI, XML_PASS);
 		final String zoneCode = xmlStringDecode(tag, TIME_ZONE_DDF, XML_STOP);
@@ -161,7 +168,7 @@ public final class InstrumentXML {
 		final TextValue guid = ValueBuilder.newText(xmlStringDecode(ats, GUID, XML_STOP));
 		final TextValue symbolReal = ValueBuilder.newText(
 				xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));
-		final byte exchCode = xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS); // XXX
+		final byte exchCode = xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS); 
 		final byte baseCode = xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP);
 		final String codeCFI = xmlStringDecode(ats, SYMBOL_CODE_CFI, XML_PASS);
 		final String zoneCode = xmlStringDecode(ats, TIME_ZONE_DDF, XML_STOP);
@@ -233,7 +240,7 @@ public final class InstrumentXML {
 		map.put(MARKET_HOURS, new TimeInterval[0]);
 		map.put(TIME_ZONE_OFFSET, newSize(zone.getUTCOffset()));
 		map.put(TIME_ZONE_NAME, newText(zone.name()));
-		map.put(COMPONENT_LEGS, new TextValue[0]);
+		map.put(COMPONENT_LEGS, new GuidList());
 
 		return Missive.build(InstrumentDDF.class, map);
 		
