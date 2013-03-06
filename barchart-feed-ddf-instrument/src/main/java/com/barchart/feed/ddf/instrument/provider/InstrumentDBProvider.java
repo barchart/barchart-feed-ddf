@@ -66,15 +66,21 @@ public final class InstrumentDBProvider {
 			@Override
 			public Boolean call() throws Exception {
 				
-				boolean didUpdate = new UpdateInstrumentDefinitions(resourceFolder).call();
+				synchronized(map) {
 				
-				if(!didUpdate) {
-					return true;
+					boolean didUpdate = new UpdateInstrumentDefinitions(
+							resourceFolder).call();
+					
+					if(!didUpdate) {
+						return true;
+					}
+					
+					boolean populateBoolean = new PopulateDatabase(
+							resourceFolder, map).call();
+					
+					return populateBoolean;
+				
 				}
-				
-				boolean populateBoolean = new PopulateDatabase(resourceFolder, map).call();
-				
-				return populateBoolean;
 			}
 			
 		};
