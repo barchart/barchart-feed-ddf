@@ -1,6 +1,7 @@
 package com.barchart.feed.ddf.instrument.provider;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,21 +39,26 @@ public class LocalCacheSymbologyContextDDF implements SymbologyContext<CharSeque
 	@Override
 	public Map<CharSequence, InstrumentGUID> lookup(
 			Collection<? extends CharSequence> symbols) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		final Map<CharSequence, InstrumentGUID> result = 
+				new HashMap<CharSequence, InstrumentGUID>();
+		
+		for(final CharSequence symbol : symbols) {
+			result.put(symbol, lookup(symbol));
+		}
+		
+		return result;
 	}
 
 	@Override
 	public List<InstrumentGUID> search(CharSequence symbol) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Search not supported");
 	}
 
 	@Override
 	public List<InstrumentGUID> search(CharSequence symbol, int limit,
 			int offset) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException("Search not supported");
 	}
 
 }

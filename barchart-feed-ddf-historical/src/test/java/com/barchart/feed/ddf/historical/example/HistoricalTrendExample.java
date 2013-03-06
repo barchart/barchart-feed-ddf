@@ -28,7 +28,6 @@ import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.util.ValueUtil;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class HistoricalTrendExample.
  */
