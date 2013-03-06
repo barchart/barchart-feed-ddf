@@ -7,6 +7,11 @@
  */
 package com.barchart.feed.ddf.client.provider;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,28 +30,53 @@ public class TestAllMarketsReceiver {
 	private static final Logger log = LoggerFactory
 			.getLogger(TestAllMarketsReceiver.class);
 
-	public static void main(final String[] args) throws Exception {
+	public static void main(final String[] args) {
 
-		final BarchartFeedReceiver client = new BarchartFeedReceiver();
+		final ExecutorService executor = Executors.newCachedThreadPool();
+		
+		
+		
+		final BarchartFeedReceiver client = new BarchartFeedReceiver(executor);
 
-		final Instrument[] instruments1 = {};
-		final Instrument[] instruments2 = { client.lookup("ESH13") };
-
-		client.listenTCP(7000, false);
-
-		final MarketTaker<Market> taker1 =
-				TakerFactory.makeFactory1(instruments1);
-		final MarketTaker<Market> taker2 =
-				TakerFactory.makeFactory2(instruments2);
-
-		client.addAllMarketsTaker(taker1);
-		client.addTaker(taker2);
-
-		// Thread.sleep(10 * 1000);
-		// client.removeTaker(taker2);
-		Thread.sleep(10 * 10 * 60 * 1000);
-		client.shutdown();
-		System.exit(0);
+		try {
+			
+			final Instrument[] instruments1 = {};
+			final Instrument[] instruments2 = { client.lookup("ESH13") };
+	
+			Future<Boolean> task;
+			
+			try {
+				task = client.listenTCP(7000, false);
+				task.get();
+			} catch (final ExecutionException ex) {
+				ex.getCause().printStackTrace();
+				throw ex;
+			}
+			
+			if(!task.get()) {
+				throw new Exception("Instrument db update failed");
+			}
+			
+			log.debug("Adding market takers");
+			
+			final MarketTaker<Market> taker1 =
+					TakerFactory.makeFactory1(instruments1);
+			final MarketTaker<Market> taker2 =
+					TakerFactory.makeFactory2(instruments2);
+	
+			client.addAllMarketsTaker(taker1);
+			client.addTaker(taker2);
+	
+			// Thread.sleep(10 * 1000);
+			// client.removeTaker(taker2);
+			Thread.sleep(10 * 10 * 60 * 1000);
+		
+		} catch (final Exception e) {
+			e.printStackTrace();
+		} finally {
+			client.shutdown();
+			executor.shutdownNow();
+		}
 
 	}
 

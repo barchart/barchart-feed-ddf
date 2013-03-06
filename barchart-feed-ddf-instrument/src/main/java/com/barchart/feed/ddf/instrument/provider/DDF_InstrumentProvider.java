@@ -70,6 +70,7 @@ public final class DDF_InstrumentProvider {
 	private static final char[] T_Z_O = new char[] {'2', '0', '1'};
 	private static final char[] T_Z_T = new char[] {'2', '0', '2'};
 	private static final char[] T_Z = new char[] {'2', '0'};
+	private static final char[] O = new char[] {'1'};
 	
 	static {
 		final DateTime now = new DateTime();
@@ -122,8 +123,13 @@ public final class DDF_InstrumentProvider {
 	 *            the instance
 	 */
 	public static void bind(final DDF_DefinitionService instance) {
+
+		//log.debug("Binding new definition service: {}", instance.
+		//	getClass().getName());
+		
 		service = new WeakReference<DDF_DefinitionService>(instance);
 		DDF_InstrumentProvider.instance = instance;
+
 	}
 
 	/**
@@ -466,12 +472,7 @@ public final class DDF_InstrumentProvider {
 		
 		/* e.g. ESH3 */
 		if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {
-			return new StringBuilder(symbol).insert(symbol.length() - 1, T_Z_O);
-		}
-		
-		/* e.g. ESH13 */
-		if(!Character.isDigit(symbol.charAt(symbol.length() - 3))) {
-			return new StringBuilder(symbol).insert(symbol.length()-2, T_Z);
+			return new StringBuilder(symbol).insert(symbol.length() - 1, O);
 		}
 		
 		return symbol;

@@ -26,6 +26,7 @@ package com.barchart.feed.client.provider;
 import java.io.File;
 import java.io.IOException;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -56,6 +57,7 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartFeedReceiver.class);
 	
+	/* Used if unable to retrieve system default temp directory */
 	private static final String TEMP_DIR = "C:\\windows\\temp\\";
 
 	private ExecutorService executor = null;
@@ -90,7 +92,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @return
 	 * 		Future referencing the instrument database update task.  The task 
 	 * 		updates the local instrument definition file from a remote S3
-	 * 		bucket and builds the local database if needed.  
+	 * 		bucket and builds the local database if needed.  Task returns true
+	 * 		upon successful completion.
 	 */
 	public Future<Boolean> listenUDP(final int socketAddress, final boolean filterBySub,
 			final File resourceFolder) {
@@ -123,7 +126,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @return
 	 * 		Future referencing the instrument database update task.  The task 
 	 * 		updates the local instrument definition file from a remote S3
-	 * 		bucket and builds the local database if needed.  
+	 * 		bucket and builds the local database if needed.  Task returns true
+	 * 		upon successful completion.  
 	 */
 	public Future<Boolean> listenUDP(final int socketAddress, final boolean filterBySub) {
 
@@ -144,7 +148,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @return
 	 * 		Future referencing the instrument database update task.  The task 
 	 * 		updates the local instrument definition file from a remote S3
-	 * 		bucket and builds the local database if needed.  
+	 * 		bucket and builds the local database if needed.  Task returns true
+	 * 		upon successful completion.  
 	 */
 	public Future<Boolean> listenUDP(final int socketAddress, final File resourceFolder) {
 		
@@ -162,7 +167,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @return
 	 * 		Future referencing the instrument database update task.  The task 
 	 * 		updates the local instrument definition file from a remote S3
-	 * 		bucket and builds the local database if needed.  
+	 * 		bucket and builds the local database if needed.  Task returns true
+	 * 		upon successful completion.  
 	 */
 	public Future<Boolean> listenUDP(final int socketAddress) {
 
@@ -188,11 +194,14 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @return
 	 * 		Future referencing the instrument database update task.  The task 
 	 * 		updates the local instrument definition file from a remote S3
-	 * 		bucket and builds the local database if needed.  
+	 * 		bucket and builds the local database if needed.  Task returns true
+	 * 		upon successful completion.  
 	 */
 	public Future<Boolean> listenTCP(final int socketAddress, final boolean filterBySub,
 			final File resourceFolder) {
 		
+		log.debug("Using {} as resource folder", resourceFolder.getAbsolutePath());
+	
 		setClient(DDF_FeedClientFactory.newStatelessTCPListenerClient(
 				socketAddress, filterBySub, executor), false);
 		
@@ -204,7 +213,6 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 		DDF_InstrumentProvider.bind(dbService);
 		
 		return executor.submit(InstrumentDBProvider.updateDBMap(resourceFolder, dbMap));
-		
 	}
 	
 	/**
@@ -220,7 +228,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @return
 	 * 		Future referencing the instrument database update task.  The task 
 	 * 		updates the local instrument definition file from a remote S3
-	 * 		bucket and builds the local database if needed.       
+	 * 		bucket and builds the local database if needed.  Task returns true
+	 * 		upon successful completion.       
 	 */
 	public Future<Boolean> listenTCP(final int socketAddress, final boolean filterBySub) {
 
@@ -231,7 +240,7 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	/**
 	 * Starts a stateless TCP connection to the specified port. If the user is
 	 * already logged in, this call will end the previous connection and reset
-	 * all registered market takers.
+	 * all registered market takers.  
 	 * 
 	 * @param socketAddress
 	 * 		The socket the feed receiver will listen to
@@ -241,7 +250,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @return
 	 * 		Future referencing the instrument database update task.  The task 
 	 * 		updates the local instrument definition file from a remote S3
-	 * 		bucket and builds the local database if needed.
+	 * 		bucket and builds the local database if needed.  Task returns true
+	 * 		upon successful completion.       
 	 */
 	public Future<Boolean> listenTCP(final int socketAddress, final File resourceFolder) {
 		
@@ -252,7 +262,7 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	/**
 	 * Starts a stateless TCP connection to the specified port. If the user is
 	 * already logged in, this call will end the previous connection and reset
-	 * all registered market takers.
+	 * all registered market takers.  
 	 * 
 	 * @param socketAddress
 	 *      The socket the feed receiver will listen to
@@ -262,7 +272,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 	 * @return
 	 * 		Future referencing the instrument database update task.  The task 
 	 * 		updates the local instrument definition file from a remote S3
-	 * 		bucket and builds the local database if needed.
+	 * 		bucket and builds the local database if needed.  Task returns true
+	 * 		upon successful completion.       
 	 */
 	public Future<Boolean> listenTCP(final int socketAddress) {
 
@@ -341,6 +352,8 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 			return File.createTempFile("temp", null).getParentFile();
 			
 		} catch (IOException e) {
+			log.warn("Unable to retrieve system temp folder, using default {}", 
+					TEMP_DIR);
 			return new File(TEMP_DIR);
 		}
 		

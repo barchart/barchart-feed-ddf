@@ -61,7 +61,7 @@ public final class InstrumentDBProvider {
 			throw new IllegalArgumentException("Map is null");
 		}
 		
-		return new Callable<Boolean>(){
+		return new Callable<Boolean>() {
 
 			@Override
 			public Boolean call() throws Exception {

@@ -62,8 +62,8 @@ final class CodecHelper {
 		final CharSequence password = settings.getAuthPass();
 
 		final Instrument instrument = query.instrument;
-		final CharSequence symbol = instrument
-				.get(InstrumentField.SYMBOL);  // TODO Need to modify symbol
+		final CharSequence symbol = formatHistorical(instrument
+				.get(InstrumentField.SYMBOL));  // TODO Need to modify symbol
 
 		final DateTimeZone timeZone = DateTimeZone.forOffsetMillis(
 				(int)instrument.get(InstrumentField.TIME_ZONE_OFFSET).asLong());
@@ -184,6 +184,22 @@ final class CodecHelper {
 
 	}
 
+	static final CharSequence formatHistorical(final CharSequence symbol) {
+		
+		if(symbol == null || symbol.length() == 0) {
+			return "";
+		}
+		
+		StringBuilder mod = new StringBuilder(symbol);
+		
+		if(mod.length() > 4) {
+			mod.delete(mod.length() - 4, mod.length() - 2);
+		}
+		
+		return mod.toString();
+		
+	}
+	
 	/**
 	 * 
 	 * start: this parameter should be set to the desired start date/time for 

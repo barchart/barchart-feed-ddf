@@ -75,7 +75,7 @@ public class HistoricalEodExample {
 			return;
 		}
 
-		log.info("insrument : {}", instrument);
+		log.info("insrument : {}", instrument.toString());
 
 		/*
 		 * 3) define ticks query parameters
