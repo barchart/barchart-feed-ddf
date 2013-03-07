@@ -87,11 +87,12 @@ public final class InstrumentDBProvider {
 		
 	}
 	
-	public static Future<Boolean> updateDBMap(final File resourceFolder,
-			final LocalInstrumentDBMap map, final ExecutorService executor) {
+	public static Callable<Boolean> updateHistoricalDBMap(final File resourceFolder,
+			final LocalInstrumentDBMap map, final DateTime date) {
 		
-		return executor.submit(updateDBMap(resourceFolder, map));
+		//TODO
 		
+		return null;
 	}
 	
 	public static File getLocalInstDef(final File resourceFolder) {

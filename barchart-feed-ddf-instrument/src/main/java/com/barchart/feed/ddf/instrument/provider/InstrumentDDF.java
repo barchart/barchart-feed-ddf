@@ -15,7 +15,6 @@ import static com.barchart.feed.api.fields.InstrumentField.VENDOR;
 
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
-import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.market.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.feed.inst.provider.InstrumentBase;
@@ -33,18 +32,8 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 	//
 
 	@Override
-	public boolean isFrozen() {
-		return true;
-	}
-
-	@Override
 	public final InstrumentDDF freeze() {
 		return this;
-	}
-
-	@Override
-	public final boolean isNull() {
-		return this == Instrument.NULL_INSTRUMENT;
 	}
 
 //	@Override
@@ -121,11 +110,6 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 
 		return text.toString();
 
-	}
-
-	@Override
-	public InstrumentGUID getGUID() {
-		return get(InstrumentField.GUID);
 	}
 
 }
