@@ -38,8 +38,10 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	private final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
 			new ConcurrentHashMap<InstrumentGUID, Instrument>();
 	
-	private final LocalCacheSymbologyContextDDF cache = new LocalCacheSymbologyContextDDF();
-	private final SymbologyContext<CharSequence> remote = new RemoteSymbologyContextDDF(guidMap);
+	private final LocalCacheSymbologyContextDDF cache = 
+			new LocalCacheSymbologyContextDDF();
+	private final SymbologyContext<CharSequence> remote = 
+			new RemoteSymbologyContextDDF(guidMap);
 			
 	private final ExecutorService executor;
 	

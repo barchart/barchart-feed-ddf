@@ -76,9 +76,11 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	//
 
-	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy = new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
+	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
+			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
-	private final Map<String, Subscription> subscriptions = new ConcurrentHashMap<String, Subscription>();
+	private final Map<String, Subscription> subscriptions = 
+			new ConcurrentHashMap<String, Subscription>();
 
 	//
 
@@ -86,9 +88,11 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	//
 
-	private final BlockingQueue<DDF_FeedEvent> eventQueue = new LinkedBlockingQueue<DDF_FeedEvent>();
+	private final BlockingQueue<DDF_FeedEvent> eventQueue = 
+			new LinkedBlockingQueue<DDF_FeedEvent>();
 
-	private final BlockingQueue<DDF_BaseMessage> messageQueue = new LinkedBlockingQueue<DDF_BaseMessage>();
+	private final BlockingQueue<DDF_BaseMessage> messageQueue = 
+			new LinkedBlockingQueue<DDF_BaseMessage>();
 
 	private final AtomicLong lastHeartbeat = new AtomicLong(0);
 
@@ -96,7 +100,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private volatile DDF_MessageListener msgListener = null;
 
-	private final CopyOnWriteArrayList<FeedStateListener> feedListeners = new CopyOnWriteArrayList<FeedStateListener>();
+	private final CopyOnWriteArrayList<FeedStateListener> feedListeners = 
+			new CopyOnWriteArrayList<FeedStateListener>();
 
 	//
 
@@ -114,7 +119,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	// SOCKS5
 
 	private DDF_SocksProxy proxySettings = null;
-	private final BlockingQueue<Boolean> socksConnectResult = new LinkedBlockingQueue<Boolean>();
+	private final BlockingQueue<Boolean> socksConnectResult = 
+			new LinkedBlockingQueue<Boolean>();
 
 	//
 
