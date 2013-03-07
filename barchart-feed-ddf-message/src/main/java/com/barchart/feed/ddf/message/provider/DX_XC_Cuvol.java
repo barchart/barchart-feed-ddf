@@ -313,11 +313,9 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 		}
 
-		// hack to work around for lack of "exchange_ddf" attribute
-
 		final Instrument instrument = getInstrument();
-		setExchange(DDF_Exchange.fromMICCode(instrument.get(
-				InstrumentField.EXCHANGE_CODE).toString()));
+		setExchange(DDF_Exchange.fromCode(instrument.get(
+				InstrumentField.EXCHANGE_CODE).toString().getBytes()[0]));
 
 		final long millisUTC = xmlTimeDecode(getExchange().kind.time.zone, tag,
 				TIME_LAST, XML_PASS);

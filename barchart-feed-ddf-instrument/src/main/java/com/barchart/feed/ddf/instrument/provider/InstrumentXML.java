@@ -232,7 +232,7 @@ public final class InstrumentXML {
 		map.put(DESCRIPTION, newText(symbolComment));
 		map.put(CFI_CODE, newText(codeCFI));
 		map.put(CURRENCY_CODE, MarketCurrency.USD);
-		map.put(EXCHANGE_CODE, newText(exchange.name()));
+		map.put(EXCHANGE_CODE, newText(new byte[]{(exchange.code)}));
 		map.put(PRICE_STEP, priceStep);
 		map.put(POINT_VALUE, pricePoint);
 		map.put(DISPLAY_FRACTION, fraction);
