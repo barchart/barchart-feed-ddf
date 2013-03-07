@@ -52,7 +52,7 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.get(DESCRIPTION).equals("International Business Machines Corp."));
 		assertTrue(IBMInst.get(CFI_CODE).equals(newText("EXXXXX")));
 		assertTrue(IBMInst.get(CURRENCY_CODE) == MarketCurrency.USD);
-		assertTrue(IBMInst.get(EXCHANGE_CODE).equals(newText("NYSE")));
+		assertTrue(IBMInst.get(EXCHANGE_CODE).equals(newText("N")));
 		assertTrue(IBMInst.get(PRICE_STEP).equals(newPrice(0.01)));
 		assertTrue(IBMInst.get(POINT_VALUE).equals(newPrice(1)));
 		assertTrue(IBMInst.get(DISPLAY_FRACTION).equals(newFraction(10, -2)));
