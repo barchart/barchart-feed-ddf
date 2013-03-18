@@ -46,7 +46,7 @@
 		<!-- <artifactId>netty</artifactId> -->
 		<barchartNettyVersion>3.5.11.Final</barchartNettyVersion>
 		
-		<barchartMissiveVersion>[1.2.2, 1.3.0)</barchartMissiveVersion>
+		<barchartMissiveVersion>1.2.2</barchartMissiveVersion>
 		<barchartProtoInstVersion>1.2.0</barchartProtoInstVersion>
 		<bdbjeVersion>4.0.92</bdbjeVersion>
 		<protoBufVersion>2.4.1</protoBufVersion>
