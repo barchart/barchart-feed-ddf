@@ -5,12 +5,16 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.feed.inst.provider.InstrumentFactory;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 
 public class TestArrayHashMap {
 	
 	public static void main(final String[] args) throws Exception {
+		
+		ObjectMapFactory.install(new BarchartFeedInstManifest());
 		
 		final ArrayHashMap map = new ArrayHashMap();
 		

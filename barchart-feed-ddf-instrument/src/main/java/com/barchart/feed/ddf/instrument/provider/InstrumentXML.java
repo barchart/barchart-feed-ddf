@@ -60,8 +60,8 @@ import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.missive.core.Tag;
-import com.barchart.missive.core.Missive;
+import com.barchart.missive.api.Tag;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.proto.buf.inst.BookLiquidity;
 import com.barchart.proto.buf.inst.BookStructure;
 import com.barchart.proto.buf.inst.Calendar;
@@ -242,7 +242,7 @@ public final class InstrumentXML {
 		map.put(TIME_ZONE_NAME, newText(zone.name()));
 		map.put(COMPONENT_LEGS, new GuidList());
 
-		return Missive.build(InstrumentDDF.class, map);
+		return ObjectMapFactory.build(InstrumentDDF.class, map);
 		
 	}
 	

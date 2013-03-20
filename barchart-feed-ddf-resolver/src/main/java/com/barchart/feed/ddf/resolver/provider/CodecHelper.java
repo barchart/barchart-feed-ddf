@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.inst.provider.InstrumentFactory;
-import com.barchart.missive.core.Tag;
+import com.barchart.missive.api.Tag;
 import com.barchart.util.enums.DictEnum;
 import com.barchart.util.enums.ParaEnumBase;
 import com.barchart.util.values.api.PriceValue;
@@ -93,19 +93,19 @@ class CodecHelper {
 
 	static String encode(final Tag<?> field, final Object value) {
 
-		if (field.type().equals(TextValue.class)) {
+		if (field.classType().equals(TextValue.class)) {
 			return value.toString();
 		}
 
-		if (field.type().equals(PriceValue.class)) {
+		if (field.classType().equals(PriceValue.class)) {
 			return encode((PriceValue) value);
 		}
 
-		if (field.type().equals(SizeValue.class)) {
+		if (field.classType().equals(SizeValue.class)) {
 			return encode((SizeValue) value);
 		}
 
-		if (field.type().equals(TimeValue.class)) {
+		if (field.classType().equals(TimeValue.class)) {
 			return encode((TimeValue) value);
 		}
 
@@ -113,7 +113,7 @@ class CodecHelper {
 			return encode((Enum<?>) value);
 		}
 
-		if (field.type().equals(ParaEnumBase.class)) {
+		if (field.classType().equals(ParaEnumBase.class)) {
 			return encode((ParaEnumBase<?, ?>) value);
 		}
 
@@ -124,32 +124,32 @@ class CodecHelper {
 	@SuppressWarnings("unchecked")
 	static Object decode(final Tag<?> field, final String value) {
 
-		if (field.type().equals(TextValue.class)) {
+		if (field.classType().equals(TextValue.class)) {
 			return ValueBuilder.newText(value);
 		}
 
-		if (field.type().equals(PriceValue.class)) {
+		if (field.classType().equals(PriceValue.class)) {
 			return decodePrice(value);
 		}
 
-		if (field.type().equals(SizeValue.class)) {
+		if (field.classType().equals(SizeValue.class)) {
 			return decodeSize(value);
 		}
 
-		if (field.type().equals(TimeValue.class)) {
+		if (field.classType().equals(TimeValue.class)) {
 			return decodeTime(value);
 		}
 
 		if (field.isEnum()) {
 			@SuppressWarnings("rawtypes")
-			final Class klaz = field.type();
+			final Class klaz = field.classType();
 			final Enum<?> enuma = enumFrom(klaz, value);
 			return enuma;
 		}
 
-		if (field.type().equals(ParaEnumBase.class)) {
+		if (field.classType().equals(ParaEnumBase.class)) {
 			@SuppressWarnings("rawtypes")
-			final Class klaz = field.type();
+			final Class klaz = field.classType();
 			final DictEnum<?>[] array = ParaEnumBase.valuesFor(klaz);
 			for (final DictEnum<?> dict : array) {
 				if (field.name().equals(dict.name())) {

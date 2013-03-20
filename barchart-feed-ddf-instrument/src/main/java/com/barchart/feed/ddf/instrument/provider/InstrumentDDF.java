@@ -18,15 +18,10 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.market.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.feed.inst.provider.InstrumentBase;
-import com.barchart.missive.core.Tag;
 import com.barchart.util.values.api.TimeValue;
 
 class InstrumentDDF extends InstrumentBase implements Instrument {
 
-	static {
-		install(new Tag<?>[0]);
-	}
-	
 	private static final MarketDisplay display = new MarketDisplayBaseImpl();
 	
 	//

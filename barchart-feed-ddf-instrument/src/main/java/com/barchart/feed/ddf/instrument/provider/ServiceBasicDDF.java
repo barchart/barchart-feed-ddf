@@ -20,9 +20,8 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
-import com.barchart.feed.inst.provider.InstrumentFactory;
-import com.barchart.missive.core.Tag;
-import com.barchart.missive.core.Missive;
+import com.barchart.missive.api.Tag;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -53,7 +52,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 		final Map<Tag, Object> map = new HashMap<Tag, Object>();
 		map.put(InstrumentField.MARKET_GUID, lookup);
-		final Instrument instrument = Missive.build(InstrumentDDF.class, map);
+		final Instrument instrument = ObjectMapFactory.build(InstrumentDDF.class, map);
 
 		return instrument;
 	}

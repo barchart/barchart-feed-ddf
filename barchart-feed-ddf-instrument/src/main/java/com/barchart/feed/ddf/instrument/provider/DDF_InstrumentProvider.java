@@ -18,10 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -38,9 +34,12 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
-import com.barchart.missive.core.Missive;
+import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
+import com.barchart.missive.api.Tag;
+import com.barchart.missive.core.Manifest;
+import com.barchart.missive.core.ObjectMap;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.anno.ThreadSafe;
-import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
 /**
@@ -76,6 +75,11 @@ public final class DDF_InstrumentProvider {
 		final DateTime now = new DateTime();
 		YEAR = now.year().get();
 		MONTH = DDF_ExpireMonth.fromDateTime(now).code;
+		
+		ObjectMapFactory.install(new BarchartFeedInstManifest());
+		final Manifest<ObjectMap> ddfManifest = new Manifest<ObjectMap>();
+		ddfManifest.put(InstrumentDDF.class, new Tag<?>[0]);
+		ObjectMapFactory.install(ddfManifest);
 	}
 	
 	private DDF_InstrumentProvider() {
@@ -369,7 +373,7 @@ public final class DDF_InstrumentProvider {
 						try {
 
 							final Instrument instrument = InstrumentXML.decodeSAX(attributes);
-							final Instrument ddfInst = Missive.build(InstrumentDDF.class, instrument);
+							final Instrument ddfInst = ObjectMapFactory.build(InstrumentDDF.class, instrument);
 							list.add(ddfInst);
 
 						} catch (final SymbolNotFoundException e) {

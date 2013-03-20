@@ -31,7 +31,7 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.SymbologyContext;
 import com.barchart.feed.ddf.util.HelperXML;
-import com.barchart.missive.core.Missive;
+import com.barchart.missive.core.ObjectMapFactory;
 
 final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> {
 
@@ -213,7 +213,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 						try {
 
 							final Instrument inst = InstrumentXML.decodeSAX(attributes);
-							final Instrument ddfInst = Missive.build(InstrumentDDF.class, inst);
+							final Instrument ddfInst = ObjectMapFactory.build(InstrumentDDF.class, inst);
 							symMap.put(inst.get(InstrumentField.SYMBOL), ddfInst.getGUID());
 							guidMap.put(inst.getGUID(), inst);
 							

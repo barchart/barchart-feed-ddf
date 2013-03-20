@@ -24,7 +24,7 @@ import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.SymbologyContext;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
-import com.barchart.missive.core.Missive;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.anno.ThreadSafe;
 
 /**
@@ -151,7 +151,7 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 				return Instrument.NULL_INSTRUMENT;
 			}
 
-			return Missive.build(InstrumentDDF.class, instrument);
+			return ObjectMapFactory.build(InstrumentDDF.class, instrument);
 			
 		}
 		
