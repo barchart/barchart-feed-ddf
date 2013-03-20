@@ -21,6 +21,11 @@ import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
+import com.barchart.missive.api.Tag;
+import com.barchart.missive.core.Manifest;
+import com.barchart.missive.core.ObjectMap;
+import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.values.provider.ValueConst;
 
 public class TestInstrumentXML {
@@ -31,6 +36,11 @@ public class TestInstrumentXML {
 	
 	@Test
 	public void testXML() throws Exception {
+		
+		ObjectMapFactory.install(new BarchartFeedInstManifest());
+		final Manifest<ObjectMap> ddfManifest = new Manifest<ObjectMap>();
+		ddfManifest.put(InstrumentDDF.class, new Tag<?>[0]);
+		ObjectMapFactory.install(ddfManifest);
 		
 		final DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
 		final DocumentBuilder builder = fac.newDocumentBuilder();
