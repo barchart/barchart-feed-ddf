@@ -72,7 +72,6 @@ import com.barchart.util.values.api.TimeValue;
  * 
  * keep here value relations and event management logic only
  **/
-
 @Mutable
 class VarMarketDDF extends VarMarket {
 
