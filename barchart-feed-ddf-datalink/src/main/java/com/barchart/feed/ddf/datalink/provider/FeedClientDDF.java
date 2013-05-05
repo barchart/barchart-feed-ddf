@@ -191,7 +191,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		eventPolicy.put(DDF_FeedEvent.LINK_DISCONNECT, reconnectionPolicy);
 
-		//no
+		// no
 		eventPolicy.put(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE,
 				reconnectionPolicy);
 
@@ -315,7 +315,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
 				final Set<Subscription> subs = new HashSet<Subscription>();
-				for(final Entry<String, Subscription> e : subscriptions.entrySet()) {
+				for (final Entry<String, Subscription> e : subscriptions
+						.entrySet()) {
 					subs.add(e.getValue());
 				}
 				subscribe(subs);
@@ -450,8 +451,9 @@ class FeedClientDDF implements DDF_FeedClient {
 	private void initialize() {
 
 		log.warn("initialize called");
-		final StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-		for(final StackTraceElement e : trace) {
+		final StackTraceElement[] trace = Thread.currentThread()
+				.getStackTrace();
+		for (final StackTraceElement e : trace) {
 			log.debug(e.getClassName() + ":" + e.getLineNumber());
 		}
 
@@ -490,6 +492,11 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		eventQueue.clear();
 		messageQueue.clear();
+
+		/* Interrupts login thread if login is active */
+
+		loginHandler.disableLogins();
+		loginHandler.interruptLogin();
 
 		// kill all threads
 
@@ -650,16 +657,16 @@ class FeedClientDDF implements DDF_FeedClient {
 		for (final Subscription sub : subs) {
 
 			if (sub != null) {
-				
+
 				final String inst = sub.getInstrument();
-				
-				/* If we're subscribed already, add new interests, otherwise add  */
-				if(subscriptions.containsKey(inst)) {
+
+				/* If we're subscribed already, add new interests, otherwise add */
+				if (subscriptions.containsKey(inst)) {
 					subscriptions.get(inst).addInterests(sub.getInterests());
 				} else {
 					subscriptions.put(inst, sub);
 				}
-				
+
 				sb.append(subscriptions.get(inst).subscribe() + ",");
 			}
 		}
@@ -669,7 +676,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	@Override
 	public Future<Boolean> subscribe(final Subscription sub) {
 
-		//TODO Should these just return DummyFutures? NULL seems bad
+		// TODO Should these just return DummyFutures? NULL seems bad
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
 			return null;
@@ -677,12 +684,12 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		/* If we're subscribed already, add new interests, otherwise add */
 		final String inst = sub.getInstrument();
-		if(subscriptions.containsKey(inst)) {
+		if (subscriptions.containsKey(inst)) {
 			subscriptions.get(inst).addInterests(sub.getInterests());
 		} else {
 			subscriptions.put(inst, sub);
 		}
-		
+
 		if (!isConnected()) {
 			return new DummyFuture();
 		}

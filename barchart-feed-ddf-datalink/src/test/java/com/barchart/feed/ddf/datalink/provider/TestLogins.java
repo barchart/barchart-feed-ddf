@@ -52,9 +52,9 @@ public class TestLogins {
 
 		};
 
-		final DDF_FeedClient client =
-				DDF_FeedClientFactory.newConnectionClient(DDF_Transport.TCP, username,
-						password, runner);
+		final DDF_FeedClient client = DDF_FeedClientFactory
+				.newConnectionClient(DDF_Transport.TCP, username, password,
+						runner);
 
 		final DDF_MessageListener handler = new DDF_MessageListener() {
 
@@ -75,25 +75,27 @@ public class TestLogins {
 
 		client.subscribe(sub);
 
-		sleep(45000);
+		sleep(3000);
 
 		log.debug("*****************************************  Unsubscribing");
 
 		client.unsubscribe(sub);
 
-		sleep(10000);
+		sleep(3000);
 
 		log.debug("*****************************************  Resubscribing");
 
 		client.subscribe(sub);
 
-		sleep(45000);
+		sleep(3000);
 
-		while(true){
-			sleep(1000);
-		}
-		
-		//client.shutdown();
+		// while (true) {
+		// sleep(1000);
+		// }
+
+		client.shutdown();
+
+		log.debug("##################### called shutdown()");
 	}
 
 	private static void sleep(final int mills) {
