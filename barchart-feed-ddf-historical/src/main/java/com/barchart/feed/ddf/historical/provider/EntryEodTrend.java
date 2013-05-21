@@ -14,7 +14,7 @@ import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeEodTim
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeInstrument;
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeMantissa;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
@@ -27,7 +27,7 @@ class EntryEodTrend extends Entry implements DDF_EntryTrend {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryEodTrend(final Instrument instrument) {
+	public EntryEodTrend(final InstrumentEntity instrument) {
 		super(instrument);
 	}
 

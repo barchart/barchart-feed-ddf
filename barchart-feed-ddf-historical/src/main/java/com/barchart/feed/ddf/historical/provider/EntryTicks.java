@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
@@ -22,7 +22,7 @@ abstract class EntryTicks extends Entry {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryTicks(final Instrument instrument) {
+	public EntryTicks(final InstrumentEntity instrument) {
 		super(instrument);
 	}
 

@@ -7,8 +7,8 @@
  */
 package bench;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.book.enums.MarketBookSide;
@@ -47,7 +47,7 @@ public class Receiver {
 
 		final BarchartFeedReceiver client = new BarchartFeedReceiver();
 
-		final Instrument[] instruments = new Instrument[args.length
+		final InstrumentEntity[] instruments = new InstrumentEntity[args.length
 				- INST_START];
 
 		for (int i = INST_START; i < args.length; i++) {

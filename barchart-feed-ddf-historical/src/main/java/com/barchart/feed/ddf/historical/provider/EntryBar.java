@@ -12,8 +12,8 @@ import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBar;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
@@ -26,7 +26,7 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryBar(final Instrument instrument) {
+	public EntryBar(final InstrumentEntity instrument) {
 		super(instrument);
 	}
 

@@ -9,8 +9,8 @@ package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.splitCSV;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 
@@ -23,13 +23,13 @@ abstract class Entry implements DDF_Entry, Codec {
 
 	protected long millisUTC;
 
-	protected Instrument inst;
+	protected InstrumentEntity inst;
 
 	protected byte ordTradeDay = DDF_TradeDay.UNKNOWN.ord;
 
 	//
 
-	Entry(final Instrument instrument) {
+	Entry(final InstrumentEntity instrument) {
 		this.inst = instrument;
 	}
 
@@ -51,7 +51,7 @@ abstract class Entry implements DDF_Entry, Codec {
 	 * @see com.barchart.feed.ddf.historical.api.DDF_Entry#getInstrument()
 	 */
 	@Override
-	public Instrument getInstrument() {
+	public InstrumentEntity getInstrument() {
 		return inst;
 	}
 

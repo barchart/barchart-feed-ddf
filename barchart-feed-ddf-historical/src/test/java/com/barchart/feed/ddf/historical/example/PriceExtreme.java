@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.ddf.historical.example;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.market.MarketDisplay;
-import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
+import com.barchart.feed.market.provider.MarketDisplayBaseImpl;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
@@ -19,11 +19,11 @@ import com.barchart.util.values.provider.ValueBuilder;
  */
 class PriceExtreme {
 
-	Instrument inst;
+	InstrumentEntity inst;
 	
 	static final MarketDisplay display = new MarketDisplayBaseImpl();
 
-	PriceExtreme(final Instrument instrument) {
+	PriceExtreme(final InstrumentEntity instrument) {
 		this.inst = instrument;
 	}
 

@@ -16,8 +16,8 @@ import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
@@ -50,7 +50,7 @@ public final class DDF_Query<E extends DDF_Entry> implements
 	public DDF_QueryType<E> type;
 
 	/** The instrument. */
-	public Instrument instrument;
+	public InstrumentEntity instrument;
 
 	/**
 	 * this parameter should be set to the desired START date/time for  the
