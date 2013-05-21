@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
 import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
@@ -27,8 +27,8 @@ public class TestRemoteSymbologyContextDDF {
 	@Test
 	public void testRemoteLookup() {
 		
-		final Map<InstrumentGUID, Instrument> guidMap = 
-				new HashMap<InstrumentGUID, Instrument>();
+		final Map<InstrumentGUID, InstrumentEntity> guidMap = 
+				new HashMap<InstrumentGUID, InstrumentEntity>();
 		
 		final RemoteSymbologyContextDDF ctx = new RemoteSymbologyContextDDF(guidMap);
 		
@@ -54,8 +54,8 @@ public class TestRemoteSymbologyContextDDF {
 	@Test
 	public void testBatchRemoteLookup() {
 		
-		final Map<InstrumentGUID, Instrument> guidMap = 
-				new HashMap<InstrumentGUID, Instrument>();
+		final Map<InstrumentGUID, InstrumentEntity> guidMap = 
+				new HashMap<InstrumentGUID, InstrumentEntity>();
 		
 		final RemoteSymbologyContextDDF ctx = new RemoteSymbologyContextDDF(guidMap);
 		final List<CharSequence> symbols = new ArrayList<CharSequence>();

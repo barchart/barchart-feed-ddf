@@ -1,7 +1,7 @@
 package com.barchart.feed.ddf.instrument.provider;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 
 public class ArrayHashMap {
 	
@@ -9,14 +9,14 @@ public class ArrayHashMap {
 	private static final int MAX_COLLISIONS = 10;
 	private static final int SIZE = (int) Math.pow(2, POW);
 	
-	private final Instrument[][] vals = new Instrument[SIZE][];
+	private final InstrumentEntity[][] vals = new InstrumentEntity[SIZE][];
 	
-	public void put(final String symbol, final Instrument inst) {
+	public void put(final String symbol, final InstrumentEntity inst) {
 		
 		int index = symbol.hashCode() & (SIZE-1);
 		
 		if(vals[index] == null) {
-			vals[index] = new Instrument[MAX_COLLISIONS];
+			vals[index] = new InstrumentEntity[MAX_COLLISIONS];
 			vals[index][0] = inst;
 			return;
 		} else {
@@ -32,12 +32,12 @@ public class ArrayHashMap {
 		
 	}
 	
-	public Instrument get(final String symbol) {
+	public InstrumentEntity get(final String symbol) {
 		
 		int index = symbol.hashCode() & (SIZE-1);
 		
 		if(vals[index] == null) {
-			return Instrument.NULL_INSTRUMENT;
+			return InstrumentEntity.NULL_INSTRUMENT;
 		}
 		
 		for(int i = 0; i < MAX_COLLISIONS; i++) {
@@ -48,7 +48,7 @@ public class ArrayHashMap {
 		
 		System.out.println("Symbol not found " + symbol);
 		
-		return Instrument.NULL_INSTRUMENT;
+		return InstrumentEntity.NULL_INSTRUMENT;
 		
 	}
 

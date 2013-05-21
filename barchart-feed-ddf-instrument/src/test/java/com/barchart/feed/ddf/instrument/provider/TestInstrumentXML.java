@@ -16,11 +16,11 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.Manifest;
@@ -48,7 +48,7 @@ public class TestInstrumentXML {
 		final Document document = builder.parse(new ByteArrayInputStream(IBM.getBytes()));
 		final Element root = document.getDocumentElement();
 		final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
-		final Instrument IBMInst = InstrumentXML.decodeXML(tag);
+		final InstrumentEntity IBMInst = InstrumentXML.decodeXML(tag);
 		
 		System.out.println(IBMInst.toString());
 		
@@ -63,7 +63,7 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.get(CFI_CODE).equals(newText("EXXXXX")));
 		assertTrue(IBMInst.get(CURRENCY_CODE) == MarketCurrency.USD);
 		assertTrue(IBMInst.get(EXCHANGE_CODE).equals(newText("N")));
-		assertTrue(IBMInst.get(PRICE_STEP).equals(newPrice(0.01)));
+		assertTrue(IBMInst.get(TICK_SIZE).equals(newPrice(0.01)));
 		assertTrue(IBMInst.get(POINT_VALUE).equals(newPrice(1)));
 		assertTrue(IBMInst.get(DISPLAY_FRACTION).equals(newFraction(10, -2)));
 		assertTrue(IBMInst.get(LIFETIME) == (ValueConst.NULL_TIME_INTERVAL));

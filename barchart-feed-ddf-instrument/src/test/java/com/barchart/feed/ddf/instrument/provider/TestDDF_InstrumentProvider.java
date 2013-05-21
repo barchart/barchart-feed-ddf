@@ -16,8 +16,8 @@ import java.util.Map.Entry;
 
 import org.junit.Test;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.TimeValue;
 
@@ -46,12 +46,12 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("_S_FX_A6H2_A6Z1");
 		symbolList.add("_S_BF_ZSQ2_ZSU2_ZSX2");
 
-		final Map<? extends CharSequence, Instrument> list = DDF_InstrumentProvider
+		final Map<? extends CharSequence, InstrumentEntity> list = DDF_InstrumentProvider
 				.find(symbolList);
 
 		assertEquals(8, list.size());
 
-		for (final Entry<? extends CharSequence, Instrument> e : list.entrySet()) {
+		for (final Entry<? extends CharSequence, InstrumentEntity> e : list.entrySet()) {
 
 			if(e.getValue() == null) {
 				System.out.println(" = null");
@@ -63,7 +63,7 @@ public class TestDDF_InstrumentProvider {
 				System.out.println(e.getValue().toString());
 			}
 			
-			final Instrument inst = e.getValue();
+			final InstrumentEntity inst = e.getValue();
 			if(inst.contains(InstrumentField.LIFETIME)) {
 				System.out.println("******* LIFETIME");
 			}

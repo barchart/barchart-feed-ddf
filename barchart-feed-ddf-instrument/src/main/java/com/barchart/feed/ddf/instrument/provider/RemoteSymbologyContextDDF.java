@@ -26,8 +26,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.SymbologyContext;
 import com.barchart.feed.ddf.util.HelperXML;
@@ -50,7 +50,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			new ConcurrentHashMap<CharSequence, InstrumentGUID>();
 	final Map<CharSequence, CharSequence> failedMap = 
 			new ConcurrentHashMap<CharSequence, CharSequence>();
-	final Map<InstrumentGUID, Instrument> guidMap;
+	final Map<InstrumentGUID, InstrumentEntity> guidMap;
 	
 	public RemoteSymbologyContextDDF() {
 		guidMap = null;
@@ -60,7 +60,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 	 * Because DDF lookup combines symbol -> GUID and GUID -> Instrument, passing in
 	 * a map for the InstrumentService to use saves a double lookup. 
 	 */
-	public RemoteSymbologyContextDDF(final Map<InstrumentGUID, Instrument> guidMap) {
+	public RemoteSymbologyContextDDF(final Map<InstrumentGUID, InstrumentEntity> guidMap) {
 		this.guidMap = guidMap;
 	}
 	
@@ -152,7 +152,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			final String symbolURI = urlInstrumentLookup(symbol);
 			final Element root = HelperXML.xmlDocumentDecode(symbolURI);
 			final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
-			final Instrument instDOM = InstrumentXML.decodeXML(tag);
+			final InstrumentEntity instDOM = InstrumentXML.decodeXML(tag);
 			
 			if(instDOM == null || instDOM.isNull()) {
 				failedMap.put(symbol, "");
@@ -212,8 +212,8 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 
 						try {
 
-							final Instrument inst = InstrumentXML.decodeSAX(attributes);
-							final Instrument ddfInst = ObjectMapFactory.build(InstrumentDDF.class, inst);
+							final InstrumentEntity inst = InstrumentXML.decodeSAX(attributes);
+							final InstrumentEntity ddfInst = ObjectMapFactory.build(InstrumentDDF.class, inst);
 							symMap.put(inst.get(InstrumentField.SYMBOL), ddfInst.getGUID());
 							guidMap.put(inst.getGUID(), inst);
 							
