@@ -44,8 +44,8 @@ import java.nio.ByteBuffer;
 
 import org.w3c.dom.Element;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.provider.DefCuvolEntry;
 import com.barchart.feed.ddf.message.api.DDF_MarketCuvol;
@@ -313,7 +313,7 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 		}
 
-		final Instrument instrument = getInstrument();
+		final InstrumentEntity instrument = instrument();
 		setExchange(DDF_Exchange.fromCode(instrument.get(
 				InstrumentField.EXCHANGE_CODE).toString().getBytes()[0]));
 

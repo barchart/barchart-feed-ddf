@@ -58,14 +58,6 @@ abstract class Base implements DDF_BaseMessage, Codec {
 
 	protected long millisUTC = HelperDDF.DDF_EMPTY;
 
-	/* (non-Javadoc)
-	 * @see com.barchart.feed.ddf.message.api.DDF_BaseMessage#getTime()
-	 */
-	@Override
-	public final TimeValue getTime() {
-		return HelperDDF.newTimeDDF(millisUTC);
-	}
-
 	//
 
 	static final void check(final byte left, final byte right) {
@@ -175,7 +167,7 @@ abstract class Base implements DDF_BaseMessage, Codec {
 		text.append("\n");
 
 		text.append("message time : ");
-		text.append(getTime());
+		text.append(millisUTC);
 		text.append("\n");
 
 	}

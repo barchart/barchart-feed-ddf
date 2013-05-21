@@ -131,7 +131,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 		final DDF_MarketBase marketMsg = (DDF_MarketBase) message;
 
 		/* Filter by instrument */
-		if (subscriptions.containsKey(marketMsg.getInstrument()
+		if (subscriptions.containsKey(marketMsg.instrument()
 				.get(InstrumentField.SYMBOL).toString())) {
 			return true;
 		}

@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
 
 import org.joda.time.DateTimeZone;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -38,7 +38,9 @@ import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
 import com.barchart.feed.ddf.symbol.provider.DDF_Symbology;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.TextValue;
+import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
@@ -73,10 +75,15 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getInstrument()
 	 */
 	@Override
-	public final Instrument getInstrument() {
+	public final InstrumentEntity instrument() {
 		return DDF_InstrumentProvider.find(getId());
 	}
-
+	
+	@Override
+	public final TimeValue getTime() {
+		return ValueBuilder.newTime(millisUTC);
+	}
+	
 	// NOTE: invokes parser
 	/*
 	 * (non-Javadoc)

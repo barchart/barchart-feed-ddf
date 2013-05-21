@@ -9,7 +9,6 @@ package com.barchart.feed.ddf.message.api;
 
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.values.api.TimeValue;
 
 /**
  * base type for all ddf/xml messasges;
@@ -23,15 +22,6 @@ public interface DDF_BaseMessage {
 	 * definitive ddf message type
 	 */
 	DDF_MessageType getMessageType();
-
-	/**
-	 * time in UTC;
-	 * 
-	 * http://en.wikipedia.org/wiki/ISO_8601
-	 * 
-	 * meaning depends on message type;
-	 */
-	TimeValue getTime();
 
 	/**
 	 * http://en.wikipedia.org/wiki/Visitor_pattern

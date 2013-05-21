@@ -138,7 +138,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 		final DDF_MarketBase marketMsg = (DDF_MarketBase) message;
 		
 		/* Filter by instrument */
-		if(subscriptions.containsKey(marketMsg.getInstrument().get(
+		if(subscriptions.containsKey(marketMsg.instrument().get(
 				InstrumentField.SYMBOL).toString())) {
 			
 			return true;

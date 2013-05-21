@@ -39,6 +39,12 @@
 
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-book</artifactId>
+  			<version>2.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-instrument</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
