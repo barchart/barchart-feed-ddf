@@ -12,8 +12,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.feed.ddf.resolver.provider.DDF_ResolverProvider;
 
@@ -36,13 +36,13 @@ public class MainResolverSearch {
 		// resolver.searchSimple("mini nasd 100 08");
 
 		// List<DDF_Instrument> result = resolver.searchSimple("es*1 *450c");
-		final List<Instrument> result = resolver.searchSimple("msft");
+		final List<InstrumentEntity> result = resolver.searchSimple("msft");
 
 		log.debug("finish");
 
 		log.debug("result.size : {}", result.size());
 
-		for (final Instrument inst : result) {
+		for (final InstrumentEntity inst : result) {
 
 			log.debug("instrument {} {}", inst.get(InstrumentField.SYMBOL),
 					inst.get(InstrumentField.DESCRIPTION));

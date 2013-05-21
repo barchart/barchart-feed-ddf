@@ -10,7 +10,7 @@ package com.barchart.feed.ddf.resolver.api;
 import java.util.List;
 import java.util.concurrent.Future;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 
 /**
  * The Interface DDF_Resolver.
@@ -53,7 +53,7 @@ public interface DDF_Resolver {
 	 * 
 	 * http://lucene.apache.org/java/3_4_0/queryparsersyntax.html
 	 */
-	List<Instrument> searchLucene(String phrase) throws Exception;
+	List<InstrumentEntity> searchLucene(String phrase) throws Exception;
 
 	/**
 	 * BARCHART simplified search syntax;
@@ -67,6 +67,6 @@ public interface DDF_Resolver {
 	 * 3) combine all terms with "AND";
 	 * 
 	 */
-	List<Instrument> searchSimple(String phrase) throws Exception;
+	List<InstrumentEntity> searchSimple(String phrase) throws Exception;
 
 }

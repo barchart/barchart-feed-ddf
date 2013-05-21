@@ -13,7 +13,7 @@ import static com.barchart.feed.api.fields.InstrumentField.LIFETIME;
 import static com.barchart.feed.api.fields.InstrumentField.MARKET_GUID;
 import static com.barchart.feed.api.fields.InstrumentField.MARKET_HOURS;
 import static com.barchart.feed.api.fields.InstrumentField.POINT_VALUE;
-import static com.barchart.feed.api.fields.InstrumentField.PRICE_STEP;
+import static com.barchart.feed.api.fields.InstrumentField.TICK_SIZE;
 import static com.barchart.feed.api.fields.InstrumentField.SECURITY_TYPE;
 import static com.barchart.feed.api.fields.InstrumentField.SYMBOL;
 import static com.barchart.feed.api.fields.InstrumentField.TIME_ZONE_NAME;
@@ -49,13 +49,13 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.api.inst.GuidList;
-import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
@@ -87,7 +87,7 @@ public final class InstrumentXML {
 		
 	}
 	
-	public static Instrument decodeXML(final Element tag) throws Exception {
+	public static InstrumentEntity decodeXML(final Element tag) throws Exception {
 		
 		
 		
@@ -106,7 +106,7 @@ public final class InstrumentXML {
 		try {
 			guid = ValueBuilder.newText(xmlStringDecode(tag, GUID, XML_STOP));
 		} catch (Exception e) {
-			return Instrument.NULL_INSTRUMENT;
+			return InstrumentEntity.NULL_INSTRUMENT;
 		}
 		
 		final TextValue symbolReal = ValueBuilder.newText(xmlStringDecode(tag, SYMBOL_REALTIME, XML_STOP));
@@ -154,7 +154,7 @@ public final class InstrumentXML {
 		
 	}
 	
-	public static Instrument decodeSAX(final Attributes ats) throws Exception {
+	public static InstrumentEntity decodeSAX(final Attributes ats) throws Exception {
 		
 		// lookup status
 		final String statusCode = xmlStringDecode(ats, STATUS, XML_STOP);
@@ -212,7 +212,7 @@ public final class InstrumentXML {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private static final Instrument build(final TextValue guid,
+	private static final InstrumentEntity build(final TextValue guid,
 			final TextValue symbolReal, final String symbolComment,
 			final String codeCFI, final DDF_Exchange exchange,
 			final PriceValue priceStep, final PriceValue pricePoint,
@@ -233,7 +233,7 @@ public final class InstrumentXML {
 		map.put(CFI_CODE, newText(codeCFI));
 		map.put(CURRENCY_CODE, MarketCurrency.USD);
 		map.put(EXCHANGE_CODE, newText(new byte[]{(exchange.code)}));
-		map.put(PRICE_STEP, priceStep);
+		map.put(TICK_SIZE, priceStep);
 		map.put(POINT_VALUE, pricePoint);
 		map.put(DISPLAY_FRACTION, fraction);
 		map.put(LIFETIME, lifetime);
