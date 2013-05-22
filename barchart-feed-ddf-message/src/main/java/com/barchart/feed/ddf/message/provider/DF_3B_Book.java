@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
+import static com.barchart.feed.api.enums.MarketSide.ASK;
+import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
-import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_BOOK_LIMIT;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_COUNT;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_PRICES;

@@ -7,12 +7,12 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
+import static com.barchart.feed.api.enums.MarketSide.ASK;
+import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
 import static com.barchart.feed.base.bar.enums.MarketBarType.PREVIOUS;
 import static com.barchart.feed.base.book.api.MarketBook.ENTRY_TOP;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
-import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isClear;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isEmpty;
 
@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
@@ -28,7 +29,6 @@ import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.MarketBookAction;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.enums.MarketField;
@@ -100,9 +100,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		final TimeValue time = message.getTime();
 
-		applyTop(message.entry(MarketBookSide.BID), time, market);
+		applyTop(message.entry(MarketSide.BID), time, market);
 
-		applyTop(message.entry(MarketBookSide.ASK), time, market);
+		applyTop(message.entry(MarketSide.ASK), time, market);
 
 		return null;
 	}
@@ -194,13 +194,13 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			
 		case ASK_LAST_PRICE:
 			final DefBookEntry topAskPrice = new DefBookEntry(MODIFY, ASK,
-					BookLiquidityType.DEFAULT, ENTRY_TOP, price, top.side(ASK).size());
+					BookLiquidityType.DEFAULT, ENTRY_TOP, price, top.side(ASK).sizeValue());
 			applyTop(topAskPrice, time, market);
 			return null;
 
 		case ASK_LAST_SIZE:
 			final DefBookEntry topAskSize = new DefBookEntry(MODIFY, ASK,
-					BookLiquidityType.DEFAULT, ENTRY_TOP, top.side(ASK).price(), size);
+					BookLiquidityType.DEFAULT, ENTRY_TOP, top.side(ASK).priceValue(), size);
 			applyTop(topAskSize, time, market);
 			return null;
 
@@ -211,13 +211,13 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			
 		case BID_LAST_PRICE:
 			final DefBookEntry topBidPrice = new DefBookEntry(MODIFY, BID,
-					BookLiquidityType.DEFAULT, ENTRY_TOP, price, top.side(BID).size());
+					BookLiquidityType.DEFAULT, ENTRY_TOP, price, top.side(BID).sizeValue());
 			applyTop(topBidPrice, time, market);
 			return null;
 
 		case BID_LAST_SIZE:
 			final DefBookEntry topBidSize = new DefBookEntry(MODIFY, BID,
-					BookLiquidityType.DEFAULT, ENTRY_TOP, top.side(BID).price(), size);
+					BookLiquidityType.DEFAULT, ENTRY_TOP, top.side(BID).priceValue(), size);
 			applyTop(topBidSize, time, market);
 			return null;
 
@@ -769,7 +769,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			final TimeValue time, final MarketDo market) {
 
 		/* ddf signals by special price values */
-		final PriceValue price = entry.price();
+		final PriceValue price = entry.priceValue();
 
 		/* ",," a.k.a comma-comma; ddf value not provided */
 		if (isEmpty(price)) {

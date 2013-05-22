@@ -13,9 +13,9 @@ import static com.barchart.util.ascii.ASCII.COMMA;
 import java.nio.ByteBuffer;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.ddf.message.api.DDF_MarketBookTop;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
@@ -112,7 +112,7 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 	 * .feed.base.api.market.enums.MarketBookSide)
 	 */
 	@Override
-	public final MarketDoBookEntry entry(final MarketBookSide side) {
+	public final MarketDoBookEntry entry(final MarketSide side) {
 
 		final PriceValue price;
 		final SizeValue size;

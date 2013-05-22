@@ -7,11 +7,12 @@
  */
 package bench;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -90,7 +91,7 @@ public class Receiver {
 				}
 
 				@Override
-				public Instrument[] bindInstruments() {
+				public InstrumentEntity[] bindInstruments() {
 
 					return instruments;
 
@@ -98,7 +99,7 @@ public class Receiver {
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final Instrument instrument, final Market value) {
+						final InstrumentEntity instrument, final Market value) {
 
 					final StringBuilder sb = new StringBuilder(value.get(
 							MarketField.INSTRUMENT).get(InstrumentField.MARKET_GUID).toString())
@@ -110,20 +111,20 @@ public class Receiver {
 
 					final MarketBookTop top = value.get(MarketField.BOOK_TOP);
 
-					MarketBookEntry entry = top.side(MarketBookSide.ASK);
+					MarketBookEntry entry = top.side(MarketSide.ASK);
 
 					if (!entry.isNull()) {
 						sb.append(" ASK TOP").append(" price=")
-								.append(ValueUtil.asDouble(entry.price()))
-								.append(" qty=").append(entry.size().asLong());
+								.append(ValueUtil.asDouble(entry.priceValue()))
+								.append(" qty=").append(entry.sizeValue().asLong());
 					}
 
-					entry = top.side(MarketBookSide.BID);
+					entry = top.side(MarketSide.BID);
 
 					if (!entry.isNull()) {
 						sb.append(" BID TOP").append(" price=")
-								.append(ValueUtil.asDouble(entry.price()))
-								.append(" qty=").append(entry.size().asLong());
+								.append(ValueUtil.asDouble(entry.priceValue()))
+								.append(" qty=").append(entry.sizeValue().asLong());
 					}
 
 					System.out.println(sb.toString());

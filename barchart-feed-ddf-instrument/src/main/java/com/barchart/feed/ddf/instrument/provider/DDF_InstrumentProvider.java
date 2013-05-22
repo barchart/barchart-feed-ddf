@@ -30,6 +30,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
@@ -159,10 +160,10 @@ public final class DDF_InstrumentProvider {
 	 * @param symbols
 	 * @return a map of resolved instruments
 	 */
-	public static Map<CharSequence, InstrumentEntity> find(
+	public static Map<CharSequence, Instrument> find(
 			final Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, InstrumentEntity> insts = new HashMap<CharSequence, InstrumentEntity>();
+		final Map<CharSequence, Instrument> insts = new HashMap<CharSequence, Instrument>();
 		final Map<CharSequence, InstrumentEntity> charInsts = instance().lookup(symbols);
 		
 		for(final Entry<CharSequence, InstrumentEntity> e : charInsts.entrySet()) {

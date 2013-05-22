@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.message.api;
 
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -17,7 +17,7 @@ import com.barchart.util.values.api.SizeValue;
 @NotMutable
 public interface DDF_MarketBookTop extends DDF_MarketBase {
 
-	MarketDoBookEntry entry(MarketBookSide side);
+	MarketDoBookEntry entry(MarketSide side);
 
 	//
 

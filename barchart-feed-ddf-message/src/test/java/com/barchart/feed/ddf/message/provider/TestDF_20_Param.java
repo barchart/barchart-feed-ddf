@@ -117,7 +117,7 @@ public class TestDF_20_Param extends TestDDFBase {
 
 		// long t1 = msg.getTime().asMillisUTC();
 		// long t2 = System.currentTimeMillis();
-		assertEquals(msg.getTime().asMillisUTC(), new DateTime(
+		assertEquals(msg.getTime().millisecond(), new DateTime(
 				"2010-06-20T16:04:55.569Z").getMillis());
 
 		// 1053-3/8
@@ -158,7 +158,7 @@ public class TestDF_20_Param extends TestDDFBase {
 
 		// long t1 = msg.getTime().asMillisUTC();
 		// long t2 = System.currentTimeMillis();
-		assertEquals(msg.getTime().asMillisUTC(), new DateTime(
+		assertEquals(msg.getTime().millisecond(), new DateTime(
 				"2010-06-20T16:04:55.569Z").getMillis());
 
 		// 1053-3/8
@@ -203,7 +203,7 @@ public class TestDF_20_Param extends TestDDFBase {
 		assertEquals(msg.getSession(), DDF_Session.UNKNOWN);
 		assertEquals(msg.getId(), "");
 		assertEquals(msg.getDelay(), 0);
-		assertEquals(msg.getTime().asMillisUTC(), 0);
+		assertEquals(msg.getTime().millisecond(), 0);
 
 		// DDF_BLANK
 		final PriceValue value = msg.getAsPrice();

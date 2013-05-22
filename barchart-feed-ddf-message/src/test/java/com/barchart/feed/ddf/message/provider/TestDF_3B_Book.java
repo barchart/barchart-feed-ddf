@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
+import static com.barchart.feed.api.enums.MarketSide.ASK;
+import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
-import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
@@ -23,8 +23,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
@@ -91,7 +91,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 		assertEquals(msg.getSpreadType(), DDF_SpreadType.UNKNOWN);
 		assertEquals(msg.getDelay(), 0);
 
-		final long t1 = msg.getTime().asMillisUTC();
+		final long t1 = msg.getTime().millisecond();
 		final long t2 = System.currentTimeMillis();
 		assertTrue(t2 - t1 < 100);
 
@@ -121,7 +121,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 		assertEquals(msg.getSpreadType(), DDF_SpreadType.UNKNOWN);
 		assertEquals(msg.getDelay(), 0);
 
-		final long t1 = msg.getTime().asMillisUTC();
+		final long t1 = msg.getTime().millisecond();
 		final long t2 = System.currentTimeMillis();
 		assertTrue(t2 - t1 < 100);
 
@@ -187,7 +187,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 	}
 
-	static MarketBookEntry newEntry(final MarketBookSide side, final int place,
+	static MarketBookEntry newEntry(final MarketSide side, final int place,
 			final long mant, final int exp, final int size) {
 		return new DefBookEntry(MODIFY, side, BookLiquidityType.DEFAULT, place,
 				ValueBuilder.newPrice(mant, exp), ValueBuilder.newSize(size));

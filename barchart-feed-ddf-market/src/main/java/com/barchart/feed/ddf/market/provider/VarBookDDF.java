@@ -7,25 +7,30 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import static com.barchart.feed.base.book.enums.MarketBookSide.ASK;
-import static com.barchart.feed.base.book.enums.MarketBookSide.BID;
+import static com.barchart.feed.api.enums.MarketSide.ASK;
+import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.TreeMap;
 
+import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
-import com.barchart.feed.base.book.enums.MarketBookSide;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.provider.DefBook;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
@@ -76,7 +81,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public final UniBookResult setEntry(final MarketDoBookEntry entry) {
 
-		final MarketBookSide side = entry.side();
+		final MarketSide side = entry.side();
 
 		final int place = entry.place();
 
@@ -107,7 +112,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	}
 
-	private EntryMap map(final MarketBookSide side) {
+	private EntryMap map(final MarketSide side) {
 		switch (side) {
 		default:
 		case BID:
@@ -118,7 +123,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public final MarketBookEntry[] entries(final MarketBookSide side) {
+	public final MarketBookEntry[] entries(final MarketSide side) {
 
 		final EntryMap map = map(side);
 
@@ -151,7 +156,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final void setTime(final TimeValue time) {
-		millisUTC = time.asMillisUTC();
+		millisUTC = time.millisecond();
 	}
 
 	@Override
@@ -169,7 +174,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public final MarketBookEntry top(final MarketBookSide side) {
+	public final MarketBookEntry top(final MarketSide side) {
 
 		final MarketBookEntry entry;
 		switch (side) {
@@ -198,17 +203,17 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public final SizeValue[] sizes(final MarketBookSide side) {
+	public final SizeValue[] sizes(final MarketSide side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
-	public PriceValue priceTop(final MarketBookSide side) {
+	public PriceValue priceTop(final MarketSide side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
-	public SizeValue sizeTop(final MarketBookSide side) {
+	public SizeValue sizeTop(final MarketSide side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
@@ -231,12 +236,66 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 			final EntryMap map = map(entry.side());
 
-			map.put(entry.price(), entry);
+			map.put(entry.priceValue(), entry);
 
 		}
 
 		return UniBookResult.NORMAL;
 
+	}
+
+	@Override
+	public Price bestPrice(MarketSide side) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double bestPriceDouble(MarketSide side) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Size bestSize(MarketSide side) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long bestSizeLong(MarketSide side) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<PriceLevel> entryList(MarketSide side) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Price lastPrice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double lastPriceDouble() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Time timeUpdated() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Time lastUpdateTime() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

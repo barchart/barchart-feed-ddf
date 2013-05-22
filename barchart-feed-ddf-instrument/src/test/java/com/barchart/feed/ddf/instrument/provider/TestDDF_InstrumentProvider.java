@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 
 import org.junit.Test;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.api.fields.InstrumentField;
 import com.barchart.util.values.api.TimeInterval;
@@ -46,12 +47,12 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("_S_FX_A6H2_A6Z1");
 		symbolList.add("_S_BF_ZSQ2_ZSU2_ZSX2");
 
-		final Map<? extends CharSequence, InstrumentEntity> list = DDF_InstrumentProvider
+		final Map<? extends CharSequence, Instrument> list = DDF_InstrumentProvider
 				.find(symbolList);
 
 		assertEquals(8, list.size());
 
-		for (final Entry<? extends CharSequence, InstrumentEntity> e : list.entrySet()) {
+		for (final Entry<? extends CharSequence, Instrument> e : list.entrySet()) {
 
 			if(e.getValue() == null) {
 				System.out.println(" = null");
@@ -63,12 +64,9 @@ public class TestDDF_InstrumentProvider {
 				System.out.println(e.getValue().toString());
 			}
 			
-			final InstrumentEntity inst = e.getValue();
-			if(inst.contains(InstrumentField.LIFETIME)) {
-				System.out.println("******* LIFETIME");
-			}
-			final TimeInterval lifetime = inst.get(InstrumentField.LIFETIME);
-			final TimeValue expires = e.getValue().get(InstrumentField.LIFETIME).stop();
+			final Instrument inst = e.getValue();
+			final TimeInterval lifetime = inst.lifetime();
+			final TimeValue expires = e.getValue().lifetime().stop();
 			System.out.println("EXP Month Year DDF = "
 					+ (expires.asDateTime().getMonthOfYear())
 					+ " "

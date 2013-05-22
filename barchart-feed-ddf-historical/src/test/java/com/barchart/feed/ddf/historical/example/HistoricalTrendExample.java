@@ -139,7 +139,7 @@ public class HistoricalTrendExample {
 				final PriceValue priceValue = ValueBuilder.newPrice(mantissa,
 						exponent);
 
-				final double priceAsDouble = ValueUtil.asDouble(priceValue);
+				final double priceAsDouble = priceValue.asDouble();
 
 				log.info("priceValue={}; priceAsDouble={}", priceValue,
 						priceAsDouble);
