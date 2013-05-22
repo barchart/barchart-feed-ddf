@@ -75,7 +75,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getInstrument()
 	 */
 	@Override
-	public final InstrumentEntity instrument() {
+	public final InstrumentEntity getInstrument() {
 		return DDF_InstrumentProvider.find(getId());
 	}
 	

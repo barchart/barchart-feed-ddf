@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.inst.Instrument;
+import com.barchart.feed.api.data.InstrumentEntity;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -47,7 +47,7 @@ public class TestDDF_MarketService {
 	@Test
 	public void testMakeDDF_MarketBaseMarketDo() throws Exception {
 
-		final Instrument instrument = DDF_InstrumentProvider.find("RJZ1");
+		final InstrumentEntity instrument = DDF_InstrumentProvider.find("RJZ1");
 
 		log.debug("instrument : {}", instrument);
 
@@ -65,13 +65,13 @@ public class TestDDF_MarketService {
 			}
 
 			@Override
-			public Instrument[] bindInstruments() {
-				return new Instrument[] { instrument };
+			public InstrumentEntity[] bindInstruments() {
+				return new InstrumentEntity[] { instrument };
 			}
 
 			@Override
 			public void onMarketEvent(final MarketEvent event,
-					final Instrument instrument, final MarketBook book) {
+					final InstrumentEntity instrument, final MarketBook book) {
 
 				log.debug("event : {}", event);
 				log.debug("book : \n{}", book);

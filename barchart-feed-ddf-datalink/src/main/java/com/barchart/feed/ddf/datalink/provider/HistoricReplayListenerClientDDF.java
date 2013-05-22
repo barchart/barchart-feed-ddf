@@ -125,7 +125,7 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 		final DDF_MarketBase marketMsg = (DDF_MarketBase) message;
 		
 		/* Filter by instrument */
-		if(subscriptions.containsKey(marketMsg.instrument().get(
+		if(subscriptions.containsKey(marketMsg.getInstrument().get(
 				InstrumentField.SYMBOL).toString())) {
 			
 			return true;

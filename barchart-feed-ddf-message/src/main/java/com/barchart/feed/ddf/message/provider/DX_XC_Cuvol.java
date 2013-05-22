@@ -313,7 +313,7 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 		}
 
-		final InstrumentEntity instrument = instrument();
+		final InstrumentEntity instrument = getInstrument();
 		setExchange(DDF_Exchange.fromCode(instrument.get(
 				InstrumentField.EXCHANGE_CODE).toString().getBytes()[0]));
 

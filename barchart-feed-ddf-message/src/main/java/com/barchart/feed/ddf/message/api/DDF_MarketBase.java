@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.api;
 
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
@@ -22,12 +22,12 @@ import com.barchart.util.values.api.TimeValue;
  * Base type for ddf feed market data messages.
  */
 @NotMutable
-public interface DDF_MarketBase extends DDF_BaseMessage {
+public interface DDF_MarketBase extends DDF_BaseMessage, MarketMessage {
 
 	/* GENERIC */
 
 	/** market instrument resolved from {@link #getId()} */
-	InstrumentEntity instrument();
+	//InstrumentEntity instrument();
 
 	/** time from message time stamp if present or from message arrival time; */
 	TimeValue getTime();
