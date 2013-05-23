@@ -13,21 +13,27 @@ import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.MarketEntity;
 import com.barchart.feed.api.framework.MarketTag;
 import com.barchart.feed.api.message.Message;
+import com.barchart.feed.base.bar.api.MarketDoBar;
+import com.barchart.feed.base.bar.enums.MarketBarType;
+import com.barchart.feed.base.book.api.MarketDoBookEntry;
+import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.ValueConverter;
+import com.barchart.feed.base.state.enums.MarketStateEntry;
+import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
+import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.values.api.PriceValue;
+import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 
 public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 	
 	private volatile TimeValue lastUpdateTime;
 	
-	@Override
-	public void setInstrument(final InstrumentEntity newSymbol) {
-		super.setInstrument(newSymbol);
-	}
 
 	/* ***** ***** ***** Market Getters ***** ***** ***** */
 	
@@ -149,6 +155,68 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 	
 	/* ***** ***** ***** Update State Methods ***** ***** ***** */
 	
+	@Override
+	public void setInstrument(final InstrumentEntity newSymbol) {
+		super.setInstrument(newSymbol);
+		
+		// Fire Agents
+	}
+	
+	@Override
+	public void setBookSnapshot(final MarketDoBookEntry[] entries,
+			final TimeValue time) {
+		super.setBookSnapshot(entries, time);
+		
+		// Fire Agents
+	}
+	
+	@Override
+	public void setBookUpdate(final MarketDoBookEntry entry,
+			final TimeValue time) {
+		super.setBookUpdate(entry, time);
+		
+		// Fire Agents
+	}
+	
+	@Override
+	public void setCuvolUpdate(final MarketDoCuvolEntry entry,
+			final TimeValue time) {
+		super.setCuvolUpdate(entry, time);
+		
+		// Fire Agents
+	}
+	
+	@Override
+	public void setCuvolSnapshot(final MarketDoCuvolEntry[] entries,
+			final TimeValue time) {
+		super.setCuvolSnapshot(entries, time);
+		
+		// Fire Agents
+	}
+	
+	@Override
+	public void setTrade(final MarketTradeType type,
+			final MarketTradeSession session,
+			final MarketTradeSequencing sequencing, final PriceValue price,
+			final SizeValue size, final TimeValue time, final TimeValue date) {
+		super.setTrade(type, session, sequencing, price, size, time, date);
+		
+		// Fire Agents
+	}
+	
+	@Override
+	public void setBar(final MarketBarType type, final MarketDoBar bar) {
+		super.setBar(type, bar);
+		
+		// Fire Agents
+	}
+	
+	@Override
+	public void setState(final MarketStateEntry entry, final boolean isOn) {
+		super.setState(entry, isOn);
+		
+		// Fire Agents
+	}
 	
 	/* ***** ***** ***** Agent Lifecycle Methods ***** ***** ***** */
 
