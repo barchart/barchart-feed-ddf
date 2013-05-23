@@ -91,7 +91,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 		assertEquals(msg.getSpreadType(), DDF_SpreadType.UNKNOWN);
 		assertEquals(msg.getDelay(), 0);
 
-		final long t1 = msg.getTime().millisecond();
+		final long t1 = msg.getTime().asMillisUTC();
 		final long t2 = System.currentTimeMillis();
 		assertTrue(t2 - t1 < 100);
 
@@ -121,7 +121,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 		assertEquals(msg.getSpreadType(), DDF_SpreadType.UNKNOWN);
 		assertEquals(msg.getDelay(), 0);
 
-		final long t1 = msg.getTime().millisecond();
+		final long t1 = msg.getTime().asMillisUTC();
 		final long t2 = System.currentTimeMillis();
 		assertTrue(t2 - t1 < 100);
 

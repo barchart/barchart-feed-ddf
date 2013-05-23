@@ -109,7 +109,7 @@ public class TestDF_27_Trade extends TestDDFBase {
 		// long t1 = msg.getTime().asMillisUTC();
 		// long t2 = System.currentTimeMillis();
 		// assertTrue(t2 - t1 < 100);
-		assertEquals(msg.getTime().millisecond(), new DateTime(
+		assertEquals(msg.getTime().asMillisUTC(), new DateTime(
 				"2010-06-20T16:04:55.569Z").getMillis());
 		// 2.1371
 		assertEquals(msg.getPrice(), newPrice(21371, -4));
@@ -189,7 +189,7 @@ public class TestDF_27_Trade extends TestDDFBase {
 		// long t1 = msg.getTime().asMillisUTC();
 		// long t2 = System.currentTimeMillis();
 		// assertTrue(t2 - t1 < 100);
-		assertEquals(msg.getTime().millisecond(),
+		assertEquals(msg.getTime().asMillisUTC(),
 				new DateTime(1317153007283L).getMillis());
 		// 2.1371
 		assertEquals(msg.getPrice(), newPrice(300376, -4));

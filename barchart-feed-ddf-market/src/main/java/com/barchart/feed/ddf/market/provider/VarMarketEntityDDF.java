@@ -14,13 +14,15 @@ import com.barchart.feed.api.framework.MarketEntity;
 import com.barchart.feed.api.framework.MarketTag;
 import com.barchart.feed.api.message.Message;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.values.api.TimeValue;
 
 public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 	
-	
+	private volatile TimeValue lastUpdateTime;
 	
 	@Override
 	public void setInstrument(final InstrumentEntity newSymbol) {
@@ -51,32 +53,43 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 
 	@Override
 	public Cuvol cuvol() {
-		return null;
+		return get(MarketField.CUVOL);
 	}
 
 	@Override
-	public Session session(SessionType type) {
-		return null;
+	public Session session(final SessionType type) {
+		switch(type) {
+		default:
+			throw new RuntimeException("Unknown session type " + type.name());
+		case CURRENT:
+			return get(MarketField.BAR_CURRENT);
+		case EXTENDED_CURRENT:
+			return get(MarketField.BAR_CURRENT_EXT);
+		case PREVIOUS:
+			return get(MarketField.BAR_PREVIOUS);
+		case EXTENDED_PREVIOUS:
+			throw new UnsupportedOperationException("Extended previous not implemented");
+		}
 	}
 
 	@Override
 	public Instrument instrument() {
-		return null;
+		return get(MarketField.INSTRUMENT);
 	}
 
 	@Override
 	public Time lastUpdateTime() {
-		return null;
+		return ValueConverter.time(lastUpdateTime);
 	}
 
 	@Override
 	public int compareTo(MarketEntity o) {
-		return 0;
+		return instrumentEntity().compareTo(o.instrumentEntity());
 	}
 
 	@Override
 	public Time lastTime() {
-		return null;
+		return ValueConverter.time(lastUpdateTime);
 	}
 
 	@Override
@@ -91,7 +104,7 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 
 	@Override
 	public MarketTag<MarketEntity> tag() {
-		return null;
+		return MarketEntity.MARKET;
 	}
 
 	@Override
@@ -116,23 +129,26 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 
 	@Override
 	public Tag<?>[] tagsList() {
-		return null;
+		return MarketEntity.ALL;
 	}
 
 	@Override
 	public int mapSize() {
-		return 0;
+		return MarketEntity.ALL.length;
 	}
 
 	@Override
 	public MarketEntity copy() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public InstrumentEntity instrumentEntity() {
-		return null;
+		return get(MarketField.INSTRUMENT);
 	}
+	
+	/* ***** ***** ***** Update State Methods ***** ***** ***** */
+	
 	
 	/* ***** ***** ***** Agent Lifecycle Methods ***** ***** ***** */
 

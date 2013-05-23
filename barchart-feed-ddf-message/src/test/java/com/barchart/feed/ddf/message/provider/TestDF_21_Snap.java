@@ -117,7 +117,7 @@ public class TestDF_21_Snap extends TestDDFBase {
 		// long t1 = msg.getTime().asMillisUTC();
 		// long t2 = System.currentTimeMillis();
 		// assertTrue(t2 - t1 < 100);
-		assertEquals(msg.getTime().millisecond(), new DateTime(
+		assertEquals(msg.getTime().asMillisUTC(), new DateTime(
 				"2010-06-20T16:04:55.569Z").getMillis());
 
 		assertTrue(msg.getPriceOpen() == DDF_NulVal.PRICE_EMPTY);
@@ -165,7 +165,7 @@ public class TestDF_21_Snap extends TestDDFBase {
 		// long t1 = msg.getTime().asMillisUTC();
 		// long t2 = System.currentTimeMillis();
 		// assertTrue(t2 - t1 < 100);
-		assertEquals(msg.getTime().millisecond(), new DateTime(
+		assertEquals(msg.getTime().asMillisUTC(), new DateTime(
 				"2010-06-20T15:04:55.569Z").getMillis());
 
 		assertEquals(msg.getPriceOpen(), newPrice(2445, -2));
@@ -225,7 +225,7 @@ public class TestDF_21_Snap extends TestDDFBase {
 		// long t1 = msg.getTime().asMillisUTC();
 		// long t2 = System.currentTimeMillis();
 		// assertTrue(t2 - t1 < 100);
-		assertEquals(msg.getTime().millisecond(), new DateTime(
+		assertEquals(msg.getTime().asMillisUTC(), new DateTime(
 				"2010-06-20T15:04:55.569Z").getMillis());
 
 		assertEquals(msg.getPriceOpen(), newPrice(5515, -2));

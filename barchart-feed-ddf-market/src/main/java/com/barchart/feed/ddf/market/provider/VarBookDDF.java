@@ -156,7 +156,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final void setTime(final TimeValue time) {
-		millisUTC = time.millisecond();
+		millisUTC = time.asMillisUTC();
 	}
 
 	@Override

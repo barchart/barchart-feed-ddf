@@ -14,6 +14,7 @@ import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.provider.DefBookTop;
+import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.base.provider.VarBook;
 import com.barchart.util.anno.ProxyTo;
 import com.barchart.util.value.api.Time;
@@ -52,7 +53,7 @@ final class VarBookTopDDF extends ValueFreezer<MarketBookTop> implements
 
 	@Override
 	public Time lastUpdateTime() {
-		return book.time();
+		return ValueConverter.time(book.time());
 	}
 
 }

@@ -116,7 +116,7 @@ public class TestDF_28_BookTop extends TestDDFBase {
 		// long t1 = msg.getTime().asMillisUTC();
 		// long t2 = System.currentTimeMillis();
 		// assertTrue(t2 - t1 < 100);
-		assertEquals(msg.getTime().millisecond(), new DateTime(
+		assertEquals(msg.getTime().asMillisUTC(), new DateTime(
 				"2010-06-20T16:04:55.569Z").getMillis());
 
 		assertEquals(msg.getPriceAsk(), newPrice(20919, -4));

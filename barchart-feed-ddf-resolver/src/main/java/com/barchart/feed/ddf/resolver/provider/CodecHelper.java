@@ -81,7 +81,7 @@ class CodecHelper {
 	}
 
 	static String encode(final TimeValue time) {
-		return Long.toString(time.millisecond());
+		return Long.toString(time.asMillisUTC());
 	}
 
 	static String encode(final Enum<?> num) {

@@ -329,7 +329,7 @@ public final class InstrumentXML {
 		if(expire == null) {
 			intBuilder.setTimeFinish(0);
 		} else {
-			intBuilder.setTimeFinish(expire.millisecond());
+			intBuilder.setTimeFinish(expire.asMillisUTC());
 		}
 		
 		calBuilder.setLifeTime(intBuilder.build());
