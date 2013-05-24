@@ -10,7 +10,7 @@ package com.barchart.feed.ddf.resolver.api;
 import java.util.List;
 import java.util.concurrent.Future;
 
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 
 /**
  * The Interface DDF_Resolver.

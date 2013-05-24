@@ -15,8 +15,8 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;

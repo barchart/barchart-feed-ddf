@@ -12,8 +12,8 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.util.FeedDDF;
 

@@ -15,8 +15,8 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.MarketSide;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.consumer.enums.MarketSide;
+import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.api.inst.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;

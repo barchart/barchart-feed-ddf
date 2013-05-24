@@ -30,8 +30,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;

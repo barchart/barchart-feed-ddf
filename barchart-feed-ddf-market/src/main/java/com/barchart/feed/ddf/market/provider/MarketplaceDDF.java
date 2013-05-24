@@ -1,9 +1,12 @@
 package com.barchart.feed.ddf.market.provider;
 
-import com.barchart.feed.api.data.MarketData;
+import com.barchart.feed.api.consumer.Agent;
+import com.barchart.feed.api.consumer.MarketCallback;
+import com.barchart.feed.api.consumer.data.MarketData;
+import com.barchart.feed.api.consumer.enums.MarketEventType;
 import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.FrameworkMarketplace;
-import com.barchart.feed.api.message.Message;
+import com.barchart.feed.api.framework.message.Message;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 
@@ -50,7 +53,8 @@ public class MarketplaceDDF extends DDF_MarketService implements FrameworkMarket
 	/* ***** ***** ***** Agent builder ***** ***** ***** */
 
 	@Override
-	public <V extends MarketData> Builder<V> agentBuilder() {
+	public <V extends MarketData> Agent newAgent(MarketCallback<V> callback,
+			MarketEventType... types) {
 		// TODO Auto-generated method stub
 		return null;
 	}

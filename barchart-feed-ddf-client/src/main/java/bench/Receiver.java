@@ -7,10 +7,10 @@
  */
 package bench;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.enums.MarketSide;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.consumer.enums.MarketSide;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.market.api.Market;

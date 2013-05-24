@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
+import static com.barchart.feed.api.consumer.enums.MarketSide.ASK;
+import static com.barchart.feed.api.consumer.enums.MarketSide.BID;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
@@ -22,8 +22,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.consumer.enums.BookLiquidityType;
+import com.barchart.feed.api.consumer.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;

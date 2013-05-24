@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.api;
 
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.consumer.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.util.anno.NotMutable;
 import com.barchart.util.values.api.PriceValue;

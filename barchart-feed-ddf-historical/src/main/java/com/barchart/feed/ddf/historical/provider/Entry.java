@@ -9,8 +9,8 @@ package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.splitCSV;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 

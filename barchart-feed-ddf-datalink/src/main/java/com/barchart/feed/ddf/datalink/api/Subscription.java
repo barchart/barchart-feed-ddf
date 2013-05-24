@@ -13,8 +13,8 @@ package com.barchart.feed.ddf.datalink.api;
 import java.util.Collection;
 import java.util.Set;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
 

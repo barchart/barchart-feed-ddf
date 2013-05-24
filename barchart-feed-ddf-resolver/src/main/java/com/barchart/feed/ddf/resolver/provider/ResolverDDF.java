@@ -30,7 +30,7 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.util.thread.ExecutorCallable;
 import com.barchart.util.values.api.TextValue;

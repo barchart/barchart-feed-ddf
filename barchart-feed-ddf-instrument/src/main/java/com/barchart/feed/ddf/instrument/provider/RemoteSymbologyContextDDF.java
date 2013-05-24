@@ -26,10 +26,10 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.fields.InstrumentField;
-import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.inst.SymbologyContext;
+import com.barchart.feed.api.consumer.inst.InstrumentGUID;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
+import com.barchart.feed.api.framework.inst.SymbologyContext;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.missive.core.ObjectMapFactory;
 

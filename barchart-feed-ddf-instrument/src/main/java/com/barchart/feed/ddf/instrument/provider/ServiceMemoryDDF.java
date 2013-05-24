@@ -20,9 +20,9 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.inst.SymbologyContext;
+import com.barchart.feed.api.consumer.inst.InstrumentGUID;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.inst.SymbologyContext;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.anno.ThreadSafe;

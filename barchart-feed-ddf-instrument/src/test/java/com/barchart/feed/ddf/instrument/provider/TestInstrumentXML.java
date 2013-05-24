@@ -1,6 +1,6 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.api.fields.InstrumentField.*;
+import static com.barchart.feed.api.framework.data.InstrumentField.*;
 
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
@@ -16,11 +16,11 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.BookStructureType;
-import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.enums.SecurityType;
+import com.barchart.feed.api.consumer.enums.BookLiquidityType;
+import com.barchart.feed.api.consumer.enums.BookStructureType;
+import com.barchart.feed.api.consumer.enums.MarketCurrency;
+import com.barchart.feed.api.consumer.enums.SecurityType;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.Manifest;

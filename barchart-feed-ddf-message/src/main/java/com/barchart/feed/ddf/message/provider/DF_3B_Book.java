@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
+import static com.barchart.feed.api.consumer.enums.MarketSide.ASK;
+import static com.barchart.feed.api.consumer.enums.MarketSide.BID;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_BOOK_LIMIT;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_COUNT;
@@ -26,7 +26,7 @@ import static com.barchart.util.ascii.ASCII.NUL;
 
 import java.nio.ByteBuffer;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.consumer.enums.BookLiquidityType;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;

@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
+import static com.barchart.feed.api.consumer.enums.MarketSide.ASK;
+import static com.barchart.feed.api.consumer.enums.MarketSide.BID;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
 import static com.barchart.feed.base.bar.enums.MarketBarType.PREVIOUS;
 import static com.barchart.feed.base.book.api.MarketBook.ENTRY_TOP;
@@ -19,9 +19,9 @@ import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.MarketSide;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.consumer.enums.BookLiquidityType;
+import com.barchart.feed.api.consumer.enums.MarketSide;
+import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;

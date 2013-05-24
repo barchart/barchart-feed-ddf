@@ -16,9 +16,9 @@ import java.util.Map.Entry;
 
 import org.junit.Test;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.util.values.api.TimeInterval;
 import com.barchart.util.values.api.TimeValue;
 

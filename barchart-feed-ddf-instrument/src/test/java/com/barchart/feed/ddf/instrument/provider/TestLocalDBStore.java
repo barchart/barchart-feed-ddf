@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.inst.provider.LocalInstDefDB;
 
 public class TestLocalDBStore {

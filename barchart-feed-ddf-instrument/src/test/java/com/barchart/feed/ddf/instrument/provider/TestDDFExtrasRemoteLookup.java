@@ -1,7 +1,7 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import com.barchart.feed.api.data.InstrumentEntity;
-import com.barchart.feed.api.fields.InstrumentField;
+import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.framework.data.InstrumentField;
 
 public class TestDDFExtrasRemoteLookup {
 
