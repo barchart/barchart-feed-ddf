@@ -1,12 +1,17 @@
 package com.barchart.feed.ddf.market.provider;
 
+import java.util.EnumMap;
+import java.util.Set;
+
 import com.barchart.feed.api.consumer.data.Cuvol;
 import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.consumer.data.MarketData;
 import com.barchart.feed.api.consumer.data.OrderBook;
 import com.barchart.feed.api.consumer.data.PriceLevel;
 import com.barchart.feed.api.consumer.data.Session;
 import com.barchart.feed.api.consumer.data.TopOfBook;
 import com.barchart.feed.api.consumer.data.Trade;
+import com.barchart.feed.api.consumer.enums.MarketEventType;
 import com.barchart.feed.api.consumer.enums.SessionType;
 import com.barchart.feed.api.framework.FrameworkAgent;
 import com.barchart.feed.api.framework.MarketEntity;
@@ -24,17 +29,24 @@ import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
 import com.barchart.missive.api.Tag;
+import com.barchart.missive.api.TagMap;
 import com.barchart.missive.core.MissiveException;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.api.TimeValue;
 
+@SuppressWarnings("rawtypes")
 public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 	
 	private volatile TimeValue lastUpdateTime;
 	
-
+	private final EnumMap<MarketEventType, Set<FrameworkAgent<?,?>>> agentMap =
+			new EnumMap<MarketEventType, Set<FrameworkAgent<?,?>>>(MarketEventType.class);
+	
+	VarMarketEntityDDF() {
+	}
+	
 	/* ***** ***** ***** Market Getters ***** ***** ***** */
 	
 	@Override
@@ -99,16 +111,6 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 	}
 
 	@Override
-	public Message lastUpdate() {
-		throw new UnsupportedOperationException("DDF only");	
-	}
-
-	@Override
-	public Message lastSnapshot() {
-		throw new UnsupportedOperationException("DDF only");	
-	}
-
-	@Override
 	public MarketTag<MarketEntity> tag() {
 		return MarketEntity.MARKET;
 	}
@@ -144,10 +146,10 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 	}
 
 	@Override
-	public MarketEntity copy() {
-		throw new UnsupportedOperationException();
+	public MarketData data() {
+		return null;
 	}
-
+	
 	@Override
 	public InstrumentEntity instrumentEntity() {
 		return get(MarketField.INSTRUMENT);
@@ -155,11 +157,23 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 	
 	/* ***** ***** ***** Update State Methods ***** ***** ***** */
 	
+	
+	@SuppressWarnings("unchecked")
+	private void fireCallbacks(final MarketEventType type) {
+		
+		for(final FrameworkAgent agent : agentMap.get(type)) {
+			
+			agent.callback().call((MarketData) get(agent.tag()), type);
+			
+		}
+		
+	}
+	
 	@Override
 	public void setInstrument(final InstrumentEntity newSymbol) {
 		super.setInstrument(newSymbol);
 		
-		// Fire Agents
+		// Currently not firing on instruments
 	}
 	
 	@Override
@@ -167,7 +181,7 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 			final TimeValue time) {
 		super.setBookSnapshot(entries, time);
 		
-		// Fire Agents
+		fireCallbacks(MarketEventType.BOOK_SNAPSHOT);
 	}
 	
 	@Override
@@ -175,7 +189,7 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 			final TimeValue time) {
 		super.setBookUpdate(entry, time);
 		
-		// Fire Agents
+		fireCallbacks(MarketEventType.BOOK_UPDATE);
 	}
 	
 	@Override
@@ -183,15 +197,15 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 			final TimeValue time) {
 		super.setCuvolUpdate(entry, time);
 		
-		// Fire Agents
+		fireCallbacks(MarketEventType.CUVOL_UPDATE);
 	}
 	
 	@Override
 	public void setCuvolSnapshot(final MarketDoCuvolEntry[] entries,
 			final TimeValue time) {
 		super.setCuvolSnapshot(entries, time);
-		
-		// Fire Agents
+
+		fireCallbacks(MarketEventType.CUVOL_SNAPSHOT);
 	}
 	
 	@Override
@@ -201,21 +215,21 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 			final SizeValue size, final TimeValue time, final TimeValue date) {
 		super.setTrade(type, session, sequencing, price, size, time, date);
 		
-		// Fire Agents
+		fireCallbacks(MarketEventType.TRADE);
 	}
 	
 	@Override
 	public void setBar(final MarketBarType type, final MarketDoBar bar) {
 		super.setBar(type, bar);
 		
-		// Fire Agents
+		fireCallbacks(MarketEventType.SNAPSHOT);
 	}
 	
 	@Override
 	public void setState(final MarketStateEntry entry, final boolean isOn) {
 		super.setState(entry, isOn);
 		
-		// Fire Agents
+		// Currently not firing on state
 	}
 	
 	/* ***** ***** ***** Agent Lifecycle Methods ***** ***** ***** */
@@ -234,5 +248,7 @@ public class VarMarketEntityDDF extends VarMarketDDF implements MarketEntity {
 	public void detach(final FrameworkAgent agent) {
 		
 	}
+
+	
 
 }
