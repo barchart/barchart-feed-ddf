@@ -38,8 +38,14 @@
 		
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
-			<artifactId>barchart-feed-market</artifactId>
-  			<version>1.0.1-SNAPSHOT</version>
+			<artifactId>barchart-feed-inst</artifactId>
+			<version>${barchartFeedInstVersion}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-base</artifactId>
+			<version>${barchartFeedBaseVersion}</version>
 		</dependency>
 		
 		<dependency>

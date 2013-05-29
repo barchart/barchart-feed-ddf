@@ -10,7 +10,7 @@ package com.barchart.feed.ddf.instrument.example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 // TODO: Auto-generated Javadoc
@@ -24,7 +24,7 @@ public class InstrumentLookupExample {
 
 	static final void find(final String symbol) {
 
-		final InstrumentEntity instrument = DDF_InstrumentProvider.find(symbol);
+		final Instrument instrument = DDF_InstrumentProvider.find(symbol);
 
 		if (instrument.isNull()) {
 			log.error("instrument lookup failed for : {}", symbol);

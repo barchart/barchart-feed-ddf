@@ -31,7 +31,6 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
@@ -52,11 +51,11 @@ public final class DDF_InstrumentProvider {
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_InstrumentProvider.class);
 
-	static final List<InstrumentEntity> NULL_LIST = Collections
-			.unmodifiableList(new ArrayList<InstrumentEntity>(0));
+	static final List<Instrument> NULL_LIST = Collections
+			.unmodifiableList(new ArrayList<Instrument>(0));
 	
-	static final Map<CharSequence, InstrumentEntity> NULL_MAP = Collections
-			.unmodifiableMap(new HashMap<CharSequence, InstrumentEntity>(0));
+	static final Map<CharSequence, Instrument> NULL_MAP = Collections
+			.unmodifiableMap(new HashMap<CharSequence, Instrument>(0));
 
 	static final String SERVER_EXTRAS = "extras.ddfplus.com";
 
@@ -144,12 +143,12 @@ public final class DDF_InstrumentProvider {
 	 *            the symbol
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
-	public static InstrumentEntity find(final CharSequence symbol) {
+	public static Instrument find(final CharSequence symbol) {
 		return instance().lookup(formatSymbol(
 				ValueBuilder.newText(symbol.toString())));
 	}
 
-	public static InstrumentEntity findHistorical(final CharSequence symbol) {
+	public static Instrument findHistorical(final CharSequence symbol) {
 		return instance().lookup(formatHistoricalSymbol(
 				ValueBuilder.newText(symbol.toString())));
 	}
@@ -164,9 +163,9 @@ public final class DDF_InstrumentProvider {
 			final Collection<? extends CharSequence> symbols) {
 		
 		final Map<CharSequence, Instrument> insts = new HashMap<CharSequence, Instrument>();
-		final Map<CharSequence, InstrumentEntity> charInsts = instance().lookup(symbols);
+		final Map<CharSequence, Instrument> charInsts = instance().lookup(symbols);
 		
-		for(final Entry<CharSequence, InstrumentEntity> e : charInsts.entrySet()) {
+		for(final Entry<CharSequence, Instrument> e : charInsts.entrySet()) {
 			insts.put(e.getKey().toString(), e.getValue());
 		}
 		
@@ -180,7 +179,7 @@ public final class DDF_InstrumentProvider {
 	 *            the symbol list
 	 * @return the list
 	 */
-	public static List<InstrumentEntity> fetch(final List<String> symbolList) {
+	public static List<Instrument> fetch(final List<String> symbolList) {
 
 		if(symbolList == null || symbolList.size() == 0) {
 			return NULL_LIST;
@@ -335,11 +334,11 @@ public final class DDF_InstrumentProvider {
 
 	}
 
-	private static List<InstrumentEntity> remoteLookup(final List<String> symbolList)
+	private static List<Instrument> remoteLookup(final List<String> symbolList)
 			throws Exception {
 
-		final List<InstrumentEntity> list =
-				new ArrayList<InstrumentEntity>(symbolList.size());
+		final List<Instrument> list =
+				new ArrayList<Instrument>(symbolList.size());
 
 		final String symbolString = concatenate(symbolList);
 
@@ -373,8 +372,8 @@ public final class DDF_InstrumentProvider {
 
 						try {
 
-							final InstrumentEntity instrument = InstrumentXML.decodeSAX(attributes);
-							final InstrumentEntity ddfInst = ObjectMapFactory.build(InstrumentDDF.class, instrument);
+							final Instrument instrument = InstrumentXML.decodeSAX(attributes);
+							final Instrument ddfInst = ObjectMapFactory.build(InstrumentDDF.class, instrument);
 							list.add(ddfInst);
 
 						} catch (final SymbolNotFoundException e) {

@@ -13,14 +13,14 @@ import static com.barchart.feed.api.framework.data.InstrumentField.LIFETIME;
 import static com.barchart.feed.api.framework.data.InstrumentField.SYMBOL;
 import static com.barchart.feed.api.framework.data.InstrumentField.VENDOR;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.api.framework.market.MarketDisplay;
+import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.feed.inst.provider.InstrumentBase;
-import com.barchart.feed.market.provider.MarketDisplayBaseImpl;
 import com.barchart.util.values.api.TimeValue;
 
-class InstrumentDDF extends InstrumentBase implements InstrumentEntity {
+class InstrumentDDF extends InstrumentBase implements Instrument {
 
 	private static final MarketDisplay display = new MarketDisplayBaseImpl();
 	

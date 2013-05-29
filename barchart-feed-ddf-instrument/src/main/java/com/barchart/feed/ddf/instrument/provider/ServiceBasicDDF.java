@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.missive.api.Tag;
@@ -42,9 +42,9 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public InstrumentEntity lookup(final CharSequence symbol) {
+	public Instrument lookup(final CharSequence symbol) {
 		if(symbol == null || symbol.length() == 0) {
-			return InstrumentEntity.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
 		/** make an upper case id */
@@ -52,25 +52,25 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 		final Map<Tag, Object> map = new HashMap<Tag, Object>();
 		map.put(InstrumentField.MARKET_GUID, lookup);
-		final InstrumentEntity instrument = ObjectMapFactory.build(InstrumentDDF.class, map);
+		final Instrument instrument = ObjectMapFactory.build(InstrumentDDF.class, map);
 
 		return instrument;
 	}
 
 	@Override
-	public Future<InstrumentEntity> lookupAsync(final CharSequence symbol) {
+	public Future<Instrument> lookupAsync(final CharSequence symbol) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<CharSequence, InstrumentEntity> lookup(final Collection<? extends CharSequence> symbols) {
+	public Map<CharSequence, Instrument> lookup(final Collection<? extends CharSequence> symbols) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<CharSequence, Future<InstrumentEntity>> lookupAsync(
+	public Map<CharSequence, Future<Instrument>> lookupAsync(
 			Collection<? extends CharSequence> symbols) {
 		// TODO Auto-generated method stub
 		return null;

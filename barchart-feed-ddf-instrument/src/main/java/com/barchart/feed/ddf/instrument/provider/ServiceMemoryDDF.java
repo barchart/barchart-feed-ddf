@@ -20,8 +20,8 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.inst.SymbologyContext;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.missive.core.ObjectMapFactory;
@@ -35,8 +35,8 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 
 	static final Logger log = LoggerFactory.getLogger(ServiceMemoryDDF.class);
 
-	private final ConcurrentMap<InstrumentGUID, InstrumentEntity> guidMap = 
-			new ConcurrentHashMap<InstrumentGUID, InstrumentEntity>();
+	private final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
+			new ConcurrentHashMap<InstrumentGUID, Instrument>();
 	
 	private final LocalCacheSymbologyContextDDF cache = 
 			new LocalCacheSymbologyContextDDF();
@@ -62,32 +62,32 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public InstrumentEntity lookup(final CharSequence symbol) {
+	public Instrument lookup(final CharSequence symbol) {
 		
 		try {
 			return new LookupCallable(symbol).call();
 		} catch (final Exception e) {
-			return InstrumentEntity.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
 	}
 
 	@Override
-	public Map<CharSequence, InstrumentEntity> lookup(Collection<? extends CharSequence> symbols) {
+	public Map<CharSequence, Instrument> lookup(Collection<? extends CharSequence> symbols) {
 		
 		if (symbols == null || symbols.size() == 0) {
 			log.warn("Lookup called with empty collection");
-			return new HashMap<CharSequence, InstrumentEntity>(0); 
+			return new HashMap<CharSequence, Instrument>(0); 
 		}
 
-		final Map<CharSequence, InstrumentEntity> instMap = 
-				new HashMap<CharSequence, InstrumentEntity>();
+		final Map<CharSequence, Instrument> instMap = 
+				new HashMap<CharSequence, Instrument>();
 
 		for (final CharSequence symbol : symbols) {
 			try {
 				instMap.put(symbol.toString(), new LookupCallable(symbol).call());
 			} catch (final Exception e) {
-				instMap.put(symbol.toString(), InstrumentEntity.NULL_INSTRUMENT);
+				instMap.put(symbol.toString(), Instrument.NULL_INSTRUMENT);
 			}
 		}
 
@@ -95,21 +95,21 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public Future<InstrumentEntity> lookupAsync(CharSequence symbol) {
+	public Future<Instrument> lookupAsync(CharSequence symbol) {
 		return executor.submit(new LookupCallable(symbol));
 	}
 
 	@Override
-	public Map<CharSequence, Future<InstrumentEntity>> lookupAsync(
+	public Map<CharSequence, Future<Instrument>> lookupAsync(
 			Collection<? extends CharSequence> symbols) {
 		
 		if (symbols == null || symbols.size() == 0) {
 			log.warn("Lookup called with empty collection");
-			return new HashMap<CharSequence, Future<InstrumentEntity>>(0); 
+			return new HashMap<CharSequence, Future<Instrument>>(0); 
 		}
 		
-		final Map<CharSequence, Future<InstrumentEntity>> result = 
-				new HashMap<CharSequence, Future<InstrumentEntity>>();
+		final Map<CharSequence, Future<Instrument>> result = 
+				new HashMap<CharSequence, Future<Instrument>>();
 		
 		for(final CharSequence symbol : symbols) {
 			result.put(symbol, executor.submit(new LookupCallable(symbol)));
@@ -118,7 +118,7 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		return result;
 	}
 	
-	private final class LookupCallable implements Callable<InstrumentEntity> {
+	private final class LookupCallable implements Callable<Instrument> {
 
 		private final CharSequence symbol;
 		
@@ -127,10 +127,10 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		}
 		
 		@Override
-		public InstrumentEntity call() throws Exception {
+		public Instrument call() throws Exception {
 			
 			if(symbol == null || symbol.length() == 0) {
-				return InstrumentEntity.NULL_INSTRUMENT;
+				return Instrument.NULL_INSTRUMENT;
 			}
 			
 			InstrumentGUID guid = cache.lookup(symbol.toString().toUpperCase()); 
@@ -140,15 +140,15 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 			}
 			
 			if(guid.equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
-				return InstrumentEntity.NULL_INSTRUMENT;
+				return Instrument.NULL_INSTRUMENT;
 			}
 			
 			cache.storeGUID(symbol, guid);
 			
-			InstrumentEntity instrument = guidMap.get(guid);
+			Instrument instrument = guidMap.get(guid);
 
 			if (instrument == null) {
-				return InstrumentEntity.NULL_INSTRUMENT;
+				return Instrument.NULL_INSTRUMENT;
 			}
 
 			return ObjectMapFactory.build(InstrumentDDF.class, instrument);

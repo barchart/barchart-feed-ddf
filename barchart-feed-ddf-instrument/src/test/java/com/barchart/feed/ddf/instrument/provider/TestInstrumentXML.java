@@ -16,11 +16,11 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;
 import com.barchart.feed.api.consumer.enums.BookStructureType;
 import com.barchart.feed.api.consumer.enums.MarketCurrency;
 import com.barchart.feed.api.consumer.enums.SecurityType;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.Manifest;
@@ -48,7 +48,7 @@ public class TestInstrumentXML {
 		final Document document = builder.parse(new ByteArrayInputStream(IBM.getBytes()));
 		final Element root = document.getDocumentElement();
 		final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
-		final InstrumentEntity IBMInst = InstrumentXML.decodeXML(tag);
+		final Instrument IBMInst = InstrumentXML.decodeXML(tag);
 		
 		System.out.println(IBMInst.toString());
 		

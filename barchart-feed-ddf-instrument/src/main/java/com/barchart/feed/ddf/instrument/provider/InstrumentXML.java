@@ -49,13 +49,13 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;
 import com.barchart.feed.api.consumer.enums.BookStructureType;
 import com.barchart.feed.api.consumer.enums.MarketCurrency;
 import com.barchart.feed.api.consumer.enums.SecurityType;
 import com.barchart.feed.api.consumer.inst.GuidList;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
@@ -87,9 +87,7 @@ public final class InstrumentXML {
 		
 	}
 	
-	public static InstrumentEntity decodeXML(final Element tag) throws Exception {
-		
-		
+	public static Instrument decodeXML(final Element tag) throws Exception {
 		
 		// lookup status
 
@@ -106,7 +104,7 @@ public final class InstrumentXML {
 		try {
 			guid = ValueBuilder.newText(xmlStringDecode(tag, GUID, XML_STOP));
 		} catch (Exception e) {
-			return InstrumentEntity.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
 		final TextValue symbolReal = ValueBuilder.newText(xmlStringDecode(tag, SYMBOL_REALTIME, XML_STOP));
@@ -154,7 +152,7 @@ public final class InstrumentXML {
 		
 	}
 	
-	public static InstrumentEntity decodeSAX(final Attributes ats) throws Exception {
+	public static Instrument decodeSAX(final Attributes ats) throws Exception {
 		
 		// lookup status
 		final String statusCode = xmlStringDecode(ats, STATUS, XML_STOP);
@@ -212,7 +210,7 @@ public final class InstrumentXML {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private static final InstrumentEntity build(final TextValue guid,
+	private static final Instrument build(final TextValue guid,
 			final TextValue symbolReal, final String symbolComment,
 			final String codeCFI, final DDF_Exchange exchange,
 			final PriceValue priceStep, final PriceValue pricePoint,

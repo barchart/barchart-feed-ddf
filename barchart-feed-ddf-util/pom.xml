@@ -69,7 +69,7 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-inst</artifactId>
-			<version>${barchartFeedVersion}</version>
+			<version>${barchartFeedInstVersion}</version>
 		</dependency>
 
 	</dependencies>

@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-client</artifactId>
-			<version>${barchartFeedVersion}</version>
+			<version>${barchartFeedClientVersion}</version>
 		</dependency>
 
 		<dependency>

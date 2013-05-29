@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
@@ -22,8 +22,8 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	
 	static final Logger log = LoggerFactory.getLogger(ServiceDatabaseDDF.class);
 	
-	private final ConcurrentMap<CharSequence, InstrumentEntity> cache = 
-			new ConcurrentHashMap<CharSequence, InstrumentEntity>();
+	private final ConcurrentMap<CharSequence, Instrument> cache = 
+			new ConcurrentHashMap<CharSequence, Instrument>();
 	
 	private final LocalInstrumentDBMap db;
 	private final ExecutorService executor;
@@ -36,23 +36,23 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public InstrumentEntity lookup(final CharSequence symbol) {
+	public Instrument lookup(final CharSequence symbol) {
 		
 		return lookupBase(symbol);
 		
 	}
 
 	@Override
-	public Future<InstrumentEntity> lookupAsync(final CharSequence symbol) {
+	public Future<Instrument> lookupAsync(final CharSequence symbol) {
 		return executor.submit(new SymbolLookup(symbol));
 	}
 
 	@Override
-	public Map<CharSequence, InstrumentEntity> lookup(
+	public Map<CharSequence, Instrument> lookup(
 			final Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, InstrumentEntity> result = 
-				new HashMap<CharSequence, InstrumentEntity>();
+		final Map<CharSequence, Instrument> result = 
+				new HashMap<CharSequence, Instrument>();
 		
 		// Currently just doing serial lookup
 		for(final CharSequence symbol : symbols) {
@@ -63,11 +63,11 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public Map<CharSequence, Future<InstrumentEntity>> lookupAsync(
+	public Map<CharSequence, Future<Instrument>> lookupAsync(
 			final Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, Future<InstrumentEntity>> result =
-				new HashMap<CharSequence, Future<InstrumentEntity>>();
+		final Map<CharSequence, Future<Instrument>> result =
+				new HashMap<CharSequence, Future<Instrument>>();
 		
 		for(final CharSequence symbol : symbols) {
 			result.put(symbol, executor.submit(new SymbolLookup(symbol)));
@@ -76,15 +76,15 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 		return result;
 	}
 	
-	private InstrumentEntity lookupBase(CharSequence symbol) {
+	private Instrument lookupBase(CharSequence symbol) {
 		
 		symbol = ValueBuilder.newText(symbol.toString());
 		
 		if(symbol == null || symbol.length() == 0) {
-			return InstrumentEntity.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		
-		InstrumentEntity instrument = cache.get(symbol);
+		Instrument instrument = cache.get(symbol);
 		
 		if(instrument != null) {
 			return instrument;
@@ -98,8 +98,8 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 		
 		if(instDef == null) {
 			//log.debug("Symbol {} not in db", symbol);
-			cache.put(symbol, InstrumentEntity.NULL_INSTRUMENT);
-			return InstrumentEntity.NULL_INSTRUMENT;
+			cache.put(symbol, Instrument.NULL_INSTRUMENT);
+			return Instrument.NULL_INSTRUMENT;
 		} else {
 			instrument = InstrumentFactory.buildFromProtoBuf(instDef);
 			cache.put(symbol, instrument);
@@ -107,7 +107,7 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 		}
 	}
 	
-	private class SymbolLookup implements Callable<InstrumentEntity> {
+	private class SymbolLookup implements Callable<Instrument> {
 
 		private final CharSequence symbol;
 		
@@ -116,7 +116,7 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 		}
 		
 		@Override
-		public InstrumentEntity call() throws Exception {
+		public Instrument call() throws Exception {
 			
 			return lookupBase(symbol);
 			

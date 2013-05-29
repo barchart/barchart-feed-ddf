@@ -10,7 +10,7 @@ package com.barchart.feed.ddf.historical.example;
 import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.api.framework.market.MarketDisplay;
-import com.barchart.feed.market.provider.MarketDisplayBaseImpl;
+import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 

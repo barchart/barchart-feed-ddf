@@ -1,13 +1,13 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.data.InstrumentField;
 
 public class TestDDFExtrasRemoteLookup {
 
 	public static void main(final String[] args) {
 		
-		InstrumentEntity inst = DDF_InstrumentProvider.find("ESH3");
+		Instrument inst = DDF_InstrumentProvider.find("ESH3");
 		
 		System.out.println(inst.toString());
 		System.out.println();
