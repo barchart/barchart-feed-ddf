@@ -30,7 +30,7 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.util.thread.ExecutorCallable;
 import com.barchart.util.values.api.TextValue;
@@ -185,7 +185,7 @@ class ResolverDDF extends ResolverState implements DDF_Resolver {
 	 * @see com.barchart.feed.ddf.resolver.api.DDF_Resolver#searchLucene(java.lang.String)
 	 */
 	@Override
-	public List<InstrumentEntity> searchLucene(final String phrase)
+	public List<Instrument> searchLucene(final String phrase)
 			throws Exception {
 
 		final Query query = new QueryParser(ConstResolver.VERSION,
@@ -199,7 +199,7 @@ class ResolverDDF extends ResolverState implements DDF_Resolver {
 	 * @see com.barchart.feed.ddf.resolver.api.DDF_Resolver#searchSimple(java.lang.String)
 	 */
 	@Override
-	public List<InstrumentEntity> searchSimple(final String phrase)
+	public List<Instrument> searchSimple(final String phrase)
 			throws Exception {
 
 		final Query query = CodecHelper.buildQuerySimple(phrase);
@@ -260,17 +260,17 @@ class ResolverDDF extends ResolverState implements DDF_Resolver {
 
 	}
 
-	private List<InstrumentEntity> searchInstrument(final Query query)
+	private List<Instrument> searchInstrument(final Query query)
 			throws Exception {
 
 		final List<Document> listDocument = searchDocument(query);
 
-		final List<InstrumentEntity> listInstrument = new ArrayList<InstrumentEntity>(
+		final List<Instrument> listInstrument = new ArrayList<Instrument>(
 				listDocument.size());
 
 		for (final Document doc : listDocument) {
 
-			final InstrumentEntity instrument = CodecHelper
+			final Instrument instrument = CodecHelper
 					.<TextValue> instrumentDecode(doc);
 
 			listInstrument.add(instrument);

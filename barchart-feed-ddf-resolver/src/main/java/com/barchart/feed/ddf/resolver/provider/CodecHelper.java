@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.api.Tag;
@@ -255,7 +254,7 @@ class CodecHelper {
 	}
 
 	/** must be globally unique */
-	static Term getKeyTerm(final InstrumentEntity instrument) {
+	static Term getKeyTerm(final Instrument instrument) {
 
 		final String name = CodecHelper.FIELD_INST_ID;
 		final String value = instrument.get(InstrumentField.MARKET_GUID).toString();
@@ -267,7 +266,7 @@ class CodecHelper {
 	}
 
 	/** convert instrument into lucene document */
-	static Document instrumentEncode(final InstrumentEntity instrument) {
+	static Document instrumentEncode(final Instrument instrument) {
 
 		final Document doc = new Document();
 
@@ -377,7 +376,7 @@ class CodecHelper {
 
 	/** convert lucene document into instrument */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	static <V extends Value<V>> InstrumentEntity instrumentDecode(
+	static <V extends Value<V>> Instrument instrumentDecode(
 			final Document doc) {
 		
 		Map<Tag, Object> tags = new HashMap<Tag, Object>();
@@ -400,7 +399,7 @@ class CodecHelper {
 	}
 
 	/** re index instrument in lucene store */
-	static void update(final IndexWriter writer, final InstrumentEntity entry)
+	static void update(final IndexWriter writer, final Instrument entry)
 			throws Exception {
 
 		final Term key = getKeyTerm(entry);
@@ -412,7 +411,7 @@ class CodecHelper {
 	}
 
 	static boolean isPresent(final IndexSearcher searcher,
-			final InstrumentEntity instrument) throws Exception {
+			final Instrument instrument) throws Exception {
 
 		final Term term = getKeyTerm(instrument);
 
