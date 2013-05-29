@@ -15,7 +15,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
@@ -61,7 +61,7 @@ final class CodecHelper {
 		final CharSequence username = settings.getAuthUser();
 		final CharSequence password = settings.getAuthPass();
 
-		final InstrumentEntity instrument = query.instrument;
+		final Instrument instrument = query.instrument;
 		final CharSequence symbol = formatHistorical(instrument
 				.get(InstrumentField.SYMBOL));  // TODO Need to modify symbol
 
@@ -233,7 +233,7 @@ final class CodecHelper {
 		return QUERY_TIME.print(queryTime);
 	}
 
-	static final boolean isFuture(final InstrumentEntity instrument) {
+	static final boolean isFuture(final Instrument instrument) {
 		return instrument.get(InstrumentField.CFI_CODE).charAt(0) == 'F';
 	}
 
@@ -249,12 +249,12 @@ final class CodecHelper {
 	DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
 	static long decodeTicksTime(final String string,
-			final InstrumentEntity instrument) {
+			final Instrument instrument) {
 		return decodeTime(string, instrument, RESULT_TIME_TICKS);
 	}
 
 	static String encodeTicksTime(final long millisUTC,
-			final InstrumentEntity instrument) {
+			final Instrument instrument) {
 		return encodeTime(millisUTC, instrument, RESULT_TIME_TICKS);
 	}
 
@@ -266,12 +266,12 @@ final class CodecHelper {
 	DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 
 	static long decodeMinsTime(final String string,
-			final InstrumentEntity instrument) {
+			final Instrument instrument) {
 		return decodeTime(string, instrument, RESULT_TIME_MINS);
 	}
 
 	static String encodeMinsTime(final long millisUTC,
-			final InstrumentEntity instrument) {
+			final Instrument instrument) {
 		return encodeTime(millisUTC, instrument, RESULT_TIME_MINS);
 	}
 
@@ -282,12 +282,12 @@ final class CodecHelper {
 	DateTimeFormat.forPattern("yyyy-MM-dd");
 
 	static long decodeEodTime(final String string,
-			final InstrumentEntity instrument) {
+			final Instrument instrument) {
 		return decodeTime(string, instrument, RESULT_TIME_EOD);
 	}
 
 	static String encodeEodTime(final long millisUTC,
-			final InstrumentEntity instrument) {
+			final Instrument instrument) {
 		return encodeTime(millisUTC, instrument, RESULT_TIME_EOD);
 	}
 
@@ -445,14 +445,14 @@ final class CodecHelper {
 	}
 
 	static long decodeTime(final String string,
-			final InstrumentEntity instrument, final DateTimeFormatter format) {
+			final Instrument instrument, final DateTimeFormatter format) {
 		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument 
 				.get(InstrumentField.TIME_ZONE_OFFSET).asLong()));
 		return format.withZone(zone).parseMillis(string);
 	}
 
 	static String encodeTime(final long millisUTC,
-			final InstrumentEntity instrument, final DateTimeFormatter format) {
+			final Instrument instrument, final DateTimeFormatter format) {
 		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument 
 				.get(InstrumentField.TIME_ZONE_OFFSET).asLong()));
 		return format.withZone(zone).print(millisUTC);
@@ -465,9 +465,9 @@ final class CodecHelper {
 		return false;
 	}
 
-	static InstrumentEntity decodeInstrument(/* local */final String symbol) {
+	static Instrument decodeInstrument(/* local */final String symbol) {
 		if (isEmpty(symbol)) {
-			return InstrumentEntity.NULL_INSTRUMENT;
+			return Instrument.NULL_INSTRUMENT;
 		}
 		// if (DDF_Symbology.isFutureHistorical(symbol)) {
 		// symbol = DDF_Symbology.futureNormalFromHistorical(symbol);
@@ -476,7 +476,7 @@ final class CodecHelper {
 		return DDF_InstrumentProvider.find(symbol);
 	}
 
-	static String encodeInstrument(final InstrumentEntity instrument,
+	static String encodeInstrument(final Instrument instrument,
 			final long millisUTC) {
 		if (instrument == null) {
 			return "";

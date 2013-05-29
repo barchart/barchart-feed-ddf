@@ -12,7 +12,7 @@ import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
 import com.barchart.util.ascii.ASCII;
@@ -25,7 +25,7 @@ class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryTicksDetail(final InstrumentEntity instrument) {
+	public EntryTicksDetail(final Instrument instrument) {
 		super(instrument);
 	}
 

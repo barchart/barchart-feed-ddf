@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.api.DDF_Result;
@@ -69,7 +69,7 @@ public class HistoricalTrendExample {
 
 		final String symbol = "C";
 
-		final InstrumentEntity instrument = //
+		final Instrument instrument = //
 		DDF_InstrumentProvider.find(symbol);
 
 		if (instrument.isNull()) {

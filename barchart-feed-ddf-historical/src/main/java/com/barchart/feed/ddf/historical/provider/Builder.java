@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMin;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
@@ -20,7 +20,7 @@ enum Builder {
 	TICKS {
 		@Override
 		public DDF_EntryTick newEntry(final int index, final String inputLine,
-				final InstrumentEntity instrument) {
+				final Instrument instrument) {
 			final EntryTicksDetail entry = new EntryTicksDetail(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
@@ -31,7 +31,7 @@ enum Builder {
 	TICKS_FORM_T {
 		@Override
 		public DDF_EntryTickFormT newEntry(final int index, final String inputLine,
-				final InstrumentEntity instrument) {
+				final Instrument instrument) {
 			final EntryTicksFormT entry = new EntryTicksFormT(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
@@ -42,7 +42,7 @@ enum Builder {
 	MINUTES {
 		@Override
 		public DDF_EntryBarMin newEntry(final int index,
-				final String inputLine, final InstrumentEntity instrument) {
+				final String inputLine, final Instrument instrument) {
 			final EntryMins entry = new EntryMins(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
@@ -53,7 +53,7 @@ enum Builder {
 	MINUTES_NEARBY {
 		@Override
 		public EntryMinsNearby newEntry(final int index,
-				final String inputLine, final InstrumentEntity instrument) {
+				final String inputLine, final Instrument instrument) {
 			final EntryMinsNearby entry = new EntryMinsNearby(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
@@ -64,7 +64,7 @@ enum Builder {
 	MINUTES_FORM_T {
 		@Override
 		public EntryMinsFormT newEntry(final int index, final String inputLine,
-				final InstrumentEntity instrument) {
+				final Instrument instrument) {
 			final EntryMinsFormT entry = new EntryMinsFormT(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
@@ -75,7 +75,7 @@ enum Builder {
 	END_OF_DAY {
 		@Override
 		public EntryEod newEntry(final int index, final String inputLine,
-				final InstrumentEntity instrument) {
+				final Instrument instrument) {
 			final EntryEod entry = new EntryEod(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
@@ -88,7 +88,7 @@ enum Builder {
 	TICKS_TREND {
 		@Override
 		public DDF_EntryTrend newEntry(final int index, final String inputLine,
-				final InstrumentEntity instrument) {
+				final Instrument instrument) {
 			final EntryTicksTrend entry = new EntryTicksTrend(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
@@ -99,7 +99,7 @@ enum Builder {
 	MINUTES_TREND {
 		@Override
 		public DDF_EntryTrend newEntry(final int index, final String inputLine,
-				final InstrumentEntity instrument) {
+				final Instrument instrument) {
 			final EntryMinsTrend entry = new EntryMinsTrend(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
@@ -110,7 +110,7 @@ enum Builder {
 	END_OF_DAY_TREND {
 		@Override
 		public DDF_EntryTrend newEntry(final int index, final String inputLine,
-				final InstrumentEntity instrument) {
+				final Instrument instrument) {
 			final EntryEodTrend entry = new EntryEodTrend(instrument);
 			entry.decode(inputLine);
 			entry.index = index;
@@ -121,7 +121,7 @@ enum Builder {
 	;
 
 	abstract DDF_Entry newEntry(int index, final String inputLine,
-			final InstrumentEntity instrument);
+			final Instrument instrument);
 
 	static final Builder from(final DDF_QueryType<?> queryType) {
 

@@ -7,13 +7,13 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTickFormT;
 
 
 public class EntryTicksFormT extends EntryTicksDetail implements DDF_EntryTickFormT {
 
-	public EntryTicksFormT(InstrumentEntity instrument) {
+	public EntryTicksFormT(Instrument instrument) {
 		super(instrument);
 	}
 	

@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.api;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 
 /**
@@ -17,7 +17,7 @@ public interface DDF_Entry {
 
 	DDF_TradeDay getTradeDay();
 
-	InstrumentEntity getInstrument();
+	Instrument getInstrument();
 
 	/** index of this entry in the result */
 	int getIndex();

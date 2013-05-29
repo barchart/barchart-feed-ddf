@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;
@@ -22,7 +22,7 @@ class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 	 *
 	 * @param instrument the instrument
 	 */
-	public EntryMinsTrend(final InstrumentEntity instrument) {
+	public EntryMinsTrend(final Instrument instrument) {
 		super(instrument);
 	}
 
