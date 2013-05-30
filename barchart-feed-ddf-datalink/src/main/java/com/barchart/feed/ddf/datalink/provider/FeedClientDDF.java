@@ -44,7 +44,6 @@ import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.api.DummyFuture;
 import com.barchart.feed.ddf.datalink.api.EventPolicy;
-import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
@@ -79,8 +78,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
 			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
-	private final Map<String, Subscription> subscriptions = 
-			new ConcurrentHashMap<String, Subscription>();
+	private final Map<String, DDF_Subscription> subscriptions = 
+			new ConcurrentHashMap<String, DDF_Subscription>();
 
 	//
 
@@ -320,8 +319,8 @@ class FeedClientDDF implements DDF_FeedClient {
 		public void newEvent() {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
-				final Set<Subscription> subs = new HashSet<Subscription>();
-				for(final Entry<String, Subscription> e : subscriptions.entrySet()) {
+				final Set<DDF_Subscription> subs = new HashSet<DDF_Subscription>();
+				for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
 					subs.add(e.getValue());
 				}
 				subscribe(subs);
@@ -636,7 +635,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Set<Subscription> subs) {
+	public Future<Boolean> subscribe(final Set<DDF_Subscription> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -653,7 +652,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		 */
 		final StringBuffer sb = new StringBuffer();
 		sb.append("GO ");
-		for (final Subscription sub : subs) {
+		for (final DDF_Subscription sub : subs) {
 
 			if (sub != null) {
 				
@@ -673,7 +672,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Subscription sub) {
+	public Future<Boolean> subscribe(final DDF_Subscription sub) {
 
 		//TODO Should these just return DummyFutures? NULL seems bad
 		if (sub == null) {
@@ -698,7 +697,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> unsubscribe(final Set<Subscription> subs) {
+	public Future<Boolean> unsubscribe(final Set<DDF_Subscription> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -715,7 +714,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		 */
 		final StringBuffer sb = new StringBuffer();
 		sb.append("STOP ");
-		for (final Subscription sub : subs) {
+		for (final DDF_Subscription sub : subs) {
 
 			if (sub != null) {
 				subscriptions.remove(sub.getInstrument());
@@ -726,7 +725,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> unsubscribe(final Subscription sub) {
+	public Future<Boolean> unsubscribe(final DDF_Subscription sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");

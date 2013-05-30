@@ -35,7 +35,6 @@ import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.DummyFuture;
 import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.api.FailedFuture;
-import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
@@ -63,8 +62,8 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	private final int socketAddress;
 	private final boolean filterBySub;
 
-	private final Map<String, Subscription> subscriptions =
-			new ConcurrentHashMap<String, Subscription>();
+	private final Map<String, DDF_Subscription> subscriptions =
+			new ConcurrentHashMap<String, DDF_Subscription>();
 
 	TCPListenerClientDDF(final int socketAddress, final boolean filterBySub,
 			final Executor executor) {
@@ -219,14 +218,14 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Set<Subscription> subs) {
+	public Future<Boolean> subscribe(final Set<DDF_Subscription> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return new FailedFuture();
 		}
 
-		for (final Subscription sub : subs) {
+		for (final DDF_Subscription sub : subs) {
 
 			if (sub != null) {
 
@@ -246,7 +245,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Subscription sub) {
+	public Future<Boolean> subscribe(final DDF_Subscription sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
@@ -269,14 +268,14 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	// the registration and unregistration of instruments in the
 	// market maker and the feed.
 	@Override
-	public Future<Boolean> unsubscribe(final Set<Subscription> subs) {
+	public Future<Boolean> unsubscribe(final Set<DDF_Subscription> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return new FailedFuture();
 		}
 
-		for (final Subscription sub : subs) {
+		for (final DDF_Subscription sub : subs) {
 
 			if (sub != null) {
 				subscriptions.remove(sub.getInstrument());
@@ -287,7 +286,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> unsubscribe(final Subscription sub) {
+	public Future<Boolean> unsubscribe(final DDF_Subscription sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");

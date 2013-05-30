@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
 import com.barchart.util.anno.UsedOnce;
 
 /**
@@ -62,7 +63,7 @@ public interface DDF_FeedClientBase {
 	 *            The set of subscriptions to subscribe.
 	 * @return A Future which returns true if successful.
 	 */
-	Future<Boolean> subscribe(Set<Subscription> subscriptions);
+	Future<Boolean> subscribe(Set<DDF_Subscription> subscriptions);
 
 	/**
 	 * Handles a subscription request.
@@ -77,7 +78,7 @@ public interface DDF_FeedClientBase {
 	 *            The subscription to subscribe.
 	 * @return A Future which returns true if successful.
 	 */
-	Future<Boolean> subscribe(Subscription subscription);
+	Future<Boolean> subscribe(DDF_Subscription subscription);
 
 	/**
 	 * Handles multiple unsubscription requests.
@@ -89,7 +90,7 @@ public interface DDF_FeedClientBase {
 	 *            The set of subscriptions to unsubscribe.
 	 * @return A Future which returns true if successful.
 	 */
-	Future<Boolean> unsubscribe(Set<Subscription> subscriptions);
+	Future<Boolean> unsubscribe(Set<DDF_Subscription> subscriptions);
 
 	/**
 	 * Handles an unsubscription request.
@@ -101,7 +102,7 @@ public interface DDF_FeedClientBase {
 	 *            The subscription to unsubscribe.
 	 * @return A Future which returns true if successful.
 	 */
-	Future<Boolean> unsubscribe(Subscription subscription);
+	Future<Boolean> unsubscribe(DDF_Subscription subscription);
 
 	/**
 	 * Sets the event policy for a specific feed event. Default policies are set

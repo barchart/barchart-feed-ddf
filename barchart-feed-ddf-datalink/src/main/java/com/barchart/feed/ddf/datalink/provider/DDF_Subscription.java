@@ -8,23 +8,23 @@
 /**
  * 
  */
-package com.barchart.feed.ddf.datalink.api;
+package com.barchart.feed.ddf.datalink.provider;
 
 import java.util.Collection;
 import java.util.Set;
 
+import com.barchart.feed.api.consumer.connection.SubscriptionType;
 import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
 import com.barchart.feed.inst.InstrumentField;
 
 /**
  * Represents a subscription to a single instrument for JERQ.
  */
-public class Subscription {
+public class DDF_Subscription {
 
 	private final String instrument;
-	private final Collection<DDF_FeedInterest> interests;
+	private final Collection<SubscriptionType> interests;
 
 	/**
 	 * @param instrument
@@ -34,8 +34,8 @@ public class Subscription {
 	 *            send a client. An empty set is interpreted as a request to
 	 *            unsubscribe.
 	 */
-	public Subscription(final String instrument,
-			final Collection<DDF_FeedInterest> interests) {
+	public DDF_Subscription(final String instrument,
+			final Collection<SubscriptionType> interests) {
 		this.instrument = instrument;
 		this.interests = interests;
 	}
@@ -46,7 +46,7 @@ public class Subscription {
 	 * @param instrument
 	 * @param events
 	 */
-	public Subscription(final Instrument instrument,
+	public DDF_Subscription(final Instrument instrument,
 			final Set<MarketEvent> events) {
 		this.instrument =
 				instrument.get(InstrumentField.SYMBOL)
@@ -54,7 +54,7 @@ public class Subscription {
 		this.interests = DDF_FeedInterest.fromEvents(events);
 	}
 
-	public Collection<DDF_FeedInterest> getInterests() {
+	public Collection<SubscriptionType> getInterests() {
 		return interests;
 	}
 	
@@ -62,11 +62,11 @@ public class Subscription {
 		return instrument;
 	}
 
-	public void addInterests(final Collection<DDF_FeedInterest> insts) {
+	public void addInterests(final Collection<SubscriptionType> insts) {
 		interests.addAll(insts);
 	}
 	
-	public void removeInterests(final Collection<DDF_FeedInterest> insts) {
+	public void removeInterests(final Collection<SubscriptionType> insts) {
 		interests.removeAll(insts);
 	}
 	

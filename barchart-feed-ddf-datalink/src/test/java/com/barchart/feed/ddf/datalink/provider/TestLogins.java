@@ -18,10 +18,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.consumer.connection.SubscriptionType;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
-import com.barchart.feed.ddf.datalink.api.Subscription;
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 
@@ -69,9 +68,9 @@ public class TestLogins {
 		// Initial login
 		client.startup();
 
-		final Set<DDF_FeedInterest> interests = new HashSet<DDF_FeedInterest>();
+		final Set<SubscriptionType> interests = new HashSet<SubscriptionType>();
 		interests.addAll(DDF_FeedInterest.setValues());
-		final Subscription sub = new Subscription("GOOG", interests);
+		final DDF_Subscription sub = new DDF_Subscription("GOOG", interests);
 
 		client.subscribe(sub);
 

@@ -15,13 +15,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.consumer.connection.SubscriptionType;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
-import com.barchart.feed.ddf.datalink.api.Subscription;
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -85,12 +85,12 @@ public class FeedClientExample {
 				"$OEX=BbSs" +
 				"";
 
-		Set<DDF_FeedInterest> insts = new HashSet<DDF_FeedInterest>();
-		insts.add(DDF_FeedInterest.BOOK_SNAPSHOT);
-		insts.add(DDF_FeedInterest.BOOK_UPDATE);
-		insts.add(DDF_FeedInterest.QUOTE_SNAPSHOT);
-		insts.add(DDF_FeedInterest.QUOTE_UPDATE);
-		client.subscribe(new Subscription("$OEX", insts));
+		Set<SubscriptionType> insts = new HashSet<SubscriptionType>();
+		insts.add(SubscriptionType.BOOK_SNAPSHOT);
+		insts.add(SubscriptionType.BOOK_UPDATE);
+		insts.add(SubscriptionType.QUOTE_SNAPSHOT);
+		insts.add(SubscriptionType.QUOTE_UPDATE);
+		client.subscribe(new DDF_Subscription("$OEX", insts));
 //		 if (!isSent) {
 //		 log.error("invalid session");
 //		 return;

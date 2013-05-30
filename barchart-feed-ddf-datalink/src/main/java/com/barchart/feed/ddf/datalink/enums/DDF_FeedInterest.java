@@ -21,7 +21,7 @@ import com.barchart.feed.inst.InstrumentField;
  * Flags for ddf JERQ "go" command to activate specific information channels in
  * the feed.
  */
-public enum DDF_FeedInterest {
+enum DDF_FeedInterest {
 
 	UNKNOWN('?'), //
 
