@@ -519,7 +519,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		// did not work, maybe because the while(true)
 
-		log.warn("# terminate start");
+		log.warn("## terminate start");
 
 		eventQueue.clear();
 		messageQueue.clear();
@@ -538,6 +538,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				try {
 					heartbeatTask.getThread().join();
 				} catch (InterruptedException e) {
+					heartbeatTask.interrupt();
 				}
 			}
 
