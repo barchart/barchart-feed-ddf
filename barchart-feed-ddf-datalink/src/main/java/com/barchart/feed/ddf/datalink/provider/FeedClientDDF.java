@@ -403,6 +403,10 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					updateFeedStateListeners(FeedState.LOGGED_OUT);
 
+					// a good pattern is to re-interrupt the thread when you
+					// catch
+					Thread.currentThread().interrupt();
+
 					return;
 
 				} catch (final Throwable e) {
@@ -432,9 +436,16 @@ class FeedClientDDF implements DDF_FeedClient {
 						msgListener.handleMessage(message);
 					}
 				} catch (final InterruptedException e) {
+
 					log.error("# DDF-MessageTask InterruptedException {}",
 							threadNumber);
+
+					// a good pattern is to re-interrupt the thread when you
+					// catch
+					Thread.currentThread().interrupt();
+
 					return;
+
 				} catch (final Throwable e) {
 					log.error("message delivery failed", e);
 				}
@@ -842,7 +853,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+
+				return;
 			}
 
 			final int threadNumber = loginThreadNumber.getAndIncrement();
@@ -1055,6 +1067,10 @@ class FeedClientDDF implements DDF_FeedClient {
 			} catch (final InterruptedException e) {
 				log.error("# DDF-heartbeat task InterruptedException {}",
 						threadNumber);
+
+				// a good pattern is to re-interrupt the thread when you catch
+				Thread.currentThread().interrupt();
+
 				return;
 
 			} catch (final Exception e) {
