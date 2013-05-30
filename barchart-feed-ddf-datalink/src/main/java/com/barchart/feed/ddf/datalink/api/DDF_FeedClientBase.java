@@ -14,9 +14,9 @@ import java.util.Set;
 import java.util.concurrent.Future;
 
 import com.barchart.feed.api.consumer.connection.Subscription;
+import com.barchart.feed.api.consumer.connection.SubscriptionHandler;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
-import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
 import com.barchart.util.anno.UsedOnce;
 
 /**
@@ -24,7 +24,7 @@ import com.barchart.util.anno.UsedOnce;
  * interface should be connectionless listeners. Feeds requiring 2 way
  * communication and a managed connection should implement DDF_FeedClient.
  */
-public interface DDF_FeedClientBase {
+public interface DDF_FeedClientBase extends SubscriptionHandler {
 
 	/**
 	 * Binds the feed client to a port or other data source and begins
@@ -64,6 +64,7 @@ public interface DDF_FeedClientBase {
 	 *            The set of subscriptions to subscribe.
 	 * @return A Future which returns true if successful.
 	 */
+	@Override
 	Future<Boolean> subscribe(Set<Subscription<?>> subscriptions);
 
 	/**
@@ -79,6 +80,7 @@ public interface DDF_FeedClientBase {
 	 *            The subscription to subscribe.
 	 * @return A Future which returns true if successful.
 	 */
+	@Override
 	Future<Boolean> subscribe(Subscription<?> subscription);
 
 	/**
@@ -91,6 +93,7 @@ public interface DDF_FeedClientBase {
 	 *            The set of subscriptions to unsubscribe.
 	 * @return A Future which returns true if successful.
 	 */
+	@Override
 	Future<Boolean> unsubscribe(Set<Subscription<?>> subscriptions);
 
 	/**
@@ -103,6 +106,7 @@ public interface DDF_FeedClientBase {
 	 *            The subscription to unsubscribe.
 	 * @return A Future which returns true if successful.
 	 */
+	@Override
 	Future<Boolean> unsubscribe(Subscription<?> subscription);
 
 	/**
