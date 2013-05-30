@@ -9,6 +9,9 @@ package com.barchart.feed.ddf.datalink.provider;
 
 abstract class RunnerDDF implements Runnable {
 
+	// windows 7 problems with newCachedThreadPool() 
+	// http://javahowto.blogspot.com/2012/10/java-applicatioin-process-hangs-on.html
+	
 	private volatile Thread thread;
 
 	protected abstract void runCore();
@@ -32,12 +35,15 @@ abstract class RunnerDDF implements Runnable {
 			return;
 		}
 		thread.interrupt();
-		// thread = null;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+		}
+		thread = null;
 	}
 
 	public Thread getThread() {
 		return thread;
 	}
-	
 
 }
