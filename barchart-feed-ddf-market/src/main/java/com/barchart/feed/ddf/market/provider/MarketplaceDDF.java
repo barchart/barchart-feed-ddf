@@ -30,33 +30,31 @@ public class MarketplaceDDF extends DDF_MarketService implements FrameworkMarket
 		throw new UnsupportedOperationException("DDF only");
 	}
 	
-	/* ***** ***** ***** Agent Lifecycle Methods ***** ***** ***** */
-
-	@Override
-	public void attachAgent(FrameworkAgent agent) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateAgent(FrameworkAgent agent) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void detachAgent(FrameworkAgent agent) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	/* ***** ***** ***** Agent builder ***** ***** ***** */
 
 	@Override
-	public <V extends MarketData> Agent newAgent(MarketCallback<V> callback,
-			MarketEventType... types) {
+	public <V extends MarketData> Agent newAgent(Class<V> clazz,
+			MarketCallback<V> callback, MarketEventType... types) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void attachAgent(FrameworkAgent<?> agent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateAgent(FrameworkAgent<?> agent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void detachAgent(FrameworkAgent<?> agent) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

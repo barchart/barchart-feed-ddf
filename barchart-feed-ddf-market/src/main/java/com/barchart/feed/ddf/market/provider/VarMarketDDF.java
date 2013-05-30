@@ -40,8 +40,8 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
@@ -87,11 +87,11 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	@Override
-	public void setInstrument(final InstrumentEntity newSymbol) {
+	public void setInstrument(final Instrument newSymbol) {
 
-		final InstrumentEntity oldInst = get(INSTRUMENT);
+		final Instrument oldInst = get(INSTRUMENT);
 
-		if (InstrumentEntity.NULL_INSTRUMENT.equals(oldInst)) {
+		if (Instrument.NULL_INSTRUMENT.equals(oldInst)) {
 			set(INSTRUMENT, newSymbol);
 		} else {
 			throw new IllegalStateException("symbol can be set only once");
@@ -174,7 +174,7 @@ class VarMarketDDF extends VarMarket {
 			break;
 		default:
 			eventAdd(NEW_BOOK_ERROR);
-			final InstrumentEntity inst = get(MarketField.INSTRUMENT);
+			final Instrument inst = get(MarketField.INSTRUMENT);
 			final TextValue id = inst.get(InstrumentField.MARKET_GUID);
 			final TextValue comment = inst.get(InstrumentField.DESCRIPTION);
 			log.error("instrument : {} : {}", id, comment);
@@ -400,7 +400,7 @@ class VarMarketDDF extends VarMarket {
 
 		if (book.isFrozen()) {
 
-			final InstrumentEntity inst = get(INSTRUMENT);
+			final Instrument inst = get(INSTRUMENT);
 
 			final BookLiquidityType type = inst.get(InstrumentField.BOOK_LIQUIDITY);
 			final SizeValue size = LIMIT;

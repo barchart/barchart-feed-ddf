@@ -12,7 +12,7 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.util.FeedDDF;
@@ -232,7 +232,7 @@ public enum DDF_FeedInterest {
 	 *            the event set
 	 * @return the char sequence
 	 */
-	public static CharSequence command(final InstrumentEntity instrumentDDF,
+	public static CharSequence command(final Instrument instrumentDDF,
 			final Set<MarketEvent> eventSet) {
 
 		final CharSequence symbol =

@@ -9,7 +9,6 @@ package bench;
 
 import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.enums.MarketSide;
-import com.barchart.feed.api.framework.data.InstrumentEntity;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
@@ -48,7 +47,7 @@ public class Receiver {
 
 		final BarchartFeedReceiver client = new BarchartFeedReceiver();
 
-		final InstrumentEntity[] instruments = new InstrumentEntity[args.length
+		final Instrument[] instruments = new Instrument[args.length
 				- INST_START];
 
 		for (int i = INST_START; i < args.length; i++) {
@@ -91,7 +90,7 @@ public class Receiver {
 				}
 
 				@Override
-				public InstrumentEntity[] bindInstruments() {
+				public Instrument[] bindInstruments() {
 
 					return instruments;
 
@@ -99,7 +98,7 @@ public class Receiver {
 
 				@Override
 				public void onMarketEvent(final MarketEvent event,
-						final InstrumentEntity instrument, final Market value) {
+						final Instrument instrument, final Market value) {
 
 					final StringBuilder sb = new StringBuilder(value.get(
 							MarketField.INSTRUMENT).get(InstrumentField.MARKET_GUID).toString())

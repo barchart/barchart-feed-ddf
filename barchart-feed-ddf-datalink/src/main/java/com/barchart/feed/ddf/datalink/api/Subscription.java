@@ -13,7 +13,7 @@ package com.barchart.feed.ddf.datalink.api;
 import java.util.Collection;
 import java.util.Set;
 
-import com.barchart.feed.api.framework.data.InstrumentEntity;
+import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
@@ -46,7 +46,7 @@ public class Subscription {
 	 * @param instrument
 	 * @param events
 	 */
-	public Subscription(final InstrumentEntity instrument,
+	public Subscription(final Instrument instrument,
 			final Set<MarketEvent> events) {
 		this.instrument =
 				instrument.get(InstrumentField.SYMBOL)
