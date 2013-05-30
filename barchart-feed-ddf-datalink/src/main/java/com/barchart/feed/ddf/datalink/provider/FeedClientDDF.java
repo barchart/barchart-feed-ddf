@@ -365,7 +365,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			Thread.currentThread().setName("# DDF EVENT TASK " + threadNumber);
 
-			log.info("# starting DDF-EventTask {}", threadNumber);
+			log.warn("# started DDF-EventTask {}", threadNumber);
 
 			while (!Thread.currentThread().isInterrupted()) {
 
@@ -1004,7 +1004,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			Thread.currentThread().setName(
 					"# DDF HEARTBEAT TASK " + threadNumber);
 
-			log.warn("starting # DDF-heartbeat task {} " + threadNumber);
+			log.warn("started # DDF-heartbeat task {} ", threadNumber);
 
 			try {
 				while (!Thread.currentThread().isInterrupted()) {
