@@ -336,6 +336,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void newEvent() {
 			synchronized (loginHandler) {
+				loginHandler.enableLogins();
 				loginHandler.login(LOGIN_DELAY);
 			}
 		}
@@ -521,17 +522,45 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		if (heartbeatTask != null) {
 			heartbeatTask.interrupt();
+
+			if (heartbeatTask.getThread() != null) {
+				try {
+					heartbeatTask.getThread().join();
+				} catch (InterruptedException e) {
+				}
+			}
+
+			log.warn("# terminate DDF-heartbeat killed");
+
 		}
 
 		if (messageTask != null) {
 			messageTask.interrupt();
+
+			if (messageTask.getThread() != null) {
+				try {
+					messageTask.getThread().join();
+				} catch (InterruptedException e) {
+				}
+
+				log.warn("# terminate DDF-MesssageTask killed");
+			}
 		}
 
 		if (eventTask != null) {
 			eventTask.interrupt();
+
+			if (eventTask.getThread() != null) {
+				try {
+					eventTask.getThread().join();
+				} catch (InterruptedException e) {
+				}
+
+				log.warn("# terminate DDF-EventTask killed");
+			}
 		}
 
-		log.warn("terminate - closing channel, channel = {}", channel);
+		log.warn("# terminate - closing channel. channel = {}", channel);
 
 		if (channel != null) {
 
@@ -780,7 +809,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private volatile Thread loginThread = null;
 
-	int i = 0;
+	private volatile AtomicInteger loginThreadNumber = new AtomicInteger();
 
 	private class LoginHandler {
 
@@ -801,6 +830,10 @@ class FeedClientDDF implements DDF_FeedClient {
 		void interruptLogin() {
 			if (isLoginActive()) {
 				loginThread.interrupt();
+				try {
+					loginThread.join();
+				} catch (InterruptedException e) {
+				}
 			}
 		}
 
@@ -812,10 +845,12 @@ class FeedClientDDF implements DDF_FeedClient {
 				e.printStackTrace();
 			}
 
+			final int threadNumber = loginThreadNumber.getAndIncrement();
+
 			log.warn(
-					"login called in LoginHandler. login enabled = {} isLoginActive = {} ",
-					enabled, isLoginActive() + " reconnect attempt count = "
-							+ i++);
+					"# LoginHandler - login called. login enabled = {} isLoginActive = {} ",
+					enabled, isLoginActive() + ". reconnect attempt count = "
+							+ threadNumber);
 
 			if (proxySettings != null) {
 
@@ -830,8 +865,9 @@ class FeedClientDDF implements DDF_FeedClient {
 
 				updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
 
-				loginThread = new Thread(new LoginRunnable(delay),
-						"# DDF Login " + i++);
+				loginThread = new Thread(
+						new LoginRunnable(delay, threadNumber), "# DDF Login "
+								+ threadNumber);
 
 				// use .start() not executor..
 
@@ -853,9 +889,12 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@SuppressWarnings("unused")
 		private final int delay;
+		@SuppressWarnings("unused")
+		private final int threadNumber;
 
-		public LoginRunnable(final int delay) {
+		public LoginRunnable(final int delay, final int threadNumber) {
 			this.delay = delay;
+			this.threadNumber = threadNumber;
 		}
 
 		@Override

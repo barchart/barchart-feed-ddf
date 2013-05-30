@@ -13,7 +13,9 @@ abstract class RunnerDDF implements Runnable {
 
 	protected abstract void runCore();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -30,7 +32,12 @@ abstract class RunnerDDF implements Runnable {
 			return;
 		}
 		thread.interrupt();
-		thread = null;
+		// thread = null;
 	}
+
+	public Thread getThread() {
+		return thread;
+	}
+	
 
 }
