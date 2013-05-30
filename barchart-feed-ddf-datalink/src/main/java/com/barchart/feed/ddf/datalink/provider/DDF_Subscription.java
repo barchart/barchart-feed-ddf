@@ -10,9 +10,9 @@
  */
 package com.barchart.feed.ddf.datalink.provider;
 
-import java.util.Collection;
 import java.util.Set;
 
+import com.barchart.feed.api.consumer.connection.Subscription;
 import com.barchart.feed.api.consumer.connection.SubscriptionType;
 import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -21,10 +21,11 @@ import com.barchart.feed.inst.InstrumentField;
 /**
  * Represents a subscription to a single instrument for JERQ.
  */
-public class DDF_Subscription {
+public class DDF_Subscription implements Subscription<Instrument> {
 
-	private final String instrument;
-	private final Collection<SubscriptionType> interests;
+	private final Instrument inst;
+	private final String symbol;
+	private final Set<SubscriptionType> interests;
 
 	/**
 	 * @param instrument
@@ -35,8 +36,9 @@ public class DDF_Subscription {
 	 *            unsubscribe.
 	 */
 	public DDF_Subscription(final String instrument,
-			final Collection<SubscriptionType> interests) {
-		this.instrument = instrument;
+			final Set<SubscriptionType> interests) {
+		this.symbol = instrument;
+		inst = null;
 		this.interests = interests;
 	}
 
@@ -48,25 +50,35 @@ public class DDF_Subscription {
 	 */
 	public DDF_Subscription(final Instrument instrument,
 			final Set<MarketEvent> events) {
-		this.instrument =
+		inst = instrument;
+		this.symbol =
 				instrument.get(InstrumentField.SYMBOL)
 						.toString();
 		this.interests = DDF_FeedInterest.fromEvents(events);
 	}
 
-	public Collection<SubscriptionType> getInterests() {
+	@Override
+	public Set<SubscriptionType> types() {
 		return interests;
 	}
 	
-	public String getInstrument() {
-		return instrument;
+	@Override
+	public Instrument interest() {
+		return inst;
+	}
+	
+	@Override
+	public String interestName() {
+		return symbol;
 	}
 
-	public void addInterests(final Collection<SubscriptionType> insts) {
+	@Override
+	public void addTypes(final Set<SubscriptionType> insts) {
 		interests.addAll(insts);
 	}
 	
-	public void removeInterests(final Collection<SubscriptionType> insts) {
+	@Override
+	public void removeTypes(final Set<SubscriptionType> insts) {
 		interests.removeAll(insts);
 	}
 	
@@ -76,8 +88,9 @@ public class DDF_Subscription {
 	 * 
 	 * @return The JERQ command to unsubscribe this subscription.
 	 */
+	@Override
 	public String unsubscribe() {
-		return instrument + "=" + DDF_FeedInterest.from(interests);
+		return symbol + "=" + DDF_FeedInterest.from(interests);
 	}
 
 	/**
@@ -86,8 +99,9 @@ public class DDF_Subscription {
 	 * 
 	 * @return The JERQ command to subscribe this subscription.
 	 */
+	@Override
 	public String subscribe() {
-		return instrument + "=" + DDF_FeedInterest.from(interests);
+		return symbol + "=" + DDF_FeedInterest.from(interests);
 	}
 
 	/**
@@ -95,7 +109,7 @@ public class DDF_Subscription {
 	 */
 	@Override
 	public String toString() {
-		return instrument + " " + DDF_FeedInterest.from(interests);
+		return symbol + " " + DDF_FeedInterest.from(interests);
 	}
 
 }

@@ -29,6 +29,7 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.consumer.connection.Subscription;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -62,8 +63,8 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	private final int socketAddress;
 	private final boolean filterBySub;
 
-	private final Map<String, DDF_Subscription> subscriptions =
-			new ConcurrentHashMap<String, DDF_Subscription>();
+	private final Map<String, Subscription> subscriptions =
+			new ConcurrentHashMap<String, Subscription>();
 
 	TCPListenerClientDDF(final int socketAddress, final boolean filterBySub,
 			final Executor executor) {
@@ -218,22 +219,22 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Set<DDF_Subscription> subs) {
+	public Future<Boolean> subscribe(final Set<Subscription<?>> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return new FailedFuture();
 		}
 
-		for (final DDF_Subscription sub : subs) {
+		for (final Subscription sub : subs) {
 
 			if (sub != null) {
 
-				final String inst = sub.getInstrument();
+				final String inst = sub.interestName();
 
 				/* If we're subscribed already, add new interests, otherwise add */
 				if (subscriptions.containsKey(inst)) {
-					subscriptions.get(inst).addInterests(sub.getInterests());
+					subscriptions.get(inst).addTypes(sub.types());
 				} else {
 					subscriptions.put(inst, sub);
 				}
@@ -245,7 +246,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final DDF_Subscription sub) {
+	public Future<Boolean> subscribe(final Subscription<?> sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
@@ -254,9 +255,9 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 
 		log.debug("Subscription registered {}", sub.toString());
 
-		final String inst = sub.getInstrument();
+		final String inst = sub.interestName();
 		if (subscriptions.containsKey(inst)) {
-			subscriptions.get(inst).addInterests(sub.getInterests());
+			subscriptions.get(inst).addTypes(sub.types());
 		} else {
 			subscriptions.put(inst, sub);
 		}
@@ -268,17 +269,17 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	// the registration and unregistration of instruments in the
 	// market maker and the feed.
 	@Override
-	public Future<Boolean> unsubscribe(final Set<DDF_Subscription> subs) {
+	public Future<Boolean> unsubscribe(final Set<Subscription<?>> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return new FailedFuture();
 		}
 
-		for (final DDF_Subscription sub : subs) {
+		for (final Subscription<?> sub : subs) {
 
 			if (sub != null) {
-				subscriptions.remove(sub.getInstrument());
+				subscriptions.remove(sub.interestName());
 			}
 		}
 
@@ -286,14 +287,14 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> unsubscribe(final DDF_Subscription sub) {
+	public Future<Boolean> unsubscribe(final Subscription sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
 			return new FailedFuture();
 		}
 
-		subscriptions.remove(sub.getInstrument());
+		subscriptions.remove(sub.interestName());
 
 		return new DummyFuture();
 	}

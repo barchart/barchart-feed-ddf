@@ -36,6 +36,7 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.consumer.connection.Subscription;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
@@ -78,8 +79,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
 			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
-	private final Map<String, DDF_Subscription> subscriptions = 
-			new ConcurrentHashMap<String, DDF_Subscription>();
+	private final Map<String, Subscription> subscriptions = 
+			new ConcurrentHashMap<String, Subscription>();
 
 	//
 
@@ -319,8 +320,8 @@ class FeedClientDDF implements DDF_FeedClient {
 		public void newEvent() {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
-				final Set<DDF_Subscription> subs = new HashSet<DDF_Subscription>();
-				for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
+				final Set<Subscription<?>> subs = new HashSet<Subscription<?>>();
+				for(final Entry<String, Subscription> e : subscriptions.entrySet()) {
 					subs.add(e.getValue());
 				}
 				subscribe(subs);
@@ -635,7 +636,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Set<DDF_Subscription> subs) {
+	public Future<Boolean> subscribe(final Set<Subscription<?>> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -652,15 +653,15 @@ class FeedClientDDF implements DDF_FeedClient {
 		 */
 		final StringBuffer sb = new StringBuffer();
 		sb.append("GO ");
-		for (final DDF_Subscription sub : subs) {
+		for (final Subscription sub : subs) {
 
 			if (sub != null) {
 				
-				final String inst = sub.getInstrument();
+				final String inst = sub.interestName();
 				
 				/* If we're subscribed already, add new interests, otherwise add  */
 				if(subscriptions.containsKey(inst)) {
-					subscriptions.get(inst).addInterests(sub.getInterests());
+					subscriptions.get(inst).addTypes(sub.types());
 				} else {
 					subscriptions.put(inst, sub);
 				}
@@ -672,7 +673,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final DDF_Subscription sub) {
+	public Future<Boolean> subscribe(final Subscription sub) {
 
 		//TODO Should these just return DummyFutures? NULL seems bad
 		if (sub == null) {
@@ -681,9 +682,9 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* If we're subscribed already, add new interests, otherwise add */
-		final String inst = sub.getInstrument();
+		final String inst = sub.interestName();
 		if(subscriptions.containsKey(inst)) {
-			subscriptions.get(inst).addInterests(sub.getInterests());
+			subscriptions.get(inst).addTypes(sub.types());
 		} else {
 			subscriptions.put(inst, sub);
 		}
@@ -697,7 +698,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> unsubscribe(final Set<DDF_Subscription> subs) {
+	public Future<Boolean> unsubscribe(final Set<Subscription<?>> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -714,10 +715,10 @@ class FeedClientDDF implements DDF_FeedClient {
 		 */
 		final StringBuffer sb = new StringBuffer();
 		sb.append("STOP ");
-		for (final DDF_Subscription sub : subs) {
+		for (final Subscription sub : subs) {
 
 			if (sub != null) {
-				subscriptions.remove(sub.getInstrument());
+				subscriptions.remove(sub.interestName());
 				sb.append(sub.unsubscribe() + ",");
 			}
 		}
@@ -725,14 +726,14 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> unsubscribe(final DDF_Subscription sub) {
+	public Future<Boolean> unsubscribe(final Subscription sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
 			return null;
 		}
 
-		subscriptions.remove(sub.getInstrument());
+		subscriptions.remove(sub.interestName());
 
 		if (!isConnected()) {
 			return new DummyFuture();
