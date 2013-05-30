@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMin;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;

@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import static com.barchart.feed.api.consumer.enums.MarketSide.ASK;
-import static com.barchart.feed.api.consumer.enums.MarketSide.BID;
+import static com.barchart.feed.api.enums.MarketSide.ASK;
+import static com.barchart.feed.api.enums.MarketSide.BID;
 
-import com.barchart.feed.api.consumer.enums.MarketSide;
+import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
 import com.barchart.feed.base.provider.DefBookTop;

@@ -13,8 +13,8 @@ import static com.barchart.feed.inst.InstrumentField.LIFETIME;
 import static com.barchart.feed.inst.InstrumentField.SYMBOL;
 import static com.barchart.feed.inst.InstrumentField.VENDOR;
 
-import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.consumer.market.MarketDisplay;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.market.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.provider.InstrumentBase;

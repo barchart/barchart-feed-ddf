@@ -31,7 +31,7 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.consumer.connection.Subscription;
+import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;

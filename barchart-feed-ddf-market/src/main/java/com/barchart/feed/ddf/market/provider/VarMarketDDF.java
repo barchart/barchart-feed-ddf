@@ -40,8 +40,8 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.consumer.enums.BookLiquidityType;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;

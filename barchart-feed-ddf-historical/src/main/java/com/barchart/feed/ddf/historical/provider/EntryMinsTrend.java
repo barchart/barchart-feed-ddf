@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
 
-import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;

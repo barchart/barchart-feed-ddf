@@ -9,8 +9,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.consumer.inst.InstrumentGUID;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
 import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
 

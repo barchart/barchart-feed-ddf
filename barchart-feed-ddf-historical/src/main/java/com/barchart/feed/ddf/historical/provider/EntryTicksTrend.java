@@ -14,7 +14,7 @@ import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeTicksT
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import com.barchart.feed.api.consumer.data.Instrument;
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.ascii.ASCII;

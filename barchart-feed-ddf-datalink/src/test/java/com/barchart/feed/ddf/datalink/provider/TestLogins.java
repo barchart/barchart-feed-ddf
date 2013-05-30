@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.consumer.connection.SubscriptionType;
+import com.barchart.feed.api.connection.SubscriptionType;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;

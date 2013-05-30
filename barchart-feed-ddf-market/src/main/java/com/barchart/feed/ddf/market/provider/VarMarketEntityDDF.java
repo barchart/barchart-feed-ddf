@@ -1,8 +1,8 @@
 package com.barchart.feed.ddf.market.provider;
 
-import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.consumer.enums.MarketEventType;
-import com.barchart.feed.api.framework.FrameworkAgent;
+import com.barchart.feed.api.FrameworkAgent;
+import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
