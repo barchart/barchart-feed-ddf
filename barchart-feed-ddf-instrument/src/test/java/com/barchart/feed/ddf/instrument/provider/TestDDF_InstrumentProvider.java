@@ -63,14 +63,14 @@ public class TestDDF_InstrumentProvider {
 			}
 			
 			final Instrument inst = e.getValue();
-			final TimeInterval lifetime = inst.lifetime();
-			final TimeValue expires = e.getValue().lifetime().stop();
-			System.out.println("EXP Month Year DDF = "
-					+ (expires.asDateTime().getMonthOfYear())
-					+ " "
-					+ expires.asDateTime().getYear());
-
-			System.out.println(e.getValue());
+//			final TimeInterval lifetime = inst.lifetime();
+//			final TimeValue expires = e.getValue().lifetime().stop();
+//			System.out.println("EXP Month Year DDF = "
+//					+ (expires.asDateTime().getMonthOfYear())
+//					+ " "
+//					+ expires.asDateTime().getYear());
+//
+//			System.out.println(e.getValue());
 
 		}
 

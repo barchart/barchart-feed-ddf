@@ -19,6 +19,7 @@ import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.provider.InstrumentBase;
 import com.barchart.util.values.api.TimeValue;
+import com.barchart.util.values.provider.ValueBuilder;
 
 class InstrumentDDF extends InstrumentBase implements Instrument {
 
@@ -89,7 +90,7 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 
 		addSpreadComponents(text);
 
-		final TimeValue expire = get(LIFETIME).stop();
+		final TimeValue expire = ValueBuilder.newTime(get(LIFETIME).stop().millisecond());
 		if (!expire.isNull()) {
 
 			text.append(display.timeMonthFull(expire));
