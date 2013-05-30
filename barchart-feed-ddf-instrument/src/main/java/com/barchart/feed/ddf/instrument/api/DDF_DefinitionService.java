@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.instrument.api;
 
-import com.barchart.feed.api.framework.inst.InstrumentService;
+import com.barchart.feed.api.consumer.inst.InstrumentService;
 
 
 /**

@@ -13,8 +13,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc

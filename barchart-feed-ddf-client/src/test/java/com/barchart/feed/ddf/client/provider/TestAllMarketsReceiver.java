@@ -17,12 +17,12 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.enums.MarketSide;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.provider.BarchartFeedReceiver;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.values.util.ValueUtil;
 
 public class TestAllMarketsReceiver {

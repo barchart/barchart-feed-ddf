@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -46,6 +45,7 @@ import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
 import com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;
 import com.barchart.feed.ddf.instrument.provider.ServiceDatabaseDDF;
 import com.barchart.feed.ddf.market.provider.DDF_MarketServiceAllMarkets;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.values.api.Value;
 
 /**

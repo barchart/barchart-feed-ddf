@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;
 import com.barchart.feed.api.consumer.enums.MarketSide;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;
@@ -58,6 +57,7 @@ import com.barchart.feed.ddf.message.enums.DDF_QuoteMode;
 import com.barchart.feed.ddf.message.enums.DDF_QuoteState;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;

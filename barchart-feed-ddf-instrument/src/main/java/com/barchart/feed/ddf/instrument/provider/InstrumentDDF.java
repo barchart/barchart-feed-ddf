@@ -7,16 +7,16 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.api.framework.data.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.api.framework.data.InstrumentField.EXCHANGE_CODE;
-import static com.barchart.feed.api.framework.data.InstrumentField.LIFETIME;
-import static com.barchart.feed.api.framework.data.InstrumentField.SYMBOL;
-import static com.barchart.feed.api.framework.data.InstrumentField.VENDOR;
+import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
+import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
+import static com.barchart.feed.inst.InstrumentField.LIFETIME;
+import static com.barchart.feed.inst.InstrumentField.SYMBOL;
+import static com.barchart.feed.inst.InstrumentField.VENDOR;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentField;
-import com.barchart.feed.api.framework.market.MarketDisplay;
+import com.barchart.feed.api.consumer.market.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.provider.InstrumentBase;
 import com.barchart.util.values.api.TimeValue;
 

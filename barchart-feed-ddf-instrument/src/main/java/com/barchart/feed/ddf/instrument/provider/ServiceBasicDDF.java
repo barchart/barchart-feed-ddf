@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.anno.ThreadSafe;

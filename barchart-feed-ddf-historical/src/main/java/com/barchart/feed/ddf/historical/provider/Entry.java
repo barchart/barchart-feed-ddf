@@ -10,9 +10,9 @@ package com.barchart.feed.ddf.historical.provider;
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.splitCSV;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
+import com.barchart.feed.inst.InstrumentField;
 
 // TODO: Auto-generated Javadoc
 abstract class Entry implements DDF_Entry, Codec {

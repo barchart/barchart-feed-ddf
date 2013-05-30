@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.enums.BookLiquidityType;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;
@@ -61,6 +60,7 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;

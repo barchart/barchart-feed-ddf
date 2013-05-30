@@ -29,7 +29,6 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -41,6 +40,7 @@ import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
+import com.barchart.feed.inst.InstrumentField;
 
 public class TCPListenerClientDDF extends SimpleChannelHandler implements
 		DDF_FeedClientBase {

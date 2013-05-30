@@ -1,9 +1,9 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.api.framework.data.InstrumentField.*;
 
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
+import static com.barchart.feed.inst.InstrumentField.*;
 import static com.barchart.util.values.provider.ValueBuilder.*;
 import static org.junit.Assert.assertTrue;
 

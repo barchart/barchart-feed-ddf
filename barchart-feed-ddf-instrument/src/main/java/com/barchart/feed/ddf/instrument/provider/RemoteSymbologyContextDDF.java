@@ -28,9 +28,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.consumer.data.Instrument;
 import com.barchart.feed.api.consumer.inst.InstrumentGUID;
-import com.barchart.feed.api.framework.data.InstrumentField;
-import com.barchart.feed.api.framework.inst.SymbologyContext;
+import com.barchart.feed.api.consumer.inst.SymbologyContext;
 import com.barchart.feed.ddf.util.HelperXML;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.core.ObjectMapFactory;
 
 final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> {

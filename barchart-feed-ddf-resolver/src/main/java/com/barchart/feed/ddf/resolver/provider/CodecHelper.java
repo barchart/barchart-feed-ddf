@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentField;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.api.Tag;
 import com.barchart.util.enums.DictEnum;

@@ -14,9 +14,9 @@ import java.util.Collection;
 import java.util.Set;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
+import com.barchart.feed.inst.InstrumentField;
 
 /**
  * Represents a subscription to a single instrument for JERQ.

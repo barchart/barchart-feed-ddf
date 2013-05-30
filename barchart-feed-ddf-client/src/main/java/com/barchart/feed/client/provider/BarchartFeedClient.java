@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
@@ -40,6 +39,7 @@ import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.api.Subscription;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+import com.barchart.feed.inst.InstrumentField;
 
 /**
  * The entry point for Barchart data feed services.

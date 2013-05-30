@@ -16,7 +16,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.barchart.feed.api.consumer.data.Instrument;
-import com.barchart.feed.api.framework.data.InstrumentField;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
@@ -24,6 +23,7 @@ import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind;
+import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.ascii.ASCII;
 
 final class CodecHelper {
