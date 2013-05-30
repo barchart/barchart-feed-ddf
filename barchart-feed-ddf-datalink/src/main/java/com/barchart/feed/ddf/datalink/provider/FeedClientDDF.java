@@ -1066,11 +1066,12 @@ class FeedClientDDF implements DDF_FeedClient {
 				}
 
 			} catch (final InterruptedException e) {
-				log.error("# DDF-heartbeat task InterruptedException {}",
-						threadNumber);
 
 				// a good pattern is to re-interrupt the thread when you catch
 				Thread.currentThread().interrupt();
+
+				log.error("# DDF-heartbeat task InterruptedException {}",
+						threadNumber);
 
 				return;
 
