@@ -399,7 +399,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					visit(session, market);
 					break;
 				default:
-					log.error("@@@ wrong indicator : {}", indicator);
+					log.warn("@@@ wrong session indicator : {}", indicator);
 					break;
 				}
 			}
