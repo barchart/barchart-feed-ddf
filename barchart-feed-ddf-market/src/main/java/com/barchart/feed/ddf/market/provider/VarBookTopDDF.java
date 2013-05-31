@@ -10,6 +10,7 @@ package com.barchart.feed.ddf.market.provider;
 import static com.barchart.feed.api.enums.MarketSide.ASK;
 import static com.barchart.feed.api.enums.MarketSide.BID;
 
+import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
@@ -54,6 +55,11 @@ final class VarBookTopDDF extends ValueFreezer<MarketBookTop> implements
 	@Override
 	public Time lastUpdateTime() {
 		return ValueConverter.time(book.time());
+	}
+
+	@Override
+	public TopOfBook copy() {
+		return this.freeze();
 	}
 
 }

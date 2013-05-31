@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
@@ -296,6 +297,11 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	public Time lastUpdateTime() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public OrderBook copy() {
+		return this.freeze();
 	}
 
 }
