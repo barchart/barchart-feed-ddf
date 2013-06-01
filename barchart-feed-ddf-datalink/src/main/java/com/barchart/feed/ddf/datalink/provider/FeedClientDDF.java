@@ -181,7 +181,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			eventPolicy.put(event, new EventPolicy() {
 
 				@Override
-				public void newEvent() {
+				public void newEvent(DDF_FeedEvent event) {
 					/* Do nothing */
 				}
 			});
@@ -312,7 +312,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	private class SubscribeAfterLogin implements EventPolicy {
 
 		@Override
-		public void newEvent() {
+		public void newEvent(DDF_FeedEvent event) {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
 				final Set<Subscription> subs = new HashSet<Subscription>();
@@ -334,8 +334,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	private class DefaultReloginPolicy implements EventPolicy {
 
 		@Override
-		public void newEvent() {
-			executor.execute(new Thread(new Disconnector()));
+		public void newEvent(DDF_FeedEvent event) {
+			executor.execute(new Thread(new Disconnector(event.name())));
 		}
 	}
 
@@ -345,7 +345,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	 */
 	private class HeartbeatPolicy implements EventPolicy {
 		@Override
-		public void newEvent() {
+		public void newEvent(DDF_FeedEvent event) {
 			lastHeartbeat.set(System.currentTimeMillis());
 		}
 	}
@@ -390,9 +390,9 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					}
 
-					log.info("Enacting policy for :{}", event.name());
+					log.warn("Enacting policy for :{}", event.name());
 
-					eventPolicy.get(event).newEvent();
+					eventPolicy.get(event).newEvent(event);
 
 				} catch (final InterruptedException e) {
 
@@ -489,7 +489,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.error("error starting DDF_Heartbeat Thread: {} ", e);
 
 			try {
-				executor.execute(new Thread(new Disconnector()));
+				executor.execute(new Thread(new Disconnector(
+						"DDF_Heartbeat Thread Start Exception")));
 			} catch (Exception e1) {
 			}
 
@@ -502,7 +503,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.error("error starting DDF_Event Thread: {} ", e);
 
 			try {
-				executor.execute(new Thread(new Disconnector()));
+				executor.execute(new Thread(new Disconnector(
+						"DDF_Event Thread Start Exception")));
 			} catch (Exception e1) {
 			}
 
@@ -515,7 +517,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.error("error starting DDF_Message Thread: {} ", e);
 
 			try {
-				executor.execute(new Thread(new Disconnector()));
+				executor.execute(new Thread(new Disconnector(
+						"DDF_Message Thread Start Exception")));
 			} catch (Exception e1) {
 			}
 
@@ -594,8 +597,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	 * blocks
 	 * 
 	 */
-	private synchronized void hardRestart() {
-
+	private synchronized void hardRestart(String caller) {
+		log.warn("#### hardRestart called by: " + caller);
 		log.warn("#### hardRestart: starting");
 
 		log.warn("#### hardRestart: interupt logins");
@@ -825,6 +828,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	private volatile Thread loginThread = null;
 
 	private volatile AtomicInteger loginThreadNumber = new AtomicInteger();
+	private volatile boolean isLoggingIn = false;
 
 	private class LoginHandler {
 
@@ -845,7 +849,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		void interruptLogin() {
 			if (isLoginActive()) {
 				loginThread.interrupt();
-				log.warn("# LoginHandler - login thred killed.");
+				log.warn("# LoginHandler - login thread killed.");
 			}
 		}
 
@@ -854,7 +858,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
-
+				log.error("# LoginHandler interrupted while sleeping");
 				return;
 			}
 
@@ -913,6 +917,8 @@ class FeedClientDDF implements DDF_FeedClient {
 		@Override
 		public void run() {
 
+			isLoggingIn = true;
+
 			log.info("starting LoginRunnable "
 					+ Thread.currentThread().getName());
 
@@ -927,13 +933,13 @@ class FeedClientDDF implements DDF_FeedClient {
 				if (!settings.isValidLogin()) {
 					log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
 					postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
-
+					isLoggingIn = false;
 					return;
 				}
 			} catch (final Exception e) {
 				log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
 				postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
-
+				isLoggingIn = false;
 				return;
 			}
 
@@ -951,7 +957,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			if (eventOne == DDF_FeedEvent.LOGIN_SENT) {
 				log.info("Posting LOGIN_SENT for primary server");
 				postEvent(DDF_FeedEvent.LOGIN_SENT);
-
+				isLoggingIn = false;
 				return;
 			}
 
@@ -965,7 +971,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			if (eventTwo == DDF_FeedEvent.LOGIN_SENT) {
 				log.info("Posting LOGIN_SENT for secondary server");
 				postEvent(DDF_FeedEvent.LOGIN_SENT);
-
+				isLoggingIn = false;
 				return;
 			}
 
@@ -976,6 +982,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			log.error("Failed to connect to both servers , Posting {}",
 					eventOne.name());
+
+			isLoggingIn = false;
 
 			postEvent(eventOne);
 
@@ -1100,7 +1108,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					// any calls here will happen in this thread
 					// ...so we will start new thread so this one can die
-					executor.execute(new Thread(new Disconnector()));
+					executor.execute(new Thread(new Disconnector(
+							"HEARTBEAT TIMEOUT")));
 
 					lastHeartbeat.set(System.currentTimeMillis());
 				}
@@ -1112,13 +1121,22 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private class Disconnector implements Runnable {
 
-		@Override
-		public void run() {
+		final String caller;
 
-			hardRestart();
-
+		public Disconnector(final String caller) {
+			this.caller = caller;
 		}
 
+		@Override
+		public void run() {
+			if (isLoggingIn) {
+				log.warn("## "
+						+ caller
+						+ " is trying to call hardRestart, but we are still logging in.");
+			}
+			hardRestart(caller);
+
+		}
 	}
 
 	// change how this is done

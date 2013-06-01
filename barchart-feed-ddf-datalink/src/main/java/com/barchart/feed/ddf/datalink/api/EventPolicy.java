@@ -10,6 +10,8 @@
  */
 package com.barchart.feed.ddf.datalink.api;
 
+import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+
 /**
  * A callback action to be fired on a specific event. Registered with a feed
  * client along with an event type.
@@ -17,6 +19,6 @@ package com.barchart.feed.ddf.datalink.api;
  */
 public interface EventPolicy {
 
-	public void newEvent();
+	public void newEvent(DDF_FeedEvent event);
 
 }
