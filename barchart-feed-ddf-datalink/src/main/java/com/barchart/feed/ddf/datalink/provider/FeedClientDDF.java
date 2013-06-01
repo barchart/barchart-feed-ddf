@@ -1133,7 +1133,9 @@ class FeedClientDDF implements DDF_FeedClient {
 				log.warn("## "
 						+ caller
 						+ " is trying to call hardRestart, but we are still logging in.");
+				return;
 			}
+
 			hardRestart(caller);
 
 		}
