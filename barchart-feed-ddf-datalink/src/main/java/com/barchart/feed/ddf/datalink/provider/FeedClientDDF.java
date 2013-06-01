@@ -390,7 +390,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					}
 
-					log.warn("Enacting policy for :{}", event.name());
+					// log.warn("Enacting policy for :{}", event.name());
 
 					eventPolicy.get(event).newEvent(event);
 
