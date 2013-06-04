@@ -320,7 +320,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		public void newEvent() {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
-				final Set<Subscription<?>> subs = new HashSet<Subscription<?>>();
+				final Set<Subscription> subs = new HashSet<Subscription>();
 				for(final Entry<String, Subscription> e : subscriptions.entrySet()) {
 					subs.add(e.getValue());
 				}
@@ -636,7 +636,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Set<Subscription<?>> subs) {
+	public Future<Boolean> subscribe(final Set<Subscription> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -657,7 +657,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (sub != null) {
 				
-				final String inst = sub.interestName();
+				final String inst = sub.encode();
 				
 				/* If we're subscribed already, add new interests, otherwise add  */
 				if(subscriptions.containsKey(inst)) {
@@ -682,7 +682,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* If we're subscribed already, add new interests, otherwise add */
-		final String inst = sub.interestName();
+		final String inst = sub.encode();
 		if(subscriptions.containsKey(inst)) {
 			subscriptions.get(inst).addTypes(sub.types());
 		} else {
@@ -698,7 +698,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> unsubscribe(final Set<Subscription<?>> subs) {
+	public Future<Boolean> unsubscribe(final Set<Subscription> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -718,7 +718,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		for (final Subscription sub : subs) {
 
 			if (sub != null) {
-				subscriptions.remove(sub.interestName());
+				subscriptions.remove(sub.encode());
 				sb.append(sub.unsubscribe() + ",");
 			}
 		}
@@ -733,7 +733,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
-		subscriptions.remove(sub.interestName());
+		subscriptions.remove(sub.encode());
 
 		if (!isConnected()) {
 			return new DummyFuture();

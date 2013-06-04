@@ -219,7 +219,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Set<Subscription<?>> subs) {
+	public Future<Boolean> subscribe(final Set<Subscription> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -230,7 +230,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 
 			if (sub != null) {
 
-				final String inst = sub.interestName();
+				final String inst = sub.encode();
 
 				/* If we're subscribed already, add new interests, otherwise add */
 				if (subscriptions.containsKey(inst)) {
@@ -246,7 +246,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Subscription<?> sub) {
+	public Future<Boolean> subscribe(final Subscription sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
@@ -255,7 +255,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 
 		log.debug("Subscription registered {}", sub.toString());
 
-		final String inst = sub.interestName();
+		final String inst = sub.encode();
 		if (subscriptions.containsKey(inst)) {
 			subscriptions.get(inst).addTypes(sub.types());
 		} else {
@@ -269,17 +269,17 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	// the registration and unregistration of instruments in the
 	// market maker and the feed.
 	@Override
-	public Future<Boolean> unsubscribe(final Set<Subscription<?>> subs) {
+	public Future<Boolean> unsubscribe(final Set<Subscription> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return new FailedFuture();
 		}
 
-		for (final Subscription<?> sub : subs) {
+		for (final Subscription sub : subs) {
 
 			if (sub != null) {
-				subscriptions.remove(sub.interestName());
+				subscriptions.remove(sub.encode());
 			}
 		}
 
@@ -294,7 +294,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 			return new FailedFuture();
 		}
 
-		subscriptions.remove(sub.interestName());
+		subscriptions.remove(sub.encode());
 
 		return new DummyFuture();
 	}

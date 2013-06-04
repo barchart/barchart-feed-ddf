@@ -47,7 +47,4 @@ public class DDF_MarketServiceAllMarkets extends MakerBaseAllMarkets<DDF_MarketB
 		});
 	}
 	
-	
-	
-	
 }

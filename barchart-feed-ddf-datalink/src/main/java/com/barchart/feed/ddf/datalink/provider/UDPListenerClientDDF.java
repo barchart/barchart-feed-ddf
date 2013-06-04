@@ -240,7 +240,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 	}
 	
 	@Override
-	public Future<Boolean> subscribe(final Set<Subscription<?>> subs) {
+	public Future<Boolean> subscribe(final Set<Subscription> subs) {
 		
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -251,7 +251,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 
 			if (sub != null) {
 				
-				final String inst = sub.interestName();
+				final String inst = sub.encode();
 				
 				/* If we're subscribed already, add new interests, otherwise add */
 				if(subscriptions.containsKey(inst)) {
@@ -274,7 +274,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 			return new FailedFuture();
 		}
 		
-		final String inst = sub.interestName();
+		final String inst = sub.encode();
 		if(subscriptions.containsKey(inst)) {
 			subscriptions.get(inst).addTypes(sub.types());
 		} else {
@@ -285,7 +285,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 	}
 	
 	@Override
-	public Future<Boolean> unsubscribe(final Set<Subscription<?>> subs) {
+	public Future<Boolean> unsubscribe(final Set<Subscription> subs) {
 		
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
@@ -295,7 +295,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 		for (final Subscription sub : subs) {
 
 			if (sub != null) {
-				subscriptions.remove(sub.interestName());
+				subscriptions.remove(sub.encode());
 			}
 		}
 		
@@ -310,7 +310,7 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 			return new FailedFuture();
 		}
 		
-		subscriptions.remove(sub.interestName());
+		subscriptions.remove(sub.encode());
 		
 		return new DummyFuture();
 	}

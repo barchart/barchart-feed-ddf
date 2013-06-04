@@ -65,7 +65,7 @@ public interface DDF_FeedClientBase extends SubscriptionHandler {
 	 * @return A Future which returns true if successful.
 	 */
 	@Override
-	Future<Boolean> subscribe(Set<Subscription<?>> subscriptions);
+	Future<Boolean> subscribe(Set<Subscription> subscriptions);
 
 	/**
 	 * Handles a subscription request.
@@ -81,7 +81,7 @@ public interface DDF_FeedClientBase extends SubscriptionHandler {
 	 * @return A Future which returns true if successful.
 	 */
 	@Override
-	Future<Boolean> subscribe(Subscription<?> subscription);
+	Future<Boolean> subscribe(Subscription subscription);
 
 	/**
 	 * Handles multiple unsubscription requests.
@@ -94,7 +94,7 @@ public interface DDF_FeedClientBase extends SubscriptionHandler {
 	 * @return A Future which returns true if successful.
 	 */
 	@Override
-	Future<Boolean> unsubscribe(Set<Subscription<?>> subscriptions);
+	Future<Boolean> unsubscribe(Set<Subscription> subscriptions);
 
 	/**
 	 * Handles an unsubscription request.
@@ -107,7 +107,7 @@ public interface DDF_FeedClientBase extends SubscriptionHandler {
 	 * @return A Future which returns true if successful.
 	 */
 	@Override
-	Future<Boolean> unsubscribe(Subscription<?> subscription);
+	Future<Boolean> unsubscribe(Subscription subscription);
 
 	/**
 	 * Sets the event policy for a specific feed event. Default policies are set

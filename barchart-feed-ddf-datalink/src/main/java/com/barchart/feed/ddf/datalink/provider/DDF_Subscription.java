@@ -21,7 +21,7 @@ import com.barchart.feed.inst.InstrumentField;
 /**
  * Represents a subscription to a single instrument for JERQ.
  */
-public class DDF_Subscription implements Subscription<Instrument> {
+public class DDF_Subscription implements Subscription {
 
 	private final Instrument inst;
 	private final String symbol;
@@ -63,12 +63,7 @@ public class DDF_Subscription implements Subscription<Instrument> {
 	}
 	
 	@Override
-	public Instrument interest() {
-		return inst;
-	}
-	
-	@Override
-	public String interestName() {
+	public String encode() {
 		return symbol;
 	}
 
@@ -110,6 +105,11 @@ public class DDF_Subscription implements Subscription<Instrument> {
 	@Override
 	public String toString() {
 		return symbol + " " + DDF_FeedInterest.from(interests);
+	}
+
+	@Override
+	public boolean isNull() {
+		return false;
 	}
 
 }
