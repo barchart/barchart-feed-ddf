@@ -35,8 +35,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.util.value.api.Time;
+import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
 
@@ -636,24 +637,24 @@ public final class HelperXML {
 	 *            the is throw
 	 * @return the time value
 	 */
-	public static final TimeValue xmlTimeDecode(final Element tag,
+	public static final Time xmlTimeDecode(final Element tag,
 			final String attribute, final boolean isThrow) {
 
 		final String timeValue = xmlStringDecode(tag, attribute, isThrow);
 
 		if (timeValue == null || timeValue.length() == 0) {
-			return ValueConst.NULL_TIME;
+			return com.barchart.util.value.impl.ValueConst.NULL_TIME;
 		}
 
 		try {
 			final DateTime dateTime = new DateTime(timeValue);
-			return ValueBuilder.newTime(dateTime.getMillis());
+			return FactoryProvider.instance().newTime(dateTime.getMillis(), "");
 		} catch (final Exception e) {
 			if (isThrow) {
 				throw new IllegalArgumentException("attribute not valid : "
 						+ attribute);
 			} else {
-				return ValueConst.NULL_TIME;
+				return com.barchart.util.value.impl.ValueConst.NULL_TIME;
 			}
 		}
 
@@ -670,24 +671,24 @@ public final class HelperXML {
 	 *            the is throw
 	 * @return the time value
 	 */
-	public static final TimeValue xmlTimeDecode(final Attributes atr,
+	public static final Time xmlTimeDecode(final Attributes atr,
 			final String attribute, final boolean isThrow) {
 
 		final String timeValue = xmlStringDecode(atr, attribute, isThrow);
 
 		if (timeValue == null || timeValue.length() == 0) {
-			return ValueConst.NULL_TIME;
+			return com.barchart.util.value.impl.ValueConst.NULL_TIME;
 		}
 
 		try {
 			final DateTime dateTime = new DateTime(timeValue);
-			return ValueBuilder.newTime(dateTime.getMillis());
+			return FactoryProvider.instance().newTime(dateTime.getMillis(), "");
 		} catch (final Exception e) {
 			if (isThrow) {
 				throw new IllegalArgumentException("attribute not valid : "
 						+ attribute);
 			} else {
-				return ValueConst.NULL_TIME;
+				return com.barchart.util.value.impl.ValueConst.NULL_TIME;
 			}
 		}
 

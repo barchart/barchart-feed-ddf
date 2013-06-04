@@ -529,7 +529,6 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	/**
 	 * blocks
-	 * 
 	 */
 	private void hardRestart() {
 

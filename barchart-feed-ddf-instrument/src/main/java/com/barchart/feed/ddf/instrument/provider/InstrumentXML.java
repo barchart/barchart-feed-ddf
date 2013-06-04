@@ -69,11 +69,12 @@ import com.barchart.proto.buf.inst.Decimal;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.InstrumentType;
 import com.barchart.proto.buf.inst.Interval;
+import com.barchart.util.value.api.Time;
+import com.barchart.util.value.api.TimeInterval;
+import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.api.TimeInterval;
-import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
 
@@ -115,7 +116,7 @@ public final class InstrumentXML {
 		final String symbolComment = xmlStringDecode(tag, SYMBOL_COMMENT,
 				XML_PASS);
 		
-		final TimeValue expire = xmlTimeDecode(tag, SYMBOL_EXPIRE, XML_PASS);
+		final Time expire = xmlTimeDecode(tag, SYMBOL_EXPIRE, XML_PASS);
 
 		// month code for exp of futures contract
 		final DDF_TimeZone zone = DDF_TimeZone.fromCode(zoneCode);
@@ -141,10 +142,10 @@ public final class InstrumentXML {
 		
 		/* Build Lifetime, currently only have last month/year of instrument from ddf.extras */
 		TimeInterval lifetime; 
-		if(expire.isNull()) {
-			lifetime = ValueConst.NULL_TIME_INTERVAL;
+		if(expire == null) { // Was isNull()
+			lifetime = com.barchart.util.value.impl.ValueConst.NULL_TIME_INTERVAL;
 		} else {
-			lifetime = ValueBuilder.newTimeInterval(ValueConst.NULL_TIME, expire);
+			lifetime = FactoryProvider.instance().newTimeInterval(0, expire.millisecond());
 		}
 		
 		return build(guid, symbolReal, symbolComment, codeCFI, 
@@ -172,7 +173,7 @@ public final class InstrumentXML {
 		final String zoneCode = xmlStringDecode(ats, TIME_ZONE_DDF, XML_STOP);
 		final String symbolComment = xmlStringDecode(ats, SYMBOL_COMMENT,
 				XML_PASS);
-		final TimeValue expire = xmlTimeDecode(ats, SYMBOL_EXPIRE, XML_PASS);
+		final Time expire = xmlTimeDecode(ats, SYMBOL_EXPIRE, XML_PASS);
 
 		//
 
@@ -198,10 +199,10 @@ public final class InstrumentXML {
 		
 		/* Build Lifetime, currently only have last month/year of instrument from ddf.extras */
 		TimeInterval lifetime; 
-		if(expire.isNull()) {
-			lifetime = ValueConst.NULL_TIME_INTERVAL;
+		if(expire == null) { // Was isNull()
+			lifetime = com.barchart.util.value.impl.ValueConst.NULL_TIME_INTERVAL;
 		} else {
-			lifetime = ValueBuilder.newTimeInterval(ValueConst.NULL_TIME, expire);
+			lifetime = FactoryProvider.instance().newTimeInterval(0, expire.millisecond());
 		}
 		
 		return build(guid, symbolReal, symbolComment, codeCFI, 
@@ -235,7 +236,7 @@ public final class InstrumentXML {
 		map.put(POINT_VALUE, pricePoint);
 		map.put(DISPLAY_FRACTION, fraction);
 		map.put(LIFETIME, lifetime);
-		map.put(MARKET_HOURS, new TimeInterval[0]);
+		map.put(MARKET_HOURS, FactoryProvider.instance().newSchedule(new TimeInterval[0]));
 		map.put(TIME_ZONE_OFFSET, newSize(zone.getUTCOffset()));
 		map.put(TIME_ZONE_NAME, newText(zone.name()));
 		map.put(COMPONENT_LEGS, new GuidList());
@@ -319,7 +320,7 @@ public final class InstrumentXML {
 		builder.setDisplayExponent(frac.fraction.exponent());
 		
 		/* Calendar */
-		final TimeValue expire = xmlTimeDecode(ats, SYMBOL_EXPIRE, XML_PASS);
+		final Time expire = xmlTimeDecode(ats, SYMBOL_EXPIRE, XML_PASS);
 		final Calendar.Builder calBuilder = Calendar.newBuilder();
 		final Interval.Builder intBuilder = Interval.newBuilder();
 		
@@ -327,7 +328,7 @@ public final class InstrumentXML {
 		if(expire == null) {
 			intBuilder.setTimeFinish(0);
 		} else {
-			intBuilder.setTimeFinish(expire.asMillisUTC());
+			intBuilder.setTimeFinish(expire.millisecond());
 		}
 		
 		calBuilder.setLifeTime(intBuilder.build());
