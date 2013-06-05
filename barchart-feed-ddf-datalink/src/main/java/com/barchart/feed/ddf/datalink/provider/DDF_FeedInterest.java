@@ -133,6 +133,8 @@ public final class DDF_FeedInterest {
 		
 		final StringBuilder sb = new StringBuilder();
 		
+		interests.remove(SubscriptionType.UNKNOWN);
+		
 		for(final SubscriptionType type : interests) {
 			sb.append(CODES.get(type));
 		}

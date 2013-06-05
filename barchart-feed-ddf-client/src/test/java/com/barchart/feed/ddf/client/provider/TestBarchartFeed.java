@@ -40,9 +40,11 @@ public class TestBarchartFeed {
 		};
 		
 		final Agent myAgent = feed.newAgent(MarketData.Type.MARKET, callback, 
-				MarketEventType.values());
+				MarketEventType.vals());
 		
 		myAgent.include("ESU3");
+		
+		log.debug("Included instrument in test main");
 		
 		try {
 			Thread.sleep(10000);

@@ -79,8 +79,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
 			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
-	private final Map<String, Subscription> subscriptions = 
-			new ConcurrentHashMap<String, Subscription>();
+	private final Map<String, DDF_Subscription> subscriptions = 
+			new ConcurrentHashMap<String, DDF_Subscription>();
 
 	//
 
@@ -321,7 +321,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
 				final Set<Subscription> subs = new HashSet<Subscription>();
-				for(final Entry<String, Subscription> e : subscriptions.entrySet()) {
+				for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
 					subs.add(e.getValue());
 				}
 				subscribe(subs);
@@ -642,10 +642,6 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
-		if (!isConnected()) {
-			return new DummyFuture();
-		}
-
 		/*
 		 * Creates a single JERQ command from the set, subscriptions are added
 		 * indivually.
@@ -656,18 +652,23 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (sub != null) {
 				
-				final String inst = sub.encode();
+				final String inst = sub.interest();
 				
 				/* If we're subscribed already, add new interests, otherwise add  */
 				if(subscriptions.containsKey(inst)) {
 					subscriptions.get(inst).addTypes(sub.types());
 				} else {
-					subscriptions.put(inst, sub);
+					subscriptions.put(inst, new DDF_Subscription(sub));
 				}
 				
-				sb.append(subscriptions.get(inst).subscribe() + ",");
+				sb.append(subscriptions.get(inst).encode() + ",");
 			}
 		}
+		
+		if (!isConnected()) {
+			return new DummyFuture();
+		}
+		
 		return writeAsync(sb.toString());
 	}
 
@@ -681,11 +682,11 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* If we're subscribed already, add new interests, otherwise add */
-		final String inst = sub.encode();
+		final String inst = sub.interest();
 		if(subscriptions.containsKey(inst)) {
 			subscriptions.get(inst).addTypes(sub.types());
 		} else {
-			subscriptions.put(inst, sub);
+			subscriptions.put(inst, new DDF_Subscription(sub));
 		}
 		
 		if (!isConnected()) {
@@ -693,7 +694,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* Request subscription from JERQ and return the future */
-		return writeAsync("GO " + sub.subscribe());
+		return writeAsync("GO " + sub.encode());
 	}
 
 	@Override
@@ -702,10 +703,6 @@ class FeedClientDDF implements DDF_FeedClient {
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return null;
-		}
-
-		if (!isConnected()) {
-			return new DummyFuture();
 		}
 
 		/*
@@ -717,10 +714,15 @@ class FeedClientDDF implements DDF_FeedClient {
 		for (final Subscription sub : subs) {
 
 			if (sub != null) {
-				subscriptions.remove(sub.encode());
-				sb.append(sub.unsubscribe() + ",");
+				subscriptions.remove(sub.interest());
+				sb.append(sub.encode() + ",");
 			}
 		}
+		
+		if (!isConnected()) {
+			return new DummyFuture();
+		}
+		
 		return writeAsync(sb.toString());
 	}
 
@@ -732,14 +734,14 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
-		subscriptions.remove(sub.encode());
+		subscriptions.remove(sub.interest());
 
 		if (!isConnected()) {
 			return new DummyFuture();
 		}
 
 		/* Request subscription from JERQ and return the future */
-		return writeAsync("STOP " + sub.unsubscribe());
+		return writeAsync("STOP " + sub.encode());
 	}
 
 	@Override

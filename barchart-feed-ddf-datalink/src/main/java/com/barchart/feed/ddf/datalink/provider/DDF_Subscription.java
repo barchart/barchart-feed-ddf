@@ -23,8 +23,7 @@ import com.barchart.feed.inst.InstrumentField;
  */
 public class DDF_Subscription implements Subscription {
 
-	private final Instrument inst;
-	private final String symbol;
+	private final String interest;
 	private final Set<SubscriptionType> interests;
 
 	/**
@@ -37,9 +36,13 @@ public class DDF_Subscription implements Subscription {
 	 */
 	public DDF_Subscription(final String instrument,
 			final Set<SubscriptionType> interests) {
-		this.symbol = instrument;
-		inst = null;
+		this.interest = instrument;
 		this.interests = interests;
+	}
+	
+	public DDF_Subscription(final Subscription sub) {
+		interest = sub.interest();
+		interests = sub.types();
 	}
 
 	/**
@@ -50,8 +53,7 @@ public class DDF_Subscription implements Subscription {
 	 */
 	public DDF_Subscription(final Instrument instrument,
 			final Set<MarketEvent> events) {
-		inst = instrument;
-		this.symbol =
+		this.interest =
 				instrument.get(InstrumentField.SYMBOL)
 						.toString();
 		this.interests = DDF_FeedInterest.fromEvents(events);
@@ -63,8 +65,13 @@ public class DDF_Subscription implements Subscription {
 	}
 	
 	@Override
+	public String interest() {
+		return interest;
+	}
+	
+	@Override
 	public String encode() {
-		return symbol;
+		return interest + "=" + DDF_FeedInterest.from(interests);
 	}
 
 	@Override
@@ -78,33 +85,11 @@ public class DDF_Subscription implements Subscription {
 	}
 	
 	/**
-	 * Helper method returning the JERQ command to unsubscribe this
-	 * subscription. Note: the "STOP " header is omitted for chaining requests.
-	 * 
-	 * @return The JERQ command to unsubscribe this subscription.
-	 */
-	@Override
-	public String unsubscribe() {
-		return symbol + "=" + DDF_FeedInterest.from(interests);
-	}
-
-	/**
-	 * Helper method returning the JERQ command to subscribe this subscription.
-	 * Note: the "GO " header is omitted for chaining requests.
-	 * 
-	 * @return The JERQ command to subscribe this subscription.
-	 */
-	@Override
-	public String subscribe() {
-		return symbol + "=" + DDF_FeedInterest.from(interests);
-	}
-
-	/**
 	 * Returns the JERQ command to request this subscription.
 	 */
 	@Override
 	public String toString() {
-		return symbol + " " + DDF_FeedInterest.from(interests);
+		return interest + " " + DDF_FeedInterest.from(interests);
 	}
 
 	@Override

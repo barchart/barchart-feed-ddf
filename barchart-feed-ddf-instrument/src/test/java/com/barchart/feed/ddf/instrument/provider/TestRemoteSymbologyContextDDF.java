@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.junit.Test;
 
@@ -27,8 +29,8 @@ public class TestRemoteSymbologyContextDDF {
 	@Test
 	public void testRemoteLookup() {
 		
-		final Map<InstrumentGUID, Instrument> guidMap = 
-				new HashMap<InstrumentGUID, Instrument>();
+		final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
+				new ConcurrentHashMap<InstrumentGUID, Instrument>();
 		
 		final RemoteSymbologyContextDDF ctx = new RemoteSymbologyContextDDF(guidMap);
 		
@@ -54,8 +56,8 @@ public class TestRemoteSymbologyContextDDF {
 	@Test
 	public void testBatchRemoteLookup() {
 		
-		final Map<InstrumentGUID, Instrument> guidMap = 
-				new HashMap<InstrumentGUID, Instrument>();
+		final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
+				new ConcurrentHashMap<InstrumentGUID, Instrument>();
 		
 		final RemoteSymbologyContextDDF ctx = new RemoteSymbologyContextDDF(guidMap);
 		final List<CharSequence> symbols = new ArrayList<CharSequence>();
