@@ -26,6 +26,7 @@ import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
+import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -203,7 +204,7 @@ public class TestDF_20_Param extends TestDDFBase {
 		assertEquals(msg.getSession(), DDF_Session.UNKNOWN);
 		assertEquals(msg.getId(), "");
 		assertEquals(msg.getDelay(), 0);
-		assertEquals(msg.getTime().asMillisUTC(), 0);
+		assertEquals(msg.getTime().asMillisUTC(), HelperDDF.DDF_EMPTY);
 
 		// DDF_BLANK
 		final PriceValue value = msg.getAsPrice();

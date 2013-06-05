@@ -26,10 +26,14 @@ import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.Manifest;
 import com.barchart.missive.core.ObjectMap;
 import com.barchart.missive.core.ObjectMapFactory;
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.values.provider.ValueConst;
 
 public class TestInstrumentXML {
 
+	private static final Factory factory = FactoryLoader.load();
+	
 	private static final String IBM = "<instruments status=\"200\" count=\"1\">	<instrument lookup=\"IBM\" status=\"200\" guid=\"IBM\" id=\"1298146\" symbol_realtime=\"IBM\" symbol_ddf=\"IBM\" symbol_historical=\"IBM\" "+
 		"symbol_description=\"International Business Machines Corp.\" symbol_cfi=\"EXXXXX\" exchange=\"XNYS\" exchange_channel=\"NYSE\" exchange_description=\"New York Stock Exchange\" exchange_ddf=\"N\" time_zone_ddf=\"America/New_York\" " + 
 		"tick_increment=\"1\" unit_code=\"2\" base_code=\"A\" point_value=\"1\"/> </instruments>";
@@ -65,8 +69,8 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.get(EXCHANGE_CODE).equals(newText("N")));
 		assertTrue(IBMInst.get(TICK_SIZE).equals(newPrice(0.01)));
 		assertTrue(IBMInst.get(POINT_VALUE).equals(newPrice(1)));
-		assertTrue(IBMInst.get(DISPLAY_FRACTION).equals(newFraction(10, -2)));
-		assertTrue(IBMInst.get(LIFETIME) == (ValueConst.NULL_TIME_INTERVAL));
+		assertTrue(IBMInst.get(DISPLAY_FRACTION).equals(factory.newFraction(10, -2)));
+		assertTrue(IBMInst.get(LIFETIME) == (com.barchart.util.value.impl.ValueConst.NULL_TIME_INTERVAL));
 		assertTrue(IBMInst.get(MARKET_HOURS).size() == 0);
 		assertTrue(IBMInst.get(TIME_ZONE_OFFSET).equals(newSize(-18000000)));
 		assertTrue(IBMInst.get(TIME_ZONE_NAME).equals(newText("NEW_YORK")));

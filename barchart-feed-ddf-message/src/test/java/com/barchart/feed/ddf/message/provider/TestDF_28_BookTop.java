@@ -29,6 +29,7 @@ import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
+import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
 
@@ -154,7 +155,7 @@ public class TestDF_28_BookTop extends TestDDFBase {
 		assertEquals(msg.getSession(), DDF_Session.UNKNOWN);
 		assertEquals(msg.getId(), "");
 		assertEquals(msg.getDelay(), 0);
-		assertEquals(msg.getTime(), newTime(0));
+		assertEquals(msg.getTime(), newTime(HelperDDF.DDF_EMPTY));
 
 		assertTrue(isEmpty(msg.getPriceAsk()));
 		assertTrue(isEmpty(msg.getSizeAsk()));

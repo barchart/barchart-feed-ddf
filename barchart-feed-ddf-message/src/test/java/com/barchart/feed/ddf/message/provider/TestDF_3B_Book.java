@@ -31,6 +31,7 @@ import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
+import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.provider.ValueBuilder;
 
@@ -212,7 +213,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 		assertEquals(msg.getSession(), DDF_Session.UNKNOWN);
 		assertEquals(msg.getId(), "");
 		assertEquals(msg.getDelay(), 0);
-		assertEquals(msg.getTime(), newTime(0));
+		assertEquals(msg.getTime(), newTime(HelperDDF.DDF_EMPTY));
 
 		// System.out.println("place=" + buffer.position());
 		// System.out.println("limit=" + buffer.limit());

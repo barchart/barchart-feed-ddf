@@ -145,7 +145,7 @@ public final class InstrumentXML {
 		
 		/* Build Lifetime, currently only have last month/year of instrument from ddf.extras */
 		TimeInterval lifetime; 
-		if(expire == null) { // Was isNull()
+		if(expire == null || expire == com.barchart.util.value.impl.ValueConst.NULL_TIME) { // Was isNull()
 			lifetime = com.barchart.util.value.impl.ValueConst.NULL_TIME_INTERVAL;
 		} else {
 			lifetime = factory.newTimeInterval(0, expire.millisecond());
@@ -204,7 +204,7 @@ public final class InstrumentXML {
 		
 		/* Build Lifetime, currently only have last month/year of instrument from ddf.extras */
 		TimeInterval lifetime; 
-		if(expire == null) { // Was isNull()
+		if(expire == null || expire == com.barchart.util.value.impl.ValueConst.NULL_TIME) { // Was isNull()
 			lifetime = com.barchart.util.value.impl.ValueConst.NULL_TIME_INTERVAL;
 		} else {
 			lifetime = factory.newTimeInterval(0, expire.millisecond());
