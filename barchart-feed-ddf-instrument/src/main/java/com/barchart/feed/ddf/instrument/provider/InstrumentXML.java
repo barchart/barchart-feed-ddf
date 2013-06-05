@@ -69,9 +69,10 @@ import com.barchart.proto.buf.inst.Decimal;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.proto.buf.inst.InstrumentType;
 import com.barchart.proto.buf.inst.Interval;
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
-import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TextValue;
@@ -79,6 +80,8 @@ import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
 
 public final class InstrumentXML {
+	
+	private static final Factory factory = FactoryLoader.load();
 	
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
@@ -145,7 +148,7 @@ public final class InstrumentXML {
 		if(expire == null) { // Was isNull()
 			lifetime = com.barchart.util.value.impl.ValueConst.NULL_TIME_INTERVAL;
 		} else {
-			lifetime = FactoryProvider.instance().newTimeInterval(0, expire.millisecond());
+			lifetime = factory.newTimeInterval(0, expire.millisecond());
 		}
 		
 		return build(guid, symbolReal, symbolComment, codeCFI, 
@@ -202,7 +205,7 @@ public final class InstrumentXML {
 		if(expire == null) { // Was isNull()
 			lifetime = com.barchart.util.value.impl.ValueConst.NULL_TIME_INTERVAL;
 		} else {
-			lifetime = FactoryProvider.instance().newTimeInterval(0, expire.millisecond());
+			lifetime = factory.newTimeInterval(0, expire.millisecond());
 		}
 		
 		return build(guid, symbolReal, symbolComment, codeCFI, 
@@ -236,7 +239,7 @@ public final class InstrumentXML {
 		map.put(POINT_VALUE, pricePoint);
 		map.put(DISPLAY_FRACTION, fraction);
 		map.put(LIFETIME, lifetime);
-		map.put(MARKET_HOURS, FactoryProvider.instance().newSchedule(new TimeInterval[0]));
+		map.put(MARKET_HOURS, factory.newSchedule(new TimeInterval[0]));
 		map.put(TIME_ZONE_OFFSET, newSize(zone.getUTCOffset()));
 		map.put(TIME_ZONE_NAME, newText(zone.name()));
 		map.put(COMPONENT_LEGS, new GuidList());
