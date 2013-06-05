@@ -71,9 +71,9 @@ import com.barchart.proto.buf.inst.InstrumentType;
 import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.value.api.TimeInterval;
-import com.barchart.util.values.api.Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -151,8 +151,10 @@ public final class InstrumentXML {
 			lifetime = factory.newTimeInterval(0, expire.millisecond());
 		}
 		
+		Fraction f = factory.newFraction(1, (int) frac.decimalDenominator);
+		
 		return build(guid, symbolReal, symbolComment, codeCFI, 
-				exchange, priceStep, pricePoint, frac.fraction, lifetime, zone);
+				exchange, priceStep, pricePoint, f, lifetime, zone);
 		
 	}
 	
@@ -208,8 +210,10 @@ public final class InstrumentXML {
 			lifetime = factory.newTimeInterval(0, expire.millisecond());
 		}
 		
+		Fraction f = factory.newFraction(1, (int) frac.decimalDenominator);
+		
 		return build(guid, symbolReal, symbolComment, codeCFI, 
-				exchange, priceStep, pricePoint, frac.fraction, lifetime, zone);
+				exchange, priceStep, pricePoint, f, lifetime, zone);
 		
 	}
 	
