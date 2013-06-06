@@ -251,17 +251,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public double bestPriceDouble(MarketSide side) {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
 	public Size bestSize(MarketSide side) {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public long bestSizeLong(MarketSide side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
@@ -272,11 +262,6 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public Price lastPrice() {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public double lastPriceDouble() {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
