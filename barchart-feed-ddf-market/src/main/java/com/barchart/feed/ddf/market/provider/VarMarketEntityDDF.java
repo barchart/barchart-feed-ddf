@@ -1,5 +1,8 @@
 package com.barchart.feed.ddf.market.provider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.api.FrameworkAgent;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.enums.MarketEventType;
@@ -17,6 +20,9 @@ import com.barchart.util.values.api.TimeValue;
 
 @SuppressWarnings("rawtypes")
 public class VarMarketEntityDDF extends VarMarketDDF {
+	
+	private static final Logger log = 
+			LoggerFactory.getLogger(VarMarketEntityDDF.class);
 	
 	VarMarketEntityDDF() {
 		
@@ -51,6 +57,8 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			final TimeValue time) {
 		super.setBookSnapshot(entries, time);
 		
+		//log.debug("Set book snapshot, firing callbacks");
+		
 		fireCallbacks(MarketEventType.BOOK_SNAPSHOT);
 	}
 	
@@ -58,6 +66,8 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	public void setBookUpdate(final MarketDoBookEntry entry,
 			final TimeValue time) {
 		super.setBookUpdate(entry, time);
+		
+		//log.debug("Set book update, firing callbacks");
 		
 		fireCallbacks(MarketEventType.BOOK_UPDATE);
 	}
@@ -67,6 +77,8 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			final TimeValue time) {
 		super.setCuvolUpdate(entry, time);
 		
+		//log.debug("Set cuvol update, firing callbacks");
+		
 		fireCallbacks(MarketEventType.CUVOL_UPDATE);
 	}
 	
@@ -74,6 +86,8 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	public void setCuvolSnapshot(final MarketDoCuvolEntry[] entries,
 			final TimeValue time) {
 		super.setCuvolSnapshot(entries, time);
+		
+		//log.debug("Set cuvol snapshot, firing callbacks");
 
 		fireCallbacks(MarketEventType.CUVOL_SNAPSHOT);
 	}
@@ -85,6 +99,8 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			final SizeValue size, final TimeValue time, final TimeValue date) {
 		super.setTrade(type, session, sequencing, price, size, time, date);
 		
+		//log.debug("Set trade, firing callbacks");
+		
 		fireCallbacks(MarketEventType.TRADE);
 	}
 	
@@ -92,12 +108,16 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	public void setBar(final MarketBarType type, final MarketDoBar bar) {
 		super.setBar(type, bar);
 		
+		//log.debug("Set bar, firing callbacks");
+		
 		fireCallbacks(MarketEventType.SNAPSHOT);
 	}
 	
 	@Override
 	public void setState(final MarketStateEntry entry, final boolean isOn) {
 		super.setState(entry, isOn);
+		
+		//log.debug("Set state");
 		
 		// Currently not firing on state
 	}
