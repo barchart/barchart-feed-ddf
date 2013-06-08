@@ -72,11 +72,7 @@ final class ZipReader {
 
 		final String encoding = connection.getContentEncoding();
 
-		log.warn("fromURL encoding = {}", encoding);
-
 		final ZipType type = ZipType.fromEncoding(encoding);
-
-		log.warn("fromURL zipType fromEncoding = {}", type.toString());
 
 		final InputStream stream = connection.getInputStream();
 
@@ -147,11 +143,11 @@ final class ZipReader {
 
 	final void close() {
 		try {
-			log.warn("zipStream == rawStream? = ", zipStream == rawStream);
 			zipStream.close();
 			rawStream.close();
 		} catch (Exception e) {
-			log.error("should not happen", e);
+			// log.error("should not happen", e);
+			// but it will if rawSteam == zipSream
 		}
 	}
 
