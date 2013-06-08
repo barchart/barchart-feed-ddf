@@ -35,8 +35,8 @@ public class TestLogins {
 
 	public static void main(final String[] args) throws Exception {
 
-		final String username = System.getProperty("barchart.username");
-		final String password = System.getProperty("barchart.password");
+		final String username = "mehb1";//System.getProperty("barchart.username");
+		final String password = "mehb1";///System.getProperty("barchart.password");
 
 		final Executor runner = new Executor() {
 
@@ -87,7 +87,7 @@ public class TestLogins {
 
 		client.subscribe(sub);
 
-		sleep(3000);
+		sleep(300000);
 
 		// while (true) {
 		// sleep(1000);
