@@ -90,8 +90,9 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	public void login(final String username, final String password,
 			final DDF_SocksProxy proxySettings) {
 
-		loginProxy(username, password, DDF_Transport.TCP, executor, proxySettings);
-		
+		loginProxy(username, password, DDF_Transport.TCP, executor,
+				proxySettings);
+
 	}
 
 	/**
@@ -105,9 +106,9 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * @param password
 	 */
 	public void login(final String username, final String password) {
-		
+
 		loginMain(username, password, DDF_Transport.TCP, executor);
-		
+
 	}
 
 	/**
@@ -121,7 +122,8 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * @param password
 	 * @param tp
 	 */
-	public void login(final String username, final String password, final DDF_Transport tp) {
+	public void login(final String username, final String password,
+			final DDF_Transport tp) {
 
 		loginMain(username, password, tp, executor);
 
@@ -144,6 +146,14 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 
 		loginMain(username, password, tp, executor);
 
+	}
+
+	public int marketCount() {
+		if (maker == null) {
+			return 0;
+		}
+
+		return maker.marketCount();
 	}
 
 	/*
