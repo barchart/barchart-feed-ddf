@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.jboss.netty.handler.codec.replay.UnreplayableOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -215,27 +216,30 @@ public class BarchartFeed implements Feed {
 	}
 	
 	@Override
-	public InstrumentFuture lookupAsync(CharSequence symbol) {
-		return null;
+	public InstrumentFuture lookupAsync(final CharSequence symbol) {
+		// TODO
+		throw new UnreplayableOperationException();
 	}
 	
 	@Override
 	public Map<CharSequence, Instrument> lookup(
-			Collection<? extends CharSequence> symbolList) {
+			final Collection<? extends CharSequence> symbolList) {
 		return DDF_InstrumentProvider.find(symbolList);
 	}
 
 	@Override
 	public InstrumentFutureMap<CharSequence> lookupAsync(
-			Collection<? extends CharSequence> symbols) {
-		return null;
+			final Collection<? extends CharSequence> symbols) {
+		
+		// TODO
+		throw new UnreplayableOperationException();
 	}
 
 	/* ***** ***** ***** AgentBuilder ***** ***** ***** */
 	
 	@Override
-	public <V extends MarketData<V>> Agent newAgent(Class<V> dataType, 
-			MarketCallback<V> callback,	MarketEventType... types) {
+	public <V extends MarketData<V>> Agent newAgent(final Class<V> dataType, 
+			final MarketCallback<V> callback,	final MarketEventType... types) {
 		
 		return maker.newAgent(dataType, callback, types);
 		
@@ -244,9 +248,9 @@ public class BarchartFeed implements Feed {
 	/* ***** ***** ***** Helper subscribe methods ***** ***** ***** */
 	
 	@Override
-	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
-			MarketCallback<V> callback, MarketEventType[] types,
-			String... symbols) {
+	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
+			final MarketCallback<V> callback, final MarketEventType[] types,
+			final String... symbols) {
 		
 		final Agent agent = newAgent(clazz, callback, types);
 		
@@ -256,9 +260,9 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
-			MarketCallback<V> callback, MarketEventType[] types,
-			Instrument... instruments) {
+	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
+			final MarketCallback<V> callback, final MarketEventType[] types,
+			final Instrument... instruments) {
 		
 		final Agent agent = newAgent(clazz, callback, types);
 		
@@ -268,9 +272,9 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
-			MarketCallback<V> callback, MarketEventType[] types,
-			Exchange... exchanges) {
+	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
+			final MarketCallback<V> callback, final MarketEventType[] types,
+			final Exchange... exchanges) {
 
 		final Agent agent = newAgent(clazz, callback, types);
 		
@@ -280,38 +284,57 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeMarket(MarketCallback<Market> callback,
-			String... instruments) {
-		// TODO Auto-generated method stub
-		return null;
+	public Agent subscribeMarket(final MarketCallback<Market> callback,
+			final String... symbols) {
+		
+		final Agent agent = newAgent(Market.class, callback, MarketEventType.ALL);
+		
+		agent.include(symbols);
+		
+		return agent;
 	}
 
 	@Override
-	public Agent subscribeTrade(MarketCallback<Trade> lastTrade,
-			String... instruments) {
-		// TODO Auto-generated method stub
-		return null;
+	public Agent subscribeTrade(final MarketCallback<Trade> lastTrade,
+			final String... symbols) {
+		
+		final Agent agent = newAgent(Trade.class, lastTrade, MarketEventType.TRADE);
+		
+		agent.include(symbols);
+		
+		return agent;
 	}
 
 	@Override
-	public Agent subscribeBook(MarketCallback<OrderBook> book,
-			String... instruments) {
-		// TODO Auto-generated method stub
-		return null;
+	public Agent subscribeBook(final MarketCallback<OrderBook> book,
+			final String... symbols) {
+		
+		final Agent agent = newAgent(OrderBook.class, book, 
+				MarketEventType.BOOK_SNAPSHOT, MarketEventType.BOOK_UPDATE);
+		
+		agent.include(symbols);
+		
+		return agent;
 	}
 
 	@Override
-	public Agent subscribeTopOfBook(MarketCallback<TopOfBook> top,
-			String... instruments) {
-		// TODO Auto-generated method stub
-		return null;
+	public Agent subscribeTopOfBook(final MarketCallback<TopOfBook> top,
+			final String... symbols) {
+		
+		final Agent agent = newAgent(TopOfBook.class, top, 
+				MarketEventType.BOOK_SNAPSHOT, MarketEventType.BOOK_UPDATE);
+		
+		return agent;
 	}
 
 	@Override
-	public Agent subscribeCuvol(MarketCallback<Cuvol> cuvol,
-			String... instruments) {
-		// TODO Auto-generated method stub
-		return null;
+	public Agent subscribeCuvol(final MarketCallback<Cuvol> cuvol,
+			final String... symbols) {
+		
+		final Agent agent = newAgent(Cuvol.class, cuvol, 
+				MarketEventType.CUVOL_SNAPSHOT, MarketEventType.CUVOL_UPDATE);
+		
+		return agent;
 	}
 
 }
