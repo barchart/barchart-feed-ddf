@@ -13,20 +13,20 @@ package com.barchart.feed.ddf.datalink.example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.client.api.FeedStateListener;
-import com.barchart.feed.client.enums.FeedState;
+import com.barchart.feed.api.connection.ConnectionState;
+import com.barchart.feed.api.connection.ConnectionStateListener;
 
 /**
  * @author g-litchfield
  * 
  */
-public class ExampleFeedStateListener implements FeedStateListener {
+public class ExampleFeedStateListener implements ConnectionStateListener {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(ExampleFeedStateListener.class);
 
 	@Override
-	public void stateUpdate(final FeedState state) {
+	public void listen(final ConnectionState state) {
 
 		log.debug("Feed state update: " + state.toString());
 

@@ -13,6 +13,8 @@ package com.barchart.feed.ddf.client.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.connection.ConnectionState;
+import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
@@ -21,8 +23,6 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
-import com.barchart.feed.client.api.FeedStateListener;
-import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.client.provider.BarchartFeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 
@@ -51,12 +51,12 @@ public class TestBarchartFeedClientProxy {
 
 		System.out.println(instrument.toString());
 
-		final FeedStateListener feedListener = new FeedStateListener() {
+		final ConnectionStateListener feedListener = new ConnectionStateListener() {
 
 			@Override
-			public void stateUpdate(final FeedState state) {
+			public void listen(final ConnectionState state) {
 
-				if (state == FeedState.LOGGED_IN) {
+				if (state == ConnectionState.LOGGED_IN) {
 					client.addTaker(TakerFactory.makeFactory(instrument));
 				}
 				

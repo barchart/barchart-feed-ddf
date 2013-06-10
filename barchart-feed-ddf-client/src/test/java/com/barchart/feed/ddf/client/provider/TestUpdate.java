@@ -10,13 +10,13 @@
  */
 package com.barchart.feed.ddf.client.provider;
 
+import com.barchart.feed.api.connection.ConnectionState;
+import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.client.api.FeedStateListener;
-import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.client.provider.BarchartFeedClient;
 
 /**
@@ -49,12 +49,12 @@ public class TestUpdate {
 
 		final Switch taker = new Switch(initInsts, newInsts);
 
-		final FeedStateListener feedListener = new FeedStateListener() {
+		final ConnectionStateListener feedListener = new ConnectionStateListener() {
 
 			@Override
-			public void stateUpdate(final FeedState state) {
+			public void listen(final ConnectionState state) {
 
-				if (state == FeedState.LOGGED_IN) {
+				if (state == ConnectionState.LOGGED_IN) {
 					client.addTaker(taker);
 				}
 			}

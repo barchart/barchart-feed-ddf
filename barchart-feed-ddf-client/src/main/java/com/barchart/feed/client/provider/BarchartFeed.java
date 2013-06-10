@@ -1,6 +1,6 @@
 package com.barchart.feed.client.provider;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
@@ -10,11 +10,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
+import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketCallback;
+import com.barchart.feed.api.connection.ConnectionStateListener;
+import com.barchart.feed.api.data.Cuvol;
+import com.barchart.feed.api.data.Exchange;
 import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.data.MarketData;
+import com.barchart.feed.api.data.OrderBook;
+import com.barchart.feed.api.data.TopOfBook;
+import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.api.enums.MarketEventType;
-import com.barchart.feed.client.api.FeedStateListener;
+import com.barchart.feed.api.inst.InstrumentFuture;
+import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.client.api.TimestampListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -26,7 +35,7 @@ import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 
-public class BarchartFeed {
+public class BarchartFeed implements Feed {
 	
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartFeed.class);
@@ -37,7 +46,7 @@ public class BarchartFeed {
 	
 	private Executor executor = null;
 	
-	private FeedStateListener stateListener;
+	private ConnectionStateListener stateListener;
 	
 	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
 			new CopyOnWriteArrayList<TimestampListener>();
@@ -61,6 +70,8 @@ public class BarchartFeed {
 	public BarchartFeed(final Executor ex) {
 		executor = ex;
 	}
+	
+	/* ***** ***** ***** ConnectionLifecycle ***** ***** ***** */
 	
 	/**
 	 * Starts the data feed asynchronously. Notification of login success is
@@ -123,9 +134,12 @@ public class BarchartFeed {
 
 	}
 	
-	/**
-	 * Shuts down the data feed and clears all registered market takers.
-	 */
+	@Override
+	public void startup() {
+		
+	}
+	
+	@Override
 	public void shutdown() {
 
 		if(maker != null) {
@@ -164,19 +178,6 @@ public class BarchartFeed {
 
 	};
 	
-	public <V extends MarketData<V>> Agent newAgent(Class<V> dataType, 
-			MarketCallback<V> callback,	MarketEventType... types) {
-		
-		// TODO review maker lifecycle
-		
-		return maker.newAgent(dataType, callback, types);
-		
-	}
-	
-	// TODO Helper methods
-	
-	// subscribe()
-	
 	/**
 	 * Applications which need to react to the connectivity state of the feed
 	 * instantiate a FeedStateListener and bind it to the client.
@@ -184,7 +185,8 @@ public class BarchartFeed {
 	 * @param listener
 	 *            The listener to be bound.
 	 */
-	public void bindFeedStateListener(final FeedStateListener listener) {
+	@Override
+	public void bindConnectionStateListener(final ConnectionStateListener listener) {
 
 		stateListener = listener;
 
@@ -205,27 +207,111 @@ public class BarchartFeed {
 		timeStampListeners.add(listener);
 	}
 	
-	/**
-	 * Retrieves the instrument object denoted by symbol. The local instrument
-	 * cache will be checked first. If the instrument is not stored locally, a
-	 * remote call to the instrument service is made.
-	 * 
-	 * @return NULL_INSTRUMENT if the symbol is not resolved.
-	 */
-	public Instrument lookup(final String symbol) {
+	/* ***** ***** ***** InstrumentService ***** ***** ***** */
+	
+	@Override
+	public Instrument lookup(final CharSequence symbol) {
 		return DDF_InstrumentProvider.find(symbol);
 	}
-
-	/**
-	 * Retrieves a list of instrument objects denoted by symbols provided. The
-	 * local instrument cache will be checked first. If any instruments are not
-	 * stored locally, a remote call to the instrument service is made.
-	 * 
-	 * @return An empty list if no symbols can be resolved.
-	 */
-	public Map<CharSequence, Instrument> lookup(final List<String> symbolList) {
+	
+	@Override
+	public InstrumentFuture lookupAsync(CharSequence symbol) {
+		return null;
+	}
+	
+	@Override
+	public Map<CharSequence, Instrument> lookup(
+			Collection<? extends CharSequence> symbolList) {
 		return DDF_InstrumentProvider.find(symbolList);
 	}
 
+	@Override
+	public InstrumentFutureMap<CharSequence> lookupAsync(
+			Collection<? extends CharSequence> symbols) {
+		return null;
+	}
+
+	/* ***** ***** ***** AgentBuilder ***** ***** ***** */
+	
+	@Override
+	public <V extends MarketData<V>> Agent newAgent(Class<V> dataType, 
+			MarketCallback<V> callback,	MarketEventType... types) {
+		
+		return maker.newAgent(dataType, callback, types);
+		
+	}
+	
+	/* ***** ***** ***** Helper subscribe methods ***** ***** ***** */
+	
+	@Override
+	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
+			MarketCallback<V> callback, MarketEventType[] types,
+			String... symbols) {
+		
+		final Agent agent = newAgent(clazz, callback, types);
+		
+		agent.include(symbols);
+		
+		return agent;
+	}
+
+	@Override
+	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
+			MarketCallback<V> callback, MarketEventType[] types,
+			Instrument... instruments) {
+		
+		final Agent agent = newAgent(clazz, callback, types);
+		
+		agent.include(instruments);
+		
+		return agent;
+	}
+
+	@Override
+	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
+			MarketCallback<V> callback, MarketEventType[] types,
+			Exchange... exchanges) {
+
+		final Agent agent = newAgent(clazz, callback, types);
+		
+		agent.include(exchanges);
+		
+		return agent;
+	}
+
+	@Override
+	public Agent subscribeMarket(MarketCallback<Market> callback,
+			String... instruments) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Agent subscribeTrade(MarketCallback<Trade> lastTrade,
+			String... instruments) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Agent subscribeBook(MarketCallback<OrderBook> book,
+			String... instruments) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Agent subscribeTopOfBook(MarketCallback<TopOfBook> top,
+			String... instruments) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Agent subscribeCuvol(MarketCallback<Cuvol> cuvol,
+			String... instruments) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

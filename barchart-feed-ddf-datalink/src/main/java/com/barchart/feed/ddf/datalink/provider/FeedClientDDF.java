@@ -36,9 +36,9 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.connection.ConnectionState;
+import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.Subscription;
-import com.barchart.feed.client.api.FeedStateListener;
-import com.barchart.feed.client.enums.FeedState;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -100,8 +100,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private volatile DDF_MessageListener msgListener = null;
 
-	private final CopyOnWriteArrayList<FeedStateListener> feedListeners = 
-			new CopyOnWriteArrayList<FeedStateListener>();
+	private final CopyOnWriteArrayList<ConnectionStateListener> feedListeners = 
+			new CopyOnWriteArrayList<ConnectionStateListener>();
 
 	//
 
@@ -373,17 +373,17 @@ class FeedClientDDF implements DDF_FeedClient {
 					if (DDF_FeedEvent.isConnectionError(event)) {
 
 						log.debug("Setting feed state to logged out");
-						updateFeedStateListeners(FeedState.LOGGED_OUT);
+						updateFeedStateListeners(ConnectionState.LOGGED_OUT);
 
 					} else if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
 
 						log.debug("Login success, feed state updated");
-						updateFeedStateListeners(FeedState.LOGGED_IN);
+						updateFeedStateListeners(ConnectionState.LOGGED_IN);
 
 					} else if (event == DDF_FeedEvent.LOGOUT) {
 
 						log.debug("Setting feed state to logged out");
-						updateFeedStateListeners(FeedState.LOGGED_OUT);
+						updateFeedStateListeners(ConnectionState.LOGGED_OUT);
 
 					}
 
@@ -394,7 +394,7 @@ class FeedClientDDF implements DDF_FeedClient {
 					log.warn("# ddf-EventTask thread InterruptedException");
 
 					log.info("Setting feed state to logged out");
-					updateFeedStateListeners(FeedState.LOGGED_OUT);
+					updateFeedStateListeners(ConnectionState.LOGGED_OUT);
 
 					return;
 				} catch (final Throwable e) {
@@ -751,7 +751,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	@Override
 	public synchronized void bindStateListener(
-			final FeedStateListener stateListener) {
+			final ConnectionStateListener stateListener) {
 		feedListeners.add(stateListener);
 	}
 
@@ -805,7 +805,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 				log.warn("Setting feed state to attempting login");
 
-				updateFeedStateListeners(FeedState.ATTEMPTING_LOGIN);
+				updateFeedStateListeners(ConnectionState.ATTEMPTING_LOGIN);
 
 				loginThread = new Thread(new LoginRunnable(delay),
 						"# DDF Login " + i++);
@@ -819,9 +819,9 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	}
 
-	private void updateFeedStateListeners(final FeedState state) {
-		for (final FeedStateListener listener : feedListeners) {
-			listener.stateUpdate(state);
+	private void updateFeedStateListeners(final ConnectionState state) {
+		for (final ConnectionStateListener listener : feedListeners) {
+			listener.listen(state);
 		}
 	}
 
