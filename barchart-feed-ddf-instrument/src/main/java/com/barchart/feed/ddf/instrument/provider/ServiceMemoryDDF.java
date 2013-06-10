@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.inst.InstrumentFuture;
+import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.inst.SymbologyContext;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
@@ -95,27 +97,36 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public Future<Instrument> lookupAsync(CharSequence symbol) {
-		return executor.submit(new LookupCallable(symbol));
+	public InstrumentFuture lookupAsync(CharSequence symbol) {
+		
+		// TODO
+		//return executor.submit(new LookupCallable(symbol));
+		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Map<CharSequence, Future<Instrument>> lookupAsync(
+	public InstrumentFutureMap<CharSequence> lookupAsync(
 			Collection<? extends CharSequence> symbols) {
 		
-		if (symbols == null || symbols.size() == 0) {
-			log.warn("Lookup called with empty collection");
-			return new HashMap<CharSequence, Future<Instrument>>(0); 
-		}
+		// TODO
 		
-		final Map<CharSequence, Future<Instrument>> result = 
-				new HashMap<CharSequence, Future<Instrument>>();
+//		if (symbols == null || symbols.size() == 0) {
+//			log.warn("Lookup called with empty collection");
+//			return new HashMap<CharSequence, Future<Instrument>>(0); 
+//		}
+//		
+//		final Map<CharSequence, Future<Instrument>> result = 
+//				new HashMap<CharSequence, Future<Instrument>>();
+//		
+//		for(final CharSequence symbol : symbols) {
+//			result.put(symbol, executor.submit(new LookupCallable(symbol)));
+//		}
+//		
+//		return result;
 		
-		for(final CharSequence symbol : symbols) {
-			result.put(symbol, executor.submit(new LookupCallable(symbol)));
-		}
+		throw new UnsupportedOperationException();
 		
-		return result;
 	}
 	
 	private final class LookupCallable implements Callable<Instrument> {

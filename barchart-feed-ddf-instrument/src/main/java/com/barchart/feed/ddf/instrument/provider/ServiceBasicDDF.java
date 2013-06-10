@@ -12,12 +12,13 @@ import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.lookupFromSymb
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.inst.InstrumentFuture;
+import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.api.Tag;
@@ -58,7 +59,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public Future<Instrument> lookupAsync(final CharSequence symbol) {
+	public InstrumentFuture lookupAsync(final CharSequence symbol) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -70,7 +71,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public Map<CharSequence, Future<Instrument>> lookupAsync(
+	public InstrumentFutureMap<CharSequence> lookupAsync(
 			Collection<? extends CharSequence> symbols) {
 		// TODO Auto-generated method stub
 		return null;

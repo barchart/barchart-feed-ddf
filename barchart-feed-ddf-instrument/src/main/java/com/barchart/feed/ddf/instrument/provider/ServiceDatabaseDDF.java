@@ -7,12 +7,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.inst.InstrumentFuture;
+import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.proto.buf.inst.InstrumentDefinition;
@@ -43,8 +44,11 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public Future<Instrument> lookupAsync(final CharSequence symbol) {
-		return executor.submit(new SymbolLookup(symbol));
+	public InstrumentFuture lookupAsync(final CharSequence symbol) {
+		// TODO
+		//return executor.submit(new SymbolLookup(symbol));
+		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -63,17 +67,22 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public Map<CharSequence, Future<Instrument>> lookupAsync(
+	public InstrumentFutureMap<CharSequence> lookupAsync(
 			final Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, Future<Instrument>> result =
-				new HashMap<CharSequence, Future<Instrument>>();
+		// TODO
 		
-		for(final CharSequence symbol : symbols) {
-			result.put(symbol, executor.submit(new SymbolLookup(symbol)));
-		}
-				
-		return result;
+//		final Map<CharSequence, Future<Instrument>> result =
+//				new HashMap<CharSequence, Future<Instrument>>();
+//		
+//		for(final CharSequence symbol : symbols) {
+//			result.put(symbol, executor.submit(new SymbolLookup(symbol)));
+//		}
+//				
+//		return result;
+		
+		throw new UnsupportedOperationException();
+		
 	}
 	
 	private Instrument lookupBase(CharSequence symbol) {
