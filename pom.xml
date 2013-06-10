@@ -12,7 +12,7 @@
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-ddf</artifactId>
-	<version>3.4.49-SNAPSHOT</version>
+	<version>3.4.49</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/barchart/barchart-feed-ddf</url>
@@ -26,7 +26,7 @@
 		<url>https://github.com/barchart/barchart-feed-ddf</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>barchart-feed-ddf-3.4.49</tag>
 	</scm>
 
 	<properties>
