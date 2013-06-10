@@ -197,7 +197,6 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		eventPolicy.put(DDF_FeedEvent.LINK_DISCONNECT, reconnectionPolicy);
 
-		//no
 		eventPolicy.put(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE,
 				reconnectionPolicy);
 

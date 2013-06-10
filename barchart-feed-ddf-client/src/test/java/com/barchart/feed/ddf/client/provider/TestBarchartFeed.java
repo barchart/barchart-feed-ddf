@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketCallback;
 import com.barchart.feed.api.data.Market;
-import com.barchart.feed.api.data.MarketData;
-import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.enums.MarketEventType;
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.client.provider.BarchartFeed;
 
 public class TestBarchartFeed {
@@ -32,16 +29,16 @@ public class TestBarchartFeed {
 				
 				log.debug(
 				v.instrument().symbol() + " " +
-				v.topOfBook().side(MarketSide.BID).size().asDouble() + " " +
-				v.topOfBook().side(MarketSide.BID).price().asDouble() + " " +
-				v.topOfBook().side(MarketSide.ASK).price().asDouble() + " " +
-				v.topOfBook().side(MarketSide.ASK).size().asDouble());
+				v.topOfBook().bid().size().asDouble() + " " +
+				v.topOfBook().bid().price().asDouble() + " " +
+				v.topOfBook().ask().price().asDouble() + " " +
+				v.topOfBook().ask().size().asDouble());
 				
 			}
 			
 		};
 		
-		final Agent myAgent = feed.newAgent(MarketData.Type.MARKET, callback, 
+		final Agent myAgent = feed.newAgent(Market.class, callback, 
 				MarketEventType.vals());
 		
 		myAgent.include("GOOG");

@@ -14,7 +14,6 @@ import com.barchart.feed.api.MarketCallback;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.MarketData;
 import com.barchart.feed.api.enums.MarketEventType;
-import com.barchart.feed.base.provider.MarketplaceBase;
 import com.barchart.feed.client.api.FeedStateListener;
 import com.barchart.feed.client.api.TimestampListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
@@ -165,7 +164,7 @@ public class BarchartFeed {
 
 	};
 	
-	public <V extends MarketData<V>> Agent newAgent(MarketData.Type dataType, 
+	public <V extends MarketData<V>> Agent newAgent(Class<V> dataType, 
 			MarketCallback<V> callback,	MarketEventType... types) {
 		
 		// TODO review maker lifecycle
@@ -173,6 +172,10 @@ public class BarchartFeed {
 		return maker.newAgent(dataType, callback, types);
 		
 	}
+	
+	// TODO Helper methods
+	
+	// subscribe()
 	
 	/**
 	 * Applications which need to react to the connectivity state of the feed
