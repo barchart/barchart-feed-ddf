@@ -32,10 +32,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.ConnectionStateListener;
+import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.client.api.TimestampListener;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
@@ -44,6 +44,8 @@ import com.barchart.feed.ddf.market.provider.DDF_MarketService;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.values.api.Value;
 
 /**
@@ -55,6 +57,8 @@ public abstract class BarchartFeedClientBase {
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartFeedClientBase.class);
 
+	private static final Factory factory = FactoryLoader.load();
+	
 	protected volatile DDF_FeedClientBase feed = null;
 
 	protected DDF_MarketProvider maker;
@@ -120,8 +124,8 @@ public abstract class BarchartFeedClientBase {
 
 			if (message instanceof DDF_ControlTimestamp) {
 				for (final TimestampListener listener : timeStampListeners) {
-					listener.handleTimestamp(((DDF_ControlTimestamp) message)
-							.getStampUTC());
+					listener.listen(factory.newTime(((DDF_ControlTimestamp) message)
+							.getStampUTC().asMillisUTC(), ""));
 				}
 			}
 

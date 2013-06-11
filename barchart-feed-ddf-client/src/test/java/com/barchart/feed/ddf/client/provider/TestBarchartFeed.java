@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
+import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketCallback;
+import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.client.provider.BarchartFeed;
@@ -18,9 +20,7 @@ public class TestBarchartFeed {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 		
-		final BarchartFeed feed = new BarchartFeed();
-		
-		feed.login(username, password);
+		final BarchartFeed feed = new BarchartFeed(username, password);
 		
 		final MarketCallback<Market> callback = new MarketCallback<Market>() {
 
@@ -37,6 +37,10 @@ public class TestBarchartFeed {
 			}
 			
 		};
+		
+		final ConnectionFuture<Feed> start = feed.startup();
+		
+		start.get();
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback, 
 				MarketEventType.vals());

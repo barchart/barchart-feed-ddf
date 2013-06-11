@@ -99,6 +99,12 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	@Override
 	public InstrumentFuture lookupAsync(CharSequence symbol) {
 		
+		InstrumentFuture future = new InstrumentFuture();
+		
+		// Update callable below to store reference to future and fire success or failure.
+		
+		// return future;
+		
 		// TODO
 		//return executor.submit(new LookupCallable(symbol));
 		
