@@ -137,7 +137,7 @@ public class BarchartFeed implements Feed {
 		}
 		
 		if(isShuttingdown.get()) {
-			throw new IllegalStateException("Startup called while shutting up");
+			throw new IllegalStateException("Startup called while shutting down");
 		}
 		
 		isStartingup.set(true);
@@ -206,11 +206,11 @@ public class BarchartFeed implements Feed {
 
 		// Consider dummy future?
 		if(isStartingup.get()) {
-			throw new IllegalStateException("Startup called while already starting up");
+			throw new IllegalStateException("Shutdown called while shutting down");
 		}
 		
 		if(isShuttingdown.get()) {
-			throw new IllegalStateException("Startup called while shutting up");
+			throw new IllegalStateException("Shutdown called while already shutting down");
 		}
 		
 		isShuttingdown.set(true);

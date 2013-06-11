@@ -641,6 +641,38 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
+		final Set<Subscription> insts = new HashSet<Subscription>();
+		final Set<Subscription> exch = new HashSet<Subscription>();
+		
+		for(final Subscription sub : subs) {
+			if(isExchange(sub)) {
+				exch.add(sub);
+			} else {
+				insts.add(sub);
+			}
+		}
+		
+		if(!insts.isEmpty()) {
+			
+			if(exch.isEmpty()) {
+				return subInsts(insts);
+			} else {
+				subInsts(insts);
+				return subExcs(exch);
+			}
+			
+		}
+		
+		if(!exch.isEmpty()) {
+			return subExcs(exch);
+		} else {
+			return new DummyFuture();
+		}
+		
+	}
+	
+	private Future<Boolean> subInsts(final Set<Subscription> subs) {
+		
 		/*
 		 * Creates a single JERQ command from the set, subscriptions are added
 		 * indivually.
@@ -651,17 +683,48 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (sub != null) {
 				
-				final String inst = sub.interest();
+				final String interest = sub.interest();
 				
 				/* If we're subscribed already, add new interests, otherwise add  */
-				if(subscriptions.containsKey(inst)) {
-					subscriptions.get(inst).addTypes(sub.types());
+				if(subscriptions.containsKey(interest)) {
+					subscriptions.get(interest).addTypes(sub.types());
 				} else {
-					subscriptions.put(inst, new DDF_Subscription(sub));
+					subscriptions.put(interest, new DDF_Subscription(sub));
 				}
 				
-				sb.append(subscriptions.get(inst).encode() + ",");
+				sb.append(subscriptions.get(interest).encode() + ",");
 			}
+		}
+		
+		if (!isConnected()) {
+			return new DummyFuture();
+		}
+		
+		return writeAsync(sb.toString());
+		
+	}
+	
+	private Future<Boolean> subExcs(final Set<Subscription> subs) {
+		
+		final StringBuffer sb = new StringBuffer();
+		
+		sb.append("STR L ");
+		for(final Subscription sub : subs) {
+			
+			if(sub != null) {
+			
+				final String interest = sub.interest();
+				
+				if(!subscriptions.containsKey(interest)) {
+					
+					subscriptions.put(interest, new DDF_Subscription(sub));
+					
+				}
+				
+				sb.append(interest + ";");
+				
+			}
+			
 		}
 		
 		if (!isConnected()) {
@@ -671,6 +734,14 @@ class FeedClientDDF implements DDF_FeedClient {
 		return writeAsync(sb.toString());
 	}
 
+	private boolean isExchange(final Subscription sub) {
+		if(sub.interest().length() == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	@Override
 	public Future<Boolean> subscribe(final Subscription sub) {
 
@@ -680,6 +751,16 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
+		if(isExchange(sub)) {
+			return subExc(sub);
+		} else {
+			return subInst(sub);
+		}
+		
+	}
+
+	private Future<Boolean> subInst(final Subscription sub) {
+		
 		/* If we're subscribed already, add new interests, otherwise add */
 		final String inst = sub.interest();
 		if(subscriptions.containsKey(inst)) {
@@ -691,11 +772,29 @@ class FeedClientDDF implements DDF_FeedClient {
 		if (!isConnected()) {
 			return new DummyFuture();
 		}
-
+		
 		/* Request subscription from JERQ and return the future */
 		return writeAsync("GO " + sub.encode());
+		
 	}
-
+	
+	private Future<Boolean> subExc(final Subscription sub) {
+		
+		final String interest = sub.interest();
+		
+		if(!subscriptions.containsKey(interest)) {
+			subscriptions.put(interest, new DDF_Subscription(sub));
+		} else {
+			return new DummyFuture();
+		}
+		
+		if (!isConnected()) {
+			return new DummyFuture();
+		}
+		
+		return writeAsync("STR L " + sub.interest());
+	}
+	
 	@Override
 	public Future<Boolean> unsubscribe(final Set<Subscription> subs) {
 
@@ -704,6 +803,38 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
+		final Set<Subscription> insts = new HashSet<Subscription>();
+		final Set<Subscription> exch = new HashSet<Subscription>();
+		
+		for(final Subscription sub : subs) {
+			if(isExchange(sub)) {
+				exch.add(sub);
+			} else {
+				insts.add(sub);
+			}
+		}
+		
+		if(!insts.isEmpty()) {
+			
+			if(exch.isEmpty()) {
+				return unsubInsts(insts);
+			} else {
+				unsubInsts(insts);
+				return unsubExchs(exch);
+			}
+			
+		}
+		
+		if(!exch.isEmpty()) {
+			return unsubExchs(exch);
+		} else {
+			return new DummyFuture();
+		}
+		
+	}
+
+	private Future<Boolean> unsubInsts(final Set<Subscription> subs) {
+		
 		/*
 		 * Creates a single JERQ command from the set. Subscriptions are removed
 		 * individually.
@@ -714,7 +845,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (sub != null) {
 				subscriptions.remove(sub.interest());
-				sb.append(sub.encode() + ",");
+				sb.append(sub.interest() + ",");
 			}
 		}
 		
@@ -724,7 +855,28 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 		return writeAsync(sb.toString());
 	}
-
+	
+	private Future<Boolean> unsubExchs(final Set<Subscription> subs) {
+		
+		for(final Subscription sub : subs) {
+			subscriptions.remove(sub.interest());
+		}
+		
+		if (!isConnected()) {
+			return new DummyFuture();
+		}
+		
+		/* Have to unsub from everything and resub */
+		writeAsync("STOP");
+		
+		final Set<Subscription> resubs = new HashSet<Subscription>();
+		for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
+			resubs.add(e.getValue());
+		}
+		
+		return subscribe(resubs);
+	}
+	
 	@Override
 	public Future<Boolean> unsubscribe(final Subscription sub) {
 
@@ -732,7 +884,17 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.error("Null subscribe request recieved");
 			return null;
 		}
+		
+		if(isExchange(sub)) {
+			return unsubExc(sub);
+		} else {
+			return unsubInst(sub);
+		}
 
+	}
+	
+	private Future<Boolean> unsubInst(final Subscription sub) {
+		
 		subscriptions.remove(sub.interest());
 
 		if (!isConnected()) {
@@ -741,6 +903,27 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		/* Request subscription from JERQ and return the future */
 		return writeAsync("STOP " + sub.encode());
+		
+	}
+	
+	private Future<Boolean> unsubExc(final Subscription sub) {
+		
+		subscriptions.remove(sub.interest());
+		
+		if (!isConnected()) {
+			return new DummyFuture();
+		}
+		
+		/* Have to unsub from everything and resub */
+		writeAsync("STOP");
+		
+		final Set<Subscription> subs = new HashSet<Subscription>();
+		for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
+			subs.add(e.getValue());
+		}
+		
+		return subscribe(subs);
+		
 	}
 
 	@Override

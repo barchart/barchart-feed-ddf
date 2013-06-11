@@ -10,6 +10,7 @@ import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.data.Market;
 import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.client.provider.BarchartFeed;
+import com.barchart.feed.inst.provider.ExchangeFactory;
 
 public class TestBarchartFeed {
 	
@@ -45,10 +46,12 @@ public class TestBarchartFeed {
 		final Agent myAgent = feed.newAgent(Market.class, callback, 
 				MarketEventType.vals());
 		
+		//myAgent.include(ExchangeFactory.fromName("CME"));
+		
 		myAgent.include("GOOG");
 		
 		try {
-			Thread.sleep(15000);
+			Thread.sleep(300000);
 		} catch (final Exception e) {
 			// Interrupted
 		}
