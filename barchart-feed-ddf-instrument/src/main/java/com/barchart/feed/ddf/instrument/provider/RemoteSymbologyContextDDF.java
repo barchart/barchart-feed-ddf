@@ -62,6 +62,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 	 */
 	public RemoteSymbologyContextDDF(final Map<InstrumentGUID, Instrument> guidMap) {
 		this.guidMap = guidMap;
+		DDF_InstrumentProvider.overrideLookupURL(false);
 	}
 	
 	@Override

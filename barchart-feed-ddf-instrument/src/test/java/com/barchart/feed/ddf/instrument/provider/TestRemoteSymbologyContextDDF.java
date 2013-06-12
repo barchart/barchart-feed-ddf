@@ -3,7 +3,6 @@ package com.barchart.feed.ddf.instrument.provider;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,8 +12,6 @@ import org.junit.Test;
 
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
-import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
 
 public class TestRemoteSymbologyContextDDF {
 
@@ -73,9 +70,6 @@ public class TestRemoteSymbologyContextDDF {
 		assertTrue(symbolMap.containsKey(FAIL_1));
 		
 		assertTrue(symbolMap.get(FAIL_1).equals(InstrumentGUID.NULL_INSTRUMENT_GUID));
-		
-		DDF_Symbol symbol = DDF_SymbolService.decode("ESH3");
-		System.out.println(symbol.toString());
 		
 	}
 	

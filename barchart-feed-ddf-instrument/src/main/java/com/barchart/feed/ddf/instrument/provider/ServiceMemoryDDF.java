@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,33 +66,25 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	public Instrument lookup(final CharSequence symbol) {
 		
 		try {
-			return new LookupCallable(symbol).call();
-		} catch (final Exception e) {
+			return retrieve(symbol);
+		} catch (final Throwable t) {
+			log.error("Lookup failed", t);
 			return Instrument.NULL_INSTRUMENT;
 		}
 		
 	}
 
 	@Override
-	public Map<CharSequence, Instrument> lookup(Collection<? extends CharSequence> symbols) {
+	public Map<CharSequence, Instrument> lookup(
+			Collection<? extends CharSequence> symbols) {
 		
-		if (symbols == null || symbols.size() == 0) {
-			log.warn("Lookup called with empty collection");
-			return new HashMap<CharSequence, Instrument>(0); 
+		try {
+			return retrieveMap(symbols);
+		} catch (final Throwable t) {
+			log.error("Lookup failed", t);
+			return new HashMap<CharSequence, Instrument>();
 		}
-
-		final Map<CharSequence, Instrument> instMap = 
-				new HashMap<CharSequence, Instrument>();
-
-		for (final CharSequence symbol : symbols) {
-			try {
-				instMap.put(symbol.toString(), new LookupCallable(symbol).call());
-			} catch (final Exception e) {
-				instMap.put(symbol.toString(), Instrument.NULL_INSTRUMENT);
-			}
-		}
-
-		return instMap;
+		
 	}
 
 	@Override
@@ -101,76 +92,136 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		
 		InstrumentFuture future = new InstrumentFuture();
 		
-		// Update callable below to store reference to future and fire success or failure.
+		executor.submit(new LookupCallable(symbol, future));
 		
-		// return future;
+		return future;
 		
-		// TODO
-		//return executor.submit(new LookupCallable(symbol));
-		
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public InstrumentFutureMap<CharSequence> lookupAsync(
 			Collection<? extends CharSequence> symbols) {
 		
-		// TODO
+		InstrumentFutureMap<CharSequence> future = 
+				new InstrumentFutureMap<CharSequence>();
 		
-//		if (symbols == null || symbols.size() == 0) {
-//			log.warn("Lookup called with empty collection");
-//			return new HashMap<CharSequence, Future<Instrument>>(0); 
-//		}
-//		
-//		final Map<CharSequence, Future<Instrument>> result = 
-//				new HashMap<CharSequence, Future<Instrument>>();
-//		
-//		for(final CharSequence symbol : symbols) {
-//			result.put(symbol, executor.submit(new LookupCallable(symbol)));
-//		}
-//		
-//		return result;
+		executor.submit(new LookupMapCallable(symbols, future));
 		
-		throw new UnsupportedOperationException();
+		return future;
 		
 	}
 	
 	private final class LookupCallable implements Callable<Instrument> {
 
 		private final CharSequence symbol;
+		private final InstrumentFuture future;
 		
-		LookupCallable(final CharSequence symbol) {
+		LookupCallable(final CharSequence symbol, final InstrumentFuture future) {
 			this.symbol = symbol;
+			this.future = future;
 		}
 		
 		@Override
 		public Instrument call() throws Exception {
 			
-			if(symbol == null || symbol.length() == 0) {
+			Instrument inst;
+			
+			try {
+			
+				inst = retrieve(symbol);
+				future.succeed(inst);
+				
+			} catch (final Throwable t) {
+				future.fail(t);
 				return Instrument.NULL_INSTRUMENT;
 			}
 			
-			InstrumentGUID guid = cache.lookup(symbol.toString().toUpperCase()); 
-					
-			if(guid.isNull()) {
-				guid = remote.lookup(symbol.toString().toUpperCase());
-			}
-			
-			if(guid.equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
-				return Instrument.NULL_INSTRUMENT;
-			}
-			
-			cache.storeGUID(symbol, guid);
-			
-			Instrument instrument = guidMap.get(guid);
-
-			if (instrument == null) {
-				return Instrument.NULL_INSTRUMENT;
-			}
-
-			return ObjectMapFactory.build(InstrumentDDF.class, instrument);
+			return inst;
 			
 		}
+		
+	}
+	
+	private Instrument retrieve(final CharSequence symbol) {
+		
+		if(symbol == null || symbol.length() == 0) {
+			return Instrument.NULL_INSTRUMENT;
+		}
+		
+		InstrumentGUID guid = cache.lookup(symbol.toString().toUpperCase()); 
+				
+		if(guid.isNull()) {
+			guid = remote.lookup(symbol.toString().toUpperCase());
+		}
+		
+		if(guid.equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
+			return Instrument.NULL_INSTRUMENT;
+		}
+		
+		cache.storeGUID(symbol, guid);
+		
+		final Instrument instrument = guidMap.get(guid);
+
+		if (instrument == null) {
+			return Instrument.NULL_INSTRUMENT;
+		}
+
+		return ObjectMapFactory.build(InstrumentDDF.class, instrument);
+		
+	}
+	
+	private final class LookupMapCallable implements 
+			Callable<Map<CharSequence, Instrument>> {
+		
+		private final Collection<? extends CharSequence> symbols;
+		private final InstrumentFutureMap<CharSequence> future;
+		
+		LookupMapCallable(final Collection<? extends CharSequence> symbols,
+				final InstrumentFutureMap<CharSequence> future) {
+			this.symbols = symbols;
+			this.future = future;
+		}
+
+		@Override
+		public Map<CharSequence, Instrument> call() throws Exception {
+			
+			Map<CharSequence, Instrument> map;
+			
+			try {
+				
+				map = retrieveMap(symbols);
+				future.succeed(map);
+				
+			} catch (final Throwable t) {
+				future.fail(t);
+				return new HashMap<CharSequence, Instrument>();
+			}
+			
+			return map;
+		}
+		
+	}
+	
+	private Map<CharSequence, Instrument> retrieveMap(
+			final Collection<? extends CharSequence> symbols) {
+		
+		if (symbols == null || symbols.size() == 0) {
+			log.warn("Lookup called with empty collection");
+			return new HashMap<CharSequence, Instrument>(0); 
+		}
+		
+		final Map<CharSequence, Instrument> result = 
+				new HashMap<CharSequence, Instrument>();
+
+		for (final CharSequence symbol : symbols) {
+			try {
+				result.put(symbol.toString(), retrieve(symbol));
+			} catch (final Exception e) {
+				result.put(symbol.toString(), Instrument.NULL_INSTRUMENT);
+			}
+		}
+		
+		return result;
 		
 	}
 	

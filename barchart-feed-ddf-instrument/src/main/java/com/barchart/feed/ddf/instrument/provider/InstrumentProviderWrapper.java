@@ -17,7 +17,7 @@ public class InstrumentProviderWrapper implements InstrumentService<CharSequence
 
 	@Override
 	public InstrumentFuture lookupAsync(CharSequence symbol) {
-		return null;
+		return DDF_InstrumentProvider.findAsync(symbol);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class InstrumentProviderWrapper implements InstrumentService<CharSequence
 	@Override
 	public InstrumentFutureMap<CharSequence> lookupAsync(
 			Collection<? extends CharSequence> symbols) {
-		return null;
+		return DDF_InstrumentProvider.findAsync(symbols);
 	}
 
 }

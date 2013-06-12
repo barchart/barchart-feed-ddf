@@ -46,9 +46,9 @@ public class TestBarchartFeed {
 		final Agent myAgent = feed.newAgent(Market.class, callback, 
 				MarketEventType.vals());
 		
-		//myAgent.include(ExchangeFactory.fromName("CME"));
+		myAgent.include(ExchangeFactory.fromName("LIFFE"));
 		
-		myAgent.include("GOOG");
+		//myAgent.include("GOOG");
 		
 		try {
 			Thread.sleep(300000);
@@ -56,21 +56,21 @@ public class TestBarchartFeed {
 			// Interrupted
 		}
 		
-		myAgent.include("MSFT");
-		
-		try {
-			Thread.sleep(10000);
-		} catch (final Exception e) {
-			// Interrupted
-		}
-		
-		myAgent.exclude("GOOG");
-		
-		try {
-			Thread.sleep(15000);
-		} catch (final Exception e) {
-			// Interrupted
-		}
+//		myAgent.include("MSFT");
+//		
+//		try {
+//			Thread.sleep(10000);
+//		} catch (final Exception e) {
+//			// Interrupted
+//		}
+//		
+//		myAgent.exclude("GOOG");
+//		
+//		try {
+//			Thread.sleep(15000);
+//		} catch (final Exception e) {
+//			// Interrupted
+//		}
 		
 		feed.shutdown();
 		

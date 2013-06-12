@@ -39,53 +39,53 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	@Override
 	public Instrument lookup(final CharSequence symbol) {
 		
-		return lookupBase(symbol);
+		try {
+			return retrieve(symbol);
+		} catch (final Throwable t) {
+			log.error("Lookup failed", t);
+			return Instrument.NULL_INSTRUMENT;
+		}
 		
 	}
 
 	@Override
 	public InstrumentFuture lookupAsync(final CharSequence symbol) {
-		// TODO
-		//return executor.submit(new SymbolLookup(symbol));
 		
-		throw new UnsupportedOperationException();
+		InstrumentFuture future = new InstrumentFuture();
+		
+		executor.submit(new LookupCallable(symbol, future));
+		
+		return future;
+		
 	}
 
 	@Override
 	public Map<CharSequence, Instrument> lookup(
 			final Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, Instrument> result = 
-				new HashMap<CharSequence, Instrument>();
-		
-		// Currently just doing serial lookup
-		for(final CharSequence symbol : symbols) {
-			result.put(symbol, lookupBase(symbol));
+		try {
+			return retrieveMap(symbols);
+		} catch (final Throwable t) {
+			log.error("Lookup failed", t);
+			return new HashMap<CharSequence, Instrument>();
 		}
 		
-		return result;
 	}
 
 	@Override
 	public InstrumentFutureMap<CharSequence> lookupAsync(
 			final Collection<? extends CharSequence> symbols) {
 		
-		// TODO
+		InstrumentFutureMap<CharSequence> future = 
+				new InstrumentFutureMap<CharSequence>();
 		
-//		final Map<CharSequence, Future<Instrument>> result =
-//				new HashMap<CharSequence, Future<Instrument>>();
-//		
-//		for(final CharSequence symbol : symbols) {
-//			result.put(symbol, executor.submit(new SymbolLookup(symbol)));
-//		}
-//				
-//		return result;
+		executor.submit(new LookupMapCallable(symbols, future));
 		
-		throw new UnsupportedOperationException();
+		return future;
 		
 	}
 	
-	private Instrument lookupBase(CharSequence symbol) {
+	private Instrument retrieve(CharSequence symbol) {
 		
 		symbol = ValueBuilder.newText(symbol.toString());
 		
@@ -116,20 +116,90 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 		}
 	}
 	
-	private class SymbolLookup implements Callable<Instrument> {
+	private class LookupCallable implements Callable<Instrument> {
 
 		private final CharSequence symbol;
+		private final InstrumentFuture future;
 		
-		public SymbolLookup(final CharSequence symbol) {
+		public LookupCallable(final CharSequence symbol,
+				final InstrumentFuture future) {
 			this.symbol = symbol;
+			this.future = future;
 		}
 		
 		@Override
 		public Instrument call() throws Exception {
 			
-			return lookupBase(symbol);
+			Instrument inst;
+			
+			try {
+			
+				inst = retrieve(symbol);
+				future.succeed(inst);
+				
+			} catch (final Throwable t) {
+				future.fail(t);
+				return Instrument.NULL_INSTRUMENT;
+			}
+			
+			return inst;
 			
 		}
+		
+	}
+	
+	private final class LookupMapCallable implements 
+			Callable<Map<CharSequence, Instrument>> {
+
+		private final Collection<? extends CharSequence> symbols;
+		private final InstrumentFutureMap<CharSequence> future;
+
+		LookupMapCallable(final Collection<? extends CharSequence> symbols,
+				final InstrumentFutureMap<CharSequence> future) {
+			this.symbols = symbols;
+			this.future = future;
+		}
+
+		@Override
+		public Map<CharSequence, Instrument> call() throws Exception {
+			
+			Map<CharSequence, Instrument> map;
+			
+			try {
+				
+				map = retrieveMap(symbols);
+				future.succeed(map);
+				
+			} catch (final Throwable t) {
+				future.fail(t);
+				return new HashMap<CharSequence, Instrument>();
+			}
+			
+			return map;
+		}
+
+	}
+	
+	private Map<CharSequence, Instrument> retrieveMap(
+			final Collection<? extends CharSequence> symbols) {
+		
+		if (symbols == null || symbols.size() == 0) {
+			log.warn("Lookup called with empty collection");
+			return new HashMap<CharSequence, Instrument>(0); 
+		}
+		
+		final Map<CharSequence, Instrument> result = 
+				new HashMap<CharSequence, Instrument>();
+
+		for (final CharSequence symbol : symbols) {
+			try {
+				result.put(symbol.toString(), retrieve(symbol));
+			} catch (final Exception e) {
+				result.put(symbol.toString(), Instrument.NULL_INSTRUMENT);
+			}
+		}
+		
+		return result;
 		
 	}
 

@@ -24,6 +24,7 @@ import com.sleepycat.je.EnvironmentConfig;
 
 public final class LocalInstrumentDBMap {
 	
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(LocalInstrumentDBMap.class);
 

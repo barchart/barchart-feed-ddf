@@ -31,6 +31,8 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.inst.InstrumentFuture;
+import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
@@ -85,8 +87,10 @@ public final class DDF_InstrumentProvider {
 	private DDF_InstrumentProvider() {
 	}
 
+	@SuppressWarnings("unused")
 	private static volatile DDF_DefinitionService instance;
 
+	@SuppressWarnings("unused")
 	private static Boolean overrideURL = false;
 
 	// TODO
@@ -144,13 +148,25 @@ public final class DDF_InstrumentProvider {
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
 	public static Instrument find(final CharSequence symbol) {
-		return instance().lookup(formatSymbol(
-				ValueBuilder.newText(symbol.toString())));
+		return instance().lookup(formatSymbol(symbol));
 	}
 
+	/**
+	 * 
+	 * @param symbol
+	 * @return
+	 */
+	public static InstrumentFuture findAsync(final CharSequence symbol) {
+		return instance().lookupAsync(formatSymbol(symbol));
+	}
+	
+	/**
+	 * 
+	 * @param symbol
+	 * @return
+	 */
 	public static Instrument findHistorical(final CharSequence symbol) {
-		return instance().lookup(formatHistoricalSymbol(
-				ValueBuilder.newText(symbol.toString())));
+		return instance().lookup(formatHistoricalSymbol(symbol));
 	}
 	
 	/**
@@ -170,6 +186,19 @@ public final class DDF_InstrumentProvider {
 		}
 		
 		return insts;
+	}
+	
+	public static InstrumentFutureMap<CharSequence> findAsync(
+			Collection<? extends CharSequence> symbols) {
+		
+		final Collection<CharSequence> formatted = new ArrayList<CharSequence>();
+		
+		for(CharSequence c : symbols) {
+			formatted.add(formatSymbol(c));
+		}
+		
+		return instance.lookupAsync(formatted);
+		
 	}
 	
 	/**
