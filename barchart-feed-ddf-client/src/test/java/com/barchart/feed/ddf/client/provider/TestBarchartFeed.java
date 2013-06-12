@@ -46,7 +46,7 @@ public class TestBarchartFeed {
 		final Agent myAgent = feed.newAgent(Market.class, callback, 
 				MarketEventType.vals());
 		
-		myAgent.include(ExchangeFactory.fromName("LIFFE"));
+		myAgent.include(ExchangeFactory.fromName("CME"));
 		
 		//myAgent.include("GOOG");
 		

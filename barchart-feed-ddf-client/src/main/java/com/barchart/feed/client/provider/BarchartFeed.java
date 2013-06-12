@@ -85,8 +85,8 @@ public class BarchartFeed implements Feed {
 		executor  = ex;
 		this.dbFolder = dbFolder;
 		
-		connection = DDF_FeedClientFactory.newConnectionClient(DDF_Transport.TCP, username,
-				password, executor);
+		connection = DDF_FeedClientFactory.newConnectionClient(
+				DDF_Transport.TCP, username, password, executor);
 		
 		connection.bindMessageListener(msgListener);
 		
