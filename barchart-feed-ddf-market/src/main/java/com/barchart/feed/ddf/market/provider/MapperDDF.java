@@ -165,7 +165,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		case TRADE_ASK_PRICE:  // NEW
 			log.debug("Mapper saw TRADE_ASK_PRICE - Price=" + price.toString() + 
 					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-					+ message.getInstrument().get(InstrumentField.SYMBOL).toString());
+					+ message.getInstrument().symbol());
 			
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
@@ -175,7 +175,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		case TRADE_BID_PRICE:  // NEW
 			log.debug("Mapper saw TRADE_BID_PRICE - Price=" + price.toString() + 
 					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-					+ message.getInstrument().get(InstrumentField.SYMBOL).toString());
+					+ message.getInstrument().symbol());
 			
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
@@ -190,7 +190,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		case ASK_LAST: // NEW
 			log.debug("Mapper saw ASK_LAST - Price=" + price.toString() + 
 					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-					+ message.getInstrument().get(InstrumentField.SYMBOL).toString());
+					+ message.getInstrument().symbol());
 			
 		case ASK_LAST_PRICE:
 			final DefBookEntry topAskPrice = new DefBookEntry(MODIFY, ASK,
@@ -207,7 +207,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		case BID_LAST: // NEW
 			log.debug("Mapper saw BID_LAST - Price=" + price.toString() + 
 					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-					+ message.getInstrument().get(InstrumentField.SYMBOL).toString());
+					+ message.getInstrument().symbol());
 			
 		case BID_LAST_PRICE:
 			final DefBookEntry topBidPrice = new DefBookEntry(MODIFY, BID,

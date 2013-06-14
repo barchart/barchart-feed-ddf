@@ -60,12 +60,12 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.anno.Mutable;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
+import com.barchart.util.values.provider.ValueBuilder;
 
 /**
  * Logic #1
@@ -175,8 +175,8 @@ class VarMarketDDF extends VarMarket {
 		default:
 			eventAdd(NEW_BOOK_ERROR);
 			final Instrument inst = get(MarketField.INSTRUMENT);
-			final TextValue id = inst.get(InstrumentField.MARKET_GUID);
-			final TextValue comment = inst.get(InstrumentField.DESCRIPTION);
+			final CharSequence id = inst.GUID();
+			final CharSequence comment = inst.description();
 			log.error("instrument : {} : {}", id, comment);
 			log.error("result : {} ; entry : {} ;", result, entry);
 			return;
@@ -402,9 +402,11 @@ class VarMarketDDF extends VarMarket {
 
 			final Instrument inst = get(INSTRUMENT);
 
-			final BookLiquidityType type = inst.get(InstrumentField.BOOK_LIQUIDITY);
+			final BookLiquidityType type = inst.liquidityType();
 			final SizeValue size = LIMIT;
-			final PriceValue step = inst.get(InstrumentField.TICK_SIZE);
+			final Price tempStep = inst.tickSize();
+			final PriceValue step = ValueBuilder.newPrice(tempStep.mantissa(), 
+					tempStep.exponent());
 
 			final VarBookDDF varBook = new VarBookDDF(type, size, step);
 			final VarBookTopDDF varBookTop = new VarBookTopDDF(varBook);

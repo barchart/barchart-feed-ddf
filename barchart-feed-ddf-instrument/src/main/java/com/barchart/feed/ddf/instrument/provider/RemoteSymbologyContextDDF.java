@@ -153,7 +153,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			final String symbolURI = urlInstrumentLookup(symbol);
 			final Element root = HelperXML.xmlDocumentDecode(symbolURI);
 			final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
-			final Instrument instDOM = InstrumentXML.decodeXML(tag);
+			final InstrumentDDF instDOM = InstrumentXML.decodeXML(tag);
 			
 			if(instDOM == null || instDOM.isNull()) {
 				failedMap.put(symbol, "");
@@ -213,9 +213,9 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 
 						try {
 
-							final Instrument inst = InstrumentXML.decodeSAX(attributes);
-							final Instrument ddfInst = ObjectMapFactory.build(InstrumentDDF.class, inst);
-							symMap.put(inst.get(InstrumentField.SYMBOL), ddfInst.GUID());
+							final InstrumentDDF inst = InstrumentXML.decodeSAX(attributes);
+							final InstrumentDDF ddfInst = ObjectMapFactory.build(InstrumentDDF.class, inst);
+							symMap.put(inst.symbol(), ddfInst.GUID());
 							guidMap.put(inst.GUID(), inst);
 							
 						} catch (final SymbolNotFoundException e) {

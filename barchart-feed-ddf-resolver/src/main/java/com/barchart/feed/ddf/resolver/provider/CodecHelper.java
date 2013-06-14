@@ -257,7 +257,7 @@ class CodecHelper {
 	static Term getKeyTerm(final Instrument instrument) {
 
 		final String name = CodecHelper.FIELD_INST_ID;
-		final String value = instrument.get(InstrumentField.MARKET_GUID).toString();
+		final String value = instrument.marketGUID();
 
 		final Term term = new Term(name, value);
 

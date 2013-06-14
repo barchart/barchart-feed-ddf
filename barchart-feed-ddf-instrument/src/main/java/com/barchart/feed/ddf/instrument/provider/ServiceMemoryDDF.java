@@ -160,7 +160,7 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		
 		cache.storeGUID(symbol, guid);
 		
-		final Instrument instrument = guidMap.get(guid);
+		final InstrumentDDF instrument = (InstrumentDDF) guidMap.get(guid);
 
 		if (instrument == null) {
 			return Instrument.NULL_INSTRUMENT;

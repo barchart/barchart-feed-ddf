@@ -52,7 +52,7 @@ public class TestInstrumentXML {
 		final Document document = builder.parse(new ByteArrayInputStream(IBM.getBytes()));
 		final Element root = document.getDocumentElement();
 		final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
-		final Instrument IBMInst = InstrumentXML.decodeXML(tag);
+		final InstrumentDDF IBMInst = InstrumentXML.decodeXML(tag);
 		
 		System.out.println(IBMInst.toString());
 		

@@ -15,7 +15,6 @@ import org.joda.time.DateTimeZone;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBar;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc
@@ -167,14 +166,14 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 		text.append(index);
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(inst.get(InstrumentField.SYMBOL));
+		text.append(inst.symbol());
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(millisUTC);
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(new DateTime(millisUTC, DateTimeZone.forOffsetMillis(
-				(int)inst.get(InstrumentField.TIME_ZONE_OFFSET).asLong())));
+				(int)inst.timeZoneOffset())));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(getTradeDay());

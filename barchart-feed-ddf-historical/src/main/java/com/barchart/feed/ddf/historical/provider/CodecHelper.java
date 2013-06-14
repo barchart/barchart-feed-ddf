@@ -22,8 +22,6 @@ import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
-import com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.ascii.ASCII;
 
 final class CodecHelper {
@@ -62,11 +60,10 @@ final class CodecHelper {
 		final CharSequence password = settings.getAuthPass();
 
 		final Instrument instrument = query.instrument;
-		final CharSequence symbol = formatHistorical(instrument
-				.get(InstrumentField.SYMBOL));  // TODO Need to modify symbol
+		final CharSequence symbol = formatHistorical(instrument.symbol());  // TODO Need to modify symbol
 
 		final DateTimeZone timeZone = DateTimeZone.forOffsetMillis(
-				(int)instrument.get(InstrumentField.TIME_ZONE_OFFSET).asLong());
+				(int)instrument.timeZoneOffset());
 		final CharSequence start = requestTime(query.timeStart, timeZone);
 		final CharSequence end = requestTime(query.timeEnd, timeZone);
 
@@ -234,7 +231,7 @@ final class CodecHelper {
 	}
 
 	static final boolean isFuture(final Instrument instrument) {
-		return instrument.get(InstrumentField.CFI_CODE).charAt(0) == 'F';
+		return instrument.CFICode().charAt(0) == 'F';
 	}
 
 	final static String[] splitCSV(final String string) {
@@ -446,15 +443,13 @@ final class CodecHelper {
 
 	static long decodeTime(final String string,
 			final Instrument instrument, final DateTimeFormatter format) {
-		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument 
-				.get(InstrumentField.TIME_ZONE_OFFSET).asLong()));
+		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument.timeZoneOffset()));
 		return format.withZone(zone).parseMillis(string);
 	}
 
 	static String encodeTime(final long millisUTC,
 			final Instrument instrument, final DateTimeFormatter format) {
-		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument 
-				.get(InstrumentField.TIME_ZONE_OFFSET).asLong()));
+		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument.timeZoneOffset()));
 		return format.withZone(zone).print(millisUTC);
 	}
 
@@ -488,7 +483,7 @@ final class CodecHelper {
 		// .getSymbol();
 		// return symbolDDF.getGroup() + symbolDDF.getMonth().code + year;
 		// }
-		return instrument.get(InstrumentField.SYMBOL).toString();
+		return instrument.symbol();
 	}
 
 }

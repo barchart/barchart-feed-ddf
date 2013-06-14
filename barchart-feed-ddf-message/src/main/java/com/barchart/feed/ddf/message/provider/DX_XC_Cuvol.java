@@ -54,7 +54,6 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.ascii.ASCII;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.PriceValue;
@@ -314,8 +313,7 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 		}
 
 		final Instrument instrument = getInstrument();
-		setExchange(DDF_Exchange.fromCode(instrument.get(
-				InstrumentField.EXCHANGE_CODE).toString().getBytes()[0]));
+		setExchange(DDF_Exchange.fromCode(instrument.exchangeCode().getBytes()[0]));
 
 		final long millisUTC = xmlTimeDecode(getExchange().kind.time.zone, tag,
 				TIME_LAST, XML_PASS);

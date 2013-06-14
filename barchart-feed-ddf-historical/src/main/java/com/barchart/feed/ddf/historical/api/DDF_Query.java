@@ -21,7 +21,6 @@ import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryType;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.clone.PublicCloneable;
 
@@ -107,12 +106,11 @@ public final class DDF_Query<E extends DDF_Entry> implements
 	}
 
 	private final CharSequence renderId() {
-		return instrument == null ? "NONE" : instrument
-				.get(InstrumentField.SYMBOL);
+		return instrument == null ? "NONE" : instrument.symbol();
 	}
 
 	private final CharSequence renderDescription() {
-		return instrument == null ? "NONE" : instrument.get(InstrumentField.DESCRIPTION);
+		return instrument == null ? "NONE" : instrument.description();
 	}
 
 	private final static DateTime NULL_TIME = new DateTime(0, DateTimeZone.UTC);
@@ -124,8 +122,7 @@ public final class DDF_Query<E extends DDF_Entry> implements
 		if (instrument == null) {
 			return time.toString();
 		} else {
-			final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument 
-					.get(InstrumentField.TIME_ZONE_OFFSET).asLong()));
+			final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument.timeZoneOffset()));
 			return time.withZone(zone).toString();
 		}
 	}
@@ -208,7 +205,7 @@ public final class DDF_Query<E extends DDF_Entry> implements
 			}
 			if (type.is(END_OF_DAY)
 					&& instrument != null
-					&& instrument.get(InstrumentField.CFI_CODE).charAt(0) == 'F') {
+					&& instrument.CFICode().charAt(0) == 'F') {
 				text.append(" eodType ");
 				text.append(renderEodType(eodType));
 				text.append(" eodVolume ");

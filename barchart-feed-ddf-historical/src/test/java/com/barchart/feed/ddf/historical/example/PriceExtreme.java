@@ -10,7 +10,6 @@ package com.barchart.feed.ddf.historical.example;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
@@ -39,7 +38,7 @@ class PriceExtreme {
 	@Override
 	public String toString() {
 
-		final int exponent = (int)inst.get(InstrumentField.DISPLAY_FRACTION).decimalExponent();
+		final int exponent = (int)inst.displayFraction().decimalExponent();
 
 		final PriceValue priceMin = ValueBuilder
 				.newPrice(mantissaMin, exponent);
@@ -47,9 +46,9 @@ class PriceExtreme {
 				.newPrice(mantissaMax, exponent);
 
 		final String stringMin = display.priceText(priceMin, 
-				inst.get(InstrumentField.DISPLAY_FRACTION));
+				inst.displayFraction());
 		final String stringMax = display.priceText(priceMax, 
-				inst.get(InstrumentField.DISPLAY_FRACTION));
+				inst.displayFraction());
 
 		return String
 				.format("minimum : %s  maximum : %s", stringMin, stringMax);

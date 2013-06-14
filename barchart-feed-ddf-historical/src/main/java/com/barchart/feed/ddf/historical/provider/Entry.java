@@ -12,7 +12,6 @@ import static com.barchart.feed.ddf.historical.provider.CodecHelper.splitCSV;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
-import com.barchart.feed.inst.InstrumentField;
 
 // TODO: Auto-generated Javadoc
 abstract class Entry implements DDF_Entry, Codec {
@@ -62,7 +61,7 @@ abstract class Entry implements DDF_Entry, Codec {
 	 */
 	@Override
 	public int priceExponent() {
-		return (int)inst.get(InstrumentField.DISPLAY_FRACTION).decimalExponent();
+		return (int)inst.displayFraction().decimalExponent();
 	}
 
 	//

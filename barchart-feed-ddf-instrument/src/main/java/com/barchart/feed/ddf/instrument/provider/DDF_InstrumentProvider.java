@@ -296,8 +296,8 @@ public final class DDF_InstrumentProvider {
 
 						try {
 
-							final Instrument instrument = InstrumentXML.decodeSAX(attributes);
-							final Instrument ddfInst = ObjectMapFactory.build(InstrumentDDF.class, instrument);
+							final InstrumentDDF instrument = InstrumentXML.decodeSAX(attributes);
+							final InstrumentDDF ddfInst = ObjectMapFactory.build(InstrumentDDF.class, instrument);
 							list.add(ddfInst);
 
 						} catch (final SymbolNotFoundException e) {
