@@ -28,7 +28,6 @@ import com.barchart.feed.api.data.MarketData;
 import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.TopOfBook;
 import com.barchart.feed.api.data.Trade;
-import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
@@ -63,15 +62,16 @@ public class BarchartFeed implements Feed {
 	private final DDF_Marketplace maker;
 	private final ExecutorService executor;
 	
+	private volatile LocalInstrumentDBMap dbMap = null;
+	
 	@SuppressWarnings("unused")
 	private volatile ConnectionStateListener stateListener;
 	
 	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
 			new CopyOnWriteArrayList<TimestampListener>();
 	
-	
 	public BarchartFeed(final String username, final String password) {
-		this(username, password, Executors.newCachedThreadPool());
+		this(username, password, Executors.newFixedThreadPool(100));
 	}
 	
 	public BarchartFeed(final String username, final String password, 
@@ -167,7 +167,7 @@ public class BarchartFeed implements Feed {
 			
 			try {
 			
-				final LocalInstrumentDBMap dbMap = InstrumentDBProvider.getMap(dbFolder);
+				dbMap = InstrumentDBProvider.getMap(dbFolder);
 				
 				final ServiceDatabaseDDF dbService = new ServiceDatabaseDDF(dbMap, executor);
 				
@@ -239,10 +239,18 @@ public class BarchartFeed implements Feed {
 				if(maker != null) {
 					maker.clearAll();
 				}
+				
+				if(dbMap != null) {
+					dbMap.close();
+				}
 	
 				connection.shutdown();
 				
+				log.debug("Barchart Feed shutdown");
+				
 			} catch (final Throwable t) {
+				
+				log.error(t.getMessage());
 				
 				isShuttingdown.set(false);
 				
@@ -255,6 +263,8 @@ public class BarchartFeed implements Feed {
 			isShuttingdown.set(false);
 			
 			future.succeed(BarchartFeed.this);
+			
+			log.debug("Barchart Feed shutdown succeeded");
 			
 		}
 		
@@ -337,9 +347,9 @@ public class BarchartFeed implements Feed {
 	
 	@Override
 	public <V extends MarketData<V>> Agent newAgent(final Class<V> dataType, 
-			final MarketCallback<V> callback,	final MarketEventType... types) {
+			final MarketCallback<V> callback) {
 		
-		return maker.newAgent(dataType, callback, types);
+		return maker.newAgent(dataType, callback);
 		
 	}
 	
@@ -347,10 +357,9 @@ public class BarchartFeed implements Feed {
 	
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketCallback<V> callback, final MarketEventType[] types,
-			final String... symbols) {
+			final MarketCallback<V> callback, final String... symbols) {
 		
-		final Agent agent = newAgent(clazz, callback, types);
+		final Agent agent = newAgent(clazz, callback);
 		
 		agent.include(symbols);
 		
@@ -359,10 +368,9 @@ public class BarchartFeed implements Feed {
 
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketCallback<V> callback, final MarketEventType[] types,
-			final Instrument... instruments) {
+			final MarketCallback<V> callback, final Instrument... instruments) {
 		
-		final Agent agent = newAgent(clazz, callback, types);
+		final Agent agent = newAgent(clazz, callback);
 		
 		agent.include(instruments);
 		
@@ -371,10 +379,9 @@ public class BarchartFeed implements Feed {
 
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketCallback<V> callback, final MarketEventType[] types,
-			final Exchange... exchanges) {
+			final MarketCallback<V> callback, final Exchange... exchanges) {
 
-		final Agent agent = newAgent(clazz, callback, types);
+		final Agent agent = newAgent(clazz, callback);
 		
 		agent.include(exchanges);
 		
@@ -385,7 +392,7 @@ public class BarchartFeed implements Feed {
 	public Agent subscribeMarket(final MarketCallback<Market> callback,
 			final String... symbols) {
 		
-		final Agent agent = newAgent(Market.class, callback, MarketEventType.ALL);
+		final Agent agent = newAgent(Market.class, callback);
 		
 		agent.include(symbols);
 		
@@ -396,7 +403,7 @@ public class BarchartFeed implements Feed {
 	public Agent subscribeTrade(final MarketCallback<Trade> lastTrade,
 			final String... symbols) {
 		
-		final Agent agent = newAgent(Trade.class, lastTrade, MarketEventType.TRADE);
+		final Agent agent = newAgent(Trade.class, lastTrade);
 		
 		agent.include(symbols);
 		
@@ -407,8 +414,7 @@ public class BarchartFeed implements Feed {
 	public Agent subscribeBook(final MarketCallback<OrderBook> book,
 			final String... symbols) {
 		
-		final Agent agent = newAgent(OrderBook.class, book, 
-				MarketEventType.BOOK_SNAPSHOT, MarketEventType.BOOK_UPDATE);
+		final Agent agent = newAgent(OrderBook.class, book);
 		
 		agent.include(symbols);
 		
@@ -419,8 +425,7 @@ public class BarchartFeed implements Feed {
 	public Agent subscribeTopOfBook(final MarketCallback<TopOfBook> top,
 			final String... symbols) {
 		
-		final Agent agent = newAgent(TopOfBook.class, top, 
-				MarketEventType.BOOK_SNAPSHOT, MarketEventType.BOOK_UPDATE);
+		final Agent agent = newAgent(TopOfBook.class, top);
 		
 		return agent;
 	}
@@ -429,8 +434,7 @@ public class BarchartFeed implements Feed {
 	public Agent subscribeCuvol(final MarketCallback<Cuvol> cuvol,
 			final String... symbols) {
 		
-		final Agent agent = newAgent(Cuvol.class, cuvol, 
-				MarketEventType.CUVOL_SNAPSHOT, MarketEventType.CUVOL_UPDATE);
+		final Agent agent = newAgent(Cuvol.class, cuvol);
 		
 		return agent;
 	}

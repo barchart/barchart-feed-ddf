@@ -17,6 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -33,8 +35,10 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
+import org.jboss.netty.channel.socket.nio.NioWorkerPool;
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.jboss.netty.logging.Slf4JLoggerFactory;
+import org.jboss.netty.util.HashedWheelTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +63,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private static final int PORT = 7500;
 
+	private static final int DEFAULT_IO_THREADS = Runtime.getRuntime().availableProcessors() * 2;
+	
 	/** use slf4j for internal NETTY LoggingHandler facade */
 	static {
 		final InternalLoggerFactory defaultFactory = new Slf4JLoggerFactory();
@@ -108,14 +114,18 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private ClientBootstrap boot;
 
+	private ChannelFactory channelFactory;
 	private Channel channel;
-
+	private HashedWheelTimer timer = null;
+	
 	//
 
 	private String username;
 	private String password;
 	private DDF_ServerType serverType = DDF_ServerType.STREAM;
 	private Executor executor;
+	
+	private ExecutorService localExecutor = Executors.newFixedThreadPool(100);
 
 	// SOCKS5
 
@@ -145,11 +155,15 @@ class FeedClientDDF implements DDF_FeedClient {
 		this.username = username;
 		this.password = password;
 		this.executor = exec;
+		
+//		final Executor nettyExecutor = Executors.newFixedThreadPool(100);
 
 		this.proxySettings = proxy;
 
-		final ChannelFactory channelFactory = new NioClientSocketChannelFactory(
-				executor, executor);
+		timer = new HashedWheelTimer();
+		
+		channelFactory = new NioClientSocketChannelFactory(
+				executor, 1, new NioWorkerPool(executor, DEFAULT_IO_THREADS), timer);
 
 		boot = new ClientBootstrap(channelFactory);
 
@@ -214,11 +228,6 @@ class FeedClientDDF implements DDF_FeedClient {
 		/* Add HeartbeatPolicy to HEART_BEAT */
 		eventPolicy.put(DDF_FeedEvent.HEART_BEAT, new HeartbeatPolicy());
 
-		/* Start heart beat listener */
-		// wait until login is called
-		// executor.execute(heartbeatTask);
-		// executor.execute(eventTask);
-		// executor.execute(messageTask);
 	}
 
 	private final DefaultReloginPolicy reconnectionPolicy = new DefaultReloginPolicy();
@@ -339,7 +348,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@Override
 		public void newEvent(DDF_FeedEvent event) {
-			executor.execute(new Thread(new Disconnector(event.name())));
+			// TODO Non-dameon thread???
+			localExecutor.execute(new Thread(new Disconnector(event.name())));
 		}
 	}
 
@@ -488,12 +498,12 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		try {
-			executor.execute(heartbeatTask);
+			localExecutor.execute(heartbeatTask);
 		} catch (Exception e) {
 			log.error("error starting DDF_Heartbeat Thread: {} ", e);
 
 			try {
-				executor.execute(new Thread(new Disconnector(
+				localExecutor.execute(new Thread(new Disconnector(
 						"DDF_Heartbeat Thread Start Exception")));
 			} catch (Exception e1) {
 			}
@@ -502,12 +512,12 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		try {
-			executor.execute(eventTask);
+			localExecutor.execute(eventTask);
 		} catch (Exception e) {
 			log.error("error starting DDF_Event Thread: {} ", e);
 
 			try {
-				executor.execute(new Thread(new Disconnector(
+				localExecutor.execute(new Thread(new Disconnector(
 						"DDF_Event Thread Start Exception")));
 			} catch (Exception e1) {
 			}
@@ -516,12 +526,12 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		try {
-			executor.execute(messageTask);
+			localExecutor.execute(messageTask);
 		} catch (Exception e) {
 			log.error("error starting DDF_Message Thread: {} ", e);
 
 			try {
-				executor.execute(new Thread(new Disconnector(
+				localExecutor.execute(new Thread(new Disconnector(
 						"DDF_Message Thread Start Exception")));
 			} catch (Exception e1) {
 			}
@@ -543,7 +553,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	private void terminate() {
 
 		log.warn("## terminate start");
-
+		
 		eventQueue.clear();
 		messageQueue.clear();
 
@@ -584,7 +594,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			try {
 				cf.await();
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				log.warn("# terminate: channel.close() channel interrupted");
 			} finally {
 				log.warn("# terminate: channel.close() complete");
@@ -592,7 +602,10 @@ class FeedClientDDF implements DDF_FeedClient {
 			}
 
 		}
-
+		
+		log.warn("# killing local executor");
+		localExecutor.shutdownNow();
+		
 		log.warn("## terminate complete");
 
 	}
@@ -675,7 +688,13 @@ class FeedClientDDF implements DDF_FeedClient {
 		// blockingWrite(FeedDDF.tcpLogout());
 
 		terminate();
+		
+		timer.stop();
 
+//		if (boot != null) {
+//			boot.releaseExternalResources();
+//		}
+		
 	}
 
 	private boolean isConnected() {
@@ -1297,8 +1316,10 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					// any calls here will happen in this thread
 					// ...so we will start new thread so this one can die
-					executor.execute(new Thread(new Disconnector(
-							"HEARTBEAT TIMEOUT")));
+//					executor.execute(new Thread(new Disconnector(
+//							"HEARTBEAT TIMEOUT")));
+					executor.execute(new Disconnector(
+							"HEARTBEAT TIMEOUT"));
 
 					lastHeartbeat.set(System.currentTimeMillis());
 				}

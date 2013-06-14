@@ -41,11 +41,16 @@ public final class LocalInstrumentDBMap {
 		.setTransactional(true)
 		.setSortedDuplicates(false);
 	
+	private final Database dbase;
+	
 	/**
 	 * 
 	 * @param dbase
 	 */
 	public LocalInstrumentDBMap(final Database dbase) {
+		
+		this.dbase = dbase;
+		
 		map = new StoredMap<String, InstrumentDefinition>(dbase, new SymbolBinding(), 
 				new InstDefBinding(), true);
 	}
@@ -55,7 +60,12 @@ public final class LocalInstrumentDBMap {
 	 * @param dbFolder
 	 */
 	public LocalInstrumentDBMap(final File dbFolder) {
-		map = buildMap(dbFolder);
+		
+		final Environment env = new Environment(dbFolder, envConfig);
+		dbase = env.openDatabase(null, "InstrumentDef", dbConfig);
+		
+		map = new StoredMap<String, InstrumentDefinition>(dbase, new SymbolBinding(), 
+				new InstDefBinding(), true);
 		
 	}
 	
@@ -66,7 +76,10 @@ public final class LocalInstrumentDBMap {
 	 */
 	public LocalInstrumentDBMap(final File dbFolder, final InputStream inStream) {
 		
-		map = buildMap(dbFolder);
+		final Environment env = new Environment(dbFolder, envConfig);
+		dbase = env.openDatabase(null, "InstrumentDef", dbConfig);
+		map =  new StoredMap<String, InstrumentDefinition>(dbase, new SymbolBinding(), 
+				new InstDefBinding(), true);
 		
 		populateDB(inStream);
 		
@@ -82,7 +95,10 @@ public final class LocalInstrumentDBMap {
 	public LocalInstrumentDBMap(final File dbFolder, final File instDefZip) 
 			throws ZipException, IOException {
 		
-		map = buildMap(dbFolder);
+		final Environment env = new Environment(dbFolder, envConfig);
+		dbase = env.openDatabase(null, "InstrumentDef", dbConfig);
+		map = new StoredMap<String, InstrumentDefinition>(dbase, new SymbolBinding(), 
+				new InstDefBinding(), true);
 		
 		InputStream inStream = null;
 		
@@ -99,16 +115,6 @@ public final class LocalInstrumentDBMap {
 				inStream.close();
 			}
 		}
-		
-	}
-	
-	private StoredMap<String, InstrumentDefinition> buildMap(final File dbFolder) {
-		
-		final Environment env = new Environment(dbFolder, envConfig);
-		final Database db = env.openDatabase(null, "InstrumentDef", dbConfig);
-	
-		return new StoredMap<String, InstrumentDefinition>(db, new SymbolBinding(), 
-			new InstDefBinding(), true);
 		
 	}
 	
@@ -178,6 +184,14 @@ public final class LocalInstrumentDBMap {
 	 */
 	public int size() {
 		return map.size();
+	}
+	
+	/**
+	 * 
+	 */
+	public void close() {
+		log.info("DB Closed");
+		dbase.close();
 	}
 	
 	private class SymbolBinding implements EntryBinding<String> {

@@ -1,5 +1,9 @@
 package com.barchart.feed.ddf.client.provider;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,9 +12,7 @@ import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketCallback;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.data.Market;
-import com.barchart.feed.api.enums.MarketEventType;
 import com.barchart.feed.client.provider.BarchartFeed;
-import com.barchart.feed.inst.provider.ExchangeFactory;
 
 public class TestBarchartFeed {
 	
@@ -26,7 +28,7 @@ public class TestBarchartFeed {
 		final MarketCallback<Market> callback = new MarketCallback<Market>() {
 
 			@Override
-			public void call(final Market v, final MarketEventType type) {
+			public void call(final Market v) {
 				
 				log.debug(
 				v.instrument().symbol() + " " +
@@ -43,15 +45,14 @@ public class TestBarchartFeed {
 		
 		start.get();
 		
-		final Agent myAgent = feed.newAgent(Market.class, callback, 
-				MarketEventType.vals());
+		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		myAgent.include(ExchangeFactory.fromName("CME"));
+		//myAgent.include(ExchangeFactory.fromName("CME"));
 		
-		//myAgent.include("GOOG");
+		myAgent.include("IBM");
 		
 		try {
-			Thread.sleep(300000);
+			Thread.sleep(70000);
 		} catch (final Exception e) {
 			// Interrupted
 		}
@@ -72,8 +73,30 @@ public class TestBarchartFeed {
 //			// Interrupted
 //		}
 		
+//		feed.shutdown();
+//		
+//		try {
+//			Thread.sleep(2000);
+//		} catch (final Exception e) {
+//			// Interrupted
+//		}
+//		
+//		feed.startup();
+//		
+//		try {
+//			Thread.sleep(7000);
+//		} catch (final Exception e) {
+//			// Interrupted
+//		}
+		
 		feed.shutdown();
 		
+		try {
+			Thread.sleep(2000);
+		} catch (final Exception e) {
+			// Interrupted
+		}
+		
 	}
-
+	
 }

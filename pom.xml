@@ -41,7 +41,7 @@
 		
 		<barchartFeedClientVersion>2.0.1-SNAPSHOT</barchartFeedClientVersion>
 
-		<barchartNettyVersion>3.5.11.Final</barchartNettyVersion>
+		<barchartNettyVersion>3.5.12.Final</barchartNettyVersion>
 		
 		<barchartMissiveVersion>2.0.0</barchartMissiveVersion>
 		<barchartProtoInstVersion>1.2.0</barchartProtoInstVersion>

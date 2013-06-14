@@ -4,8 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.FrameworkAgent;
+import com.barchart.feed.api.data.Cuvol;
 import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.enums.MarketEventType;
+import com.barchart.feed.api.data.Market;
+import com.barchart.feed.api.data.MarketData;
+import com.barchart.feed.api.data.OrderBook;
+import com.barchart.feed.api.data.Session;
+import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
@@ -21,6 +26,7 @@ import com.barchart.util.values.api.TimeValue;
 @SuppressWarnings("rawtypes")
 public class VarMarketEntityDDF extends VarMarketDDF {
 	
+	@SuppressWarnings("unused")
 	private static final Logger log = 
 			LoggerFactory.getLogger(VarMarketEntityDDF.class);
 	
@@ -33,12 +39,21 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	
 	
 	@SuppressWarnings("unchecked")
-	private void fireCallbacks(final MarketEventType type) {
+	private <V extends MarketData<V>> void fireCallbacks(
+			final Class<V> clazz) {
 		
-		for(final FrameworkAgent agent : agentMap.get(type)) {
+		for(final FrameworkAgent agent : agentMap.get(clazz)) {
 			
 			if(agent.isActive()) {
-				agent.callback().call(agent.data(this), type);
+				agent.callback().call(agent.data(this));
+			}
+			
+		}
+		
+		for(final FrameworkAgent agent : agentMap.get(Market.class)) {
+			
+			if(agent.isActive()) {
+				agent.callback().call(agent.data(this));
 			}
 			
 		}
@@ -59,7 +74,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set book snapshot, firing callbacks");
 		
-		fireCallbacks(MarketEventType.BOOK_SNAPSHOT);
+		fireCallbacks(OrderBook.class);
 	}
 	
 	@Override
@@ -69,7 +84,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set book update, firing callbacks");
 		
-		fireCallbacks(MarketEventType.BOOK_UPDATE);
+		fireCallbacks(OrderBook.class);
 	}
 	
 	@Override
@@ -79,7 +94,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set cuvol update, firing callbacks");
 		
-		fireCallbacks(MarketEventType.CUVOL_UPDATE);
+		fireCallbacks(Cuvol.class);
 	}
 	
 	@Override
@@ -89,7 +104,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set cuvol snapshot, firing callbacks");
 
-		fireCallbacks(MarketEventType.CUVOL_SNAPSHOT);
+		fireCallbacks(Cuvol.class);
 	}
 	
 	@Override
@@ -101,7 +116,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set trade, firing callbacks");
 		
-		fireCallbacks(MarketEventType.TRADE);
+		fireCallbacks(Trade.class);
 	}
 	
 	@Override
@@ -110,7 +125,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set bar, firing callbacks");
 		
-		fireCallbacks(MarketEventType.SNAPSHOT);
+		fireCallbacks(Session.class);
 	}
 	
 	@Override
