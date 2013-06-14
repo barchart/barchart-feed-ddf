@@ -8,8 +8,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +73,25 @@ public class BarchartFeed implements Feed {
 			new CopyOnWriteArrayList<TimestampListener>();
 	
 	public BarchartFeed(final String username, final String password) {
-		this(username, password, Executors.newFixedThreadPool(100));
+		
+		this(username, password, Executors.newFixedThreadPool(100, 
+				
+				new ThreadFactory() {
+
+			final AtomicLong counter = new AtomicLong(0);
+			
+			@Override
+			public Thread newThread(final Runnable r) {
+				
+				final Thread t = new Thread(r, "Feed thread " + 
+						counter.getAndIncrement()); 
+				
+				t.setDaemon(true);
+				
+				return t;
+			}
+			
+		}));
 	}
 	
 	public BarchartFeed(final String username, final String password, 
@@ -176,11 +196,7 @@ public class BarchartFeed implements Feed {
 				final Future<Boolean> dbUpdate = executor.submit(
 						InstrumentDBProvider.updateDBMap(dbFolder, dbMap));
 				
-				boolean dbok = dbUpdate.get(DB_UPDATE_TIMEOUT, TimeUnit.SECONDS);
-				
-				if(!dbok) {
-					throw new Exception("Failed to update DB");
-				}
+				dbUpdate.get(DB_UPDATE_TIMEOUT, TimeUnit.SECONDS);
 				
 				connection.startup();
 			
@@ -326,8 +342,7 @@ public class BarchartFeed implements Feed {
 	
 	@Override
 	public InstrumentFuture lookupAsync(final CharSequence symbol) {
-		// TODO
-		throw new UnsupportedOperationException();
+		return DDF_InstrumentProvider.findAsync(symbol);
 	}
 	
 	@Override
@@ -339,8 +354,7 @@ public class BarchartFeed implements Feed {
 	@Override
 	public InstrumentFutureMap<CharSequence> lookupAsync(
 			final Collection<? extends CharSequence> symbols) {
-		// TODO
-		throw new UnsupportedOperationException();
+		return DDF_InstrumentProvider.findAsync(symbols);
 	}
 
 	/* ***** ***** ***** AgentBuilder ***** ***** ***** */

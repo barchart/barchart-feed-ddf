@@ -1,9 +1,5 @@
 package com.barchart.feed.ddf.client.provider;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,10 +45,10 @@ public class TestBarchartFeed {
 		
 		//myAgent.include(ExchangeFactory.fromName("CME"));
 		
-		myAgent.include("IBM");
+		myAgent.include("CLU3");
 		
 		try {
-			Thread.sleep(70000);
+			Thread.sleep(7000);
 		} catch (final Exception e) {
 			// Interrupted
 		}

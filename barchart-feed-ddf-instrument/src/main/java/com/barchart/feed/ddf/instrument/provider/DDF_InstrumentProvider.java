@@ -132,9 +132,6 @@ public final class DDF_InstrumentProvider {
 	 */
 	public static void bind(final DDF_DefinitionService instance) {
 
-		//log.debug("Binding new definition service: {}", instance.
-		//	getClass().getName());
-		
 		service = new WeakReference<DDF_DefinitionService>(instance);
 		DDF_InstrumentProvider.instance = instance;
 
@@ -179,7 +176,14 @@ public final class DDF_InstrumentProvider {
 			final Collection<? extends CharSequence> symbols) {
 		
 		final Map<CharSequence, Instrument> insts = new HashMap<CharSequence, Instrument>();
-		final Map<CharSequence, Instrument> charInsts = instance().lookup(symbols);
+		
+		final Collection<CharSequence> formatted = new ArrayList<CharSequence>();
+		
+		for(CharSequence c : symbols) {
+			formatted.add(formatSymbol(c));
+		}
+		
+		final Map<CharSequence, Instrument> charInsts = instance().lookup(formatted);
 		
 		for(final Entry<CharSequence, Instrument> e : charInsts.entrySet()) {
 			insts.put(e.getKey().toString(), e.getValue());
@@ -223,94 +227,6 @@ public final class DDF_InstrumentProvider {
 
 	}
 	
-//	class RetrieveInstrument implements Future<Instrument> {
-//
-//		private final TextValue symbol;
-//
-//		private volatile Instrument result = null;
-//
-//		RetrieveInstrument(final CharSequence symbol) {
-//			this.symbol = ValueBuilder.newText(symbol.toString());
-//		}
-//
-//		RetrieveInstrument(final TextValue symbol) {
-//			this.symbol = symbol;
-//		}
-//
-//		@Override
-//		public boolean cancel(final boolean mayInterruptIfRunning) {
-//			throw new UnsupportedOperationException("Not Supported");
-//		}
-//
-//		@Override
-//		public Instrument get() throws InterruptedException,
-//				ExecutionException {
-//			result = instance().lookup(symbol);
-//			return result;
-//		}
-//
-//		@Override
-//		public Instrument get(final long timeout, final TimeUnit unit)
-//				throws InterruptedException, ExecutionException,
-//				TimeoutException {
-//			throw new UnsupportedOperationException("Not Supported");
-//		}
-//
-//		@Override
-//		public boolean isCancelled() {
-//			return false;
-//		}
-//
-//		@Override
-//		public boolean isDone() {
-//			return result != null;
-//		}
-//
-//	}
-//
-//	class RetrieveInstrumentList implements Future<Map<CharSequence, Instrument>> {
-//
-//		private final List<CharSequence> symbolList;
-//
-//		private volatile Map<CharSequence, Instrument> result;
-//
-//		RetrieveInstrumentList(final List<CharSequence> symbolList) {
-//			this.symbolList = symbolList;
-//		}
-//
-//		@Override
-//		public boolean cancel(final boolean mayInterruptIfRunning) {
-//			throw new UnsupportedOperationException("Not Supported");
-//		}
-//
-//		@Override
-//		public Map<CharSequence, Instrument> get() throws InterruptedException,
-//				ExecutionException {
-//			result = instance().lookup(symbolList);
-//			return result;
-//		}
-//
-//		@Override
-//		public Map<CharSequence, Instrument> get(final long timeout, final TimeUnit unit)
-//						throws InterruptedException, ExecutionException,
-//						TimeoutException {
-//			throw new UnsupportedOperationException("Not Supported");
-//		}
-//
-//		@Override
-//		public boolean isCancelled() {
-//			return false;
-//		}
-//
-//		@Override
-//		public boolean isDone() {
-//			return result != null;
-//		}
-//
-//	}
-
-	
-
 	/**
 	 * Override lookup url.
 	 * 
@@ -323,27 +239,6 @@ public final class DDF_InstrumentProvider {
 
 	// TODO: FIXME - allow custom look URL
 	//
-
-//	static DDF_Instrument remoteLookup(CharSequence symbol) throws Exception {
-//
-//		if (overrideURL) {
-//			symbol = symbol + "&bats=1";
-//		}
-//
-//		final String symbolURI = urlInstrumentLookup(symbol);
-//
-//		log.debug("SINGLE symbolURI");
-//		// log.debug("SINGLE symbolURI={}", symbolURI);
-//
-//		final Element root = xmlDocumentDecode(symbolURI);
-//
-//		final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
-//
-//		final DDF_Instrument instrument = new InstrumentDDF(InstrumentXML.decodeXML(tag));
-//
-//		return instrument;
-//
-//	}
 
 	static String concatenate(final List<String> symbolList) {
 
