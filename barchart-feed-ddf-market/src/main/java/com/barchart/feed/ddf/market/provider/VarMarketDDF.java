@@ -90,13 +90,7 @@ class VarMarketDDF extends VarMarket {
 
 	@Override
 	public void setInstrument(final Instrument newSymbol) {
-
-		if (Instrument.NULL_INSTRUMENT.equals(instrument)) {
-			instrument = newSymbol;
-		} else {
-			throw new IllegalStateException("symbol can be set only once");
-		}
-
+		instrument = newSymbol;
 	}
 
 	@Override

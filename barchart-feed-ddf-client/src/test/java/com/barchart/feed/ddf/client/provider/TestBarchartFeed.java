@@ -44,9 +44,9 @@ public class TestBarchartFeed {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		myAgent.include(ExchangeFactory.fromName("CME"));
+		//myAgent.include(ExchangeFactory.fromName("CME"));
 		
-		//myAgent.include("CLU3");
+		myAgent.include("GEZ3");
 		
 		try {
 			Thread.sleep(70000);
