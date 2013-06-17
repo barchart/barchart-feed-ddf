@@ -156,8 +156,8 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 				final PriceValue price = ValueBuilder.newPrice(mantissa,
 						exponent);
 				final SizeValue size = ValueBuilder.newSize(sizeValue);
-				final MarketDoCuvolEntry entry = new DefCuvolEntry(place,
-						price, size);
+				final MarketDoCuvolEntry entry = new DefCuvolEntry(getInstrument(), 
+						place, price, size);
 				entries[entryIndex++] = entry;
 			}
 		}

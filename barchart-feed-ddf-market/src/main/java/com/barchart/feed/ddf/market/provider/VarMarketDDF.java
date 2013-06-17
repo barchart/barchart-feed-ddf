@@ -25,7 +25,6 @@ import static com.barchart.feed.base.market.enums.MarketEvent.NEW_TRADE;
 import static com.barchart.feed.base.market.enums.MarketEvent.NEW_VOLUME;
 import static com.barchart.feed.base.market.enums.MarketField.BOOK;
 import static com.barchart.feed.base.market.enums.MarketField.BOOK_TOP;
-import static com.barchart.feed.base.market.enums.MarketField.INSTRUMENT;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET_TIME;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.SEQUENCING;
@@ -51,7 +50,6 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
-import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.VarMarket;
 import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
@@ -75,6 +73,10 @@ import com.barchart.util.values.provider.ValueBuilder;
 @Mutable
 class VarMarketDDF extends VarMarket {
 
+	public VarMarketDDF(Instrument instrument) {
+		super(instrument);
+	}
+
 	private static final Logger log = LoggerFactory
 			.getLogger(VarMarketDDF.class);
 
@@ -89,10 +91,8 @@ class VarMarketDDF extends VarMarket {
 	@Override
 	public void setInstrument(final Instrument newSymbol) {
 
-		final Instrument oldInst = get(INSTRUMENT);
-
-		if (Instrument.NULL_INSTRUMENT.equals(oldInst)) {
-			set(INSTRUMENT, newSymbol);
+		if (Instrument.NULL_INSTRUMENT.equals(instrument)) {
+			instrument = newSymbol;
 		} else {
 			throw new IllegalStateException("symbol can be set only once");
 		}
@@ -174,9 +174,8 @@ class VarMarketDDF extends VarMarket {
 			break;
 		default:
 			eventAdd(NEW_BOOK_ERROR);
-			final Instrument inst = get(MarketField.INSTRUMENT);
-			final CharSequence id = inst.GUID();
-			final CharSequence comment = inst.description();
+			final CharSequence id = instrument.GUID();
+			final CharSequence comment = instrument.description();
 			log.error("instrument : {} : {}", id, comment);
 			log.error("result : {} ; entry : {} ;", result, entry);
 			return;
@@ -219,6 +218,7 @@ class VarMarketDDF extends VarMarket {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private final void applyTradeToBar(final MarketTradeSession session,
 			final MarketTradeSequencing sequencing, final PriceValue price,
 			final SizeValue size, final TimeValue time, final TimeValue date) {
@@ -400,15 +400,14 @@ class VarMarketDDF extends VarMarket {
 
 		if (book.isFrozen()) {
 
-			final Instrument inst = get(INSTRUMENT);
-
-			final BookLiquidityType type = inst.liquidityType();
+			final BookLiquidityType type = instrument.liquidityType();
 			final SizeValue size = LIMIT;
-			final Price tempStep = inst.tickSize();
+			// TODO ValueConverter
+			final Price tempStep = instrument.tickSize();
 			final PriceValue step = ValueBuilder.newPrice(tempStep.mantissa(), 
 					tempStep.exponent());
 
-			final VarBookDDF varBook = new VarBookDDF(type, size, step);
+			final VarBookDDF varBook = new VarBookDDF(instrument, type, size, step);
 			final VarBookTopDDF varBookTop = new VarBookTopDDF(varBook);
 
 			set(BOOK, varBook);

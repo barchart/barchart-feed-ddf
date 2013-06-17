@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.provider.MakerBase;
@@ -36,8 +37,8 @@ public class DDF_MarketService extends MakerBase<DDF_MarketBase> implements
 		return new DDF_MarketService(new MarketFactory() {
 
 			@Override
-			public MarketDo newMarket() {
-				return new VarMarketDDF();
+			public MarketDo newMarket(final Instrument instrument) {
+				return new VarMarketDDF(instrument);
 			}
 
 		});

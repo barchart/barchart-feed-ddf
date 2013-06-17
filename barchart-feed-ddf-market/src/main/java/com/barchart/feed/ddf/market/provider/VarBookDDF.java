@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.data.OrderBook;
 import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
@@ -51,7 +52,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	private long millisUTC;
-
+	
 	private static final Comparator<PriceValue> CMP_ASC = new Comparator<PriceValue>() {
 		@Override
 		public int compare(final PriceValue o1, final PriceValue o2) {
@@ -72,9 +73,12 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	private MarketBookEntry topBid;
 	private MarketBookEntry topAsk;
 
-	VarBookDDF(final BookLiquidityType type, final SizeValue size,
-			final PriceValue step) {
+	private final Instrument instrument;
+	
+	VarBookDDF(final Instrument instrument, final BookLiquidityType type, 
+			final SizeValue size, final PriceValue step) {
 		// XXX
+		this.instrument = instrument;
 	}
 
 	// #####################################
@@ -147,7 +151,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(time(), entries(BID), entries(ASK), null, null);
+		return new DefBook(instrument, time(), entries(BID), entries(ASK), null, null);
 	}
 
 	@Override
@@ -278,6 +282,11 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public OrderBook copy() {
 		return this.freeze();
+	}
+
+	@Override
+	public Instrument instrument() {
+		return instrument;
 	}
 
 }

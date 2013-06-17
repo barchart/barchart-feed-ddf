@@ -99,8 +99,7 @@ public class Receiver {
 				public void onMarketEvent(final MarketEvent event,
 						final Instrument instrument, final Market value) {
 
-					final StringBuilder sb = new StringBuilder(value.get(
-							MarketField.INSTRUMENT).marketGUID())
+					final StringBuilder sb = new StringBuilder(value.instrument().marketGUID())
 							.append(" ")
 							.append(event)
 							.append(" EventTime=")

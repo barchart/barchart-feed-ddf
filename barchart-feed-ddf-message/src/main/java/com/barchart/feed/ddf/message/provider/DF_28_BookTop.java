@@ -12,6 +12,7 @@ import static com.barchart.util.ascii.ASCII.COMMA;
 
 import java.nio.ByteBuffer;
 
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBook;
@@ -112,7 +113,8 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 	 * .feed.base.api.market.enums.MarketBookSide)
 	 */
 	@Override
-	public final MarketDoBookEntry entry(final MarketSide side) {
+	public final MarketDoBookEntry entry(final Instrument instrument, 
+			final MarketSide side) {
 
 		final PriceValue price;
 		final SizeValue size;
@@ -134,7 +136,8 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 		}
 
 		/** XXX note: {@link MarketBook#ENTRY_TOP} */
-		final MarketDoBookEntry entry = new DefBookEntry(MODIFY, side, BookLiquidityType.DEFAULT,
+		final MarketDoBookEntry entry = new DefBookEntry(instrument, 
+				MODIFY, side, BookLiquidityType.DEFAULT,
 				MarketBook.ENTRY_TOP, price, size);
 
 		return entry;

@@ -2,6 +2,7 @@ package com.barchart.feed.ddf.market.provider;
 
 import com.barchart.feed.api.AgentBuilder;
 import com.barchart.feed.api.connection.SubscriptionHandler;
+import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -28,8 +29,8 @@ public class DDF_Marketplace extends MarketplaceBase<DDF_MarketBase> implements
 		return new DDF_Marketplace(new MarketFactory() {
 
 			@Override
-			public MarketDo newMarket() {
-				return new VarMarketEntityDDF();
+			public MarketDo newMarket(final Instrument instrument) {
+				return new VarMarketEntityDDF(instrument);
 			}
 
 		}, new InstrumentProviderWrapper(), handler);

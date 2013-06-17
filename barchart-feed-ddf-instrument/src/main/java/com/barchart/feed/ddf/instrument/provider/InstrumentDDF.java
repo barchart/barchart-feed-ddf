@@ -27,11 +27,6 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 	
 	//
 
-	@Override
-	public final InstrumentDDF freeze() {
-		return this;
-	}
-
 //	@Override
 //	public final String toString() {
 //		return "" + //
