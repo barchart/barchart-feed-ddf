@@ -45,7 +45,6 @@ import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
 import com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;
 import com.barchart.feed.ddf.instrument.provider.ServiceDatabaseDDF;
 import com.barchart.feed.ddf.market.provider.DDF_MarketServiceAllMarkets;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.values.api.Value;
 
 /**
@@ -321,11 +320,11 @@ public class BarchartFeedReceiver extends BarchartFeedClientBase {
 					 */
 					if (events.isEmpty()) {
 						log.debug("Unsubscribing to "
-								+ instrument.get(InstrumentField.MARKET_GUID));
+								+ instrument.marketGUID());
 						feed.unsubscribe(new DDF_Subscription(instrument, events));
 					} else {
 						log.debug("Subscribing to "
-								+ instrument.get(InstrumentField.MARKET_GUID)
+								+ instrument.marketGUID()
 								+ " Events: " + printEvents(events));
 						feed.subscribe(new DDF_Subscription(instrument, events));
 					}

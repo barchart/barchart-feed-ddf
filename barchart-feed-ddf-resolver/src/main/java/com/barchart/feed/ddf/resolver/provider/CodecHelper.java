@@ -298,18 +298,23 @@ class CodecHelper {
 
 		}
 
-		for (final Tag<?> field : CodecHelper.BASE) {
-
-			final String name = field.name();
-			final String value = encode(field, instrument.get(field));
-
-			/** store; do not index */
-			final Field baseField = new Field(name, value, Field.Store.YES,
-					Field.Index.NO);
-
-			doc.add(baseField);
-
-		}
+		// TODO If this ever need to be used, then some hardcoding
+		// for iterating over the instrument fields will need to be written.
+		
+		// Currently, this isn't being used.
+		
+//		for (final Tag<?> field : CodecHelper.BASE) {
+//
+//			final String name = field.name();
+//			final String value = encode(field, instrument.get(field));
+//
+//			/** store; do not index */
+//			final Field baseField = new Field(name, value, Field.Store.YES,
+//					Field.Index.NO);
+//
+//			doc.add(baseField);
+//
+//		}
 
 		return doc;
 

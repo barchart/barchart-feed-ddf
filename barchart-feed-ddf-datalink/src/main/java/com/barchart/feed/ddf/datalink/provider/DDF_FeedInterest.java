@@ -14,7 +14,6 @@ import com.barchart.feed.api.connection.SubscriptionType;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.util.FeedDDF;
-import com.barchart.feed.inst.InstrumentField;
 
 public final class DDF_FeedInterest {
 
@@ -146,7 +145,7 @@ public final class DDF_FeedInterest {
 			final Set<MarketEvent> eventSet) {
 		
 		final CharSequence symbol =
-				instrumentDDF.get(InstrumentField.SYMBOL);
+				instrumentDDF.symbol();
 		
 		final CharSequence interest = from(eventSet);
 

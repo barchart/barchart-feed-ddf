@@ -22,7 +22,6 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.provider.BarchartFeedReceiver;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.values.util.ValueUtil;
 
 public class TestAllMarketsReceiver {
@@ -109,7 +108,7 @@ public class TestAllMarketsReceiver {
 					final StringBuilder sb =
 							new StringBuilder("Taker 1 Event: ").append(event);
 
-					sb.append(" " + instrument.get(InstrumentField.MARKET_GUID));
+					sb.append(" " + instrument.marketGUID());
 
 					sb.append(" BID "
 							+ ValueUtil.asDouble(value
@@ -154,7 +153,7 @@ public class TestAllMarketsReceiver {
 
 					 final StringBuilder sb = new
 					 StringBuilder(" *** TAKER 2 EVENT: ")
-					 .append(instrument.get(InstrumentField.MARKET_GUID).toString())
+					 .append(instrument.marketGUID())
 					 .append("******************************************************************************/n")
 					 .append("******************************************************************************/n")
 					 .append("******************************************************************************/n");

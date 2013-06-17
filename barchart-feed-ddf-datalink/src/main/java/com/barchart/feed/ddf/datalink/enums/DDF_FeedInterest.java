@@ -15,7 +15,6 @@ import java.util.Set;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.util.FeedDDF;
-import com.barchart.feed.inst.InstrumentField;
 
 /**
  * Flags for ddf JERQ "go" command to activate specific information channels in
@@ -236,7 +235,7 @@ enum DDF_FeedInterest {
 			final Set<MarketEvent> eventSet) {
 
 		final CharSequence symbol =
-				instrumentDDF.get(InstrumentField.SYMBOL);
+				instrumentDDF.symbol();
 
 		final CharSequence interest = DDF_FeedInterest.from(eventSet);
 

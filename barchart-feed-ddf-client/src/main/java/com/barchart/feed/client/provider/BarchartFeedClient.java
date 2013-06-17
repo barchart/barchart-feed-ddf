@@ -39,7 +39,6 @@ import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
-import com.barchart.feed.inst.InstrumentField;
 
 /**
  * The entry point for Barchart data feed services.
@@ -191,11 +190,11 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 			 */
 			if (events.isEmpty()) {
 				log.debug("Unsubscribing to "
-						+ instrument.get(InstrumentField.MARKET_GUID));
+						+ instrument.marketGUID());
 				feed.unsubscribe(new DDF_Subscription(instrument, events));
 			} else {
 				log.debug("Subscribing to "
-						+ instrument.get(InstrumentField.MARKET_GUID) + " Events: "
+						+ instrument.marketGUID() + " Events: "
 						+ printEvents(events));
 				feed.subscribe(new DDF_Subscription(instrument, events));
 			}

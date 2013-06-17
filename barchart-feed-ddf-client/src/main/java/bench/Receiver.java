@@ -16,7 +16,6 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.client.provider.BarchartFeedReceiver;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.util.values.util.ValueUtil;
 
 /**
@@ -101,7 +100,7 @@ public class Receiver {
 						final Instrument instrument, final Market value) {
 
 					final StringBuilder sb = new StringBuilder(value.get(
-							MarketField.INSTRUMENT).get(InstrumentField.MARKET_GUID).toString())
+							MarketField.INSTRUMENT).marketGUID())
 							.append(" ")
 							.append(event)
 							.append(" EventTime=")

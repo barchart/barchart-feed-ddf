@@ -16,7 +16,6 @@ import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.SubscriptionType;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.feed.inst.InstrumentField;
 
 /**
  * Represents a subscription to a single instrument for JERQ.
@@ -54,8 +53,7 @@ public class DDF_Subscription implements Subscription {
 	public DDF_Subscription(final Instrument instrument,
 			final Set<MarketEvent> events) {
 		this.interest =
-				instrument.get(InstrumentField.SYMBOL)
-						.toString();
+				instrument.symbol();
 		this.interests = DDF_FeedInterest.fromEvents(events);
 	}
 

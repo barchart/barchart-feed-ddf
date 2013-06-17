@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.feed.ddf.resolver.provider.DDF_ResolverProvider;
-import com.barchart.feed.inst.InstrumentField;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -44,8 +43,7 @@ public class MainResolverSearch {
 
 		for (final Instrument inst : result) {
 
-			log.debug("instrument {} {}", inst.get(InstrumentField.SYMBOL),
-					inst.get(InstrumentField.DESCRIPTION));
+			log.debug("instrument {} {}", inst.symbol(), inst.description());
 
 		}
 

@@ -40,7 +40,6 @@ import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
-import com.barchart.feed.inst.InstrumentField;
 
 public class TCPListenerClientDDF extends SimpleChannelHandler implements
 		DDF_FeedClientBase {
@@ -125,7 +124,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 
 		/* Filter by instrument */
 		if (subscriptions.containsKey(marketMsg.getInstrument()
-				.get(InstrumentField.SYMBOL).toString())) {
+				.symbol())) {
 			return true;
 		}
 
