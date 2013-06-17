@@ -103,4 +103,9 @@ class InstrumentDDF extends InstrumentBase implements Instrument {
 
 	}
 
+	@Override 
+	public Instrument instrument() {
+		return this;
+	}
+	
 }
