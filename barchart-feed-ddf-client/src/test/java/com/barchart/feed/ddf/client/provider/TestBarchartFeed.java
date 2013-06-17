@@ -9,6 +9,7 @@ import com.barchart.feed.api.MarketCallback;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.data.Market;
 import com.barchart.feed.client.provider.BarchartFeed;
+import com.barchart.feed.inst.provider.ExchangeFactory;
 
 public class TestBarchartFeed {
 	
@@ -43,12 +44,12 @@ public class TestBarchartFeed {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		//myAgent.include(ExchangeFactory.fromName("CME"));
+		myAgent.include(ExchangeFactory.fromName("CME"));
 		
-		myAgent.include("CLU3");
+		//myAgent.include("CLU3");
 		
 		try {
-			Thread.sleep(7000);
+			Thread.sleep(70000);
 		} catch (final Exception e) {
 			// Interrupted
 		}

@@ -45,12 +45,6 @@
 
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
-			<artifactId>barchart-feed-client</artifactId>
-			<version>${barchartFeedClientVersion}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-settings</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
