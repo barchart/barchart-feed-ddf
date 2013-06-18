@@ -96,7 +96,7 @@ class VarMarketDDF extends VarMarket {
 	@Override
 	public void setBookSnapshot(final MarketDoBookEntry[] entries,
 			final TimeValue time) {
-
+		
 		assert entries != null;
 		assert time != null;
 

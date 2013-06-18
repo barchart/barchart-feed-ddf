@@ -46,7 +46,7 @@ public class TestBarchartFeed {
 		
 		//myAgent.include(ExchangeFactory.fromName("CME"));
 		
-		myAgent.include("GEZ3");
+		myAgent.include("ESU3");
 		
 		try {
 			Thread.sleep(70000);

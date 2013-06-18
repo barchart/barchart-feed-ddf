@@ -16,6 +16,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.PriceLevel;
@@ -42,6 +45,8 @@ import com.barchart.util.values.provider.ValueFreezer;
 @ThreadSafe(rule = "use in runSafe() only")
 public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 		MarketDoBook {
+	
+	private static final Logger log = LoggerFactory.getLogger(VarBookDDF.class);
 
 	@SuppressWarnings("serial")
 	private static class EntryMap extends TreeMap<PriceValue, MarketBookEntry> {
@@ -150,9 +155,10 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(instrument, time(), entries(BID), entries(ASK), null, null);
+		return new DefBook(instrument, time(), new MarketBookEntry[]{topBid}, 
+				new MarketBookEntry[]{topAsk});
 	}
-
+	
 	@Override
 	public TimeValue time() {
 		return ValueBuilder.newTime(millisUTC);
@@ -220,7 +226,22 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	public SizeValue sizeTop(final MarketSide side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
+	
+	@Override
+	public TopOfBook topOfBook() {
+		throw new UnsupportedOperationException("UNUSED");
+	}
 
+	@Override
+	public PriceLevel lastBookUpdate() {
+		throw new UnsupportedOperationException("UNUSED");
+	}
+
+	@Override
+	public Time updated() {
+		throw new UnsupportedOperationException("UNUSED");
+	}
+	
 	/* #################################### */
 
 	@Override
@@ -261,24 +282,6 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public Instrument instrument() {
 		return instrument;
-	}
-
-	@Override
-	public TopOfBook topOfBook() {
-		// TODO
-		return null;
-	}
-
-	@Override
-	public PriceLevel lastBookUpdate() {
-		// TODO
-		return null;
-	}
-
-	@Override
-	public Time updated() {
-		// TODO
-		return null;
 	}
 
 }

@@ -61,6 +61,7 @@ public final class LocalInstrumentDBMap {
 	 */
 	public LocalInstrumentDBMap(final File dbFolder) {
 		
+		// TODO exception handling for env locking
 		final Environment env = new Environment(dbFolder, envConfig);
 		dbase = env.openDatabase(null, "InstrumentDef", dbConfig);
 		
