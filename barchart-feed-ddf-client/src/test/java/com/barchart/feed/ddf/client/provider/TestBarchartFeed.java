@@ -1,5 +1,7 @@
 package com.barchart.feed.ddf.client.provider;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,9 +9,9 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketCallback;
 import com.barchart.feed.api.connection.ConnectionFuture;
+import com.barchart.feed.api.model.CuvolEntry;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartFeed;
-import com.barchart.feed.inst.provider.Exchanges;
 
 public class TestBarchartFeed {
 	
@@ -28,13 +30,13 @@ public class TestBarchartFeed {
 			public void call(final Market v) {
 				
 				log.debug(
-				v.instrument().symbol() + " " +
+				v.instrument().symbol() + "\n" +
 //				v.orderBook().topOfBook().bid().size().asDouble() + " " +
 //				v.orderBook().topOfBook().bid().price().asDouble() + " " +
 //				v.orderBook().topOfBook().ask().price().asDouble() + " " +
 //				v.orderBook().topOfBook().ask().size().asDouble());
 
-				v.orderBook().lastBookUpdate().toString());
+				printCuvol(v.cuvol().cuvolList()));
 				
 			}
 			
@@ -97,5 +99,22 @@ public class TestBarchartFeed {
 		}
 		
 	}
+	
+	public static String printCuvol(final List<CuvolEntry> entries) {
+		
+		final StringBuilder sb = new StringBuilder();
+		
+		for(final CuvolEntry e : entries) {
+			sb.append(e.toString() + "\n");
+		}
+		
+		return sb.toString();
+		
+		
+	}
+	
+	
+	
+	
 	
 }
