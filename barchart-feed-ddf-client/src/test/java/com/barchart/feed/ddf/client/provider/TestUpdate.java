@@ -12,7 +12,7 @@ package com.barchart.feed.ddf.client.provider;
 
 import com.barchart.feed.api.connection.ConnectionState;
 import com.barchart.feed.api.connection.ConnectionStateListener;
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;

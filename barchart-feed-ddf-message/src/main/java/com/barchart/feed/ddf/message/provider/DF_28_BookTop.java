@@ -12,9 +12,9 @@ import static com.barchart.util.ascii.ASCII.COMMA;
 
 import java.nio.ByteBuffer;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;
@@ -136,7 +136,7 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 		}
 
 		/** XXX note: {@link MarketBook#ENTRY_TOP} */
-		final MarketDoBookEntry entry = new DefBookEntry(instrument, 
+		final MarketDoBookEntry entry = new DefBookEntry(
 				MODIFY, side, BookLiquidityType.DEFAULT,
 				MarketBook.ENTRY_TOP, price, size);
 

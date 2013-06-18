@@ -16,7 +16,7 @@ import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;

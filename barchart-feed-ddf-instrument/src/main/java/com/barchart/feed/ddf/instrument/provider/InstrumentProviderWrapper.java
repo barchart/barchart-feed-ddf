@@ -3,10 +3,10 @@ package com.barchart.feed.ddf.instrument.provider;
 import java.util.Collection;
 import java.util.Map;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.inst.InstrumentService;
+import com.barchart.feed.api.model.meta.Instrument;
 
 public class InstrumentProviderWrapper implements InstrumentService<CharSequence> {
 

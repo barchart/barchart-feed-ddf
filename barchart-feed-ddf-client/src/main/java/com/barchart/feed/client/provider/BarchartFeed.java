@@ -22,16 +22,16 @@ import com.barchart.feed.api.MarketCallback;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
-import com.barchart.feed.api.data.Cuvol;
-import com.barchart.feed.api.data.Exchange;
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.Market;
-import com.barchart.feed.api.data.MarketData;
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.data.TopOfBook;
-import com.barchart.feed.api.data.Trade;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentFutureMap;
+import com.barchart.feed.api.model.MarketData;
+import com.barchart.feed.api.model.data.Cuvol;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.TopOfBook;
+import com.barchart.feed.api.model.data.Trade;
+import com.barchart.feed.api.model.meta.Exchange;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
@@ -431,15 +431,6 @@ public class BarchartFeed implements Feed {
 		final Agent agent = newAgent(OrderBook.class, book);
 		
 		agent.include(symbols);
-		
-		return agent;
-	}
-
-	@Override
-	public Agent subscribeTopOfBook(final MarketCallback<TopOfBook> top,
-			final String... symbols) {
-		
-		final Agent agent = newAgent(TopOfBook.class, top);
 		
 		return agent;
 	}

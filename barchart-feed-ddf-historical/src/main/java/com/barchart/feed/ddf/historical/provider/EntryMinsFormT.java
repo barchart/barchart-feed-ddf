@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMinFormT;
 
 class EntryMinsFormT extends EntryBar implements DDF_EntryBarMinFormT {

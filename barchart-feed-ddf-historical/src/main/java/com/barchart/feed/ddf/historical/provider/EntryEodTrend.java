@@ -14,7 +14,7 @@ import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeEodTim
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeInstrument;
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeMantissa;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;

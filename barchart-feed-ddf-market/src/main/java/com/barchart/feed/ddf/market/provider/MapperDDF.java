@@ -193,14 +193,14 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					+ message.getInstrument().symbol());
 			
 		case ASK_LAST_PRICE:
-			final DefBookEntry topAskPrice = new DefBookEntry(market.instrument(), 
+			final DefBookEntry topAskPrice = new DefBookEntry(
 					MODIFY, ASK,
 					BookLiquidityType.DEFAULT, ENTRY_TOP, price, top.side(ASK).sizeValue());
 			applyTop(topAskPrice, time, market);
 			return null;
 
 		case ASK_LAST_SIZE:
-			final DefBookEntry topAskSize = new DefBookEntry(market.instrument(), 
+			final DefBookEntry topAskSize = new DefBookEntry(
 					MODIFY, ASK,
 					BookLiquidityType.DEFAULT, ENTRY_TOP, top.side(ASK).priceValue(), size);
 			applyTop(topAskSize, time, market);
@@ -212,14 +212,14 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					+ message.getInstrument().symbol());
 			
 		case BID_LAST_PRICE:
-			final DefBookEntry topBidPrice = new DefBookEntry(market.instrument(), 
+			final DefBookEntry topBidPrice = new DefBookEntry(
 					MODIFY, BID,
 					BookLiquidityType.DEFAULT, ENTRY_TOP, price, top.side(BID).sizeValue());
 			applyTop(topBidPrice, time, market);
 			return null;
 
 		case BID_LAST_SIZE:
-			final DefBookEntry topBidSize = new DefBookEntry(market.instrument(), 
+			final DefBookEntry topBidSize = new DefBookEntry(
 					MODIFY, BID,
 					BookLiquidityType.DEFAULT, ENTRY_TOP, top.side(BID).priceValue(), size);
 			applyTop(topBidSize, time, market);
@@ -534,10 +534,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			/** XXX note: {@link MarketBook#ENTRY_TOP} */
 
-			final MarketDoBookEntry entryBid = new DefBookEntry(market.instrument(), 
+			final MarketDoBookEntry entryBid = new DefBookEntry(
 					MODIFY, BID,
 					BookLiquidityType.DEFAULT, ENTRY_TOP, priceBid, ValueConst.NULL_SIZE);
-			final MarketDoBookEntry entryAsk = new DefBookEntry(market.instrument(), 
+			final MarketDoBookEntry entryAsk = new DefBookEntry(
 					MODIFY, ASK,
 					BookLiquidityType.DEFAULT, ENTRY_TOP, priceAsk, ValueConst.NULL_SIZE);
 
@@ -784,7 +784,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		/* ",-," a.k.a comma-dash-comma; ddf command : remove */
 		if (isClear(price)) {
-			entry = new DefBookEntry(market.instrument(), 
+			entry = new DefBookEntry(
 					MarketBookAction.REMOVE, entry.side(),
 					BookLiquidityType.DEFAULT, MarketBook.ENTRY_TOP,
 					ValueConst.NULL_PRICE, ValueConst.NULL_SIZE);

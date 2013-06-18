@@ -20,7 +20,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.provider.DefCuvolEntry;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -155,7 +154,7 @@ public class TestDX_XC_Cuvol extends TestDDFBase {
 			final int exp, final long sizeValue) {
 		final PriceValue price = ValueBuilder.newPrice(mant, exp);
 		final SizeValue size = ValueBuilder.newSize(sizeValue);
-		final MarketCuvolEntry entry = new DefCuvolEntry(Instrument.NULL_INSTRUMENT,  
+		final MarketCuvolEntry entry = new DefCuvolEntry(
 				place, price, size);
 		return entry;
 	}

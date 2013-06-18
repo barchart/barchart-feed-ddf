@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;

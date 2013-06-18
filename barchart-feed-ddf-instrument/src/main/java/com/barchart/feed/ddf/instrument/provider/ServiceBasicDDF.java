@@ -16,9 +16,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.inst.InstrumentFuture;
 import com.barchart.feed.api.inst.InstrumentFutureMap;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.missive.api.Tag;

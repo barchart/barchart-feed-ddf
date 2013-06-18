@@ -22,7 +22,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;
@@ -132,34 +131,34 @@ public class TestDX_XB_Book extends TestDDFBase {
 		 * 
 		 * bidsizes=\"162,582,692,698,953,680,819,931,958,1166\"
 		 */
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 1,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 1,
 				ValueBuilder.newPrice(109975, -2), ValueBuilder.newSize(162));
 		assertEquals(entry, entries[0]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 2,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 2,
 				ValueBuilder.newPrice(109950, -2), ValueBuilder.newSize(582));
 		assertEquals(entry, entries[1]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 3,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 3,
 				ValueBuilder.newPrice(109925, -2), ValueBuilder.newSize(692));
 		assertEquals(entry, entries[2]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 4,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 4,
 				ValueBuilder.newPrice(109900, -2), ValueBuilder.newSize(698));
 		assertEquals(entry, entries[3]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 5,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 5,
 				ValueBuilder.newPrice(109875, -2), ValueBuilder.newSize(953));
 		assertEquals(entry, entries[4]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 6,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 6,
 				ValueBuilder.newPrice(109850, -2), ValueBuilder.newSize(680));
 		assertEquals(entry, entries[5]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 7,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 7,
 				ValueBuilder.newPrice(109825, -2), ValueBuilder.newSize(819));
 		assertEquals(entry, entries[6]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 8,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 8,
 				ValueBuilder.newPrice(109800, -2), ValueBuilder.newSize(931));
 		assertEquals(entry, entries[7]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 9,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 9,
 				ValueBuilder.newPrice(109775, -2), ValueBuilder.newSize(958));
 		assertEquals(entry, entries[8]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, BID, DEFAULT, 10,
+		entry = new DefBookEntry(MODIFY, BID, DEFAULT, 10,
 				ValueBuilder.newPrice(109750, -2), ValueBuilder.newSize(1166));
 		assertEquals(entry, entries[9]);
 
@@ -169,34 +168,34 @@ public class TestDX_XB_Book extends TestDDFBase {
 		 * 
 		 * asksizes=\"247,794,646,868,811,1049,830,1244,2287,694\"
 		 */
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 1,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 1,
 				ValueBuilder.newPrice(110000, -2), ValueBuilder.newSize(247));
 		assertEquals(entry, entries[10]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 2,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 2,
 				ValueBuilder.newPrice(110025, -2), ValueBuilder.newSize(794));
 		assertEquals(entry, entries[11]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 3,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 3,
 				ValueBuilder.newPrice(110050, -2), ValueBuilder.newSize(646));
 		assertEquals(entry, entries[12]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 4,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 4,
 				ValueBuilder.newPrice(110075, -2), ValueBuilder.newSize(868));
 		assertEquals(entry, entries[13]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 5,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 5,
 				ValueBuilder.newPrice(110100, -2), ValueBuilder.newSize(811));
 		assertEquals(entry, entries[14]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 6,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 6,
 				ValueBuilder.newPrice(110125, -2), ValueBuilder.newSize(1049));
 		assertEquals(entry, entries[15]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 7,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 7,
 				ValueBuilder.newPrice(110150, -2), ValueBuilder.newSize(830));
 		assertEquals(entry, entries[16]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 8,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 8,
 				ValueBuilder.newPrice(110175, -2), ValueBuilder.newSize(1244));
 		assertEquals(entry, entries[17]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 9,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 9,
 				ValueBuilder.newPrice(110200, -2), ValueBuilder.newSize(2287));
 		assertEquals(entry, entries[18]);
-		entry = new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, ASK, DEFAULT, 10,
+		entry = new DefBookEntry(MODIFY, ASK, DEFAULT, 10,
 				ValueBuilder.newPrice(110225, -2), ValueBuilder.newSize(694));
 		assertEquals(entry, entries[19]);
 
@@ -236,7 +235,7 @@ public class TestDX_XB_Book extends TestDDFBase {
 
 	static MarketBookEntry newEntry(final MarketSide side, final int place,
 			final long mant, final int exp, final int size) {
-		return new DefBookEntry(Instrument.NULL_INSTRUMENT, MODIFY, side, DEFAULT, place,
+		return new DefBookEntry(MODIFY, side, DEFAULT, place,
 				ValueBuilder.newPrice(mant, exp), ValueBuilder.newSize(size));
 	}
 

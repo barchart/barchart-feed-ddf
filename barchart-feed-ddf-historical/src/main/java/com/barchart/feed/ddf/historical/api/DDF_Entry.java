@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.api;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 
 /**

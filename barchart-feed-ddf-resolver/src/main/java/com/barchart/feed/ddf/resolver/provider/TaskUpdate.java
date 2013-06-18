@@ -29,7 +29,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 class TaskUpdate implements Callable<Void> {

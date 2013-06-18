@@ -107,7 +107,7 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 
 			final SizeValue size = HelperDDF.newSizeDDF(sizeBidArray[index]);
 
-			final MarketDoBookEntry entry = new DefBookEntry(getInstrument(), MODIFY, BID,
+			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, BID,
 					BookLiquidityType.DEFAULT, place, price, size);
 
 			entries[entryIndex++] = entry;
@@ -127,7 +127,7 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 
 			final SizeValue size = HelperDDF.newSizeDDF(sizeAskArray[index]);
 
-			final MarketDoBookEntry entry = new DefBookEntry(getInstrument(), MODIFY, ASK,
+			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, ASK,
 					BookLiquidityType.DEFAULT, place, price, size);
 
 			entries[entryIndex++] = entry;

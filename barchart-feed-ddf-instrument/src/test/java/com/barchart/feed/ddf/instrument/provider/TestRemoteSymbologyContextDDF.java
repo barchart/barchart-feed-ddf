@@ -10,8 +10,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.junit.Test;
 
-import com.barchart.feed.api.data.Instrument;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.model.meta.Instrument;
 
 public class TestRemoteSymbologyContextDDF {
 

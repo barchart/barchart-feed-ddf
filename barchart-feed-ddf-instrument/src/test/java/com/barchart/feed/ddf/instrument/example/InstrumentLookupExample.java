@@ -10,7 +10,7 @@ package com.barchart.feed.ddf.instrument.example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 // TODO: Auto-generated Javadoc

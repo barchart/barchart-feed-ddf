@@ -7,9 +7,9 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketCallback;
 import com.barchart.feed.api.connection.ConnectionFuture;
-import com.barchart.feed.api.data.Market;
+import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartFeed;
-import com.barchart.feed.inst.provider.ExchangeFactory;
+import com.barchart.feed.inst.provider.Exchanges;
 
 public class TestBarchartFeed {
 	
@@ -29,10 +29,10 @@ public class TestBarchartFeed {
 				
 				log.debug(
 				v.instrument().symbol() + " " +
-				v.topOfBook().bid().size().asDouble() + " " +
-				v.topOfBook().bid().price().asDouble() + " " +
-				v.topOfBook().ask().price().asDouble() + " " +
-				v.topOfBook().ask().size().asDouble());
+				v.orderBook().topOfBook().bid().size().asDouble() + " " +
+				v.orderBook().topOfBook().bid().price().asDouble() + " " +
+				v.orderBook().topOfBook().ask().price().asDouble() + " " +
+				v.orderBook().topOfBook().ask().size().asDouble());
 				
 			}
 			

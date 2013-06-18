@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.provider.MakerBase;

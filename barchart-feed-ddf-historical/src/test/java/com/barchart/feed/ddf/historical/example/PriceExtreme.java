@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.example;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
 import com.barchart.util.values.api.PriceValue;

@@ -12,7 +12,7 @@ import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.ascii.ASCII;

@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import com.barchart.feed.api.data.Instrument;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMinNearby;
 
 class EntryMinsNearby extends EntryBar implements DDF_EntryBarMinNearby {

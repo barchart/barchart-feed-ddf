@@ -16,11 +16,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.barchart.feed.api.data.Instrument;
-import com.barchart.feed.api.data.OrderBook;
-import com.barchart.feed.api.data.PriceLevel;
 import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.PriceLevel;
+import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.TopOfBook;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketDoBook;
@@ -30,8 +31,6 @@ import com.barchart.feed.base.provider.DefBook;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
-import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.Time;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
@@ -250,32 +249,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public Price bestPrice(MarketSide side) {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public Size bestSize(MarketSide side) {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
 	public List<PriceLevel> entryList(MarketSide side) {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public Price lastPrice() {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public Time timeUpdated() {
-		throw new UnsupportedOperationException("UNUSED");
-	}
-
-	@Override
-	public Time lastUpdateTime() {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
@@ -287,6 +261,24 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public Instrument instrument() {
 		return instrument;
+	}
+
+	@Override
+	public TopOfBook topOfBook() {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public PriceLevel lastBookUpdate() {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public Time updated() {
+		// TODO
+		return null;
 	}
 
 }
