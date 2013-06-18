@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.Collection;
@@ -32,6 +30,7 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.provider.DefBook;
 import com.barchart.feed.base.provider.DefBookEntry;
+import com.barchart.feed.base.provider.MarketConst;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.value.api.Time;
@@ -46,7 +45,10 @@ import com.barchart.util.values.provider.ValueFreezer;
 public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 		MarketDoBook {
 	
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(VarBookDDF.class);
+	
+	protected volatile MarketBookEntry lastEntry = MarketConst.NULL_BOOK_ENTRY;
 
 	@SuppressWarnings("serial")
 	private static class EntryMap extends TreeMap<PriceValue, MarketBookEntry> {
@@ -90,11 +92,16 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public final UniBookResult setEntry(final MarketDoBookEntry entry) {
 
+		if(entry != null) {
+			lastEntry = entry.freeze();
+		}
+		
 		final MarketSide side = entry.side();
 
 		final int place = entry.place();
 
-		//
+		// NOTE: This only updates top.  Full book is not incrementally updated
+		// for unknown reason.  
 
 		final EntryMap map = map(side);
 
@@ -156,7 +163,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public final DefBook freeze() {
 		return new DefBook(instrument, time(), new MarketBookEntry[]{topBid}, 
-				new MarketBookEntry[]{topAsk});
+				new MarketBookEntry[]{topAsk}, lastEntry);
 	}
 	
 	@Override

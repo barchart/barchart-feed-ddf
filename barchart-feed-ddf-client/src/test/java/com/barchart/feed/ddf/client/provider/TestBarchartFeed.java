@@ -29,10 +29,12 @@ public class TestBarchartFeed {
 				
 				log.debug(
 				v.instrument().symbol() + " " +
-				v.orderBook().topOfBook().bid().size().asDouble() + " " +
-				v.orderBook().topOfBook().bid().price().asDouble() + " " +
-				v.orderBook().topOfBook().ask().price().asDouble() + " " +
-				v.orderBook().topOfBook().ask().size().asDouble());
+//				v.orderBook().topOfBook().bid().size().asDouble() + " " +
+//				v.orderBook().topOfBook().bid().price().asDouble() + " " +
+//				v.orderBook().topOfBook().ask().price().asDouble() + " " +
+//				v.orderBook().topOfBook().ask().size().asDouble());
+
+				v.orderBook().lastBookUpdate().toString());
 				
 			}
 			
