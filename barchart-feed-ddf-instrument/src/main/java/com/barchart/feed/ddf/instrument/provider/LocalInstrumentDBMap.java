@@ -21,10 +21,10 @@ import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.Durability;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.je.EnvironmentLockedException;
 
 public final class LocalInstrumentDBMap {
 	
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
 			.getLogger(LocalInstrumentDBMap.class);
 
@@ -58,10 +58,10 @@ public final class LocalInstrumentDBMap {
 	/**
 	 * 
 	 * @param dbFolder
+	 * @throws EnvironmentLockedException if provided File is locked by another application
 	 */
-	public LocalInstrumentDBMap(final File dbFolder) {
+	public LocalInstrumentDBMap(final File dbFolder) throws EnvironmentLockedException {
 		
-		// TODO exception handling for env locking
 		final Environment env = new Environment(dbFolder, envConfig);
 		dbase = env.openDatabase(null, "InstrumentDef", dbConfig);
 		

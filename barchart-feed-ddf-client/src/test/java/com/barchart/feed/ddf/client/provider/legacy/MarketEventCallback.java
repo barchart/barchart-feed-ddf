@@ -5,13 +5,13 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.client.provider;
+package com.barchart.feed.ddf.client.provider.legacy;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.util.values.api.Value;
 
-public interface MarketEventCallback<V extends Value<V>> {
+interface MarketEventCallback<V extends Value<V>> {
 
 	public void onMarketEvent(MarketEvent event,
 			Instrument instrument, V value); 

@@ -22,7 +22,7 @@
  * 
  * 
  */
-package com.barchart.feed.client.provider;
+package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +51,7 @@ import com.barchart.util.values.api.Value;
 /**
  * The entry point for Barchart data feed services.
  */
-public abstract class BarchartFeedClientBase {
+abstract class BarchartFeedClientBase {
 
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory

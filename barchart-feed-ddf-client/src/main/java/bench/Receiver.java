@@ -15,7 +15,6 @@ import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.client.provider.BarchartFeedReceiver;
 import com.barchart.util.values.util.ValueUtil;
 
 /**
@@ -31,6 +30,8 @@ import com.barchart.util.values.util.ValueUtil;
  */
 public class Receiver {
 
+	// TODO
+	
 	/**
 	 * 
 	 * @param args
@@ -44,93 +45,93 @@ public class Receiver {
 			throw new RuntimeException("No arguments passed to main");
 		}
 
-		final BarchartFeedReceiver client = new BarchartFeedReceiver();
-
-		final Instrument[] instruments = new Instrument[args.length
-				- INST_START];
-
-		for (int i = INST_START; i < args.length; i++) {
-			instruments[i - INST_START] = client.lookup(args[i]);
-		}
-
-		if (args[0].equals("TCP")) {
-			client.listenTCP(Integer.parseInt(args[1]), false);
-		} else if (args[0].equals("UDP")) {
-			client.listenUDP(Integer.parseInt(args[1]), false);
-		} else {
-			throw new RuntimeException("Bad protocol, expecting UDP or TCP");
-		}
-
-		client.addAllMarketsTaker(TakerFactory.makeTaker(instruments));
-
-		System.in.read();
-		client.shutdown();
-		System.exit(0);
+//		final BarchartFeedReceiver client = new BarchartFeedReceiver();
+//
+//		final Instrument[] instruments = new Instrument[args.length
+//				- INST_START];
+//
+//		for (int i = INST_START; i < args.length; i++) {
+//			instruments[i - INST_START] = client.lookup(args[i]);
+//		}
+//
+//		if (args[0].equals("TCP")) {
+//			client.listenTCP(Integer.parseInt(args[1]), false);
+//		} else if (args[0].equals("UDP")) {
+//			client.listenUDP(Integer.parseInt(args[1]), false);
+//		} else {
+//			throw new RuntimeException("Bad protocol, expecting UDP or TCP");
+//		}
+//
+//		client.addAllMarketsTaker(TakerFactory.makeTaker(instruments));
+//
+//		System.in.read();
+//		client.shutdown();
+//		System.exit(0);
 
 	}
 
-	private static class TakerFactory {
-
-		static MarketTaker<Market> makeTaker(
-				final Instrument[] instruments) {
-
-			return new MarketTaker<Market>() {
-
-				@Override
-				public MarketField<Market> bindField() {
-					return MarketField.MARKET;
-				}
-
-				@Override
-				public MarketEvent[] bindEvents() {
-
-					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
-
-				}
-
-				@Override
-				public Instrument[] bindInstruments() {
-
-					return instruments;
-
-				}
-
-				@Override
-				public void onMarketEvent(final MarketEvent event,
-						final Instrument instrument, final Market value) {
-
-					final StringBuilder sb = new StringBuilder(value.instrument().marketGUID())
-							.append(" ")
-							.append(event)
-							.append(" EventTime=")
-							.append(value.get(MarketField.MARKET_TIME)
-									.asDateTime().toString());
-
-					final MarketBookTop top = value.get(MarketField.BOOK_TOP);
-
-					MarketBookEntry entry = top.side(MarketSide.ASK);
-
-					if (!entry.isNull()) {
-						sb.append(" ASK TOP").append(" price=")
-								.append(ValueUtil.asDouble(entry.priceValue()))
-								.append(" qty=").append(entry.sizeValue().asLong());
-					}
-
-					entry = top.side(MarketSide.BID);
-
-					if (!entry.isNull()) {
-						sb.append(" BID TOP").append(" price=")
-								.append(ValueUtil.asDouble(entry.priceValue()))
-								.append(" qty=").append(entry.sizeValue().asLong());
-					}
-
-					System.out.println(sb.toString());
-
-				}
-
-			};
-
-		}
-	}
+//	private static class TakerFactory {
+//
+//		static MarketTaker<Market> makeTaker(
+//				final Instrument[] instruments) {
+//
+//			return new MarketTaker<Market>() {
+//
+//				@Override
+//				public MarketField<Market> bindField() {
+//					return MarketField.MARKET;
+//				}
+//
+//				@Override
+//				public MarketEvent[] bindEvents() {
+//
+//					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
+//
+//				}
+//
+//				@Override
+//				public Instrument[] bindInstruments() {
+//
+//					return instruments;
+//
+//				}
+//
+//				@Override
+//				public void onMarketEvent(final MarketEvent event,
+//						final Instrument instrument, final Market value) {
+//
+//					final StringBuilder sb = new StringBuilder(value.instrument().marketGUID())
+//							.append(" ")
+//							.append(event)
+//							.append(" EventTime=")
+//							.append(value.get(MarketField.MARKET_TIME)
+//									.asDateTime().toString());
+//
+//					final MarketBookTop top = value.get(MarketField.BOOK_TOP);
+//
+//					MarketBookEntry entry = top.side(MarketSide.ASK);
+//
+//					if (!entry.isNull()) {
+//						sb.append(" ASK TOP").append(" price=")
+//								.append(ValueUtil.asDouble(entry.priceValue()))
+//								.append(" qty=").append(entry.sizeValue().asLong());
+//					}
+//
+//					entry = top.side(MarketSide.BID);
+//
+//					if (!entry.isNull()) {
+//						sb.append(" BID TOP").append(" price=")
+//								.append(ValueUtil.asDouble(entry.priceValue()))
+//								.append(" qty=").append(entry.sizeValue().asLong());
+//					}
+//
+//					System.out.println(sb.toString());
+//
+//				}
+//
+//			};
+//
+//		}
+//	}
 
 }

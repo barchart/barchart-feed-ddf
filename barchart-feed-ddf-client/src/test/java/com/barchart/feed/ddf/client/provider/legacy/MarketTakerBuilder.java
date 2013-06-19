@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.client.provider;
+package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +19,7 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.util.values.api.Value;
 
-public class MarketTakerBuilder<V extends Value<V>> {
+class MarketTakerBuilder<V extends Value<V>> {
 
 	private Set<MarketEvent> events = new HashSet<MarketEvent>();
 	private Set<Instrument> instruments = new HashSet<Instrument>();

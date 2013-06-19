@@ -21,7 +21,7 @@
  * <p>
  * 
  */
-package com.barchart.feed.client.provider;
+package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +50,7 @@ import com.barchart.util.values.api.Value;
 /**
  * The entry point for Barchart data feed services.
  */
-public class BarchartFeedReceiver extends BarchartFeedClientBase {
+class BarchartFeedReceiver extends BarchartFeedClientBase {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartFeedReceiver.class);

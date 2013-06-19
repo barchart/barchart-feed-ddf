@@ -8,7 +8,7 @@
 /**
  * 
  */
-package com.barchart.feed.ddf.client.provider;
+package com.barchart.feed.ddf.client.provider.legacy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,6 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
-import com.barchart.feed.client.provider.BarchartFeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 
 /**
@@ -32,6 +31,10 @@ import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
  */
 public class TestBarchartFeedClientProxy {
 
+	/*
+	 * Currently not working with new Marketplace
+	 */
+	
 	private static final Logger log = LoggerFactory
 			.getLogger(TestBarchartFeedClientProxy.class);
 

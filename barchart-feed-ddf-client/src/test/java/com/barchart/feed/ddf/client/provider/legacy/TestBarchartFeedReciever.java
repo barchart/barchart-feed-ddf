@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.client.provider;
+package com.barchart.feed.ddf.client.provider.legacy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,6 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
-import com.barchart.feed.client.provider.BarchartFeedReceiver;
 
 public class TestBarchartFeedReciever {
 
@@ -30,7 +29,7 @@ public class TestBarchartFeedReciever {
 		
 		BarchartFeedReceiver client = new BarchartFeedReceiver();
 		
-		final Instrument[] instruments = { client.lookup("ESH13")};
+		final Instrument[] instruments = { client.lookup("ESU13")};
 		
 		client.listenTCP(7000, true); 
 		client.addTaker(TakerFactory.makeFactory(instruments));
@@ -57,7 +56,7 @@ public class TestBarchartFeedReciever {
 				public MarketEvent[] bindEvents() {
 
 					//return MarketEvent.in(MarketEvent.values());
-					return new MarketEvent[] { MarketEvent.MARKET_UPDATED };
+					return MarketEvent.in(MarketEvent.values());
 
 				}
 

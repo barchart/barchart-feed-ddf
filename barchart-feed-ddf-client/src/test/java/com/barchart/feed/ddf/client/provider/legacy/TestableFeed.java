@@ -1,4 +1,4 @@
-package com.barchart.feed.client.provider;
+package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +31,7 @@ import com.barchart.feed.api.model.data.OrderBook;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
@@ -39,17 +40,17 @@ import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
 import com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;
 import com.barchart.feed.ddf.instrument.provider.ServiceDatabaseDDF;
-import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.values.api.Value;
 
-public class BarchartFeed implements Feed {
-	
+public class TestableFeed implements Feed {
+
 	private static final Logger log = LoggerFactory
-			.getLogger(BarchartFeed.class);
+			.getLogger(TestableFeed.class);
 	
 	/* Value api factory */
 	private static final Factory factory = FactoryLoader.load();
@@ -60,7 +61,7 @@ public class BarchartFeed implements Feed {
 	private static final long DB_UPDATE_TIMEOUT = 60; // seconds
 	
 	private final DDF_FeedClientBase connection;
-	private final DDF_Marketplace maker;
+	private final TestableMarketplace maker;
 	private final ExecutorService executor;
 	
 	private volatile LocalInstrumentDBMap dbMap = null;
@@ -71,11 +72,9 @@ public class BarchartFeed implements Feed {
 	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
 			new CopyOnWriteArrayList<TimestampListener>();
 	
-	private final AtomicBoolean useLocalInstDB = new AtomicBoolean(false);
-	
-	public BarchartFeed(final String username, final String password) {
+	public TestableFeed(final String username, final String password) {
 		
-		this(username, password, Executors.newFixedThreadPool(100, 
+		executor = Executors.newFixedThreadPool(100, 
 				
 				new ThreadFactory() {
 
@@ -92,98 +91,49 @@ public class BarchartFeed implements Feed {
 				return t;
 			}
 			
-		}));
-	}
-	
-	public BarchartFeed(final String username, final String password, 
-			final ExecutorService ex) {
-		this(username, password, ex, getTempFolder());
-	}
-	
-	public BarchartFeed(final String username, final String password, 
-			final ExecutorService ex, final File dbFolder) {
+		});
 		
-		executor  = ex;
-		this.dbFolder = dbFolder;
+		dbFolder = getTempFolder();
 		
 		connection = DDF_FeedClientFactory.newConnectionClient(
 				DDF_Transport.TCP, username, password, executor);
 		
 		connection.bindMessageListener(msgListener);
 		
-		maker = DDF_Marketplace.newInstance(connection);
+		maker = TestableMarketplace.newTestableInstance(connection);
 		
 	}
 	
 	/*
-	 * Returns the default temp folder
+	 * This is the default message listener. Users wishing to handle raw
+	 * messages will need to implement their own feed client.
 	 */
-	private static File getTempFolder() {
-		
-		try {
-			
-			return File.createTempFile("temp", null).getParentFile();
-			
-		} catch (IOException e) {
-			log.warn("Unable to retrieve system temp folder, using default {}", 
-					TEMP_DIR);
-			return new File(TEMP_DIR);
+	private final DDF_MessageListener msgListener = new DDF_MessageListener() {
+
+		@Override
+		public void handleMessage(final DDF_BaseMessage message) {
+
+			if (message instanceof DDF_ControlTimestamp) {
+				for (final TimestampListener listener : timeStampListeners) {
+					listener.listen(factory.newTime(((DDF_ControlTimestamp) message)
+							.getStampUTC().asMillisUTC(), ""));
+				}
+			}
+
+			if (message instanceof DDF_MarketBase) {
+				final DDF_MarketBase marketMessage = (DDF_MarketBase) message;
+				maker.make(marketMessage);
+			}
+
 		}
-		
-	}
-	
-	/* ***** ***** ***** Builder Methods ***** ***** ***** */
-	
-	/**
-	 * Call if the client wishes to use a local instrument definition database
-	 * for symbol resolution instead of the default remote lookup.
-	 * 
-	 * This is primarily for users who plan to subscribe to entire exchanges or
-	 * the entire feed.
-	 * 
-	 * If the feed has already been started, it must be shut down for this
-	 * call to take effect.
-	 * 
-	 * @return the current feed
-	 */
-	public Feed useLocalInstDefDB() {
-		useLocalInstDB.set(true);
-		return this;
-	}
-	
-	/**
-	 * Returns the feed to the default state of using a remote lookup
-	 * for symbol resolution.
-	 * 
-	 * If the feed has already been started, it must be shut down for this
-	 * call to take effect.
-	 * 
-	 * @return the current feed;
-	 */
-	public Feed useRemoteInstDefLookup() {
-		useLocalInstDB.set(false);
-		return this;
-	}
-	
-	
-	/* ***** ***** ***** ConnectionLifecycle ***** ***** ***** */
-	
-	/**
-	 * Starts the data feed asynchronously. Notification of login success is
-	 * reported by FeedStateListeners which are bound to this object.
-	 * <p>
-	 * Constructs a new feed client with the user's user name and password. The
-	 * transport protocol defaults to TCP and a default executor are used.
-	 * 
-	 * @param username
-	 * @param password
-	 */
+
+	};
 	
 	private final AtomicBoolean isStartingup = new AtomicBoolean(false);
 	private final AtomicBoolean isShuttingdown = new AtomicBoolean(false);
 	
 	@Override
-	public synchronized ConnectionFuture<Feed> startup() {
+	public ConnectionFuture<Feed> startup() {
 		
 		// Consider dummy future?
 		if(isStartingup.get()) {
@@ -221,20 +171,16 @@ public class BarchartFeed implements Feed {
 			
 			try {
 			
-				if(useLocalInstDB.get()) {
+				dbMap = InstrumentDBProvider.getMap(dbFolder);
 				
-					dbMap = InstrumentDBProvider.getMap(dbFolder);
-					
-					final ServiceDatabaseDDF dbService = new ServiceDatabaseDDF(dbMap, executor);
-					
-					DDF_InstrumentProvider.bind(dbService);
-					
-					final Future<Boolean> dbUpdate = executor.submit(
-							InstrumentDBProvider.updateDBMap(dbFolder, dbMap));
-					
-					dbUpdate.get(DB_UPDATE_TIMEOUT, TimeUnit.SECONDS);
-					
-				}
+				final ServiceDatabaseDDF dbService = new ServiceDatabaseDDF(dbMap, executor);
+				
+				DDF_InstrumentProvider.bind(dbService);
+				
+				final Future<Boolean> dbUpdate = executor.submit(
+						InstrumentDBProvider.updateDBMap(dbFolder, dbMap));
+				
+				dbUpdate.get(DB_UPDATE_TIMEOUT, TimeUnit.SECONDS);
 				
 				connection.startup();
 			
@@ -249,15 +195,15 @@ public class BarchartFeed implements Feed {
 			
 			isStartingup.set(false);
 			
-			future.succeed(BarchartFeed.this);
+			future.succeed(TestableFeed.this);
 			
 		}
 		
 	}
-	
-	@Override
-	public synchronized ConnectionFuture<Feed> shutdown() {
 
+	@Override
+	public ConnectionFuture<Feed> shutdown() {
+		
 		// Consider dummy future?
 		if(isStartingup.get()) {
 			throw new IllegalStateException("Shutdown called while shutting down");
@@ -274,7 +220,6 @@ public class BarchartFeed implements Feed {
 		executor.execute(new ShutdownRunnable(future));
 		
 		return future;
-
 	}
 	
 	private final class ShutdownRunnable implements Runnable {
@@ -316,42 +261,17 @@ public class BarchartFeed implements Feed {
 			
 			isShuttingdown.set(false);
 			
-			future.succeed(BarchartFeed.this);
+			future.succeed(TestableFeed.this);
 			
 			log.debug("Barchart Feed shutdown succeeded");
 			
 		}
 		
 	}
-	
-	/*
-	 * This is the default message listener. Users wishing to handle raw
-	 * messages will need to implement their own feed client.
-	 */
-	private final DDF_MessageListener msgListener = new DDF_MessageListener() {
 
-		@Override
-		public void handleMessage(final DDF_BaseMessage message) {
-
-			if (message instanceof DDF_ControlTimestamp) {
-				for (final TimestampListener listener : timeStampListeners) {
-					listener.listen(factory.newTime(((DDF_ControlTimestamp) message)
-							.getStampUTC().asMillisUTC(), ""));
-				}
-			}
-
-			if (message instanceof DDF_MarketBase) {
-				final DDF_MarketBase marketMessage = (DDF_MarketBase) message;
-				maker.make(marketMessage);
-			}
-
-		}
-
-	};
-	
 	@Override
-	public void bindConnectionStateListener(final ConnectionStateListener listener) {
-
+	public void bindConnectionStateListener(ConnectionStateListener listener) {
+		
 		stateListener = listener;
 
 		if (connection != null) {
@@ -359,58 +279,49 @@ public class BarchartFeed implements Feed {
 		} else {
 			throw new RuntimeException("Connection state listener already bound");
 		}
-
+		
 	}
-	
+
 	@Override
-	public void bindTimestampListener(final TimestampListener listener) {
+	public void bindTimestampListener(TimestampListener listener) {
 		
 		if(listener != null) {
 			timeStampListeners.add(listener);
 		}
 		
 	}
-	
-	/* ***** ***** ***** InstrumentService ***** ***** ***** */
-	
+
 	@Override
-	public Instrument lookup(final CharSequence symbol) {
+	public Instrument lookup(CharSequence symbol) {
 		return DDF_InstrumentProvider.find(symbol);
 	}
-	
+
 	@Override
-	public InstrumentFuture lookupAsync(final CharSequence symbol) {
+	public InstrumentFuture lookupAsync(CharSequence symbol) {
 		return DDF_InstrumentProvider.findAsync(symbol);
 	}
-	
+
 	@Override
 	public Map<CharSequence, Instrument> lookup(
-			final Collection<? extends CharSequence> symbolList) {
+			Collection<? extends CharSequence> symbolList) {
 		return DDF_InstrumentProvider.find(symbolList);
 	}
 
 	@Override
 	public InstrumentFutureMap<CharSequence> lookupAsync(
-			final Collection<? extends CharSequence> symbols) {
+			Collection<? extends CharSequence> symbols) {
 		return DDF_InstrumentProvider.findAsync(symbols);
 	}
 
-	/* ***** ***** ***** AgentBuilder ***** ***** ***** */
-	
 	@Override
-	public <V extends MarketData<V>> Agent newAgent(final Class<V> dataType, 
-			final MarketCallback<V> callback) {
-		
+	public <V extends MarketData<V>> Agent newAgent(Class<V> dataType,
+			MarketCallback<V> callback) {
 		return maker.newAgent(dataType, callback);
-		
 	}
-	
-	/* ***** ***** ***** Helper subscribe methods ***** ***** ***** */
-	
+
 	@Override
-	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketCallback<V> callback, final String... symbols) {
-		
+	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
+			MarketCallback<V> callback, String... symbols) {
 		final Agent agent = newAgent(clazz, callback);
 		
 		agent.include(symbols);
@@ -419,8 +330,8 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketCallback<V> callback, final Instrument... instruments) {
+	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
+			MarketCallback<V> callback, Instrument... instruments) {
 		
 		final Agent agent = newAgent(clazz, callback);
 		
@@ -430,9 +341,8 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketCallback<V> callback, final Exchange... exchanges) {
-
+	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
+			MarketCallback<V> callback, Exchange... exchanges) {
 		final Agent agent = newAgent(clazz, callback);
 		
 		agent.include(exchanges);
@@ -441,9 +351,8 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeMarket(final MarketCallback<Market> callback,
-			final String... symbols) {
-		
+	public Agent subscribeMarket(MarketCallback<Market> callback,
+			String... symbols) {
 		final Agent agent = newAgent(Market.class, callback);
 		
 		agent.include(symbols);
@@ -452,9 +361,8 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeTrade(final MarketCallback<Trade> lastTrade,
-			final String... symbols) {
-		
+	public Agent subscribeTrade(MarketCallback<Trade> lastTrade,
+			String... symbols) {
 		final Agent agent = newAgent(Trade.class, lastTrade);
 		
 		agent.include(symbols);
@@ -463,9 +371,8 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeBook(final MarketCallback<OrderBook> book,
-			final String... symbols) {
-		
+	public Agent subscribeBook(MarketCallback<OrderBook> book,
+			String... symbols) {
 		final Agent agent = newAgent(OrderBook.class, book);
 		
 		agent.include(symbols);
@@ -474,12 +381,39 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeCuvol(final MarketCallback<Cuvol> cuvol,
-			final String... symbols) {
-		
+	public Agent subscribeCuvol(MarketCallback<Cuvol> cuvol, String... symbols) {
 		final Agent agent = newAgent(Cuvol.class, cuvol);
 		
 		return agent;
 	}
 
+	/*
+	 * Returns the default temp folder
+	 */
+	private static File getTempFolder() {
+		
+		try {
+			
+			return File.createTempFile("temp", null).getParentFile();
+			
+		} catch (IOException e) {
+			log.warn("Unable to retrieve system temp folder, using default {}", 
+					TEMP_DIR);
+			return new File(TEMP_DIR);
+		}
+		
+	}
+
+	public <V extends Value<V>> boolean addTaker(final MarketTaker<V> taker) {
+		return maker.register(taker);
+	}
+	
+	public <V extends Value<V>> boolean updateTaker(final MarketTaker<V> taker) {
+		return maker.update(taker);
+	}
+	
+	public <V extends Value<V>> boolean removeTaker(final MarketTaker<V> taker) {
+		return maker.unregister(taker);
+	}
+	
 }

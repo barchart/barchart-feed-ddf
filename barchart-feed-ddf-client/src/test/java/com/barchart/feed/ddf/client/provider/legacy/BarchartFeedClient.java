@@ -22,7 +22,7 @@
  * 
  * 
  */
-package com.barchart.feed.client.provider;
+package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.util.Set;
 import java.util.concurrent.Executor;

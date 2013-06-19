@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -150,6 +148,10 @@ public final class InstrumentDBProvider {
 		
 		if(!resourceFolder.isDirectory()) {
 			throw new IllegalArgumentException("Resource folder must be a directory");
+		}
+		
+		if(!resourceFolder.canWrite()) {
+			throw new IllegalStateException("Resource folder is locked by another aplication");
 		}
 		
 	}

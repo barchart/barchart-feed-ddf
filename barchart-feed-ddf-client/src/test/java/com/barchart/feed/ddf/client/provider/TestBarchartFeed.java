@@ -22,7 +22,7 @@ public class TestBarchartFeed {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 		
-		final BarchartFeed feed = new BarchartFeed(username, password);
+		final Feed feed = new BarchartFeed(username, password).useLocalInstDefDB();
 		
 		final MarketCallback<Market> callback = new MarketCallback<Market>() {
 
@@ -31,10 +31,6 @@ public class TestBarchartFeed {
 				
 				log.debug(
 				v.instrument().symbol() + "\n" +
-//				v.orderBook().topOfBook().bid().size().asDouble() + " " +
-//				v.orderBook().topOfBook().bid().price().asDouble() + " " +
-//				v.orderBook().topOfBook().ask().price().asDouble() + " " +
-//				v.orderBook().topOfBook().ask().size().asDouble());
 
 				printCuvol(v.cuvol().cuvolList()));
 				
@@ -50,53 +46,13 @@ public class TestBarchartFeed {
 		
 		//myAgent.include(ExchangeFactory.fromName("CME"));
 		
-		myAgent.include("ESU3");
+		myAgent.include("GOOG");
 		
-		try {
-			Thread.sleep(70000);
-		} catch (final Exception e) {
-			// Interrupted
-		}
-		
-//		myAgent.include("MSFT");
-//		
-//		try {
-//			Thread.sleep(10000);
-//		} catch (final Exception e) {
-//			// Interrupted
-//		}
-//		
-//		myAgent.exclude("GOOG");
-//		
-//		try {
-//			Thread.sleep(15000);
-//		} catch (final Exception e) {
-//			// Interrupted
-//		}
-		
-//		feed.shutdown();
-//		
-//		try {
-//			Thread.sleep(2000);
-//		} catch (final Exception e) {
-//			// Interrupted
-//		}
-//		
-//		feed.startup();
-//		
-//		try {
-//			Thread.sleep(7000);
-//		} catch (final Exception e) {
-//			// Interrupted
-//		}
+		Thread.sleep(700000);
 		
 		feed.shutdown();
 		
-		try {
-			Thread.sleep(2000);
-		} catch (final Exception e) {
-			// Interrupted
-		}
+		Thread.sleep(2000);
 		
 	}
 	
@@ -109,7 +65,6 @@ public class TestBarchartFeed {
 		}
 		
 		return sb.toString();
-		
 		
 	}
 	

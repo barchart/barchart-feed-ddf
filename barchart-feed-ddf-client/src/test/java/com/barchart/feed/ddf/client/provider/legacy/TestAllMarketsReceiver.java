@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.client.provider;
+package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -21,7 +21,6 @@ import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.client.provider.BarchartFeedReceiver;
 import com.barchart.util.values.util.ValueUtil;
 
 public class TestAllMarketsReceiver {
