@@ -43,7 +43,8 @@ public class TestBarchartFeedClient {
 
 		final BarchartFeedClient client = new BarchartFeedClient();
 
-		final Instrument[] instruments = { client.lookup("GOOG")};
+		final Instrument[] instruments = 
+				client.lookup("GOOG").toArray(new Instrument[0]);
 		final ConnectionStateListener feedListener = new ConnectionStateListener() {
 
 			@Override

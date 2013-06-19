@@ -3,6 +3,7 @@ package com.barchart.feed.client.provider;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
-import com.barchart.feed.api.MarketCallback;
+import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
@@ -71,11 +72,44 @@ public class BarchartFeed implements Feed {
 	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
 			new CopyOnWriteArrayList<TimestampListener>();
 	
-	private final AtomicBoolean useLocalInstDB = new AtomicBoolean(false);
+	private final boolean useLocalInstDB;
 	
-	public BarchartFeed(final String username, final String password) {
+	public BarchartFeed(final String username, final String password, 
+			final ExecutorService ex, final File dbFolder, final boolean useDB) {
 		
-		this(username, password, Executors.newFixedThreadPool(100, 
+		executor  = ex;
+		this.dbFolder = dbFolder;
+		
+		connection = DDF_FeedClientFactory.newConnectionClient(
+				DDF_Transport.TCP, username, password, executor);
+		
+		connection.bindMessageListener(msgListener);
+		
+		maker = DDF_Marketplace.newInstance(connection);
+		
+		this.useLocalInstDB = useDB; 
+		
+	}
+	
+	public static Builder builder(final String username, 
+			final String password) {
+		return new Builder(username, password);
+	}
+	
+	/**
+	 * Builder for different BarchartFeed configurations
+	 */
+	public static class Builder {
+		
+		private final String username, password;
+		private File dbFolder = getTempFolder();
+		private boolean useLocalDB = false; 
+		
+		/*
+		 * Default ExecutorService uses a cached thread pool with dameon
+		 * threads.
+		 */
+		private ExecutorService executor = Executors.newCachedThreadPool( 
 				
 				new ThreadFactory() {
 
@@ -92,26 +126,32 @@ public class BarchartFeed implements Feed {
 				return t;
 			}
 			
-		}));
-	}
-	
-	public BarchartFeed(final String username, final String password, 
-			final ExecutorService ex) {
-		this(username, password, ex, getTempFolder());
-	}
-	
-	public BarchartFeed(final String username, final String password, 
-			final ExecutorService ex, final File dbFolder) {
+		});
 		
-		executor  = ex;
-		this.dbFolder = dbFolder;
+		public Builder(final String username, final String password) {
+			this.username = username;
+			this.password = password;
+		}
 		
-		connection = DDF_FeedClientFactory.newConnectionClient(
-				DDF_Transport.TCP, username, password, executor);
+		public Builder setExecutor(final ExecutorService executor) {
+			this.executor = executor;
+			return this;
+		}
 		
-		connection.bindMessageListener(msgListener);
+		public Builder setDatabaseFolder(final File dbFolder) {
+			this.dbFolder = dbFolder; 
+			return this;
+		}
 		
-		maker = DDF_Marketplace.newInstance(connection);
+		public Builder useLocalInstDatabase() {
+			useLocalDB = true;
+			return this;
+		}
+		
+		public Feed build() {
+			return new BarchartFeed(username, password, executor, dbFolder, 
+					useLocalDB);
+		}
 		
 	}
 	
@@ -131,40 +171,6 @@ public class BarchartFeed implements Feed {
 		}
 		
 	}
-	
-	/* ***** ***** ***** Builder Methods ***** ***** ***** */
-	
-	/**
-	 * Call if the client wishes to use a local instrument definition database
-	 * for symbol resolution instead of the default remote lookup.
-	 * 
-	 * This is primarily for users who plan to subscribe to entire exchanges or
-	 * the entire feed.
-	 * 
-	 * If the feed has already been started, it must be shut down for this
-	 * call to take effect.
-	 * 
-	 * @return the current feed
-	 */
-	public Feed useLocalInstDefDB() {
-		useLocalInstDB.set(true);
-		return this;
-	}
-	
-	/**
-	 * Returns the feed to the default state of using a remote lookup
-	 * for symbol resolution.
-	 * 
-	 * If the feed has already been started, it must be shut down for this
-	 * call to take effect.
-	 * 
-	 * @return the current feed;
-	 */
-	public Feed useRemoteInstDefLookup() {
-		useLocalInstDB.set(false);
-		return this;
-	}
-	
 	
 	/* ***** ***** ***** ConnectionLifecycle ***** ***** ***** */
 	
@@ -221,7 +227,7 @@ public class BarchartFeed implements Feed {
 			
 			try {
 			
-				if(useLocalInstDB.get()) {
+				if(useLocalInstDB) {
 				
 					dbMap = InstrumentDBProvider.getMap(dbFolder);
 					
@@ -374,7 +380,7 @@ public class BarchartFeed implements Feed {
 	/* ***** ***** ***** InstrumentService ***** ***** ***** */
 	
 	@Override
-	public Instrument lookup(final CharSequence symbol) {
+	public List<Instrument> lookup(final CharSequence symbol) {
 		return DDF_InstrumentProvider.find(symbol);
 	}
 	
@@ -384,7 +390,7 @@ public class BarchartFeed implements Feed {
 	}
 	
 	@Override
-	public Map<CharSequence, Instrument> lookup(
+	public Map<CharSequence, List<Instrument>> lookup(
 			final Collection<? extends CharSequence> symbolList) {
 		return DDF_InstrumentProvider.find(symbolList);
 	}
@@ -399,7 +405,7 @@ public class BarchartFeed implements Feed {
 	
 	@Override
 	public <V extends MarketData<V>> Agent newAgent(final Class<V> dataType, 
-			final MarketCallback<V> callback) {
+			final MarketObserver<V> callback) {
 		
 		return maker.newAgent(dataType, callback);
 		
@@ -409,7 +415,7 @@ public class BarchartFeed implements Feed {
 	
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketCallback<V> callback, final String... symbols) {
+			final MarketObserver<V> callback, final String... symbols) {
 		
 		final Agent agent = newAgent(clazz, callback);
 		
@@ -420,7 +426,7 @@ public class BarchartFeed implements Feed {
 
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketCallback<V> callback, final Instrument... instruments) {
+			final MarketObserver<V> callback, final Instrument... instruments) {
 		
 		final Agent agent = newAgent(clazz, callback);
 		
@@ -431,7 +437,7 @@ public class BarchartFeed implements Feed {
 
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketCallback<V> callback, final Exchange... exchanges) {
+			final MarketObserver<V> callback, final Exchange... exchanges) {
 
 		final Agent agent = newAgent(clazz, callback);
 		
@@ -441,7 +447,7 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeMarket(final MarketCallback<Market> callback,
+	public Agent subscribeMarket(final MarketObserver<Market> callback,
 			final String... symbols) {
 		
 		final Agent agent = newAgent(Market.class, callback);
@@ -452,7 +458,7 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeTrade(final MarketCallback<Trade> lastTrade,
+	public Agent subscribeTrade(final MarketObserver<Trade> lastTrade,
 			final String... symbols) {
 		
 		final Agent agent = newAgent(Trade.class, lastTrade);
@@ -463,7 +469,7 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeBook(final MarketCallback<OrderBook> book,
+	public Agent subscribeBook(final MarketObserver<OrderBook> book,
 			final String... symbols) {
 		
 		final Agent agent = newAgent(OrderBook.class, book);
@@ -474,7 +480,7 @@ public class BarchartFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeCuvol(final MarketCallback<Cuvol> cuvol,
+	public Agent subscribeCuvol(final MarketObserver<Cuvol> cuvol,
 			final String... symbols) {
 		
 		final Agent agent = newAgent(Cuvol.class, cuvol);

@@ -39,7 +39,8 @@ public class TestAllMarketsReceiver {
 		try {
 			
 			final Instrument[] instruments1 = {};
-			final Instrument[] instruments2 = { client.lookup("ESH13") };
+			final Instrument[] instruments2 = 
+					client.lookup("ESH13").toArray(new Instrument[0]) ;
 	
 			Future<Boolean> task;
 			

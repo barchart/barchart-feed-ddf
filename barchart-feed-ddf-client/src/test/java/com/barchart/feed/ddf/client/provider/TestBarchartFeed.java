@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
-import com.barchart.feed.api.MarketCallback;
+import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.CuvolEntry;
 import com.barchart.feed.api.model.data.Market;
@@ -22,12 +22,13 @@ public class TestBarchartFeed {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 		
-		final Feed feed = new BarchartFeed(username, password).useLocalInstDefDB();
+		final Feed feed = BarchartFeed.builder(username, password).
+				useLocalInstDatabase().build();
 		
-		final MarketCallback<Market> callback = new MarketCallback<Market>() {
+		final MarketObserver<Market> callback = new MarketObserver<Market>() {
 
 			@Override
-			public void call(final Market v) {
+			public void onNext(final Market v) {
 				
 				log.debug(
 				v.instrument().symbol() + "\n" +

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
-import com.barchart.feed.api.MarketCallback;
+import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.CuvolEntry;
 import com.barchart.feed.api.model.data.Market;
@@ -31,10 +31,10 @@ public class XX_CuvolCompareTest {
 		
 		final TestableFeed feed = new TestableFeed(username, password);
 		
-		final MarketCallback<Market> callback = new MarketCallback<Market>() {
+		final MarketObserver<Market> callback = new MarketObserver<Market>() {
 
 			@Override
-			public void call(final Market v) {
+			public void onNext(final Market v) {
 				
 				log.debug(
 				v.instrument().symbol() + "\n" +
@@ -50,15 +50,13 @@ public class XX_CuvolCompareTest {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		final Instrument inst = feed.lookup(SYMBOL);
+		final Instrument inst = feed.lookup(SYMBOL).get(0);
 		
 		//myAgent.include(inst);
 		
 		feed.addTaker(new CuvolTaker(new Instrument[]{inst}));
 		
 		Thread.sleep(700000);
-		
-		
 		
 	}
 	

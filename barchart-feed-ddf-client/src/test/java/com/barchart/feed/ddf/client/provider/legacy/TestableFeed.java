@@ -3,6 +3,7 @@ package com.barchart.feed.ddf.client.provider.legacy;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
-import com.barchart.feed.api.MarketCallback;
+import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
@@ -292,7 +293,7 @@ public class TestableFeed implements Feed {
 	}
 
 	@Override
-	public Instrument lookup(CharSequence symbol) {
+	public List<Instrument> lookup(CharSequence symbol) {
 		return DDF_InstrumentProvider.find(symbol);
 	}
 
@@ -302,7 +303,7 @@ public class TestableFeed implements Feed {
 	}
 
 	@Override
-	public Map<CharSequence, Instrument> lookup(
+	public Map<CharSequence, List<Instrument>> lookup(
 			Collection<? extends CharSequence> symbolList) {
 		return DDF_InstrumentProvider.find(symbolList);
 	}
@@ -315,13 +316,13 @@ public class TestableFeed implements Feed {
 
 	@Override
 	public <V extends MarketData<V>> Agent newAgent(Class<V> dataType,
-			MarketCallback<V> callback) {
+			MarketObserver<V> callback) {
 		return maker.newAgent(dataType, callback);
 	}
 
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
-			MarketCallback<V> callback, String... symbols) {
+			MarketObserver<V> callback, String... symbols) {
 		final Agent agent = newAgent(clazz, callback);
 		
 		agent.include(symbols);
@@ -331,7 +332,7 @@ public class TestableFeed implements Feed {
 
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
-			MarketCallback<V> callback, Instrument... instruments) {
+			MarketObserver<V> callback, Instrument... instruments) {
 		
 		final Agent agent = newAgent(clazz, callback);
 		
@@ -342,7 +343,7 @@ public class TestableFeed implements Feed {
 
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(Class<V> clazz,
-			MarketCallback<V> callback, Exchange... exchanges) {
+			MarketObserver<V> callback, Exchange... exchanges) {
 		final Agent agent = newAgent(clazz, callback);
 		
 		agent.include(exchanges);
@@ -351,7 +352,7 @@ public class TestableFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeMarket(MarketCallback<Market> callback,
+	public Agent subscribeMarket(MarketObserver<Market> callback,
 			String... symbols) {
 		final Agent agent = newAgent(Market.class, callback);
 		
@@ -361,7 +362,7 @@ public class TestableFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeTrade(MarketCallback<Trade> lastTrade,
+	public Agent subscribeTrade(MarketObserver<Trade> lastTrade,
 			String... symbols) {
 		final Agent agent = newAgent(Trade.class, lastTrade);
 		
@@ -371,7 +372,7 @@ public class TestableFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeBook(MarketCallback<OrderBook> book,
+	public Agent subscribeBook(MarketObserver<OrderBook> book,
 			String... symbols) {
 		final Agent agent = newAgent(OrderBook.class, book);
 		
@@ -381,7 +382,7 @@ public class TestableFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeCuvol(MarketCallback<Cuvol> cuvol, String... symbols) {
+	public Agent subscribeCuvol(MarketObserver<Cuvol> cuvol, String... symbols) {
 		final Agent agent = newAgent(Cuvol.class, cuvol);
 		
 		return agent;

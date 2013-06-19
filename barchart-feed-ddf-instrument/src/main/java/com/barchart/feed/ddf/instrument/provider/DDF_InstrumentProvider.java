@@ -42,7 +42,6 @@ import com.barchart.missive.core.Manifest;
 import com.barchart.missive.core.ObjectMap;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.anno.ThreadSafe;
-import com.barchart.util.values.provider.ValueBuilder;
 
 /**
  * The Class DDF_InstrumentProvider.
@@ -87,7 +86,6 @@ public final class DDF_InstrumentProvider {
 	private DDF_InstrumentProvider() {
 	}
 
-	@SuppressWarnings("unused")
 	private static volatile DDF_DefinitionService instance;
 
 	@SuppressWarnings("unused")
@@ -144,7 +142,7 @@ public final class DDF_InstrumentProvider {
 	 *            the symbol
 	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
 	 */
-	public static Instrument find(final CharSequence symbol) {
+	public static List<Instrument> find(final CharSequence symbol) {
 		return instance().lookup(formatSymbol(symbol));
 	}
 
@@ -162,7 +160,7 @@ public final class DDF_InstrumentProvider {
 	 * @param symbol
 	 * @return
 	 */
-	public static Instrument findHistorical(final CharSequence symbol) {
+	public static List<Instrument> findHistorical(final CharSequence symbol) {
 		return instance().lookup(formatHistoricalSymbol(symbol));
 	}
 	
@@ -172,10 +170,11 @@ public final class DDF_InstrumentProvider {
 	 * @param symbols
 	 * @return a map of resolved instruments
 	 */
-	public static Map<CharSequence, Instrument> find(
+	public static Map<CharSequence, List<Instrument>> find(
 			final Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, Instrument> insts = new HashMap<CharSequence, Instrument>();
+		final Map<CharSequence, List<Instrument>> insts = 
+				new HashMap<CharSequence, List<Instrument>>();
 		
 		final Collection<CharSequence> formatted = new ArrayList<CharSequence>();
 		
@@ -183,9 +182,9 @@ public final class DDF_InstrumentProvider {
 			formatted.add(formatSymbol(c));
 		}
 		
-		final Map<CharSequence, Instrument> charInsts = instance().lookup(formatted);
+		final Map<CharSequence, List<Instrument>> charInsts = instance().lookup(formatted);
 		
-		for(final Entry<CharSequence, Instrument> e : charInsts.entrySet()) {
+		for(final Entry<CharSequence, List<Instrument>> e : charInsts.entrySet()) {
 			insts.put(e.getKey().toString(), e.getValue());
 		}
 		

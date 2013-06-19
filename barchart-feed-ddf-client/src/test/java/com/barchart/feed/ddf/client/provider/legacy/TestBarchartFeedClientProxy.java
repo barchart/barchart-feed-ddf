@@ -50,7 +50,7 @@ public class TestBarchartFeedClientProxy {
 
 		final String symbol = "RMU12";
 
-		final Instrument instrument = client.lookup(symbol);
+		final Instrument instrument = client.lookup(symbol).get(0);
 
 		System.out.println(instrument.toString());
 

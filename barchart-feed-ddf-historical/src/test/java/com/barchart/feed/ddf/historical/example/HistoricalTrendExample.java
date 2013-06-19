@@ -26,7 +26,6 @@ import com.barchart.util.bench.time.StopWatch;
 import com.barchart.util.thread.Runner;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
-import com.barchart.util.values.util.ValueUtil;
 
 /**
  * The Class HistoricalTrendExample.
@@ -70,7 +69,7 @@ public class HistoricalTrendExample {
 		final String symbol = "C";
 
 		final Instrument instrument = //
-		DDF_InstrumentProvider.find(symbol);
+		DDF_InstrumentProvider.find(symbol).get(0);
 
 		if (instrument.isNull()) {
 			log.error("can not get insrument for : {}", symbol);

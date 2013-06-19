@@ -10,7 +10,9 @@ package com.barchart.feed.ddf.instrument.provider;
 import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.lookupFromSymbol;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -43,9 +45,9 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Instrument lookup(final CharSequence symbol) {
+	public List<Instrument> lookup(final CharSequence symbol) {
 		if(symbol == null || symbol.length() == 0) {
-			return Instrument.NULL_INSTRUMENT;
+			return Collections.emptyList();
 		}
 		
 		/** make an upper case id */
@@ -55,7 +57,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 		map.put(InstrumentField.MARKET_GUID, lookup);
 		final Instrument instrument = ObjectMapFactory.build(InstrumentDDF.class, map);
 
-		return instrument;
+		return Collections.singletonList(instrument);
 	}
 
 	@Override
@@ -65,7 +67,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public Map<CharSequence, Instrument> lookup(final Collection<? extends CharSequence> symbols) {
+	public Map<CharSequence, List<Instrument>> lookup(final Collection<? extends CharSequence> symbols) {
 		// TODO Auto-generated method stub
 		return null;
 	}

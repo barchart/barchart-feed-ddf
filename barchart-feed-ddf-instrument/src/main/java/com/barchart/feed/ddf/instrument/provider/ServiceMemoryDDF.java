@@ -7,8 +7,11 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,8 +39,9 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 
 	static final Logger log = LoggerFactory.getLogger(ServiceMemoryDDF.class);
 
-	private final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
-			new ConcurrentHashMap<InstrumentGUID, Instrument>();
+	// TODO make list<Inst> ???
+	private final ConcurrentMap<InstrumentGUID, List<Instrument>> guidMap = 
+			new ConcurrentHashMap<InstrumentGUID, List<Instrument>>();
 	
 	private final LocalCacheSymbologyContextDDF cache = 
 			new LocalCacheSymbologyContextDDF();
@@ -63,26 +67,26 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 	}
 
 	@Override
-	public Instrument lookup(final CharSequence symbol) {
+	public List<Instrument> lookup(final CharSequence symbol) {
 		
 		try {
 			return retrieve(symbol);
 		} catch (final Throwable t) {
 			log.error("Lookup failed", t);
-			return Instrument.NULL_INSTRUMENT;
+			return Collections.emptyList();
 		}
 		
 	}
 
 	@Override
-	public Map<CharSequence, Instrument> lookup(
+	public Map<CharSequence, List<Instrument>> lookup(
 			Collection<? extends CharSequence> symbols) {
 		
 		try {
 			return retrieveMap(symbols);
 		} catch (final Throwable t) {
 			log.error("Lookup failed", t);
-			return new HashMap<CharSequence, Instrument>();
+			return Collections.emptyMap();
 		}
 		
 	}
@@ -111,7 +115,7 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		
 	}
 	
-	private final class LookupCallable implements Callable<Instrument> {
+	private final class LookupCallable implements Callable<List<Instrument>> {
 
 		private final CharSequence symbol;
 		private final InstrumentFuture future;
@@ -122,9 +126,9 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		}
 		
 		@Override
-		public Instrument call() throws Exception {
+		public List<Instrument> call() throws Exception {
 			
-			Instrument inst;
+			List<Instrument> inst;
 			
 			try {
 			
@@ -133,7 +137,7 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 				
 			} catch (final Throwable t) {
 				future.fail(t);
-				return Instrument.NULL_INSTRUMENT;
+				return Collections.emptyList();
 			}
 			
 			return inst;
@@ -142,10 +146,10 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		
 	}
 	
-	private Instrument retrieve(final CharSequence symbol) {
+	private List<Instrument> retrieve(final CharSequence symbol) {
 		
 		if(symbol == null || symbol.length() == 0) {
-			return Instrument.NULL_INSTRUMENT;
+			return Collections.emptyList();
 		}
 		
 		InstrumentGUID guid = cache.lookup(symbol.toString().toUpperCase()); 
@@ -155,7 +159,7 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		}
 		
 		if(guid.equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
-			return Instrument.NULL_INSTRUMENT;
+			return Collections.emptyList();
 		}
 		
 		cache.storeGUID(symbol, guid);
@@ -163,15 +167,17 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		final InstrumentDDF instrument = (InstrumentDDF) guidMap.get(guid);
 
 		if (instrument == null) {
-			return Instrument.NULL_INSTRUMENT;
+			return Collections.emptyList();
 		}
 
-		return ObjectMapFactory.build(InstrumentDDF.class, instrument);
+		Instrument inst = ObjectMapFactory.build(InstrumentDDF.class, instrument);
+		
+		return Collections.singletonList(inst);
 		
 	}
 	
 	private final class LookupMapCallable implements 
-			Callable<Map<CharSequence, Instrument>> {
+			Callable<Map<CharSequence, List<Instrument>>> {
 		
 		private final Collection<? extends CharSequence> symbols;
 		private final InstrumentFutureMap<CharSequence> future;
@@ -183,9 +189,9 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		}
 
 		@Override
-		public Map<CharSequence, Instrument> call() throws Exception {
+		public Map<CharSequence, List<Instrument>> call() throws Exception {
 			
-			Map<CharSequence, Instrument> map;
+			Map<CharSequence, List<Instrument>> map;
 			
 			try {
 				
@@ -194,7 +200,7 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 				
 			} catch (final Throwable t) {
 				future.fail(t);
-				return new HashMap<CharSequence, Instrument>();
+				return Collections.emptyMap();
 			}
 			
 			return map;
@@ -202,22 +208,22 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 		
 	}
 	
-	private Map<CharSequence, Instrument> retrieveMap(
+	private Map<CharSequence, List<Instrument>> retrieveMap(
 			final Collection<? extends CharSequence> symbols) {
 		
 		if (symbols == null || symbols.size() == 0) {
 			log.warn("Lookup called with empty collection");
-			return new HashMap<CharSequence, Instrument>(0); 
+			return Collections.emptyMap(); 
 		}
 		
-		final Map<CharSequence, Instrument> result = 
-				new HashMap<CharSequence, Instrument>();
+		final Map<CharSequence, List<Instrument>> result = 
+				new HashMap<CharSequence, List<Instrument>>();
 
 		for (final CharSequence symbol : symbols) {
 			try {
 				result.put(symbol.toString(), retrieve(symbol));
 			} catch (final Exception e) {
-				result.put(symbol.toString(), Instrument.NULL_INSTRUMENT);
+				result.put(symbol.toString(), new ArrayList<Instrument>(0));
 			}
 		}
 		

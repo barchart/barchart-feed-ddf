@@ -29,7 +29,7 @@ public class TestBarchartFeedReciever {
 		
 		BarchartFeedReceiver client = new BarchartFeedReceiver();
 		
-		final Instrument[] instruments = { client.lookup("ESU13")};
+		final Instrument[] instruments = client.lookup("ESU13").toArray(new Instrument[0]);
 		
 		client.listenTCP(7000, true); 
 		client.addTaker(TakerFactory.makeFactory(instruments));

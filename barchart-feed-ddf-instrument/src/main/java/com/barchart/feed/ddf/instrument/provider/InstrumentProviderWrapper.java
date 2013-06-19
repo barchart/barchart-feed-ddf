@@ -1,6 +1,7 @@
 package com.barchart.feed.ddf.instrument.provider;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import com.barchart.feed.api.inst.InstrumentFuture;
@@ -11,7 +12,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 public class InstrumentProviderWrapper implements InstrumentService<CharSequence> {
 
 	@Override
-	public Instrument lookup(CharSequence symbol) {
+	public List<Instrument> lookup(CharSequence symbol) {
 		return DDF_InstrumentProvider.find(symbol);
 	}
 
@@ -21,7 +22,7 @@ public class InstrumentProviderWrapper implements InstrumentService<CharSequence
 	}
 
 	@Override
-	public Map<CharSequence, Instrument> lookup(
+	public Map<CharSequence, List<Instrument>> lookup(
 			Collection<? extends CharSequence> symbols) {
 		return DDF_InstrumentProvider.find(symbols);
 	}

@@ -468,7 +468,7 @@ final class CodecHelper {
 		// symbol = DDF_Symbology.futureNormalFromHistorical(symbol);
 		// // System.out.println("### YES ###");
 		// }
-		return DDF_InstrumentProvider.find(symbol);
+		return DDF_InstrumentProvider.find(symbol).get(0);
 	}
 
 	static String encodeInstrument(final Instrument instrument,

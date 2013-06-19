@@ -222,7 +222,7 @@ abstract class BarchartFeedClientBase {
 	 * 
 	 * @return NULL_INSTRUMENT if the symbol is not resolved.
 	 */
-	public Instrument lookup(final String symbol) {
+	public List<Instrument> lookup(final String symbol) {
 		return DDF_InstrumentProvider.find(symbol);
 	}
 
@@ -233,7 +233,7 @@ abstract class BarchartFeedClientBase {
 	 * 
 	 * @return An empty list if no symbols can be resolved.
 	 */
-	public Map<CharSequence, Instrument> lookup(final List<String> symbolList) {
+	public Map<CharSequence, List<Instrument>> lookup(final List<String> symbolList) {
 		return DDF_InstrumentProvider.find(symbolList);
 	}
 

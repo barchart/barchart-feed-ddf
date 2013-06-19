@@ -67,7 +67,7 @@ public class HistoricalTicksExample {
 		final String symbol = "esu10";
 
 		final Instrument instrument = //
-		DDF_InstrumentProvider.findHistorical(symbol);
+		DDF_InstrumentProvider.findHistorical(symbol).get(0);
 
 		if (instrument.isNull()) {
 			log.error("can not get insrument for : {}", symbol);
