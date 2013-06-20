@@ -146,7 +146,8 @@ final class ZipReader {
 			zipStream.close();
 			rawStream.close();
 		} catch (Exception e) {
-			log.error("should not happen", e);
+			// log.error("should not happen", e);
+			// but it will if rawSteam == zipSream
 		}
 	}
 
