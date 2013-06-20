@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.barchart.feed.api.inst.InstrumentFuture;
-import com.barchart.feed.api.inst.InstrumentFutureMap;
-import com.barchart.feed.api.inst.InstrumentService;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.inst.InstrumentFuture;
+import com.barchart.feed.inst.InstrumentFutureMap;
+import com.barchart.feed.inst.InstrumentService;
 
 public class InstrumentProviderWrapper implements InstrumentService<CharSequence> {
 

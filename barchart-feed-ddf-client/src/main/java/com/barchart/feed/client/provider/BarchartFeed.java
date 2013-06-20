@@ -2,9 +2,6 @@ package com.barchart.feed.client.provider;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,8 +20,6 @@ import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
-import com.barchart.feed.api.inst.InstrumentFuture;
-import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
@@ -74,7 +69,11 @@ public class BarchartFeed implements Feed {
 	
 	private final boolean useLocalInstDB;
 	
-	public BarchartFeed(final String username, final String password, 
+	public BarchartFeed(final String username, final String password) {
+		this(username, password, getDefault(), getTempFolder(), false);
+	}
+	
+	BarchartFeed(final String username, final String password, 
 			final ExecutorService ex, final File dbFolder, final boolean useDB) {
 		
 		executor  = ex;
@@ -91,9 +90,8 @@ public class BarchartFeed implements Feed {
 		
 	}
 	
-	public static Builder builder(final String username, 
-			final String password) {
-		return new Builder(username, password);
+	public static Builder builder() {
+		return new Builder();
 	}
 	
 	/**
@@ -101,15 +99,50 @@ public class BarchartFeed implements Feed {
 	 */
 	public static class Builder {
 		
-		private final String username, password;
+		private String username = "NULL";
+		private String password = "NULL";
 		private File dbFolder = getTempFolder();
 		private boolean useLocalDB = false; 
 		
-		/*
-		 * Default ExecutorService uses a cached thread pool with dameon
-		 * threads.
-		 */
-		private ExecutorService executor = Executors.newCachedThreadPool( 
+		private ExecutorService executor = getDefault();
+		
+		public Builder() {
+		}
+		
+		public Builder username(final String username) {
+			this.username = username;
+			return this;
+		}
+		
+		public Builder password(final String password) {
+			this.password = password;
+			return this;
+		}
+		
+		public Builder executor(final ExecutorService executor) {
+			this.executor = executor;
+			return this;
+		}
+		
+		public Builder dbaseFolder(final File dbFolder) {
+			this.dbFolder = dbFolder; 
+			return this;
+		}
+		
+		public Builder useLocalInstDatabase() {
+			useLocalDB = true;
+			return this;
+		}
+		
+		public Feed build() {
+			return new BarchartFeed(username, password, executor, dbFolder, 
+					useLocalDB);
+		}
+		
+	}
+	
+	private static ExecutorService getDefault() {
+		return Executors.newCachedThreadPool( 
 				
 				new ThreadFactory() {
 
@@ -127,32 +160,6 @@ public class BarchartFeed implements Feed {
 			}
 			
 		});
-		
-		public Builder(final String username, final String password) {
-			this.username = username;
-			this.password = password;
-		}
-		
-		public Builder setExecutor(final ExecutorService executor) {
-			this.executor = executor;
-			return this;
-		}
-		
-		public Builder setDatabaseFolder(final File dbFolder) {
-			this.dbFolder = dbFolder; 
-			return this;
-		}
-		
-		public Builder useLocalInstDatabase() {
-			useLocalDB = true;
-			return this;
-		}
-		
-		public Feed build() {
-			return new BarchartFeed(username, password, executor, dbFolder, 
-					useLocalDB);
-		}
-		
 	}
 	
 	/*
@@ -377,30 +384,6 @@ public class BarchartFeed implements Feed {
 		
 	}
 	
-	/* ***** ***** ***** InstrumentService ***** ***** ***** */
-	
-	@Override
-	public List<Instrument> lookup(final CharSequence symbol) {
-		return DDF_InstrumentProvider.find(symbol);
-	}
-	
-	@Override
-	public InstrumentFuture lookupAsync(final CharSequence symbol) {
-		return DDF_InstrumentProvider.findAsync(symbol);
-	}
-	
-	@Override
-	public Map<CharSequence, List<Instrument>> lookup(
-			final Collection<? extends CharSequence> symbolList) {
-		return DDF_InstrumentProvider.find(symbolList);
-	}
-
-	@Override
-	public InstrumentFutureMap<CharSequence> lookupAsync(
-			final Collection<? extends CharSequence> symbols) {
-		return DDF_InstrumentProvider.findAsync(symbols);
-	}
-
 	/* ***** ***** ***** AgentBuilder ***** ***** ***** */
 	
 	@Override

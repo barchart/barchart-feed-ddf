@@ -22,7 +22,6 @@ import static com.barchart.feed.inst.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.inst.InstrumentField.BOOK_LIQUIDITY;
 import static com.barchart.feed.inst.InstrumentField.BOOK_STRUCTURE;
 import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
-import static com.barchart.feed.inst.InstrumentField.COMPONENT_LEGS;
 import static com.barchart.feed.inst.InstrumentField.CURRENCY_CODE;
 import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.inst.InstrumentField.DISPLAY_FRACTION;
@@ -53,9 +52,7 @@ import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
-import com.barchart.feed.api.inst.GuidList;
 import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
@@ -247,7 +244,6 @@ public final class InstrumentXML {
 		map.put(MARKET_HOURS, factory.newSchedule(new TimeInterval[0]));
 		map.put(TIME_ZONE_OFFSET, newSize(zone.getUTCOffset()));
 		map.put(TIME_ZONE_NAME, newText(zone.name()));
-		map.put(COMPONENT_LEGS, new GuidList());
 
 		return ObjectMapFactory.build(InstrumentDDF.class, map);
 		

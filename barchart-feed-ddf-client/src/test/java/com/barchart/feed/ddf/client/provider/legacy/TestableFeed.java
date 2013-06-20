@@ -2,9 +2,6 @@ package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,8 +20,6 @@ import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
-import com.barchart.feed.api.inst.InstrumentFuture;
-import com.barchart.feed.api.inst.InstrumentFutureMap;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
@@ -290,28 +285,6 @@ public class TestableFeed implements Feed {
 			timeStampListeners.add(listener);
 		}
 		
-	}
-
-	@Override
-	public List<Instrument> lookup(CharSequence symbol) {
-		return DDF_InstrumentProvider.find(symbol);
-	}
-
-	@Override
-	public InstrumentFuture lookupAsync(CharSequence symbol) {
-		return DDF_InstrumentProvider.findAsync(symbol);
-	}
-
-	@Override
-	public Map<CharSequence, List<Instrument>> lookup(
-			Collection<? extends CharSequence> symbolList) {
-		return DDF_InstrumentProvider.find(symbolList);
-	}
-
-	@Override
-	public InstrumentFutureMap<CharSequence> lookupAsync(
-			Collection<? extends CharSequence> symbols) {
-		return DDF_InstrumentProvider.findAsync(symbols);
 	}
 
 	@Override

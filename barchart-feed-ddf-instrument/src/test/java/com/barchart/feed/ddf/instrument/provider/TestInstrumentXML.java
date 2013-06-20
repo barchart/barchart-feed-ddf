@@ -1,6 +1,5 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
 import static com.barchart.feed.inst.InstrumentField.*;
@@ -20,7 +19,6 @@ import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
-import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.Manifest;
@@ -74,7 +72,6 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.get(MARKET_HOURS).size() == 0);
 		assertTrue(IBMInst.get(TIME_ZONE_OFFSET).equals(newSize(-18000000)));
 		assertTrue(IBMInst.get(TIME_ZONE_NAME).equals(newText("NEW_YORK")));
-		assertTrue(IBMInst.get(COMPONENT_LEGS).size() == 0);
 		
 	}
 	

@@ -1,7 +1,6 @@
 package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 public class XX_CuvolCompareTest {
 	
@@ -24,7 +24,7 @@ public class XX_CuvolCompareTest {
 	
 	final static String SYMBOL = "GOOG";
 	
-	public static void main(final String[] args) throws InterruptedException, ExecutionException {
+	public static void main(final String[] args) throws Exception {
 		
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
@@ -50,7 +50,7 @@ public class XX_CuvolCompareTest {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		final Instrument inst = feed.lookup(SYMBOL).get(0);
+		final Instrument inst = DDF_InstrumentProvider.find(SYMBOL).get(0);
 		
 		//myAgent.include(inst);
 		
