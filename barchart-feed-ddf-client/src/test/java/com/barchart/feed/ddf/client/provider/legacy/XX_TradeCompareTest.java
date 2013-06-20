@@ -13,7 +13,7 @@ import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 public class XX_TradeCompareTest {
 	
-final static String SYMBOL = "ESU3";
+	final static String SYMBOL = "ESU3";
 	
 	public static void main(final String[] args) throws Exception {
 		
