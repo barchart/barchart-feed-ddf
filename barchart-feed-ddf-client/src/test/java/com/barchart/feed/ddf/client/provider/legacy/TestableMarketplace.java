@@ -327,6 +327,7 @@ public class TestableMarketplace extends DDF_Marketplace {
 	
 	@Override
 	public void add(final MarketRegListener listener) {
+		log.debug("RegListener added to Marketplace");
 		listenerList.addIfAbsent(listener);
 	}
 

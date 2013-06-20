@@ -2,6 +2,7 @@ package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,11 +28,14 @@ import com.barchart.feed.api.model.data.OrderBook;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
+import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
 import com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;
@@ -97,7 +101,42 @@ public class TestableFeed implements Feed {
 		connection.bindMessageListener(msgListener);
 		
 		maker = TestableMarketplace.newTestableInstance(connection);
+		maker.add(instrumentSubscriptionListener);
 		
+	}
+	
+	private final MarketRegListener instrumentSubscriptionListener = new MarketRegListener() {
+
+		@Override
+		public void onRegistrationChange(final Instrument instrument,
+				final Set<MarketEvent> events) {
+
+			/*
+			 * The market maker denotes 'unsubscribe' with an empty event set
+			 */
+			if (events.isEmpty()) {
+				log.debug("Unsubscribing to "
+						+ instrument.marketGUID());
+				connection.unsubscribe(new DDF_Subscription(instrument, events));
+			} else {
+				log.debug("Subscribing to "
+						+ instrument.marketGUID() + " Events: "
+						+ printEvents(events));
+				connection.subscribe(new DDF_Subscription(instrument, events));
+			}
+
+		}
+
+	};
+	
+	private String printEvents(final Set<MarketEvent> events) {
+		final StringBuffer sb = new StringBuffer();
+
+		for (final MarketEvent me : events) {
+			sb.append(me.name() + ", ");
+		}
+
+		return sb.toString();
 	}
 	
 	/*

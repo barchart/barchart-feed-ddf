@@ -7,17 +7,17 @@ import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.CuvolEntry;
-import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
-public class XX_CuvolCompareTest {
+public class XX_TradeCompareTest {
 	
-	final static String SYMBOL = "ESU3";
+final static String SYMBOL = "ESU3";
 	
 	public static void main(final String[] args) throws Exception {
 		
@@ -31,9 +31,13 @@ public class XX_CuvolCompareTest {
 			@Override
 			public void onNext(final Market v) {
 				
+				final Trade trade = v.lastTrade();
+				
 				System.out.println("AGENT: " +
 				v.instrument().symbol() + " " +
-				printCuvol(v.cuvol().cuvolList()));
+				trade.price().asDouble() + " " +
+				trade.size().asDouble()
+				);
 				
 			}
 			
@@ -52,18 +56,6 @@ public class XX_CuvolCompareTest {
 		feed.addTaker(new CuvolTaker(new Instrument[]{inst}));
 		
 		Thread.sleep(700000);
-		
-	}
-	
-	public static String printCuvol(final List<CuvolEntry> entries) {
-		
-		final StringBuilder sb = new StringBuilder();
-		
-		for(final CuvolEntry e : entries) {
-			sb.append(e.volume().asDouble() + "\t");
-		}
-		
-		return sb.toString();
 		
 	}
 	
@@ -95,8 +87,11 @@ public class XX_CuvolCompareTest {
 			public void onMarketEvent(MarketEvent event, Instrument instrument,
 					com.barchart.feed.base.market.api.Market v) {
 				
+				final Trade trade = v.lastTrade();
+				
 				System.out.println("TAKER: " + v.instrument().symbol() +  " " +
-						printCuvol(v.cuvol().cuvolList()) + "\n");
+						trade.price().asDouble() + " " +
+						trade.size().asDouble() + "\n");
 				
 			}
 		

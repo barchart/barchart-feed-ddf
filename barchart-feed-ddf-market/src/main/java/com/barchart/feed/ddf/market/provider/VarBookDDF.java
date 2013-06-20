@@ -162,8 +162,8 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(instrument, time(), new MarketBookEntry[]{topBid}, 
-				new MarketBookEntry[]{topAsk}, lastEntry);
+		return new DefBook(instrument, time(), entries(MarketSide.BID), 
+				entries(MarketSide.ASK), lastEntry);
 	}
 	
 	@Override
@@ -272,6 +272,10 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 		}
 
+		/*
+		 * 
+		 */
+		
 		return UniBookResult.NORMAL;
 
 	}
