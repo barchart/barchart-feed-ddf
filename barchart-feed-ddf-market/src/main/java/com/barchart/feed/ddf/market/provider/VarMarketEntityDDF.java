@@ -117,6 +117,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		//log.debug("Set trade, firing callbacks");
 		
 		fireCallbacks(Trade.class);
+		fireCallbacks(Cuvol.class);  // HACK FOR DDF
 	}
 	
 	@Override

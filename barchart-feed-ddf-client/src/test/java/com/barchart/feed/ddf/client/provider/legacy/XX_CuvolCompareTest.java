@@ -26,14 +26,14 @@ public class XX_CuvolCompareTest {
 		
 		final TestableFeed feed = new TestableFeed(username, password);
 		
-		final MarketObserver<Market> callback = new MarketObserver<Market>() {
+		final MarketObserver<Cuvol> callback = new MarketObserver<Cuvol>() {
 
 			@Override
-			public void onNext(final Market v) {
+			public void onNext(final Cuvol v) {
 				
 				System.out.println("AGENT: " +
 				v.instrument().symbol() + " " +
-				printCuvol(v.cuvol().cuvolList()));
+				printCuvol(v.cuvolList()));
 				
 			}
 			
@@ -43,7 +43,7 @@ public class XX_CuvolCompareTest {
 		
 		start.get();
 		
-		final Agent myAgent = feed.newAgent(Market.class, callback);
+		final Agent myAgent = feed.newAgent(Cuvol.class, callback);
 		
 		final Instrument inst = DDF_InstrumentProvider.find(SYMBOL).get(0);
 		
@@ -83,7 +83,8 @@ public class XX_CuvolCompareTest {
 
 			@Override
 			public MarketEvent[] bindEvents() {
-				return new MarketEvent[] {MarketEvent.MARKET_UPDATED};
+				return new MarketEvent[] {MarketEvent.NEW_CUVOL_SNAPSHOT,
+						MarketEvent.NEW_CUVOL_UPDATE, MarketEvent.NEW_TRADE};
 			}
 
 			@Override
