@@ -1,13 +1,9 @@
 package com.barchart.feed.ddf.client.provider.legacy;
 
-import java.util.List;
-
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
-import com.barchart.feed.api.model.CuvolEntry;
-import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
@@ -26,17 +22,15 @@ final static String SYMBOL = "ESU3";
 		
 		final TestableFeed feed = new TestableFeed(username, password);
 		
-		final MarketObserver<Market> callback = new MarketObserver<Market>() {
+		final MarketObserver<Trade> callback = new MarketObserver<Trade>() {
 
 			@Override
-			public void onNext(final Market v) {
-				
-				final Trade trade = v.lastTrade();
+			public void onNext(final Trade v) {
 				
 				System.out.println("AGENT: " +
 				v.instrument().symbol() + " " +
-				trade.price().asDouble() + " " +
-				trade.size().asDouble()
+				v.price().asDouble() + " " +
+				v.size().asDouble()
 				);
 				
 			}
@@ -47,24 +41,24 @@ final static String SYMBOL = "ESU3";
 		
 		start.get();
 		
-		final Agent myAgent = feed.newAgent(Market.class, callback);
+		final Agent myAgent = feed.newAgent(Trade.class, callback);
 		
 		final Instrument inst = DDF_InstrumentProvider.find(SYMBOL).get(0);
 		
 		myAgent.include(inst);
 		
-		feed.addTaker(new CuvolTaker(new Instrument[]{inst}));
+		feed.addTaker(new TradeTaker(new Instrument[]{inst}));
 		
 		Thread.sleep(700000);
 		
 	}
 	
-	public static class CuvolTaker implements 
+	public static class TradeTaker implements 
 			MarketTaker<com.barchart.feed.base.market.api.Market> {
 
 			final Instrument[] instruments;
 	
-			public CuvolTaker(final Instrument[] instruments) {
+			public TradeTaker(final Instrument[] instruments) {
 				this.instruments = instruments;
 			}
 	
@@ -75,7 +69,7 @@ final static String SYMBOL = "ESU3";
 
 			@Override
 			public MarketEvent[] bindEvents() {
-				return new MarketEvent[] {MarketEvent.MARKET_UPDATED};
+				return new MarketEvent[] {MarketEvent.NEW_TRADE};
 			}
 
 			@Override
