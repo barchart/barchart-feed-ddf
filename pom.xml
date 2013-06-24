@@ -8,6 +8,7 @@
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
 		<version>2.5.12</version>
+		<relativePath/>
 	</parent>
 
 	<groupId>com.barchart.feed</groupId>
