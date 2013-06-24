@@ -33,18 +33,15 @@
 
 		<barchartUtilVersion>2.0.28</barchartUtilVersion>
 
-		<barchartFeedAPIVersion>2.0.1-SNAPSHOT</barchartFeedAPIVersion>
-		
-		<barchartFeedInstVersion>2.0.1-SNAPSHOT</barchartFeedInstVersion>
-		
-		<barchartFeedBaseVersion>2.0.1-SNAPSHOT</barchartFeedBaseVersion>
-		
-		<barchartFeedClientVersion>2.0.1-SNAPSHOT</barchartFeedClientVersion>
+		<barchartFeedAPIVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedAPIVersion>
+		<barchartFeedInstVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedInstVersion>
+		<barchartFeedBaseVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedBaseVersion>
+		<barchartFeedClientVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedClientVersion>
 
-		<barchartNettyVersion>3.5.12.Final</barchartNettyVersion>
-		
 		<barchartMissiveVersion>2.0.0</barchartMissiveVersion>
+		<barchartNettyVersion>3.5.12.Final</barchartNettyVersion>
 		<barchartProtoInstVersion>1.2.0</barchartProtoInstVersion>
+
 		<bdbjeVersion>4.0.92</bdbjeVersion>
 		<protoBufVersion>2.4.1</protoBufVersion>
 
