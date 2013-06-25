@@ -81,7 +81,7 @@ public class XX_TradeCompareTest {
 			public void onMarketEvent(MarketEvent event, Instrument instrument,
 					com.barchart.feed.base.market.api.Market v) {
 				
-				final Trade trade = v.lastTrade();
+				final Trade trade = v.trade();
 				
 				System.out.println("TAKER: " + v.instrument().symbol() +  " " +
 						trade.price().asDouble() + " " +

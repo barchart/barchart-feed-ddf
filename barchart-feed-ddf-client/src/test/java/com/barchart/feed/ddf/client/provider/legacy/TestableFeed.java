@@ -24,7 +24,7 @@ import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -384,9 +384,9 @@ public class TestableFeed implements Feed {
 	}
 
 	@Override
-	public Agent subscribeBook(MarketObserver<OrderBook> book,
+	public Agent subscribeBook(MarketObserver<Book> book,
 			String... symbols) {
-		final Agent agent = newAgent(OrderBook.class, book);
+		final Agent agent = newAgent(Book.class, book);
 		
 		agent.include(symbols);
 		

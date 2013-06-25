@@ -56,7 +56,7 @@ public class Receiver {
 					.append(" EventTime=")
 					.append(value.updated());
 
-				final TopOfBook top = value.orderBook().topOfBook();
+				final TopOfBook top = value.book().topOfBook();
 				
 				PriceLevel entry = top.ask();
 				

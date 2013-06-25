@@ -7,7 +7,7 @@ import com.barchart.feed.api.FrameworkAgent;
 import com.barchart.feed.api.model.MarketData;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -74,7 +74,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set book snapshot, firing callbacks");
 		
-		fireCallbacks(OrderBook.class);
+		fireCallbacks(Book.class);
 	}
 	
 	@Override
@@ -84,7 +84,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set book update, firing callbacks");
 		
-		fireCallbacks(OrderBook.class);
+		fireCallbacks(Book.class);
 	}
 	
 	@Override

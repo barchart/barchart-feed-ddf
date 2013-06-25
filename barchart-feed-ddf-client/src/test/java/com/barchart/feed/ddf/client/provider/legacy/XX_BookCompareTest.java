@@ -5,7 +5,7 @@ import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.OrderBook;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
@@ -24,10 +24,10 @@ final static String SYMBOL = "ESU3";
 		
 		final TestableFeed feed = new TestableFeed(username, password);
 		
-		final MarketObserver<OrderBook> callback = new MarketObserver<OrderBook>() {
+		final MarketObserver<Book> callback = new MarketObserver<Book>() {
 
 			@Override
-			public void onNext(final OrderBook v) {
+			public void onNext(final Book v) {
 				
 				final TopOfBook top = v.topOfBook();
 				
@@ -54,7 +54,7 @@ final static String SYMBOL = "ESU3";
 		
 		start.get();
 		
-		final Agent myAgent = feed.newAgent(OrderBook.class, callback);
+		final Agent myAgent = feed.newAgent(Book.class, callback);
 		
 		final Instrument inst = DDF_InstrumentProvider.find(SYMBOL).get(0);
 		
@@ -95,14 +95,14 @@ final static String SYMBOL = "ESU3";
 		public void onMarketEvent(MarketEvent event, Instrument instrument,
 				com.barchart.feed.base.market.api.Market v) {
 			
-			final TopOfBook top = v.orderBook().topOfBook();
+			final TopOfBook top = v.book().topOfBook();
 			
 			System.out.println("TAKER: " + v.instrument().symbol() +  " " +
 					top.ask().price().asDouble() + " " +
 					top.ask().size().asDouble() + " " +
 					top.bid().size().asDouble() + " " +
 					top.bid().price().asDouble() + " " +
-					v.orderBook().lastBookUpdate().price().asDouble() + "\n");
+					v.book().lastBookUpdate().price().asDouble() + "\n");
 			
 		}
 		
