@@ -7,12 +7,13 @@
 	<parent>
 		<groupId>com.barchart.base</groupId>
 		<artifactId>barchart-archon</artifactId>
-		<version>2.3.9</version>
+		<version>2.5.12</version>
+		<relativePath />
 	</parent>
 
 	<groupId>com.barchart.feed</groupId>
 	<artifactId>barchart-feed-ddf</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>4.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<url>https://github.com/barchart/barchart-feed-ddf</url>
@@ -26,25 +27,22 @@
 		<url>https://github.com/barchart/barchart-feed-ddf</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>4_0</tag>
 	</scm>
 
 	<properties>
 
 		<barchartUtilVersion>2.0.28</barchartUtilVersion>
 
-		<barchartFeedAPIVersion>2.0.1-SNAPSHOT</barchartFeedAPIVersion>
-		
-		<barchartFeedInstVersion>2.0.1-SNAPSHOT</barchartFeedInstVersion>
-		
-		<barchartFeedBaseVersion>2.0.1-SNAPSHOT</barchartFeedBaseVersion>
-		
-		<barchartFeedClientVersion>2.0.1-SNAPSHOT</barchartFeedClientVersion>
+		<barchartFeedAPIVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedAPIVersion>
+		<barchartFeedInstVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedInstVersion>
+		<barchartFeedBaseVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedBaseVersion>
+		<barchartFeedClientVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedClientVersion>
 
-		<barchartNettyVersion>3.5.12.Final</barchartNettyVersion>
-		
 		<barchartMissiveVersion>2.0.0</barchartMissiveVersion>
+		<barchartNettyVersion>3.5.12.Final</barchartNettyVersion>
 		<barchartProtoInstVersion>1.2.0</barchartProtoInstVersion>
+
 		<bdbjeVersion>4.0.92</bdbjeVersion>
 		<protoBufVersion>2.4.1</protoBufVersion>
 
