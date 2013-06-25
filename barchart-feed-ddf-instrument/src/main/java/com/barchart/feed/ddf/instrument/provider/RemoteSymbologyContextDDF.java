@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -51,7 +50,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			new ConcurrentHashMap<CharSequence, InstrumentGUID>();
 	final Map<CharSequence, CharSequence> failedMap = 
 			new ConcurrentHashMap<CharSequence, CharSequence>();
-	final Map<InstrumentGUID, List<Instrument>> guidMap;
+	final Map<InstrumentGUID, Instrument> guidMap;
 	
 	public RemoteSymbologyContextDDF() {
 		guidMap = null;
@@ -61,7 +60,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 	 * Because DDF lookup combines symbol -> GUID and GUID -> Instrument, passing in
 	 * a map for the InstrumentService to use saves a double lookup. 
 	 */
-	public RemoteSymbologyContextDDF(final Map<InstrumentGUID, List<Instrument>> guidMap) {
+	public RemoteSymbologyContextDDF(final Map<InstrumentGUID, Instrument> guidMap) {
 		this.guidMap = guidMap;
 		DDF_InstrumentProvider.overrideLookupURL(false);
 	}
@@ -170,7 +169,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			
 			/* Populate instrument map */
 			if(symbolMap != null) {
-				guidMap.put(guid, Collections.singletonList((Instrument)instDOM));
+				guidMap.put(guid, (Instrument)instDOM);
 			}
 			
 			return guid;
@@ -217,7 +216,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 							final InstrumentDDF inst = InstrumentXML.decodeSAX(attributes);
 							final InstrumentDDF ddfInst = ObjectMapFactory.build(InstrumentDDF.class, inst);
 							symMap.put(inst.symbol(), ddfInst.GUID());
-							guidMap.put(inst.GUID(), Collections.singletonList((Instrument)inst));
+							guidMap.put(inst.GUID(), (Instrument)inst);
 							
 						} catch (final SymbolNotFoundException e) {
 							log.warn("symbol not found : {}", e.getMessage());

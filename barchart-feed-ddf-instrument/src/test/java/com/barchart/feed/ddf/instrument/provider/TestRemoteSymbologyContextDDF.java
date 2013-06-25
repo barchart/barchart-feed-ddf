@@ -26,8 +26,8 @@ public class TestRemoteSymbologyContextDDF {
 	@Test
 	public void testRemoteLookup() {
 		
-		final ConcurrentMap<InstrumentGUID, List<Instrument>> guidMap = 
-				new ConcurrentHashMap<InstrumentGUID, List<Instrument>>();
+		final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
+				new ConcurrentHashMap<InstrumentGUID, Instrument>();
 		
 		final RemoteSymbologyContextDDF ctx = new RemoteSymbologyContextDDF(guidMap);
 		
@@ -53,8 +53,8 @@ public class TestRemoteSymbologyContextDDF {
 	@Test
 	public void testBatchRemoteLookup() {
 		
-		final ConcurrentMap<InstrumentGUID, List<Instrument>> guidMap = 
-				new ConcurrentHashMap<InstrumentGUID, List<Instrument>>();
+		final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
+				new ConcurrentHashMap<InstrumentGUID, Instrument>();
 		
 		final RemoteSymbologyContextDDF ctx = new RemoteSymbologyContextDDF(guidMap);
 		final List<CharSequence> symbols = new ArrayList<CharSequence>();

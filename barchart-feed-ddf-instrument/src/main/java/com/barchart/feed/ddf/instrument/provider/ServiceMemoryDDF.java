@@ -39,8 +39,8 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 
 	static final Logger log = LoggerFactory.getLogger(ServiceMemoryDDF.class);
 
-	private final ConcurrentMap<InstrumentGUID, List<Instrument>> guidMap = 
-			new ConcurrentHashMap<InstrumentGUID, List<Instrument>>();
+	private final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
+			new ConcurrentHashMap<InstrumentGUID, Instrument>();
 	
 	private final LocalCacheSymbologyContextDDF cache = 
 			new LocalCacheSymbologyContextDDF();

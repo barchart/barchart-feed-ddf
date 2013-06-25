@@ -35,7 +35,7 @@ public class TestDDF_MarketService {
 	static final byte[] err1 = "%<BOOK askcount=\"5\" askprices=\"66370,66380,66400,66420,66430\" asksizes=\"2,1,1,1,2\" basecode=\"A\" bidcount=\"5\" bidprices=\"66290,66270,66240,66230,66220\" bidsizes=\"1,1,1,1,2\" symbol=\"RJZ1\"/>"
 			.getBytes();
 
-	static final byte[] err2 = "3RJZ1,BAC55,66290K1,66270L1,66250M2,66240N1,66230O1,66370J2,66380I1,66400H1,66420G1,66430F2"
+	static final byte[] err2 = "3RJZ3,BAC55,66290K1,66270L1,66250M2,66240N1,66230O1,66370J2,66380I1,66400H1,66420G1,66430F2"
 			.getBytes();
 
 	/**
@@ -47,8 +47,8 @@ public class TestDDF_MarketService {
 	@Test
 	public void testMakeDDF_MarketBaseMarketDo() throws Exception {
 
-		final Instrument instrument = DDF_InstrumentProvider.find("RJZ1").get(0);
-
+		final Instrument instrument = DDF_InstrumentProvider.find("RJZ3").get(0);
+		
 		log.debug("instrument : {}", instrument);
 
 		final DDF_MarketProvider maker = DDF_MarketService.newInstance();

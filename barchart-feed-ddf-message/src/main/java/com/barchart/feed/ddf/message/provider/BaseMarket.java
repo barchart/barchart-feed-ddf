@@ -21,6 +21,7 @@ import static com.barchart.util.ascii.ASCII.SOH;
 import static com.barchart.util.ascii.ASCII.STX;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 
 import org.joda.time.DateTimeZone;
 
@@ -74,6 +75,10 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 */
 	@Override
 	public final Instrument getInstrument() {
+		final List<Instrument> insts = DDF_InstrumentProvider.find(getId());
+		if(insts.isEmpty()) {
+			return Instrument.NULL_INSTRUMENT;
+		}
 		return DDF_InstrumentProvider.find(getId()).get(0);
 	}
 	
