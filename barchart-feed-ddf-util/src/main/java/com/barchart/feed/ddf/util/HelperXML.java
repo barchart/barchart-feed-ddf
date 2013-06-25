@@ -35,8 +35,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.provider.FactoryProvider;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
@@ -46,6 +47,8 @@ import com.barchart.util.values.provider.ValueConst;
  * The Class HelperXML.
  */
 public final class HelperXML {
+
+	static final Factory factory = FactoryLoader.load();
 
 	private static Logger log = LoggerFactory.getLogger(HelperXML.class);
 
@@ -248,7 +251,7 @@ public final class HelperXML {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * Xml string encode.
 	 * 
@@ -648,7 +651,7 @@ public final class HelperXML {
 
 		try {
 			final DateTime dateTime = new DateTime(timeValue);
-			return FactoryProvider.instance().newTime(dateTime.getMillis(), "");
+			return factory.newTime(dateTime.getMillis(), "");
 		} catch (final Exception e) {
 			if (isThrow) {
 				throw new IllegalArgumentException("attribute not valid : "
@@ -682,7 +685,7 @@ public final class HelperXML {
 
 		try {
 			final DateTime dateTime = new DateTime(timeValue);
-			return FactoryProvider.instance().newTime(dateTime.getMillis(), "");
+			return factory.newTime(dateTime.getMillis(), "");
 		} catch (final Exception e) {
 			if (isThrow) {
 				throw new IllegalArgumentException("attribute not valid : "
