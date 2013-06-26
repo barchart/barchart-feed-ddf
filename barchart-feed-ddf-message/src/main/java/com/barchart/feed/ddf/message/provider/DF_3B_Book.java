@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_BOOK_LIMIT;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_COUNT;
@@ -107,7 +105,7 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 
 			final SizeValue size = HelperDDF.newSizeDDF(sizeBidArray[index]);
 
-			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, BID,
+			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, Book.Side.BID,
 					Book.Type.DEFAULT, place, price, size);
 
 			entries[entryIndex++] = entry;
@@ -127,7 +125,7 @@ class DF_3B_Book extends BaseMarket implements DDF_MarketBook {
 
 			final SizeValue size = HelperDDF.newSizeDDF(sizeAskArray[index]);
 
-			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, ASK,
+			final MarketDoBookEntry entry = new DefBookEntry(MODIFY, Book.Side.ASK,
 					Book.Type.DEFAULT, place, price, size);
 
 			entries[entryIndex++] = entry;

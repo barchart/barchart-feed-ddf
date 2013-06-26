@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
@@ -113,7 +113,7 @@ public class TestAllMarketsReceiver {
 					sb.append(" BID "
 							+ ValueUtil.asDouble(value
 									.get(MarketField.BOOK_TOP)
-									.side(MarketSide.BID).priceValue()));
+									.side(Book.Side.BID).priceValue()));
 
 					log.debug(sb.toString());
 

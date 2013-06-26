@@ -7,8 +7,6 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.api.enums.MarketSide.ASK;
-import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
 import static com.barchart.util.values.provider.ValueBuilder.newTime;
@@ -22,7 +20,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;
@@ -156,39 +153,39 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 		//
 
-		entry = newEntry(BID, 1, 63795, -3, 25);
+		entry = newEntry(Book.Side.BID, 1, 63795, -3, 25);
 		assertEquals(entry, entries[0]);
 
-		entry = newEntry(BID, 2, 63790, -3, 5);
+		entry = newEntry(Book.Side.BID, 2, 63790, -3, 5);
 		assertEquals(entry, entries[1]);
 
-		entry = newEntry(BID, 3, 63780, -3, 1000);
+		entry = newEntry(Book.Side.BID, 3, 63780, -3, 1000);
 		assertEquals(entry, entries[2]);
 
-		entry = newEntry(BID, 4, 63775, -3, 35);
+		entry = newEntry(Book.Side.BID, 4, 63775, -3, 35);
 		assertEquals(entry, entries[3]);
 
-		entry = newEntry(BID, 5, 63765, -3, 5);
+		entry = newEntry(Book.Side.BID, 5, 63765, -3, 5);
 		assertEquals(entry, entries[4]);
 
-		entry = newEntry(ASK, 1, 63800, -3, 20);
+		entry = newEntry(Book.Side.ASK, 1, 63800, -3, 20);
 		assertEquals(entry, entries[5]);
 
-		entry = newEntry(ASK, 2, 63815, -3, 5);
+		entry = newEntry(Book.Side.ASK, 2, 63815, -3, 5);
 		assertEquals(entry, entries[6]);
 
-		entry = newEntry(ASK, 3, 63820, -3, 10);
+		entry = newEntry(Book.Side.ASK, 3, 63820, -3, 10);
 		assertEquals(entry, entries[7]);
 
-		entry = newEntry(ASK, 4, 63825, -3, 5);
+		entry = newEntry(Book.Side.ASK, 4, 63825, -3, 5);
 		assertEquals(entry, entries[8]);
 
-		entry = newEntry(ASK, 5, 63830, -3, 7);
+		entry = newEntry(Book.Side.ASK, 5, 63830, -3, 7);
 		assertEquals(entry, entries[9]);
 
 	}
 
-	static MarketBookEntry newEntry(final MarketSide side, final int place,
+	static MarketBookEntry newEntry(final Book.Side side, final int place,
 			final long mant, final int exp, final int size) {
 		return new DefBookEntry(MODIFY, side, 
 				Book.Type.DEFAULT, place,

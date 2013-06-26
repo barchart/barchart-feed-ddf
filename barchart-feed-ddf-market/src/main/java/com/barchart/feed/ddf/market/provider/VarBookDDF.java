@@ -17,7 +17,6 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.TopOfBook;
@@ -95,7 +94,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 			lastEntry = entry.freeze();
 		}
 		
-		final MarketSide side = entry.side();
+		final Book.Side side = entry.side();
 
 		final int place = entry.place();
 
@@ -127,7 +126,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	}
 
-	private EntryMap map(final MarketSide side) {
+	private EntryMap map(final Book.Side side) {
 		switch (side) {
 		default:
 		case BID:
@@ -138,7 +137,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public final MarketBookEntry[] entries(final MarketSide side) {
+	public final MarketBookEntry[] entries(final Book.Side side) {
 
 		final EntryMap map = map(side);
 
@@ -161,8 +160,8 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(instrument, time(), entries(MarketSide.BID), 
-				entries(MarketSide.ASK), lastEntry);
+		return new DefBook(instrument, time(), entries(Book.Side.BID), 
+				entries(Book.Side.ASK), lastEntry);
 	}
 	
 	@Override
@@ -190,7 +189,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public final MarketBookEntry top(final MarketSide side) {
+	public final MarketBookEntry top(final Book.Side side) {
 
 		final MarketBookEntry entry;
 		switch (side) {
@@ -219,17 +218,17 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public final SizeValue[] sizes(final MarketSide side) {
+	public final SizeValue[] sizes(final Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
-	public PriceValue priceTop(final MarketSide side) {
+	public PriceValue priceTop(final Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override
-	public SizeValue sizeTop(final MarketSide side) {
+	public SizeValue sizeTop(final Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 	
@@ -280,7 +279,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public List<PriceLevel> entryList(MarketSide side) {
+	public List<PriceLevel> entryList(Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
