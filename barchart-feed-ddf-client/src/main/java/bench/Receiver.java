@@ -11,11 +11,9 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
-import com.barchart.feed.api.model.PriceLevel;
+import com.barchart.feed.api.model.data.Book.PriceLevel;
+import com.barchart.feed.api.model.data.Book.Top;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.Session;
-import com.barchart.feed.api.model.data.TopOfBook;
-import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.client.provider.BarchartFeed;
 
 /**
@@ -56,7 +54,7 @@ public class Receiver {
 					.append(" EventTime=")
 					.append(value.updated());
 
-				final TopOfBook top = value.book().topOfBook();
+				final Top top = value.book().top();
 				
 				PriceLevel entry = top.ask();
 				

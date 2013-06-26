@@ -4,9 +4,8 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
-import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Book.Top;
 import com.barchart.feed.api.model.data.Book;
-import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -29,9 +28,9 @@ final static String SYMBOL = "ESU3";
 			@Override
 			public void onNext(final Book v) {
 				
-				final TopOfBook top = v.topOfBook();
+				final Top top = v.top();
 				
-				if(top == TopOfBook.NULL_TOP_OF_BOOK) {
+				if(top == Top.NULL_TOP_OF_BOOK) {
 					System.out.println("TOP OF BOOK NULL");
 				} else {
 				
@@ -95,7 +94,7 @@ final static String SYMBOL = "ESU3";
 		public void onMarketEvent(MarketEvent event, Instrument instrument,
 				com.barchart.feed.base.market.api.Market v) {
 			
-			final TopOfBook top = v.book().topOfBook();
+			final Top top = v.book().top();
 			
 			System.out.println("TAKER: " + v.instrument().symbol() +  " " +
 					top.ask().price().asDouble() + " " +

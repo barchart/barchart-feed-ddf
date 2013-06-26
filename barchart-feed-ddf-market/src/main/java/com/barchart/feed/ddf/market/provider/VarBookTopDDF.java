@@ -7,7 +7,6 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.book.api.MarketBookTop;
@@ -49,12 +48,12 @@ final class VarBookTopDDF extends ValueFreezer<MarketBookTop> implements
 	}
 
 	@Override
-	public PriceLevel bid() {
+	public Book.PriceLevel bid() {
 		return book.top(Book.Side.BID);
 	}
 
 	@Override
-	public PriceLevel ask() {
+	public Book.PriceLevel ask() {
 		return book.top(Book.Side.ASK);
 	}
 

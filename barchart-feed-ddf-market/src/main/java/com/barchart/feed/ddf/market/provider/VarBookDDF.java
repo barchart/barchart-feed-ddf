@@ -17,9 +17,7 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
-import com.barchart.feed.api.model.data.TopOfBook;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketBookEntry;
@@ -233,7 +231,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 	
 	@Override
-	public TopOfBook topOfBook() {
+	public Top top() {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
