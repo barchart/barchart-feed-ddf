@@ -646,7 +646,7 @@ public final class HelperXML {
 		final String timeValue = xmlStringDecode(tag, attribute, isThrow);
 
 		if (timeValue == null || timeValue.length() == 0) {
-			return com.barchart.util.value.impl.ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		try {
@@ -657,7 +657,7 @@ public final class HelperXML {
 				throw new IllegalArgumentException("attribute not valid : "
 						+ attribute);
 			} else {
-				return com.barchart.util.value.impl.ValueConst.NULL_TIME;
+				return Time.NULL;
 			}
 		}
 
@@ -680,7 +680,7 @@ public final class HelperXML {
 		final String timeValue = xmlStringDecode(atr, attribute, isThrow);
 
 		if (timeValue == null || timeValue.length() == 0) {
-			return com.barchart.util.value.impl.ValueConst.NULL_TIME;
+			return Time.NULL;
 		}
 
 		try {
@@ -691,7 +691,7 @@ public final class HelperXML {
 				throw new IllegalArgumentException("attribute not valid : "
 						+ attribute);
 			} else {
-				return com.barchart.util.value.impl.ValueConst.NULL_TIME;
+				return Time.NULL;
 			}
 		}
 

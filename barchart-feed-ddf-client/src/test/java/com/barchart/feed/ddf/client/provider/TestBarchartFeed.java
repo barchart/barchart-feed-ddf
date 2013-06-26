@@ -47,7 +47,7 @@ public class TestBarchartFeed {
 		
 		//myAgent.include(ExchangeFactory.fromName("CME"));
 		
-		myAgent.include("GOOG");
+		myAgent.include("ESU13");
 		
 		Thread.sleep(700000);
 		
@@ -68,9 +68,5 @@ public class TestBarchartFeed {
 		return sb.toString();
 		
 	}
-	
-	
-	
-	
 	
 }
