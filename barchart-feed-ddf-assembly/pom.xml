@@ -90,6 +90,20 @@
 			<scope>provided</scope>
 		</dependency>
 
+  		<dependency>
+			<groupId>com.sleepycat</groupId>
+			<artifactId>je</artifactId>
+			<version>${bdbjeVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>${protoBufVersion}</version>
+			<scope>provided</scope>
+		</dependency>	
+
 	</dependencies>
 
 	<properties>
@@ -202,11 +216,9 @@
 							*;scope=compile;inline=true,
 						</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
-<!-- 						<Export-Package> -->
-<!-- 							com.barchart.util.*;version=${barchartUtilVersion}, -->
-<!-- 							com.barchart.feed.*;version=${barchartFeedVersion}, -->
-<!-- 							com.barchart.feed.ddf.*;version=${project.parent.version}, -->
-<!-- 						</Export-Package> -->
+						<Export-Package>
+							com.barchart.*,
+						</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>

@@ -43,8 +43,8 @@
 		<barchartNettyVersion>3.5.12.Final</barchartNettyVersion>
 <!-- 		<barchartProtoInstVersion>1.2.0</barchartProtoInstVersion> -->
 
-<!-- 		<bdbjeVersion>4.0.92</bdbjeVersion> -->
-<!-- 		<protoBufVersion>2.4.1</protoBufVersion> -->
+		<bdbjeVersion>4.0.92</bdbjeVersion>
+		<protoBufVersion>2.4.1</protoBufVersion>
 
 	</properties>
 
