@@ -17,7 +17,6 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
 import com.barchart.feed.api.model.PriceLevel;
 import com.barchart.feed.api.model.data.Book;
@@ -81,7 +80,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	private final Instrument instrument;
 	
-	VarBookDDF(final Instrument instrument, final BookLiquidityType type, 
+	VarBookDDF(final Instrument instrument, final Book.Type type, 
 			final SizeValue size, final PriceValue step) {
 		// XXX
 		this.instrument = instrument;
@@ -103,7 +102,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 		// NOTE: This only updates top.  Full book is not incrementally updated
 		// for unknown reason.  
 
-		final EntryMap map = map(side);
+		//final EntryMap map = map(side);
 
 		switch (side) {
 		case BID:

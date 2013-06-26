@@ -48,11 +48,10 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
@@ -228,8 +227,8 @@ public final class InstrumentXML {
 		map.put(InstrumentField.GUID, new InstrumentGUID(guid));
 		map.put(MARKET_GUID, guid);
 		map.put(SECURITY_TYPE, SecurityType.NULL_TYPE);
-		map.put(BOOK_LIQUIDITY, BookLiquidityType.NONE);
-		map.put(BOOK_STRUCTURE, BookStructureType.NONE);
+		map.put(BOOK_LIQUIDITY, Instrument.BookLiquidityType.NONE);
+		map.put(BOOK_STRUCTURE, Instrument.BookStructureType.NONE);
 		map.put(BOOK_DEPTH, ValueConst.NULL_SIZE);
 		map.put(VENDOR, newText("Barchart"));
 		map.put(SYMBOL, symbolReal);

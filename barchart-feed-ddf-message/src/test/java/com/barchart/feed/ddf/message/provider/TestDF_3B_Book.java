@@ -22,8 +22,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
 import com.barchart.feed.api.enums.MarketSide;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -191,7 +191,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 	static MarketBookEntry newEntry(final MarketSide side, final int place,
 			final long mant, final int exp, final int size) {
 		return new DefBookEntry(MODIFY, side, 
-				BookLiquidityType.DEFAULT, place,
+				Book.Type.DEFAULT, place,
 				ValueBuilder.newPrice(mant, exp), ValueBuilder.newSize(size));
 	}
 

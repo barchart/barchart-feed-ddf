@@ -15,10 +15,9 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
-import com.barchart.feed.api.enums.BookStructureType;
 import com.barchart.feed.api.enums.MarketCurrency;
 import com.barchart.feed.api.enums.SecurityType;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.Manifest;
@@ -57,8 +56,8 @@ public class TestInstrumentXML {
 		
 		assertTrue(IBMInst.get(MARKET_GUID).equals("1298146"));
 		assertTrue(IBMInst.get(SECURITY_TYPE) == SecurityType.NULL_TYPE);
-		assertTrue(IBMInst.get(BOOK_LIQUIDITY) == BookLiquidityType.NONE);
-		assertTrue(IBMInst.get(BOOK_STRUCTURE) == BookStructureType.NONE);
+		assertTrue(IBMInst.get(BOOK_LIQUIDITY) == Instrument.BookLiquidityType.NONE);
+		assertTrue(IBMInst.get(BOOK_STRUCTURE) == Instrument.BookStructureType.NONE);
 		assertTrue(IBMInst.get(BOOK_DEPTH) == ValueConst.NULL_SIZE);
 		assertTrue(IBMInst.get(VENDOR).equals(newText("Barchart")));
 		assertTrue(IBMInst.get(SYMBOL).equals(newText("IBM")));

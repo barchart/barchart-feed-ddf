@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.api.enums.BookLiquidityType.*;
+import static com.barchart.feed.api.model.data.Book.Type.*;
 import static com.barchart.feed.api.enums.MarketSide.ASK;
 import static com.barchart.feed.api.enums.MarketSide.BID;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
@@ -70,7 +70,6 @@ public class TestDX_XB_Book extends TestDDFBase {
 	public void testDecodeSpreadXML() {
 
 		final DX_XB_Book msg = new DX_XB_Book();
-		final MarketBookEntry entry;
 
 		final ByteBuffer buffer = ByteBuffer.wrap(baXBsp);
 

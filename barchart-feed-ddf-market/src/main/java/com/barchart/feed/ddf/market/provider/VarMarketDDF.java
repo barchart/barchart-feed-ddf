@@ -39,7 +39,7 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.enums.BookLiquidityType;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
@@ -394,7 +394,24 @@ class VarMarketDDF extends VarMarket {
 
 		if (book.isFrozen()) {
 
-			final BookLiquidityType type = instrument.liquidityType();
+			Book.Type type = null;
+			switch(instrument.liquidityType()) {
+			default :
+				type = Book.Type.NONE;
+				break;
+			case NONE:
+				type = Book.Type.NONE;
+				break;
+			case DEFAULT:
+				type = Book.Type.DEFAULT;
+				break;
+			case IMPLIED:
+				type = Book.Type.IMPLIED;
+				break;
+			case COMBINED:
+				type = Book.Type.COMBINED;
+				break;
+			}
 			final SizeValue size = LIMIT;
 			// TODO ValueConverter
 			final Price tempStep = instrument.tickSize();
