@@ -26,6 +26,7 @@ import com.barchart.missive.core.ObjectMap;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.provider.ValueConst;
 
 public class TestInstrumentXML {
@@ -68,7 +69,7 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.get(TICK_SIZE).equals(newPrice(0.01)));
 		assertTrue(IBMInst.get(POINT_VALUE).equals(newPrice(1)));
 		assertTrue(IBMInst.get(DISPLAY_FRACTION).equals(factory.newFraction(10, -2)));
-		assertTrue(IBMInst.get(LIFETIME) == (com.barchart.util.value.impl.ValueConst.NULL_TIME_INTERVAL));
+		assertTrue(IBMInst.get(LIFETIME) == TimeInterval.NULL);
 		assertTrue(IBMInst.get(MARKET_HOURS).size() == 0);
 		assertTrue(IBMInst.get(TIME_ZONE_OFFSET).equals(newSize(-18000000)));
 		assertTrue(IBMInst.get(TIME_ZONE_NAME).equals(newText("NEW_YORK")));
