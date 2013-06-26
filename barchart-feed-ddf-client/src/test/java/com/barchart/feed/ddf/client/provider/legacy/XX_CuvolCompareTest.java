@@ -6,9 +6,7 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
-import com.barchart.feed.api.model.CuvolEntry;
 import com.barchart.feed.api.model.data.Cuvol;
-import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -33,7 +31,7 @@ public class XX_CuvolCompareTest {
 				
 				System.out.println("AGENT: " +
 				v.instrument().symbol() + " " +
-				printCuvol(v.cuvolList()));
+				printCuvol(v.entryList()));
 				
 			}
 			
@@ -55,12 +53,12 @@ public class XX_CuvolCompareTest {
 		
 	}
 	
-	public static String printCuvol(final List<CuvolEntry> entries) {
+	public static String printCuvol(final List<Cuvol.Entry> entries) {
 		
 		final StringBuilder sb = new StringBuilder();
 		
-		for(final CuvolEntry e : entries) {
-			sb.append(e.volume().asDouble() + "\t");
+		for(final Cuvol.Entry e : entries) {
+			sb.append(e.size().asDouble() + "\t");
 		}
 		
 		return sb.toString();
@@ -97,7 +95,7 @@ public class XX_CuvolCompareTest {
 					com.barchart.feed.base.market.api.Market v) {
 				
 				System.out.println("TAKER: " + v.instrument().symbol() +  " " +
-						printCuvol(v.cuvol().cuvolList()) + "\n");
+						printCuvol(v.cuvol().entryList()) + "\n");
 				
 			}
 		

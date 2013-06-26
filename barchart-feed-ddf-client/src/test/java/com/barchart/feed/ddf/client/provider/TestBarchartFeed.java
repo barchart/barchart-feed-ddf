@@ -9,7 +9,7 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
-import com.barchart.feed.api.model.CuvolEntry;
+import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartFeed;
 
@@ -33,7 +33,7 @@ public class TestBarchartFeed {
 				log.debug(
 				v.instrument().symbol() + "\n" +
 
-				printCuvol(v.cuvol().cuvolList()));
+				printCuvol(v.cuvol().entryList()));
 				
 			}
 			
@@ -56,11 +56,11 @@ public class TestBarchartFeed {
 		
 	}
 	
-	public static String printCuvol(final List<CuvolEntry> entries) {
+	public static String printCuvol(final List<Cuvol.Entry> entries) {
 		
 		final StringBuilder sb = new StringBuilder();
 		
-		for(final CuvolEntry e : entries) {
+		for(final Cuvol.Entry e : entries) {
 			sb.append(e.toString() + "\n");
 		}
 		
