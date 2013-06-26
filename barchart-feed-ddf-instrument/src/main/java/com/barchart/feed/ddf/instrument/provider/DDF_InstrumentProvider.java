@@ -140,7 +140,7 @@ public final class DDF_InstrumentProvider {
 	 * 
 	 * @param symbol
 	 *            the symbol
-	 * @return resolved instrument or {@link #NULL_INSTRUMENT}
+	 * @return resolved instrument or {@link #NULL}
 	 */
 	public static List<Instrument> find(final CharSequence symbol) {
 		return instance().lookup(formatSymbol(symbol));

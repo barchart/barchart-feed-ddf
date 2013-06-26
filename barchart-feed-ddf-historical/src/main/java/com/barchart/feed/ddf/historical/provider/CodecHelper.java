@@ -462,7 +462,7 @@ final class CodecHelper {
 
 	static Instrument decodeInstrument(/* local */final String symbol) {
 		if (isEmpty(symbol)) {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 		// if (DDF_Symbology.isFutureHistorical(symbol)) {
 		// symbol = DDF_Symbology.futureNormalFromHistorical(symbol);

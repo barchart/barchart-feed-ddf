@@ -157,7 +157,7 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 			guid = remote.lookup(symbol.toString().toUpperCase());
 		}
 		
-		if(guid.equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
+		if(guid.equals(InstrumentGUID.NULL)) {
 			return Collections.emptyList();
 		}
 		

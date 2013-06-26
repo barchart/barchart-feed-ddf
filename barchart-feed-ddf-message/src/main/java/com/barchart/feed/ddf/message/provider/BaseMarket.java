@@ -77,7 +77,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	public final Instrument getInstrument() {
 		final List<Instrument> insts = DDF_InstrumentProvider.find(getId());
 		if(insts.isEmpty()) {
-			return Instrument.NULL_INSTRUMENT;
+			return Instrument.NULL;
 		}
 		return DDF_InstrumentProvider.find(getId()).get(0);
 	}

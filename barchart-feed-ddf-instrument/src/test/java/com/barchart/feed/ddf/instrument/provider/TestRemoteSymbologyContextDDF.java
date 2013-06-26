@@ -45,7 +45,7 @@ public class TestRemoteSymbologyContextDDF {
 		
 		final InstrumentGUID guidFail = ctx.lookup(FAIL_1);
 		
-		assertTrue(guidFail.equals(InstrumentGUID.NULL_INSTRUMENT_GUID));
+		assertTrue(guidFail.equals(InstrumentGUID.NULL));
 		assertTrue(ctx.failedMap.containsKey(FAIL_1));
 		
 	}
@@ -69,7 +69,7 @@ public class TestRemoteSymbologyContextDDF {
 		assertTrue(symbolMap.containsKey(INST_2));
 		assertTrue(symbolMap.containsKey(FAIL_1));
 		
-		assertTrue(symbolMap.get(FAIL_1).equals(InstrumentGUID.NULL_INSTRUMENT_GUID));
+		assertTrue(symbolMap.get(FAIL_1).equals(InstrumentGUID.NULL));
 		
 	}
 	

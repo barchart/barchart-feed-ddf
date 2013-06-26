@@ -23,13 +23,13 @@ public class LocalCacheSymbologyContextDDF implements SymbologyContext<CharSeque
 	public InstrumentGUID lookup(final CharSequence symbol) {
 		
 		if(symbol == null || symbol.length() == 0) {
-			return InstrumentGUID.NULL_INSTRUMENT_GUID;
+			return InstrumentGUID.NULL;
 		}
 		
 		final InstrumentGUID guid = symbolMap.get(symbol);
 		
 		if(guid == null) {
-			return InstrumentGUID.NULL_INSTRUMENT_GUID;
+			return InstrumentGUID.NULL;
 		} else {
 			return guid;
 		}

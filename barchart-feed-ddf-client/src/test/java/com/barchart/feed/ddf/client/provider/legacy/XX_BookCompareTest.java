@@ -30,7 +30,7 @@ final static String SYMBOL = "ESU3";
 				
 				final Top top = v.top();
 				
-				if(top == Top.NULL_TOP_OF_BOOK) {
+				if(top == Top.NULL) {
 					System.out.println("TOP OF BOOK NULL");
 				} else {
 				

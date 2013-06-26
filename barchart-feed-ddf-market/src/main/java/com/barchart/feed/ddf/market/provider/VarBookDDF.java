@@ -282,11 +282,6 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public Book copy() {
-		return this.freeze();
-	}
-
-	@Override
 	public Instrument instrument() {
 		return instrument;
 	}

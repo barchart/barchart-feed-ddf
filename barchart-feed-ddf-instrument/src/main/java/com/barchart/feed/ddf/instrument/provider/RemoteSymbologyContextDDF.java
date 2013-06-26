@@ -99,14 +99,14 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 				gMap.put(symbol,  symbolMap.get(symbol));
 				iter.remove();
 			} else if(failedMap.containsKey(symbol)) {
-				gMap.put(symbol, InstrumentGUID.NULL_INSTRUMENT_GUID);
+				gMap.put(symbol, InstrumentGUID.NULL);
 				iter.remove();
 			}
 		}
 		
 		/* Seed lookup values in result map with null */
 		for(final CharSequence sym : symbols) {
-			gMap.put(sym, InstrumentGUID.NULL_INSTRUMENT_GUID);
+			gMap.put(sym, InstrumentGUID.NULL);
 		}
 		
 		try {
@@ -118,7 +118,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 		/* Cache all failed lookups */
 		for(final Entry<CharSequence, InstrumentGUID> e : gMap.entrySet()) {
 			
-			if(e.getValue().equals(InstrumentGUID.NULL_INSTRUMENT_GUID)) {
+			if(e.getValue().equals(InstrumentGUID.NULL)) {
 				failedMap.put(e.getKey(), "");
 			}
 			
@@ -157,7 +157,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			
 			if(instDOM == null || instDOM.isNull()) {
 				failedMap.put(symbol, "");
-				return InstrumentGUID.NULL_INSTRUMENT_GUID;
+				return InstrumentGUID.NULL;
 			}
 			
 			InstrumentGUID guid = new InstrumentGUID(
@@ -177,11 +177,11 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 		} catch (final SymbolNotFoundException se) {
 			log.debug("HTTP status failed on {}", symbol);
 			failedMap.put(symbol, "");
-			return InstrumentGUID.NULL_INSTRUMENT_GUID;
+			return InstrumentGUID.NULL;
 		} catch (final Exception e) {
 			log.error("Symbol remote lookup failed for {}, {}", symbol, e.getMessage());
 			failedMap.put(symbol, "");
-			return InstrumentGUID.NULL_INSTRUMENT_GUID;
+			return InstrumentGUID.NULL;
 		}
 		
 	}
