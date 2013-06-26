@@ -16,7 +16,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
@@ -55,7 +54,7 @@ public class TestInstrumentXML {
 		System.out.println(IBMInst.toString());
 		
 		assertTrue(IBMInst.get(MARKET_GUID).equals("1298146"));
-		assertTrue(IBMInst.get(SECURITY_TYPE) == SecurityType.NULL_TYPE);
+		assertTrue(IBMInst.get(SECURITY_TYPE) == Instrument.SecurityType.NULL_TYPE);
 		assertTrue(IBMInst.get(BOOK_LIQUIDITY) == Instrument.BookLiquidityType.NONE);
 		assertTrue(IBMInst.get(BOOK_STRUCTURE) == Instrument.BookStructureType.NONE);
 		assertTrue(IBMInst.get(BOOK_DEPTH) == ValueConst.NULL_SIZE);

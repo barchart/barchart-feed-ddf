@@ -49,7 +49,6 @@ import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
 import com.barchart.feed.api.enums.MarketCurrency;
-import com.barchart.feed.api.enums.SecurityType;
 import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
@@ -226,7 +225,7 @@ public final class InstrumentXML {
 		
 		map.put(InstrumentField.GUID, new InstrumentGUID(guid));
 		map.put(MARKET_GUID, guid);
-		map.put(SECURITY_TYPE, SecurityType.NULL_TYPE);
+		map.put(SECURITY_TYPE, Instrument.SecurityType.NULL_TYPE);
 		map.put(BOOK_LIQUIDITY, Instrument.BookLiquidityType.NONE);
 		map.put(BOOK_STRUCTURE, Instrument.BookStructureType.NONE);
 		map.put(BOOK_DEPTH, ValueConst.NULL_SIZE);
