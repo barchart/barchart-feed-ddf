@@ -12,10 +12,10 @@ package com.barchart.feed.ddf.datalink.provider;
 
 import java.util.Set;
 
-import com.barchart.feed.api.connection.Subscription;
-import com.barchart.feed.api.connection.SubscriptionType;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
+import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.SubscriptionType;
 
 /**
  * Represents a subscription to a single instrument for JERQ.

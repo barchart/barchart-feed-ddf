@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.ConnectionState;
 import com.barchart.feed.api.connection.ConnectionStateListener;
-import com.barchart.feed.api.connection.Subscription;
+import com.barchart.feed.base.sub.Subscription;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;

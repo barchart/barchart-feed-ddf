@@ -1,6 +1,6 @@
 package com.barchart.feed.ddf.datalink.provider;
 
-import static com.barchart.feed.api.connection.SubscriptionType.*;
+import static com.barchart.feed.base.sub.SubscriptionType.*;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -10,9 +10,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.barchart.feed.api.connection.SubscriptionType;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
+import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.ddf.util.FeedDDF;
 
 public final class DDF_FeedInterest {

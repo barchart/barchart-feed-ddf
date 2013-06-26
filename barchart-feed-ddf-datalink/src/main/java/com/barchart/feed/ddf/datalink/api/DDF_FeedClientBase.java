@@ -14,8 +14,8 @@ import java.util.Set;
 import java.util.concurrent.Future;
 
 import com.barchart.feed.api.connection.ConnectionStateListener;
-import com.barchart.feed.api.connection.Subscription;
-import com.barchart.feed.api.connection.SubscriptionHandler;
+import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.util.anno.UsedOnce;
 

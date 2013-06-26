@@ -46,7 +46,6 @@ public class TestBarchartFeed {
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
 		//myAgent.include(ExchangeFactory.fromName("CME"));
-		
 		myAgent.include("ESU13");
 		
 		Thread.sleep(700000);
@@ -66,7 +65,6 @@ public class TestBarchartFeed {
 		}
 		
 		return sb.toString();
-		
 	}
 	
 }

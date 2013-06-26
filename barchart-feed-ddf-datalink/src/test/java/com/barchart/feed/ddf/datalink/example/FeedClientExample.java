@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.ConnectionStateListener;
-import com.barchart.feed.api.connection.SubscriptionType;
+import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
