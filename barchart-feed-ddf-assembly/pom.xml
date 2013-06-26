@@ -202,11 +202,11 @@
 							*;scope=compile;inline=true,
 						</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
-						<Export-Package>
-							com.barchart.util.*;version=${barchartUtilVersion},
-							com.barchart.feed.*;version=${barchartFeedVersion},
-							com.barchart.feed.ddf.*;version=${project.parent.version},
-						</Export-Package>
+<!-- 						<Export-Package> -->
+<!-- 							com.barchart.util.*;version=${barchartUtilVersion}, -->
+<!-- 							com.barchart.feed.*;version=${barchartFeedVersion}, -->
+<!-- 							com.barchart.feed.ddf.*;version=${project.parent.version}, -->
+<!-- 						</Export-Package> -->
 					</instructions>
 				</configuration>
 			</plugin>
