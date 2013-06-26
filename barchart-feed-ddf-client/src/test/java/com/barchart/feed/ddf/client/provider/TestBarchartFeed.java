@@ -23,7 +23,7 @@ public class TestBarchartFeed {
 		final String password = System.getProperty("barchart.password");
 		
 		final Feed feed = BarchartFeed.builder().username(username).
-				password(password).useLocalInstDatabase().build();
+				password(password).build();
 		
 		final MarketObserver<Market> callback = new MarketObserver<Market>() {
 
