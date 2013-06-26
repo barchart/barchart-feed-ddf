@@ -1,13 +1,7 @@
-<!--
-
-    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com />
-
-    All rights reserved. Licensed under the OSI BSD License.
-
-    http://www.opensource.org/licenses/bsd-license.php
-
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com /> All 
+	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -27,8 +21,8 @@
 		<url>https://github.com/barchart/barchart-feed-ddf</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
-	  <tag>4_0</tag>
-  </scm>
+		<tag>4_0</tag>
+	</scm>
 
 	<dependencies>
 
@@ -90,7 +84,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-  		<dependency>
+		<dependency>
 			<groupId>com.sleepycat</groupId>
 			<artifactId>je</artifactId>
 			<version>${bdbjeVersion}</version>
@@ -102,7 +96,7 @@
 			<artifactId>protobuf-java</artifactId>
 			<version>${protoBufVersion}</version>
 			<scope>provided</scope>
-		</dependency>	
+		</dependency>
 
 	</dependencies>
 
@@ -202,7 +196,6 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<configuration>
 					<instructions>
-						<_failok>true</_failok>
 						<_removeheaders>
 							Service-Component,
 							Include-Resource,
@@ -210,6 +203,8 @@
 							Ignore-Package,
 						</_removeheaders>
 						<Import-Package>
+							<!-- jackson is optional dependency from legacy util-values -->
+							!org.codehaus.jackson.*,
 							*,
 						</Import-Package>
 						<Embed-Dependency>
@@ -217,7 +212,7 @@
 						</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
 						<Export-Package>
-							com.barchart.*,
+							com.barchart.*;-noimport:=true,
 						</Export-Package>
 					</instructions>
 				</configuration>
