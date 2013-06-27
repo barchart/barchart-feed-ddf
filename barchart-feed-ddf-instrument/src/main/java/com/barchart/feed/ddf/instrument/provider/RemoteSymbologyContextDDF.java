@@ -26,8 +26,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.barchart.feed.api.inst.InstrumentGUID;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.util.InstrumentGUID;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.SymbologyContext;

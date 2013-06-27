@@ -32,8 +32,7 @@ public class XX_SessionCompareTest {
 				v.open().asDouble() + " " +
 				v.high().asDouble() + " " +
 				v.low().asDouble() + " " +
-				v.volume().asDouble() + " " +
-				v.previous().close().asDouble()
+				v.volume().asDouble()
 				
 				);
 				
@@ -89,8 +88,7 @@ public class XX_SessionCompareTest {
 						v.session().open().asDouble() + " " +
 						v.session().high().asDouble() + " " +
 						v.session().low().asDouble() + " " +
-						v.session().volume().asDouble() + " " +
-						v.session().previous().close().asDouble()
+						v.session().volume().asDouble()
 						
 						+ "\n");
 				

@@ -48,9 +48,9 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
-import com.barchart.feed.api.inst.InstrumentGUID;
-import com.barchart.feed.api.inst.MarketCurrency;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;

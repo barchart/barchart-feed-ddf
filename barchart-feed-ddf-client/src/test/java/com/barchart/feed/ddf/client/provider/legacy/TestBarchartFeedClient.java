@@ -113,7 +113,7 @@ public class TestBarchartFeedClient {
 
 					if (!barCurrent.isNull()) {
 						sb.append("; price=")
-								.append(barCurrent.get(MarketBarField.CLOSE)
+								.append(barCurrent.close()
 										.mantissa())
 								.append("; time=")
 								.append(barCurrent.get(MarketBarField.BAR_TIME)

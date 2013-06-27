@@ -5,6 +5,7 @@ import com.barchart.feed.api.Feed;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.SessionSet;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -23,19 +24,19 @@ public class XX_SettleCompareTest {
 		
 		final TestableFeed feed = new TestableFeed(username, password);
 		
-		final MarketObserver<Session> callback = new MarketObserver<Session>() {
+		final MarketObserver<SessionSet> callback = new MarketObserver<SessionSet>() {
 	
 			@Override
-			public void onNext(final Session v) {
+			public void onNext(final SessionSet v) {
 				
-				if(v.isSettled()) {
+				if(v.session(Session.Type.DEFAULT_CURRENT).isSettled()) {
 				
 					System.out.println("AGENT: " +
 					v.instrument().symbol() + " " +
-					"IS SETTLED: " + v.isSettled() + " " +
-					" @ " + v.settle() + " " +
+					"IS SETTLED: " + v.session(Session.Type.DEFAULT_CURRENT).isSettled() + " " +
+					" @ " + v.session(Session.Type.DEFAULT_CURRENT).settle() + " " +
 					" PREVIOUS = " +
-					v.previous().close().asDouble()
+					v.session(Session.Type.DEFAULT_PREVIOUS).close().asDouble()
 					
 					);
 				}
@@ -47,7 +48,7 @@ public class XX_SettleCompareTest {
 		
 		start.get();
 		
-		final Agent myAgent = feed.newAgent(Session.class, callback);
+		final Agent myAgent = feed.newAgent(SessionSet.class, callback);
 		
 		final Instrument inst = DDF_InstrumentProvider.find(SYMBOL).get(0);
 		
@@ -92,8 +93,8 @@ public class XX_SettleCompareTest {
 			System.out.println("TAKER: " + v.instrument().symbol() +  " " +
 					"IS SETTLED: " + v.session().isSettled() + " " +
 					" @ " + v.session().settle() + " " +
-					" PREVIOUS = " +
-					v.session().previous().close().asDouble()
+					" PREVIOUS = " 
+					//v.session().previous().close().asDouble()
 					
 					+ "\n");
 			
