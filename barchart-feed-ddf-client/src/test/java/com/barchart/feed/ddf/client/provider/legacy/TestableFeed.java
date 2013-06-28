@@ -16,10 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.Feed;
+import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.ConnectionFuture;
-import com.barchart.feed.api.connection.ConnectionStateListener;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
@@ -47,7 +47,7 @@ import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.values.api.Value;
 
-public class TestableFeed implements Feed {
+public class TestableFeed implements Marketplace {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(TestableFeed.class);
@@ -67,7 +67,7 @@ public class TestableFeed implements Feed {
 	private volatile LocalInstrumentDBMap dbMap = null;
 	
 	@SuppressWarnings("unused")
-	private volatile ConnectionStateListener stateListener;
+	private volatile Connection.Monitor stateListener;
 	
 	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
 			new CopyOnWriteArrayList<TimestampListener>();
@@ -168,7 +168,7 @@ public class TestableFeed implements Feed {
 	private final AtomicBoolean isShuttingdown = new AtomicBoolean(false);
 	
 	@Override
-	public ConnectionFuture<Feed> startup() {
+	public ConnectionFuture<Marketplace> startup() {
 		
 		// Consider dummy future?
 		if(isStartingup.get()) {
@@ -181,7 +181,7 @@ public class TestableFeed implements Feed {
 		
 		isStartingup.set(true);
 		
-		final ConnectionFuture<Feed> future = new ConnectionFuture<Feed>();
+		final ConnectionFuture<Marketplace> future = new ConnectionFuture<Marketplace>();
 		
 		executor.execute(new StartupRunnable(future));
 		
@@ -191,9 +191,9 @@ public class TestableFeed implements Feed {
 	
 	private final class StartupRunnable implements Runnable {
 
-		private final ConnectionFuture<Feed> future;
+		private final ConnectionFuture<Marketplace> future;
 		
-		StartupRunnable(final ConnectionFuture<Feed> future) {
+		StartupRunnable(final ConnectionFuture<Marketplace> future) {
 			this.future = future;
 		}
 
@@ -237,7 +237,7 @@ public class TestableFeed implements Feed {
 	}
 
 	@Override
-	public ConnectionFuture<Feed> shutdown() {
+	public ConnectionFuture<Marketplace> shutdown() {
 		
 		// Consider dummy future?
 		if(isStartingup.get()) {
@@ -250,7 +250,7 @@ public class TestableFeed implements Feed {
 		
 		isShuttingdown.set(true);
 		
-		final ConnectionFuture<Feed> future = new ConnectionFuture<Feed>();
+		final ConnectionFuture<Marketplace> future = new ConnectionFuture<Marketplace>();
 		
 		executor.execute(new ShutdownRunnable(future));
 		
@@ -259,9 +259,9 @@ public class TestableFeed implements Feed {
 	
 	private final class ShutdownRunnable implements Runnable {
 
-		private final ConnectionFuture<Feed> future;
+		private final ConnectionFuture<Marketplace> future;
 		
-		ShutdownRunnable(final ConnectionFuture<Feed> future) {
+		ShutdownRunnable(final ConnectionFuture<Marketplace> future) {
 			this.future = future;
 		}
 		
@@ -305,7 +305,7 @@ public class TestableFeed implements Feed {
 	}
 
 	@Override
-	public void bindConnectionStateListener(ConnectionStateListener listener) {
+	public void bindConnectionStateListener(Connection.Monitor listener) {
 		
 		stateListener = listener;
 

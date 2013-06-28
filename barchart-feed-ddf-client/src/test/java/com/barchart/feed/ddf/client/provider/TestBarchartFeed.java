@@ -6,12 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.Feed;
+import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartFeed;
+import com.barchart.feed.inst.provider.Exchanges;
 
 public class TestBarchartFeed {
 	
@@ -22,8 +23,11 @@ public class TestBarchartFeed {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 		
-		final Feed feed = BarchartFeed.builder().username(username).
-				password(password).build();
+		final Marketplace feed = BarchartFeed.builder().
+				username(username).
+				password(password).
+				useLocalInstDatabase().
+				build();
 		
 		final MarketObserver<Market> callback = new MarketObserver<Market>() {
 
@@ -39,14 +43,14 @@ public class TestBarchartFeed {
 			
 		};
 		
-		final ConnectionFuture<Feed> start = feed.startup();
+		final ConnectionFuture<Marketplace> start = feed.startup();
 		
 		start.get();
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		//myAgent.include(ExchangeFactory.fromName("CME"));
-		myAgent.include("ESU13");
+		myAgent.include(Exchanges.fromName("CME"));
+		//myAgent.include("ESU13");
 		
 		Thread.sleep(700000);
 		

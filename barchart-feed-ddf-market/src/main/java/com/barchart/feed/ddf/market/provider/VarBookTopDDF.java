@@ -48,12 +48,12 @@ final class VarBookTopDDF extends ValueFreezer<MarketBookTop> implements
 	}
 
 	@Override
-	public Book.PriceLevel bid() {
+	public Book.Entry bid() {
 		return book.top(Book.Side.BID);
 	}
 
 	@Override
-	public Book.PriceLevel ask() {
+	public Book.Entry ask() {
 		return book.top(Book.Side.ASK);
 	}
 

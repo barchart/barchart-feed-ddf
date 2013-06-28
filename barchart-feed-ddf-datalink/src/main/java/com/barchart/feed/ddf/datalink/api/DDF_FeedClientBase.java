@@ -13,7 +13,7 @@ package com.barchart.feed.ddf.datalink.api;
 import java.util.Set;
 import java.util.concurrent.Future;
 
-import com.barchart.feed.api.connection.ConnectionStateListener;
+import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.base.sub.Subscription;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
@@ -49,7 +49,7 @@ public interface DDF_FeedClientBase extends SubscriptionHandler {
 	 * Attach single feed state listener to the client.
 	 */
 	@UsedOnce
-	void bindStateListener(ConnectionStateListener stateListener);
+	void bindStateListener(Connection.Monitor stateListener);
 	
 	/**
 	 * Handles multiple subscription requests.

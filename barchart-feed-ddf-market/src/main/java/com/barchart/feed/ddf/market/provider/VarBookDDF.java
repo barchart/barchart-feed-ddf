@@ -236,7 +236,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public PriceLevel lastBookUpdate() {
+	public Entry lastBookUpdate() {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 
@@ -277,7 +277,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	}
 
 	@Override
-	public List<PriceLevel> entryList(Book.Side side) {
+	public List<Entry> entryList(Book.Side side) {
 		throw new UnsupportedOperationException("UNUSED");
 	}
 

@@ -42,8 +42,7 @@ import org.jboss.netty.util.HashedWheelTimer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.connection.ConnectionState;
-import com.barchart.feed.api.connection.ConnectionStateListener;
+import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.base.sub.Subscription;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
@@ -107,8 +106,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private volatile DDF_MessageListener msgListener = null;
 
-	private final CopyOnWriteArrayList<ConnectionStateListener> feedListeners = 
-			new CopyOnWriteArrayList<ConnectionStateListener>();
+	private final CopyOnWriteArrayList<Connection.Monitor> feedListeners = 
+			new CopyOnWriteArrayList<Connection.Monitor>();
 
 	//
 
@@ -390,17 +389,17 @@ class FeedClientDDF implements DDF_FeedClient {
 					if (DDF_FeedEvent.isConnectionError(event)) {
 
 						log.info("Setting feed state to logged out");
-						updateFeedStateListeners(ConnectionState.LOGGED_OUT);
+						updateFeedStateListeners(Connection.State.CONNECTED);
 
 					} else if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
 
 						log.info("Login success, feed state updated");
-						updateFeedStateListeners(ConnectionState.LOGGED_IN);
+						updateFeedStateListeners(Connection.State.CONNECTED);
 
 					} else if (event == DDF_FeedEvent.LOGOUT) {
 
 						log.info("Setting feed state to logged out");
-						updateFeedStateListeners(ConnectionState.LOGGED_OUT);
+						updateFeedStateListeners(Connection.State.DISCONNECTED);
 
 					}
 
@@ -414,7 +413,7 @@ class FeedClientDDF implements DDF_FeedClient {
 							threadNumber);
 
 					log.info("Setting feed state to logged out");
-					updateFeedStateListeners(ConnectionState.LOGGED_OUT);
+					updateFeedStateListeners(Connection.State.DISCONNECTED);
 
 					Thread.currentThread().interrupt();
 
@@ -1029,7 +1028,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	@Override
 	public synchronized void bindStateListener(
-			final ConnectionStateListener stateListener) {
+			final Connection.Monitor stateListener) {
 		feedListeners.add(stateListener);
 	}
 
@@ -1088,7 +1087,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 				log.warn("Setting feed state to attempting login");
 
-				updateFeedStateListeners(ConnectionState.ATTEMPTING_LOGIN);
+				updateFeedStateListeners(Connection.State.CONNECTING);
 
 				loginThread = new Thread(
 						new LoginRunnable(delay, threadNumber), "# DDF Login "
@@ -1103,9 +1102,10 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	}
 
-	private void updateFeedStateListeners(final ConnectionState state) {
-		for (final ConnectionStateListener listener : feedListeners) {
-			listener.listen(state);
+	private void updateFeedStateListeners(final Connection.State state) {
+		for (final Connection.Monitor listener : feedListeners) {
+			// FIXME Monitor not implemented yet, so this needs to be a Monitor
+			listener.handle(state, null);
 		}
 	}
 

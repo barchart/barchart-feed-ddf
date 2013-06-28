@@ -1,7 +1,7 @@
 package com.barchart.feed.ddf.client.provider.legacy;
 
 import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.Feed;
+import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.data.Book.Top;
@@ -14,7 +14,7 @@ import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 public class XX_BookCompareTest {
 
-final static String SYMBOL = "ESU3";
+final static String SYMBOL = "CLN3";
 	
 	public static void main(final String[] args) throws Exception {
 		
@@ -49,7 +49,7 @@ final static String SYMBOL = "ESU3";
 			
 		};
 		
-		final ConnectionFuture<Feed> start = feed.startup();
+		final ConnectionFuture<Marketplace> start = feed.startup();
 		
 		start.get();
 		

@@ -16,7 +16,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.Manifest;
@@ -62,7 +61,6 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.get(SYMBOL).equals(newText("IBM")));
 		assertTrue(IBMInst.get(DESCRIPTION).equals("International Business Machines Corp."));
 		assertTrue(IBMInst.get(CFI_CODE).equals(newText("EXXXXX")));
-		assertTrue(IBMInst.get(CURRENCY_CODE) == MarketCurrency.USD);
 		assertTrue(IBMInst.get(EXCHANGE_CODE).equals(newText("N")));
 		assertTrue(IBMInst.get(TICK_SIZE).equals(newPrice(0.01)));
 		assertTrue(IBMInst.get(POINT_VALUE).equals(newPrice(1)));

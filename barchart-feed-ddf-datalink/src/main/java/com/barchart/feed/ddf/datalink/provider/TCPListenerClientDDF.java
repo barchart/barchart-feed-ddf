@@ -29,7 +29,7 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.connection.ConnectionStateListener;
+import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.base.sub.Subscription;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -207,7 +207,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public void bindStateListener(final ConnectionStateListener stateListener) {
+	public void bindStateListener(final Connection.Monitor stateListener) {
 		// TODO Implement connection notifications for TCP listeners
 	}
 

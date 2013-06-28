@@ -8,10 +8,10 @@
 package bench;
 
 import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.Feed;
+import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.ConnectionFuture;
-import com.barchart.feed.api.model.data.Book.PriceLevel;
+import com.barchart.feed.api.model.data.Book.Entry;
 import com.barchart.feed.api.model.data.Book.Top;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartFeed;
@@ -42,7 +42,7 @@ public class Receiver {
 			throw new RuntimeException("Bad arguments passed to main");
 		}
 		
-		final Feed feed = new BarchartFeed(args[0], args[1]);
+		final Marketplace feed = new BarchartFeed(args[0], args[1]);
 
 		final MarketObserver<Market> observer = new MarketObserver<Market>() {
 
@@ -56,7 +56,7 @@ public class Receiver {
 
 				final Top top = value.book().top();
 				
-				PriceLevel entry = top.ask();
+				Entry entry = top.ask();
 				
 				if (!entry.isNull()) {
 					sb.append(" ASK TOP").append(" price=")
@@ -79,7 +79,7 @@ public class Receiver {
 			
 		};
 		
-		final ConnectionFuture<Feed> start = feed.startup();
+		final ConnectionFuture<Marketplace> start = feed.startup();
 		
 		start.get();
 		

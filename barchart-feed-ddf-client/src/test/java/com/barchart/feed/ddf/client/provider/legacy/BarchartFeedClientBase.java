@@ -31,7 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.connection.ConnectionStateListener;
+import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
@@ -66,7 +66,7 @@ abstract class BarchartFeedClientBase {
 	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
 			new CopyOnWriteArrayList<TimestampListener>();
 
-	private ConnectionStateListener stateListener;
+	private Connection.Monitor stateListener;
 
 	public BarchartFeedClientBase() {
 		maker = DDF_MarketService.newInstance();
@@ -145,7 +145,7 @@ abstract class BarchartFeedClientBase {
 	 * @param listener
 	 *            The listener to be bound.
 	 */
-	public void bindFeedStateListener(final ConnectionStateListener listener) {
+	public void bindFeedStateListener(final Connection.Monitor listener) {
 
 		stateListener = listener;
 

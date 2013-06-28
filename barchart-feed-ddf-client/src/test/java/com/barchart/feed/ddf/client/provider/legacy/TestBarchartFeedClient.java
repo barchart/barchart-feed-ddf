@@ -13,8 +13,7 @@ package com.barchart.feed.ddf.client.provider.legacy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.connection.ConnectionState;
-import com.barchart.feed.api.connection.ConnectionStateListener;
+import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
@@ -45,12 +44,12 @@ public class TestBarchartFeedClient {
 
 		final Instrument[] instruments = 
 				client.lookup("GOOG").toArray(new Instrument[0]);
-		final ConnectionStateListener feedListener = new ConnectionStateListener() {
+		final Connection.Monitor feedListener = new Connection.Monitor() {
 
 			@Override
-			public void listen(final ConnectionState state) {
+			public void handle(final Connection.State state, Connection connection) {
 
-				if (state == ConnectionState.LOGGED_IN) {
+				if (state == Connection.State.CONNECTED) {
 					client.addTaker(TakerFactory.makeFactory(instruments));
 				}
 

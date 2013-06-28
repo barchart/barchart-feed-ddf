@@ -22,7 +22,6 @@ import static com.barchart.feed.inst.InstrumentField.BOOK_DEPTH;
 import static com.barchart.feed.inst.InstrumentField.BOOK_LIQUIDITY;
 import static com.barchart.feed.inst.InstrumentField.BOOK_STRUCTURE;
 import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
-import static com.barchart.feed.inst.InstrumentField.CURRENCY_CODE;
 import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.inst.InstrumentField.DISPLAY_FRACTION;
 import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
@@ -50,7 +49,6 @@ import org.xml.sax.Attributes;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.InstrumentGUID;
-import com.barchart.feed.api.util.MarketCurrency;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
@@ -233,7 +231,6 @@ public final class InstrumentXML {
 		map.put(SYMBOL, symbolReal);
 		map.put(DESCRIPTION, newText(symbolComment));
 		map.put(CFI_CODE, newText(codeCFI));
-		map.put(CURRENCY_CODE, MarketCurrency.USD);
 		map.put(EXCHANGE_CODE, newText(new byte[]{(exchange.code)}));
 		map.put(TICK_SIZE, priceStep);
 		map.put(POINT_VALUE, pricePoint);

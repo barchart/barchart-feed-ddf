@@ -114,7 +114,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			final SizeValue size, final TimeValue time, final TimeValue date) {
 		super.setTrade(type, session, sequencing, price, size, time, date);
 		
-		//log.debug("Set trade, firing callbacks");
+		log.debug("Set trade, firing callbacks");
 		
 		fireCallbacks(Trade.class);
 		fireCallbacks(Cuvol.class);  // HACK FOR DDF
