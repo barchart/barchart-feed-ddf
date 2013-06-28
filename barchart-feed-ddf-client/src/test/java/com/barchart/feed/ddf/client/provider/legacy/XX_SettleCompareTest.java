@@ -1,9 +1,7 @@
 package com.barchart.feed.ddf.client.provider.legacy;
 
 import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
-import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.SessionSet;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -44,9 +42,7 @@ public class XX_SettleCompareTest {
 			
 		};
 	
-		final ConnectionFuture<Marketplace> start = feed.startup();
-		
-		start.get();
+		feed.startup();
 		
 		final Agent myAgent = feed.newAgent(SessionSet.class, callback);
 		

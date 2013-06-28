@@ -10,7 +10,6 @@ package bench;
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
-import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.data.Book.Entry;
 import com.barchart.feed.api.model.data.Book.Top;
 import com.barchart.feed.api.model.data.Market;
@@ -79,9 +78,7 @@ public class Receiver {
 			
 		};
 		
-		final ConnectionFuture<Marketplace> start = feed.startup();
-		
-		start.get();
+		feed.startup();
 		
 		final Agent myAgent = feed.newAgent(Market.class, observer);
 		

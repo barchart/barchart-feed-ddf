@@ -1,9 +1,7 @@
 package com.barchart.feed.ddf.client.provider.legacy;
 
 import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
-import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
@@ -37,9 +35,7 @@ public class XX_TradeCompareTest {
 			
 		};
 		
-		final ConnectionFuture<Marketplace> start = feed.startup();
-		
-		start.get();
+		feed.startup();
 		
 		final Agent myAgent = feed.newAgent(Trade.class, callback);
 		

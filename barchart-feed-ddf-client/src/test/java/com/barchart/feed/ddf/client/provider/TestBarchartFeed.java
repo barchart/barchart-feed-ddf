@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
-import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartFeed;
@@ -43,9 +42,7 @@ public class TestBarchartFeed {
 			
 		};
 		
-		final ConnectionFuture<Marketplace> start = feed.startup();
-		
-		start.get();
+		feed.startup();
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		

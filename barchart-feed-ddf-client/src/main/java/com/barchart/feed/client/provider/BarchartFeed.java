@@ -18,7 +18,6 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection;
-import com.barchart.feed.api.connection.ConnectionFuture;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
@@ -196,7 +195,7 @@ public class BarchartFeed implements Marketplace {
 	private final AtomicBoolean isShuttingdown = new AtomicBoolean(false);
 	
 	@Override
-	public synchronized ConnectionFuture<Marketplace> startup() {
+	public synchronized void startup() {
 		
 		// Consider dummy future?
 		if(isStartingup.get()) {
@@ -209,21 +208,13 @@ public class BarchartFeed implements Marketplace {
 		
 		isStartingup.set(true);
 		
-		final ConnectionFuture<Marketplace> future = new ConnectionFuture<Marketplace>();
+		executor.execute(new StartupRunnable());
 		
-		executor.execute(new StartupRunnable(future));
-		
-		return future;
+		/** Currently just letting it run */
 		
 	}
 	
 	private final class StartupRunnable implements Runnable {
-
-		private final ConnectionFuture<Marketplace> future;
-		
-		StartupRunnable(final ConnectionFuture<Marketplace> future) {
-			this.future = future;
-		}
 
 		/*
 		 * Ensures instrument database is installed/updated before
@@ -255,21 +246,17 @@ public class BarchartFeed implements Marketplace {
 				
 				isStartingup.set(false);
 				
-				future.fail(t);
-				
 				return;
 			}
 			
 			isStartingup.set(false);
-			
-			future.succeed(BarchartFeed.this);
 			
 		}
 		
 	}
 	
 	@Override
-	public synchronized ConnectionFuture<Marketplace> shutdown() {
+	public synchronized void shutdown() {
 
 		// Consider dummy future?
 		if(isStartingup.get()) {
@@ -282,22 +269,14 @@ public class BarchartFeed implements Marketplace {
 		
 		isShuttingdown.set(true);
 		
-		final ConnectionFuture<Marketplace> future = new ConnectionFuture<Marketplace>();
+		executor.execute(new ShutdownRunnable());
 		
-		executor.execute(new ShutdownRunnable(future));
-		
-		return future;
+		/** Currently just letting it run */
 
 	}
 	
 	private final class ShutdownRunnable implements Runnable {
 
-		private final ConnectionFuture<Marketplace> future;
-		
-		ShutdownRunnable(final ConnectionFuture<Marketplace> future) {
-			this.future = future;
-		}
-		
 		@Override
 		public void run() {
 			
@@ -321,15 +300,11 @@ public class BarchartFeed implements Marketplace {
 				
 				isShuttingdown.set(false);
 				
-				future.fail(t);
-				
 				return;
 			}
 			
 			
 			isShuttingdown.set(false);
-			
-			future.succeed(BarchartFeed.this);
 			
 			log.debug("Barchart Feed shutdown succeeded");
 			
