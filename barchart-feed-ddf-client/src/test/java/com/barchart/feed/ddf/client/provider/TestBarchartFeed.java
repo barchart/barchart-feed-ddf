@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.connection.Connection;
+import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartMarketplace;
@@ -34,7 +36,7 @@ public class TestBarchartFeed {
 			public void onNext(final Market v) {
 				
 				log.debug(
-				v.instrument().symbol() + "\n" +
+				v.instrument().symbol() + " " +
 
 				v.book().top().ask().price().asDouble() + " " +
 				v.book().top().bid().price().asDouble());
@@ -45,16 +47,25 @@ public class TestBarchartFeed {
 			
 		};
 		
+		feed.bindConnectionStateListener(new Connection.Monitor() {
+
+			@Override
+			public void handle(State state, Connection connection) {
+				System.out.println("Connection: " + state.name());
+			}
+			
+		});
+		
 		feed.startup();
 		
-		//final Agent myAgent = feed.newAgent(Market.class, callback);
+		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
 		//myAgent.include(Exchanges.fromName("CME"));
-		//myAgent.include("ESU13");
+		myAgent.include("ESU13");
 		
 		//final Agent myAgent = feed.subscribe(Market.class, callback, "ESU13");
 		
-		final Agent myAgent = feed.subscribeMarket(callback, "$SPX");
+		//final Agent myAgent = feed.subscribeMarket(callback, "ESU3");
 		
 		Thread.sleep(700000);
 		

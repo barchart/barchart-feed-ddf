@@ -244,6 +244,7 @@ public class BarchartMarketplace implements Marketplace {
 			
 			} catch (final Throwable t) {
 				
+				log.error("Exception starting up marketplace {}", t.getMessage());
 				isStartingup.set(false);
 				
 				return;
