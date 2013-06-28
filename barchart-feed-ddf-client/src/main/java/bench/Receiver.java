@@ -13,7 +13,7 @@ import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.model.data.Book.Entry;
 import com.barchart.feed.api.model.data.Book.Top;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.client.provider.BarchartFeed;
+import com.barchart.feed.client.provider.BarchartMarketplace;
 
 /**
  * 
@@ -41,7 +41,7 @@ public class Receiver {
 			throw new RuntimeException("Bad arguments passed to main");
 		}
 		
-		final Marketplace feed = new BarchartFeed(args[0], args[1]);
+		final Marketplace feed = new BarchartMarketplace(args[0], args[1]);
 
 		final MarketObserver<Market> observer = new MarketObserver<Market>() {
 

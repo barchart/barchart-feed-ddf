@@ -41,10 +41,10 @@ import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
 
-public class BarchartFeed implements Marketplace {
+public class BarchartMarketplace implements Marketplace {
 	
 	private static final Logger log = LoggerFactory
-			.getLogger(BarchartFeed.class);
+			.getLogger(BarchartMarketplace.class);
 	
 	/* Value api factory */
 	private static final Factory factory = FactoryLoader.load();
@@ -68,11 +68,11 @@ public class BarchartFeed implements Marketplace {
 	
 	private final boolean useLocalInstDB;
 	
-	public BarchartFeed(final String username, final String password) {
+	public BarchartMarketplace(final String username, final String password) {
 		this(username, password, getDefault(), getTempFolder(), false);
 	}
 	
-	BarchartFeed(final String username, final String password, 
+	BarchartMarketplace(final String username, final String password, 
 			final ExecutorService ex, final File dbFolder, final boolean useDB) {
 		
 		executor  = ex;
@@ -134,7 +134,7 @@ public class BarchartFeed implements Marketplace {
 		}
 		
 		public Marketplace build() {
-			return new BarchartFeed(username, password, executor, dbFolder, 
+			return new BarchartMarketplace(username, password, executor, dbFolder, 
 					useLocalDB);
 		}
 		

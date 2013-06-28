@@ -10,7 +10,7 @@ import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.client.provider.BarchartFeed;
+import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.inst.provider.Exchanges;
 
 public class TestBarchartFeed {
@@ -22,7 +22,7 @@ public class TestBarchartFeed {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 		
-		final Marketplace feed = BarchartFeed.builder().
+		final Marketplace feed = BarchartMarketplace.builder().
 				username(username).
 				password(password).
 				useLocalInstDatabase().
@@ -36,7 +36,10 @@ public class TestBarchartFeed {
 				log.debug(
 				v.instrument().symbol() + "\n" +
 
-				printCuvol(v.cuvol().entryList()));
+				v.book().top().ask().price().asDouble() + " " +
+				v.book().top().bid().price().asDouble());
+				
+				//printCuvol(v.cuvol().entryList()));
 				
 			}
 			
@@ -44,10 +47,14 @@ public class TestBarchartFeed {
 		
 		feed.startup();
 		
-		final Agent myAgent = feed.newAgent(Market.class, callback);
+		//final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		myAgent.include(Exchanges.fromName("CME"));
+		//myAgent.include(Exchanges.fromName("CME"));
 		//myAgent.include("ESU13");
+		
+		//final Agent myAgent = feed.subscribe(Market.class, callback, "ESU13");
+		
+		final Agent myAgent = feed.subscribeMarket(callback, "$SPX");
 		
 		Thread.sleep(700000);
 		

@@ -12,7 +12,7 @@ import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 public class XX_BookCompareTest {
 
-final static String SYMBOL = "ESU3";
+final static String SYMBOL = "CLU13";
 	
 	public static void main(final String[] args) throws Exception {
 		
