@@ -1,0 +1,128 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package com.barchart.feed.ddf.instrument.provider;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    import java.util.ArrayList;<a name="line.3"></a>
+<FONT color="green">004</FONT>    import java.util.Collections;<a name="line.4"></a>
+<FONT color="green">005</FONT>    import java.util.List;<a name="line.5"></a>
+<FONT color="green">006</FONT>    <a name="line.6"></a>
+<FONT color="green">007</FONT>    import javax.xml.parsers.DocumentBuilder;<a name="line.7"></a>
+<FONT color="green">008</FONT>    import javax.xml.parsers.DocumentBuilderFactory;<a name="line.8"></a>
+<FONT color="green">009</FONT>    <a name="line.9"></a>
+<FONT color="green">010</FONT>    import org.joda.time.DateTime;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import org.joda.time.format.DateTimeFormat;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import org.joda.time.format.DateTimeFormatter;<a name="line.12"></a>
+<FONT color="green">013</FONT>    import org.w3c.dom.Element;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import org.w3c.dom.NodeList;<a name="line.14"></a>
+<FONT color="green">015</FONT>    <a name="line.15"></a>
+<FONT color="green">016</FONT>    public class TestVersionParser {<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>            private static final String S3_URL = "https://s3.amazonaws.com/instrument-def/";<a name="line.18"></a>
+<FONT color="green">019</FONT>            <a name="line.19"></a>
+<FONT color="green">020</FONT>            private static final DateTimeFormatter TIMESTAMP_FORMATTER = <a name="line.20"></a>
+<FONT color="green">021</FONT>                            DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");<a name="line.21"></a>
+<FONT color="green">022</FONT>            <a name="line.22"></a>
+<FONT color="green">023</FONT>            public static void main(final String[] args) throws Exception {<a name="line.23"></a>
+<FONT color="green">024</FONT>                    <a name="line.24"></a>
+<FONT color="green">025</FONT>                    <a name="line.25"></a>
+<FONT color="green">026</FONT>                    System.out.println(getLatestVersion());<a name="line.26"></a>
+<FONT color="green">027</FONT>                    <a name="line.27"></a>
+<FONT color="green">028</FONT>            }<a name="line.28"></a>
+<FONT color="green">029</FONT>            <a name="line.29"></a>
+<FONT color="green">030</FONT>            private static String getLatestVersion() throws Exception {<a name="line.30"></a>
+<FONT color="green">031</FONT>                    <a name="line.31"></a>
+<FONT color="green">032</FONT>                    DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();<a name="line.32"></a>
+<FONT color="green">033</FONT>                    <a name="line.33"></a>
+<FONT color="green">034</FONT>                    Element element = db.parse(S3_URL).getDocumentElement();<a name="line.34"></a>
+<FONT color="green">035</FONT>                    NodeList nodeList = element.getChildNodes();<a name="line.35"></a>
+<FONT color="green">036</FONT>                    <a name="line.36"></a>
+<FONT color="green">037</FONT>                    List&lt;DateTime&gt; versionTimes = new ArrayList&lt;DateTime&gt;();<a name="line.37"></a>
+<FONT color="green">038</FONT>                    <a name="line.38"></a>
+<FONT color="green">039</FONT>                    for(int i = 0; i &lt; nodeList.getLength(); i++) {<a name="line.39"></a>
+<FONT color="green">040</FONT>                            <a name="line.40"></a>
+<FONT color="green">041</FONT>                            if(nodeList.item(i).getNodeName().equals("Contents")) {<a name="line.41"></a>
+<FONT color="green">042</FONT>                                    <a name="line.42"></a>
+<FONT color="green">043</FONT>                                    NodeList contentNodes = nodeList.item(i).getChildNodes();<a name="line.43"></a>
+<FONT color="green">044</FONT>                                    for(int n = 0; n &lt; contentNodes.getLength(); n++) {<a name="line.44"></a>
+<FONT color="green">045</FONT>                                            <a name="line.45"></a>
+<FONT color="green">046</FONT>                                            if(contentNodes.item(n).getNodeName().equals("LastModified")) {<a name="line.46"></a>
+<FONT color="green">047</FONT>                                                    versionTimes.add(TIMESTAMP_FORMATTER.parseDateTime(<a name="line.47"></a>
+<FONT color="green">048</FONT>                                                                    contentNodes.item(n).getTextContent().split("\\.")[0]));<a name="line.48"></a>
+<FONT color="green">049</FONT>                                            }<a name="line.49"></a>
+<FONT color="green">050</FONT>                                            <a name="line.50"></a>
+<FONT color="green">051</FONT>                                    }<a name="line.51"></a>
+<FONT color="green">052</FONT>                                    <a name="line.52"></a>
+<FONT color="green">053</FONT>                            }<a name="line.53"></a>
+<FONT color="green">054</FONT>                    }<a name="line.54"></a>
+<FONT color="green">055</FONT>                    <a name="line.55"></a>
+<FONT color="green">056</FONT>                    Collections.sort(versionTimes);<a name="line.56"></a>
+<FONT color="green">057</FONT>                    <a name="line.57"></a>
+<FONT color="green">058</FONT>                    return TIMESTAMP_FORMATTER.print(versionTimes.get(versionTimes.size() - 1));<a name="line.58"></a>
+<FONT color="green">059</FONT>                    <a name="line.59"></a>
+<FONT color="green">060</FONT>            }<a name="line.60"></a>
+<FONT color="green">061</FONT>            <a name="line.61"></a>
+<FONT color="green">062</FONT>    }<a name="line.62"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

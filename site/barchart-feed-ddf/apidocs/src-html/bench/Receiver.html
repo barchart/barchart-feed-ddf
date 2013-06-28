@@ -10,139 +10,92 @@
 <FONT color="green">007</FONT>     */<a name="line.7"></a>
 <FONT color="green">008</FONT>    package bench;<a name="line.8"></a>
 <FONT color="green">009</FONT>    <a name="line.9"></a>
-<FONT color="green">010</FONT>    import com.barchart.feed.base.bar.api.MarketBar;<a name="line.10"></a>
-<FONT color="green">011</FONT>    import com.barchart.feed.base.book.api.MarketBookEntry;<a name="line.11"></a>
-<FONT color="green">012</FONT>    import com.barchart.feed.base.book.api.MarketBookTop;<a name="line.12"></a>
-<FONT color="green">013</FONT>    import com.barchart.feed.base.book.enums.MarketBookSide;<a name="line.13"></a>
-<FONT color="green">014</FONT>    import com.barchart.feed.base.instrument.enums.InstrumentField;<a name="line.14"></a>
-<FONT color="green">015</FONT>    import com.barchart.feed.base.instrument.values.MarketInstrument;<a name="line.15"></a>
-<FONT color="green">016</FONT>    import com.barchart.feed.base.market.api.Market;<a name="line.16"></a>
-<FONT color="green">017</FONT>    import com.barchart.feed.base.market.api.MarketTaker;<a name="line.17"></a>
-<FONT color="green">018</FONT>    import com.barchart.feed.base.market.enums.MarketEvent;<a name="line.18"></a>
-<FONT color="green">019</FONT>    import com.barchart.feed.base.market.enums.MarketField;<a name="line.19"></a>
-<FONT color="green">020</FONT>    import com.barchart.feed.client.provider.BarchartFeedReceiver;<a name="line.20"></a>
-<FONT color="green">021</FONT>    import com.barchart.util.values.util.ValueUtil;<a name="line.21"></a>
-<FONT color="green">022</FONT>    <a name="line.22"></a>
-<FONT color="green">023</FONT>    /**<a name="line.23"></a>
-<FONT color="green">024</FONT>     * <a name="line.24"></a>
-<FONT color="green">025</FONT>     * you can invoke this utility from command line:<a name="line.25"></a>
-<FONT color="green">026</FONT>     * <a name="line.26"></a>
-<FONT color="green">027</FONT>     * &lt;pre&gt;<a name="line.27"></a>
-<FONT color="green">028</FONT>     * java - jar barchart-feed-ddf-client-X.Y.Z.jar bench.Receiver TCP 7500 IBM<a name="line.28"></a>
-<FONT color="green">029</FONT>     * &lt;/pre&gt;<a name="line.29"></a>
-<FONT color="green">030</FONT>     * <a name="line.30"></a>
-<FONT color="green">031</FONT>     * arguments = { TCP / UDP , port, instrument1, instrument2, ...}<a name="line.31"></a>
-<FONT color="green">032</FONT>     * <a name="line.32"></a>
-<FONT color="green">033</FONT>     */<a name="line.33"></a>
-<FONT color="green">034</FONT>    public class Receiver {<a name="line.34"></a>
-<FONT color="green">035</FONT>    <a name="line.35"></a>
-<FONT color="green">036</FONT>            /**<a name="line.36"></a>
-<FONT color="green">037</FONT>             * <a name="line.37"></a>
-<FONT color="green">038</FONT>             * @param args<a name="line.38"></a>
-<FONT color="green">039</FONT>             * @throws Exception<a name="line.39"></a>
-<FONT color="green">040</FONT>             */<a name="line.40"></a>
-<FONT color="green">041</FONT>            public static void main(final String... args) throws Exception {<a name="line.41"></a>
-<FONT color="green">042</FONT>    <a name="line.42"></a>
-<FONT color="green">043</FONT>                    final int INST_START = 2;<a name="line.43"></a>
-<FONT color="green">044</FONT>    <a name="line.44"></a>
-<FONT color="green">045</FONT>                    if (args == null) {<a name="line.45"></a>
-<FONT color="green">046</FONT>                            throw new RuntimeException("No arguments passed to main");<a name="line.46"></a>
-<FONT color="green">047</FONT>                    }<a name="line.47"></a>
-<FONT color="green">048</FONT>    <a name="line.48"></a>
-<FONT color="green">049</FONT>                    final BarchartFeedReceiver client = new BarchartFeedReceiver();<a name="line.49"></a>
-<FONT color="green">050</FONT>    <a name="line.50"></a>
-<FONT color="green">051</FONT>                    final MarketInstrument[] instruments = new MarketInstrument[args.length<a name="line.51"></a>
-<FONT color="green">052</FONT>                                    - INST_START];<a name="line.52"></a>
-<FONT color="green">053</FONT>    <a name="line.53"></a>
-<FONT color="green">054</FONT>                    for (int i = INST_START; i &lt; args.length; i++) {<a name="line.54"></a>
-<FONT color="green">055</FONT>                            instruments[i - INST_START] = client.lookup(args[i]);<a name="line.55"></a>
-<FONT color="green">056</FONT>                    }<a name="line.56"></a>
-<FONT color="green">057</FONT>    <a name="line.57"></a>
-<FONT color="green">058</FONT>                    if (args[0].equals("TCP")) {<a name="line.58"></a>
-<FONT color="green">059</FONT>                            client.listenTCP(Integer.parseInt(args[1]), false);<a name="line.59"></a>
-<FONT color="green">060</FONT>                    } else if (args[0].equals("UDP")) {<a name="line.60"></a>
-<FONT color="green">061</FONT>                            client.listenUDP(Integer.parseInt(args[1]), false);<a name="line.61"></a>
-<FONT color="green">062</FONT>                    } else {<a name="line.62"></a>
-<FONT color="green">063</FONT>                            throw new RuntimeException("Bad protocol, expecting UDP or TCP");<a name="line.63"></a>
-<FONT color="green">064</FONT>                    }<a name="line.64"></a>
-<FONT color="green">065</FONT>    <a name="line.65"></a>
-<FONT color="green">066</FONT>                    client.addAllMarketsTaker(TakerFactory.makeTaker(instruments));<a name="line.66"></a>
-<FONT color="green">067</FONT>    <a name="line.67"></a>
-<FONT color="green">068</FONT>                    System.in.read();<a name="line.68"></a>
-<FONT color="green">069</FONT>                    client.shutdown();<a name="line.69"></a>
-<FONT color="green">070</FONT>                    System.exit(0);<a name="line.70"></a>
-<FONT color="green">071</FONT>    <a name="line.71"></a>
-<FONT color="green">072</FONT>            }<a name="line.72"></a>
+<FONT color="green">010</FONT>    import com.barchart.feed.api.Agent;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import com.barchart.feed.api.Marketplace;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import com.barchart.feed.api.MarketObserver;<a name="line.12"></a>
+<FONT color="green">013</FONT>    import com.barchart.feed.api.model.data.Book.Entry;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import com.barchart.feed.api.model.data.Book.Top;<a name="line.14"></a>
+<FONT color="green">015</FONT>    import com.barchart.feed.api.model.data.Market;<a name="line.15"></a>
+<FONT color="green">016</FONT>    import com.barchart.feed.client.provider.BarchartMarketplace;<a name="line.16"></a>
+<FONT color="green">017</FONT>    <a name="line.17"></a>
+<FONT color="green">018</FONT>    /**<a name="line.18"></a>
+<FONT color="green">019</FONT>     * <a name="line.19"></a>
+<FONT color="green">020</FONT>     * you can invoke this utility from command line:<a name="line.20"></a>
+<FONT color="green">021</FONT>     * <a name="line.21"></a>
+<FONT color="green">022</FONT>     * &lt;pre&gt;<a name="line.22"></a>
+<FONT color="green">023</FONT>     * java - jar barchart-feed-ddf-client-X.Y.Z.jar bench.Receiver TCP 7500 IBM<a name="line.23"></a>
+<FONT color="green">024</FONT>     * &lt;/pre&gt;<a name="line.24"></a>
+<FONT color="green">025</FONT>     * <a name="line.25"></a>
+<FONT color="green">026</FONT>     * arguments = { TCP / UDP , port, instrument1, instrument2, ...}<a name="line.26"></a>
+<FONT color="green">027</FONT>     * <a name="line.27"></a>
+<FONT color="green">028</FONT>     */<a name="line.28"></a>
+<FONT color="green">029</FONT>    public class Receiver {<a name="line.29"></a>
+<FONT color="green">030</FONT>    <a name="line.30"></a>
+<FONT color="green">031</FONT>            // TODO<a name="line.31"></a>
+<FONT color="green">032</FONT>            <a name="line.32"></a>
+<FONT color="green">033</FONT>            /**<a name="line.33"></a>
+<FONT color="green">034</FONT>             * <a name="line.34"></a>
+<FONT color="green">035</FONT>             * @param args<a name="line.35"></a>
+<FONT color="green">036</FONT>             * @throws Exception<a name="line.36"></a>
+<FONT color="green">037</FONT>             */<a name="line.37"></a>
+<FONT color="green">038</FONT>            public static void main(final String... args) throws Exception {<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>                    if (args == null || args.length &lt; 3) {<a name="line.40"></a>
+<FONT color="green">041</FONT>                            throw new RuntimeException("Bad arguments passed to main");<a name="line.41"></a>
+<FONT color="green">042</FONT>                    }<a name="line.42"></a>
+<FONT color="green">043</FONT>                    <a name="line.43"></a>
+<FONT color="green">044</FONT>                    final Marketplace feed = new BarchartMarketplace(args[0], args[1]);<a name="line.44"></a>
+<FONT color="green">045</FONT>    <a name="line.45"></a>
+<FONT color="green">046</FONT>                    final MarketObserver&lt;Market&gt; observer = new MarketObserver&lt;Market&gt;() {<a name="line.46"></a>
+<FONT color="green">047</FONT>    <a name="line.47"></a>
+<FONT color="green">048</FONT>                            @Override<a name="line.48"></a>
+<FONT color="green">049</FONT>                            public void onNext(Market value) {<a name="line.49"></a>
+<FONT color="green">050</FONT>                                    <a name="line.50"></a>
+<FONT color="green">051</FONT>                                    final StringBuilder sb = new StringBuilder(value.instrument().marketGUID())<a name="line.51"></a>
+<FONT color="green">052</FONT>                                            .append(" ")<a name="line.52"></a>
+<FONT color="green">053</FONT>                                            .append(" EventTime=")<a name="line.53"></a>
+<FONT color="green">054</FONT>                                            .append(value.updated());<a name="line.54"></a>
+<FONT color="green">055</FONT>    <a name="line.55"></a>
+<FONT color="green">056</FONT>                                    final Top top = value.book().top();<a name="line.56"></a>
+<FONT color="green">057</FONT>                                    <a name="line.57"></a>
+<FONT color="green">058</FONT>                                    Entry entry = top.ask();<a name="line.58"></a>
+<FONT color="green">059</FONT>                                    <a name="line.59"></a>
+<FONT color="green">060</FONT>                                    if (!entry.isNull()) {<a name="line.60"></a>
+<FONT color="green">061</FONT>                                            sb.append(" ASK TOP").append(" price=")<a name="line.61"></a>
+<FONT color="green">062</FONT>                                                            .append(entry.price().asDouble())<a name="line.62"></a>
+<FONT color="green">063</FONT>                                                            .append(" qty=").append(entry.size().asDouble());<a name="line.63"></a>
+<FONT color="green">064</FONT>                                    }<a name="line.64"></a>
+<FONT color="green">065</FONT>                                    <a name="line.65"></a>
+<FONT color="green">066</FONT>                                    entry = top.bid();<a name="line.66"></a>
+<FONT color="green">067</FONT>                                    <a name="line.67"></a>
+<FONT color="green">068</FONT>                                    if (!entry.isNull()) {<a name="line.68"></a>
+<FONT color="green">069</FONT>                                            sb.append(" BID TOP").append(" price=")<a name="line.69"></a>
+<FONT color="green">070</FONT>                                                            .append(entry.price().asDouble())<a name="line.70"></a>
+<FONT color="green">071</FONT>                                                            .append(" qty=").append(entry.size().asDouble());<a name="line.71"></a>
+<FONT color="green">072</FONT>                                    }<a name="line.72"></a>
 <FONT color="green">073</FONT>    <a name="line.73"></a>
-<FONT color="green">074</FONT>            private static class TakerFactory {<a name="line.74"></a>
+<FONT color="green">074</FONT>                                    System.out.println(sb.toString());<a name="line.74"></a>
 <FONT color="green">075</FONT>    <a name="line.75"></a>
-<FONT color="green">076</FONT>                    static MarketTaker&lt;Market&gt; makeTaker(<a name="line.76"></a>
-<FONT color="green">077</FONT>                                    final MarketInstrument[] instruments) {<a name="line.77"></a>
-<FONT color="green">078</FONT>    <a name="line.78"></a>
-<FONT color="green">079</FONT>                            return new MarketTaker&lt;Market&gt;() {<a name="line.79"></a>
-<FONT color="green">080</FONT>    <a name="line.80"></a>
-<FONT color="green">081</FONT>                                    @Override<a name="line.81"></a>
-<FONT color="green">082</FONT>                                    public MarketField&lt;Market&gt; bindField() {<a name="line.82"></a>
-<FONT color="green">083</FONT>                                            return MarketField.MARKET;<a name="line.83"></a>
-<FONT color="green">084</FONT>                                    }<a name="line.84"></a>
-<FONT color="green">085</FONT>    <a name="line.85"></a>
-<FONT color="green">086</FONT>                                    @Override<a name="line.86"></a>
-<FONT color="green">087</FONT>                                    public MarketEvent[] bindEvents() {<a name="line.87"></a>
+<FONT color="green">076</FONT>                                    <a name="line.76"></a>
+<FONT color="green">077</FONT>                            }<a name="line.77"></a>
+<FONT color="green">078</FONT>                            <a name="line.78"></a>
+<FONT color="green">079</FONT>                    };<a name="line.79"></a>
+<FONT color="green">080</FONT>                    <a name="line.80"></a>
+<FONT color="green">081</FONT>                    feed.startup();<a name="line.81"></a>
+<FONT color="green">082</FONT>                    <a name="line.82"></a>
+<FONT color="green">083</FONT>                    final Agent myAgent = feed.newAgent(Market.class, observer);<a name="line.83"></a>
+<FONT color="green">084</FONT>                    <a name="line.84"></a>
+<FONT color="green">085</FONT>                    for(int i = 2; i &lt; args.length; i++) {<a name="line.85"></a>
+<FONT color="green">086</FONT>                            myAgent.include(args[i]);<a name="line.86"></a>
+<FONT color="green">087</FONT>                    }<a name="line.87"></a>
 <FONT color="green">088</FONT>    <a name="line.88"></a>
-<FONT color="green">089</FONT>                                            return new MarketEvent[] { MarketEvent.MARKET_UPDATED };<a name="line.89"></a>
-<FONT color="green">090</FONT>    <a name="line.90"></a>
-<FONT color="green">091</FONT>                                    }<a name="line.91"></a>
+<FONT color="green">089</FONT>                    System.in.read();<a name="line.89"></a>
+<FONT color="green">090</FONT>                    feed.shutdown();<a name="line.90"></a>
+<FONT color="green">091</FONT>                    System.exit(0);<a name="line.91"></a>
 <FONT color="green">092</FONT>    <a name="line.92"></a>
-<FONT color="green">093</FONT>                                    @Override<a name="line.93"></a>
-<FONT color="green">094</FONT>                                    public MarketInstrument[] bindInstruments() {<a name="line.94"></a>
-<FONT color="green">095</FONT>    <a name="line.95"></a>
-<FONT color="green">096</FONT>                                            return instruments;<a name="line.96"></a>
-<FONT color="green">097</FONT>    <a name="line.97"></a>
-<FONT color="green">098</FONT>                                    }<a name="line.98"></a>
-<FONT color="green">099</FONT>    <a name="line.99"></a>
-<FONT color="green">100</FONT>                                    @Override<a name="line.100"></a>
-<FONT color="green">101</FONT>                                    public void onMarketEvent(final MarketEvent event,<a name="line.101"></a>
-<FONT color="green">102</FONT>                                                    final MarketInstrument instrument, final Market value) {<a name="line.102"></a>
-<FONT color="green">103</FONT>    <a name="line.103"></a>
-<FONT color="green">104</FONT>                                            final StringBuilder sb = new StringBuilder(value.get(<a name="line.104"></a>
-<FONT color="green">105</FONT>                                                            MarketField.INSTRUMENT).get(InstrumentField.ID))<a name="line.105"></a>
-<FONT color="green">106</FONT>                                                            .append(" ")<a name="line.106"></a>
-<FONT color="green">107</FONT>                                                            .append(event)<a name="line.107"></a>
-<FONT color="green">108</FONT>                                                            .append(" EventTime=")<a name="line.108"></a>
-<FONT color="green">109</FONT>                                                            .append(value.get(MarketField.MARKET_TIME)<a name="line.109"></a>
-<FONT color="green">110</FONT>                                                                            .asDateTime().toString());<a name="line.110"></a>
-<FONT color="green">111</FONT>    <a name="line.111"></a>
-<FONT color="green">112</FONT>                                            final MarketBookTop top = value.get(MarketField.BOOK_TOP);<a name="line.112"></a>
-<FONT color="green">113</FONT>    <a name="line.113"></a>
-<FONT color="green">114</FONT>                                            MarketBookEntry entry = top.side(MarketBookSide.ASK);<a name="line.114"></a>
-<FONT color="green">115</FONT>    <a name="line.115"></a>
-<FONT color="green">116</FONT>                                            if (!entry.isNull()) {<a name="line.116"></a>
-<FONT color="green">117</FONT>                                                    sb.append(" ASK TOP").append(" price=")<a name="line.117"></a>
-<FONT color="green">118</FONT>                                                                    .append(ValueUtil.asDouble(entry.price()))<a name="line.118"></a>
-<FONT color="green">119</FONT>                                                                    .append(" qty=").append(entry.size().asLong());<a name="line.119"></a>
-<FONT color="green">120</FONT>                                            }<a name="line.120"></a>
-<FONT color="green">121</FONT>    <a name="line.121"></a>
-<FONT color="green">122</FONT>                                            entry = top.side(MarketBookSide.BID);<a name="line.122"></a>
-<FONT color="green">123</FONT>    <a name="line.123"></a>
-<FONT color="green">124</FONT>                                            if (!entry.isNull()) {<a name="line.124"></a>
-<FONT color="green">125</FONT>                                                    sb.append(" BID TOP").append(" price=")<a name="line.125"></a>
-<FONT color="green">126</FONT>                                                                    .append(ValueUtil.asDouble(entry.price()))<a name="line.126"></a>
-<FONT color="green">127</FONT>                                                                    .append(" qty=").append(entry.size().asLong());<a name="line.127"></a>
-<FONT color="green">128</FONT>                                            }<a name="line.128"></a>
-<FONT color="green">129</FONT>    <a name="line.129"></a>
-<FONT color="green">130</FONT>                                            final MarketBar barCurrent = value<a name="line.130"></a>
-<FONT color="green">131</FONT>                                                            .get(MarketField.BAR_CURRENT);<a name="line.131"></a>
-<FONT color="green">132</FONT>    <a name="line.132"></a>
-<FONT color="green">133</FONT>                                            System.out.println(sb.toString());<a name="line.133"></a>
-<FONT color="green">134</FONT>    <a name="line.134"></a>
-<FONT color="green">135</FONT>                                    }<a name="line.135"></a>
-<FONT color="green">136</FONT>    <a name="line.136"></a>
-<FONT color="green">137</FONT>                            };<a name="line.137"></a>
-<FONT color="green">138</FONT>    <a name="line.138"></a>
-<FONT color="green">139</FONT>                    }<a name="line.139"></a>
-<FONT color="green">140</FONT>            }<a name="line.140"></a>
-<FONT color="green">141</FONT>    <a name="line.141"></a>
-<FONT color="green">142</FONT>    }<a name="line.142"></a>
+<FONT color="green">093</FONT>            }<a name="line.93"></a>
+<FONT color="green">094</FONT>    <a name="line.94"></a>
+<FONT color="green">095</FONT>    }<a name="line.95"></a>
 
 
 

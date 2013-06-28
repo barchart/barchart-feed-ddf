@@ -13,7 +13,7 @@
 <FONT color="green">010</FONT>    import org.slf4j.Logger;<a name="line.10"></a>
 <FONT color="green">011</FONT>    import org.slf4j.LoggerFactory;<a name="line.11"></a>
 <FONT color="green">012</FONT>    <a name="line.12"></a>
-<FONT color="green">013</FONT>    import com.barchart.feed.ddf.instrument.api.DDF_Instrument;<a name="line.13"></a>
+<FONT color="green">013</FONT>    import com.barchart.feed.api.model.meta.Instrument;<a name="line.13"></a>
 <FONT color="green">014</FONT>    import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;<a name="line.14"></a>
 <FONT color="green">015</FONT>    <a name="line.15"></a>
 <FONT color="green">016</FONT>    // TODO: Auto-generated Javadoc<a name="line.16"></a>
@@ -27,7 +27,7 @@
 <FONT color="green">024</FONT>    <a name="line.24"></a>
 <FONT color="green">025</FONT>            static final void find(final String symbol) {<a name="line.25"></a>
 <FONT color="green">026</FONT>    <a name="line.26"></a>
-<FONT color="green">027</FONT>                    final DDF_Instrument instrument = DDF_InstrumentProvider.find(symbol);<a name="line.27"></a>
+<FONT color="green">027</FONT>                    final Instrument instrument = DDF_InstrumentProvider.find(symbol).get(0);<a name="line.27"></a>
 <FONT color="green">028</FONT>    <a name="line.28"></a>
 <FONT color="green">029</FONT>                    if (instrument.isNull()) {<a name="line.29"></a>
 <FONT color="green">030</FONT>                            log.error("instrument lookup failed for : {}", symbol);<a name="line.30"></a>

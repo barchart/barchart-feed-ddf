@@ -1,4 +1,5 @@
 com.barchart.feed.ddf.client.provider
+com.barchart.feed.ddf.client.provider.legacy
 com.barchart.feed.ddf.datalink.example
 com.barchart.feed.ddf.datalink.provider
 com.barchart.feed.ddf.historical.enums

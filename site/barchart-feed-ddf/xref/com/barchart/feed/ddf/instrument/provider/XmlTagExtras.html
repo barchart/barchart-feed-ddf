@@ -76,43 +76,46 @@
 <a class="jxr_linenumber" name="66" href="#66">66</a>  	String STATUS = <span class="jxr_string">"status"</span>;
 <a class="jxr_linenumber" name="67" href="#67">67</a>  
 <a class="jxr_linenumber" name="68" href="#68">68</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> barchart globally unique identifier */</em>
-<a class="jxr_linenumber" name="69" href="#69">69</a>  	String SYMBOL_UNI = <span class="jxr_string">"guid"</span>;
+<a class="jxr_linenumber" name="69" href="#69">69</a>  	String GUID = <span class="jxr_string">"id"</span>;
 <a class="jxr_linenumber" name="70" href="#70">70</a>  
-<a class="jxr_linenumber" name="71" href="#71">71</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> used by historical query system */</em>
-<a class="jxr_linenumber" name="72" href="#72">72</a>  	String SYMBOL_HIST = <span class="jxr_string">"symbol_historical"</span>;
-<a class="jxr_linenumber" name="73" href="#73">73</a>  
-<a class="jxr_linenumber" name="74" href="#74">74</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> ddf feed codes */</em>
-<a class="jxr_linenumber" name="75" href="#75">75</a>  	String EXCHANGE_DDF = <span class="jxr_string">"exchange_ddf"</span>;
-<a class="jxr_linenumber" name="76" href="#76">76</a>  	String SYMBOL_REAL = <span class="jxr_string">"symbol_ddf"</span>;
-<a class="jxr_linenumber" name="77" href="#77">77</a>  	String SYMBOL_DDF_EXPIRE_YEAR = <span class="jxr_string">"symbol_ddf_expire_year"</span>;
-<a class="jxr_linenumber" name="78" href="#78">78</a>  	String SYMBOL_DDF_EXPIRE_MONTH = <span class="jxr_string">"symbol_ddf_expire_month"</span>;
-<a class="jxr_linenumber" name="79" href="#79">79</a>  	String BASE_CODE_DDF = <span class="jxr_string">"base_code"</span>;
-<a class="jxr_linenumber" name="80" href="#80">80</a>  
-<a class="jxr_linenumber" name="81" href="#81">81</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> not used by ddf feed; but one-to-one mapping to base code */</em>
-<a class="jxr_linenumber" name="82" href="#82">82</a>  	String UNIT_CODE_DDF = <span class="jxr_string">"unit_code"</span>;
+<a class="jxr_linenumber" name="71" href="#71">71</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> barchart globally unique symbol */</em>
+<a class="jxr_linenumber" name="72" href="#72">72</a>  	String SYMBOL_REALTIME = <span class="jxr_string">"symbol_realtime"</span>;
+<a class="jxr_linenumber" name="73" href="#73">73</a>  	
+<a class="jxr_linenumber" name="74" href="#74">74</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> used by historical query system */</em>
+<a class="jxr_linenumber" name="75" href="#75">75</a>  	String SYMBOL_HIST = <span class="jxr_string">"symbol_historical"</span>;
+<a class="jxr_linenumber" name="76" href="#76">76</a>  
+<a class="jxr_linenumber" name="77" href="#77">77</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> ddf feed codes */</em>
+<a class="jxr_linenumber" name="78" href="#78">78</a>  	String EXCHANGE_DDF = <span class="jxr_string">"exchange_ddf"</span>;
+<a class="jxr_linenumber" name="79" href="#79">79</a>  	String SYMBOL_DDF_REAL = <span class="jxr_string">"symbol_ddf"</span>;
+<a class="jxr_linenumber" name="80" href="#80">80</a>  	String SYMBOL_DDF_EXPIRE_YEAR = <span class="jxr_string">"symbol_ddf_expire_year"</span>;
+<a class="jxr_linenumber" name="81" href="#81">81</a>  	String SYMBOL_DDF_EXPIRE_MONTH = <span class="jxr_string">"symbol_ddf_expire_month"</span>;
+<a class="jxr_linenumber" name="82" href="#82">82</a>  	String BASE_CODE_DDF = <span class="jxr_string">"base_code"</span>;
 <a class="jxr_linenumber" name="83" href="#83">83</a>  
-<a class="jxr_linenumber" name="84" href="#84">84</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> implied by symbol/exchange */</em>
-<a class="jxr_linenumber" name="85" href="#85">85</a>  	String TIME_ZONE_DDF = <span class="jxr_string">"time_zone_ddf"</span>;
+<a class="jxr_linenumber" name="84" href="#84">84</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> not used by ddf feed; but one-to-one mapping to base code */</em>
+<a class="jxr_linenumber" name="85" href="#85">85</a>  	String UNIT_CODE_DDF = <span class="jxr_string">"unit_code"</span>;
 <a class="jxr_linenumber" name="86" href="#86">86</a>  
-<a class="jxr_linenumber" name="87" href="#87">87</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> <a href="<a href="http://en.wikipedia.org/wiki/Market_identification_code" target="alexandria_uri">http://en.wikipedia.org/wiki/Market_identification_code</a>" target="alexandria_uri"><a href="http://en.wikipedia.org/wiki/Market_identification_code" target="alexandria_uri">http://en.wikipedia.org/wiki/Market_identification_code</a></a> */</em>
-<a class="jxr_linenumber" name="88" href="#88">88</a>  	String EXCHANGE = <span class="jxr_string">"exchange"</span>;
-<a class="jxr_linenumber" name="89" href="#89">89</a>  	String EXCHANGE_CHANNEL = <span class="jxr_string">"exchange_channel"</span>;
-<a class="jxr_linenumber" name="90" href="#90">90</a>  	String EXCHANGE_COMMENT = <span class="jxr_string">"exchange_description"</span>;
-<a class="jxr_linenumber" name="91" href="#91">91</a>  
-<a class="jxr_linenumber" name="92" href="#92">92</a>  	String SYMBOL_CODE_CFI = <span class="jxr_string">"symbol_cfi"</span>;
-<a class="jxr_linenumber" name="93" href="#93">93</a>  
-<a class="jxr_linenumber" name="94" href="#94">94</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> expiration date, if any */</em>
-<a class="jxr_linenumber" name="95" href="#95">95</a>  	String SYMBOL_EXPIRE = <span class="jxr_string">"symbol_expire"</span>;
+<a class="jxr_linenumber" name="87" href="#87">87</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> implied by symbol/exchange */</em>
+<a class="jxr_linenumber" name="88" href="#88">88</a>  	String TIME_ZONE_DDF = <span class="jxr_string">"time_zone_ddf"</span>;
+<a class="jxr_linenumber" name="89" href="#89">89</a>  
+<a class="jxr_linenumber" name="90" href="#90">90</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> <a href="<a href="http://en.wikipedia.org/wiki/Market_identification_code" target="alexandria_uri">http://en.wikipedia.org/wiki/Market_identification_code</a>" target="alexandria_uri"><a href="http://en.wikipedia.org/wiki/Market_identification_code" target="alexandria_uri">http://en.wikipedia.org/wiki/Market_identification_code</a></a> */</em>
+<a class="jxr_linenumber" name="91" href="#91">91</a>  	String EXCHANGE = <span class="jxr_string">"exchange"</span>;
+<a class="jxr_linenumber" name="92" href="#92">92</a>  	String EXCHANGE_CHANNEL = <span class="jxr_string">"exchange_channel"</span>;
+<a class="jxr_linenumber" name="93" href="#93">93</a>  	String EXCHANGE_COMMENT = <span class="jxr_string">"exchange_description"</span>;
+<a class="jxr_linenumber" name="94" href="#94">94</a>  
+<a class="jxr_linenumber" name="95" href="#95">95</a>  	String SYMBOL_CODE_CFI = <span class="jxr_string">"symbol_cfi"</span>;
 <a class="jxr_linenumber" name="96" href="#96">96</a>  
-<a class="jxr_linenumber" name="97" href="#97">97</a>  
-<a class="jxr_linenumber" name="98" href="#98">98</a>  	String SYMBOL_COMMENT = <span class="jxr_string">"symbol_description"</span>;
+<a class="jxr_linenumber" name="97" href="#97">97</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> expiration date, if any */</em>
+<a class="jxr_linenumber" name="98" href="#98">98</a>  	String SYMBOL_EXPIRE = <span class="jxr_string">"symbol_expire"</span>;
 <a class="jxr_linenumber" name="99" href="#99">99</a>  
-<a class="jxr_linenumber" name="100" href="#100">100</a> 	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> price step expressed as ddf base code fraction */</em>
-<a class="jxr_linenumber" name="101" href="#101">101</a> 	String PRICE_TICK_INCREMENT = <span class="jxr_string">"tick_increment"</span>;
+<a class="jxr_linenumber" name="100" href="#100">100</a> 
+<a class="jxr_linenumber" name="101" href="#101">101</a> 	String SYMBOL_COMMENT = <span class="jxr_string">"symbol_description"</span>;
 <a class="jxr_linenumber" name="102" href="#102">102</a> 
-<a class="jxr_linenumber" name="103" href="#103">103</a> 	String PRICE_POINT_VALUE = <span class="jxr_string">"point_value"</span>;
-<a class="jxr_linenumber" name="104" href="#104">104</a> 
-<a class="jxr_linenumber" name="105" href="#105">105</a> }
+<a class="jxr_linenumber" name="103" href="#103">103</a> 	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> price step expressed as ddf base code fraction */</em>
+<a class="jxr_linenumber" name="104" href="#104">104</a> 	String PRICE_TICK_INCREMENT = <span class="jxr_string">"tick_increment"</span>;
+<a class="jxr_linenumber" name="105" href="#105">105</a> 
+<a class="jxr_linenumber" name="106" href="#106">106</a> 	String PRICE_POINT_VALUE = <span class="jxr_string">"point_value"</span>;
+<a class="jxr_linenumber" name="107" href="#107">107</a> 
+<a class="jxr_linenumber" name="108" href="#108">108</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

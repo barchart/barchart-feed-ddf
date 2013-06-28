@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> org.xml.sax.SAXException;
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> org.xml.sax.helpers.DefaultHandler;
 <a class="jxr_linenumber" name="31" href="#31">31</a>  
-<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.api.model.meta.Instrument;
 <a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 <a class="jxr_linenumber" name="34" href="#34">34</a>  
 <a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/resolver/provider/TaskUpdate.html">TaskUpdate</a> <strong class="jxr_keyword">implements</strong> Callable&lt;Void&gt; {
@@ -210,10 +210,10 @@
 <a class="jxr_linenumber" name="200" href="#200">200</a> 
 <a class="jxr_linenumber" name="201" href="#201">201</a> 			batchSize += symbolBatch.size();
 <a class="jxr_linenumber" name="202" href="#202">202</a> 
-<a class="jxr_linenumber" name="203" href="#203">203</a> 			<strong class="jxr_keyword">final</strong> List&lt;DDF_Instrument&gt; instrumentList = <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/DDF_InstrumentProvider.html">DDF_InstrumentProvider</a>
+<a class="jxr_linenumber" name="203" href="#203">203</a> 			<strong class="jxr_keyword">final</strong> List&lt;Instrument&gt; instrumentList = <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/DDF_InstrumentProvider.html">DDF_InstrumentProvider</a>
 <a class="jxr_linenumber" name="204" href="#204">204</a> 					.fetch(symbolBatch);
 <a class="jxr_linenumber" name="205" href="#205">205</a> 
-<a class="jxr_linenumber" name="206" href="#206">206</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> DDF_Instrument instrument : instrumentList) {
+<a class="jxr_linenumber" name="206" href="#206">206</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Instrument instrument : instrumentList) {
 <a class="jxr_linenumber" name="207" href="#207">207</a> 
 <a class="jxr_linenumber" name="208" href="#208">208</a> 				checkInterrupt(<span class="jxr_string">"intrument update"</span>);
 <a class="jxr_linenumber" name="209" href="#209">209</a> 

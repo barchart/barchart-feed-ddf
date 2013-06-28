@@ -21,11 +21,11 @@
 <a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
 <a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
 <a class="jxr_linenumber" name="13" href="#13">13</a>  
-<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.api.DDF_EntryTick;
-<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.api.DDF_Query;
-<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.api.DDF_Result;
-<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.provider.DDF_HistoricalService;
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.api.model.meta.Instrument;
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.api.DDF_EntryTick;
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.api.DDF_Query;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.api.DDF_Result;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.provider.DDF_HistoricalService;
 <a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.settings.api.DDF_Server;
 <a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.settings.api.DDF_Settings;
@@ -76,8 +76,8 @@
 <a class="jxr_linenumber" name="66" href="#66">66</a>  
 <a class="jxr_linenumber" name="67" href="#67">67</a>  		<strong class="jxr_keyword">final</strong> String symbol = <span class="jxr_string">"esu10"</span>;
 <a class="jxr_linenumber" name="68" href="#68">68</a>  
-<a class="jxr_linenumber" name="69" href="#69">69</a>  		<strong class="jxr_keyword">final</strong> DDF_Instrument instrument = <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="70" href="#70">70</a>  		DDF_InstrumentProvider.find(symbol);
+<a class="jxr_linenumber" name="69" href="#69">69</a>  		<strong class="jxr_keyword">final</strong> Instrument instrument = <em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="70" href="#70">70</a>  		DDF_InstrumentProvider.findHistorical(symbol).get(0);
 <a class="jxr_linenumber" name="71" href="#71">71</a>  
 <a class="jxr_linenumber" name="72" href="#72">72</a>  		<strong class="jxr_keyword">if</strong> (instrument.isNull()) {
 <a class="jxr_linenumber" name="73" href="#73">73</a>  			log.error(<span class="jxr_string">"can not get insrument for : {}"</span>, symbol);

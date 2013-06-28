@@ -20,7 +20,7 @@
 <a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
 <a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
 <a class="jxr_linenumber" name="12" href="#12">12</a>  
-<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.api.model.meta.Instrument;
 <a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 <a class="jxr_linenumber" name="15" href="#15">15</a>  
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_comment">// TODO: Auto-generated Javadoc</em>
@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="24" href="#24">24</a>  
 <a class="jxr_linenumber" name="25" href="#25">25</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> find(<strong class="jxr_keyword">final</strong> String symbol) {
 <a class="jxr_linenumber" name="26" href="#26">26</a>  
-<a class="jxr_linenumber" name="27" href="#27">27</a>  		<strong class="jxr_keyword">final</strong> DDF_Instrument instrument = DDF_InstrumentProvider.find(symbol);
+<a class="jxr_linenumber" name="27" href="#27">27</a>  		<strong class="jxr_keyword">final</strong> Instrument instrument = DDF_InstrumentProvider.find(symbol).get(0);
 <a class="jxr_linenumber" name="28" href="#28">28</a>  
 <a class="jxr_linenumber" name="29" href="#29">29</a>  		<strong class="jxr_keyword">if</strong> (instrument.isNull()) {
 <a class="jxr_linenumber" name="30" href="#30">30</a>  			log.error(<span class="jxr_string">"instrument lookup failed for : {}"</span>, symbol);

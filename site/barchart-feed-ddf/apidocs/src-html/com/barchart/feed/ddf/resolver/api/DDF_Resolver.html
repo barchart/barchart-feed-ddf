@@ -13,7 +13,7 @@
 <FONT color="green">010</FONT>    import java.util.List;<a name="line.10"></a>
 <FONT color="green">011</FONT>    import java.util.concurrent.Future;<a name="line.11"></a>
 <FONT color="green">012</FONT>    <a name="line.12"></a>
-<FONT color="green">013</FONT>    import com.barchart.feed.ddf.instrument.api.DDF_Instrument;<a name="line.13"></a>
+<FONT color="green">013</FONT>    import com.barchart.feed.api.model.meta.Instrument;<a name="line.13"></a>
 <FONT color="green">014</FONT>    <a name="line.14"></a>
 <FONT color="green">015</FONT>    /**<a name="line.15"></a>
 <FONT color="green">016</FONT>     * The Interface DDF_Resolver.<a name="line.16"></a>
@@ -56,7 +56,7 @@
 <FONT color="green">053</FONT>             * <a name="line.53"></a>
 <FONT color="green">054</FONT>             * http://lucene.apache.org/java/3_4_0/queryparsersyntax.html<a name="line.54"></a>
 <FONT color="green">055</FONT>             */<a name="line.55"></a>
-<FONT color="green">056</FONT>            List&lt;DDF_Instrument&gt; searchLucene(String phrase) throws Exception;<a name="line.56"></a>
+<FONT color="green">056</FONT>            List&lt;Instrument&gt; searchLucene(String phrase) throws Exception;<a name="line.56"></a>
 <FONT color="green">057</FONT>    <a name="line.57"></a>
 <FONT color="green">058</FONT>            /**<a name="line.58"></a>
 <FONT color="green">059</FONT>             * BARCHART simplified search syntax;<a name="line.59"></a>
@@ -70,7 +70,7 @@
 <FONT color="green">067</FONT>             * 3) combine all terms with "AND";<a name="line.67"></a>
 <FONT color="green">068</FONT>             * <a name="line.68"></a>
 <FONT color="green">069</FONT>             */<a name="line.69"></a>
-<FONT color="green">070</FONT>            List&lt;DDF_Instrument&gt; searchSimple(String phrase) throws Exception;<a name="line.70"></a>
+<FONT color="green">070</FONT>            List&lt;Instrument&gt; searchSimple(String phrase) throws Exception;<a name="line.70"></a>
 <FONT color="green">071</FONT>    <a name="line.71"></a>
 <FONT color="green">072</FONT>    }<a name="line.72"></a>
 

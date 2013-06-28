@@ -25,13 +25,13 @@
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.client.api.FeedStateListener;
-<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
-<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.Subscription;
-<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.enums.DDF_FeedInterest;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.enums.DDF_Transport;
-<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.api.connection.Connection;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.base.sub.SubscriptionType;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.enums.DDF_Transport;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
 <a class="jxr_linenumber" name="25" href="#25">25</a>  
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_comment">// TODO: Auto-generated Javadoc</em>
 <a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment">/**</em>
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="67" href="#67">67</a>  
 <a class="jxr_linenumber" name="68" href="#68">68</a>  		client.bindMessageListener(handler);
 <a class="jxr_linenumber" name="69" href="#69">69</a>  
-<a class="jxr_linenumber" name="70" href="#70">70</a>  		<strong class="jxr_keyword">final</strong> FeedStateListener stateListener = <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/example/ExampleFeedStateListener.html">ExampleFeedStateListener</a>();
+<a class="jxr_linenumber" name="70" href="#70">70</a>  		<strong class="jxr_keyword">final</strong> Connection.Monitor stateListener = <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/example/ExampleFeedStateListener.html">ExampleFeedStateListener</a>();
 <a class="jxr_linenumber" name="71" href="#71">71</a>  
 <a class="jxr_linenumber" name="72" href="#72">72</a>  		client.bindStateListener(stateListener);
 <a class="jxr_linenumber" name="73" href="#73">73</a>  
@@ -95,12 +95,12 @@
 <a class="jxr_linenumber" name="85" href="#85">85</a>  				<span class="jxr_string">"$OEX=BbSs"</span> +
 <a class="jxr_linenumber" name="86" href="#86">86</a>  				<span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="87" href="#87">87</a>  
-<a class="jxr_linenumber" name="88" href="#88">88</a>  		Set&lt;DDF_FeedInterest&gt; insts = <strong class="jxr_keyword">new</strong> HashSet&lt;DDF_FeedInterest&gt;();
-<a class="jxr_linenumber" name="89" href="#89">89</a>  		insts.add(DDF_FeedInterest.BOOK_SNAPSHOT);
-<a class="jxr_linenumber" name="90" href="#90">90</a>  		insts.add(DDF_FeedInterest.BOOK_UPDATE);
-<a class="jxr_linenumber" name="91" href="#91">91</a>  		insts.add(DDF_FeedInterest.QUOTE_SNAPSHOT);
-<a class="jxr_linenumber" name="92" href="#92">92</a>  		insts.add(DDF_FeedInterest.QUOTE_UPDATE);
-<a class="jxr_linenumber" name="93" href="#93">93</a>  		client.subscribe(<strong class="jxr_keyword">new</strong> Subscription(<span class="jxr_string">"$OEX"</span>, insts));
+<a class="jxr_linenumber" name="88" href="#88">88</a>  		Set&lt;SubscriptionType&gt; insts = <strong class="jxr_keyword">new</strong> HashSet&lt;SubscriptionType&gt;();
+<a class="jxr_linenumber" name="89" href="#89">89</a>  		insts.add(SubscriptionType.BOOK_SNAPSHOT);
+<a class="jxr_linenumber" name="90" href="#90">90</a>  		insts.add(SubscriptionType.BOOK_UPDATE);
+<a class="jxr_linenumber" name="91" href="#91">91</a>  		insts.add(SubscriptionType.QUOTE_SNAPSHOT);
+<a class="jxr_linenumber" name="92" href="#92">92</a>  		insts.add(SubscriptionType.QUOTE_UPDATE);
+<a class="jxr_linenumber" name="93" href="#93">93</a>  		client.subscribe(<strong class="jxr_keyword">new</strong> DDF_Subscription(<span class="jxr_string">"$OEX"</span>, insts));
 <a class="jxr_linenumber" name="94" href="#94">94</a>  <em class="jxr_comment">//		 if (!isSent) {</em>
 <a class="jxr_linenumber" name="95" href="#95">95</a>  <em class="jxr_comment">//		 log.error("invalid session");</em>
 <a class="jxr_linenumber" name="96" href="#96">96</a>  <em class="jxr_comment">//		 return;</em>

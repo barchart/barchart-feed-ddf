@@ -19,8 +19,8 @@
 <a class="jxr_linenumber" name="9" href="#9">9</a>   
 <a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.barchart.feed.ddf.historical.provider.CodecHelper.*;
 <a class="jxr_linenumber" name="11" href="#11">11</a>  
-<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
-<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.api.model.meta.Instrument;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 <a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.ascii.ASCII;
 <a class="jxr_linenumber" name="16" href="#16">16</a>  
@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_javadoccomment">	 * @param instrument the instrument</em>
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="25" href="#25">25</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../../com/barchart/feed/ddf/historical/provider/EntryMinsTrend.html">EntryMinsTrend</a>(<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/api/DDF_Instrument.html">DDF_Instrument</a> instrument) {
+<a class="jxr_linenumber" name="25" href="#25">25</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../../com/barchart/feed/ddf/historical/provider/EntryMinsTrend.html">EntryMinsTrend</a>(<strong class="jxr_keyword">final</strong> Instrument instrument) {
 <a class="jxr_linenumber" name="26" href="#26">26</a>  		<strong class="jxr_keyword">super</strong>(instrument);
 <a class="jxr_linenumber" name="27" href="#27">27</a>  	}
 <a class="jxr_linenumber" name="28" href="#28">28</a>  
@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="61" href="#61">61</a>  	@Override
 <a class="jxr_linenumber" name="62" href="#62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> decodeHead(<strong class="jxr_keyword">final</strong> String[] inputArray) {
 <a class="jxr_linenumber" name="63" href="#63">63</a>  
-<a class="jxr_linenumber" name="64" href="#64">64</a>  		millisUTC = decodeMinsTime(inputArray[0], instrument);
+<a class="jxr_linenumber" name="64" href="#64">64</a>  		millisUTC = decodeMinsTime(inputArray[0], inst);
 <a class="jxr_linenumber" name="65" href="#65">65</a>  
 <a class="jxr_linenumber" name="66" href="#66">66</a>  		ordTradeDay = DDF_TradeDay.fromMillisUTC(millisUTC).ord;
 <a class="jxr_linenumber" name="67" href="#67">67</a>  
@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="86" href="#86">86</a>  
 <a class="jxr_linenumber" name="87" href="#87">87</a>  		<strong class="jxr_keyword">final</strong> StringBuilder text = <strong class="jxr_keyword">new</strong> StringBuilder(128);
 <a class="jxr_linenumber" name="88" href="#88">88</a>  
-<a class="jxr_linenumber" name="89" href="#89">89</a>  		text.append(encodeMinsTime(millisUTC, instrument));
+<a class="jxr_linenumber" name="89" href="#89">89</a>  		text.append(encodeMinsTime(millisUTC, inst));
 <a class="jxr_linenumber" name="90" href="#90">90</a>  		text.append(ASCII.STRING_COMMA);
 <a class="jxr_linenumber" name="91" href="#91">91</a>  
 <a class="jxr_linenumber" name="92" href="#92">92</a>  		text.append(encodeMantissa(priceSupport(), priceExponent()));

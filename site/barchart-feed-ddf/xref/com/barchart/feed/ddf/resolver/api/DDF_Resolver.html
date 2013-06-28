@@ -20,7 +20,7 @@
 <a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.Future;
 <a class="jxr_linenumber" name="12" href="#12">12</a>  
-<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.api.DDF_Instrument;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.api.model.meta.Instrument;
 <a class="jxr_linenumber" name="14" href="#14">14</a>  
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_javadoccomment"> * The Interface DDF_Resolver.</em>
@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment">	 * </em>
 <a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">	 * <a href="http://lucene.apache.org/java/3_4_0/queryparsersyntax.html" target="alexandria_uri">http://lucene.apache.org/java/3_4_0/queryparsersyntax.html</a></em>
 <a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="56" href="#56">56</a>  	List&lt;DDF_Instrument&gt; searchLucene(String phrase) <strong class="jxr_keyword">throws</strong> Exception;
+<a class="jxr_linenumber" name="56" href="#56">56</a>  	List&lt;Instrument&gt; searchLucene(String phrase) <strong class="jxr_keyword">throws</strong> Exception;
 <a class="jxr_linenumber" name="57" href="#57">57</a>  
 <a class="jxr_linenumber" name="58" href="#58">58</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment">	 * BARCHART simplified search syntax;</em>
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="67" href="#67">67</a>  <em class="jxr_javadoccomment">	 * 3) combine all terms with "AND";</em>
 <a class="jxr_linenumber" name="68" href="#68">68</a>  <em class="jxr_javadoccomment">	 * </em>
 <a class="jxr_linenumber" name="69" href="#69">69</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="70" href="#70">70</a>  	List&lt;DDF_Instrument&gt; searchSimple(String phrase) <strong class="jxr_keyword">throws</strong> Exception;
+<a class="jxr_linenumber" name="70" href="#70">70</a>  	List&lt;Instrument&gt; searchSimple(String phrase) <strong class="jxr_keyword">throws</strong> Exception;
 <a class="jxr_linenumber" name="71" href="#71">71</a>  
 <a class="jxr_linenumber" name="72" href="#72">72</a>  }
 </pre>

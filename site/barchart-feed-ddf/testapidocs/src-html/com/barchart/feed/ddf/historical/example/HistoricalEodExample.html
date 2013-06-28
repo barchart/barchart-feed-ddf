@@ -14,11 +14,11 @@
 <FONT color="green">011</FONT>    import org.slf4j.Logger;<a name="line.11"></a>
 <FONT color="green">012</FONT>    import org.slf4j.LoggerFactory;<a name="line.12"></a>
 <FONT color="green">013</FONT>    <a name="line.13"></a>
-<FONT color="green">014</FONT>    import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;<a name="line.14"></a>
-<FONT color="green">015</FONT>    import com.barchart.feed.ddf.historical.api.DDF_Query;<a name="line.15"></a>
-<FONT color="green">016</FONT>    import com.barchart.feed.ddf.historical.api.DDF_Result;<a name="line.16"></a>
-<FONT color="green">017</FONT>    import com.barchart.feed.ddf.historical.provider.DDF_HistoricalService;<a name="line.17"></a>
-<FONT color="green">018</FONT>    import com.barchart.feed.ddf.instrument.api.DDF_Instrument;<a name="line.18"></a>
+<FONT color="green">014</FONT>    import com.barchart.feed.api.model.meta.Instrument;<a name="line.14"></a>
+<FONT color="green">015</FONT>    import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;<a name="line.15"></a>
+<FONT color="green">016</FONT>    import com.barchart.feed.ddf.historical.api.DDF_Query;<a name="line.16"></a>
+<FONT color="green">017</FONT>    import com.barchart.feed.ddf.historical.api.DDF_Result;<a name="line.17"></a>
+<FONT color="green">018</FONT>    import com.barchart.feed.ddf.historical.provider.DDF_HistoricalService;<a name="line.18"></a>
 <FONT color="green">019</FONT>    import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;<a name="line.19"></a>
 <FONT color="green">020</FONT>    import com.barchart.feed.ddf.settings.api.DDF_Server;<a name="line.20"></a>
 <FONT color="green">021</FONT>    import com.barchart.feed.ddf.settings.api.DDF_Settings;<a name="line.21"></a>
@@ -70,15 +70,15 @@
 <FONT color="green">067</FONT>    <a name="line.67"></a>
 <FONT color="green">068</FONT>                    final String symbol = "EGM2";<a name="line.68"></a>
 <FONT color="green">069</FONT>    <a name="line.69"></a>
-<FONT color="green">070</FONT>                    final DDF_Instrument instrument = //<a name="line.70"></a>
-<FONT color="green">071</FONT>                                    DDF_InstrumentProvider.find(symbol);<a name="line.71"></a>
+<FONT color="green">070</FONT>                    final Instrument instrument = //<a name="line.70"></a>
+<FONT color="green">071</FONT>                                    DDF_InstrumentProvider.findHistorical(symbol).get(0);<a name="line.71"></a>
 <FONT color="green">072</FONT>    <a name="line.72"></a>
 <FONT color="green">073</FONT>                    if (instrument.isNull()) {<a name="line.73"></a>
 <FONT color="green">074</FONT>                            log.error("can not get insrument for : {}", symbol);<a name="line.74"></a>
 <FONT color="green">075</FONT>                            return;<a name="line.75"></a>
 <FONT color="green">076</FONT>                    }<a name="line.76"></a>
 <FONT color="green">077</FONT>    <a name="line.77"></a>
-<FONT color="green">078</FONT>                    log.info("insrument : {}", instrument);<a name="line.78"></a>
+<FONT color="green">078</FONT>                    log.info("insrument : {}", instrument.toString());<a name="line.78"></a>
 <FONT color="green">079</FONT>    <a name="line.79"></a>
 <FONT color="green">080</FONT>                    /*<a name="line.80"></a>
 <FONT color="green">081</FONT>                     * 3) define ticks query parameters<a name="line.81"></a>
