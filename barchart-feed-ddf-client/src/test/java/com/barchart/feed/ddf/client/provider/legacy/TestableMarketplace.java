@@ -146,7 +146,7 @@ public class TestableMarketplace extends DDF_Marketplace {
 				final MarketDo market = marketMap.get(inst);
 
 				if(market==null){
-					log.error("Failed to get MarketDo for " + inst.GUID().toString());
+					log.error("Failed to get MarketDo for " + inst.symbol());
 					continue;
 				}
 				

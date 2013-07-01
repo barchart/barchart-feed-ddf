@@ -60,8 +60,8 @@ public class TestBarchartFeed {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		//myAgent.include(Exchanges.fromName("CME"));
-		myAgent.include("ESU13");
+		myAgent.include(Exchanges.fromName("CME"));
+		//myAgent.include("GOOG");
 		
 		//final Agent myAgent = feed.subscribe(Market.class, callback, "ESU13");
 		

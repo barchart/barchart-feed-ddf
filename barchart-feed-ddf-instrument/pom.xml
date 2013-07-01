@@ -36,39 +36,12 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.barchart.feed</groupId> -->
-<!-- 			<artifactId>barchart-feed-inst</artifactId> -->
-<!-- 			<version>${barchartFeedInstVersion}</version> -->
-<!-- 		</dependency> -->
-		
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-base</artifactId>
 			<version>${barchartFeedBaseVersion}</version>
 		</dependency>
 		
-<!-- 		<dependency> -->
-<!--   			<groupId>com.barchart.missive</groupId> -->
-<!-- 			<artifactId>barchart-missive</artifactId> -->
-<!-- 			<version>${barchartMissiveVersion}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!--   		</dependency> -->
-  		
-  		<!-- protocol buffers - original -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.google.protobuf</groupId> -->
-<!-- 			<artifactId>protobuf-java</artifactId> -->
-<!-- 			<version>${protoBufVersion}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency>	 -->
-  		
-<!--   		<dependency> -->
-<!--   			<groupId>com.barchart.proto</groupId> -->
-<!--   			<artifactId>barchart-proto-buf-inst</artifactId> -->
-<!-- 			<version>${barchartProtoInstVersion}</version> -->
-<!--   		</dependency> -->
-  		 
   		<!-- berkeley db --> 
 <!--   		<dependency> -->
 <!-- 			<groupId>com.sleepycat</groupId> -->

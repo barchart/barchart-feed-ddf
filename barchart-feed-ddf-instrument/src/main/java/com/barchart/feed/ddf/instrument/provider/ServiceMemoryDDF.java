@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.inst.InstrumentFuture;
 import com.barchart.feed.inst.InstrumentFutureMap;
@@ -39,8 +39,8 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 
 	static final Logger log = LoggerFactory.getLogger(ServiceMemoryDDF.class);
 
-	private final ConcurrentMap<InstrumentGUID, Instrument> guidMap = 
-			new ConcurrentHashMap<InstrumentGUID, Instrument>();
+	private final ConcurrentMap<Identifier, Instrument> guidMap = 
+			new ConcurrentHashMap<Identifier, Instrument>();
 	
 	private final LocalCacheSymbologyContextDDF cache = 
 			new LocalCacheSymbologyContextDDF();
@@ -151,13 +151,13 @@ public class ServiceMemoryDDF implements DDF_DefinitionService {
 			return Collections.emptyList();
 		}
 		
-		InstrumentGUID guid = cache.lookup(symbol.toString().toUpperCase()); 
+		Identifier guid = cache.lookup(symbol.toString().toUpperCase()); 
 				
 		if(guid.isNull()) {
 			guid = remote.lookup(symbol.toString().toUpperCase());
 		}
 		
-		if(guid.equals(InstrumentGUID.NULL)) {
+		if(guid.isNull()) {
 			return Collections.emptyList();
 		}
 		

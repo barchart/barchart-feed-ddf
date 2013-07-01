@@ -168,7 +168,7 @@ class VarMarketDDF extends VarMarket {
 			break;
 		default:
 			eventAdd(NEW_BOOK_ERROR);
-			final CharSequence id = instrument.GUID();
+			final CharSequence id = instrument.id().toString();
 			final CharSequence comment = instrument.description();
 			log.error("instrument : {} : {}", id, comment);
 			log.error("result : {} ; entry : {} ;", result, entry);

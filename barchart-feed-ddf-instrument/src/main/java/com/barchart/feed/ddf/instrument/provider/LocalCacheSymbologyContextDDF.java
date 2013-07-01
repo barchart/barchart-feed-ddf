@@ -7,29 +7,29 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.inst.SymbologyContext;
 
 public class LocalCacheSymbologyContextDDF implements SymbologyContext<CharSequence> {
 
-	private final ConcurrentMap<CharSequence, InstrumentGUID> symbolMap = 
-			new ConcurrentHashMap<CharSequence, InstrumentGUID>();
+	private final ConcurrentMap<CharSequence, Identifier> symbolMap = 
+			new ConcurrentHashMap<CharSequence, Identifier>();
 	
-	public void storeGUID(final CharSequence symbol, final InstrumentGUID guid) {
+	public void storeGUID(final CharSequence symbol, final Identifier guid) {
 		symbolMap.put(symbol, guid);
 	}
 	
 	@Override
-	public InstrumentGUID lookup(final CharSequence symbol) {
+	public Identifier lookup(final CharSequence symbol) {
 		
 		if(symbol == null || symbol.length() == 0) {
-			return InstrumentGUID.NULL;
+			return Identifier.NULL;
 		}
 		
-		final InstrumentGUID guid = symbolMap.get(symbol);
+		final Identifier guid = symbolMap.get(symbol);
 		
 		if(guid == null) {
-			return InstrumentGUID.NULL;
+			return Identifier.NULL;
 		} else {
 			return guid;
 		}
@@ -37,11 +37,11 @@ public class LocalCacheSymbologyContextDDF implements SymbologyContext<CharSeque
 	}
 
 	@Override
-	public Map<CharSequence, InstrumentGUID> lookup(
+	public Map<CharSequence, Identifier> lookup(
 			Collection<? extends CharSequence> symbols) {
 		
-		final Map<CharSequence, InstrumentGUID> result = 
-				new HashMap<CharSequence, InstrumentGUID>();
+		final Map<CharSequence, Identifier> result = 
+				new HashMap<CharSequence, Identifier>();
 		
 		for(final CharSequence symbol : symbols) {
 			result.put(symbol, lookup(symbol));
@@ -51,12 +51,12 @@ public class LocalCacheSymbologyContextDDF implements SymbologyContext<CharSeque
 	}
 
 	@Override
-	public List<InstrumentGUID> search(CharSequence symbol) {
+	public List<Identifier> search(CharSequence symbol) {
 		throw new UnsupportedOperationException("Search not supported");
 	}
 
 	@Override
-	public List<InstrumentGUID> search(CharSequence symbol, int limit,
+	public List<Identifier> search(CharSequence symbol, int limit,
 			int offset) {
 		throw new UnsupportedOperationException("Search not supported");
 	}

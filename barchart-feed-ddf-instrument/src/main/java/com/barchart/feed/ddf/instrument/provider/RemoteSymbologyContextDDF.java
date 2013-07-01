@@ -27,10 +27,11 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.InstrumentGUID;
+import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.SymbologyContext;
+import com.barchart.feed.inst.provider.InstrumentBase;
 import com.barchart.missive.core.ObjectMapFactory;
 
 final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> {
@@ -46,11 +47,11 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
 	}
 	
-	final Map<CharSequence, InstrumentGUID> symbolMap = 
-			new ConcurrentHashMap<CharSequence, InstrumentGUID>();
+	final Map<CharSequence, Identifier> symbolMap = 
+			new ConcurrentHashMap<CharSequence, Identifier>();
 	final Map<CharSequence, CharSequence> failedMap = 
 			new ConcurrentHashMap<CharSequence, CharSequence>();
-	final Map<InstrumentGUID, Instrument> guidMap;
+	final Map<Identifier, Instrument> guidMap;
 	
 	public RemoteSymbologyContextDDF() {
 		guidMap = null;
@@ -60,19 +61,19 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 	 * Because DDF lookup combines symbol -> GUID and GUID -> Instrument, passing in
 	 * a map for the InstrumentService to use saves a double lookup. 
 	 */
-	public RemoteSymbologyContextDDF(final Map<InstrumentGUID, Instrument> guidMap) {
+	public RemoteSymbologyContextDDF(final Map<Identifier, Instrument> guidMap) {
 		this.guidMap = guidMap;
 		DDF_InstrumentProvider.overrideLookupURL(false);
 	}
 	
 	@Override
-	public InstrumentGUID lookup(CharSequence symbol) {
+	public Identifier lookup(CharSequence symbol) {
 		
 		if (overrideURL) {
 			symbol = symbol + "&bats=1";
 		}
 		
-		InstrumentGUID guid = symbolMap.get(symbol);
+		Identifier guid = symbolMap.get(symbol);
 		if(guid != null) {
 			return guid;
 		}
@@ -82,13 +83,13 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 	}
 	
 	@Override
-	public Map<CharSequence, InstrumentGUID> lookup(
+	public Map<CharSequence, Identifier> lookup(
 			final Collection<? extends CharSequence> symbols) {
 		
 		//TODO overrideURL??
 		
-		final Map<CharSequence, InstrumentGUID> gMap = 
-				new HashMap<CharSequence, InstrumentGUID>();
+		final Map<CharSequence, Identifier> gMap = 
+				new HashMap<CharSequence, Identifier>();
 		
 		final Iterator<? extends CharSequence> iter = symbols.iterator();
 		
@@ -99,14 +100,14 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 				gMap.put(symbol,  symbolMap.get(symbol));
 				iter.remove();
 			} else if(failedMap.containsKey(symbol)) {
-				gMap.put(symbol, InstrumentGUID.NULL);
+				gMap.put(symbol, Identifier.NULL);
 				iter.remove();
 			}
 		}
 		
 		/* Seed lookup values in result map with null */
 		for(final CharSequence sym : symbols) {
-			gMap.put(sym, InstrumentGUID.NULL);
+			gMap.put(sym, Identifier.NULL);
 		}
 		
 		try {
@@ -116,9 +117,9 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 		}
 		
 		/* Cache all failed lookups */
-		for(final Entry<CharSequence, InstrumentGUID> e : gMap.entrySet()) {
+		for(final Entry<CharSequence, Identifier> e : gMap.entrySet()) {
 			
-			if(e.getValue().equals(InstrumentGUID.NULL)) {
+			if(e.getValue().equals(Identifier.NULL)) {
 				failedMap.put(e.getKey(), "");
 			}
 			
@@ -128,11 +129,11 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 	}
 
 	@Override
-	public List<InstrumentGUID> search(final CharSequence symbol) {
+	public List<Identifier> search(final CharSequence symbol) {
 		
-		final List<InstrumentGUID> list = new ArrayList<InstrumentGUID>();
+		final List<Identifier> list = new ArrayList<Identifier>();
 		
-		final InstrumentGUID guid = lookup(symbol);
+		final Identifier guid = lookup(symbol);
 		if(guid != null) {
 			list.add(guid);
 		}
@@ -141,12 +142,12 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 	}
 
 	@Override
-	public List<InstrumentGUID> search(final CharSequence symbol, int limit,
+	public List<Identifier> search(final CharSequence symbol, int limit,
 			int offset) {
 		return search(symbol);
 	}
 	
-	private InstrumentGUID remoteLookup(final CharSequence symbol) {
+	private Identifier remoteLookup(final CharSequence symbol) {
 		
 		try {
 			
@@ -157,10 +158,10 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 			
 			if(instDOM == null || instDOM.isNull()) {
 				failedMap.put(symbol, "");
-				return InstrumentGUID.NULL;
+				return Identifier.NULL;
 			}
 			
-			InstrumentGUID guid = new InstrumentGUID(
+			Identifier guid = new InstrumentBase.InstIdentifier(
 					instDOM.get(InstrumentField.MARKET_GUID));
 			
 			/* Cache symbols */
@@ -177,17 +178,17 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 		} catch (final SymbolNotFoundException se) {
 			log.debug("HTTP status failed on {}", symbol);
 			failedMap.put(symbol, "");
-			return InstrumentGUID.NULL;
+			return Identifier.NULL;
 		} catch (final Exception e) {
 			log.error("Symbol remote lookup failed for {}, {}", symbol, e.getMessage());
 			failedMap.put(symbol, "");
-			return InstrumentGUID.NULL;
+			return Identifier.NULL;
 		}
 		
 	}
 	
 	private void remoteLookup(final Collection<? extends CharSequence> symbols,
-			final Map<CharSequence, InstrumentGUID> symMap) 
+			final Map<CharSequence, Identifier> symMap) 
 			throws Exception {
 		
 		final String symbolString = concatenate(symbols);
@@ -215,8 +216,8 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 
 							final InstrumentDDF inst = InstrumentXML.decodeSAX(attributes);
 							final InstrumentDDF ddfInst = ObjectMapFactory.build(InstrumentDDF.class, inst);
-							symMap.put(inst.symbol(), ddfInst.GUID());
-							guidMap.put(inst.GUID(), (Instrument)inst);
+							symMap.put(inst.symbol(), ddfInst.id());
+							guidMap.put(inst.id(), (Instrument)inst);
 							
 						} catch (final SymbolNotFoundException e) {
 							log.warn("symbol not found : {}", e.getMessage());

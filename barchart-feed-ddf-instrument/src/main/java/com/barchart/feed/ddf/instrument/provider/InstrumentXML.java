@@ -48,11 +48,11 @@ import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.InstrumentGUID;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.inst.InstrumentField;
+import com.barchart.feed.inst.provider.InstrumentGUID;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.proto.buf.inst.BookLiquidity;
