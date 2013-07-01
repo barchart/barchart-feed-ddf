@@ -31,12 +31,15 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	
 	private final LocalInstrumentDBMap db;
 	private final ExecutorService executor;
+	private final ServiceMemoryDDF remoteInstService;
 	
 	public ServiceDatabaseDDF(final LocalInstrumentDBMap map, 
 			final ExecutorService executor) {
 		
 		this.db = map;
 		this.executor = executor;
+		remoteInstService = new ServiceMemoryDDF(executor);
+		
 	}
 
 	@Override
@@ -108,16 +111,18 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 			log.debug("Cache size = {}", cache.size());
 		}
 		
-		if(instDef == null) {
-			//log.debug("Symbol {} not in db", symbol);
-			cache.put(symbol, new ArrayList<Instrument>(0));
-			return Collections.emptyList();
-		} else {
+		if(instDef != null) {
+			
 			instrument = Collections.singletonList(
 					InstrumentFactory.buildFromProtoBuf(instDef));
 			cache.put(symbol, instrument);
 			return instrument;
-		}
+			
+		} 
+		
+		log.debug("Cannot find {} in local DB, using remote", symbol);
+		return remoteInstService.lookup(symbol);
+		
 	}
 	
 	private class LookupCallable implements Callable<List<Instrument>> {
