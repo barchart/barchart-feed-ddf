@@ -931,15 +931,21 @@ class FeedClientDDF implements DDF_FeedClient {
 			try {
 				settings = DDF_SettingsService.newSettings(username, password);
 				if (!settings.isValidLogin()) {
+
+					isLoggingIn = false;
+
 					log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
 					postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
-					isLoggingIn = false;
+
 					return;
 				}
 			} catch (final Exception e) {
+
+				isLoggingIn = false;
+
 				log.error("Posting SETTINGS_RETRIEVAL_FAILURE");
 				postEvent(DDF_FeedEvent.SETTINGS_RETRIEVAL_FAILURE);
-				isLoggingIn = false;
+
 				return;
 			}
 
@@ -955,9 +961,11 @@ class FeedClientDDF implements DDF_FeedClient {
 			final DDF_FeedEvent eventOne = login(primary, PORT);
 
 			if (eventOne == DDF_FeedEvent.LOGIN_SENT) {
+				isLoggingIn = false;
+
 				log.info("Posting LOGIN_SENT for primary server");
 				postEvent(DDF_FeedEvent.LOGIN_SENT);
-				isLoggingIn = false;
+
 				return;
 			}
 
@@ -969,9 +977,11 @@ class FeedClientDDF implements DDF_FeedClient {
 			final DDF_FeedEvent eventTwo = login(secondary, PORT);
 
 			if (eventTwo == DDF_FeedEvent.LOGIN_SENT) {
+				isLoggingIn = false;
+
 				log.info("Posting LOGIN_SENT for secondary server");
 				postEvent(DDF_FeedEvent.LOGIN_SENT);
-				isLoggingIn = false;
+
 				return;
 			}
 
@@ -980,10 +990,10 @@ class FeedClientDDF implements DDF_FeedClient {
 			 * server in the event both logins fail.
 			 */
 
+			isLoggingIn = false;
+
 			log.error("Failed to connect to both servers , Posting {}",
 					eventOne.name());
-
-			isLoggingIn = false;
 
 			postEvent(eventOne);
 
