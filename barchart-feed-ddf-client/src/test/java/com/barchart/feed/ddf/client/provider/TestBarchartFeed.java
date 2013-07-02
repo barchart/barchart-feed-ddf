@@ -28,7 +28,7 @@ public class TestBarchartFeed {
 		final Marketplace feed = BarchartMarketplace.builder().
 				username(username).
 				password(password).
-				useLocalInstDatabase().
+				//useLocalInstDatabase().
 				build();
 		
 		final MarketObserver<Market> callback = new MarketObserver<Market>() {
@@ -36,11 +36,11 @@ public class TestBarchartFeed {
 			@Override
 			public void onNext(final Market v) {
 				
-				log.debug(
-				v.instrument().symbol() + " " +
-
-				v.book().top().ask().price().asDouble() + " " +
-				v.book().top().bid().price().asDouble());
+//				log.debug(
+//				v.instrument().symbol() + " " +
+//
+//				v.book().top().ask().price().asDouble() + " " +
+//				v.book().top().bid().price().asDouble());
 				
 				//printCuvol(v.cuvol().entryList()));
 				
@@ -61,8 +61,8 @@ public class TestBarchartFeed {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		//myAgent.include(Exchanges.fromName("CME"));
-		myAgent.include("GOOG");
+		//myAgent.include(Exchanges.fromName("CFE"));
+		myAgent.include("$SPX");
 		
 		Thread.sleep(1000000);
 		

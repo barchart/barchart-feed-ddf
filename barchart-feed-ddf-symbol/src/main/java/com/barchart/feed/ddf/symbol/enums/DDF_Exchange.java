@@ -84,7 +84,7 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	NASDAQ_Book_Top(_q_, STOCK), //
 
 	CBOE_Futures(_R_, FUTURE), //
-	CBOE_Index(_r_, FUTURE), //
+	CBOE_Index(_r_, INDEX), //  changed from FUTURE
 
 	Fix_Me_S(_S_, FUTURE), //
 	Fix_Me_S_XXX(_s_, FUTURE), //
