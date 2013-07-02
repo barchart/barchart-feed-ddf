@@ -17,8 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +60,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private static final int PORT = 7500;
 
-	private static final int DEFAULT_IO_THREADS = Runtime.getRuntime().availableProcessors() * 2;
+	private static final int DEFAULT_IO_THREADS = 
+			Runtime.getRuntime().availableProcessors() * 2;
 	
 	/** use slf4j for internal NETTY LoggingHandler facade */
 	static {
@@ -124,7 +123,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	private DDF_ServerType serverType = DDF_ServerType.STREAM;
 	private Executor executor;
 	
-	private ExecutorService localExecutor = Executors.newFixedThreadPool(100);
+	//private ExecutorService localExecutor = Executors.newFixedThreadPool(100);
 
 	// SOCKS5
 
@@ -155,8 +154,6 @@ class FeedClientDDF implements DDF_FeedClient {
 		this.password = password;
 		this.executor = exec;
 		
-//		final Executor nettyExecutor = Executors.newFixedThreadPool(100);
-
 		this.proxySettings = proxy;
 
 		timer = new HashedWheelTimer();
@@ -347,8 +344,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		@Override
 		public void newEvent(DDF_FeedEvent event) {
-			// TODO Non-dameon thread???
-			localExecutor.execute(new Thread(new Disconnector(event.name())));
+			executor.execute(new Thread(new Disconnector(event.name())));
 		}
 	}
 
@@ -500,12 +496,12 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		try {
-			localExecutor.execute(heartbeatTask);
+			executor.execute(heartbeatTask);
 		} catch (Exception e) {
 			log.error("error starting DDF_Heartbeat Thread: {} ", e);
 
 			try {
-				localExecutor.execute(new Thread(new Disconnector(
+				executor.execute(new Thread(new Disconnector(
 						"DDF_Heartbeat Thread Start Exception")));
 			} catch (Exception e1) {
 			}
@@ -514,12 +510,12 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		try {
-			localExecutor.execute(eventTask);
+			executor.execute(eventTask);
 		} catch (Exception e) {
 			log.error("error starting DDF_Event Thread: {} ", e);
 
 			try {
-				localExecutor.execute(new Thread(new Disconnector(
+				executor.execute(new Thread(new Disconnector(
 						"DDF_Event Thread Start Exception")));
 			} catch (Exception e1) {
 			}
@@ -528,12 +524,12 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		try {
-			localExecutor.execute(messageTask);
+			executor.execute(messageTask);
 		} catch (Exception e) {
 			log.error("error starting DDF_Message Thread: {} ", e);
 
 			try {
-				localExecutor.execute(new Thread(new Disconnector(
+				executor.execute(new Thread(new Disconnector(
 						"DDF_Message Thread Start Exception")));
 			} catch (Exception e1) {
 			}
@@ -605,9 +601,6 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		}
 		
-		log.warn("# killing local executor");
-		localExecutor.shutdownNow();
-		
 		log.warn("## terminate complete");
 
 	}
@@ -659,6 +652,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	public synchronized void startup() {
 
 		log.debug("Public login called");
+		
 		loginHandler.enableLogins();
 		loginHandler.login(0);
 
@@ -686,19 +680,16 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		postEvent(DDF_FeedEvent.LOGOUT);
 
-		// Do we need to specifically tell JERQ we're logging out?
-		// blockingWrite(FeedDDF.tcpLogout());
-
 		terminate();
 		
-		timer.stop();
+//		timer.stop();
 
-//		if (boot != null) {
-//			boot.releaseExternalResources();
-//		}
+		if (boot != null) {
+			boot.releaseExternalResources();
+		}
 		
 	}
-
+	
 	private boolean isConnected() {
 		if (channel == null) {
 			return false;
@@ -1319,10 +1310,8 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					// any calls here will happen in this thread
 					// ...so we will start new thread so this one can die
-//					executor.execute(new Thread(new Disconnector(
-//							"HEARTBEAT TIMEOUT")));
-					executor.execute(new Disconnector(
-							"HEARTBEAT TIMEOUT"));
+					executor.execute(new Thread(new Disconnector(
+							"HEARTBEAT TIMEOUT")));
 
 					lastHeartbeat.set(System.currentTimeMillis());
 				}

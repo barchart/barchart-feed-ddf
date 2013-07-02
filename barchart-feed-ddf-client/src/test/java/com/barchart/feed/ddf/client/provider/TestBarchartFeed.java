@@ -1,19 +1,20 @@
 package com.barchart.feed.ddf.client.provider;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartMarketplace;
-import com.barchart.feed.inst.provider.Exchanges;
 
 public class TestBarchartFeed {
 	
@@ -23,7 +24,7 @@ public class TestBarchartFeed {
 		
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
-		
+
 		final Marketplace feed = BarchartMarketplace.builder().
 				username(username).
 				password(password).
@@ -60,18 +61,22 @@ public class TestBarchartFeed {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		myAgent.include(Exchanges.fromName("CME"));
-		//myAgent.include("GOOG");
+		//myAgent.include(Exchanges.fromName("CME"));
+		myAgent.include("GOOG");
 		
-		//final Agent myAgent = feed.subscribe(Market.class, callback, "ESU13");
-		
-		//final Agent myAgent = feed.subscribeMarket(callback, "ESU3");
-		
-		Thread.sleep(700000);
+		Thread.sleep(1000000);
 		
 		feed.shutdown();
 		
-		Thread.sleep(2000);
+//		Thread.sleep(5000);
+//		
+//		feed.startup();
+//		
+//		myAgent.include("GOOG");
+//		
+//		Thread.sleep(10000);
+//		
+//		feed.shutdown();
 		
 	}
 	

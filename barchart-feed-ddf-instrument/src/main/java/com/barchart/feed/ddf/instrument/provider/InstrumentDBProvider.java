@@ -210,8 +210,6 @@ public final class InstrumentDBProvider {
 		@Override
 		public Boolean call() throws Exception {
 			
-			
-			
 			final File instDef = getLocalInstDef(resourceFolder);
 			
 			final String remoteVersion = getLatestS3InstDefVersion();
@@ -288,7 +286,7 @@ public final class InstrumentDBProvider {
 			InputStream inStream = null;
 			
 			try {
-			
+				
 				final File instDef = getLocalInstDef(resourceFolder);
 				
 				if(instDef == null) {
@@ -299,6 +297,8 @@ public final class InstrumentDBProvider {
 				final ZipFile zFile= new ZipFile(instDef);
 				final ZipEntry entry = zFile.entries().nextElement();
 				inStream = zFile.getInputStream(entry);
+				
+				map.clear();
 				
 				long counter = 0;
 				InstrumentDefinition def = null;

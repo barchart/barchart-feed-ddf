@@ -96,8 +96,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 		final int place = entry.place();
 
-		// NOTE: This only updates top.  Full book is not incrementally updated
-		// for unknown reason.  
+		// NOTE: This only updates top.  
 
 		//final EntryMap map = map(side);
 
@@ -158,8 +157,13 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(instrument, time(), entries(Book.Side.BID), 
-				entries(Book.Side.ASK), lastEntry);
+		
+		return new DefBook(instrument, time(), 
+				//entries(Book.Side.BID),
+				new MarketBookEntry[]{topBid},
+				//entries(Book.Side.ASK),
+				new MarketBookEntry[]{topAsk},
+				lastEntry);
 	}
 	
 	@Override

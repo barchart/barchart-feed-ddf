@@ -46,6 +46,8 @@ public class BarchartMarketplace implements Marketplace {
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartMarketplace.class);
 	
+	private static final long DB_UPDATE_INTERVAL = 1000 * 60 * 60 * 4; // 4 hours
+	
 	/* Value api factory */
 	private static final Factory factory = FactoryLoader.load();
 	
@@ -54,11 +56,13 @@ public class BarchartMarketplace implements Marketplace {
 	private final File dbFolder;
 	private static final long DB_UPDATE_TIMEOUT = 60; // seconds
 	
-	private final DDF_FeedClientBase connection;
+	private volatile DDF_FeedClientBase connection;
 	private final DDF_Marketplace maker;
 	private final ExecutorService executor;
 	
 	private volatile LocalInstrumentDBMap dbMap = null;
+	
+	private final String username, password;
 	
 	@SuppressWarnings("unused")
 	private volatile Connection.Monitor stateListener;
@@ -75,14 +79,16 @@ public class BarchartMarketplace implements Marketplace {
 	BarchartMarketplace(final String username, final String password, 
 			final ExecutorService ex, final File dbFolder, final boolean useDB) {
 		
-		executor  = ex;
+		this.username = username;
+		this.password = password;
+		this.executor = ex;
 		this.dbFolder = dbFolder;
 		
-		connection = DDF_FeedClientFactory.newConnectionClient(
-				DDF_Transport.TCP, username, password, executor);
+		connection = makeConnection();
 		
 		connection.bindMessageListener(msgListener);
 		
+		// Need a way to set maker up with a new connection.
 		maker = DDF_Marketplace.newInstance(connection);
 		
 		this.useLocalInstDB = useDB; 
@@ -98,8 +104,8 @@ public class BarchartMarketplace implements Marketplace {
 	 */
 	public static class Builder {
 		
-		private String username = "NULL";
-		private String password = "NULL";
+		private String username = "NULL USERNAME";
+		private String password = "NULL PASSWORD";
 		private File dbFolder = getTempFolder();
 		private boolean useLocalDB = false; 
 		
@@ -178,6 +184,11 @@ public class BarchartMarketplace implements Marketplace {
 		
 	}
 	
+	private DDF_FeedClientBase makeConnection() {
+		return DDF_FeedClientFactory.newConnectionClient(
+				DDF_Transport.TCP, username, password, executor);
+	}
+	
 	/* ***** ***** ***** ConnectionLifecycle ***** ***** ***** */
 	
 	/**
@@ -197,7 +208,6 @@ public class BarchartMarketplace implements Marketplace {
 	@Override
 	public synchronized void startup() {
 		
-		// Consider dummy future?
 		if(isStartingup.get()) {
 			throw new IllegalStateException("Startup called while already starting up");
 		}
@@ -214,6 +224,8 @@ public class BarchartMarketplace implements Marketplace {
 		
 	}
 	
+	private volatile Future<?> dbUpdater = null;
+	
 	private final class StartupRunnable implements Runnable {
 
 		/*
@@ -225,11 +237,14 @@ public class BarchartMarketplace implements Marketplace {
 			
 			try {
 			
+				log.debug("Startup Runnable starting");
+				
 				if(useLocalInstDB) {
 				
 					dbMap = InstrumentDBProvider.getMap(dbFolder);
 					
-					final ServiceDatabaseDDF dbService = new ServiceDatabaseDDF(dbMap, executor);
+					final ServiceDatabaseDDF dbService = new ServiceDatabaseDDF(
+							dbMap, executor);
 					
 					DDF_InstrumentProvider.bind(dbService);
 					
@@ -238,13 +253,23 @@ public class BarchartMarketplace implements Marketplace {
 					
 					dbUpdate.get(DB_UPDATE_TIMEOUT, TimeUnit.SECONDS);
 					
+					/* Start background db update runnable, kill previous task if needed */
+					if(dbUpdater != null) {
+						dbUpdater.cancel(true);
+						while(!dbUpdater.isCancelled() || !dbUpdater.isDone()) {
+							// 
+						}
+					}
+					
+					dbUpdater = executor.submit(dbUpdateRunnable());
+					
 				}
 				
 				connection.startup();
 			
 			} catch (final Throwable t) {
 				
-				log.error("Exception starting up marketplace {}", t.toString());
+				log.error("Exception starting up marketplace {}", t);
 				isStartingup.set(false);
 				
 				return;
@@ -256,16 +281,46 @@ public class BarchartMarketplace implements Marketplace {
 		
 	}
 	
+	private final Runnable dbUpdateRunnable() { 
+		
+		return new Runnable() {
+
+			@Override
+			public void run() {
+				
+				log.debug("Starting database update task");
+				
+				try {
+					
+					while(!Thread.currentThread().isInterrupted()) {
+						
+						Thread.sleep(DB_UPDATE_INTERVAL); // 4 hours
+						log.debug("Updating instrument database");
+						InstrumentDBProvider.updateDBMap(dbFolder, dbMap);
+						
+					}
+				
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+				
+			}
+			
+		};
+
+	}
+	
 	@Override
 	public synchronized void shutdown() {
 
-		// Consider dummy future?
 		if(isStartingup.get()) {
-			throw new IllegalStateException("Shutdown called while shutting down");
+			throw new IllegalStateException(
+					"Shutdown called while starting up");
 		}
 		
 		if(isShuttingdown.get()) {
-			throw new IllegalStateException("Shutdown called while already shutting down");
+			throw new IllegalStateException(
+					"Shutdown called while already shutting down");
 		}
 		
 		isShuttingdown.set(true);
@@ -290,14 +345,16 @@ public class BarchartMarketplace implements Marketplace {
 				if(dbMap != null) {
 					dbMap.close();
 				}
+				
+				//dbUpdater.cancel(true);
 	
 				connection.shutdown();
-				
+
 				log.debug("Barchart Feed shutdown");
 				
 			} catch (final Throwable t) {
 				
-				log.error(t.getMessage());
+				log.error("Error {}", t);
 				
 				isShuttingdown.set(false);
 				
