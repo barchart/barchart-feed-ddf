@@ -21,11 +21,15 @@ import static com.barchart.util.ascii.ASCII.SOH;
 import static com.barchart.util.ascii.ASCII.STX;
 
 import java.nio.ByteBuffer;
+import java.util.Collections;
 import java.util.List;
 
 import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.util.Identifier;
+import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -38,6 +42,11 @@ import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
 import com.barchart.feed.ddf.symbol.provider.DDF_Symbology;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
+import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.api.Price;
+import com.barchart.util.value.api.Schedule;
+import com.barchart.util.value.api.Size;
+import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -79,7 +88,130 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		if(insts.isEmpty()) {
 			return Instrument.NULL;
 		}
-		return DDF_InstrumentProvider.find(getId()).get(0);
+		return insts.get(0);
+	}
+	
+	private Instrument makeStub() {
+		
+		return new Instrument() {
+
+			@Override
+			public int compareTo(Instrument o) {
+				return id().compareTo(o.id());
+			}
+
+			@Override
+			public boolean isNull() {
+				return false;
+			}
+
+			@Override
+			public Identifier id() {
+				// TODO Important that this is recorded and checked locally
+				return null;
+			}
+
+			@Override
+			public MetaType type() {
+				return MetaType.INSTRUMENT;
+			}
+
+			@Override
+			public String marketGUID() {
+				return id().toString();
+			}
+
+			@Override
+			public SecurityType securityType() {
+				return getExchange().kind.asSecType();
+			}
+
+			@Override
+			public BookLiquidityType liquidityType() {
+				return BookLiquidityType.NONE;
+			}
+
+			@Override
+			public BookStructureType bookStructure() {
+				return BookStructureType.NONE;
+			}
+
+			@Override
+			public Size maxBookDepth() {
+				return Size.NULL;
+			}
+
+			@Override
+			public String instrumentDataVendor() {
+				return "Unknown Data Vendor";
+			}
+
+			@Override
+			public String symbol() {
+				return getId().toString();
+			}
+
+			@Override
+			public String description() {
+				return "Unresolved Instrument Stub";
+			}
+
+			@Override
+			public String CFICode() {
+				return "Unknown CFI Code";
+			}
+
+			@Override
+			public Exchange exchange() {
+				return getExchange().asExchange();
+			}
+
+			@Override
+			public String exchangeCode() {
+				return String.valueOf(getExchange().code);
+			}
+
+			@Override
+			public Price tickSize() {
+				return Price.NULL;
+			}
+
+			@Override
+			public Price pointValue() {
+				return Price.NULL;
+			}
+
+			@Override
+			public Fraction displayFraction() {
+				return ValueConverter.fraction(getFraction().fraction);
+			}
+
+			@Override
+			public TimeInterval lifetime() {
+				return TimeInterval.NULL;
+			}
+
+			@Override
+			public Schedule marketHours() {
+				return Schedule.NULL;
+			}
+
+			@Override
+			public long timeZoneOffset() {
+				return 0;
+			}
+
+			@Override
+			public String timeZoneName() {
+				return "Null Time Zone";
+			}
+
+			@Override
+			public List<Identifier> componentLegs() {
+				return Collections.emptyList();
+			}
+			
+		};
 	}
 	
 	@Override

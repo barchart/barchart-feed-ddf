@@ -347,6 +347,10 @@ public final class DDF_InstrumentProvider {
 			return symbol;
 		}
 		
+		if(symbol.charAt(0) == '_') {
+			return symbol;
+		}
+		
 		/* e.g. GOOG */
 		if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {
 			return symbol;

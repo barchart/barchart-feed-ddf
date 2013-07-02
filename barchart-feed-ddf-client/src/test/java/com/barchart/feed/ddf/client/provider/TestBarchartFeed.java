@@ -1,8 +1,6 @@
 package com.barchart.feed.ddf.client.provider;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +12,9 @@ import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.client.provider.BarchartMarketplace;
+import com.barchart.feed.inst.provider.Exchanges;
 
 public class TestBarchartFeed {
 	
@@ -28,13 +28,15 @@ public class TestBarchartFeed {
 		final Marketplace feed = BarchartMarketplace.builder().
 				username(username).
 				password(password).
-				//useLocalInstDatabase().
+				useLocalInstDatabase().
 				build();
 		
-		final MarketObserver<Market> callback = new MarketObserver<Market>() {
+		final MarketObserver<Trade> callback = new MarketObserver<Trade>() {
 
 			@Override
-			public void onNext(final Market v) {
+			public void onNext(final Trade v) {
+				
+				log.debug(v.instrument().symbol() + " " + v.type().name());
 				
 //				log.debug(
 //				v.instrument().symbol() + " " +
@@ -59,10 +61,10 @@ public class TestBarchartFeed {
 		
 		feed.startup();
 		
-		final Agent myAgent = feed.newAgent(Market.class, callback);
+		final Agent myAgent = feed.newAgent(Trade.class, callback);
 		
-		//myAgent.include(Exchanges.fromName("CFE"));
-		myAgent.include("$SPX");
+		myAgent.include(Exchanges.fromName("CME"));
+		//myAgent.include("GOOG");
 		
 		Thread.sleep(1000000);
 		

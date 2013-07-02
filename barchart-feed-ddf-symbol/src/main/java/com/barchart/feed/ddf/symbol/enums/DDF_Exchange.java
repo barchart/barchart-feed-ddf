@@ -10,6 +10,9 @@ package com.barchart.feed.ddf.symbol.enums;
 import static com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind.*;
 import static com.barchart.util.ascii.ASCII.*;
 
+import com.barchart.feed.api.model.meta.Exchange;
+import com.barchart.feed.api.util.Identifier;
+import com.barchart.feed.inst.provider.Exchanges;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.Value;
 
@@ -248,5 +251,9 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	public boolean isNull() {
 		return this == UNKNOWN;
 	}
-
+	
+	public Exchange asExchange() {
+		return Exchanges.fromCode(new String(new byte[]{code}));
+	}
+	
 }

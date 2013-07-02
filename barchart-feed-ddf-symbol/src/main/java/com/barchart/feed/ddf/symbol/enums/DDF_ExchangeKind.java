@@ -10,6 +10,7 @@ package com.barchart.feed.ddf.symbol.enums;
 import static com.barchart.feed.ddf.symbol.enums.DDF_TimeZone.*;
 import static com.barchart.util.ascii.ASCII.*;
 
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.values.api.Value;
 
@@ -126,6 +127,22 @@ public enum DDF_ExchangeKind implements Value<DDF_ExchangeKind> {
 	@Override
 	public boolean isNull() {
 		return this == UNKNOWN;
+	}
+	
+	public Instrument.SecurityType asSecType() {
+		switch(this) {
+		default:
+			return Instrument.SecurityType.NULL_TYPE;
+		case FUTURE:
+			return Instrument.SecurityType.FUTURE;
+		case STOCK:
+			return Instrument.SecurityType.EQUITY;
+		case INDEX:
+			return Instrument.SecurityType.INDEX;
+		case FOREX:
+			return Instrument.SecurityType.FOREX;
+		}
+		
 	}
 
 }

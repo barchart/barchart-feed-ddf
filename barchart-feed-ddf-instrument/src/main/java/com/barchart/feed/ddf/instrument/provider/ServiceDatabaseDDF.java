@@ -26,8 +26,13 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	
 	static final Logger log = LoggerFactory.getLogger(ServiceDatabaseDDF.class);
 	
+	private static final List<Instrument> EMPTY_LIST = Collections.emptyList();
+	
 	private final ConcurrentMap<CharSequence, List<Instrument>> cache = 
 			new ConcurrentHashMap<CharSequence, List<Instrument>>();
+	
+	private final ConcurrentMap<CharSequence, Boolean> failedCache = 
+			new ConcurrentHashMap<CharSequence, Boolean>();
 	
 	private final LocalInstrumentDBMap db;
 	private final ExecutorService executor;
@@ -99,6 +104,10 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 			return Collections.emptyList();
 		}
 		
+		if(failedCache.containsKey(symbol)) {
+			return EMPTY_LIST;
+		}
+		
 		List<Instrument> instrument = cache.get(symbol);
 		
 		if(instrument != null) {
@@ -116,12 +125,31 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 			instrument = Collections.singletonList(
 					InstrumentFactory.buildFromProtoBuf(instDef));
 			cache.put(symbol, instrument);
+			
+			//DELETE ME
+			if(instrument.get(0).exchange().isNull()) {
+				System.out.println();
+			}
+			
 			return instrument;
 			
 		} 
 		
-		log.debug("Cannot find {} in local DB, using remote", symbol);
-		return remoteInstService.lookup(symbol);
+		instrument = remoteInstService.lookup(symbol);
+		
+		if(instrument != null && instrument.size() > 0) {
+			
+			//DELETE ME
+			if(instrument.get(0).exchange().isNull()) {
+				System.out.println();
+			}
+			
+			cache.put(symbol, instrument);
+			return instrument;
+		} else {
+			failedCache.put(symbol, false);
+			return EMPTY_LIST;
+		}
 		
 	}
 	
