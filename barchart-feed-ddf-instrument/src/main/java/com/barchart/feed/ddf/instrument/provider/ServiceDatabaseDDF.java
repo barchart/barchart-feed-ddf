@@ -108,6 +108,17 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 			return EMPTY_LIST;
 		}
 		
+		/*
+		 * FIXME HACK
+		 * Currently need to filter options because of symbology
+		 */
+		if(symbol.charAt(symbol.length() - 1) == 'P' ||
+			symbol.charAt(symbol.length() - 1) == 'C' ||
+			symbol.charAt(symbol.length() - 1) == 'Q' ||
+			symbol.charAt(symbol.length() - 1) == 'D') {
+			return EMPTY_LIST;
+		}
+		
 		List<Instrument> instrument = cache.get(symbol);
 		
 		if(instrument != null) {
@@ -126,24 +137,14 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 					InstrumentFactory.buildFromProtoBuf(instDef));
 			cache.put(symbol, instrument);
 			
-			//DELETE ME
-			if(instrument.get(0).exchange().isNull()) {
-				System.out.println();
-			}
-			
 			return instrument;
 			
 		} 
 		
+		//log.debug("Symbol {} not found in DB, using remote", symbol);
 		instrument = remoteInstService.lookup(symbol);
 		
 		if(instrument != null && instrument.size() > 0) {
-			
-			//DELETE ME
-			if(instrument.get(0).exchange().isNull()) {
-				System.out.println();
-			}
-			
 			cache.put(symbol, instrument);
 			return instrument;
 		} else {

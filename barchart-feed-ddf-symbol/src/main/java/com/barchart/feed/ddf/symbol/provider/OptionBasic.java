@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.ddf.symbol.provider;
 
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.OPTION_SEPARATOR;
+
 import com.barchart.feed.ddf.symbol.api.DDF_SymbolOption;
 import com.barchart.feed.ddf.symbol.enums.DDF_Option;
 import com.barchart.feed.ddf.symbol.enums.DDF_OptionYear;

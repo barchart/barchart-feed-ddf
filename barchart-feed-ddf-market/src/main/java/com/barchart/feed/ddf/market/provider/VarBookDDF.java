@@ -141,6 +141,14 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 		final Collection<MarketBookEntry> values = map.values();
 
 		final int size = values.size();
+		
+		if(size == 0) {
+			if(side == Side.BID) {
+				return new MarketBookEntry[]{topBid};
+			} else {
+				return new MarketBookEntry[]{topAsk};
+			}
+		}
 
 		final MarketBookEntry[] array = new MarketBookEntry[size];
 
@@ -159,10 +167,8 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	public final DefBook freeze() {
 		
 		return new DefBook(instrument, time(), 
-				//entries(Book.Side.BID),
-				new MarketBookEntry[]{topBid},
-				//entries(Book.Side.ASK),
-				new MarketBookEntry[]{topAsk},
+				entries(Book.Side.BID),
+				entries(Book.Side.ASK),
 				lastEntry);
 	}
 	

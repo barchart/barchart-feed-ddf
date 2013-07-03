@@ -36,7 +36,7 @@ public class TestBarchartFeed {
 			@Override
 			public void onNext(final Trade v) {
 				
-				log.debug(v.instrument().symbol() + " " + v.type().name());
+				//log.debug(v.instrument().symbol() + " " + v.types().name());
 				
 //				log.debug(
 //				v.instrument().symbol() + " " +

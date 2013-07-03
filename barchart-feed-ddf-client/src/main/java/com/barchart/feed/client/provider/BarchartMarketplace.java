@@ -54,7 +54,7 @@ public class BarchartMarketplace implements Marketplace {
 	/* Used if unable to retrieve system default temp directory */
 	private static final String TEMP_DIR = "C:\\windows\\temp\\";
 	private final File dbFolder;
-	private static final long DB_UPDATE_TIMEOUT = 60; // seconds
+	private static final long DB_UPDATE_TIMEOUT = 2 * 60; // seconds
 	
 	private volatile DDF_FeedClientBase connection;
 	private final DDF_Marketplace maker;

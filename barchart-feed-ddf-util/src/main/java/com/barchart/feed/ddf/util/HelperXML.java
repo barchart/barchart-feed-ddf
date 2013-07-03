@@ -246,7 +246,7 @@ public final class HelperXML {
 			return string;
 		}
 		if (isThrow) {
-			throw new IllegalArgumentException("attribute not valid : "
+			throw new IllegalArgumentException("String decode - attribute not valid : "
 					+ attribute);
 		}
 		return "";

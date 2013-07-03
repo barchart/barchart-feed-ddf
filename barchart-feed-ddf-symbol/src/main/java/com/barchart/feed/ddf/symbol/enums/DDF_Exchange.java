@@ -10,6 +10,9 @@ package com.barchart.feed.ddf.symbol.enums;
 import static com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind.*;
 import static com.barchart.util.ascii.ASCII.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.inst.provider.Exchanges;
@@ -122,6 +125,10 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	/** The ord. */
  ;
 
+	
+	private static final Logger log = LoggerFactory
+			.getLogger(DDF_Exchange.class);
+	
 	// ////////////////////////
 
 	/** byte sized enum ordinal */

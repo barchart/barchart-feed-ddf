@@ -104,11 +104,13 @@ public final class InstrumentXML {
 		try {
 			guid = ValueBuilder.newText(xmlStringDecode(tag, GUID, XML_STOP));
 		} catch (Exception e) {
-			//return Instrument.NULL_INSTRUMENT;
+			// TODO
+			//return (InstrumentDDF) Instrument.NULL;
 			return null;
 		}
 		
-		final TextValue symbolReal = ValueBuilder.newText(xmlStringDecode(tag, SYMBOL_REALTIME, XML_STOP));
+		final TextValue symbolReal = ValueBuilder.newText(xmlStringDecode(
+				tag, SYMBOL_REALTIME, XML_STOP));
 		final byte exchCode = xmlByteDecode(tag, EXCHANGE_DDF, XML_PASS); 
 		final byte baseCode = xmlByteDecode(tag, BASE_CODE_DDF, XML_STOP);
 		final String codeCFI = xmlStringDecode(tag, SYMBOL_CODE_CFI, XML_PASS);
@@ -297,19 +299,27 @@ public final class InstrumentXML {
 		/* market originating exchange identifier */
 		final DDF_Exchange exchange = DDF_Exchange.fromCode( 
 				xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS));
-		builder.setExchangeCode(exchange.name());
+		String eCode = new String(new byte[] {exchange.code});
+		if(eCode == null || eCode.isEmpty()) {
+			eCode = Exchanges.NULL_CODE;
+		}
+		builder.setExchangeCode(eCode);
 		
 		final DDF_Fraction frac = DDF_Fraction.fromBaseCode(
 				xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP));
 		
 		/* price step / increment size / tick size */
-		final long priceStepMantissa = xmlDecimalDecode(frac, ats,
+		try {
+			final long priceStepMantissa = xmlDecimalDecode(frac, ats,
 				PRICE_TICK_INCREMENT, XML_STOP);
-		builder.setMinimumPriceIncrement(buildDecimal(priceStepMantissa, frac.decimalExponent));
+			builder.setMinimumPriceIncrement(buildDecimal(priceStepMantissa, frac.decimalExponent));
+		} catch (Exception e) {
+			builder.setMinimumPriceIncrement(buildDecimal(0,0));
+		}
 		
 		/* value of a future contract / stock share */
 		final String pricePointString = xmlStringDecode(ats, PRICE_POINT_VALUE,	XML_PASS);
-		if(pricePointString == null) {
+		if(pricePointString == null || pricePointString.isEmpty()) {
 			builder.setContractPointValue(buildDecimal(0,0));
 		} else {
 			PriceValue pricePoint = ValueBuilder.newPrice(Double

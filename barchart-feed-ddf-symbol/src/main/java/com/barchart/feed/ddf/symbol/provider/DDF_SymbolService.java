@@ -60,7 +60,7 @@ public class DDF_SymbolService {
 		final TextValue guid = DDF_Symbology.lookupFromSymbol(text);
 		DDF_Symbol symbol = symbolMap.get(guid);
 
-		log.error("find {}", text);
+		//log.error("find {}", text);
 
 		if (symbol == null) {
 			symbol = decode(guid.toString());
@@ -128,6 +128,7 @@ public class DDF_SymbolService {
 			symbol.year = DDF_ExpireYear.fromOptionYear(indicator);
 			symbol.strikePrice = symbolName.substring(middle + 1, finish - 1);
 			symbol.optionIndicator = DDF_Option.fromOptionYear(indicator);
+			
 			return symbol;
 		}
 

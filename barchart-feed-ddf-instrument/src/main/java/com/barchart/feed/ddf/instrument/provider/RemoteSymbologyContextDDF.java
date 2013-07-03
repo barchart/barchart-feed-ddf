@@ -165,7 +165,7 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 					instDOM.get(InstrumentField.MARKET_GUID));
 			
 			/* Cache symbols */
-			log.debug("Caching {} for symbol {}", instDOM.get(InstrumentField.SYMBOL), symbol);
+			//log.debug("Caching {} for symbol {}", instDOM.get(InstrumentField.SYMBOL), symbol);
 			symbolMap.put(instDOM.get(InstrumentField.SYMBOL).toString(), guid);
 			
 			/* Populate instrument map */

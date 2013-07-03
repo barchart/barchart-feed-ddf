@@ -244,23 +244,25 @@ public final class DDF_Symbology {
 	 * @return true, if is future
 	 */
 	public static final boolean isFuture(final String symbol) {
-		if (symbol == null) {
-			return false;
-		}
-		if (!containsDigit(symbol)) {
-			return false;
-		}
-		final int size = symbol.length();
-		if (size < 3) {
-			return false;
-		}
-		if (!DDF_ExpireYear.isValid(symbol.charAt(size - 1))) {
-			return false;
-		}
-		if (!DDF_ExpireMonth.isValid(symbol.charAt(size - 2))) {
-			return false;
-		}
-		return true;
+		
+			if (symbol == null) {
+				return false;
+			}
+			if (!containsDigit(symbol)) {
+				return false;
+			}
+			final int size = symbol.length();
+			if (size < 3) {
+				return false;
+			}
+			if (!DDF_ExpireYear.isValid(symbol.charAt(size - 1))) {
+				return false;
+			}
+			if (!DDF_ExpireMonth.isValid(symbol.charAt(size - 2))) {
+				return false;
+			}
+			return true;
+	
 	}
 
 	/**
