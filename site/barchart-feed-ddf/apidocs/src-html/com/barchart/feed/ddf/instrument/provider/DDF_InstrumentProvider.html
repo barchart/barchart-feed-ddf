@@ -350,65 +350,69 @@
 <FONT color="green">347</FONT>                            return symbol;<a name="line.347"></a>
 <FONT color="green">348</FONT>                    }<a name="line.348"></a>
 <FONT color="green">349</FONT>                    <a name="line.349"></a>
-<FONT color="green">350</FONT>                    /* e.g. GOOG */<a name="line.350"></a>
-<FONT color="green">351</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {<a name="line.351"></a>
-<FONT color="green">352</FONT>                            return symbol;<a name="line.352"></a>
-<FONT color="green">353</FONT>                    }<a name="line.353"></a>
-<FONT color="green">354</FONT>                    <a name="line.354"></a>
-<FONT color="green">355</FONT>                    /* e.g. ESH3 */<a name="line.355"></a>
-<FONT color="green">356</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {<a name="line.356"></a>
-<FONT color="green">357</FONT>                            <a name="line.357"></a>
-<FONT color="green">358</FONT>                            final StringBuilder sb = new StringBuilder(symbol);<a name="line.358"></a>
-<FONT color="green">359</FONT>                            int last = Character.getNumericValue(symbol.charAt(symbol.length() - 1));<a name="line.359"></a>
-<FONT color="green">360</FONT>                            if(YEAR % 2010 &lt; last) {<a name="line.360"></a>
-<FONT color="green">361</FONT>                                    symbol = sb.insert(symbol.length() - 1, T_Z_O);<a name="line.361"></a>
-<FONT color="green">362</FONT>                            } else if(YEAR % 2010 &gt; last) {<a name="line.362"></a>
-<FONT color="green">363</FONT>                                    symbol = sb.insert(symbol.length() - 1, T_Z_T);<a name="line.363"></a>
-<FONT color="green">364</FONT>                            } else {<a name="line.364"></a>
-<FONT color="green">365</FONT>                                    if(symbol.charAt(symbol.length() - 2) &gt;= MONTH) {<a name="line.365"></a>
-<FONT color="green">366</FONT>                                            symbol = sb.insert(symbol.length() - 1, T_Z_O);<a name="line.366"></a>
-<FONT color="green">367</FONT>                                    } else {<a name="line.367"></a>
-<FONT color="green">368</FONT>                                            symbol = sb.insert(symbol.length() - 1, T_Z_T);<a name="line.368"></a>
-<FONT color="green">369</FONT>                                    }<a name="line.369"></a>
-<FONT color="green">370</FONT>                            }<a name="line.370"></a>
-<FONT color="green">371</FONT>                            <a name="line.371"></a>
-<FONT color="green">372</FONT>                            return symbol;<a name="line.372"></a>
-<FONT color="green">373</FONT>                    }<a name="line.373"></a>
-<FONT color="green">374</FONT>                    <a name="line.374"></a>
-<FONT color="green">375</FONT>                    /* e.g. ESH13 */<a name="line.375"></a>
-<FONT color="green">376</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 3))) {<a name="line.376"></a>
-<FONT color="green">377</FONT>                            <a name="line.377"></a>
-<FONT color="green">378</FONT>                            return new StringBuilder(symbol).insert(symbol.length()-2, T_Z);<a name="line.378"></a>
-<FONT color="green">379</FONT>                            <a name="line.379"></a>
-<FONT color="green">380</FONT>                    }<a name="line.380"></a>
-<FONT color="green">381</FONT>                    <a name="line.381"></a>
-<FONT color="green">382</FONT>                    return symbol;<a name="line.382"></a>
-<FONT color="green">383</FONT>            }<a name="line.383"></a>
-<FONT color="green">384</FONT>            <a name="line.384"></a>
-<FONT color="green">385</FONT>            public static CharSequence formatHistoricalSymbol(CharSequence symbol) {<a name="line.385"></a>
-<FONT color="green">386</FONT>                    <a name="line.386"></a>
-<FONT color="green">387</FONT>                    if(symbol == null) {<a name="line.387"></a>
-<FONT color="green">388</FONT>                            return "";<a name="line.388"></a>
-<FONT color="green">389</FONT>                    }<a name="line.389"></a>
+<FONT color="green">350</FONT>                    if(symbol.charAt(0) == '_') {<a name="line.350"></a>
+<FONT color="green">351</FONT>                            return symbol;<a name="line.351"></a>
+<FONT color="green">352</FONT>                    }<a name="line.352"></a>
+<FONT color="green">353</FONT>                    <a name="line.353"></a>
+<FONT color="green">354</FONT>                    /* e.g. GOOG */<a name="line.354"></a>
+<FONT color="green">355</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {<a name="line.355"></a>
+<FONT color="green">356</FONT>                            return symbol;<a name="line.356"></a>
+<FONT color="green">357</FONT>                    }<a name="line.357"></a>
+<FONT color="green">358</FONT>                    <a name="line.358"></a>
+<FONT color="green">359</FONT>                    /* e.g. ESH3 */<a name="line.359"></a>
+<FONT color="green">360</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {<a name="line.360"></a>
+<FONT color="green">361</FONT>                            <a name="line.361"></a>
+<FONT color="green">362</FONT>                            final StringBuilder sb = new StringBuilder(symbol);<a name="line.362"></a>
+<FONT color="green">363</FONT>                            int last = Character.getNumericValue(symbol.charAt(symbol.length() - 1));<a name="line.363"></a>
+<FONT color="green">364</FONT>                            if(YEAR % 2010 &lt; last) {<a name="line.364"></a>
+<FONT color="green">365</FONT>                                    symbol = sb.insert(symbol.length() - 1, T_Z_O);<a name="line.365"></a>
+<FONT color="green">366</FONT>                            } else if(YEAR % 2010 &gt; last) {<a name="line.366"></a>
+<FONT color="green">367</FONT>                                    symbol = sb.insert(symbol.length() - 1, T_Z_T);<a name="line.367"></a>
+<FONT color="green">368</FONT>                            } else {<a name="line.368"></a>
+<FONT color="green">369</FONT>                                    if(symbol.charAt(symbol.length() - 2) &gt;= MONTH) {<a name="line.369"></a>
+<FONT color="green">370</FONT>                                            symbol = sb.insert(symbol.length() - 1, T_Z_O);<a name="line.370"></a>
+<FONT color="green">371</FONT>                                    } else {<a name="line.371"></a>
+<FONT color="green">372</FONT>                                            symbol = sb.insert(symbol.length() - 1, T_Z_T);<a name="line.372"></a>
+<FONT color="green">373</FONT>                                    }<a name="line.373"></a>
+<FONT color="green">374</FONT>                            }<a name="line.374"></a>
+<FONT color="green">375</FONT>                            <a name="line.375"></a>
+<FONT color="green">376</FONT>                            return symbol;<a name="line.376"></a>
+<FONT color="green">377</FONT>                    }<a name="line.377"></a>
+<FONT color="green">378</FONT>                    <a name="line.378"></a>
+<FONT color="green">379</FONT>                    /* e.g. ESH13 */<a name="line.379"></a>
+<FONT color="green">380</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 3))) {<a name="line.380"></a>
+<FONT color="green">381</FONT>                            <a name="line.381"></a>
+<FONT color="green">382</FONT>                            return new StringBuilder(symbol).insert(symbol.length()-2, T_Z);<a name="line.382"></a>
+<FONT color="green">383</FONT>                            <a name="line.383"></a>
+<FONT color="green">384</FONT>                    }<a name="line.384"></a>
+<FONT color="green">385</FONT>                    <a name="line.385"></a>
+<FONT color="green">386</FONT>                    return symbol;<a name="line.386"></a>
+<FONT color="green">387</FONT>            }<a name="line.387"></a>
+<FONT color="green">388</FONT>            <a name="line.388"></a>
+<FONT color="green">389</FONT>            public static CharSequence formatHistoricalSymbol(CharSequence symbol) {<a name="line.389"></a>
 <FONT color="green">390</FONT>                    <a name="line.390"></a>
-<FONT color="green">391</FONT>                    if(symbol.length() &lt; 3) {<a name="line.391"></a>
-<FONT color="green">392</FONT>                            return symbol;<a name="line.392"></a>
+<FONT color="green">391</FONT>                    if(symbol == null) {<a name="line.391"></a>
+<FONT color="green">392</FONT>                            return "";<a name="line.392"></a>
 <FONT color="green">393</FONT>                    }<a name="line.393"></a>
 <FONT color="green">394</FONT>                    <a name="line.394"></a>
-<FONT color="green">395</FONT>                    /* e.g. GOOG */<a name="line.395"></a>
-<FONT color="green">396</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {<a name="line.396"></a>
-<FONT color="green">397</FONT>                            return symbol;<a name="line.397"></a>
-<FONT color="green">398</FONT>                    }<a name="line.398"></a>
-<FONT color="green">399</FONT>                    <a name="line.399"></a>
-<FONT color="green">400</FONT>                    /* e.g. ESH3 */<a name="line.400"></a>
-<FONT color="green">401</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {<a name="line.401"></a>
-<FONT color="green">402</FONT>                            return new StringBuilder(symbol).insert(symbol.length() - 1, O);<a name="line.402"></a>
-<FONT color="green">403</FONT>                    }<a name="line.403"></a>
-<FONT color="green">404</FONT>                    <a name="line.404"></a>
-<FONT color="green">405</FONT>                    return symbol;<a name="line.405"></a>
-<FONT color="green">406</FONT>            }<a name="line.406"></a>
-<FONT color="green">407</FONT>    <a name="line.407"></a>
-<FONT color="green">408</FONT>    }<a name="line.408"></a>
+<FONT color="green">395</FONT>                    if(symbol.length() &lt; 3) {<a name="line.395"></a>
+<FONT color="green">396</FONT>                            return symbol;<a name="line.396"></a>
+<FONT color="green">397</FONT>                    }<a name="line.397"></a>
+<FONT color="green">398</FONT>                    <a name="line.398"></a>
+<FONT color="green">399</FONT>                    /* e.g. GOOG */<a name="line.399"></a>
+<FONT color="green">400</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {<a name="line.400"></a>
+<FONT color="green">401</FONT>                            return symbol;<a name="line.401"></a>
+<FONT color="green">402</FONT>                    }<a name="line.402"></a>
+<FONT color="green">403</FONT>                    <a name="line.403"></a>
+<FONT color="green">404</FONT>                    /* e.g. ESH3 */<a name="line.404"></a>
+<FONT color="green">405</FONT>                    if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {<a name="line.405"></a>
+<FONT color="green">406</FONT>                            return new StringBuilder(symbol).insert(symbol.length() - 1, O);<a name="line.406"></a>
+<FONT color="green">407</FONT>                    }<a name="line.407"></a>
+<FONT color="green">408</FONT>                    <a name="line.408"></a>
+<FONT color="green">409</FONT>                    return symbol;<a name="line.409"></a>
+<FONT color="green">410</FONT>            }<a name="line.410"></a>
+<FONT color="green">411</FONT>    <a name="line.411"></a>
+<FONT color="green">412</FONT>    }<a name="line.412"></a>
 
 
 

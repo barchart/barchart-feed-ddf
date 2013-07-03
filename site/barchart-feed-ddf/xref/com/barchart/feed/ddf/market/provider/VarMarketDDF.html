@@ -178,7 +178,7 @@
 <a class="jxr_linenumber" name="168" href="#168">168</a> 			<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="169" href="#169">169</a> 		<strong class="jxr_keyword">default</strong>:
 <a class="jxr_linenumber" name="170" href="#170">170</a> 			eventAdd(NEW_BOOK_ERROR);
-<a class="jxr_linenumber" name="171" href="#171">171</a> 			<strong class="jxr_keyword">final</strong> CharSequence id = instrument.GUID();
+<a class="jxr_linenumber" name="171" href="#171">171</a> 			<strong class="jxr_keyword">final</strong> CharSequence id = instrument.id().toString();
 <a class="jxr_linenumber" name="172" href="#172">172</a> 			<strong class="jxr_keyword">final</strong> CharSequence comment = instrument.description();
 <a class="jxr_linenumber" name="173" href="#173">173</a> 			log.error(<span class="jxr_string">"instrument : {} : {}"</span>, id, comment);
 <a class="jxr_linenumber" name="174" href="#174">174</a> 			log.error(<span class="jxr_string">"result : {} ; entry : {} ;"</span>, result, entry);

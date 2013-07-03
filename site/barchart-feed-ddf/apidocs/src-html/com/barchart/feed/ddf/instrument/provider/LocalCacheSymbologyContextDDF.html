@@ -10,29 +10,29 @@
 <FONT color="green">007</FONT>    import java.util.concurrent.ConcurrentHashMap;<a name="line.7"></a>
 <FONT color="green">008</FONT>    import java.util.concurrent.ConcurrentMap;<a name="line.8"></a>
 <FONT color="green">009</FONT>    <a name="line.9"></a>
-<FONT color="green">010</FONT>    import com.barchart.feed.api.util.InstrumentGUID;<a name="line.10"></a>
+<FONT color="green">010</FONT>    import com.barchart.feed.api.util.Identifier;<a name="line.10"></a>
 <FONT color="green">011</FONT>    import com.barchart.feed.inst.SymbologyContext;<a name="line.11"></a>
 <FONT color="green">012</FONT>    <a name="line.12"></a>
 <FONT color="green">013</FONT>    public class LocalCacheSymbologyContextDDF implements SymbologyContext&lt;CharSequence&gt; {<a name="line.13"></a>
 <FONT color="green">014</FONT>    <a name="line.14"></a>
-<FONT color="green">015</FONT>            private final ConcurrentMap&lt;CharSequence, InstrumentGUID&gt; symbolMap = <a name="line.15"></a>
-<FONT color="green">016</FONT>                            new ConcurrentHashMap&lt;CharSequence, InstrumentGUID&gt;();<a name="line.16"></a>
+<FONT color="green">015</FONT>            private final ConcurrentMap&lt;CharSequence, Identifier&gt; symbolMap = <a name="line.15"></a>
+<FONT color="green">016</FONT>                            new ConcurrentHashMap&lt;CharSequence, Identifier&gt;();<a name="line.16"></a>
 <FONT color="green">017</FONT>            <a name="line.17"></a>
-<FONT color="green">018</FONT>            public void storeGUID(final CharSequence symbol, final InstrumentGUID guid) {<a name="line.18"></a>
+<FONT color="green">018</FONT>            public void storeGUID(final CharSequence symbol, final Identifier guid) {<a name="line.18"></a>
 <FONT color="green">019</FONT>                    symbolMap.put(symbol, guid);<a name="line.19"></a>
 <FONT color="green">020</FONT>            }<a name="line.20"></a>
 <FONT color="green">021</FONT>            <a name="line.21"></a>
 <FONT color="green">022</FONT>            @Override<a name="line.22"></a>
-<FONT color="green">023</FONT>            public InstrumentGUID lookup(final CharSequence symbol) {<a name="line.23"></a>
+<FONT color="green">023</FONT>            public Identifier lookup(final CharSequence symbol) {<a name="line.23"></a>
 <FONT color="green">024</FONT>                    <a name="line.24"></a>
 <FONT color="green">025</FONT>                    if(symbol == null || symbol.length() == 0) {<a name="line.25"></a>
-<FONT color="green">026</FONT>                            return InstrumentGUID.NULL;<a name="line.26"></a>
+<FONT color="green">026</FONT>                            return Identifier.NULL;<a name="line.26"></a>
 <FONT color="green">027</FONT>                    }<a name="line.27"></a>
 <FONT color="green">028</FONT>                    <a name="line.28"></a>
-<FONT color="green">029</FONT>                    final InstrumentGUID guid = symbolMap.get(symbol);<a name="line.29"></a>
+<FONT color="green">029</FONT>                    final Identifier guid = symbolMap.get(symbol);<a name="line.29"></a>
 <FONT color="green">030</FONT>                    <a name="line.30"></a>
 <FONT color="green">031</FONT>                    if(guid == null) {<a name="line.31"></a>
-<FONT color="green">032</FONT>                            return InstrumentGUID.NULL;<a name="line.32"></a>
+<FONT color="green">032</FONT>                            return Identifier.NULL;<a name="line.32"></a>
 <FONT color="green">033</FONT>                    } else {<a name="line.33"></a>
 <FONT color="green">034</FONT>                            return guid;<a name="line.34"></a>
 <FONT color="green">035</FONT>                    }<a name="line.35"></a>
@@ -40,11 +40,11 @@
 <FONT color="green">037</FONT>            }<a name="line.37"></a>
 <FONT color="green">038</FONT>    <a name="line.38"></a>
 <FONT color="green">039</FONT>            @Override<a name="line.39"></a>
-<FONT color="green">040</FONT>            public Map&lt;CharSequence, InstrumentGUID&gt; lookup(<a name="line.40"></a>
+<FONT color="green">040</FONT>            public Map&lt;CharSequence, Identifier&gt; lookup(<a name="line.40"></a>
 <FONT color="green">041</FONT>                            Collection&lt;? extends CharSequence&gt; symbols) {<a name="line.41"></a>
 <FONT color="green">042</FONT>                    <a name="line.42"></a>
-<FONT color="green">043</FONT>                    final Map&lt;CharSequence, InstrumentGUID&gt; result = <a name="line.43"></a>
-<FONT color="green">044</FONT>                                    new HashMap&lt;CharSequence, InstrumentGUID&gt;();<a name="line.44"></a>
+<FONT color="green">043</FONT>                    final Map&lt;CharSequence, Identifier&gt; result = <a name="line.43"></a>
+<FONT color="green">044</FONT>                                    new HashMap&lt;CharSequence, Identifier&gt;();<a name="line.44"></a>
 <FONT color="green">045</FONT>                    <a name="line.45"></a>
 <FONT color="green">046</FONT>                    for(final CharSequence symbol : symbols) {<a name="line.46"></a>
 <FONT color="green">047</FONT>                            result.put(symbol, lookup(symbol));<a name="line.47"></a>
@@ -54,12 +54,12 @@
 <FONT color="green">051</FONT>            }<a name="line.51"></a>
 <FONT color="green">052</FONT>    <a name="line.52"></a>
 <FONT color="green">053</FONT>            @Override<a name="line.53"></a>
-<FONT color="green">054</FONT>            public List&lt;InstrumentGUID&gt; search(CharSequence symbol) {<a name="line.54"></a>
+<FONT color="green">054</FONT>            public List&lt;Identifier&gt; search(CharSequence symbol) {<a name="line.54"></a>
 <FONT color="green">055</FONT>                    throw new UnsupportedOperationException("Search not supported");<a name="line.55"></a>
 <FONT color="green">056</FONT>            }<a name="line.56"></a>
 <FONT color="green">057</FONT>    <a name="line.57"></a>
 <FONT color="green">058</FONT>            @Override<a name="line.58"></a>
-<FONT color="green">059</FONT>            public List&lt;InstrumentGUID&gt; search(CharSequence symbol, int limit,<a name="line.59"></a>
+<FONT color="green">059</FONT>            public List&lt;Identifier&gt; search(CharSequence symbol, int limit,<a name="line.59"></a>
 <FONT color="green">060</FONT>                            int offset) {<a name="line.60"></a>
 <FONT color="green">061</FONT>                    throw new UnsupportedOperationException("Search not supported");<a name="line.61"></a>
 <FONT color="green">062</FONT>            }<a name="line.62"></a>

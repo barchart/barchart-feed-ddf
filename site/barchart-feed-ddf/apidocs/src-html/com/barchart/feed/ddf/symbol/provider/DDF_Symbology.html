@@ -247,374 +247,376 @@
 <FONT color="green">244</FONT>             * @return true, if is future<a name="line.244"></a>
 <FONT color="green">245</FONT>             */<a name="line.245"></a>
 <FONT color="green">246</FONT>            public static final boolean isFuture(final String symbol) {<a name="line.246"></a>
-<FONT color="green">247</FONT>                    if (symbol == null) {<a name="line.247"></a>
-<FONT color="green">248</FONT>                            return false;<a name="line.248"></a>
-<FONT color="green">249</FONT>                    }<a name="line.249"></a>
-<FONT color="green">250</FONT>                    if (!containsDigit(symbol)) {<a name="line.250"></a>
-<FONT color="green">251</FONT>                            return false;<a name="line.251"></a>
-<FONT color="green">252</FONT>                    }<a name="line.252"></a>
-<FONT color="green">253</FONT>                    final int size = symbol.length();<a name="line.253"></a>
-<FONT color="green">254</FONT>                    if (size &lt; 3) {<a name="line.254"></a>
-<FONT color="green">255</FONT>                            return false;<a name="line.255"></a>
-<FONT color="green">256</FONT>                    }<a name="line.256"></a>
-<FONT color="green">257</FONT>                    if (!DDF_ExpireYear.isValid(symbol.charAt(size - 1))) {<a name="line.257"></a>
-<FONT color="green">258</FONT>                            return false;<a name="line.258"></a>
-<FONT color="green">259</FONT>                    }<a name="line.259"></a>
-<FONT color="green">260</FONT>                    if (!DDF_ExpireMonth.isValid(symbol.charAt(size - 2))) {<a name="line.260"></a>
-<FONT color="green">261</FONT>                            return false;<a name="line.261"></a>
-<FONT color="green">262</FONT>                    }<a name="line.262"></a>
-<FONT color="green">263</FONT>                    return true;<a name="line.263"></a>
-<FONT color="green">264</FONT>            }<a name="line.264"></a>
-<FONT color="green">265</FONT>    <a name="line.265"></a>
-<FONT color="green">266</FONT>            /**<a name="line.266"></a>
-<FONT color="green">267</FONT>             * Gets the group future.<a name="line.267"></a>
-<FONT color="green">268</FONT>             *<a name="line.268"></a>
-<FONT color="green">269</FONT>             * @param symbolName the symbol name<a name="line.269"></a>
-<FONT color="green">270</FONT>             * @return the group future<a name="line.270"></a>
-<FONT color="green">271</FONT>             */<a name="line.271"></a>
-<FONT color="green">272</FONT>            public static final String getGroupFuture(final String symbolName) {<a name="line.272"></a>
-<FONT color="green">273</FONT>                    final int start = 0;<a name="line.273"></a>
-<FONT color="green">274</FONT>                    final int finish = symbolName.length() - 2;<a name="line.274"></a>
-<FONT color="green">275</FONT>                    return symbolName.substring(start, finish);<a name="line.275"></a>
-<FONT color="green">276</FONT>            }<a name="line.276"></a>
-<FONT color="green">277</FONT>    <a name="line.277"></a>
-<FONT color="green">278</FONT>            /**<a name="line.278"></a>
-<FONT color="green">279</FONT>             * Gets the future expire year.<a name="line.279"></a>
-<FONT color="green">280</FONT>             *<a name="line.280"></a>
-<FONT color="green">281</FONT>             * @param symbolName the symbol name<a name="line.281"></a>
-<FONT color="green">282</FONT>             * @return the future expire year<a name="line.282"></a>
-<FONT color="green">283</FONT>             */<a name="line.283"></a>
-<FONT color="green">284</FONT>            public static final DDF_ExpireYear getFutureExpireYear(<a name="line.284"></a>
-<FONT color="green">285</FONT>                            final String symbolName) {<a name="line.285"></a>
-<FONT color="green">286</FONT>                    final int size = symbolName.length();<a name="line.286"></a>
-<FONT color="green">287</FONT>                    final char code = symbolName.charAt(size - 1);<a name="line.287"></a>
-<FONT color="green">288</FONT>                    return DDF_ExpireYear.fromCode(code);<a name="line.288"></a>
-<FONT color="green">289</FONT>            }<a name="line.289"></a>
-<FONT color="green">290</FONT>    <a name="line.290"></a>
-<FONT color="green">291</FONT>            /**<a name="line.291"></a>
-<FONT color="green">292</FONT>             * Gets the future expire month.<a name="line.292"></a>
-<FONT color="green">293</FONT>             *<a name="line.293"></a>
-<FONT color="green">294</FONT>             * @param symbolName the symbol name<a name="line.294"></a>
-<FONT color="green">295</FONT>             * @return the future expire month<a name="line.295"></a>
-<FONT color="green">296</FONT>             */<a name="line.296"></a>
-<FONT color="green">297</FONT>            public static final DDF_ExpireMonth getFutureExpireMonth(<a name="line.297"></a>
-<FONT color="green">298</FONT>                            final String symbolName) {<a name="line.298"></a>
-<FONT color="green">299</FONT>                    final int size = symbolName.length();<a name="line.299"></a>
-<FONT color="green">300</FONT>                    final char code = symbolName.charAt(size - 2);<a name="line.300"></a>
-<FONT color="green">301</FONT>                    return DDF_ExpireMonth.fromCode(code);<a name="line.301"></a>
-<FONT color="green">302</FONT>            }<a name="line.302"></a>
-<FONT color="green">303</FONT>    <a name="line.303"></a>
-<FONT color="green">304</FONT>            /*<a name="line.304"></a>
-<FONT color="green">305</FONT>             * Futures Options Symbols Overview ================================<a name="line.305"></a>
-<FONT color="green">306</FONT>             * <a name="line.306"></a>
-<FONT color="green">307</FONT>             * CMSSSSC or CCMSSSP; SX5300P or ESU990C<a name="line.307"></a>
+<FONT color="green">247</FONT>                    <a name="line.247"></a>
+<FONT color="green">248</FONT>                            if (symbol == null) {<a name="line.248"></a>
+<FONT color="green">249</FONT>                                    return false;<a name="line.249"></a>
+<FONT color="green">250</FONT>                            }<a name="line.250"></a>
+<FONT color="green">251</FONT>                            if (!containsDigit(symbol)) {<a name="line.251"></a>
+<FONT color="green">252</FONT>                                    return false;<a name="line.252"></a>
+<FONT color="green">253</FONT>                            }<a name="line.253"></a>
+<FONT color="green">254</FONT>                            final int size = symbol.length();<a name="line.254"></a>
+<FONT color="green">255</FONT>                            if (size &lt; 3) {<a name="line.255"></a>
+<FONT color="green">256</FONT>                                    return false;<a name="line.256"></a>
+<FONT color="green">257</FONT>                            }<a name="line.257"></a>
+<FONT color="green">258</FONT>                            if (!DDF_ExpireYear.isValid(symbol.charAt(size - 1))) {<a name="line.258"></a>
+<FONT color="green">259</FONT>                                    return false;<a name="line.259"></a>
+<FONT color="green">260</FONT>                            }<a name="line.260"></a>
+<FONT color="green">261</FONT>                            if (!DDF_ExpireMonth.isValid(symbol.charAt(size - 2))) {<a name="line.261"></a>
+<FONT color="green">262</FONT>                                    return false;<a name="line.262"></a>
+<FONT color="green">263</FONT>                            }<a name="line.263"></a>
+<FONT color="green">264</FONT>                            return true;<a name="line.264"></a>
+<FONT color="green">265</FONT>            <a name="line.265"></a>
+<FONT color="green">266</FONT>            }<a name="line.266"></a>
+<FONT color="green">267</FONT>    <a name="line.267"></a>
+<FONT color="green">268</FONT>            /**<a name="line.268"></a>
+<FONT color="green">269</FONT>             * Gets the group future.<a name="line.269"></a>
+<FONT color="green">270</FONT>             *<a name="line.270"></a>
+<FONT color="green">271</FONT>             * @param symbolName the symbol name<a name="line.271"></a>
+<FONT color="green">272</FONT>             * @return the group future<a name="line.272"></a>
+<FONT color="green">273</FONT>             */<a name="line.273"></a>
+<FONT color="green">274</FONT>            public static final String getGroupFuture(final String symbolName) {<a name="line.274"></a>
+<FONT color="green">275</FONT>                    final int start = 0;<a name="line.275"></a>
+<FONT color="green">276</FONT>                    final int finish = symbolName.length() - 2;<a name="line.276"></a>
+<FONT color="green">277</FONT>                    return symbolName.substring(start, finish);<a name="line.277"></a>
+<FONT color="green">278</FONT>            }<a name="line.278"></a>
+<FONT color="green">279</FONT>    <a name="line.279"></a>
+<FONT color="green">280</FONT>            /**<a name="line.280"></a>
+<FONT color="green">281</FONT>             * Gets the future expire year.<a name="line.281"></a>
+<FONT color="green">282</FONT>             *<a name="line.282"></a>
+<FONT color="green">283</FONT>             * @param symbolName the symbol name<a name="line.283"></a>
+<FONT color="green">284</FONT>             * @return the future expire year<a name="line.284"></a>
+<FONT color="green">285</FONT>             */<a name="line.285"></a>
+<FONT color="green">286</FONT>            public static final DDF_ExpireYear getFutureExpireYear(<a name="line.286"></a>
+<FONT color="green">287</FONT>                            final String symbolName) {<a name="line.287"></a>
+<FONT color="green">288</FONT>                    final int size = symbolName.length();<a name="line.288"></a>
+<FONT color="green">289</FONT>                    final char code = symbolName.charAt(size - 1);<a name="line.289"></a>
+<FONT color="green">290</FONT>                    return DDF_ExpireYear.fromCode(code);<a name="line.290"></a>
+<FONT color="green">291</FONT>            }<a name="line.291"></a>
+<FONT color="green">292</FONT>    <a name="line.292"></a>
+<FONT color="green">293</FONT>            /**<a name="line.293"></a>
+<FONT color="green">294</FONT>             * Gets the future expire month.<a name="line.294"></a>
+<FONT color="green">295</FONT>             *<a name="line.295"></a>
+<FONT color="green">296</FONT>             * @param symbolName the symbol name<a name="line.296"></a>
+<FONT color="green">297</FONT>             * @return the future expire month<a name="line.297"></a>
+<FONT color="green">298</FONT>             */<a name="line.298"></a>
+<FONT color="green">299</FONT>            public static final DDF_ExpireMonth getFutureExpireMonth(<a name="line.299"></a>
+<FONT color="green">300</FONT>                            final String symbolName) {<a name="line.300"></a>
+<FONT color="green">301</FONT>                    final int size = symbolName.length();<a name="line.301"></a>
+<FONT color="green">302</FONT>                    final char code = symbolName.charAt(size - 2);<a name="line.302"></a>
+<FONT color="green">303</FONT>                    return DDF_ExpireMonth.fromCode(code);<a name="line.303"></a>
+<FONT color="green">304</FONT>            }<a name="line.304"></a>
+<FONT color="green">305</FONT>    <a name="line.305"></a>
+<FONT color="green">306</FONT>            /*<a name="line.306"></a>
+<FONT color="green">307</FONT>             * Futures Options Symbols Overview ================================<a name="line.307"></a>
 <FONT color="green">308</FONT>             * <a name="line.308"></a>
-<FONT color="green">309</FONT>             * 8 bytes, where C or CC is commodity code from symbols list SSSS or SSS is<a name="line.309"></a>
-<FONT color="green">310</FONT>             * strike price C is Put or Call letter C=call this year, D=call next year,<a name="line.310"></a>
-<FONT color="green">311</FONT>             * E=call two years out, F=call 3 years out; G=call 4 years out P=put this<a name="line.311"></a>
-<FONT color="green">312</FONT>             * year, Q=put next year, R=put 2 years out, S=put 3 years out, T=put 4<a name="line.312"></a>
-<FONT color="green">313</FONT>             * years out<a name="line.313"></a>
-<FONT color="green">314</FONT>             */<a name="line.314"></a>
-<FONT color="green">315</FONT>    <a name="line.315"></a>
-<FONT color="green">316</FONT>            /**<a name="line.316"></a>
-<FONT color="green">317</FONT>             * Checks if is option basic.<a name="line.317"></a>
-<FONT color="green">318</FONT>             *<a name="line.318"></a>
-<FONT color="green">319</FONT>             * @param symbol the symbol<a name="line.319"></a>
-<FONT color="green">320</FONT>             * @return true, if is option basic<a name="line.320"></a>
-<FONT color="green">321</FONT>             */<a name="line.321"></a>
-<FONT color="green">322</FONT>            public static final boolean isOptionBasic(final String symbol) {<a name="line.322"></a>
-<FONT color="green">323</FONT>                    if (!containsDigit(symbol)) {<a name="line.323"></a>
-<FONT color="green">324</FONT>                            return false;<a name="line.324"></a>
-<FONT color="green">325</FONT>                    }<a name="line.325"></a>
-<FONT color="green">326</FONT>                    if (containsOptionSeparator(symbol)) {<a name="line.326"></a>
-<FONT color="green">327</FONT>                            return false;<a name="line.327"></a>
-<FONT color="green">328</FONT>                    }<a name="line.328"></a>
-<FONT color="green">329</FONT>                    final int size = symbol.length();<a name="line.329"></a>
-<FONT color="green">330</FONT>                    if (!DDF_OptionYear.isValid(symbol.charAt(size - 1))) {<a name="line.330"></a>
-<FONT color="green">331</FONT>                            return false;<a name="line.331"></a>
-<FONT color="green">332</FONT>                    }<a name="line.332"></a>
-<FONT color="green">333</FONT>                    return true;<a name="line.333"></a>
-<FONT color="green">334</FONT>            }<a name="line.334"></a>
-<FONT color="green">335</FONT>    <a name="line.335"></a>
-<FONT color="green">336</FONT>            /*<a name="line.336"></a>
-<FONT color="green">337</FONT>             * Futures Options Symbols Overview - Extended Symbology<a name="line.337"></a>
-<FONT color="green">338</FONT>             * =====================================================<a name="line.338"></a>
-<FONT color="green">339</FONT>             * <a name="line.339"></a>
-<FONT color="green">340</FONT>             * For exchange traded spreads and select futures options, currently only<a name="line.340"></a>
-<FONT color="green">341</FONT>             * NYMEX ClearPort Swaps, exchange code "j" DDF will start utilizing a new<a name="line.341"></a>
-<FONT color="green">342</FONT>             * format for options contracts.<a name="line.342"></a>
-<FONT color="green">343</FONT>             * <a name="line.343"></a>
-<FONT color="green">344</FONT>             * CCCMY|SSSSSC or CCCMY|SSSSSP<a name="line.344"></a>
+<FONT color="green">309</FONT>             * CMSSSSC or CCMSSSP; SX5300P or ESU990C<a name="line.309"></a>
+<FONT color="green">310</FONT>             * <a name="line.310"></a>
+<FONT color="green">311</FONT>             * 8 bytes, where C or CC is commodity code from symbols list SSSS or SSS is<a name="line.311"></a>
+<FONT color="green">312</FONT>             * strike price C is Put or Call letter C=call this year, D=call next year,<a name="line.312"></a>
+<FONT color="green">313</FONT>             * E=call two years out, F=call 3 years out; G=call 4 years out P=put this<a name="line.313"></a>
+<FONT color="green">314</FONT>             * year, Q=put next year, R=put 2 years out, S=put 3 years out, T=put 4<a name="line.314"></a>
+<FONT color="green">315</FONT>             * years out<a name="line.315"></a>
+<FONT color="green">316</FONT>             */<a name="line.316"></a>
+<FONT color="green">317</FONT>    <a name="line.317"></a>
+<FONT color="green">318</FONT>            /**<a name="line.318"></a>
+<FONT color="green">319</FONT>             * Checks if is option basic.<a name="line.319"></a>
+<FONT color="green">320</FONT>             *<a name="line.320"></a>
+<FONT color="green">321</FONT>             * @param symbol the symbol<a name="line.321"></a>
+<FONT color="green">322</FONT>             * @return true, if is option basic<a name="line.322"></a>
+<FONT color="green">323</FONT>             */<a name="line.323"></a>
+<FONT color="green">324</FONT>            public static final boolean isOptionBasic(final String symbol) {<a name="line.324"></a>
+<FONT color="green">325</FONT>                    if (!containsDigit(symbol)) {<a name="line.325"></a>
+<FONT color="green">326</FONT>                            return false;<a name="line.326"></a>
+<FONT color="green">327</FONT>                    }<a name="line.327"></a>
+<FONT color="green">328</FONT>                    if (containsOptionSeparator(symbol)) {<a name="line.328"></a>
+<FONT color="green">329</FONT>                            return false;<a name="line.329"></a>
+<FONT color="green">330</FONT>                    }<a name="line.330"></a>
+<FONT color="green">331</FONT>                    final int size = symbol.length();<a name="line.331"></a>
+<FONT color="green">332</FONT>                    if (!DDF_OptionYear.isValid(symbol.charAt(size - 1))) {<a name="line.332"></a>
+<FONT color="green">333</FONT>                            return false;<a name="line.333"></a>
+<FONT color="green">334</FONT>                    }<a name="line.334"></a>
+<FONT color="green">335</FONT>                    return true;<a name="line.335"></a>
+<FONT color="green">336</FONT>            }<a name="line.336"></a>
+<FONT color="green">337</FONT>    <a name="line.337"></a>
+<FONT color="green">338</FONT>            /*<a name="line.338"></a>
+<FONT color="green">339</FONT>             * Futures Options Symbols Overview - Extended Symbology<a name="line.339"></a>
+<FONT color="green">340</FONT>             * =====================================================<a name="line.340"></a>
+<FONT color="green">341</FONT>             * <a name="line.341"></a>
+<FONT color="green">342</FONT>             * For exchange traded spreads and select futures options, currently only<a name="line.342"></a>
+<FONT color="green">343</FONT>             * NYMEX ClearPort Swaps, exchange code "j" DDF will start utilizing a new<a name="line.343"></a>
+<FONT color="green">344</FONT>             * format for options contracts.<a name="line.344"></a>
 <FONT color="green">345</FONT>             * <a name="line.345"></a>
-<FONT color="green">346</FONT>             * Example: JAOV7|10050P<a name="line.346"></a>
+<FONT color="green">346</FONT>             * CCCMY|SSSSSC or CCCMY|SSSSSP<a name="line.346"></a>
 <FONT color="green">347</FONT>             * <a name="line.347"></a>
-<FONT color="green">348</FONT>             * Up to 12 bytes, where CCCMY is the futures symbol. CCC - commodity code,<a name="line.348"></a>
-<FONT color="green">349</FONT>             * M - month, Y - year | - delimiter SSSSS is the strike price, left<a name="line.349"></a>
-<FONT color="green">350</FONT>             * justified, zero padded to the right. C = Call, P = Put<a name="line.350"></a>
-<FONT color="green">351</FONT>             */<a name="line.351"></a>
-<FONT color="green">352</FONT>    <a name="line.352"></a>
-<FONT color="green">353</FONT>            /** The Constant OPTION_SEPARATOR. */<a name="line.353"></a>
-<FONT color="green">354</FONT>            public static final String OPTION_SEPARATOR = ASCII.STRING_BAR;<a name="line.354"></a>
-<FONT color="green">355</FONT>    <a name="line.355"></a>
-<FONT color="green">356</FONT>            /**<a name="line.356"></a>
-<FONT color="green">357</FONT>             * Contains option separator.<a name="line.357"></a>
-<FONT color="green">358</FONT>             *<a name="line.358"></a>
-<FONT color="green">359</FONT>             * @param symbol the symbol<a name="line.359"></a>
-<FONT color="green">360</FONT>             * @return true, if successful<a name="line.360"></a>
-<FONT color="green">361</FONT>             */<a name="line.361"></a>
-<FONT color="green">362</FONT>            public static final boolean containsOptionSeparator(final String symbol) {<a name="line.362"></a>
-<FONT color="green">363</FONT>                    if (symbol == null) {<a name="line.363"></a>
-<FONT color="green">364</FONT>                            return false;<a name="line.364"></a>
-<FONT color="green">365</FONT>                    }<a name="line.365"></a>
-<FONT color="green">366</FONT>                    if (!containsDigit(symbol)) {<a name="line.366"></a>
-<FONT color="green">367</FONT>                            return false;<a name="line.367"></a>
-<FONT color="green">368</FONT>                    }<a name="line.368"></a>
-<FONT color="green">369</FONT>                    return symbol.contains(OPTION_SEPARATOR);<a name="line.369"></a>
-<FONT color="green">370</FONT>            }<a name="line.370"></a>
-<FONT color="green">371</FONT>    <a name="line.371"></a>
-<FONT color="green">372</FONT>            /**<a name="line.372"></a>
-<FONT color="green">373</FONT>             * Checks if is option extended.<a name="line.373"></a>
-<FONT color="green">374</FONT>             *<a name="line.374"></a>
-<FONT color="green">375</FONT>             * @param symbol the symbol<a name="line.375"></a>
-<FONT color="green">376</FONT>             * @return true, if is option extended<a name="line.376"></a>
-<FONT color="green">377</FONT>             */<a name="line.377"></a>
-<FONT color="green">378</FONT>            public static final boolean isOptionExtended(final String symbol) {<a name="line.378"></a>
-<FONT color="green">379</FONT>                    if (symbol == null) {<a name="line.379"></a>
-<FONT color="green">380</FONT>                            return false;<a name="line.380"></a>
-<FONT color="green">381</FONT>                    }<a name="line.381"></a>
-<FONT color="green">382</FONT>                    if (!containsOptionSeparator(symbol)) {<a name="line.382"></a>
-<FONT color="green">383</FONT>                            return false;<a name="line.383"></a>
-<FONT color="green">384</FONT>                    }<a name="line.384"></a>
-<FONT color="green">385</FONT>                    final int size = symbol.length();<a name="line.385"></a>
-<FONT color="green">386</FONT>                    if (!DDF_Option.isValid(symbol.charAt(size - 1))) {<a name="line.386"></a>
-<FONT color="green">387</FONT>                            return false;<a name="line.387"></a>
-<FONT color="green">388</FONT>                    }<a name="line.388"></a>
-<FONT color="green">389</FONT>                    return true;<a name="line.389"></a>
-<FONT color="green">390</FONT>            }<a name="line.390"></a>
-<FONT color="green">391</FONT>    <a name="line.391"></a>
-<FONT color="green">392</FONT>            /**<a name="line.392"></a>
-<FONT color="green">393</FONT>             * Checks if is index.<a name="line.393"></a>
-<FONT color="green">394</FONT>             *<a name="line.394"></a>
-<FONT color="green">395</FONT>             * @param symbol the symbol<a name="line.395"></a>
-<FONT color="green">396</FONT>             * @return true, if is index<a name="line.396"></a>
-<FONT color="green">397</FONT>             */<a name="line.397"></a>
-<FONT color="green">398</FONT>            public static final boolean isIndex(final String symbol) {<a name="line.398"></a>
-<FONT color="green">399</FONT>                    if (symbol == null) {<a name="line.399"></a>
-<FONT color="green">400</FONT>                            return false;<a name="line.400"></a>
-<FONT color="green">401</FONT>                    }<a name="line.401"></a>
-<FONT color="green">402</FONT>                    return symbol.toUpperCase().startsWith(PREFIX_INDEX);<a name="line.402"></a>
-<FONT color="green">403</FONT>            }<a name="line.403"></a>
-<FONT color="green">404</FONT>    <a name="line.404"></a>
-<FONT color="green">405</FONT>            /**<a name="line.405"></a>
-<FONT color="green">406</FONT>             * Checks if is forex.<a name="line.406"></a>
-<FONT color="green">407</FONT>             *<a name="line.407"></a>
-<FONT color="green">408</FONT>             * @param symbol the symbol<a name="line.408"></a>
-<FONT color="green">409</FONT>             * @return true, if is forex<a name="line.409"></a>
-<FONT color="green">410</FONT>             */<a name="line.410"></a>
-<FONT color="green">411</FONT>            public static final boolean isForex(final String symbol) {<a name="line.411"></a>
-<FONT color="green">412</FONT>                    if (symbol == null) {<a name="line.412"></a>
-<FONT color="green">413</FONT>                            return false;<a name="line.413"></a>
-<FONT color="green">414</FONT>                    }<a name="line.414"></a>
-<FONT color="green">415</FONT>                    return symbol.toUpperCase().startsWith(PREFIX_FOREX);<a name="line.415"></a>
-<FONT color="green">416</FONT>            }<a name="line.416"></a>
-<FONT color="green">417</FONT>    <a name="line.417"></a>
-<FONT color="green">418</FONT>            /**<a name="line.418"></a>
-<FONT color="green">419</FONT>             * Checks if is equity sector.<a name="line.419"></a>
-<FONT color="green">420</FONT>             *<a name="line.420"></a>
-<FONT color="green">421</FONT>             * @param symbol the symbol<a name="line.421"></a>
-<FONT color="green">422</FONT>             * @return true, if is equity sector<a name="line.422"></a>
-<FONT color="green">423</FONT>             */<a name="line.423"></a>
-<FONT color="green">424</FONT>            public static final boolean isEquitySector(final String symbol) {<a name="line.424"></a>
-<FONT color="green">425</FONT>                    if (symbol == null) {<a name="line.425"></a>
-<FONT color="green">426</FONT>                            return false;<a name="line.426"></a>
-<FONT color="green">427</FONT>                    }<a name="line.427"></a>
-<FONT color="green">428</FONT>                    return symbol.toUpperCase().startsWith(PREFIX_SECTOR);<a name="line.428"></a>
-<FONT color="green">429</FONT>            }<a name="line.429"></a>
-<FONT color="green">430</FONT>    <a name="line.430"></a>
-<FONT color="green">431</FONT>            /**<a name="line.431"></a>
-<FONT color="green">432</FONT>             * Checks if is test.<a name="line.432"></a>
-<FONT color="green">433</FONT>             *<a name="line.433"></a>
-<FONT color="green">434</FONT>             * @param symbol the symbol<a name="line.434"></a>
-<FONT color="green">435</FONT>             * @return true, if is test<a name="line.435"></a>
-<FONT color="green">436</FONT>             */<a name="line.436"></a>
-<FONT color="green">437</FONT>            public static final boolean isTest(final String symbol) {<a name="line.437"></a>
-<FONT color="green">438</FONT>                    if (symbol == null) {<a name="line.438"></a>
-<FONT color="green">439</FONT>                            return false;<a name="line.439"></a>
-<FONT color="green">440</FONT>                    }<a name="line.440"></a>
-<FONT color="green">441</FONT>                    return symbol.toUpperCase().startsWith(PREFIX_TEST);<a name="line.441"></a>
-<FONT color="green">442</FONT>            }<a name="line.442"></a>
-<FONT color="green">443</FONT>    <a name="line.443"></a>
-<FONT color="green">444</FONT>            /**<a name="line.444"></a>
-<FONT color="green">445</FONT>             * Checks if is equity can.<a name="line.445"></a>
-<FONT color="green">446</FONT>             *<a name="line.446"></a>
-<FONT color="green">447</FONT>             * @param symbol the symbol<a name="line.447"></a>
-<FONT color="green">448</FONT>             * @return true, if is equity can<a name="line.448"></a>
-<FONT color="green">449</FONT>             */<a name="line.449"></a>
-<FONT color="green">450</FONT>            public static final boolean isEquityCAN(final String symbol) {<a name="line.450"></a>
-<FONT color="green">451</FONT>                    if (symbol == null) {<a name="line.451"></a>
-<FONT color="green">452</FONT>                            return false;<a name="line.452"></a>
-<FONT color="green">453</FONT>                    }<a name="line.453"></a>
-<FONT color="green">454</FONT>                    final String name = symbol.toUpperCase();<a name="line.454"></a>
-<FONT color="green">455</FONT>                    return name.endsWith(SUFFIX_EQUITY_CAN_1)<a name="line.455"></a>
-<FONT color="green">456</FONT>                                    || name.endsWith(SUFFIX_EQUITY_CAN_2);<a name="line.456"></a>
-<FONT color="green">457</FONT>            }<a name="line.457"></a>
-<FONT color="green">458</FONT>    <a name="line.458"></a>
-<FONT color="green">459</FONT>            /**<a name="line.459"></a>
-<FONT color="green">460</FONT>             * Gets the group equity can.<a name="line.460"></a>
-<FONT color="green">461</FONT>             *<a name="line.461"></a>
-<FONT color="green">462</FONT>             * @param symbol the symbol<a name="line.462"></a>
-<FONT color="green">463</FONT>             * @return the group equity can<a name="line.463"></a>
-<FONT color="green">464</FONT>             */<a name="line.464"></a>
-<FONT color="green">465</FONT>            public static final String getGroupEquityCAN(final String symbol) {<a name="line.465"></a>
-<FONT color="green">466</FONT>                    final String name = symbol.toUpperCase();<a name="line.466"></a>
-<FONT color="green">467</FONT>                    if (name.endsWith(SUFFIX_EQUITY_CAN_1)) {<a name="line.467"></a>
-<FONT color="green">468</FONT>                            return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_CAN_1));<a name="line.468"></a>
-<FONT color="green">469</FONT>                    }<a name="line.469"></a>
-<FONT color="green">470</FONT>                    if (name.endsWith(SUFFIX_EQUITY_CAN_2)) {<a name="line.470"></a>
-<FONT color="green">471</FONT>                            return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_CAN_2));<a name="line.471"></a>
-<FONT color="green">472</FONT>                    }<a name="line.472"></a>
-<FONT color="green">473</FONT>                    return null;<a name="line.473"></a>
-<FONT color="green">474</FONT>            }<a name="line.474"></a>
-<FONT color="green">475</FONT>    <a name="line.475"></a>
-<FONT color="green">476</FONT>            /**<a name="line.476"></a>
-<FONT color="green">477</FONT>             * Checks if is equity lse.<a name="line.477"></a>
-<FONT color="green">478</FONT>             *<a name="line.478"></a>
-<FONT color="green">479</FONT>             * @param symbol the symbol<a name="line.479"></a>
-<FONT color="green">480</FONT>             * @return true, if is equity lse<a name="line.480"></a>
-<FONT color="green">481</FONT>             */<a name="line.481"></a>
-<FONT color="green">482</FONT>            public static final boolean isEquityLSE(final String symbol) {<a name="line.482"></a>
-<FONT color="green">483</FONT>                    if (symbol == null) {<a name="line.483"></a>
-<FONT color="green">484</FONT>                            return false;<a name="line.484"></a>
-<FONT color="green">485</FONT>                    }<a name="line.485"></a>
-<FONT color="green">486</FONT>                    return symbol.toUpperCase().endsWith(SUFFIX_EQUITY_LSE);<a name="line.486"></a>
-<FONT color="green">487</FONT>            }<a name="line.487"></a>
-<FONT color="green">488</FONT>    <a name="line.488"></a>
-<FONT color="green">489</FONT>            /**<a name="line.489"></a>
-<FONT color="green">490</FONT>             * Gets the group equity lse.<a name="line.490"></a>
-<FONT color="green">491</FONT>             *<a name="line.491"></a>
-<FONT color="green">492</FONT>             * @param symbolName the symbol name<a name="line.492"></a>
-<FONT color="green">493</FONT>             * @return the group equity lse<a name="line.493"></a>
-<FONT color="green">494</FONT>             */<a name="line.494"></a>
-<FONT color="green">495</FONT>            public static final String getGroupEquityLSE(final String symbolName) {<a name="line.495"></a>
-<FONT color="green">496</FONT>                    final String name = symbolName.toUpperCase();<a name="line.496"></a>
-<FONT color="green">497</FONT>                    return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_LSE));<a name="line.497"></a>
-<FONT color="green">498</FONT>            }<a name="line.498"></a>
-<FONT color="green">499</FONT>    <a name="line.499"></a>
-<FONT color="green">500</FONT>            /**<a name="line.500"></a>
-<FONT color="green">501</FONT>             * Checks if is equity nse.<a name="line.501"></a>
-<FONT color="green">502</FONT>             *<a name="line.502"></a>
-<FONT color="green">503</FONT>             * @param symbol the symbol<a name="line.503"></a>
-<FONT color="green">504</FONT>             * @return true, if is equity nse<a name="line.504"></a>
-<FONT color="green">505</FONT>             */<a name="line.505"></a>
-<FONT color="green">506</FONT>            public static final boolean isEquityNSE(final String symbol) {<a name="line.506"></a>
-<FONT color="green">507</FONT>                    if (symbol == null) {<a name="line.507"></a>
-<FONT color="green">508</FONT>                            return false;<a name="line.508"></a>
-<FONT color="green">509</FONT>                    }<a name="line.509"></a>
-<FONT color="green">510</FONT>                    final String name = symbol.toUpperCase();<a name="line.510"></a>
-<FONT color="green">511</FONT>                    return name.toUpperCase().endsWith(SUFFIX_EQUITY_NSE);<a name="line.511"></a>
-<FONT color="green">512</FONT>            }<a name="line.512"></a>
-<FONT color="green">513</FONT>    <a name="line.513"></a>
-<FONT color="green">514</FONT>            /**<a name="line.514"></a>
-<FONT color="green">515</FONT>             * Gets the group equity nse.<a name="line.515"></a>
-<FONT color="green">516</FONT>             *<a name="line.516"></a>
-<FONT color="green">517</FONT>             * @param symbolName the symbol name<a name="line.517"></a>
-<FONT color="green">518</FONT>             * @return the group equity nse<a name="line.518"></a>
-<FONT color="green">519</FONT>             */<a name="line.519"></a>
-<FONT color="green">520</FONT>            public static final String getGroupEquityNSE(final String symbolName) {<a name="line.520"></a>
-<FONT color="green">521</FONT>                    final String name = symbolName.toUpperCase();<a name="line.521"></a>
-<FONT color="green">522</FONT>                    return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_NSE));<a name="line.522"></a>
-<FONT color="green">523</FONT>            }<a name="line.523"></a>
-<FONT color="green">524</FONT>    <a name="line.524"></a>
-<FONT color="green">525</FONT>            /**<a name="line.525"></a>
-<FONT color="green">526</FONT>             * Checks if is equity other.<a name="line.526"></a>
-<FONT color="green">527</FONT>             *<a name="line.527"></a>
-<FONT color="green">528</FONT>             * @param symbol the symbol<a name="line.528"></a>
-<FONT color="green">529</FONT>             * @return true, if is equity other<a name="line.529"></a>
-<FONT color="green">530</FONT>             */<a name="line.530"></a>
-<FONT color="green">531</FONT>            public static final boolean isEquityOther(final String symbol) {<a name="line.531"></a>
-<FONT color="green">532</FONT>                    if (symbol == null) {<a name="line.532"></a>
-<FONT color="green">533</FONT>                            return false;<a name="line.533"></a>
-<FONT color="green">534</FONT>                    }<a name="line.534"></a>
-<FONT color="green">535</FONT>                    if (containsDigit(symbol)) {<a name="line.535"></a>
-<FONT color="green">536</FONT>                            // excludes futures, options<a name="line.536"></a>
-<FONT color="green">537</FONT>                            return false;<a name="line.537"></a>
-<FONT color="green">538</FONT>                    }<a name="line.538"></a>
-<FONT color="green">539</FONT>                    if (isTest(symbol)) {<a name="line.539"></a>
-<FONT color="green">540</FONT>                            return false;<a name="line.540"></a>
-<FONT color="green">541</FONT>    <a name="line.541"></a>
-<FONT color="green">542</FONT>                    }<a name="line.542"></a>
-<FONT color="green">543</FONT>                    if (isForex(symbol)) {<a name="line.543"></a>
-<FONT color="green">544</FONT>                            return false;<a name="line.544"></a>
-<FONT color="green">545</FONT>    <a name="line.545"></a>
-<FONT color="green">546</FONT>                    }<a name="line.546"></a>
-<FONT color="green">547</FONT>                    if (isIndex(symbol)) {<a name="line.547"></a>
-<FONT color="green">548</FONT>                            return false;<a name="line.548"></a>
-<FONT color="green">549</FONT>    <a name="line.549"></a>
-<FONT color="green">550</FONT>                    }<a name="line.550"></a>
-<FONT color="green">551</FONT>                    if (isEquityLSE(symbol)) {<a name="line.551"></a>
-<FONT color="green">552</FONT>                            return false;<a name="line.552"></a>
-<FONT color="green">553</FONT>    <a name="line.553"></a>
-<FONT color="green">554</FONT>                    }<a name="line.554"></a>
-<FONT color="green">555</FONT>                    if (isEquityCAN(symbol)) {<a name="line.555"></a>
-<FONT color="green">556</FONT>                            return false;<a name="line.556"></a>
-<FONT color="green">557</FONT>    <a name="line.557"></a>
-<FONT color="green">558</FONT>                    }<a name="line.558"></a>
-<FONT color="green">559</FONT>                    if (isEquityNSE(symbol)) {<a name="line.559"></a>
-<FONT color="green">560</FONT>                            return false;<a name="line.560"></a>
-<FONT color="green">561</FONT>    <a name="line.561"></a>
-<FONT color="green">562</FONT>                    }<a name="line.562"></a>
-<FONT color="green">563</FONT>                    return true;<a name="line.563"></a>
-<FONT color="green">564</FONT>            }<a name="line.564"></a>
-<FONT color="green">565</FONT>    <a name="line.565"></a>
-<FONT color="green">566</FONT>            /**<a name="line.566"></a>
-<FONT color="green">567</FONT>             * Checks if is future historical.<a name="line.567"></a>
-<FONT color="green">568</FONT>             *<a name="line.568"></a>
-<FONT color="green">569</FONT>             * @param symbol the symbol<a name="line.569"></a>
-<FONT color="green">570</FONT>             * @return true, if is future historical<a name="line.570"></a>
-<FONT color="green">571</FONT>             */<a name="line.571"></a>
-<FONT color="green">572</FONT>            public static final boolean isFutureHistorical(final String symbol) {<a name="line.572"></a>
-<FONT color="green">573</FONT>                    if (symbol == null) {<a name="line.573"></a>
-<FONT color="green">574</FONT>                            return false;<a name="line.574"></a>
-<FONT color="green">575</FONT>                    }<a name="line.575"></a>
-<FONT color="green">576</FONT>                    final int size = symbol.length();<a name="line.576"></a>
-<FONT color="green">577</FONT>                    if (size &lt; 3) {<a name="line.577"></a>
-<FONT color="green">578</FONT>                            return false;<a name="line.578"></a>
-<FONT color="green">579</FONT>                    }<a name="line.579"></a>
-<FONT color="green">580</FONT>                    final char digitLow = symbol.charAt(size - 1);<a name="line.580"></a>
-<FONT color="green">581</FONT>                    final char digitHigh = symbol.charAt(size - 2);<a name="line.581"></a>
-<FONT color="green">582</FONT>                    if (!isDigit(digitLow)) {<a name="line.582"></a>
-<FONT color="green">583</FONT>                            return false;<a name="line.583"></a>
-<FONT color="green">584</FONT>                    }<a name="line.584"></a>
-<FONT color="green">585</FONT>                    if (!isDigit(digitHigh)) {<a name="line.585"></a>
-<FONT color="green">586</FONT>                            return false;<a name="line.586"></a>
-<FONT color="green">587</FONT>                    }<a name="line.587"></a>
-<FONT color="green">588</FONT>                    return true;<a name="line.588"></a>
-<FONT color="green">589</FONT>            }<a name="line.589"></a>
-<FONT color="green">590</FONT>    <a name="line.590"></a>
-<FONT color="green">591</FONT>            /**<a name="line.591"></a>
-<FONT color="green">592</FONT>             * Future normal from historical.<a name="line.592"></a>
-<FONT color="green">593</FONT>             *<a name="line.593"></a>
-<FONT color="green">594</FONT>             * @param symbol the symbol<a name="line.594"></a>
-<FONT color="green">595</FONT>             * @return the string<a name="line.595"></a>
-<FONT color="green">596</FONT>             */<a name="line.596"></a>
-<FONT color="green">597</FONT>            public static final String futureNormalFromHistorical(final String symbol) {<a name="line.597"></a>
-<FONT color="green">598</FONT>                    final int size = symbol.length();<a name="line.598"></a>
-<FONT color="green">599</FONT>                    final char digitLow = symbol.charAt(size - 1);<a name="line.599"></a>
-<FONT color="green">600</FONT>                    final String group = symbol.substring(0, size - 2);<a name="line.600"></a>
-<FONT color="green">601</FONT>                    return group + digitLow;<a name="line.601"></a>
-<FONT color="green">602</FONT>            }<a name="line.602"></a>
-<FONT color="green">603</FONT>    <a name="line.603"></a>
-<FONT color="green">604</FONT>            /**<a name="line.604"></a>
-<FONT color="green">605</FONT>             * Future normal into historical.<a name="line.605"></a>
-<FONT color="green">606</FONT>             *<a name="line.606"></a>
-<FONT color="green">607</FONT>             * @param symbol the symbol<a name="line.607"></a>
-<FONT color="green">608</FONT>             * @return the string<a name="line.608"></a>
-<FONT color="green">609</FONT>             */<a name="line.609"></a>
-<FONT color="green">610</FONT>            public static final String futureNormalIntoHistorical(final String symbol) {<a name="line.610"></a>
-<FONT color="green">611</FONT>                    return "";<a name="line.611"></a>
-<FONT color="green">612</FONT>            }<a name="line.612"></a>
-<FONT color="green">613</FONT>    <a name="line.613"></a>
-<FONT color="green">614</FONT>    }<a name="line.614"></a>
+<FONT color="green">348</FONT>             * Example: JAOV7|10050P<a name="line.348"></a>
+<FONT color="green">349</FONT>             * <a name="line.349"></a>
+<FONT color="green">350</FONT>             * Up to 12 bytes, where CCCMY is the futures symbol. CCC - commodity code,<a name="line.350"></a>
+<FONT color="green">351</FONT>             * M - month, Y - year | - delimiter SSSSS is the strike price, left<a name="line.351"></a>
+<FONT color="green">352</FONT>             * justified, zero padded to the right. C = Call, P = Put<a name="line.352"></a>
+<FONT color="green">353</FONT>             */<a name="line.353"></a>
+<FONT color="green">354</FONT>    <a name="line.354"></a>
+<FONT color="green">355</FONT>            /** The Constant OPTION_SEPARATOR. */<a name="line.355"></a>
+<FONT color="green">356</FONT>            public static final String OPTION_SEPARATOR = ASCII.STRING_BAR;<a name="line.356"></a>
+<FONT color="green">357</FONT>    <a name="line.357"></a>
+<FONT color="green">358</FONT>            /**<a name="line.358"></a>
+<FONT color="green">359</FONT>             * Contains option separator.<a name="line.359"></a>
+<FONT color="green">360</FONT>             *<a name="line.360"></a>
+<FONT color="green">361</FONT>             * @param symbol the symbol<a name="line.361"></a>
+<FONT color="green">362</FONT>             * @return true, if successful<a name="line.362"></a>
+<FONT color="green">363</FONT>             */<a name="line.363"></a>
+<FONT color="green">364</FONT>            public static final boolean containsOptionSeparator(final String symbol) {<a name="line.364"></a>
+<FONT color="green">365</FONT>                    if (symbol == null) {<a name="line.365"></a>
+<FONT color="green">366</FONT>                            return false;<a name="line.366"></a>
+<FONT color="green">367</FONT>                    }<a name="line.367"></a>
+<FONT color="green">368</FONT>                    if (!containsDigit(symbol)) {<a name="line.368"></a>
+<FONT color="green">369</FONT>                            return false;<a name="line.369"></a>
+<FONT color="green">370</FONT>                    }<a name="line.370"></a>
+<FONT color="green">371</FONT>                    return symbol.contains(OPTION_SEPARATOR);<a name="line.371"></a>
+<FONT color="green">372</FONT>            }<a name="line.372"></a>
+<FONT color="green">373</FONT>    <a name="line.373"></a>
+<FONT color="green">374</FONT>            /**<a name="line.374"></a>
+<FONT color="green">375</FONT>             * Checks if is option extended.<a name="line.375"></a>
+<FONT color="green">376</FONT>             *<a name="line.376"></a>
+<FONT color="green">377</FONT>             * @param symbol the symbol<a name="line.377"></a>
+<FONT color="green">378</FONT>             * @return true, if is option extended<a name="line.378"></a>
+<FONT color="green">379</FONT>             */<a name="line.379"></a>
+<FONT color="green">380</FONT>            public static final boolean isOptionExtended(final String symbol) {<a name="line.380"></a>
+<FONT color="green">381</FONT>                    if (symbol == null) {<a name="line.381"></a>
+<FONT color="green">382</FONT>                            return false;<a name="line.382"></a>
+<FONT color="green">383</FONT>                    }<a name="line.383"></a>
+<FONT color="green">384</FONT>                    if (!containsOptionSeparator(symbol)) {<a name="line.384"></a>
+<FONT color="green">385</FONT>                            return false;<a name="line.385"></a>
+<FONT color="green">386</FONT>                    }<a name="line.386"></a>
+<FONT color="green">387</FONT>                    final int size = symbol.length();<a name="line.387"></a>
+<FONT color="green">388</FONT>                    if (!DDF_Option.isValid(symbol.charAt(size - 1))) {<a name="line.388"></a>
+<FONT color="green">389</FONT>                            return false;<a name="line.389"></a>
+<FONT color="green">390</FONT>                    }<a name="line.390"></a>
+<FONT color="green">391</FONT>                    return true;<a name="line.391"></a>
+<FONT color="green">392</FONT>            }<a name="line.392"></a>
+<FONT color="green">393</FONT>    <a name="line.393"></a>
+<FONT color="green">394</FONT>            /**<a name="line.394"></a>
+<FONT color="green">395</FONT>             * Checks if is index.<a name="line.395"></a>
+<FONT color="green">396</FONT>             *<a name="line.396"></a>
+<FONT color="green">397</FONT>             * @param symbol the symbol<a name="line.397"></a>
+<FONT color="green">398</FONT>             * @return true, if is index<a name="line.398"></a>
+<FONT color="green">399</FONT>             */<a name="line.399"></a>
+<FONT color="green">400</FONT>            public static final boolean isIndex(final String symbol) {<a name="line.400"></a>
+<FONT color="green">401</FONT>                    if (symbol == null) {<a name="line.401"></a>
+<FONT color="green">402</FONT>                            return false;<a name="line.402"></a>
+<FONT color="green">403</FONT>                    }<a name="line.403"></a>
+<FONT color="green">404</FONT>                    return symbol.toUpperCase().startsWith(PREFIX_INDEX);<a name="line.404"></a>
+<FONT color="green">405</FONT>            }<a name="line.405"></a>
+<FONT color="green">406</FONT>    <a name="line.406"></a>
+<FONT color="green">407</FONT>            /**<a name="line.407"></a>
+<FONT color="green">408</FONT>             * Checks if is forex.<a name="line.408"></a>
+<FONT color="green">409</FONT>             *<a name="line.409"></a>
+<FONT color="green">410</FONT>             * @param symbol the symbol<a name="line.410"></a>
+<FONT color="green">411</FONT>             * @return true, if is forex<a name="line.411"></a>
+<FONT color="green">412</FONT>             */<a name="line.412"></a>
+<FONT color="green">413</FONT>            public static final boolean isForex(final String symbol) {<a name="line.413"></a>
+<FONT color="green">414</FONT>                    if (symbol == null) {<a name="line.414"></a>
+<FONT color="green">415</FONT>                            return false;<a name="line.415"></a>
+<FONT color="green">416</FONT>                    }<a name="line.416"></a>
+<FONT color="green">417</FONT>                    return symbol.toUpperCase().startsWith(PREFIX_FOREX);<a name="line.417"></a>
+<FONT color="green">418</FONT>            }<a name="line.418"></a>
+<FONT color="green">419</FONT>    <a name="line.419"></a>
+<FONT color="green">420</FONT>            /**<a name="line.420"></a>
+<FONT color="green">421</FONT>             * Checks if is equity sector.<a name="line.421"></a>
+<FONT color="green">422</FONT>             *<a name="line.422"></a>
+<FONT color="green">423</FONT>             * @param symbol the symbol<a name="line.423"></a>
+<FONT color="green">424</FONT>             * @return true, if is equity sector<a name="line.424"></a>
+<FONT color="green">425</FONT>             */<a name="line.425"></a>
+<FONT color="green">426</FONT>            public static final boolean isEquitySector(final String symbol) {<a name="line.426"></a>
+<FONT color="green">427</FONT>                    if (symbol == null) {<a name="line.427"></a>
+<FONT color="green">428</FONT>                            return false;<a name="line.428"></a>
+<FONT color="green">429</FONT>                    }<a name="line.429"></a>
+<FONT color="green">430</FONT>                    return symbol.toUpperCase().startsWith(PREFIX_SECTOR);<a name="line.430"></a>
+<FONT color="green">431</FONT>            }<a name="line.431"></a>
+<FONT color="green">432</FONT>    <a name="line.432"></a>
+<FONT color="green">433</FONT>            /**<a name="line.433"></a>
+<FONT color="green">434</FONT>             * Checks if is test.<a name="line.434"></a>
+<FONT color="green">435</FONT>             *<a name="line.435"></a>
+<FONT color="green">436</FONT>             * @param symbol the symbol<a name="line.436"></a>
+<FONT color="green">437</FONT>             * @return true, if is test<a name="line.437"></a>
+<FONT color="green">438</FONT>             */<a name="line.438"></a>
+<FONT color="green">439</FONT>            public static final boolean isTest(final String symbol) {<a name="line.439"></a>
+<FONT color="green">440</FONT>                    if (symbol == null) {<a name="line.440"></a>
+<FONT color="green">441</FONT>                            return false;<a name="line.441"></a>
+<FONT color="green">442</FONT>                    }<a name="line.442"></a>
+<FONT color="green">443</FONT>                    return symbol.toUpperCase().startsWith(PREFIX_TEST);<a name="line.443"></a>
+<FONT color="green">444</FONT>            }<a name="line.444"></a>
+<FONT color="green">445</FONT>    <a name="line.445"></a>
+<FONT color="green">446</FONT>            /**<a name="line.446"></a>
+<FONT color="green">447</FONT>             * Checks if is equity can.<a name="line.447"></a>
+<FONT color="green">448</FONT>             *<a name="line.448"></a>
+<FONT color="green">449</FONT>             * @param symbol the symbol<a name="line.449"></a>
+<FONT color="green">450</FONT>             * @return true, if is equity can<a name="line.450"></a>
+<FONT color="green">451</FONT>             */<a name="line.451"></a>
+<FONT color="green">452</FONT>            public static final boolean isEquityCAN(final String symbol) {<a name="line.452"></a>
+<FONT color="green">453</FONT>                    if (symbol == null) {<a name="line.453"></a>
+<FONT color="green">454</FONT>                            return false;<a name="line.454"></a>
+<FONT color="green">455</FONT>                    }<a name="line.455"></a>
+<FONT color="green">456</FONT>                    final String name = symbol.toUpperCase();<a name="line.456"></a>
+<FONT color="green">457</FONT>                    return name.endsWith(SUFFIX_EQUITY_CAN_1)<a name="line.457"></a>
+<FONT color="green">458</FONT>                                    || name.endsWith(SUFFIX_EQUITY_CAN_2);<a name="line.458"></a>
+<FONT color="green">459</FONT>            }<a name="line.459"></a>
+<FONT color="green">460</FONT>    <a name="line.460"></a>
+<FONT color="green">461</FONT>            /**<a name="line.461"></a>
+<FONT color="green">462</FONT>             * Gets the group equity can.<a name="line.462"></a>
+<FONT color="green">463</FONT>             *<a name="line.463"></a>
+<FONT color="green">464</FONT>             * @param symbol the symbol<a name="line.464"></a>
+<FONT color="green">465</FONT>             * @return the group equity can<a name="line.465"></a>
+<FONT color="green">466</FONT>             */<a name="line.466"></a>
+<FONT color="green">467</FONT>            public static final String getGroupEquityCAN(final String symbol) {<a name="line.467"></a>
+<FONT color="green">468</FONT>                    final String name = symbol.toUpperCase();<a name="line.468"></a>
+<FONT color="green">469</FONT>                    if (name.endsWith(SUFFIX_EQUITY_CAN_1)) {<a name="line.469"></a>
+<FONT color="green">470</FONT>                            return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_CAN_1));<a name="line.470"></a>
+<FONT color="green">471</FONT>                    }<a name="line.471"></a>
+<FONT color="green">472</FONT>                    if (name.endsWith(SUFFIX_EQUITY_CAN_2)) {<a name="line.472"></a>
+<FONT color="green">473</FONT>                            return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_CAN_2));<a name="line.473"></a>
+<FONT color="green">474</FONT>                    }<a name="line.474"></a>
+<FONT color="green">475</FONT>                    return null;<a name="line.475"></a>
+<FONT color="green">476</FONT>            }<a name="line.476"></a>
+<FONT color="green">477</FONT>    <a name="line.477"></a>
+<FONT color="green">478</FONT>            /**<a name="line.478"></a>
+<FONT color="green">479</FONT>             * Checks if is equity lse.<a name="line.479"></a>
+<FONT color="green">480</FONT>             *<a name="line.480"></a>
+<FONT color="green">481</FONT>             * @param symbol the symbol<a name="line.481"></a>
+<FONT color="green">482</FONT>             * @return true, if is equity lse<a name="line.482"></a>
+<FONT color="green">483</FONT>             */<a name="line.483"></a>
+<FONT color="green">484</FONT>            public static final boolean isEquityLSE(final String symbol) {<a name="line.484"></a>
+<FONT color="green">485</FONT>                    if (symbol == null) {<a name="line.485"></a>
+<FONT color="green">486</FONT>                            return false;<a name="line.486"></a>
+<FONT color="green">487</FONT>                    }<a name="line.487"></a>
+<FONT color="green">488</FONT>                    return symbol.toUpperCase().endsWith(SUFFIX_EQUITY_LSE);<a name="line.488"></a>
+<FONT color="green">489</FONT>            }<a name="line.489"></a>
+<FONT color="green">490</FONT>    <a name="line.490"></a>
+<FONT color="green">491</FONT>            /**<a name="line.491"></a>
+<FONT color="green">492</FONT>             * Gets the group equity lse.<a name="line.492"></a>
+<FONT color="green">493</FONT>             *<a name="line.493"></a>
+<FONT color="green">494</FONT>             * @param symbolName the symbol name<a name="line.494"></a>
+<FONT color="green">495</FONT>             * @return the group equity lse<a name="line.495"></a>
+<FONT color="green">496</FONT>             */<a name="line.496"></a>
+<FONT color="green">497</FONT>            public static final String getGroupEquityLSE(final String symbolName) {<a name="line.497"></a>
+<FONT color="green">498</FONT>                    final String name = symbolName.toUpperCase();<a name="line.498"></a>
+<FONT color="green">499</FONT>                    return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_LSE));<a name="line.499"></a>
+<FONT color="green">500</FONT>            }<a name="line.500"></a>
+<FONT color="green">501</FONT>    <a name="line.501"></a>
+<FONT color="green">502</FONT>            /**<a name="line.502"></a>
+<FONT color="green">503</FONT>             * Checks if is equity nse.<a name="line.503"></a>
+<FONT color="green">504</FONT>             *<a name="line.504"></a>
+<FONT color="green">505</FONT>             * @param symbol the symbol<a name="line.505"></a>
+<FONT color="green">506</FONT>             * @return true, if is equity nse<a name="line.506"></a>
+<FONT color="green">507</FONT>             */<a name="line.507"></a>
+<FONT color="green">508</FONT>            public static final boolean isEquityNSE(final String symbol) {<a name="line.508"></a>
+<FONT color="green">509</FONT>                    if (symbol == null) {<a name="line.509"></a>
+<FONT color="green">510</FONT>                            return false;<a name="line.510"></a>
+<FONT color="green">511</FONT>                    }<a name="line.511"></a>
+<FONT color="green">512</FONT>                    final String name = symbol.toUpperCase();<a name="line.512"></a>
+<FONT color="green">513</FONT>                    return name.toUpperCase().endsWith(SUFFIX_EQUITY_NSE);<a name="line.513"></a>
+<FONT color="green">514</FONT>            }<a name="line.514"></a>
+<FONT color="green">515</FONT>    <a name="line.515"></a>
+<FONT color="green">516</FONT>            /**<a name="line.516"></a>
+<FONT color="green">517</FONT>             * Gets the group equity nse.<a name="line.517"></a>
+<FONT color="green">518</FONT>             *<a name="line.518"></a>
+<FONT color="green">519</FONT>             * @param symbolName the symbol name<a name="line.519"></a>
+<FONT color="green">520</FONT>             * @return the group equity nse<a name="line.520"></a>
+<FONT color="green">521</FONT>             */<a name="line.521"></a>
+<FONT color="green">522</FONT>            public static final String getGroupEquityNSE(final String symbolName) {<a name="line.522"></a>
+<FONT color="green">523</FONT>                    final String name = symbolName.toUpperCase();<a name="line.523"></a>
+<FONT color="green">524</FONT>                    return name.substring(0, name.lastIndexOf(SUFFIX_EQUITY_NSE));<a name="line.524"></a>
+<FONT color="green">525</FONT>            }<a name="line.525"></a>
+<FONT color="green">526</FONT>    <a name="line.526"></a>
+<FONT color="green">527</FONT>            /**<a name="line.527"></a>
+<FONT color="green">528</FONT>             * Checks if is equity other.<a name="line.528"></a>
+<FONT color="green">529</FONT>             *<a name="line.529"></a>
+<FONT color="green">530</FONT>             * @param symbol the symbol<a name="line.530"></a>
+<FONT color="green">531</FONT>             * @return true, if is equity other<a name="line.531"></a>
+<FONT color="green">532</FONT>             */<a name="line.532"></a>
+<FONT color="green">533</FONT>            public static final boolean isEquityOther(final String symbol) {<a name="line.533"></a>
+<FONT color="green">534</FONT>                    if (symbol == null) {<a name="line.534"></a>
+<FONT color="green">535</FONT>                            return false;<a name="line.535"></a>
+<FONT color="green">536</FONT>                    }<a name="line.536"></a>
+<FONT color="green">537</FONT>                    if (containsDigit(symbol)) {<a name="line.537"></a>
+<FONT color="green">538</FONT>                            // excludes futures, options<a name="line.538"></a>
+<FONT color="green">539</FONT>                            return false;<a name="line.539"></a>
+<FONT color="green">540</FONT>                    }<a name="line.540"></a>
+<FONT color="green">541</FONT>                    if (isTest(symbol)) {<a name="line.541"></a>
+<FONT color="green">542</FONT>                            return false;<a name="line.542"></a>
+<FONT color="green">543</FONT>    <a name="line.543"></a>
+<FONT color="green">544</FONT>                    }<a name="line.544"></a>
+<FONT color="green">545</FONT>                    if (isForex(symbol)) {<a name="line.545"></a>
+<FONT color="green">546</FONT>                            return false;<a name="line.546"></a>
+<FONT color="green">547</FONT>    <a name="line.547"></a>
+<FONT color="green">548</FONT>                    }<a name="line.548"></a>
+<FONT color="green">549</FONT>                    if (isIndex(symbol)) {<a name="line.549"></a>
+<FONT color="green">550</FONT>                            return false;<a name="line.550"></a>
+<FONT color="green">551</FONT>    <a name="line.551"></a>
+<FONT color="green">552</FONT>                    }<a name="line.552"></a>
+<FONT color="green">553</FONT>                    if (isEquityLSE(symbol)) {<a name="line.553"></a>
+<FONT color="green">554</FONT>                            return false;<a name="line.554"></a>
+<FONT color="green">555</FONT>    <a name="line.555"></a>
+<FONT color="green">556</FONT>                    }<a name="line.556"></a>
+<FONT color="green">557</FONT>                    if (isEquityCAN(symbol)) {<a name="line.557"></a>
+<FONT color="green">558</FONT>                            return false;<a name="line.558"></a>
+<FONT color="green">559</FONT>    <a name="line.559"></a>
+<FONT color="green">560</FONT>                    }<a name="line.560"></a>
+<FONT color="green">561</FONT>                    if (isEquityNSE(symbol)) {<a name="line.561"></a>
+<FONT color="green">562</FONT>                            return false;<a name="line.562"></a>
+<FONT color="green">563</FONT>    <a name="line.563"></a>
+<FONT color="green">564</FONT>                    }<a name="line.564"></a>
+<FONT color="green">565</FONT>                    return true;<a name="line.565"></a>
+<FONT color="green">566</FONT>            }<a name="line.566"></a>
+<FONT color="green">567</FONT>    <a name="line.567"></a>
+<FONT color="green">568</FONT>            /**<a name="line.568"></a>
+<FONT color="green">569</FONT>             * Checks if is future historical.<a name="line.569"></a>
+<FONT color="green">570</FONT>             *<a name="line.570"></a>
+<FONT color="green">571</FONT>             * @param symbol the symbol<a name="line.571"></a>
+<FONT color="green">572</FONT>             * @return true, if is future historical<a name="line.572"></a>
+<FONT color="green">573</FONT>             */<a name="line.573"></a>
+<FONT color="green">574</FONT>            public static final boolean isFutureHistorical(final String symbol) {<a name="line.574"></a>
+<FONT color="green">575</FONT>                    if (symbol == null) {<a name="line.575"></a>
+<FONT color="green">576</FONT>                            return false;<a name="line.576"></a>
+<FONT color="green">577</FONT>                    }<a name="line.577"></a>
+<FONT color="green">578</FONT>                    final int size = symbol.length();<a name="line.578"></a>
+<FONT color="green">579</FONT>                    if (size &lt; 3) {<a name="line.579"></a>
+<FONT color="green">580</FONT>                            return false;<a name="line.580"></a>
+<FONT color="green">581</FONT>                    }<a name="line.581"></a>
+<FONT color="green">582</FONT>                    final char digitLow = symbol.charAt(size - 1);<a name="line.582"></a>
+<FONT color="green">583</FONT>                    final char digitHigh = symbol.charAt(size - 2);<a name="line.583"></a>
+<FONT color="green">584</FONT>                    if (!isDigit(digitLow)) {<a name="line.584"></a>
+<FONT color="green">585</FONT>                            return false;<a name="line.585"></a>
+<FONT color="green">586</FONT>                    }<a name="line.586"></a>
+<FONT color="green">587</FONT>                    if (!isDigit(digitHigh)) {<a name="line.587"></a>
+<FONT color="green">588</FONT>                            return false;<a name="line.588"></a>
+<FONT color="green">589</FONT>                    }<a name="line.589"></a>
+<FONT color="green">590</FONT>                    return true;<a name="line.590"></a>
+<FONT color="green">591</FONT>            }<a name="line.591"></a>
+<FONT color="green">592</FONT>    <a name="line.592"></a>
+<FONT color="green">593</FONT>            /**<a name="line.593"></a>
+<FONT color="green">594</FONT>             * Future normal from historical.<a name="line.594"></a>
+<FONT color="green">595</FONT>             *<a name="line.595"></a>
+<FONT color="green">596</FONT>             * @param symbol the symbol<a name="line.596"></a>
+<FONT color="green">597</FONT>             * @return the string<a name="line.597"></a>
+<FONT color="green">598</FONT>             */<a name="line.598"></a>
+<FONT color="green">599</FONT>            public static final String futureNormalFromHistorical(final String symbol) {<a name="line.599"></a>
+<FONT color="green">600</FONT>                    final int size = symbol.length();<a name="line.600"></a>
+<FONT color="green">601</FONT>                    final char digitLow = symbol.charAt(size - 1);<a name="line.601"></a>
+<FONT color="green">602</FONT>                    final String group = symbol.substring(0, size - 2);<a name="line.602"></a>
+<FONT color="green">603</FONT>                    return group + digitLow;<a name="line.603"></a>
+<FONT color="green">604</FONT>            }<a name="line.604"></a>
+<FONT color="green">605</FONT>    <a name="line.605"></a>
+<FONT color="green">606</FONT>            /**<a name="line.606"></a>
+<FONT color="green">607</FONT>             * Future normal into historical.<a name="line.607"></a>
+<FONT color="green">608</FONT>             *<a name="line.608"></a>
+<FONT color="green">609</FONT>             * @param symbol the symbol<a name="line.609"></a>
+<FONT color="green">610</FONT>             * @return the string<a name="line.610"></a>
+<FONT color="green">611</FONT>             */<a name="line.611"></a>
+<FONT color="green">612</FONT>            public static final String futureNormalIntoHistorical(final String symbol) {<a name="line.612"></a>
+<FONT color="green">613</FONT>                    return "";<a name="line.613"></a>
+<FONT color="green">614</FONT>            }<a name="line.614"></a>
+<FONT color="green">615</FONT>    <a name="line.615"></a>
+<FONT color="green">616</FONT>    }<a name="line.616"></a>
 
 
 
