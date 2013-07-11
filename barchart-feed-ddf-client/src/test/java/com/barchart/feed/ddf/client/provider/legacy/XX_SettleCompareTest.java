@@ -27,17 +27,17 @@ public class XX_SettleCompareTest {
 			@Override
 			public void onNext(final SessionSet v) {
 				
-				if(v.session(Session.Type.DEFAULT_CURRENT).isSettled()) {
-				
-					System.out.println("AGENT: " +
-					v.instrument().symbol() + " " +
-					"IS SETTLED: " + v.session(Session.Type.DEFAULT_CURRENT).isSettled() + " " +
-					" @ " + v.session(Session.Type.DEFAULT_CURRENT).settle() + " " +
-					" PREVIOUS = " +
-					v.session(Session.Type.DEFAULT_PREVIOUS).close().asDouble()
-					
-					);
-				}
+//				if(v.session(Session.Type.DEFAULT_CURRENT).isSettled()) {
+//				
+//					System.out.println("AGENT: " +
+//					v.instrument().symbol() + " " +
+//					"IS SETTLED: " + v.session(Session.Type.DEFAULT_CURRENT).isSettled() + " " +
+//					" @ " + v.session(Session.Type.DEFAULT_CURRENT).settle() + " " +
+//					" PREVIOUS = " +
+//					v.session(Session.Type.DEFAULT_PREVIOUS).close().asDouble()
+//					
+//					);
+//				}
 			}
 			
 		};

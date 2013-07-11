@@ -645,6 +645,16 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		bar.set(MarketBarField.BAR_TIME, message.getTime());
 
 		market.setBar(type, bar);
+		
+		/*
+		 * If a previous update, set in bar current.
+		 */
+		if(type == MarketBarType.PREVIOUS) {
+			
+			market.loadBar(MarketBarType.CURRENT.field).set(
+					MarketBarField.SETTLE_PREVIOUS, priceSettle);
+			
+		}
 
 		return null;
 	}

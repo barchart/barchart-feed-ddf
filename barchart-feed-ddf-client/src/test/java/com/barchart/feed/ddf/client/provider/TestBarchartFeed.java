@@ -67,9 +67,8 @@ public class TestBarchartFeed {
 				
 				log.debug(
 				v.instrument().symbol() + " " +
-				v.book().lastBookUpdate().level() + " " + 
-				v.book().lastBookUpdate().price().toString() + " " + 
-				v.book().lastBookUpdate().size().toString());
+				v.session().previousClose().toString());
+				
 			}
 			
 		};
@@ -77,7 +76,7 @@ public class TestBarchartFeed {
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
 		//myAgent.include(Exchanges.fromName("CME"));
-		myAgent.include("^EURUSD");
+		myAgent.include("CLU13");
 		
 		Thread.sleep(1000000);
 		
