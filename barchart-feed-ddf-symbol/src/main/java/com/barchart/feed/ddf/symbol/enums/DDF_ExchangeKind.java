@@ -25,7 +25,7 @@ public enum DDF_ExchangeKind implements Value<DDF_ExchangeKind> {
 
 	INDEX(_2_, NEW_YORK), //
 
-	FOREX(_3_, NEW_YORK), //
+	FOREX(_3_, CHICAGO), //
 
 	//
 
