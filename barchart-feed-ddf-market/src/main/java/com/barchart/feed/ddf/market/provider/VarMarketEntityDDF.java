@@ -82,8 +82,10 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			final TimeValue time) {
 		super.setBookUpdate(entry, time);
 		
-		//log.debug("Set book update, firing callbacks");
+		log.debug("Set book update, firing callbacks");
 		
+		// Book updates aren't being fired when GO ESU3=bB, 
+		// only when all interests are subbed to
 		fireCallbacks(Book.class);
 	}
 	

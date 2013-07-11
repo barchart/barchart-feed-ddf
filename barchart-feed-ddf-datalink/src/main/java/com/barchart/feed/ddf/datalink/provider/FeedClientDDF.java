@@ -441,7 +441,9 @@ class FeedClientDDF implements DDF_FeedClient {
 					if (msgListener != null) {
 						
 						// #######################
-						//log.debug(message.toStringFields());
+						log.debug(message.toStringFields());
+						// #######################
+						
 						msgListener.handleMessage(message);
 					}
 				} catch (final InterruptedException e) {

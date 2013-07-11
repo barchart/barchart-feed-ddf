@@ -89,6 +89,8 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	public final UniBookResult setEntry(final MarketDoBookEntry entry) {
 
 		if(entry != null) {
+			// Why does this fire if I have a Market observer and not
+			// a Book observer?
 			lastEntry = entry.freeze();
 		}
 		
@@ -165,7 +167,6 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final DefBook freeze() {
-		
 		return new DefBook(instrument, time(), 
 				entries(Book.Side.BID),
 				entries(Book.Side.ASK),
@@ -190,10 +191,11 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public final MarketBookEntry last() {
 
-		final DefBookEntry entry = null; // XXX
-
-		return entry == null ? NULL_BOOK_ENTRY : entry;
-
+//		log.debug("last called in VarBookDDF");
+//		final DefBookEntry entry = (DefBookEntry) lastEntry.freeze();
+//
+//		return entry == null ? NULL_BOOK_ENTRY : entry;
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 	@Override

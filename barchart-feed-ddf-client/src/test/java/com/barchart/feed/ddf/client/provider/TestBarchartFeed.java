@@ -10,8 +10,10 @@ import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.Connection.State;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.inst.provider.Exchanges;
@@ -31,25 +33,6 @@ public class TestBarchartFeed {
 				useLocalInstDatabase().
 				build();
 		
-		final MarketObserver<Trade> callback = new MarketObserver<Trade>() {
-
-			@Override
-			public void onNext(final Trade v) {
-				
-				//log.debug(v.instrument().symbol() + " " + v.types().name());
-				
-//				log.debug(
-//				v.instrument().symbol() + " " +
-//
-//				v.book().top().ask().price().asDouble() + " " +
-//				v.book().top().bid().price().asDouble());
-				
-				//printCuvol(v.cuvol().entryList()));
-				
-			}
-			
-		};
-		
 		feed.bindConnectionStateListener(new Connection.Monitor() {
 
 			@Override
@@ -61,10 +44,40 @@ public class TestBarchartFeed {
 		
 		feed.startup();
 		
-		final Agent myAgent = feed.newAgent(Trade.class, callback);
+//		final MarketObserver<Book> callback = new MarketObserver<Book>() {
+//
+//			@Override
+//			public void onNext(final Book v) {
+//				
+//				log.debug(
+//				v.instrument().symbol() + " " +
+//				v.lastBookUpdate().level() + " " + 
+//				v.lastBookUpdate().price().toString() + " " + 
+//				v.lastBookUpdate().size().toString());
+//			}
+//			
+//		};
+//		
+//		final Agent myAgent = feed.newAgent(Book.class, callback);
 		
-		myAgent.include(Exchanges.fromName("CME"));
-		//myAgent.include("GOOG");
+		final MarketObserver<Market> callback = new MarketObserver<Market>() {
+
+			@Override
+			public void onNext(final Market v) {
+				
+				log.debug(
+				v.instrument().symbol() + " " +
+				v.book().lastBookUpdate().level() + " " + 
+				v.book().lastBookUpdate().price().toString() + " " + 
+				v.book().lastBookUpdate().size().toString());
+			}
+			
+		};
+		
+		final Agent myAgent = feed.newAgent(Market.class, callback);
+		
+		//myAgent.include(Exchanges.fromName("CME"));
+		myAgent.include("^EURUSD");
 		
 		Thread.sleep(1000000);
 		

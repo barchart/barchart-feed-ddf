@@ -42,14 +42,12 @@
 			<version>${barchartFeedBaseVersion}</version>
 		</dependency>
 		
-  		<!-- berkeley db --> 
-<!--   		<dependency> -->
-<!-- 			<groupId>com.sleepycat</groupId> -->
-<!-- 			<artifactId>je</artifactId> -->
-<!-- 			<version>${bdbjeVersion}</version> -->
-<!-- 			<optional>true</optional> -->
-<!-- 		</dependency> -->
-
+		<dependency>
+			<groupId>org.openfeed.proto</groupId>
+			<artifactId>openfeed-protocol-instrument</artifactId>
+			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
+		</dependency>
+		
 	</dependencies>
 
 </project>
