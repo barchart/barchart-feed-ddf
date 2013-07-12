@@ -85,64 +85,66 @@
 <FONT color="green">082</FONT>                            final TimeValue time) {<a name="line.82"></a>
 <FONT color="green">083</FONT>                    super.setBookUpdate(entry, time);<a name="line.83"></a>
 <FONT color="green">084</FONT>                    <a name="line.84"></a>
-<FONT color="green">085</FONT>                    //log.debug("Set book update, firing callbacks");<a name="line.85"></a>
+<FONT color="green">085</FONT>                    log.debug("Set book update, firing callbacks");<a name="line.85"></a>
 <FONT color="green">086</FONT>                    <a name="line.86"></a>
-<FONT color="green">087</FONT>                    fireCallbacks(Book.class);<a name="line.87"></a>
-<FONT color="green">088</FONT>            }<a name="line.88"></a>
-<FONT color="green">089</FONT>            <a name="line.89"></a>
-<FONT color="green">090</FONT>            @Override<a name="line.90"></a>
-<FONT color="green">091</FONT>            public void setCuvolUpdate(final MarketDoCuvolEntry entry,<a name="line.91"></a>
-<FONT color="green">092</FONT>                            final TimeValue time) {<a name="line.92"></a>
-<FONT color="green">093</FONT>                    super.setCuvolUpdate(entry, time);<a name="line.93"></a>
-<FONT color="green">094</FONT>                    <a name="line.94"></a>
-<FONT color="green">095</FONT>                    //log.debug("Set cuvol update, firing callbacks");<a name="line.95"></a>
+<FONT color="green">087</FONT>                    // Book updates aren't being fired when GO ESU3=bB, <a name="line.87"></a>
+<FONT color="green">088</FONT>                    // only when all interests are subbed to<a name="line.88"></a>
+<FONT color="green">089</FONT>                    fireCallbacks(Book.class);<a name="line.89"></a>
+<FONT color="green">090</FONT>            }<a name="line.90"></a>
+<FONT color="green">091</FONT>            <a name="line.91"></a>
+<FONT color="green">092</FONT>            @Override<a name="line.92"></a>
+<FONT color="green">093</FONT>            public void setCuvolUpdate(final MarketDoCuvolEntry entry,<a name="line.93"></a>
+<FONT color="green">094</FONT>                            final TimeValue time) {<a name="line.94"></a>
+<FONT color="green">095</FONT>                    super.setCuvolUpdate(entry, time);<a name="line.95"></a>
 <FONT color="green">096</FONT>                    <a name="line.96"></a>
-<FONT color="green">097</FONT>                    fireCallbacks(Cuvol.class);<a name="line.97"></a>
-<FONT color="green">098</FONT>            }<a name="line.98"></a>
-<FONT color="green">099</FONT>            <a name="line.99"></a>
-<FONT color="green">100</FONT>            @Override<a name="line.100"></a>
-<FONT color="green">101</FONT>            public void setCuvolSnapshot(final MarketDoCuvolEntry[] entries,<a name="line.101"></a>
-<FONT color="green">102</FONT>                            final TimeValue time) {<a name="line.102"></a>
-<FONT color="green">103</FONT>                    super.setCuvolSnapshot(entries, time);<a name="line.103"></a>
-<FONT color="green">104</FONT>                    <a name="line.104"></a>
-<FONT color="green">105</FONT>                    //log.debug("Set cuvol snapshot, firing callbacks");<a name="line.105"></a>
-<FONT color="green">106</FONT>    <a name="line.106"></a>
-<FONT color="green">107</FONT>                    fireCallbacks(Cuvol.class);<a name="line.107"></a>
-<FONT color="green">108</FONT>            }<a name="line.108"></a>
-<FONT color="green">109</FONT>            <a name="line.109"></a>
-<FONT color="green">110</FONT>            @Override<a name="line.110"></a>
-<FONT color="green">111</FONT>            public void setTrade(final MarketTradeType type,<a name="line.111"></a>
-<FONT color="green">112</FONT>                            final MarketTradeSession session,<a name="line.112"></a>
-<FONT color="green">113</FONT>                            final MarketTradeSequencing sequencing, final PriceValue price,<a name="line.113"></a>
-<FONT color="green">114</FONT>                            final SizeValue size, final TimeValue time, final TimeValue date) {<a name="line.114"></a>
-<FONT color="green">115</FONT>                    super.setTrade(type, session, sequencing, price, size, time, date);<a name="line.115"></a>
-<FONT color="green">116</FONT>                    <a name="line.116"></a>
-<FONT color="green">117</FONT>                    //log.debug("Set trade, firing callbacks");<a name="line.117"></a>
+<FONT color="green">097</FONT>                    //log.debug("Set cuvol update, firing callbacks");<a name="line.97"></a>
+<FONT color="green">098</FONT>                    <a name="line.98"></a>
+<FONT color="green">099</FONT>                    fireCallbacks(Cuvol.class);<a name="line.99"></a>
+<FONT color="green">100</FONT>            }<a name="line.100"></a>
+<FONT color="green">101</FONT>            <a name="line.101"></a>
+<FONT color="green">102</FONT>            @Override<a name="line.102"></a>
+<FONT color="green">103</FONT>            public void setCuvolSnapshot(final MarketDoCuvolEntry[] entries,<a name="line.103"></a>
+<FONT color="green">104</FONT>                            final TimeValue time) {<a name="line.104"></a>
+<FONT color="green">105</FONT>                    super.setCuvolSnapshot(entries, time);<a name="line.105"></a>
+<FONT color="green">106</FONT>                    <a name="line.106"></a>
+<FONT color="green">107</FONT>                    //log.debug("Set cuvol snapshot, firing callbacks");<a name="line.107"></a>
+<FONT color="green">108</FONT>    <a name="line.108"></a>
+<FONT color="green">109</FONT>                    fireCallbacks(Cuvol.class);<a name="line.109"></a>
+<FONT color="green">110</FONT>            }<a name="line.110"></a>
+<FONT color="green">111</FONT>            <a name="line.111"></a>
+<FONT color="green">112</FONT>            @Override<a name="line.112"></a>
+<FONT color="green">113</FONT>            public void setTrade(final MarketTradeType type,<a name="line.113"></a>
+<FONT color="green">114</FONT>                            final MarketTradeSession session,<a name="line.114"></a>
+<FONT color="green">115</FONT>                            final MarketTradeSequencing sequencing, final PriceValue price,<a name="line.115"></a>
+<FONT color="green">116</FONT>                            final SizeValue size, final TimeValue time, final TimeValue date) {<a name="line.116"></a>
+<FONT color="green">117</FONT>                    super.setTrade(type, session, sequencing, price, size, time, date);<a name="line.117"></a>
 <FONT color="green">118</FONT>                    <a name="line.118"></a>
-<FONT color="green">119</FONT>                    fireCallbacks(Trade.class);<a name="line.119"></a>
-<FONT color="green">120</FONT>                    fireCallbacks(Cuvol.class);  // HACK FOR DDF<a name="line.120"></a>
-<FONT color="green">121</FONT>                    fireCallbacks(Session.class);  // HACK FOR DDF<a name="line.121"></a>
-<FONT color="green">122</FONT>            }<a name="line.122"></a>
-<FONT color="green">123</FONT>            <a name="line.123"></a>
-<FONT color="green">124</FONT>            @Override<a name="line.124"></a>
-<FONT color="green">125</FONT>            public void setBar(final MarketBarType type, final MarketDoBar bar) {<a name="line.125"></a>
-<FONT color="green">126</FONT>                    super.setBar(type, bar);<a name="line.126"></a>
-<FONT color="green">127</FONT>                    <a name="line.127"></a>
-<FONT color="green">128</FONT>                    //log.debug("Set bar, firing callbacks");<a name="line.128"></a>
+<FONT color="green">119</FONT>                    //log.debug("Set trade, firing callbacks");<a name="line.119"></a>
+<FONT color="green">120</FONT>                    <a name="line.120"></a>
+<FONT color="green">121</FONT>                    fireCallbacks(Trade.class);<a name="line.121"></a>
+<FONT color="green">122</FONT>                    fireCallbacks(Cuvol.class);  // HACK FOR DDF<a name="line.122"></a>
+<FONT color="green">123</FONT>                    fireCallbacks(Session.class);  // HACK FOR DDF<a name="line.123"></a>
+<FONT color="green">124</FONT>            }<a name="line.124"></a>
+<FONT color="green">125</FONT>            <a name="line.125"></a>
+<FONT color="green">126</FONT>            @Override<a name="line.126"></a>
+<FONT color="green">127</FONT>            public void setBar(final MarketBarType type, final MarketDoBar bar) {<a name="line.127"></a>
+<FONT color="green">128</FONT>                    super.setBar(type, bar);<a name="line.128"></a>
 <FONT color="green">129</FONT>                    <a name="line.129"></a>
-<FONT color="green">130</FONT>                    fireCallbacks(Session.class);<a name="line.130"></a>
-<FONT color="green">131</FONT>            }<a name="line.131"></a>
-<FONT color="green">132</FONT>            <a name="line.132"></a>
-<FONT color="green">133</FONT>            @Override<a name="line.133"></a>
-<FONT color="green">134</FONT>            public void setState(final MarketStateEntry entry, final boolean isOn) {<a name="line.134"></a>
-<FONT color="green">135</FONT>                    super.setState(entry, isOn);<a name="line.135"></a>
-<FONT color="green">136</FONT>                    <a name="line.136"></a>
-<FONT color="green">137</FONT>                    //log.debug("Set state");<a name="line.137"></a>
+<FONT color="green">130</FONT>                    //log.debug("Set bar, firing callbacks");<a name="line.130"></a>
+<FONT color="green">131</FONT>                    <a name="line.131"></a>
+<FONT color="green">132</FONT>                    fireCallbacks(Session.class);<a name="line.132"></a>
+<FONT color="green">133</FONT>            }<a name="line.133"></a>
+<FONT color="green">134</FONT>            <a name="line.134"></a>
+<FONT color="green">135</FONT>            @Override<a name="line.135"></a>
+<FONT color="green">136</FONT>            public void setState(final MarketStateEntry entry, final boolean isOn) {<a name="line.136"></a>
+<FONT color="green">137</FONT>                    super.setState(entry, isOn);<a name="line.137"></a>
 <FONT color="green">138</FONT>                    <a name="line.138"></a>
-<FONT color="green">139</FONT>                    // Currently not firing on state<a name="line.139"></a>
-<FONT color="green">140</FONT>            }<a name="line.140"></a>
-<FONT color="green">141</FONT>            <a name="line.141"></a>
-<FONT color="green">142</FONT>    }<a name="line.142"></a>
+<FONT color="green">139</FONT>                    //log.debug("Set state");<a name="line.139"></a>
+<FONT color="green">140</FONT>                    <a name="line.140"></a>
+<FONT color="green">141</FONT>                    // Currently not firing on state<a name="line.141"></a>
+<FONT color="green">142</FONT>            }<a name="line.142"></a>
+<FONT color="green">143</FONT>            <a name="line.143"></a>
+<FONT color="green">144</FONT>    }<a name="line.144"></a>
 
 
 

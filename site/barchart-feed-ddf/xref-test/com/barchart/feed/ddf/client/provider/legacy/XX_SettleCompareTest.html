@@ -37,17 +37,17 @@
 <a class="jxr_linenumber" name="27" href="#27">27</a>  			@Override
 <a class="jxr_linenumber" name="28" href="#28">28</a>  			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onNext(<strong class="jxr_keyword">final</strong> SessionSet v) {
 <a class="jxr_linenumber" name="29" href="#29">29</a>  				
-<a class="jxr_linenumber" name="30" href="#30">30</a>  				<strong class="jxr_keyword">if</strong>(v.session(Session.Type.DEFAULT_CURRENT).isSettled()) {
-<a class="jxr_linenumber" name="31" href="#31">31</a>  				
-<a class="jxr_linenumber" name="32" href="#32">32</a>  					System.out.println(<span class="jxr_string">"AGENT: "</span> +
-<a class="jxr_linenumber" name="33" href="#33">33</a>  					v.instrument().symbol() + <span class="jxr_string">" "</span> +
-<a class="jxr_linenumber" name="34" href="#34">34</a>  					<span class="jxr_string">"IS SETTLED: "</span> + v.session(Session.Type.DEFAULT_CURRENT).isSettled() + <span class="jxr_string">" "</span> +
-<a class="jxr_linenumber" name="35" href="#35">35</a>  					<span class="jxr_string">" @ "</span> + v.session(Session.Type.DEFAULT_CURRENT).settle() + <span class="jxr_string">" "</span> +
-<a class="jxr_linenumber" name="36" href="#36">36</a>  					<span class="jxr_string">" PREVIOUS = "</span> +
-<a class="jxr_linenumber" name="37" href="#37">37</a>  					v.session(Session.Type.DEFAULT_PREVIOUS).close().asDouble()
-<a class="jxr_linenumber" name="38" href="#38">38</a>  					
-<a class="jxr_linenumber" name="39" href="#39">39</a>  					);
-<a class="jxr_linenumber" name="40" href="#40">40</a>  				}
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_comment">//				if(v.session(Session.Type.DEFAULT_CURRENT).isSettled()) {</em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_comment">//				</em>
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_comment">//					System.out.println("AGENT: " +</em>
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <em class="jxr_comment">//					v.instrument().symbol() + " " +</em>
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_comment">//					"IS SETTLED: " + v.session(Session.Type.DEFAULT_CURRENT).isSettled() + " " +</em>
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_comment">//					" @ " + v.session(Session.Type.DEFAULT_CURRENT).settle() + " " +</em>
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_comment">//					" PREVIOUS = " +</em>
+<a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_comment">//					v.session(Session.Type.DEFAULT_PREVIOUS).close().asDouble()</em>
+<a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_comment">//					</em>
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_comment">//					);</em>
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_comment">//				}</em>
 <a class="jxr_linenumber" name="41" href="#41">41</a>  			}
 <a class="jxr_linenumber" name="42" href="#42">42</a>  			
 <a class="jxr_linenumber" name="43" href="#43">43</a>  		};

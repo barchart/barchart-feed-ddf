@@ -30,17 +30,17 @@
 <FONT color="green">027</FONT>                            @Override<a name="line.27"></a>
 <FONT color="green">028</FONT>                            public void onNext(final SessionSet v) {<a name="line.28"></a>
 <FONT color="green">029</FONT>                                    <a name="line.29"></a>
-<FONT color="green">030</FONT>                                    if(v.session(Session.Type.DEFAULT_CURRENT).isSettled()) {<a name="line.30"></a>
-<FONT color="green">031</FONT>                                    <a name="line.31"></a>
-<FONT color="green">032</FONT>                                            System.out.println("AGENT: " +<a name="line.32"></a>
-<FONT color="green">033</FONT>                                            v.instrument().symbol() + " " +<a name="line.33"></a>
-<FONT color="green">034</FONT>                                            "IS SETTLED: " + v.session(Session.Type.DEFAULT_CURRENT).isSettled() + " " +<a name="line.34"></a>
-<FONT color="green">035</FONT>                                            " @ " + v.session(Session.Type.DEFAULT_CURRENT).settle() + " " +<a name="line.35"></a>
-<FONT color="green">036</FONT>                                            " PREVIOUS = " +<a name="line.36"></a>
-<FONT color="green">037</FONT>                                            v.session(Session.Type.DEFAULT_PREVIOUS).close().asDouble()<a name="line.37"></a>
-<FONT color="green">038</FONT>                                            <a name="line.38"></a>
-<FONT color="green">039</FONT>                                            );<a name="line.39"></a>
-<FONT color="green">040</FONT>                                    }<a name="line.40"></a>
+<FONT color="green">030</FONT>    //                              if(v.session(Session.Type.DEFAULT_CURRENT).isSettled()) {<a name="line.30"></a>
+<FONT color="green">031</FONT>    //                              <a name="line.31"></a>
+<FONT color="green">032</FONT>    //                                      System.out.println("AGENT: " +<a name="line.32"></a>
+<FONT color="green">033</FONT>    //                                      v.instrument().symbol() + " " +<a name="line.33"></a>
+<FONT color="green">034</FONT>    //                                      "IS SETTLED: " + v.session(Session.Type.DEFAULT_CURRENT).isSettled() + " " +<a name="line.34"></a>
+<FONT color="green">035</FONT>    //                                      " @ " + v.session(Session.Type.DEFAULT_CURRENT).settle() + " " +<a name="line.35"></a>
+<FONT color="green">036</FONT>    //                                      " PREVIOUS = " +<a name="line.36"></a>
+<FONT color="green">037</FONT>    //                                      v.session(Session.Type.DEFAULT_PREVIOUS).close().asDouble()<a name="line.37"></a>
+<FONT color="green">038</FONT>    //                                      <a name="line.38"></a>
+<FONT color="green">039</FONT>    //                                      );<a name="line.39"></a>
+<FONT color="green">040</FONT>    //                              }<a name="line.40"></a>
 <FONT color="green">041</FONT>                            }<a name="line.41"></a>
 <FONT color="green">042</FONT>                            <a name="line.42"></a>
 <FONT color="green">043</FONT>                    };<a name="line.43"></a>
