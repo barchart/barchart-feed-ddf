@@ -1,5 +1,8 @@
 package com.barchart.feed.ddf.instrument.provider.ext;
 
+import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
+import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -15,9 +18,12 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Element;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.ddf.instrument.provider.InstrumentXML;
 import com.barchart.feed.ddf.instrument.provider.OpenFeedInstDBMap;
+import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.market.provider.api.model.meta.InstrumentState;
 
 public final class NewInstrumentProvider {
@@ -127,15 +133,18 @@ public final class NewInstrumentProvider {
 	}
 
 	public static Instrument fromID(final String id) {
+		// TODO
 		return null;
 	}
 	
 	public static Map<String, Instrument> fromID(final Collection<String> ids) {
+		// TODO
 		return null;
 	}
 	
 	public static Map<String, Instrument> fromSymbol(
 			final Collection<String> symbols) {
+		// TODO
 		return null;
 	}
 	
@@ -167,30 +176,35 @@ public final class NewInstrumentProvider {
 						// TODO ????
 					}
 					
-					// TODO Need to convert over to open feed def
 					InstrumentDefinition inst = db.get(id);
 					
 					if(inst != null) {
 						
-						// TODO null here should be the inst from the db
 						/*
 						 * This updates all references to the instrument
 						 */
-						iState.process(null);
+						iState.process(inst);
 						
 						return;
 					}
 					
 					/* Remote lookup */
 					final Future<InstrumentDefinition> futdef = executor.submit(remoteCallable(id));
-					final InstrumentDefinition def = futdef.get(DEFAULT_TIMEOUT, MILLIS);
 					
-					if(iState == null) {
-						// TODO Problem
+					/* Runnable blocks here, waiting for remote */
+					inst = futdef.get(DEFAULT_TIMEOUT, MILLIS);
+					
+					if(inst != null) {
+						
+						/*
+						 * This updates all references to the instrument
+						 */
+						iState.process(inst);
+						
+						return;
 					}
 					
-					
-					
+					// Here inst was null, so some error needs to be handled
 					
 				} catch (final Throwable t) {
 					// TODO How to handle failure?
@@ -202,25 +216,43 @@ public final class NewInstrumentProvider {
 		
 	}
 	
-	private static Callable<org.openfeed.proto.inst.InstrumentDefinition> remoteCallable(final String id) {
+	private static final String SERVER_EXTRAS = "extras.ddfplus.com";
+
+	private static final String urlInstrumentLookup(final CharSequence lookup) {
+		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
+	}
+	
+	private static Callable<InstrumentDefinition> remoteCallable(final String symbol) {
 		
-		return new Callable<org.openfeed.proto.inst.InstrumentDefinition>() {
+		return new Callable<InstrumentDefinition>() {
 	
 			@Override
-			public org.openfeed.proto.inst.InstrumentDefinition call() throws Exception {
+			public InstrumentDefinition call() throws Exception {
 				
-				return null;
+				try {
+					
+					final String symbolURI = urlInstrumentLookup(symbol);
+					final Element root = HelperXML.xmlDocumentDecode(symbolURI);
+					final Element tag = xmlFirstChild(root, "instrument", XML_STOP);
+					final InstrumentDefinition instDOM = InstrumentXML.decodeXMLProto(tag);
+					
+					if(instDOM == null || instDOM == InstrumentDefinition.getDefaultInstance()) {
+						log.warn("Empty instrument def returned from remote lookup: {}", symbol);
+						return InstrumentDefinition.getDefaultInstance();
+					}
+					
+					return instDOM;
+					
+				} catch (final Throwable t) {
+					log.error("Remote instrument lookup callable exception: {}", t);
+					return InstrumentDefinition.getDefaultInstance();
+				}
 				
 			}
 		
 		};
 		
 	}
-	
-	
-	
-	
-	
 	
 	
 	
