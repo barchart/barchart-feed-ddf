@@ -187,6 +187,9 @@ public final class LocalInstrumentDBMap {
 		return map.size();
 	}
 	
+	/**
+	 * 
+	 */
 	public void clear() {
 		map.clear();
 	}

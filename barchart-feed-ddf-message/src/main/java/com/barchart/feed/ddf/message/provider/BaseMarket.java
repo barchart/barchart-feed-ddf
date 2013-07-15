@@ -94,130 +94,152 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 			return Instrument.NULL;
 		}
 		return insts.get(0);
+		
+		/*
+		 * return NewInstrumentProvider.fromMessage(stub);
+		 */
 	}
 	
-	private Instrument makeStub() {
-		
-		return new Instrument() {
+	/*  
+	 * Lazy eval instrument stub 
+	 */
+	private final Instrument stub = new Instrument() {
 
-			@Override
-			public int compareTo(Instrument o) {
-				return id().compareTo(o.id());
-			}
+		@Override
+		public int compareTo(Instrument o) {
+			return id().compareTo(o.id());
+		}
 
-			@Override
-			public boolean isNull() {
-				return false;
-			}
+		@Override
+		public boolean isNull() {
+			return false;
+		}
 
-			@Override
-			public Identifier id() {
-				// TODO Important that this is recorded and checked locally
-				return null;
-			}
-
-			@Override
-			public MetaType type() {
-				return MetaType.INSTRUMENT;
-			}
-
-			@Override
-			public String marketGUID() {
-				return id().toString();
-			}
-
-			@Override
-			public SecurityType securityType() {
-				return getExchange().kind.asSecType();
-			}
-
-			@Override
-			public BookLiquidityType liquidityType() {
-				return BookLiquidityType.NONE;
-			}
-
-			@Override
-			public BookStructureType bookStructure() {
-				return BookStructureType.NONE;
-			}
-
-			@Override
-			public Size maxBookDepth() {
-				return Size.NULL;
-			}
-
-			@Override
-			public String instrumentDataVendor() {
-				return "Unknown Data Vendor";
-			}
-
-			@Override
-			public String symbol() {
-				return getId().toString();
-			}
-
-			@Override
-			public String description() {
-				return "Unresolved Instrument Stub";
-			}
-
-			@Override
-			public String CFICode() {
-				return "Unknown CFI Code";
-			}
-
-			@Override
-			public Exchange exchange() {
-				return getExchange().asExchange();
-			}
-
-			@Override
-			public String exchangeCode() {
-				return String.valueOf(getExchange().code);
-			}
-
-			@Override
-			public Price tickSize() {
-				return Price.NULL;
-			}
-
-			@Override
-			public Price pointValue() {
-				return Price.NULL;
-			}
-
-			@Override
-			public Fraction displayFraction() {
-				return ValueConverter.fraction(getFraction().fraction);
-			}
-
-			@Override
-			public TimeInterval lifetime() {
-				return TimeInterval.NULL;
-			}
-
-			@Override
-			public Schedule marketHours() {
-				return Schedule.NULL;
-			}
-
-			@Override
-			public long timeZoneOffset() {
-				return 0;
-			}
-
-			@Override
-			public String timeZoneName() {
-				return "Null Time Zone";
-			}
-
-			@Override
-			public List<Identifier> componentLegs() {
-				return Collections.emptyList();
-			}
+		@Override
+		public Identifier id() {
 			
-		};
-	}
+			return new Identifier() {
+
+				@Override
+				public String toString() {
+					return getId().toString();
+				}
+				
+				@Override
+				public int compareTo(Identifier o) {
+					return toString().compareTo(o.toString());
+				}
+
+				@Override
+				public boolean isNull() {
+					return false;
+				}
+				
+			};
+		}
+
+		@Override
+		public MetaType type() {
+			return MetaType.INSTRUMENT;
+		}
+
+		@Override
+		public String marketGUID() {
+			return id().toString();
+		}
+
+		@Override
+		public SecurityType securityType() {
+			return getExchange().kind.asSecType();
+		}
+
+		@Override
+		public BookLiquidityType liquidityType() {
+			return BookLiquidityType.NONE;
+		}
+
+		@Override
+		public BookStructureType bookStructure() {
+			return BookStructureType.NONE;
+		}
+
+		@Override
+		public Size maxBookDepth() {
+			return Size.NULL;
+		}
+
+		@Override
+		public String instrumentDataVendor() {
+			return "Unknown Data Vendor";
+		}
+
+		@Override
+		public String symbol() {
+			return getId().toString();
+		}
+
+		@Override
+		public String description() {
+			return "Unresolved Instrument Stub";
+		}
+
+		@Override
+		public String CFICode() {
+			return "Unknown CFI Code";
+		}
+
+		@Override
+		public Exchange exchange() {
+			return getExchange().asExchange();
+		}
+
+		@Override
+		public String exchangeCode() {
+			return String.valueOf(getExchange().code);
+		}
+
+		@Override
+		public Price tickSize() {
+			return Price.NULL;
+		}
+
+		@Override
+		public Price pointValue() {
+			return Price.NULL;
+		}
+
+		@Override
+		public Fraction displayFraction() {
+			return ValueConverter.fraction(getFraction().fraction);
+		}
+
+		@Override
+		public TimeInterval lifetime() {
+			return TimeInterval.NULL;
+		}
+
+		@Override
+		public Schedule marketHours() {
+			return Schedule.NULL;
+		}
+
+		@Override
+		public long timeZoneOffset() {
+			return 0;
+		}
+
+		@Override
+		public String timeZoneName() {
+			return "Null Time Zone";
+		}
+
+		@Override
+		public List<Identifier> componentLegs() {
+			return Collections.emptyList();
+		}
+		
+	};
+	
 	
 	@Override
 	public final TimeValue getTime() {
