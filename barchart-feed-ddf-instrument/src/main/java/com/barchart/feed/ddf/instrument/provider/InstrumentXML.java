@@ -43,12 +43,18 @@ import static com.barchart.util.values.provider.ValueBuilder.newText;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openfeed.proto.inst.BookLiquidity;
+import org.openfeed.proto.inst.BookStructure;
+import org.openfeed.proto.inst.Calendar;
+import org.openfeed.proto.inst.Decimal;
+import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.proto.inst.InstrumentType;
+import org.openfeed.proto.inst.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
-import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
@@ -58,13 +64,6 @@ import com.barchart.feed.inst.provider.Exchanges;
 import com.barchart.feed.inst.provider.InstrumentGUID;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.ObjectMapFactory;
-import com.barchart.proto.buf.inst.BookLiquidity;
-import com.barchart.proto.buf.inst.BookStructure;
-import com.barchart.proto.buf.inst.Calendar;
-import com.barchart.proto.buf.inst.Decimal;
-import com.barchart.proto.buf.inst.InstrumentDefinition;
-import com.barchart.proto.buf.inst.InstrumentType;
-import com.barchart.proto.buf.inst.Interval;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Fraction;
@@ -269,7 +268,7 @@ public final class InstrumentXML {
 			return InstrumentDefinition.getDefaultInstance();
 		}
 		/* type of security, Forex, Equity, etc. */
-		builder.setInstrumentType(InstrumentType.NO_TYPE_INST);
+		builder.setInstrumentType(InstrumentType.NO_INSTUMENT);
 		
 		/* liquidy type, default / implied / combined */
 		builder.setBookLiquidity(BookLiquidity.NO_BOOK_LIQUIDITY);
@@ -351,8 +350,8 @@ public final class InstrumentXML {
 		final DDF_TimeZone zone = DDF_TimeZone.fromCode(xmlStringDecode(
 				ats, TIME_ZONE_DDF, XML_STOP));
 		
-		/* timezone represented as offset in minutes from utc */
-		builder.setTimeZoneOffset(zone.getUTCOffset());
+//		/* timezone represented as offset in minutes from utc */
+//		builder.setTimeZoneOffset(zone.getUTCOffset());
 		
 		/* time zone name as text */
 		builder.setTimeZoneName(zone.name());

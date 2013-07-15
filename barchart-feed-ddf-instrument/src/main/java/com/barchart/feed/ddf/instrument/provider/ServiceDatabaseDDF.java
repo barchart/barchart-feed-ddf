@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 
+import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,6 @@ import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.inst.InstrumentFuture;
 import com.barchart.feed.inst.InstrumentFutureMap;
 import com.barchart.feed.inst.provider.InstrumentFactory;
-import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.barchart.util.values.provider.ValueBuilder;
 
 public class ServiceDatabaseDDF implements DDF_DefinitionService {

@@ -42,12 +42,6 @@
 			<version>${barchartFeedBaseVersion}</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.openfeed.proto</groupId>
-			<artifactId>openfeed-protocol-instrument</artifactId>
-			<version>[1-SNAPSHOT,2-SNAPSHOT)</version>
-		</dependency>
-		
 	</dependencies>
 
 </project>

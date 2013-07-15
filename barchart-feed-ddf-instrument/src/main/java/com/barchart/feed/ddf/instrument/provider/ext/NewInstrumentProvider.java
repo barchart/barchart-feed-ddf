@@ -110,8 +110,6 @@ public final class NewInstrumentProvider {
 		return instState;
 	}
 	
-	
-	
 	public static Instrument fromSymbol(final String id) {
 		
 		if(id == null || id.isEmpty()) {

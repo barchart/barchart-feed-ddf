@@ -7,10 +7,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.proto.buf.inst.InstrumentDefinition;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sleepycat.bind.EntityBinding;
 import com.sleepycat.bind.EntryBinding;
