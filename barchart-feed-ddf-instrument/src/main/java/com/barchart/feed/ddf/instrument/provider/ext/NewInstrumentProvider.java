@@ -106,29 +106,37 @@ public final class NewInstrumentProvider {
 			return symbolMap.get(symbol);
 		}
 		
-		final InstrumentState instState = InstrumentStateFactory.newInstrumentFromStub(inst);
+		final InstrumentState instState = InstrumentStateFactory.
+				newInstrumentFromStub(inst);
 		
 		symbolMap.put(symbol, instState);
 		
-		// start async lookup / populate
+		/* Asnyc lookup */
 		executor.submit(populateRunner(symbol));
 		
 		return instState;
+		
 	}
 	
-	public static Instrument fromSymbol(final String id) {
+	public static Instrument fromSymbol(final String symbol) {
 		
-		if(id == null || id.isEmpty()) {
+		if(symbol == null || symbol.isEmpty()) {
 			return Instrument.NULL;
 		}
 		
-		if(symbolMap.containsKey(id)) {
-			return symbolMap.get(id);
+		if(symbolMap.containsKey(symbol)) {
+			return symbolMap.get(symbol);
 		}
 		
-		// Here we need to run search, populate data
+		final InstrumentState instState = InstrumentStateFactory.
+				newInstrument(symbol);
 		
-		return InstrumentStateFactory.newInstrument(id);
+		symbolMap.put(symbol, instState);
+		
+		/* Asnyc lookup */
+		executor.submit(populateRunner(symbol));
+		
+		return instState;
 		
 	}
 
@@ -222,7 +230,7 @@ public final class NewInstrumentProvider {
 		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
 	}
 	
-	private static Callable<InstrumentDefinition> remoteCallable(final String symbol) {
+	static Callable<InstrumentDefinition> remoteCallable(final String symbol) {
 		
 		return new Callable<InstrumentDefinition>() {
 	

@@ -268,7 +268,7 @@ public final class InstrumentXML {
 			return InstrumentDefinition.getDefaultInstance();
 		}
 		/* type of security, Forex, Equity, etc. */
-		builder.setInstrumentType(InstrumentType.NO_INSTUMENT);
+		builder.setInstrumentType(InstrumentType.NO_INSTRUMENT);
 		
 		/* liquidy type, default / implied / combined */
 		builder.setBookLiquidity(BookLiquidity.NO_BOOK_LIQUIDITY);
@@ -376,7 +376,7 @@ public final class InstrumentXML {
 			return InstrumentDefinition.getDefaultInstance();
 		}
 		/* type of security, Forex, Equity, etc. */
-		builder.setInstrumentType(InstrumentType.NO_INSTUMENT);
+		builder.setInstrumentType(InstrumentType.NO_INSTRUMENT);
 		
 		/* liquidy type, default / implied / combined */
 		builder.setBookLiquidity(BookLiquidity.NO_BOOK_LIQUIDITY);
