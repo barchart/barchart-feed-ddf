@@ -44,9 +44,13 @@ import java.nio.ByteBuffer;
 
 import org.w3c.dom.Element;
 
+import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.provider.DefCuvolEntry;
+import com.barchart.feed.base.provider.ValueConverter;
+import com.barchart.feed.ddf.instrument.provider.ext.InstBase;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketCuvol;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -56,6 +60,8 @@ import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
 import com.barchart.util.math.MathExtra;
+import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.SizeValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -313,6 +319,9 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 		}
 
 		final Instrument instrument = getInstrument();
+		
+		// FIXME This doesnt work, instrument uses the exchange() method to get it's exchange
+		// so you can't call exchangeCode() on instrument before it's been set in the message;
 		setExchange(DDF_Exchange.fromCode(instrument.exchangeCode().getBytes()[0]));
 
 		final long millisUTC = xmlTimeDecode(getExchange().kind.time.zone, tag,
@@ -411,5 +420,52 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 		text.append("TODO : ");
 
 	}
+	
+	@Override
+	public Instrument getInstrument() {
+		return stub;
+	}
+	
+	/*  
+	 * Lazy eval instrument stub 
+	 */
+	private final Instrument stub = new InstBase() {
+
+		@Override
+		public String marketGUID() {
+			return NewInstrumentProvider.formatSymbol(getId().toString());
+		}
+
+		@Override
+		public SecurityType securityType() {
+			return getExchange().kind.asSecType();
+		}
+
+		@Override
+		public String symbol() {
+			return NewInstrumentProvider.formatSymbol(getId().toString());
+		}
+
+		@Override
+		public Exchange exchange() {
+			return getExchange().asExchange();
+		}
+
+		@Override
+		public String exchangeCode() {
+			return new String(new byte[] {getExchange().code});
+		}
+
+		@Override
+		public Price tickSize() {
+			return ValueConverter.price(getPriceStep());
+		}
+
+		@Override
+		public Fraction displayFraction() {
+			return ValueConverter.fraction(getFraction().fraction);
+		}
+
+	};
 
 }

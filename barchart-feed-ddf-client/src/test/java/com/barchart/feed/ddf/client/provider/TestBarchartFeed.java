@@ -44,22 +44,6 @@ public class TestBarchartFeed {
 		
 		feed.startup();
 		
-//		final MarketObserver<Book> callback = new MarketObserver<Book>() {
-//
-//			@Override
-//			public void onNext(final Book v) {
-//				
-//				log.debug(
-//				v.instrument().symbol() + " " +
-//				v.lastBookUpdate().level() + " " + 
-//				v.lastBookUpdate().price().toString() + " " + 
-//				v.lastBookUpdate().size().toString());
-//			}
-//			
-//		};
-//		
-//		final Agent myAgent = feed.newAgent(Book.class, callback);
-		
 		final MarketObserver<Market> callback = new MarketObserver<Market>() {
 
 			@Override
@@ -67,7 +51,8 @@ public class TestBarchartFeed {
 				
 				log.debug(
 				v.instrument().symbol() + " " +
-				v.session().previousClose().toString());
+				v.book().top().bid().price().asDouble() + " " +
+				v.book().top().ask().price().asDouble());
 				
 			}
 			
@@ -81,16 +66,6 @@ public class TestBarchartFeed {
 		Thread.sleep(1000000);
 		
 		feed.shutdown();
-		
-//		Thread.sleep(5000);
-//		
-//		feed.startup();
-//		
-//		myAgent.include("GOOG");
-//		
-//		Thread.sleep(10000);
-//		
-//		feed.shutdown();
 		
 	}
 	

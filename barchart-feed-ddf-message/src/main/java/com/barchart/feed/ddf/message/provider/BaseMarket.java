@@ -21,16 +21,14 @@ import static com.barchart.util.ascii.ASCII.SOH;
 import static com.barchart.util.ascii.ASCII.STX;
 
 import java.nio.ByteBuffer;
-import java.util.Collections;
-import java.util.List;
 
 import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.base.provider.ValueConverter;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.ext.InstBase;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
@@ -43,10 +41,6 @@ import com.barchart.feed.ddf.symbol.provider.DDF_Symbology;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.value.api.Price;
-import com.barchart.util.value.api.Schedule;
-import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -83,69 +77,27 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getInstrument()
 	 */
 	@Override
-	public final Instrument getInstrument() {
+	public Instrument getInstrument() {
 		
-		/*
-		 * TODO The ID needs to be worked to match symbol_realtime
-		 * currently options are not working
-		 */
-		List<Instrument> insts = DDF_InstrumentProvider.find(getId());
-		if(insts.isEmpty()) {
-			return Instrument.NULL;
-		}
-		return insts.get(0);
+//		List<Instrument> insts = DDF_InstrumentProvider.find(getId());
+//		if(insts.isEmpty()) {
+//			return Instrument.NULL;
+//		}
+//		return insts.get(0);
+//		
+		return NewInstrumentProvider.fromMessage(stub);
 		
-		/*
-		 * return NewInstrumentProvider.fromMessage(stub);
-		 */
 	}
 	
 	/*  
 	 * Lazy eval instrument stub 
 	 */
-	private final Instrument stub = new Instrument() {
+	private final Instrument stub = new InstBase() {
 
-		@Override
-		public int compareTo(Instrument o) {
-			return id().compareTo(o.id());
-		}
-
-		@Override
-		public boolean isNull() {
-			return false;
-		}
-
-		@Override
-		public Identifier id() {
-			
-			return new Identifier() {
-
-				@Override
-				public String toString() {
-					return getId().toString();
-				}
-				
-				@Override
-				public int compareTo(Identifier o) {
-					return toString().compareTo(o.toString());
-				}
-
-				@Override
-				public boolean isNull() {
-					return false;
-				}
-				
-			};
-		}
-
-		@Override
-		public MetaType type() {
-			return MetaType.INSTRUMENT;
-		}
-
+		/* GUID is symbol for now */
 		@Override
 		public String marketGUID() {
-			return id().toString();
+			return NewInstrumentProvider.formatSymbol(getId().toString());
 		}
 
 		@Override
@@ -154,38 +106,8 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		}
 
 		@Override
-		public BookLiquidityType liquidityType() {
-			return BookLiquidityType.NONE;
-		}
-
-		@Override
-		public BookStructureType bookStructure() {
-			return BookStructureType.NONE;
-		}
-
-		@Override
-		public Size maxBookDepth() {
-			return Size.NULL;
-		}
-
-		@Override
-		public String instrumentDataVendor() {
-			return "Unknown Data Vendor";
-		}
-
-		@Override
 		public String symbol() {
-			return getId().toString();
-		}
-
-		@Override
-		public String description() {
-			return "Unresolved Instrument Stub";
-		}
-
-		@Override
-		public String CFICode() {
-			return "Unknown CFI Code";
+			return NewInstrumentProvider.formatSymbol(getId().toString());
 		}
 
 		@Override
@@ -195,17 +117,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 		@Override
 		public String exchangeCode() {
-			return String.valueOf(getExchange().code);
-		}
-
-		@Override
-		public Price tickSize() {
-			return Price.NULL;
-		}
-
-		@Override
-		public Price pointValue() {
-			return Price.NULL;
+			return new String(new byte[] {getExchange().code});
 		}
 
 		@Override
@@ -213,33 +125,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 			return ValueConverter.fraction(getFraction().fraction);
 		}
 
-		@Override
-		public TimeInterval lifetime() {
-			return TimeInterval.NULL;
-		}
-
-		@Override
-		public Schedule marketHours() {
-			return Schedule.NULL;
-		}
-
-		@Override
-		public long timeZoneOffset() {
-			return 0;
-		}
-
-		@Override
-		public String timeZoneName() {
-			return "Null Time Zone";
-		}
-
-		@Override
-		public List<Identifier> componentLegs() {
-			return Collections.emptyList();
-		}
-		
 	};
-	
 	
 	@Override
 	public final TimeValue getTime() {

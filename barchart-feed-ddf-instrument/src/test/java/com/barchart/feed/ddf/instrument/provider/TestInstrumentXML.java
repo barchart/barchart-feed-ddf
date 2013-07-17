@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import cleanup.InstrumentDDF;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;

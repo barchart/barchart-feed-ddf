@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.instrument.provider;
+package cleanup;
 
 import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
 import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;

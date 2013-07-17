@@ -86,7 +86,7 @@ public final class InstrumentXML {
 		
 	}
 	
-	public static InstrumentDDF decodeXML(final Element tag) throws Exception {
+	public static Instrument decodeXML(final Element tag) throws Exception {
 		
 		// lookup status
 
@@ -156,7 +156,7 @@ public final class InstrumentXML {
 		
 	}
 	
-	public static InstrumentDDF decodeSAX(final Attributes ats) throws Exception {
+	public static Instrument decodeSAX(final Attributes ats) throws Exception {
 		
 		// lookup status
 		final String statusCode = xmlStringDecode(ats, STATUS, XML_STOP);
@@ -216,7 +216,7 @@ public final class InstrumentXML {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private static final InstrumentDDF build(final TextValue guid,
+	private static final Instrument build(final TextValue guid,
 			final TextValue symbolReal, final String symbolComment,
 			final String codeCFI, final DDF_Exchange exchange,
 			final PriceValue priceStep, final PriceValue pricePoint,

@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.joda.time.DateTime;
 import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +24,9 @@ import org.w3c.dom.Element;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.instrument.provider.InstrumentXML;
 import com.barchart.feed.ddf.instrument.provider.OpenFeedInstDBMap;
+import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
-import com.barchart.market.provider.api.model.meta.InstrumentState;
+import com.barchart.feed.inst.participant.InstrumentState;
 
 public final class NewInstrumentProvider {
 	
@@ -89,7 +91,6 @@ public final class NewInstrumentProvider {
 	 * 2. If the symbol is unknown, it will make a new InstrumentState from the info
 	 * in the stub and begin an async lookup of info.
 	 * 
-	 * 
 	 * @param inst
 	 * @return
 	 */
@@ -106,10 +107,12 @@ public final class NewInstrumentProvider {
 			return symbolMap.get(symbol);
 		}
 		
+		/* New symbol, create stub */
 		final InstrumentState instState = InstrumentStateFactory.
 				newInstrumentFromStub(inst);
 		
 		symbolMap.put(symbol, instState);
+		log.debug("Put {} stub into map", symbol);
 		
 		/* Asnyc lookup */
 		executor.submit(populateRunner(symbol));
@@ -118,11 +121,13 @@ public final class NewInstrumentProvider {
 		
 	}
 	
-	public static Instrument fromSymbol(final String symbol) {
+	public static Instrument fromSymbol(String symbol) {
 		
 		if(symbol == null || symbol.isEmpty()) {
 			return Instrument.NULL;
 		}
+		
+		symbol = formatSymbol(symbol);
 		
 		if(symbolMap.containsKey(symbol)) {
 			return symbolMap.get(symbol);
@@ -138,18 +143,8 @@ public final class NewInstrumentProvider {
 		
 		return instState;
 		
-	}
+	} 
 
-	public static Instrument fromID(final String id) {
-		// TODO
-		return null;
-	}
-	
-	public static Map<String, Instrument> fromID(final Collection<String> ids) {
-		// TODO
-		return null;
-	}
-	
 	public static Map<String, Instrument> fromSymbol(
 			final Collection<String> symbols) {
 		// TODO
@@ -157,16 +152,6 @@ public final class NewInstrumentProvider {
 	}
 	
 	//
-	
-	public static String formatSymbol(final String symbol) {
-		
-		StringBuffer sb = new StringBuffer();
-		
-		// TODO
-		
-		return sb.toString();
-		
-	}
 	
 	private static Runnable populateRunner(final String id) {
 		
@@ -181,19 +166,29 @@ public final class NewInstrumentProvider {
 					InstrumentState iState = symbolMap.get(id);
 					
 					if(iState == null) {
-						// TODO ????
+						log.error("Runner called for {}, expected stub missing", id);
+						return;
 					}
 					
-					InstrumentDefinition inst = db.get(id);
+					InstrumentDefinition inst;
 					
-					if(inst != null) {
+					// TODO make default db...
+					if(db != null) {
 						
-						/*
-						 * This updates all references to the instrument
-						 */
-						iState.process(inst);
+						inst = db.get(id);
 						
-						return;
+						if(inst != null) {
+							
+							/*
+							 * This updates all references to the instrument
+							 */
+							iState.process(inst);
+							
+							log.debug("Instrument def found in db for {}", id);
+							
+							return;
+						}
+					
 					}
 					
 					/* Remote lookup */
@@ -209,13 +204,15 @@ public final class NewInstrumentProvider {
 						 */
 						iState.process(inst);
 						
+						log.debug("Instrument def found in remote for {}", id);
+						
 						return;
 					}
 					
 					// Here inst was null, so some error needs to be handled
 					
 				} catch (final Throwable t) {
-					// TODO How to handle failure?
+					log.error("Exception in runner {}", t);
 				}
 				
 			}
@@ -238,6 +235,8 @@ public final class NewInstrumentProvider {
 			public InstrumentDefinition call() throws Exception {
 				
 				try {
+					
+					log.debug("Starting remote lookup for {}", symbol);
 					
 					final String symbolURI = urlInstrumentLookup(symbol);
 					final Element root = HelperXML.xmlDocumentDecode(symbolURI);
@@ -262,8 +261,107 @@ public final class NewInstrumentProvider {
 		
 	}
 	
+	private static final int YEAR;
+	private static final char MONTH;
 	
+	static {
+		final DateTime now = new DateTime();
+		YEAR = now.year().get();
+		MONTH = DDF_ExpireMonth.fromDateTime(now).code;
+	}
 	
+	private static final char[] T_Z_O = new char[] {'2', '0', '1'};
+	private static final char[] T_Z_T = new char[] {'2', '0', '2'};
+	private static final char[] T_Z = new char[] {'2', '0'};
+	
+	public static String formatSymbol(String symbol) {
+		
+		if(symbol == null) {
+			return "";
+		}
+		
+		final int len = symbol.length();
+		
+		if(len < 3) {
+			return symbol;
+		}
+		
+		/* Spread */
+		if(symbol.charAt(0) == '_') {
+			return symbol;
+		}
+		
+		/* Option */
+		if(symbol.matches(".+\\d(C|P|D|Q)$")) {
+			
+			
+			int pIndex = len - 2;
+			while(Character.isDigit(symbol.charAt(pIndex))) {
+				
+				if(pIndex <= 2) {
+					log.error("Failed to format option {}", symbol);
+					return symbol + " failed";
+				}
+				
+				pIndex--;
+			}
+
+			final String price = symbol.substring(pIndex + 1, len-1);
+			
+			final char mon = symbol.charAt(pIndex);
+			DDF_ExpireMonth sMon = DDF_ExpireMonth.fromCode(mon);
+			DDF_ExpireMonth nowMon = DDF_ExpireMonth.fromCode(MONTH);
+			final String y = (sMon.value >= nowMon.value) ? String.valueOf(YEAR) :
+				String.valueOf(YEAR+1);
+			
+			final StringBuilder sb = new StringBuilder();
+			
+			sb.append(symbol.substring(0, pIndex + 1)); // prefix
+			sb.append(y); // year
+			sb.append("|"); // pipe
+			sb.append(price);
+			
+			if(symbol.matches(".+(C|D)$")) {
+				return sb.append("C").toString();
+			} else {
+				return sb.append("P").toString();
+			}
+			
+		}
+		
+		/* e.g. GOOG */
+		if(!Character.isDigit(symbol.charAt(len - 1))) {
+			return symbol;
+		}
+		
+		/* e.g. ESH3 */
+		if(!Character.isDigit(symbol.charAt(len - 2))) {
+			
+			final StringBuilder sb = new StringBuilder(symbol);
+			int last = Character.getNumericValue(symbol.charAt(len - 1));
+			if(YEAR % 2010 < last) {
+				return sb.insert(len - 1, T_Z_O).toString();
+			} else if(YEAR % 2010 > last) {
+				return sb.insert(len - 1, T_Z_T).toString();
+			} else {
+				if(symbol.charAt(len - 2) >= MONTH) {
+					return sb.insert(len - 1, T_Z_O).toString();
+				} else {
+					return sb.insert(len - 1, T_Z_T).toString();
+				}
+			}
+			
+		}
+		
+		/* e.g. ESH13 */
+		if(!Character.isDigit(symbol.charAt(len - 3))) {
+			return new StringBuilder(symbol).insert(len-2, T_Z).toString();
+		}
+		
+		return symbol;
+		
+	}
+
 	
 	
 	

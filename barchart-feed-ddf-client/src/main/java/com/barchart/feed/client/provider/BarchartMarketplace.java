@@ -389,9 +389,6 @@ public class BarchartMarketplace implements Marketplace {
 			if (message instanceof DDF_MarketBase) {
 				final DDF_MarketBase marketMessage = (DDF_MarketBase) message;
 				
-//				log.debug(marketMessage.toString());
-//				log.debug(marketMessage.toStringFields());
-				
 				maker.make(marketMessage);
 			}
 

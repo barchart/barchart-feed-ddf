@@ -47,6 +47,11 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.barchart.feed.api.model.meta.Exchange;
+import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.provider.ValueConverter;
+import com.barchart.feed.ddf.instrument.provider.ext.InstBase;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.api.DDF_MarketSession;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
@@ -59,6 +64,8 @@ import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
+import com.barchart.util.value.api.Fraction;
+import com.barchart.util.value.api.Price;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
@@ -398,5 +405,57 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 		text.append("TODO : ");
 
 	}
+	
+	@Override
+	public Instrument getInstrument() {
+		return stub;
+	}
+	
+	/*  
+	 * Lazy eval instrument stub 
+	 */
+	private final Instrument stub = new InstBase() {
+
+		@Override
+		public String marketGUID() {
+			return NewInstrumentProvider.formatSymbol(getId().toString());
+		}
+
+		@Override
+		public SecurityType securityType() {
+			return getExchange().kind.asSecType();
+		}
+
+		@Override
+		public String symbol() {
+			return NewInstrumentProvider.formatSymbol(getId().toString());
+		}
+
+		@Override
+		public Exchange exchange() {
+			return getExchange().asExchange();
+		}
+
+		@Override
+		public String exchangeCode() {
+			return new String(new byte[] {getExchange().code});
+		}
+
+		@Override
+		public Price tickSize() {
+			return ValueConverter.price(getPriceStep());
+		}
+
+		@Override
+		public Price pointValue() {
+			return ValueConverter.price(getPointValue());
+		}
+
+		@Override
+		public Fraction displayFraction() {
+			return ValueConverter.fraction(getFraction().fraction);
+		}
+
+	};
 
 }

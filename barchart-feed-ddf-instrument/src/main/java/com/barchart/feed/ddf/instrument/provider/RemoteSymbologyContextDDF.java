@@ -26,6 +26,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import cleanup.InstrumentDDF;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.ddf.util.HelperXML;
