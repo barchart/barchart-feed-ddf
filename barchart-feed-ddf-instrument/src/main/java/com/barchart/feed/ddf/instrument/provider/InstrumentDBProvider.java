@@ -41,16 +41,16 @@ public final class InstrumentDBProvider {
 		
 	}
 	
-	public static LocalInstrumentDBMap getMap(final File resourceFolder) {
+	public static InstrumentDatabaseMap getMap(final File resourceFolder) {
 		
 		validateResourceFolder(resourceFolder);
 		
-		return new LocalInstrumentDBMap(getDBFolder(resourceFolder));
+		return new InstrumentDatabaseMap(getDBFolder(resourceFolder));
 		
 	}
 	
 	public static Callable<Boolean> updateDBMap(final File resourceFolder,
-			final LocalInstrumentDBMap map) {
+			final InstrumentDatabaseMap map) {
 		
 		validateResourceFolder(resourceFolder);
 		
@@ -85,7 +85,7 @@ public final class InstrumentDBProvider {
 	}
 	
 	public static Callable<Boolean> updateHistoricalDBMap(final File resourceFolder,
-			final LocalInstrumentDBMap map, final DateTime date) {
+			final InstrumentDatabaseMap map, final DateTime date) {
 		
 		//TODO
 		
@@ -269,10 +269,10 @@ public final class InstrumentDBProvider {
 	private static class PopulateDatabase implements Callable<Boolean> {
 
 		private final File resourceFolder;
-		private final LocalInstrumentDBMap map;
+		private final InstrumentDatabaseMap map;
 		
 		public PopulateDatabase(final File resourceFolder,
-			final LocalInstrumentDBMap map) {
+			final InstrumentDatabaseMap map) {
 			this.resourceFolder = resourceFolder;
 			this.map = map;
 		}

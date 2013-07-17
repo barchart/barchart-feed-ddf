@@ -20,19 +20,19 @@ public class InstrumentProviderWrapper implements InstrumentService<CharSequence
 
 	@Override
 	public InstrumentFuture lookupAsync(CharSequence symbol) {
-		return DDF_InstrumentProvider.findAsync(symbol);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Map<CharSequence, List<Instrument>> lookup(
 			Collection<? extends CharSequence> symbols) {
-		return DDF_InstrumentProvider.find(symbols);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public InstrumentFutureMap<CharSequence> lookupAsync(
 			Collection<? extends CharSequence> symbols) {
-		return DDF_InstrumentProvider.findAsync(symbols);
+		throw new UnsupportedOperationException();
 	}
 
 }

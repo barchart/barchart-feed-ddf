@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import org.junit.Test;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 
 /**
  * The Class TestDDF_InstrumentProvider.
@@ -33,7 +34,7 @@ public class TestDDF_InstrumentProvider {
 	@Test
 	public void test1() throws Exception {
 
-		final Collection<CharSequence> symbolList = new ArrayList<CharSequence>();
+		final Collection<String> symbolList = new ArrayList<String>();
 
 		symbolList.add("IBM");
 		symbolList.add("ORCL");
@@ -44,24 +45,24 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("_S_FX_A6H2_A6Z1");
 		symbolList.add("_S_BF_ZSQ2_ZSU2_ZSX2");
 
-		final Map<? extends CharSequence, List<Instrument>> list = DDF_InstrumentProvider
-				.find(symbolList);
+		final Map<String, Instrument> list = NewInstrumentProvider
+				.fromSymbols(symbolList);
 
 		assertEquals(8, list.size());
 
-		for (final Entry<? extends CharSequence, List<Instrument>> e : list.entrySet()) {
+		for (final Entry<? extends CharSequence, Instrument> e : list.entrySet()) {
 
 			if(e.getValue() == null) {
 				System.out.println(" = null");
 				continue;
-			} else if(e.getValue().isEmpty()) {
+			} else if(e.getValue().isNull()) {
 				System.out.println("isNull");
 				continue;
 			} else {
 				System.out.println(e.getValue().toString());
 			}
 			
-			final Instrument inst = e.getValue().get(0);
+			final Instrument inst = e.getValue();
 //			final TimeInterval lifetime = inst.lifetime();
 //			final TimeValue expires = e.getValue().lifetime().stop();
 //			System.out.println("EXP Month Year DDF = "

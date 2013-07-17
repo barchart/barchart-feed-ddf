@@ -30,10 +30,9 @@ import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
-import com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;
-import com.barchart.feed.ddf.instrument.provider.ServiceDatabaseDDF;
+import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
@@ -60,7 +59,7 @@ public class BarchartMarketplace implements Marketplace {
 	private final DDF_Marketplace maker;
 	private final ExecutorService executor;
 	
-	private volatile LocalInstrumentDBMap dbMap = null;
+	private volatile InstrumentDatabaseMap dbMap = null;
 	
 	private final String username, password;
 	
@@ -243,10 +242,7 @@ public class BarchartMarketplace implements Marketplace {
 				
 					dbMap = InstrumentDBProvider.getMap(dbFolder);
 					
-					final ServiceDatabaseDDF dbService = new ServiceDatabaseDDF(
-							dbMap, executor);
-					
-					DDF_InstrumentProvider.bind(dbService);
+					NewInstrumentProvider.bindDatabaseMap(dbMap);
 					
 					final Future<Boolean> dbUpdate = executor.submit(
 							InstrumentDBProvider.updateDBMap(dbFolder, dbMap));

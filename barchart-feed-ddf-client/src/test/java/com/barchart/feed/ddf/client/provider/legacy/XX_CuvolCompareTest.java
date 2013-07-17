@@ -9,7 +9,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 
 public class XX_CuvolCompareTest {
 	
@@ -39,7 +39,7 @@ public class XX_CuvolCompareTest {
 		
 		final Agent myAgent = feed.newAgent(Cuvol.class, callback);
 		
-		final Instrument inst = DDF_InstrumentProvider.find(SYMBOL).get(0);
+		final Instrument inst = NewInstrumentProvider.fromSymbol(SYMBOL);
 		
 		myAgent.include(inst);
 		

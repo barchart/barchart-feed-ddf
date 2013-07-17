@@ -16,13 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.TimestampListener;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
@@ -35,10 +35,9 @@ import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
-import com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;
-import com.barchart.feed.ddf.instrument.provider.ServiceDatabaseDDF;
+import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
@@ -63,7 +62,7 @@ public class TestableFeed implements Marketplace {
 	private final TestableMarketplace maker;
 	private final ExecutorService executor;
 	
-	private volatile LocalInstrumentDBMap dbMap = null;
+	private volatile InstrumentDatabaseMap dbMap = null;
 	
 	@SuppressWarnings("unused")
 	private volatile Connection.Monitor stateListener;
@@ -197,9 +196,7 @@ public class TestableFeed implements Marketplace {
 			
 				dbMap = InstrumentDBProvider.getMap(dbFolder);
 				
-				final ServiceDatabaseDDF dbService = new ServiceDatabaseDDF(dbMap, executor);
-				
-				DDF_InstrumentProvider.bind(dbService);
+				NewInstrumentProvider.bindDatabaseMap(dbMap);
 				
 				final Future<Boolean> dbUpdate = executor.submit(
 						InstrumentDBProvider.updateDBMap(dbFolder, dbMap));

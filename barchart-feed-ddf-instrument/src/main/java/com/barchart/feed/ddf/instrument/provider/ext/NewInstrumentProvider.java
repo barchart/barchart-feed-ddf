@@ -23,7 +23,7 @@ import org.w3c.dom.Element;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.instrument.provider.InstrumentXML;
-import com.barchart.feed.ddf.instrument.provider.OpenFeedInstDBMap;
+import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.participant.InstrumentState;
@@ -39,7 +39,7 @@ public final class NewInstrumentProvider {
 	private static final ConcurrentMap<String, InstrumentState> symbolMap =
 			new ConcurrentHashMap<String, InstrumentState>();
 	
-	private static volatile OpenFeedInstDBMap db = null;
+	private static volatile InstrumentDatabaseMap db = null;
 	
 	private NewInstrumentProvider() {
 		
@@ -78,7 +78,7 @@ public final class NewInstrumentProvider {
 	/**
 	 * @param map Bind an already built db map
 	 */
-	public synchronized static void bindDatabaseMap(final OpenFeedInstDBMap map) {
+	public synchronized static void bindDatabaseMap(final InstrumentDatabaseMap map) {
 		db = map;
 	}
 	
@@ -144,6 +144,12 @@ public final class NewInstrumentProvider {
 		return instState;
 		
 	} 
+	
+	public static Map<String, Instrument> fromSymbols(
+			final Collection<String> symbols) {
+		// TODO
+		return null;
+	}
 
 	public static Map<String, Instrument> fromSymbol(
 			final Collection<String> symbols) {
@@ -151,6 +157,10 @@ public final class NewInstrumentProvider {
 		return null;
 	}
 	
+	public static Instrument fromHistorical(String symbol) {
+		// TODO
+		return null;
+	}
 	//
 	
 	private static Runnable populateRunner(final String id) {
@@ -241,7 +251,7 @@ public final class NewInstrumentProvider {
 					final String symbolURI = urlInstrumentLookup(symbol);
 					final Element root = HelperXML.xmlDocumentDecode(symbolURI);
 					final Element tag = xmlFirstChild(root, "instrument", XML_STOP);
-					final InstrumentDefinition instDOM = InstrumentXML.decodeXMLProto(tag);
+					final InstrumentDefinition instDOM = InstrumentXML.decodeXML(tag);
 					
 					if(instDOM == null || instDOM == InstrumentDefinition.getDefaultInstance()) {
 						log.warn("Empty instrument def returned from remote lookup: {}", symbol);

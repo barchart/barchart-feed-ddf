@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.instrument.provider;
+package cleanup;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -30,10 +30,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import cleanup.InstrumentDDF;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
+import com.barchart.feed.ddf.instrument.provider.InstrumentXML;
+import com.barchart.feed.ddf.instrument.provider.SymbolNotFoundException;
+import com.barchart.feed.ddf.instrument.provider.XmlTagExtras;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.InstrumentFuture;
@@ -49,7 +51,7 @@ import com.barchart.util.anno.ThreadSafe;
  * The Class DDF_InstrumentProvider.
  */
 @ThreadSafe
-public final class DDF_InstrumentProvider {
+final class DDF_InstrumentProvider {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_InstrumentProvider.class);
@@ -295,22 +297,21 @@ public final class DDF_InstrumentProvider {
 
 					if (XmlTagExtras.TAG.equals(qName)) {
 
-						try {
-
-							final InstrumentDDF instrument = InstrumentXML.decodeSAX(attributes);
-							final InstrumentDDF ddfInst = ObjectMapFactory.build(InstrumentDDF.class, instrument);
-							list.add(ddfInst);
-
-						} catch (final SymbolNotFoundException e) {
-
-							log.warn("symbol not found : {}", e.getMessage());
-
-						} catch (final Exception e) {
-
-							log.error("decode failure", e);
-							HelperXML.log(attributes);
-
-						}
+//
+//							final InstrumentDDF instrument = InstrumentXML.decodeSAX(attributes);
+//							final InstrumentDDF ddfInst = ObjectMapFactory.build(InstrumentDDF.class, instrument);
+//							list.add(ddfInst);
+//
+//						} catch (final SymbolNotFoundException e) {
+//
+//							log.warn("symbol not found : {}", e.getMessage());
+//
+//						} catch (final Exception e) {
+//
+//							log.error("decode failure", e);
+//							HelperXML.log(attributes);
+//
+//						}
 
 						count++;
 

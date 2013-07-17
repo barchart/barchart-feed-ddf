@@ -18,7 +18,7 @@ import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
@@ -47,7 +47,7 @@ public class TestDDF_MarketService {
 	@Test
 	public void testMakeDDF_MarketBaseMarketDo() throws Exception {
 
-		final Instrument instrument = DDF_InstrumentProvider.find("RJZ3").get(0);
+		final Instrument instrument = NewInstrumentProvider.fromSymbol("RJZ3");
 		
 		log.debug("instrument : {}", instrument);
 

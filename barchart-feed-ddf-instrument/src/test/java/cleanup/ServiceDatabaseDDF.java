@@ -1,4 +1,4 @@
-package com.barchart.feed.ddf.instrument.provider;
+package cleanup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,12 +17,13 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
+import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
 import com.barchart.feed.inst.InstrumentFuture;
 import com.barchart.feed.inst.InstrumentFutureMap;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.util.values.provider.ValueBuilder;
 
-public class ServiceDatabaseDDF implements DDF_DefinitionService {
+class ServiceDatabaseDDF implements DDF_DefinitionService {
 	
 	static final Logger log = LoggerFactory.getLogger(ServiceDatabaseDDF.class);
 	
@@ -34,11 +35,11 @@ public class ServiceDatabaseDDF implements DDF_DefinitionService {
 	private final ConcurrentMap<CharSequence, Boolean> failedCache = 
 			new ConcurrentHashMap<CharSequence, Boolean>();
 	
-	private final LocalInstrumentDBMap db;
+	private final InstrumentDatabaseMap db;
 	private final ExecutorService executor;
 	private final ServiceMemoryDDF remoteInstService;
 	
-	public ServiceDatabaseDDF(final LocalInstrumentDBMap map, 
+	public ServiceDatabaseDDF(final InstrumentDatabaseMap map, 
 			final ExecutorService executor) {
 		
 		this.db = map;

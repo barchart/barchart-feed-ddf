@@ -40,10 +40,9 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.provider.MakerBaseAllMarkets;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
-import com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;
-import com.barchart.feed.ddf.instrument.provider.ServiceDatabaseDDF;
+import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.market.provider.DDF_MarketServiceAllMarkets;
 import com.barchart.util.values.api.Value;
 
@@ -99,12 +98,10 @@ class BarchartFeedReceiver extends BarchartFeedClientBase {
 		setClient(DDF_FeedClientFactory.newUDPListenerClient(socketAddress,
 				filterBySub, executor), false);
 		
-		final LocalInstrumentDBMap dbMap = InstrumentDBProvider.getMap(
+		final InstrumentDatabaseMap dbMap = InstrumentDBProvider.getMap(
 				resourceFolder);
 		
-		final ServiceDatabaseDDF dbService = new ServiceDatabaseDDF(dbMap, executor);
-		
-		DDF_InstrumentProvider.bind(dbService);
+		NewInstrumentProvider.bindDatabaseMap(dbMap);
 		
 		return executor.submit(InstrumentDBProvider.updateDBMap(resourceFolder, dbMap));
 		
@@ -203,12 +200,10 @@ class BarchartFeedReceiver extends BarchartFeedClientBase {
 		setClient(DDF_FeedClientFactory.newStatelessTCPListenerClient(
 				socketAddress, filterBySub, executor), false);
 		
-		final LocalInstrumentDBMap dbMap = InstrumentDBProvider.getMap(
+		final InstrumentDatabaseMap dbMap = InstrumentDBProvider.getMap(
 				resourceFolder);
 		
-		final ServiceDatabaseDDF dbService = new ServiceDatabaseDDF(dbMap, executor);
-		
-		DDF_InstrumentProvider.bind(dbService);
+		NewInstrumentProvider.bindDatabaseMap(dbMap);
 		
 		return executor.submit(InstrumentDBProvider.updateDBMap(resourceFolder, dbMap));
 	}

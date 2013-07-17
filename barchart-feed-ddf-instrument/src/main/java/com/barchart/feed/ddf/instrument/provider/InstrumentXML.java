@@ -18,30 +18,6 @@ import static com.barchart.feed.ddf.util.HelperXML.xmlByteDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlTimeDecode;
-import static com.barchart.feed.inst.InstrumentField.BOOK_DEPTH;
-import static com.barchart.feed.inst.InstrumentField.BOOK_LIQUIDITY;
-import static com.barchart.feed.inst.InstrumentField.BOOK_STRUCTURE;
-import static com.barchart.feed.inst.InstrumentField.CFI_CODE;
-import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.inst.InstrumentField.DISPLAY_FRACTION;
-import static com.barchart.feed.inst.InstrumentField.EXCHANGE;
-import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
-import static com.barchart.feed.inst.InstrumentField.LIFETIME;
-import static com.barchart.feed.inst.InstrumentField.MARKET_GUID;
-import static com.barchart.feed.inst.InstrumentField.MARKET_HOURS;
-import static com.barchart.feed.inst.InstrumentField.POINT_VALUE;
-import static com.barchart.feed.inst.InstrumentField.SECURITY_TYPE;
-import static com.barchart.feed.inst.InstrumentField.SYMBOL;
-import static com.barchart.feed.inst.InstrumentField.TICK_SIZE;
-import static com.barchart.feed.inst.InstrumentField.TIME_ZONE_NAME;
-import static com.barchart.feed.inst.InstrumentField.TIME_ZONE_OFFSET;
-import static com.barchart.feed.inst.InstrumentField.VENDOR;
-import static com.barchart.util.values.provider.ValueBuilder.newPrice;
-import static com.barchart.util.values.provider.ValueBuilder.newSize;
-import static com.barchart.util.values.provider.ValueBuilder.newText;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import org.openfeed.proto.inst.BookLiquidity;
 import org.openfeed.proto.inst.BookStructure;
@@ -55,24 +31,16 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
-import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.provider.Exchanges;
 import com.barchart.feed.inst.provider.InstrumentGUID;
-import com.barchart.missive.api.Tag;
-import com.barchart.missive.core.ObjectMapFactory;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
-import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.TextValue;
 import com.barchart.util.values.provider.ValueBuilder;
-import com.barchart.util.values.provider.ValueConst;
 
 public final class InstrumentXML {
 	
@@ -86,170 +54,7 @@ public final class InstrumentXML {
 		
 	}
 	
-	public static Instrument decodeXML(final Element tag) throws Exception {
-		
-		// lookup status
-
-		final String statusCode = xmlStringDecode(tag, STATUS, XML_STOP);
-		final StatusXML status = StatusXML.fromCode(statusCode);
-
-		if (!status.isFound()) {
-			final String lookup = xmlStringDecode(tag, LOOKUP, XML_STOP);
-			throw new SymbolNotFoundException(lookup);
-		}
-
-		// decode DOM
-		TextValue guid;
-		try {
-			guid = ValueBuilder.newText(xmlStringDecode(tag, GUID, XML_STOP));
-		} catch (Exception e) {
-			// TODO
-			//return (InstrumentDDF) Instrument.NULL;
-			return null;
-		}
-		
-		final TextValue symbolReal = ValueBuilder.newText(xmlStringDecode(
-				tag, SYMBOL_REALTIME, XML_STOP));
-		final byte exchCode = xmlByteDecode(tag, EXCHANGE_DDF, XML_PASS); 
-		final byte baseCode = xmlByteDecode(tag, BASE_CODE_DDF, XML_STOP);
-		final String codeCFI = xmlStringDecode(tag, SYMBOL_CODE_CFI, XML_PASS);
-		final String zoneCode = xmlStringDecode(tag, TIME_ZONE_DDF, XML_STOP);
-		final String symbolComment = xmlStringDecode(tag, SYMBOL_COMMENT,
-				XML_PASS);
-		
-		final Time expire = xmlTimeDecode(tag, SYMBOL_EXPIRE, XML_PASS);
-
-		// month code for exp of futures contract
-		final DDF_TimeZone zone = DDF_TimeZone.fromCode(zoneCode);
-		final DDF_Exchange exchange = DDF_Exchange.fromCode(exchCode);
-		final DDF_Fraction frac = DDF_Fraction.fromBaseCode(baseCode);
-		final long priceStepMantissa = xmlDecimalDecode(frac, tag,
-				PRICE_TICK_INCREMENT, XML_STOP);
-		final String pricePointString = xmlStringDecode(tag, PRICE_POINT_VALUE,
-				XML_PASS);
-
-		PriceValue pricePoint = ValueBuilder.newPrice(0);
-		if (pricePointString != null) {
-			try {
-				pricePoint = ValueBuilder.newPrice(Double
-						.valueOf(pricePointString));
-			} catch (Exception e) {
-			}
-
-		}
-
-		final PriceValue priceStep = newPrice(priceStepMantissa,
-				frac.decimalExponent);
-		
-		/* Build Lifetime, currently only have last month/year of instrument from ddf.extras */
-		TimeInterval lifetime; 
-		if(expire == null || expire == Time.NULL) { // Was isNull()
-			lifetime = TimeInterval.NULL;
-		} else {
-			lifetime = factory.newTimeInterval(0, expire.millisecond());
-		}
-		
-		Fraction f = factory.newFraction(1, (int) frac.decimalDenominator);
-		
-		return build(guid, symbolReal, symbolComment, codeCFI, 
-				exchange, priceStep, pricePoint, f, lifetime, zone);
-		
-	}
-	
-	public static Instrument decodeSAX(final Attributes ats) throws Exception {
-		
-		// lookup status
-		final String statusCode = xmlStringDecode(ats, STATUS, XML_STOP);
-		final StatusXML status = StatusXML.fromCode(statusCode);
-		if (!status.isFound()) {
-			final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
-			throw new SymbolNotFoundException(lookup);
-		}
-		
-		// decode SAX
-		final TextValue guid = ValueBuilder.newText(xmlStringDecode(ats, GUID, XML_STOP));
-		final TextValue symbolReal = ValueBuilder.newText(
-				xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));
-		final byte exchCode = xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS); 
-		final byte baseCode = xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP);
-		final String codeCFI = xmlStringDecode(ats, SYMBOL_CODE_CFI, XML_PASS);
-		final String zoneCode = xmlStringDecode(ats, TIME_ZONE_DDF, XML_STOP);
-		final String symbolComment = xmlStringDecode(ats, SYMBOL_COMMENT,
-				XML_PASS);
-		final Time expire = xmlTimeDecode(ats, SYMBOL_EXPIRE, XML_PASS);
-
-		//
-
-		final DDF_TimeZone zone = DDF_TimeZone.fromCode(zoneCode);
-		final DDF_Exchange exchange = DDF_Exchange.fromCode(exchCode);
-		final DDF_Fraction frac = DDF_Fraction.fromBaseCode(baseCode);
-		final long priceStepMantissa = xmlDecimalDecode(frac, ats,
-				PRICE_TICK_INCREMENT, XML_STOP);
-		final String pricePointString = xmlStringDecode(ats, PRICE_POINT_VALUE,
-				XML_PASS);
-
-		PriceValue pricePoint = ValueBuilder.newPrice(0);
-		if (pricePointString != null) {
-			try {
-				pricePoint = ValueBuilder.newPrice(Double
-						.valueOf(pricePointString));
-			} catch (Exception e) {
-			}
-		}
-
-		final PriceValue priceStep = newPrice(priceStepMantissa,
-				frac.decimalExponent);
-		
-		/* Build Lifetime, currently only have last month/year of instrument from ddf.extras */
-		TimeInterval lifetime; 
-		if(expire == null || expire == com.barchart.util.value.impl.ValueConst.NULL_TIME) { // Was isNull()
-			lifetime = com.barchart.util.value.impl.ValueConst.NULL_TIME_INTERVAL;
-		} else {
-			lifetime = factory.newTimeInterval(0, expire.millisecond());
-		}
-		
-		Fraction f = factory.newFraction(1, (int) frac.decimalDenominator);
-		
-		return build(guid, symbolReal, symbolComment, codeCFI, 
-				exchange, priceStep, pricePoint, f, lifetime, zone);
-		
-	}
-	
-	@SuppressWarnings("rawtypes")
-	private static final Instrument build(final TextValue guid,
-			final TextValue symbolReal, final String symbolComment,
-			final String codeCFI, final DDF_Exchange exchange,
-			final PriceValue priceStep, final PriceValue pricePoint,
-			final Fraction fraction, final TimeInterval lifetime,
-			final DDF_TimeZone zone) {
-		
-		final Map<Tag, Object> map = new HashMap<Tag, Object>();
-		
-		map.put(InstrumentField.GUID, new InstrumentGUID(guid));
-		map.put(MARKET_GUID, guid);
-		map.put(SECURITY_TYPE, Instrument.SecurityType.NULL_TYPE);
-		map.put(BOOK_LIQUIDITY, Instrument.BookLiquidityType.NONE);
-		map.put(BOOK_STRUCTURE, Instrument.BookStructureType.NONE);
-		map.put(BOOK_DEPTH, ValueConst.NULL_SIZE);
-		map.put(VENDOR, newText("Barchart"));
-		map.put(SYMBOL, symbolReal);
-		map.put(DESCRIPTION, newText(symbolComment));
-		map.put(CFI_CODE, newText(codeCFI));
-		map.put(EXCHANGE, exchange.asExchange());
-		map.put(EXCHANGE_CODE, newText(new byte[]{(exchange.code)}));
-		map.put(TICK_SIZE, priceStep);
-		map.put(POINT_VALUE, pricePoint);
-		map.put(DISPLAY_FRACTION, fraction);
-		map.put(LIFETIME, lifetime);
-		map.put(MARKET_HOURS, factory.newSchedule(new TimeInterval[0]));
-		map.put(TIME_ZONE_OFFSET, newSize(zone.getUTCOffset()));
-		map.put(TIME_ZONE_NAME, newText(zone.name()));
-
-		return ObjectMapFactory.build(InstrumentDDF.class, map);
-		
-	}
-	
-	public static InstrumentDefinition decodeXMLProto(final Element tag) throws Exception {
+	public static InstrumentDefinition decodeXML(final Element tag) throws Exception {
 		
 		InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
 		
@@ -357,7 +162,7 @@ public final class InstrumentXML {
 		
 	}
 	
-	public static InstrumentDefinition decodeSAXProto(final Attributes ats) throws Exception {
+	public static InstrumentDefinition decodeSAX(final Attributes ats) throws Exception {
 
 		InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
 		

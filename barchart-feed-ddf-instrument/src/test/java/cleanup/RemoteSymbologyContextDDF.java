@@ -1,4 +1,4 @@
-package com.barchart.feed.ddf.instrument.provider;
+package cleanup;
 
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
@@ -26,10 +26,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import cleanup.InstrumentDDF;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.Identifier;
+import com.barchart.feed.ddf.instrument.provider.InstrumentXML;
+import com.barchart.feed.ddf.instrument.provider.SymbolNotFoundException;
+import com.barchart.feed.ddf.instrument.provider.XmlTagExtras;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.InstrumentField;
 import com.barchart.feed.inst.SymbologyContext;
@@ -151,41 +153,42 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 	
 	private Identifier remoteLookup(final CharSequence symbol) {
 		
-		try {
-			
-			final String symbolURI = urlInstrumentLookup(symbol);
-			final Element root = HelperXML.xmlDocumentDecode(symbolURI);
-			final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
-			final InstrumentDDF instDOM = InstrumentXML.decodeXML(tag);
-			
-			if(instDOM == null || instDOM.isNull()) {
-				failedMap.put(symbol, "");
-				return Identifier.NULL;
-			}
-			
-			Identifier guid = new InstrumentBase.InstIdentifier(
-					instDOM.get(InstrumentField.MARKET_GUID));
-			
-			/* Cache symbols */
-			//log.debug("Caching {} for symbol {}", instDOM.get(InstrumentField.SYMBOL), symbol);
-			symbolMap.put(instDOM.get(InstrumentField.SYMBOL).toString(), guid);
-			
-			/* Populate instrument map */
-			if(symbolMap != null) {
-				guidMap.put(guid, (Instrument)instDOM);
-			}
-			
-			return guid;
-			
-		} catch (final SymbolNotFoundException se) {
-			log.debug("HTTP status failed on {}", symbol);
-			failedMap.put(symbol, "");
-			return Identifier.NULL;
-		} catch (final Exception e) {
-			log.error("Symbol remote lookup failed for {}, {}", symbol, e.getMessage());
-			failedMap.put(symbol, "");
-			return Identifier.NULL;
-		}
+		return null;
+//		try {
+//			
+//			final String symbolURI = urlInstrumentLookup(symbol);
+//			final Element root = HelperXML.xmlDocumentDecode(symbolURI);
+//			final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
+//			final InstrumentDDF instDOM = InstrumentXML.decodeXML(tag);
+//			
+//			if(instDOM == null || instDOM.isNull()) {
+//				failedMap.put(symbol, "");
+//				return Identifier.NULL;
+//			}
+//			
+//			Identifier guid = new InstrumentBase.InstIdentifier(
+//					instDOM.get(InstrumentField.MARKET_GUID));
+//			
+//			/* Cache symbols */
+//			//log.debug("Caching {} for symbol {}", instDOM.get(InstrumentField.SYMBOL), symbol);
+//			symbolMap.put(instDOM.get(InstrumentField.SYMBOL).toString(), guid);
+//			
+//			/* Populate instrument map */
+//			if(symbolMap != null) {
+//				guidMap.put(guid, (Instrument)instDOM);
+//			}
+//			
+//			return guid;
+//			
+//		} catch (final SymbolNotFoundException se) {
+//			log.debug("HTTP status failed on {}", symbol);
+//			failedMap.put(symbol, "");
+//			return Identifier.NULL;
+//		} catch (final Exception e) {
+//			log.error("Symbol remote lookup failed for {}, {}", symbol, e.getMessage());
+//			failedMap.put(symbol, "");
+//			return Identifier.NULL;
+//		}
 		
 	}
 	
@@ -214,19 +217,19 @@ final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> 
 
 					if (XmlTagExtras.TAG.equals(qName)) {
 
-						try {
-
-							final InstrumentDDF inst = InstrumentXML.decodeSAX(attributes);
-							final InstrumentDDF ddfInst = ObjectMapFactory.build(InstrumentDDF.class, inst);
-							symMap.put(inst.symbol(), ddfInst.id());
-							guidMap.put(inst.id(), (Instrument)inst);
-							
-						} catch (final SymbolNotFoundException e) {
-							log.warn("symbol not found : {}", e.getMessage());
-						} catch (final Exception e) {
-							log.error("decode failure", e);
-							HelperXML.log(attributes);
-						}
+//						try {
+//
+//							final InstrumentDDF inst = InstrumentXML.decodeSAX(attributes);
+//							final InstrumentDDF ddfInst = ObjectMapFactory.build(InstrumentDDF.class, inst);
+//							symMap.put(inst.symbol(), ddfInst.id());
+//							guidMap.put(inst.id(), (Instrument)inst);
+//							
+//						} catch (final SymbolNotFoundException e) {
+//							log.warn("symbol not found : {}", e.getMessage());
+//						} catch (final Exception e) {
+//							log.error("decode failure", e);
+//							HelperXML.log(attributes);
+//						}
 
 						count++;
 						if (count % 1000 == 0) {

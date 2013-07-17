@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.instrument.provider;
+package cleanup;
 
 import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.lookupFromSymbol;
 
@@ -18,7 +18,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cleanup.InstrumentDDF;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;

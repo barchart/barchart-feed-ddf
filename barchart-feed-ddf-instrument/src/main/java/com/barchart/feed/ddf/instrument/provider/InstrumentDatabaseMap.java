@@ -23,10 +23,10 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.EnvironmentLockedException;
 
-public final class LocalInstrumentDBMap {
+public final class InstrumentDatabaseMap {
 	
 	private static final Logger log = LoggerFactory
-			.getLogger(LocalInstrumentDBMap.class);
+			.getLogger(InstrumentDatabaseMap.class);
 
 	private final StoredMap<String, InstrumentDefinition> map;
 	
@@ -47,7 +47,7 @@ public final class LocalInstrumentDBMap {
 	 * 
 	 * @param dbase
 	 */
-	public LocalInstrumentDBMap(final Database dbase) {
+	public InstrumentDatabaseMap(final Database dbase) {
 		
 		this.dbase = dbase;
 		
@@ -60,7 +60,7 @@ public final class LocalInstrumentDBMap {
 	 * @param dbFolder
 	 * @throws EnvironmentLockedException if provided File is locked by another application
 	 */
-	public LocalInstrumentDBMap(final File dbFolder) throws EnvironmentLockedException {
+	public InstrumentDatabaseMap(final File dbFolder) throws EnvironmentLockedException {
 		
 		final Environment env = new Environment(dbFolder, envConfig);
 		dbase = env.openDatabase(null, "InstrumentDef", dbConfig);
@@ -75,7 +75,7 @@ public final class LocalInstrumentDBMap {
 	 * @param dbFolder
 	 * @param inStream
 	 */
-	public LocalInstrumentDBMap(final File dbFolder, final InputStream inStream) {
+	public InstrumentDatabaseMap(final File dbFolder, final InputStream inStream) {
 		
 		final Environment env = new Environment(dbFolder, envConfig);
 		dbase = env.openDatabase(null, "InstrumentDef", dbConfig);
@@ -93,7 +93,7 @@ public final class LocalInstrumentDBMap {
 	 * @throws ZipException
 	 * @throws IOException
 	 */
-	public LocalInstrumentDBMap(final File dbFolder, final File instDefZip) 
+	public InstrumentDatabaseMap(final File dbFolder, final File instDefZip) 
 			throws ZipException, IOException {
 		
 		final Environment env = new Environment(dbFolder, envConfig);

@@ -15,18 +15,12 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import cleanup.InstrumentDDF;
-
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
-import com.barchart.missive.api.Tag;
-import com.barchart.missive.core.Manifest;
-import com.barchart.missive.core.ObjectMap;
-import com.barchart.missive.core.ObjectMapFactory;
+import com.barchart.feed.inst.provider2.InstrumentFactory;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
-import com.barchart.util.values.provider.ValueConst;
 
 public class TestInstrumentXML {
 
@@ -39,38 +33,33 @@ public class TestInstrumentXML {
 	@Test
 	public void testXML() throws Exception {
 		
-		ObjectMapFactory.install(new BarchartFeedInstManifest());
-		final Manifest<ObjectMap> ddfManifest = new Manifest<ObjectMap>();
-		ddfManifest.put(InstrumentDDF.class, new Tag<?>[0]);
-		ObjectMapFactory.install(ddfManifest);
-		
 		final DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
 		final DocumentBuilder builder = fac.newDocumentBuilder();
 		
 		final Document document = builder.parse(new ByteArrayInputStream(IBM.getBytes()));
 		final Element root = document.getDocumentElement();
 		final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
-		final InstrumentDDF IBMInst = InstrumentXML.decodeXML(tag);
+		final Instrument IBMInst = InstrumentFactory.instrument(InstrumentXML.decodeXML(tag));
 		
 		System.out.println(IBMInst.toString());
 		
-		assertTrue(IBMInst.get(MARKET_GUID).equals("1298146"));
-		assertTrue(IBMInst.get(SECURITY_TYPE) == Instrument.SecurityType.NULL_TYPE);
-		assertTrue(IBMInst.get(BOOK_LIQUIDITY) == Instrument.BookLiquidityType.NONE);
-		assertTrue(IBMInst.get(BOOK_STRUCTURE) == Instrument.BookStructureType.NONE);
-		assertTrue(IBMInst.get(BOOK_DEPTH) == ValueConst.NULL_SIZE);
-		assertTrue(IBMInst.get(VENDOR).equals(newText("Barchart")));
-		assertTrue(IBMInst.get(SYMBOL).equals(newText("IBM")));
-		assertTrue(IBMInst.get(DESCRIPTION).equals("International Business Machines Corp."));
-		assertTrue(IBMInst.get(CFI_CODE).equals(newText("EXXXXX")));
-		assertTrue(IBMInst.get(EXCHANGE_CODE).equals(newText("N")));
-		assertTrue(IBMInst.get(TICK_SIZE).equals(newPrice(0.01)));
-		assertTrue(IBMInst.get(POINT_VALUE).equals(newPrice(1)));
-		assertTrue(IBMInst.get(DISPLAY_FRACTION).equals(factory.newFraction(10, -2)));
-		assertTrue(IBMInst.get(LIFETIME) == TimeInterval.NULL);
-		assertTrue(IBMInst.get(MARKET_HOURS).size() == 0);
-		assertTrue(IBMInst.get(TIME_ZONE_OFFSET).equals(newSize(-18000000)));
-		assertTrue(IBMInst.get(TIME_ZONE_NAME).equals(newText("NEW_YORK")));
+		assertTrue(IBMInst.marketGUID().equals("1298146"));
+		assertTrue(IBMInst.securityType() == Instrument.SecurityType.NULL_TYPE);
+		assertTrue(IBMInst.liquidityType() == Instrument.BookLiquidityType.NONE);
+		assertTrue(IBMInst.bookStructure() == Instrument.BookStructureType.NONE);
+		assertTrue(IBMInst.maxBookDepth() == Size.NULL);
+		assertTrue(IBMInst.instrumentDataVendor().equals(newText("Barchart")));
+		assertTrue(IBMInst.symbol().equals("IBM"));
+		assertTrue(IBMInst.description().equals("International Business Machines Corp."));
+		assertTrue(IBMInst.CFICode().equals("EXXXXX"));
+		assertTrue(IBMInst.exchangeCode().equals("N"));
+		assertTrue(IBMInst.tickSize().equals(factory.newPrice(1, -100)));
+		assertTrue(IBMInst.pointValue().equals(factory.newPrice(1, 0)));
+		assertTrue(IBMInst.displayFraction().equals(factory.newFraction(10, -2)));
+		assertTrue(IBMInst.lifetime() == TimeInterval.NULL);
+		assertTrue(IBMInst.marketHours().size() == 0);
+	//	assertTrue(IBMInst.get(TIME_ZONE_OFFSET).equals(newSize(-18000000)));
+		assertTrue(IBMInst.timeZoneName().equals(newText("NEW_YORK")));
 		
 	}
 	

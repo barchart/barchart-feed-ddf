@@ -24,6 +24,7 @@
  */
 package com.barchart.feed.ddf.client.provider.legacy;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -38,7 +39,7 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.market.provider.DDF_MarketService;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
@@ -223,7 +224,7 @@ abstract class BarchartFeedClientBase {
 	 * @return NULL_INSTRUMENT if the symbol is not resolved.
 	 */
 	public List<Instrument> lookup(final String symbol) {
-		return DDF_InstrumentProvider.find(symbol);
+		return Collections.singletonList(NewInstrumentProvider.fromSymbol(symbol));
 	}
 
 	/**
@@ -233,8 +234,8 @@ abstract class BarchartFeedClientBase {
 	 * 
 	 * @return An empty list if no symbols can be resolved.
 	 */
-	public Map<CharSequence, List<Instrument>> lookup(final List<String> symbolList) {
-		return DDF_InstrumentProvider.find(symbolList);
+	public Map<String, Instrument> lookup(final List<String> symbolList) {
+		return NewInstrumentProvider.fromSymbol(symbolList);
 	}
 
 	/**

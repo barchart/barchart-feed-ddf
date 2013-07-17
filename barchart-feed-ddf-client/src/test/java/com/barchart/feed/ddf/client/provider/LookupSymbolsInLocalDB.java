@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
-import com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;
+import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
 
 public class LookupSymbolsInLocalDB {
 
@@ -13,7 +13,7 @@ public class LookupSymbolsInLocalDB {
 	public static void main(final String[] args) {
 		
 	
-		LocalInstrumentDBMap dbMap = InstrumentDBProvider.getMap(getTempFolder());
+		InstrumentDatabaseMap dbMap = InstrumentDBProvider.getMap(getTempFolder());
 		
 		System.out.println(dbMap.get("LEQ0|1100C").toString());
 		System.out.println(dbMap.get("ESV1450P").toString());

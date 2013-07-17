@@ -7,8 +7,15 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryOrder.*;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.*;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryOrder.ASCENDING;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.END_OF_DAY;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.END_OF_DAY_TREND;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_FORM_T;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_NEARBY;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_TREND;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS_FORM_T;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS_TREND;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -20,7 +27,7 @@ import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.util.ascii.ASCII;
 
@@ -468,7 +475,7 @@ final class CodecHelper {
 		// symbol = DDF_Symbology.futureNormalFromHistorical(symbol);
 		// // System.out.println("### YES ###");
 		// }
-		return DDF_InstrumentProvider.find(symbol).get(0);
+		return NewInstrumentProvider.fromSymbol(symbol);
 	}
 
 	static String encodeInstrument(final Instrument instrument,

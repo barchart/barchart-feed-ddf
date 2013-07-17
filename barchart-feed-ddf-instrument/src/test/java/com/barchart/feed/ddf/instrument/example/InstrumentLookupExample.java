@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -24,7 +24,7 @@ public class InstrumentLookupExample {
 
 	static final void find(final String symbol) {
 
-		final Instrument instrument = DDF_InstrumentProvider.find(symbol).get(0);
+		final Instrument instrument = NewInstrumentProvider.fromSymbol(symbol);
 
 		if (instrument.isNull()) {
 			log.error("instrument lookup failed for : {}", symbol);

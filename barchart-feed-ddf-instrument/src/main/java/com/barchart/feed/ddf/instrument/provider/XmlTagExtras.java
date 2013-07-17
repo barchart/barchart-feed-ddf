@@ -55,7 +55,7 @@ package com.barchart.feed.ddf.instrument.provider;
  * 
  */
 
-interface XmlTagExtras {
+public interface XmlTagExtras {
 
 	String TAG = "instrument";
 

@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.instrument.provider;
+package cleanup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,11 +22,11 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cleanup.InstrumentDDF;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
+import com.barchart.feed.ddf.instrument.provider.LocalCacheSymbologyContextDDF;
 import com.barchart.feed.inst.InstrumentFuture;
 import com.barchart.feed.inst.InstrumentFutureMap;
 import com.barchart.feed.inst.SymbologyContext;
