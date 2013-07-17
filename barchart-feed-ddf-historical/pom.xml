@@ -26,7 +26,11 @@
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
 	  <tag>HEAD</tag>
-  </scm>
+  	</scm>
+  	
+  	<properties>
+  		<barchartUtilVersion>2.0.16</barchartUtilVersion>
+  	</properties>
 	
 	<dependencies>
 

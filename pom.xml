@@ -34,12 +34,12 @@
 		<!-- http://search.maven.org/#search|ga|1|barchart-util -->
 		<!-- <groupId>com.barchart.util</groupId> -->
 		<!-- <artifactId>barchart-util</artifactId> -->
-		<barchartUtilVersion>2.0.16</barchartUtilVersion>
+		<!-- <barchartUtilVersion>2.0.16</barchartUtilVersion> -->
 
 		<!-- http://search.maven.org/#search|ga|1|barchart-feed -->
 		<!-- <groupId>com.barchart.feed</groupId> -->
 		<!-- <artifactId>barchart-feed</artifactId> -->
-		<barchartFeedVersion>1.3.26</barchartFeedVersion>
+		<barchartFeedVersion>1.3.29</barchartFeedVersion>
 
 		<!-- http://search.maven.org/#search|ga|1|io.netty -->
 		<!-- <groupId>io.netty</groupId> -->
