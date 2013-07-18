@@ -4,6 +4,7 @@ import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,8 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.ddf.instrument.provider.InstrumentXML;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
+import com.barchart.feed.ddf.instrument.provider.InstrumentXML;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.participant.InstrumentState;
@@ -147,19 +148,39 @@ public final class NewInstrumentProvider {
 	
 	public static Map<String, Instrument> fromSymbols(
 			final Collection<String> symbols) {
-		// TODO
-		return null;
+		
+		final Map<String, Instrument> map = new HashMap<String, Instrument>();
+		
+		for(final String symbol : symbols) {
+			map.put(symbol, fromSymbol(symbol));
+		}
+		
+		return map;
+		
 	}
 
-	public static Map<String, Instrument> fromSymbol(
-			final Collection<String> symbols) {
-		// TODO
-		return null;
-	}
-	
 	public static Instrument fromHistorical(String symbol) {
-		// TODO
-		return null;
+		
+		if(symbol == null || symbol.isEmpty()) {
+			return Instrument.NULL;
+		}
+		
+		symbol = formatHistoricalSymbol(symbol);
+		
+		if(symbolMap.containsKey(symbol)) {
+			return symbolMap.get(symbol);
+		}
+		
+		final InstrumentState instState = InstrumentStateFactory.
+				newInstrument(symbol);
+		
+		symbolMap.put(symbol, instState);
+		
+		/* Asnyc lookup */
+		executor.submit(populateRunner(symbol));
+		
+		return instState;
+		
 	}
 	//
 	
@@ -283,6 +304,7 @@ public final class NewInstrumentProvider {
 	private static final char[] T_Z_O = new char[] {'2', '0', '1'};
 	private static final char[] T_Z_T = new char[] {'2', '0', '2'};
 	private static final char[] T_Z = new char[] {'2', '0'};
+	private static final char[] O = new char[] {'1'};
 	
 	public static String formatSymbol(String symbol) {
 		
@@ -372,13 +394,27 @@ public final class NewInstrumentProvider {
 		
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
+	public static String formatHistoricalSymbol(String symbol) {
+		
+		if(symbol == null) {
+			return "";
+		}
+		
+		if(symbol.length() < 3) {
+			return symbol;
+		}
+		
+		/* e.g. GOOG */
+		if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {
+			return symbol;
+		}
+		
+		/* e.g. ESH3 */
+		if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {
+			return new StringBuilder(symbol).insert(symbol.length() - 1, O).toString();
+		}
+		
+		return symbol;
+	}
 	
 }

@@ -30,12 +30,17 @@ public final class InstrumentDatabaseMap {
 
 	private final StoredMap<String, InstrumentDefinition> map;
 	
-	private final Durability durability = new Durability(Durability.SyncPolicy.WRITE_NO_SYNC,
-			Durability.SyncPolicy.WRITE_NO_SYNC, Durability.ReplicaAckPolicy.NONE);
-	private final EnvironmentConfig envConfig = (EnvironmentConfig) new EnvironmentConfig()
+	private final Durability durability = new Durability(
+			Durability.SyncPolicy.WRITE_NO_SYNC,
+			Durability.SyncPolicy.WRITE_NO_SYNC, 
+			Durability.ReplicaAckPolicy.NONE);
+	
+	private final EnvironmentConfig envConfig = 
+			(EnvironmentConfig) new EnvironmentConfig()
 		.setAllowCreate(true)
 		.setTransactional(true)
 		.setDurability(durability);
+	
 	private final DatabaseConfig dbConfig = new DatabaseConfig()
 		.setAllowCreate(true)
 		.setTransactional(true)
@@ -51,8 +56,8 @@ public final class InstrumentDatabaseMap {
 		
 		this.dbase = dbase;
 		
-		map = new StoredMap<String, InstrumentDefinition>(dbase, new SymbolBinding(), 
-				new InstDefBinding(), true);
+		map = new StoredMap<String, InstrumentDefinition>(dbase, 
+				new SymbolBinding(), new InstDefBinding(), true);
 	}
 	
 	/**

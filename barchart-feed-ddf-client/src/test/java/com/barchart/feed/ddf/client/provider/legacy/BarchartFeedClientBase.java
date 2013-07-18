@@ -235,7 +235,7 @@ abstract class BarchartFeedClientBase {
 	 * @return An empty list if no symbols can be resolved.
 	 */
 	public Map<String, Instrument> lookup(final List<String> symbolList) {
-		return NewInstrumentProvider.fromSymbol(symbolList);
+		return NewInstrumentProvider.fromSymbols(symbolList);
 	}
 
 	/**
