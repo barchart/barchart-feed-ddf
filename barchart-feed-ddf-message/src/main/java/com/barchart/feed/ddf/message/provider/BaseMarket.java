@@ -175,7 +175,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getExchange()
 	 */
 	@Override
-	public final DDF_Exchange getExchange() {
+	public DDF_Exchange getExchange() {
 		return DDF_Exchange.fromOrd(ordExchange);
 	}
 

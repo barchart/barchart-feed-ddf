@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.provider.DefCuvolEntry;
+import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
@@ -46,6 +47,13 @@ public class TestDX_XC_Cuvol extends TestDDFBase {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		
+		NewInstrumentProvider.fromSymbol("GEM0");
+		NewInstrumentProvider.fromSymbol("GEM1");
+		
+		/* Delay to let instruments populate */
+		Thread.sleep(1000);
+		
 	}
 
 	/**
@@ -113,9 +121,6 @@ public class TestDX_XC_Cuvol extends TestDDFBase {
 		assertEquals(msg.getTradeDay(), DDF_TradeDay.D15);
 		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getDelay(), 0);
-
-		// TODO
-		// assertEquals(msg.getTime(), newTime(0));
 
 		//
 

@@ -408,7 +408,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 	
 	@Override
 	public Instrument getInstrument() {
-		return stub;
+		return NewInstrumentProvider.fromMessage(stub);
 	}
 	
 	/*  

@@ -240,6 +240,11 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 	protected final String xmlTagName() {
 		return TAG;
 	}
+	
+	@Override
+	public DDF_Exchange getExchange() {
+		return DDF_Exchange.fromCode(getInstrument().exchangeCode().getBytes()[0]);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -423,7 +428,7 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 	
 	@Override
 	public Instrument getInstrument() {
-		return stub;
+		return NewInstrumentProvider.fromMessage(stub);
 	}
 	
 	/*  
@@ -448,12 +453,12 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 		@Override
 		public Exchange exchange() {
-			return getExchange().asExchange();
+			return Exchange.NULL;
 		}
 
 		@Override
 		public String exchangeCode() {
-			return new String(new byte[] {getExchange().code});
+			return "NULL";
 		}
 
 		@Override
