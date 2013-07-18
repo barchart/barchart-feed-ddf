@@ -16,7 +16,7 @@ public class DDF_Marketplace extends MarketplaceBase<DDF_MarketBase> implements
 		DDF_MarketProvider, AgentBuilder {
 
 	protected DDF_Marketplace(MarketFactory factory,
-			InstrumentService<CharSequence> instLookup,
+			InstrumentService<String> instLookup,
 			SubscriptionHandler handler) {
 		super(factory, instLookup, handler);
 	}

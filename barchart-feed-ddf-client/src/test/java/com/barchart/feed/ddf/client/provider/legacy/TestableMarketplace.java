@@ -31,7 +31,7 @@ public class TestableMarketplace extends DDF_Marketplace {
 	private static final Logger log = LoggerFactory.getLogger(TestableMarketplace.class);
 	
 	protected TestableMarketplace(MarketFactory factory,
-			InstrumentService<CharSequence> instLookup,
+			InstrumentService<String> instLookup,
 			SubscriptionHandler handler) {
 		super(factory, instLookup, handler);
 	}
