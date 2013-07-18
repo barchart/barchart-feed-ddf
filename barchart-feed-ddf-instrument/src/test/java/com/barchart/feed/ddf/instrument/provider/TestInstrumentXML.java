@@ -19,6 +19,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.provider2.InstrumentFactory;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
 
@@ -41,25 +42,23 @@ public class TestInstrumentXML {
 		final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);
 		final Instrument IBMInst = InstrumentFactory.instrument(InstrumentXML.decodeXML(tag));
 		
-		System.out.println(IBMInst.toString());
-		
-		assertTrue(IBMInst.marketGUID().equals("1298146"));
+		assertTrue(IBMInst.marketGUID().equals("IBM"));
 		assertTrue(IBMInst.securityType() == Instrument.SecurityType.NULL_TYPE);
 		assertTrue(IBMInst.liquidityType() == Instrument.BookLiquidityType.NONE);
 		assertTrue(IBMInst.bookStructure() == Instrument.BookStructureType.NONE);
 		assertTrue(IBMInst.maxBookDepth() == Size.NULL);
-		assertTrue(IBMInst.instrumentDataVendor().equals(newText("Barchart")));
+		assertTrue(IBMInst.instrumentDataVendor().equals("Barchart"));
 		assertTrue(IBMInst.symbol().equals("IBM"));
 		assertTrue(IBMInst.description().equals("International Business Machines Corp."));
 		assertTrue(IBMInst.CFICode().equals("EXXXXX"));
 		assertTrue(IBMInst.exchangeCode().equals("N"));
-		assertTrue(IBMInst.tickSize().equals(factory.newPrice(1, -100)));
+		assertTrue(IBMInst.tickSize().equals(factory.newPrice(1, -2)));
 		assertTrue(IBMInst.pointValue().equals(factory.newPrice(1, 0)));
 		assertTrue(IBMInst.displayFraction().equals(factory.newFraction(10, -2)));
 		assertTrue(IBMInst.lifetime() == TimeInterval.NULL);
 		assertTrue(IBMInst.marketHours().size() == 0);
-	//	assertTrue(IBMInst.get(TIME_ZONE_OFFSET).equals(newSize(-18000000)));
-		assertTrue(IBMInst.timeZoneName().equals(newText("NEW_YORK")));
+		assertTrue(IBMInst.timeZoneOffset() == -18000000);
+		assertTrue(IBMInst.timeZoneName().equals("NEW_YORK"));
 		
 	}
 	

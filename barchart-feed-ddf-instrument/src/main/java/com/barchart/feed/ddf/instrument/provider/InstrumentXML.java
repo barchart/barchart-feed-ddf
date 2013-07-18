@@ -2,7 +2,7 @@ package com.barchart.feed.ddf.instrument.provider;
 
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.BASE_CODE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.EXCHANGE_DDF;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.GUID;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ID;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_POINT_VALUE;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_TICK_INCREMENT;
@@ -68,7 +68,7 @@ public final class InstrumentXML {
 		
 		/* market identifier; must be globally unique; */
 		try {
-			builder.setMarketId(Long.parseLong(xmlStringDecode(tag, GUID, XML_STOP)));
+			builder.setMarketId(Long.parseLong(xmlStringDecode(tag, ID, XML_STOP)));
 		} catch(Exception e) {
 			return InstrumentDefinition.getDefaultInstance();
 		}
@@ -80,9 +80,6 @@ public final class InstrumentXML {
 		
 		/* structure of book */
 		builder.setBookStructure(BookStructure.NO_BOOK_STRUCTURE);
-		
-		/* book depth */
-		builder.setBookDepth(0);
 		
 		/* vendor */
 		builder.setVendorId("Barchart");
@@ -176,7 +173,7 @@ public final class InstrumentXML {
 		
 		/* market identifier; must be globally unique; */
 		try {
-			builder.setMarketId(Long.parseLong(xmlStringDecode(ats, GUID, XML_STOP)));
+			builder.setMarketId(Long.parseLong(xmlStringDecode(ats, ID, XML_STOP)));
 		} catch(Exception e) {
 			return InstrumentDefinition.getDefaultInstance();
 		}

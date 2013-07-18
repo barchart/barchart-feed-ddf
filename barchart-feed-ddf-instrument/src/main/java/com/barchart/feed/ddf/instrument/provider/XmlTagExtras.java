@@ -66,7 +66,7 @@ public interface XmlTagExtras {
 	String STATUS = "status";
 
 	/** barchart globally unique identifier */
-	String GUID = "id";
+	String ID = "id";
 
 	/** barchart globally unique symbol */
 	String SYMBOL_REALTIME = "symbol_realtime";
