@@ -31,6 +31,7 @@ public class TestBarchartFeed {
 				username(username).
 				password(password).
 				useLocalInstDatabase().
+				syncWithRemote(false).
 				build();
 		
 		feed.bindConnectionStateListener(new Connection.Monitor() {

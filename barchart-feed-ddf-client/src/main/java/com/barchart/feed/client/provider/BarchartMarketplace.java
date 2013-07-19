@@ -70,13 +70,15 @@ public class BarchartMarketplace implements Marketplace {
 			new CopyOnWriteArrayList<TimestampListener>();
 	
 	private final boolean useLocalInstDB;
+	private final boolean syncWithRemote;
 	
 	public BarchartMarketplace(final String username, final String password) {
-		this(username, password, getDefault(), getTempFolder(), false);
+		this(username, password, getDefault(), getTempFolder(), false, true);
 	}
 	
 	BarchartMarketplace(final String username, final String password, 
-			final ExecutorService ex, final File dbFolder, final boolean useDB) {
+			final ExecutorService ex, final File dbFolder, final boolean useDB,
+			final boolean syncWithRemote) {
 		
 		this.username = username;
 		this.password = password;
@@ -91,7 +93,7 @@ public class BarchartMarketplace implements Marketplace {
 		maker = DDF_Marketplace.newInstance(connection);
 		
 		this.useLocalInstDB = useDB; 
-		
+		this.syncWithRemote = syncWithRemote;
 	}
 	
 	public static Builder builder() {
@@ -107,6 +109,7 @@ public class BarchartMarketplace implements Marketplace {
 		private String password = "NULL PASSWORD";
 		private File dbFolder = getTempFolder();
 		private boolean useLocalDB = false; 
+		private boolean syncWithRemote = true;
 		
 		private ExecutorService executor = getDefault();
 		
@@ -138,9 +141,14 @@ public class BarchartMarketplace implements Marketplace {
 			return this;
 		}
 		
+		public Builder syncWithRemote(final boolean sync) {
+			syncWithRemote = sync;
+			return this;
+		}
+		
 		public Marketplace build() {
 			return new BarchartMarketplace(username, password, executor, dbFolder, 
-					useLocalDB);
+					useLocalDB, syncWithRemote);
 		}
 		
 	}
@@ -244,21 +252,22 @@ public class BarchartMarketplace implements Marketplace {
 					
 					NewInstrumentProvider.bindDatabaseMap(dbMap);
 					
-					final Future<Boolean> dbUpdate = executor.submit(
-							InstrumentDBProvider.updateDBMap(dbFolder, dbMap));
-					
-					dbUpdate.get(DB_UPDATE_TIMEOUT, TimeUnit.SECONDS);
-					
-					/* Start background db update runnable, kill previous task if needed */
-					if(dbUpdater != null) {
-						dbUpdater.cancel(true);
-						while(!dbUpdater.isCancelled() || !dbUpdater.isDone()) {
-							// 
+					if(syncWithRemote) {
+						final Future<Boolean> dbUpdate = executor.submit(
+								InstrumentDBProvider.updateDBMap(dbFolder, dbMap));
+						
+						dbUpdate.get(DB_UPDATE_TIMEOUT, TimeUnit.SECONDS);
+						
+						/* Start background db update runnable, kill previous task if needed */
+						if(dbUpdater != null) {
+							dbUpdater.cancel(true);
+							while(!dbUpdater.isCancelled() || !dbUpdater.isDone()) {
+								// 
+							}
 						}
+						
+						dbUpdater = executor.submit(dbUpdateRunnable());
 					}
-					
-					dbUpdater = executor.submit(dbUpdateRunnable());
-					
 				}
 				
 				connection.startup();
