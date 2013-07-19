@@ -8,12 +8,14 @@
 package com.barchart.feed.ddf.instrument.provider;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -23,7 +25,7 @@ import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 /**
  * The Class TestDDF_InstrumentProvider.
  */
-public class TestDDF_InstrumentProvider {
+public class TestInstrumentProvider {
 
 	/**
 	 * Test1.
@@ -74,6 +76,23 @@ public class TestDDF_InstrumentProvider {
 
 		}
 
+	}
+	
+	@Test
+	public void testHashmap() throws Exception {
+		
+		final Set<Instrument> insts = new HashSet<Instrument>();
+		
+		final Instrument i = NewInstrumentProvider.fromSymbol("ESU13");
+		
+		insts.add(i);
+		
+		assertTrue(insts.contains(i));
+		
+		final Instrument i2 = NewInstrumentProvider.fromSymbol("ESU13");
+		
+		assertTrue(insts.contains(i2));
+		
 	}
 
 }

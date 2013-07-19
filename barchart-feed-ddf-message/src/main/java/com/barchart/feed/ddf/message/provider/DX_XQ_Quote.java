@@ -418,7 +418,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 		@Override
 		public String marketGUID() {
-			return NewInstrumentProvider.formatSymbol(getId().toString());
+			return NewInstrumentProvider.formatSymbol(new String(getSymbolFull()));
 		}
 
 		@Override
@@ -428,7 +428,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 		@Override
 		public String symbol() {
-			return NewInstrumentProvider.formatSymbol(getId().toString());
+			return NewInstrumentProvider.formatSymbol(new String(getSymbolFull()));
 		}
 
 		@Override

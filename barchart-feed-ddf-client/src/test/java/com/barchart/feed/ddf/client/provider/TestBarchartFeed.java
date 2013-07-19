@@ -44,6 +44,23 @@ public class TestBarchartFeed {
 		
 		feed.startup();
 		
+//		final MarketObserver<Book> callback = new MarketObserver<Book>() {
+//
+//			@Override
+//			public void onNext(final Book v) {
+//				
+//				log.debug(
+//				v.instrument().symbol() + " " +
+//				
+//				v.top().bid().price().asDouble() + " " +
+//				v.top().bid().size().asDouble() + " " +
+//				v.top().ask().size().asDouble() + " " +
+//				v.top().ask().price().asDouble());
+//				
+//			}
+//			
+//		};
+		
 		final MarketObserver<Market> callback = new MarketObserver<Market>() {
 
 			@Override
@@ -51,8 +68,8 @@ public class TestBarchartFeed {
 				
 				log.debug(
 				v.instrument().symbol() + " " +
-				v.book().top().bid().price().asDouble() + " " +
-				v.book().top().ask().price().asDouble());
+				printCuvol(v.cuvol().entryList())
+				);
 				
 			}
 			
@@ -61,7 +78,7 @@ public class TestBarchartFeed {
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
 		//myAgent.include(Exchanges.fromName("CME"));
-		myAgent.include("CLU13");
+		myAgent.include("ESU13");
 		
 		Thread.sleep(1000000);
 		

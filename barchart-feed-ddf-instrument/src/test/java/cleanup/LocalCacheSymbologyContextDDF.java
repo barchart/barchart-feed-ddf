@@ -1,4 +1,4 @@
-package com.barchart.feed.ddf.instrument.provider;
+package cleanup;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentMap;
 import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.inst.SymbologyContext;
 
-public class LocalCacheSymbologyContextDDF implements SymbologyContext<CharSequence> {
+class LocalCacheSymbologyContextDDF implements SymbologyContext<CharSequence> {
 
 	private final ConcurrentMap<CharSequence, Identifier> symbolMap = 
 			new ConcurrentHashMap<CharSequence, Identifier>();
