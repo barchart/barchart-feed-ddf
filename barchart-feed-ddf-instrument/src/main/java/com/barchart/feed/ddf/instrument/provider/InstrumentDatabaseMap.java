@@ -11,6 +11,7 @@ import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.inst.provider.InstrumentMap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sleepycat.bind.EntityBinding;
 import com.sleepycat.bind.EntryBinding;
@@ -23,7 +24,7 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.EnvironmentLockedException;
 
-public final class InstrumentDatabaseMap {
+public final class InstrumentDatabaseMap implements InstrumentMap {
 	
 	private static final Logger log = LoggerFactory
 			.getLogger(InstrumentDatabaseMap.class);
@@ -162,6 +163,7 @@ public final class InstrumentDatabaseMap {
 	 * @param key
 	 * @return
 	 */
+	@Override
 	public boolean containsKey(final String key) {
 		return map.containsKey(key);
 	}
@@ -171,6 +173,7 @@ public final class InstrumentDatabaseMap {
 	 * @param key
 	 * @return
 	 */
+	@Override
 	public InstrumentDefinition get(final String key) {
 		return map.get(key);
 	}
@@ -180,6 +183,7 @@ public final class InstrumentDatabaseMap {
 	 * @param key
 	 * @param value
 	 */
+	@Override
 	public void put(final String key, final InstrumentDefinition value) {
 		map.put(key, value);
 	}
@@ -188,6 +192,7 @@ public final class InstrumentDatabaseMap {
 	 * 
 	 * @return
 	 */
+	@Override
 	public int size() {
 		return map.size();
 	}
@@ -195,6 +200,7 @@ public final class InstrumentDatabaseMap {
 	/**
 	 * 
 	 */
+	@Override
 	public void clear() {
 		map.clear();
 	}
@@ -202,6 +208,7 @@ public final class InstrumentDatabaseMap {
 	/**
 	 * 
 	 */
+	@Override
 	public void close() {
 		log.info("DB Closed");
 		dbase.close();

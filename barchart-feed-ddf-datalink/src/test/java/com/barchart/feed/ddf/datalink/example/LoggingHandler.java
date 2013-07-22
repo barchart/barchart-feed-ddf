@@ -22,7 +22,7 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
-import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 
 // TODO: Auto-generated Javadoc
@@ -62,8 +62,8 @@ public class LoggingHandler implements DDF_MessageListener {
 			e.printStackTrace();
 		}
 
-		final Instrument instrument2 = NewInstrumentProvider.fromSymbol("XFU2");
-		final Instrument instrument = NewInstrumentProvider.fromSymbol("RMN2");
+		final Instrument instrument2 = DDF_InstrumentProvider.fromSymbol("XFU2");
+		final Instrument instrument = DDF_InstrumentProvider.fromSymbol("RMN2");
 
 		symbolList.add(instrument);
 		symbolList.add(instrument2);

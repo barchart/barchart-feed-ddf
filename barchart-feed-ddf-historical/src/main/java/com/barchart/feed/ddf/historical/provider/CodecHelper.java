@@ -27,7 +27,7 @@ import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
-import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.util.ascii.ASCII;
 
@@ -475,7 +475,7 @@ final class CodecHelper {
 		// symbol = DDF_Symbology.futureNormalFromHistorical(symbol);
 		// // System.out.println("### YES ###");
 		// }
-		return NewInstrumentProvider.fromSymbol(symbol);
+		return DDF_InstrumentProvider.fromSymbol(symbol);
 	}
 
 	static String encodeInstrument(final Instrument instrument,

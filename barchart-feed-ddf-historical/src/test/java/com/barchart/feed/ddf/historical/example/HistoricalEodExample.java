@@ -16,7 +16,7 @@ import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.api.DDF_Result;
 import com.barchart.feed.ddf.historical.provider.DDF_HistoricalService;
-import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
@@ -68,7 +68,7 @@ public class HistoricalEodExample {
 		final String symbol = "EGM2";
 
 		final Instrument instrument = //
-				NewInstrumentProvider.fromHistorical(symbol);
+				DDF_InstrumentProvider.fromHistorical(symbol);
 
 		if (instrument.isNull()) {
 			log.error("can not get insrument for : {}", symbol);

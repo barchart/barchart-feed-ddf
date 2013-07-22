@@ -1,4 +1,4 @@
-package com.barchart.feed.ddf.instrument.provider.ext;
+package com.barchart.feed.ddf.instrument.provider;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDisplay;

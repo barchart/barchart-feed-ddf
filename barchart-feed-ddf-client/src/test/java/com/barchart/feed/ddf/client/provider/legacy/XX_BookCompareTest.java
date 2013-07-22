@@ -8,7 +8,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 public class XX_BookCompareTest {
 
@@ -51,7 +51,7 @@ final static String SYMBOL = "CLU13";
 		
 		final Agent myAgent = feed.newAgent(Book.class, callback);
 		
-		final Instrument inst = NewInstrumentProvider.fromSymbol(SYMBOL);
+		final Instrument inst = DDF_InstrumentProvider.fromSymbol(SYMBOL);
 		
 		myAgent.include(inst);
 		

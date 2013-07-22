@@ -1,4 +1,4 @@
-package com.barchart.feed.ddf.instrument.provider.ext;
+package com.barchart.feed.ddf.instrument.provider;
 
 import org.openfeed.proto.inst.Decimal;
 import org.openfeed.proto.inst.InstrumentDefinition;

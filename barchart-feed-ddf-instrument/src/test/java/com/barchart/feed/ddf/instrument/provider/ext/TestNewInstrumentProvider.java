@@ -7,6 +7,8 @@ import java.util.concurrent.Callable;
 import org.junit.Test;
 import org.openfeed.proto.inst.InstrumentDefinition;
 
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+
 public class TestNewInstrumentProvider {
 	
 //	public static void main(final String[] args) throws Exception {
@@ -24,16 +26,16 @@ public class TestNewInstrumentProvider {
 	public void testSymbolFormat() {
 		
 		/* Futures */
-		assertTrue(NewInstrumentProvider.formatSymbol("MGU3").equals("MGU2013"));
+		assertTrue(DDF_InstrumentProvider.formatSymbol("MGU3").equals("MGU2013"));
 		
 		/* Spreads */
 		
 		
 		/* Options */
-		assertTrue(NewInstrumentProvider.formatSymbol("A6Z885C").equals("A6Z2013|885C"));
-		assertTrue(NewInstrumentProvider.formatSymbol("A6U850P").equals("A6U2013|850P"));
-		assertTrue(NewInstrumentProvider.formatSymbol("EWH2550Q").equals("EWH2014|2550P"));
-		assertTrue(NewInstrumentProvider.formatSymbol("EWH3950D").equals("EWH2014|3950C"));
+		assertTrue(DDF_InstrumentProvider.formatSymbol("A6Z885C").equals("A6Z2013|885C"));
+		assertTrue(DDF_InstrumentProvider.formatSymbol("A6U850P").equals("A6U2013|850P"));
+		assertTrue(DDF_InstrumentProvider.formatSymbol("EWH2550Q").equals("EWH2014|2550P"));
+		assertTrue(DDF_InstrumentProvider.formatSymbol("EWH3950D").equals("EWH2014|3950C"));
 	}
 	
 }

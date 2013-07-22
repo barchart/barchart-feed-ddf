@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.provider.DefCuvolEntry;
-import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
@@ -48,8 +48,8 @@ public class TestDX_XC_Cuvol extends TestDDFBase {
 	@Before
 	public void setUp() throws Exception {
 		
-		NewInstrumentProvider.fromSymbol("GEM0");
-		NewInstrumentProvider.fromSymbol("GEM1");
+		DDF_InstrumentProvider.fromSymbol("GEM0");
+		DDF_InstrumentProvider.fromSymbol("GEM1");
 		
 		/* Delay to let instruments populate */
 		Thread.sleep(1000);

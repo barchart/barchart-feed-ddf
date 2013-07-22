@@ -37,7 +37,7 @@ import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
-import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
@@ -196,7 +196,7 @@ public class TestableFeed implements Marketplace {
 			
 				dbMap = InstrumentDBProvider.getMap(dbFolder);
 				
-				NewInstrumentProvider.bindDatabaseMap(dbMap);
+				DDF_InstrumentProvider.bindDatabaseMap(dbMap);
 				
 				final Future<Boolean> dbUpdate = executor.submit(
 						InstrumentDBProvider.updateDBMap(dbFolder, dbMap));

@@ -42,7 +42,7 @@ import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
-import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.market.provider.DDF_MarketServiceAllMarkets;
 import com.barchart.util.values.api.Value;
 
@@ -101,7 +101,7 @@ class BarchartFeedReceiver extends BarchartFeedClientBase {
 		final InstrumentDatabaseMap dbMap = InstrumentDBProvider.getMap(
 				resourceFolder);
 		
-		NewInstrumentProvider.bindDatabaseMap(dbMap);
+		DDF_InstrumentProvider.bindDatabaseMap(dbMap);
 		
 		return executor.submit(InstrumentDBProvider.updateDBMap(resourceFolder, dbMap));
 		
@@ -203,7 +203,7 @@ class BarchartFeedReceiver extends BarchartFeedClientBase {
 		final InstrumentDatabaseMap dbMap = InstrumentDBProvider.getMap(
 				resourceFolder);
 		
-		NewInstrumentProvider.bindDatabaseMap(dbMap);
+		DDF_InstrumentProvider.bindDatabaseMap(dbMap);
 		
 		return executor.submit(InstrumentDBProvider.updateDBMap(resourceFolder, dbMap));
 	}

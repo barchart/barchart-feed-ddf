@@ -1,4 +1,4 @@
-package com.barchart.feed.ddf.instrument.provider.ext;
+package com.barchart.feed.ddf.instrument.provider;
 
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
@@ -23,26 +23,24 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
-import com.barchart.feed.ddf.instrument.provider.InstrumentXML;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.participant.InstrumentState;
 
-public final class NewInstrumentProvider {
+public final class DDF_InstrumentProvider {
 	
 	private static final long DEFAULT_TIMEOUT = 5000;
 	private static final TimeUnit MILLIS = TimeUnit.MILLISECONDS;
 	
 	private static final Logger log = LoggerFactory
-			.getLogger(NewInstrumentProvider.class);
+			.getLogger(DDF_InstrumentProvider.class);
 	
 	private static final ConcurrentMap<String, InstrumentState> symbolMap =
 			new ConcurrentHashMap<String, InstrumentState>();
 	
 	private static volatile InstrumentDatabaseMap db = null;
 	
-	private NewInstrumentProvider() {
+	private DDF_InstrumentProvider() {
 		
 	}
 	

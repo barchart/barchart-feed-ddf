@@ -20,7 +20,6 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 
 /**
  * The Class TestDDF_InstrumentProvider.
@@ -47,7 +46,7 @@ public class TestInstrumentProvider {
 		symbolList.add("_S_FX_A6H2_A6Z1");
 		symbolList.add("_S_BF_ZSQ2_ZSU2_ZSX2");
 
-		final Map<String, Instrument> list = NewInstrumentProvider
+		final Map<String, Instrument> list = DDF_InstrumentProvider
 				.fromSymbols(symbolList);
 
 		assertEquals(8, list.size());
@@ -83,13 +82,13 @@ public class TestInstrumentProvider {
 		
 		final Set<Instrument> insts = new HashSet<Instrument>();
 		
-		final Instrument i = NewInstrumentProvider.fromSymbol("ESU13");
+		final Instrument i = DDF_InstrumentProvider.fromSymbol("ESU13");
 		
 		insts.add(i);
 		
 		assertTrue(insts.contains(i));
 		
-		final Instrument i2 = NewInstrumentProvider.fromSymbol("ESU13");
+		final Instrument i2 = DDF_InstrumentProvider.fromSymbol("ESU13");
 		
 		assertTrue(insts.contains(i2));
 		

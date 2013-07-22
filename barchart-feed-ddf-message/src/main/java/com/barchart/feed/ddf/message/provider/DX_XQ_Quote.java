@@ -50,8 +50,8 @@ import org.w3c.dom.NodeList;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.provider.ValueConverter;
-import com.barchart.feed.ddf.instrument.provider.ext.InstBase;
-import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.InstBase;
 import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.api.DDF_MarketSession;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
@@ -408,7 +408,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 	
 	@Override
 	public Instrument getInstrument() {
-		return NewInstrumentProvider.fromMessage(stub);
+		return DDF_InstrumentProvider.fromMessage(stub);
 	}
 	
 	/*  
@@ -418,7 +418,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 		@Override
 		public String marketGUID() {
-			return NewInstrumentProvider.formatSymbol(new String(getSymbolFull()));
+			return DDF_InstrumentProvider.formatSymbol(new String(getSymbolFull()));
 		}
 
 		@Override
@@ -428,7 +428,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 		@Override
 		public String symbol() {
-			return NewInstrumentProvider.formatSymbol(new String(getSymbolFull()));
+			return DDF_InstrumentProvider.formatSymbol(new String(getSymbolFull()));
 		}
 
 		@Override
