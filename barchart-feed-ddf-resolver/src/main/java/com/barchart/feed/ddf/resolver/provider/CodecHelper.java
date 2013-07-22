@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.inst.InstrumentField;
-import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.missive.api.Tag;
 import com.barchart.util.enums.DictEnum;
 import com.barchart.util.enums.ParaEnumBase;
@@ -55,10 +53,6 @@ class CodecHelper {
 
 	/** lucene doc index */
 	static final String FIELD_INST_BODY = "@INST_BODY";
-
-	//
-
-	static final Tag<?>[] BASE = InstrumentField.FIELDS;
 
 	//
 
@@ -380,26 +374,11 @@ class CodecHelper {
 	}
 
 	/** convert lucene document into instrument */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static <V extends Value<V>> Instrument instrumentDecode(
 			final Document doc) {
 		
-		Map<Tag, Object> tags = new HashMap<Tag, Object>();
-
-		for (final Tag<?> field : CodecHelper.BASE) {
-
-			final String name = field.name();
-			final String value = doc.get(name);
-
-			if (!isValid(value)) {
-				continue;
-			}
-
-			tags.put(field, (V) decode(field, value));
-
-		}
-
-		return InstrumentFactory.build(tags);
+		// TODO Build protobuf from document then call factory
+		return Instrument.NULL;
 
 	}
 

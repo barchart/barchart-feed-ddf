@@ -27,6 +27,8 @@ public class TestBarchartFeed {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 
+//		final File db
+		
 		final Marketplace feed = BarchartMarketplace.builder().
 				username(username).
 				password(password).

@@ -18,6 +18,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import legacy.InstrumentBase;
+import legacy.InstrumentField;
+import legacy.SymbologyContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -33,9 +37,6 @@ import com.barchart.feed.ddf.instrument.provider.InstrumentXML;
 import com.barchart.feed.ddf.instrument.provider.SymbolNotFoundException;
 import com.barchart.feed.ddf.instrument.provider.XmlTagExtras;
 import com.barchart.feed.ddf.util.HelperXML;
-import com.barchart.feed.inst.InstrumentField;
-import com.barchart.feed.inst.SymbologyContext;
-import com.barchart.feed.inst.provider.InstrumentBase;
 import com.barchart.missive.core.ObjectMapFactory;
 
 final class RemoteSymbologyContextDDF implements SymbologyContext<CharSequence> {

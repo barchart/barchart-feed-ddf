@@ -3,7 +3,7 @@ package com.barchart.feed.ddf.instrument.provider.ext;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
-import com.barchart.feed.inst.provider2.InstrumentBase;
+import com.barchart.feed.inst.provider.InstrumentBase;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 

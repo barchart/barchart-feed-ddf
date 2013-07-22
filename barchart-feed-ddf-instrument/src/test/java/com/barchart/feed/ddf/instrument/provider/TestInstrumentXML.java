@@ -2,8 +2,6 @@ package com.barchart.feed.ddf.instrument.provider;
 
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
-import static com.barchart.feed.inst.InstrumentField.*;
-import static com.barchart.util.values.provider.ValueBuilder.*;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -16,10 +14,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.inst.provider2.InstrumentFactory;
+import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
-import com.barchart.util.value.api.Schedule;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
 

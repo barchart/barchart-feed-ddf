@@ -3,6 +3,7 @@ package com.barchart.feed.ddf.instrument.provider;
 import java.util.Collection;
 import java.util.Map;
 
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.instrument.provider.ext.NewInstrumentProvider;
 import com.barchart.feed.inst.InstrumentFuture;

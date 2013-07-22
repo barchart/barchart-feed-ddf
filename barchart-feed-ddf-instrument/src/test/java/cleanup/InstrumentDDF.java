@@ -7,17 +7,17 @@
  */
 package cleanup;
 
-import static com.barchart.feed.inst.InstrumentField.DESCRIPTION;
-import static com.barchart.feed.inst.InstrumentField.EXCHANGE_CODE;
-import static com.barchart.feed.inst.InstrumentField.LIFETIME;
-import static com.barchart.feed.inst.InstrumentField.SYMBOL;
-import static com.barchart.feed.inst.InstrumentField.VENDOR;
+import static legacy.InstrumentField.DESCRIPTION;
+import static legacy.InstrumentField.EXCHANGE_CODE;
+import static legacy.InstrumentField.LIFETIME;
+import static legacy.InstrumentField.SYMBOL;
+import static legacy.InstrumentField.VENDOR;
+import legacy.InstrumentBase;
+import legacy.InstrumentField;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
-import com.barchart.feed.inst.InstrumentField;
-import com.barchart.feed.inst.provider.InstrumentBase;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
 

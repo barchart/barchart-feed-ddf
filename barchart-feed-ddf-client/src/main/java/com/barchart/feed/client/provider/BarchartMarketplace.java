@@ -253,6 +253,7 @@ public class BarchartMarketplace implements Marketplace {
 					NewInstrumentProvider.bindDatabaseMap(dbMap);
 					
 					if(syncWithRemote) {
+						
 						final Future<Boolean> dbUpdate = executor.submit(
 								InstrumentDBProvider.updateDBMap(dbFolder, dbMap));
 						
@@ -267,6 +268,7 @@ public class BarchartMarketplace implements Marketplace {
 						}
 						
 						dbUpdater = executor.submit(dbUpdateRunnable());
+						
 					}
 				}
 				

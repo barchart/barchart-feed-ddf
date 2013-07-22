@@ -35,7 +35,6 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.inst.provider.Exchanges;
-import com.barchart.feed.inst.provider.InstrumentGUID;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Time;
@@ -44,6 +43,7 @@ import com.barchart.util.values.provider.ValueBuilder;
 
 public final class InstrumentXML {
 	
+	@SuppressWarnings("unused")
 	private static final Factory factory = FactoryLoader.load();
 	
 	@SuppressWarnings("unused")

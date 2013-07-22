@@ -5,7 +5,7 @@ import org.openfeed.proto.inst.InstrumentDefinition;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.participant.InstrumentState;
-import com.barchart.feed.inst.provider2.InstrumentFactory;
+import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 

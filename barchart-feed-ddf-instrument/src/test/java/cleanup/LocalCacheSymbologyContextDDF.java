@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import legacy.SymbologyContext;
+
 import com.barchart.feed.api.util.Identifier;
-import com.barchart.feed.inst.SymbologyContext;
 
 class LocalCacheSymbologyContextDDF implements SymbologyContext<CharSequence> {
 

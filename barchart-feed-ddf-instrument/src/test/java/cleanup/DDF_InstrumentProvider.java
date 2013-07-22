@@ -22,6 +22,9 @@ import java.util.Map.Entry;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import legacy.BarchartFeedInstManifest;
+
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +43,6 @@ import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.InstrumentFuture;
 import com.barchart.feed.inst.InstrumentFutureMap;
-import com.barchart.feed.inst.missive.BarchartFeedInstManifest;
 import com.barchart.missive.api.Tag;
 import com.barchart.missive.core.Manifest;
 import com.barchart.missive.core.ObjectMap;
