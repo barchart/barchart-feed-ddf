@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.missive.api.Tag;
 import com.barchart.util.enums.DictEnum;
 import com.barchart.util.enums.ParaEnumBase;
 import com.barchart.util.values.api.PriceValue;
@@ -85,77 +84,77 @@ class CodecHelper {
 		return num.guid();
 	}
 
-	static String encode(final Tag<?> field, final Object value) {
+//	static String encode(final Tag<?> field, final Object value) {
+//
+//		if (field.classType().equals(TextValue.class)) {
+//			return value.toString();
+//		}
+//
+//		if (field.classType().equals(PriceValue.class)) {
+//			return encode((PriceValue) value);
+//		}
+//
+//		if (field.classType().equals(SizeValue.class)) {
+//			return encode((SizeValue) value);
+//		}
+//
+//		if (field.classType().equals(TimeValue.class)) {
+//			return encode((TimeValue) value);
+//		}
+//
+//		if (field.isEnum()) {
+//			return encode((Enum<?>) value);
+//		}
+//
+//		if (field.classType().equals(ParaEnumBase.class)) {
+//			return encode((ParaEnumBase<?, ?>) value);
+//		}
+//
+//		throw new RuntimeException("wrong field : " + field);
+//
+//	}
 
-		if (field.classType().equals(TextValue.class)) {
-			return value.toString();
-		}
-
-		if (field.classType().equals(PriceValue.class)) {
-			return encode((PriceValue) value);
-		}
-
-		if (field.classType().equals(SizeValue.class)) {
-			return encode((SizeValue) value);
-		}
-
-		if (field.classType().equals(TimeValue.class)) {
-			return encode((TimeValue) value);
-		}
-
-		if (field.isEnum()) {
-			return encode((Enum<?>) value);
-		}
-
-		if (field.classType().equals(ParaEnumBase.class)) {
-			return encode((ParaEnumBase<?, ?>) value);
-		}
-
-		throw new RuntimeException("wrong field : " + field);
-
-	}
-
-	@SuppressWarnings("unchecked")
-	static Object decode(final Tag<?> field, final String value) {
-
-		if (field.classType().equals(TextValue.class)) {
-			return ValueBuilder.newText(value);
-		}
-
-		if (field.classType().equals(PriceValue.class)) {
-			return decodePrice(value);
-		}
-
-		if (field.classType().equals(SizeValue.class)) {
-			return decodeSize(value);
-		}
-
-		if (field.classType().equals(TimeValue.class)) {
-			return decodeTime(value);
-		}
-
-		if (field.isEnum()) {
-			@SuppressWarnings("rawtypes")
-			final Class klaz = field.classType();
-			final Enum<?> enuma = enumFrom(klaz, value);
-			return enuma;
-		}
-
-		if (field.classType().equals(ParaEnumBase.class)) {
-			@SuppressWarnings("rawtypes")
-			final Class klaz = field.classType();
-			final DictEnum<?>[] array = ParaEnumBase.valuesFor(klaz);
-			for (final DictEnum<?> dict : array) {
-				if (field.name().equals(dict.name())) {
-					return dict;
-				}
-			}
-			return null;
-		}
-
-		throw new RuntimeException("wrong field : " + field);
-
-	}
+//	@SuppressWarnings("unchecked")
+//	static Object decode(final Tag<?> field, final String value) {
+//
+//		if (field.classType().equals(TextValue.class)) {
+//			return ValueBuilder.newText(value);
+//		}
+//
+//		if (field.classType().equals(PriceValue.class)) {
+//			return decodePrice(value);
+//		}
+//
+//		if (field.classType().equals(SizeValue.class)) {
+//			return decodeSize(value);
+//		}
+//
+//		if (field.classType().equals(TimeValue.class)) {
+//			return decodeTime(value);
+//		}
+//
+//		if (field.isEnum()) {
+//			@SuppressWarnings("rawtypes")
+//			final Class klaz = field.classType();
+//			final Enum<?> enuma = enumFrom(klaz, value);
+//			return enuma;
+//		}
+//
+//		if (field.classType().equals(ParaEnumBase.class)) {
+//			@SuppressWarnings("rawtypes")
+//			final Class klaz = field.classType();
+//			final DictEnum<?>[] array = ParaEnumBase.valuesFor(klaz);
+//			for (final DictEnum<?> dict : array) {
+//				if (field.name().equals(dict.name())) {
+//					return dict;
+//				}
+//			}
+//			return null;
+//		}
+//
+//		throw new RuntimeException("wrong field : " + field);
+//
+//	}
 
 	static PriceValue decodePrice(final String value) {
 		final String[] array = value.split(SEPARATOR_REGEX);
