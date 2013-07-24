@@ -163,110 +163,114 @@ public final class InstrumentXML {
 
 		InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
 		
-		// lookup status
-		final String statusCode = xmlStringDecode(ats, STATUS, XML_STOP);
-		final StatusXML status = StatusXML.fromCode(statusCode);
-		if (!status.isFound()) {
+		try {
+			
+			// lookup status
+			final String statusCode = xmlStringDecode(ats, STATUS, XML_STOP);
+			final StatusXML status = StatusXML.fromCode(statusCode);
+			if (!status.isFound()) {
+				final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
+				throw new SymbolNotFoundException(lookup);
+			}
+			
+			/* market identifier; must be globally unique; */
+			builder.setMarketId(Long.parseLong(xmlStringDecode(ats, ID, XML_STOP)));
+			
+			/* type of security, Forex, Equity, etc. */
+			builder.setInstrumentType(InstrumentType.NO_INSTRUMENT);
+			
+			/* liquidy type, default / implied / combined */
+			builder.setBookLiquidity(BookLiquidity.NO_BOOK_LIQUIDITY);
+			
+			/* structure of book */
+			builder.setBookStructure(BookStructure.NO_BOOK_STRUCTURE);
+			
+			/* book depth */
+			builder.setBookDepth(0);
+			
+			/* vendor */
+			builder.setVendorId("Barchart");
+			
+			/* market symbol; can be non unique; */
+			builder.setSymbol(xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));
+			
+			/* market free style description; can be used in full text search */
+			builder.setDescription(String.valueOf(xmlStringDecode(ats, SYMBOL_COMMENT,
+					XML_PASS)));
+			
+			/* stock vs future vs etc. */
+			builder.setCfiCode(xmlStringDecode(ats, SYMBOL_CODE_CFI, XML_PASS));
+			
+			/* price currency */
+			builder.setCurrencyCode("USD");
+			
+			/* market originating exchange identifier */
+			final DDF_Exchange exchange = DDF_Exchange.fromCode( 
+					xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS));
+			String eCode = new String(new byte[] {exchange.code});
+			if(eCode == null || eCode.isEmpty()) {
+				eCode = Exchanges.NULL_CODE;
+			}
+			builder.setExchangeCode(eCode);
+			
+			final DDF_Fraction frac = DDF_Fraction.fromBaseCode(
+					xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP));
+			
+			/* price step / increment size / tick size */
+			try {
+				final long priceStepMantissa = xmlDecimalDecode(frac, ats,
+					PRICE_TICK_INCREMENT, XML_STOP);
+				builder.setMinimumPriceIncrement(buildDecimal(priceStepMantissa, frac.decimalExponent));
+			} catch (Exception e) {
+				builder.setMinimumPriceIncrement(buildDecimal(0,0));
+			}
+			
+			/* value of a future contract / stock share */
+			final String pricePointString = xmlStringDecode(ats, PRICE_POINT_VALUE,	XML_PASS);
+			if(pricePointString == null || pricePointString.isEmpty()) {
+				builder.setContractPointValue(buildDecimal(0,0));
+			} else {
+				PriceValue pricePoint = ValueBuilder.newPrice(Double
+						.valueOf(pricePointString));
+				builder.setContractPointValue(buildDecimal(
+						pricePoint.mantissa(), pricePoint.exponent()));
+			}
+			
+			/* display fraction base : decimal(10) vs binary(2), etc. */
+			builder.setDisplayBase((int)frac.fraction.base());
+			builder.setDisplayExponent(frac.fraction.exponent());
+			
+			/* Calendar */
+			final Time expire = xmlTimeDecode(ats, SYMBOL_EXPIRE, XML_PASS);
+			final Calendar.Builder calBuilder = Calendar.newBuilder();
+			final Interval.Builder intBuilder = Interval.newBuilder();
+			
+			intBuilder.setTimeStart(0);
+			if(expire == null) {
+				intBuilder.setTimeFinish(0);
+			} else {
+				intBuilder.setTimeFinish(expire.millisecond());
+			}
+			
+			calBuilder.setLifeTime(intBuilder.build());
+			builder.setCalendar(calBuilder.build());
+	
+			//
+			final DDF_TimeZone zone = DDF_TimeZone.fromCode(xmlStringDecode(
+					ats, TIME_ZONE_DDF, XML_STOP));
+			
+	//		/* timezone represented as offset in minutes from utc */
+	//		builder.setTimeZoneOffset(zone.getUTCOffset());
+			
+			/* time zone name as text */
+			builder.setTimeZoneName(zone.name());
+			
+			return builder.build();
+		
+		} catch (final Exception e) {
 			final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
 			throw new SymbolNotFoundException(lookup);
 		}
-		
-		/* market identifier; must be globally unique; */
-		try {
-			builder.setMarketId(Long.parseLong(xmlStringDecode(ats, ID, XML_STOP)));
-		} catch(Exception e) {
-			return InstrumentDefinition.getDefaultInstance();
-		}
-		/* type of security, Forex, Equity, etc. */
-		builder.setInstrumentType(InstrumentType.NO_INSTRUMENT);
-		
-		/* liquidy type, default / implied / combined */
-		builder.setBookLiquidity(BookLiquidity.NO_BOOK_LIQUIDITY);
-		
-		/* structure of book */
-		builder.setBookStructure(BookStructure.NO_BOOK_STRUCTURE);
-		
-		/* book depth */
-		builder.setBookDepth(0);
-		
-		/* vendor */
-		builder.setVendorId("Barchart");
-		
-		/* market symbol; can be non unique; */
-		builder.setSymbol(xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));
-		
-		/* market free style description; can be used in full text search */
-		builder.setDescription(String.valueOf(xmlStringDecode(ats, SYMBOL_COMMENT,
-				XML_PASS)));
-		
-		/* stock vs future vs etc. */
-		builder.setCfiCode(xmlStringDecode(ats, SYMBOL_CODE_CFI, XML_PASS));
-		
-		/* price currency */
-		builder.setCurrencyCode("USD");
-		
-		/* market originating exchange identifier */
-		final DDF_Exchange exchange = DDF_Exchange.fromCode( 
-				xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS));
-		String eCode = new String(new byte[] {exchange.code});
-		if(eCode == null || eCode.isEmpty()) {
-			eCode = Exchanges.NULL_CODE;
-		}
-		builder.setExchangeCode(eCode);
-		
-		final DDF_Fraction frac = DDF_Fraction.fromBaseCode(
-				xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP));
-		
-		/* price step / increment size / tick size */
-		try {
-			final long priceStepMantissa = xmlDecimalDecode(frac, ats,
-				PRICE_TICK_INCREMENT, XML_STOP);
-			builder.setMinimumPriceIncrement(buildDecimal(priceStepMantissa, frac.decimalExponent));
-		} catch (Exception e) {
-			builder.setMinimumPriceIncrement(buildDecimal(0,0));
-		}
-		
-		/* value of a future contract / stock share */
-		final String pricePointString = xmlStringDecode(ats, PRICE_POINT_VALUE,	XML_PASS);
-		if(pricePointString == null || pricePointString.isEmpty()) {
-			builder.setContractPointValue(buildDecimal(0,0));
-		} else {
-			PriceValue pricePoint = ValueBuilder.newPrice(Double
-					.valueOf(pricePointString));
-			builder.setContractPointValue(buildDecimal(
-					pricePoint.mantissa(), pricePoint.exponent()));
-		}
-		
-		/* display fraction base : decimal(10) vs binary(2), etc. */
-		builder.setDisplayBase((int)frac.fraction.base());
-		builder.setDisplayExponent(frac.fraction.exponent());
-		
-		/* Calendar */
-		final Time expire = xmlTimeDecode(ats, SYMBOL_EXPIRE, XML_PASS);
-		final Calendar.Builder calBuilder = Calendar.newBuilder();
-		final Interval.Builder intBuilder = Interval.newBuilder();
-		
-		intBuilder.setTimeStart(0);
-		if(expire == null) {
-			intBuilder.setTimeFinish(0);
-		} else {
-			intBuilder.setTimeFinish(expire.millisecond());
-		}
-		
-		calBuilder.setLifeTime(intBuilder.build());
-		builder.setCalendar(calBuilder.build());
-
-		//
-		final DDF_TimeZone zone = DDF_TimeZone.fromCode(xmlStringDecode(
-				ats, TIME_ZONE_DDF, XML_STOP));
-		
-//		/* timezone represented as offset in minutes from utc */
-//		builder.setTimeZoneOffset(zone.getUTCOffset());
-		
-		/* time zone name as text */
-		builder.setTimeZoneName(zone.name());
-		
-		return builder.build();
 		
 	}
 	

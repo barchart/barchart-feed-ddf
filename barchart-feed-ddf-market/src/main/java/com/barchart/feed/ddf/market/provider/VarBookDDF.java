@@ -11,7 +11,9 @@ import static com.barchart.feed.base.provider.MarketConst.NULL_BOOK_ENTRY;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.slf4j.Logger;
@@ -25,7 +27,6 @@ import com.barchart.feed.base.book.api.MarketDoBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.provider.DefBook;
-import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.base.provider.MarketConst;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
@@ -45,6 +46,8 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	private static final Logger log = LoggerFactory.getLogger(VarBookDDF.class);
 	
 	protected volatile MarketBookEntry lastEntry = MarketConst.NULL_BOOK_ENTRY;
+	
+	private Set<Component> changeSet;
 
 	@SuppressWarnings("serial")
 	private static class EntryMap extends TreeMap<PriceValue, MarketBookEntry> {
@@ -170,7 +173,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 		return new DefBook(instrument, time(), 
 				entries(Book.Side.BID),
 				entries(Book.Side.ASK),
-				lastEntry);
+				lastEntry, EnumSet.copyOf(changeSet));
 	}
 	
 	@Override
@@ -296,6 +299,11 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public Instrument instrument() {
 		return instrument;
+	}
+
+	@Override
+	public Set<Component> change() {
+		throw new UnsupportedOperationException("UNUSED");
 	}
 
 }
