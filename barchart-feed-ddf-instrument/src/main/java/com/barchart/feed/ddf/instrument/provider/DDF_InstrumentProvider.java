@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.joda.time.DateTime;
 import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +38,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.util.Observer;
-import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
+import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.InstrumentDefinitionResult;
 import com.barchart.feed.inst.participant.InstrumentState;
@@ -133,7 +132,7 @@ public final class DDF_InstrumentProvider {
 		}
 		
 		/* NOTE id() in ddf is just the realtime symbol, not an actual GUID */
-		final String symbol = formatSymbol(inst.id().toString());
+		final String symbol = Symbology.formatSymbol(inst.id().toString());
 		
 		if(symbolMap.containsKey(symbol)) {
 			return symbolMap.get(symbol);
@@ -159,7 +158,6 @@ public final class DDF_InstrumentProvider {
 		} catch (final Exception e) {
 			failedRemoteQueue.add(symbol);
 		}
-		//executor.submit(populateRunner(symbol));
 		
 		return instState;
 		
@@ -171,7 +169,7 @@ public final class DDF_InstrumentProvider {
 			return Instrument.NULL;
 		}
 		
-		symbol = formatSymbol(symbol);
+		symbol = Symbology.formatSymbol(symbol);
 		
 		if(symbolMap.containsKey(symbol)) {
 			return symbolMap.get(symbol);
@@ -195,7 +193,6 @@ public final class DDF_InstrumentProvider {
 		} catch (final Exception e) {
 			failedRemoteQueue.add(symbol);
 		}
-		//executor.submit(populateRunner(symbol));
 		
 		return instState;
 		
@@ -220,10 +217,17 @@ public final class DDF_InstrumentProvider {
 			return Instrument.NULL;
 		}
 		
-		symbol = formatHistoricalSymbol(symbol);
+		symbol = Symbology.formatHistoricalSymbol(symbol);
 		
 		if(symbolMap.containsKey(symbol)) {
 			return symbolMap.get(symbol);
+		}
+		
+		if(db.containsKey(symbol)) {
+			final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
+			instState.process(db.get(symbol));
+			symbolMap.put(symbol, instState);
+			return instState;
 		}
 		
 		final InstrumentState instState = InstrumentStateFactory.
@@ -232,7 +236,11 @@ public final class DDF_InstrumentProvider {
 		symbolMap.put(symbol, instState);
 		
 		/* Asnyc lookup */
-		executor.submit(populateRunner(symbol));
+		try {
+			remoteQueue.put(symbol);
+		} catch (final Exception e) {
+			failedRemoteQueue.add(symbol);
+		}
 		
 		return instState;
 		
@@ -306,7 +314,7 @@ public final class DDF_InstrumentProvider {
 		
 	}
 	
-	private static Runnable populateRunner(final String id) {
+	/*private static Runnable populateRunner(final String id) {
 		
 		return new Runnable() {
 
@@ -338,18 +346,18 @@ public final class DDF_InstrumentProvider {
 					
 					log.debug("{} was not found in local instrument db", id);
 					
-					/* Remote lookup */
+					 Remote lookup 
 					final Future<InstrumentDefinition> futdef = 
 							executor.submit(remoteSingle(id));
 					
-					/* Runnable blocks here, waiting for remote */
+					 Runnable blocks here, waiting for remote 
 					inst = futdef.get(DEFAULT_TIMEOUT, MILLIS);
 					
 					if(inst != null) {
 						
-						/*
+						
 						 * This updates all references to the instrument
-						 */
+						 
 						iState.process(inst);
 						
 						log.debug("Instrument def found in remote for {}", id);
@@ -368,50 +376,6 @@ public final class DDF_InstrumentProvider {
 			
 		};
 		
-	}
-	
-	/*private static Runnable populateMulti(final List<String> symbols) {
-		
-		return new Runnable() {
-
-			@Override
-			public void run() {
-				
-				final List<String> toLookup = new ArrayList<String>();
-				
-				for(final String symbol : symbols) {
-					
-					if(local(symbol)) {
-						toLookup.add(symbol);
-					}
-					
-				}
-				
-				
-				
-			}
-			
-		};
-		
-	}
-	
-	private static boolean local(final String symbol) {
-		
-		InstrumentState iState = symbolMap.get(symbol);
-		
-		if(iState == null) {
-			log.error("Runner called for {}, expected stub missing", symbol);
-			return false;
-		}
-		
-		InstrumentDefinition inst = db.get(symbol);
-		
-		if(inst != null && inst != InstrumentDefinition.getDefaultInstance()) {
-			observer.onNext(new InstDefResult(symbol, inst));
-			return false;
-		}
-		
-		return true;
 	}*/
 	
 	private static final String SERVER_EXTRAS = "extras.ddfplus.com";
@@ -599,131 +563,4 @@ public final class DDF_InstrumentProvider {
 		
 	}
 	
-	private static final int YEAR;
-	private static final char MONTH;
-	
-	static {
-		final DateTime now = new DateTime();
-		YEAR = now.year().get();
-		MONTH = DDF_ExpireMonth.fromDateTime(now).code;
-	}
-	
-	/* ***** ***** Symbol Formatting ***** ***** */
-	
-	private static final char[] T_Z_O = new char[] {'2', '0', '1'};
-	private static final char[] T_Z_T = new char[] {'2', '0', '2'};
-	private static final char[] T_Z = new char[] {'2', '0'};
-	private static final char[] O = new char[] {'1'};
-	
-	public static String formatSymbol(String symbol) {
-		
-		if(symbol == null) {
-			return "";
-		}
-		
-		final int len = symbol.length();
-		
-		if(len < 3) {
-			return symbol;
-		}
-		
-		/* Spread */
-		if(symbol.charAt(0) == '_') {
-			return symbol;
-		}
-		
-		/* Option */
-		if(symbol.matches(".+\\d(C|P|D|Q)$")) {
-			
-			
-			int pIndex = len - 2;
-			while(Character.isDigit(symbol.charAt(pIndex))) {
-				
-				if(pIndex <= 2) {
-					log.error("Failed to format option {}", symbol);
-					return symbol + " failed";
-				}
-				
-				pIndex--;
-			}
-
-			final String price = symbol.substring(pIndex + 1, len-1);
-			
-			final char mon = symbol.charAt(pIndex);
-			DDF_ExpireMonth sMon = DDF_ExpireMonth.fromCode(mon);
-			DDF_ExpireMonth nowMon = DDF_ExpireMonth.fromCode(MONTH);
-			final String y = (sMon.value >= nowMon.value) ? String.valueOf(YEAR) :
-				String.valueOf(YEAR+1);
-			
-			final StringBuilder sb = new StringBuilder();
-			
-			sb.append(symbol.substring(0, pIndex + 1)); // prefix
-			sb.append(y); // year
-			sb.append("|"); // pipe
-			sb.append(price);
-			
-			if(symbol.matches(".+(C|D)$")) {
-				return sb.append("C").toString();
-			} else {
-				return sb.append("P").toString();
-			}
-			
-		}
-		
-		/* e.g. GOOG */
-		if(!Character.isDigit(symbol.charAt(len - 1))) {
-			return symbol;
-		}
-		
-		/* e.g. ESH3 */
-		if(!Character.isDigit(symbol.charAt(len - 2))) {
-			
-			final StringBuilder sb = new StringBuilder(symbol);
-			int last = Character.getNumericValue(symbol.charAt(len - 1));
-			if(YEAR % 2010 < last) {
-				return sb.insert(len - 1, T_Z_O).toString();
-			} else if(YEAR % 2010 > last) {
-				return sb.insert(len - 1, T_Z_T).toString();
-			} else {
-				if(symbol.charAt(len - 2) >= MONTH) {
-					return sb.insert(len - 1, T_Z_O).toString();
-				} else {
-					return sb.insert(len - 1, T_Z_T).toString();
-				}
-			}
-			
-		}
-		
-		/* e.g. ESH13 */
-		if(!Character.isDigit(symbol.charAt(len - 3))) {
-			return new StringBuilder(symbol).insert(len-2, T_Z).toString();
-		}
-		
-		return symbol;
-		
-	}
-
-	public static String formatHistoricalSymbol(String symbol) {
-		
-		if(symbol == null) {
-			return "";
-		}
-		
-		if(symbol.length() < 3) {
-			return symbol;
-		}
-		
-		/* e.g. GOOG */
-		if(!Character.isDigit(symbol.charAt(symbol.length() - 1))) {
-			return symbol;
-		}
-		
-		/* e.g. ESH3 */
-		if(!Character.isDigit(symbol.charAt(symbol.length() - 2))) {
-			return new StringBuilder(symbol).insert(symbol.length() - 1, O).toString();
-		}
-		
-		return symbol;
-	}
-
 }

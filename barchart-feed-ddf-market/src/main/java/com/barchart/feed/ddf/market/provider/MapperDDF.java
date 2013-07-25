@@ -94,6 +94,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	@Override
 	public Void visit(final DDF_MarketBookTop message, final MarketDo market) {
 
+		
+		
 		final TimeValue time = message.getTime();
 
 		applyTop(message.entry(market.instrument(), Book.Side.BID), time, market);

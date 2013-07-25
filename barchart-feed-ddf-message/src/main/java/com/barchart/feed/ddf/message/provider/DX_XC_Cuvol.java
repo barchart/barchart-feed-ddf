@@ -48,6 +48,7 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.provider.DefCuvolEntry;
+import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstBase;
@@ -438,7 +439,7 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 		@Override
 		public String marketGUID() {
-			return DDF_InstrumentProvider.formatSymbol(getId().toString());
+			return Symbology.formatSymbol(getId().toString());
 		}
 
 		@Override
@@ -448,7 +449,7 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 		@Override
 		public String symbol() {
-			return DDF_InstrumentProvider.formatSymbol(getId().toString());
+			return Symbology.formatSymbol(getId().toString());
 		}
 
 		@Override

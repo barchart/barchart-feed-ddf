@@ -49,6 +49,7 @@ import org.w3c.dom.NodeList;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstBase;
@@ -418,7 +419,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 		@Override
 		public String marketGUID() {
-			return DDF_InstrumentProvider.formatSymbol(new String(getSymbolFull()));
+			return Symbology.formatSymbol(new String(getSymbolFull()));
 		}
 
 		@Override
@@ -428,7 +429,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 		@Override
 		public String symbol() {
-			return DDF_InstrumentProvider.formatSymbol(new String(getSymbolFull()));
+			return Symbology.formatSymbol(new String(getSymbolFull()));
 		}
 
 		@Override

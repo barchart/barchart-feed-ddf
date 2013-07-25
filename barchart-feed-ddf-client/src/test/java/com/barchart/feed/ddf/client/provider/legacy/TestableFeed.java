@@ -397,5 +397,15 @@ public class TestableFeed implements Marketplace {
 	public <V extends Value<V>> boolean removeTaker(final MarketTaker<V> taker) {
 		return maker.unregister(taker);
 	}
+
+	@Override
+	public Market snapshot(Instrument instrument) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Market snapshot(String symbol) {
+		throw new UnsupportedOperationException();
+	}
 	
 }

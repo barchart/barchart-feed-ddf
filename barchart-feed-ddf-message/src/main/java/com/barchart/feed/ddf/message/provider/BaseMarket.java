@@ -26,6 +26,7 @@ import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstBase;
@@ -97,7 +98,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		/* GUID is symbol for now */
 		@Override
 		public String marketGUID() {
-			return DDF_InstrumentProvider.formatSymbol(getId().toString());
+			return Symbology.formatSymbol(getId().toString());
 		}
 
 		@Override
@@ -107,7 +108,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 		@Override
 		public String symbol() {
-			return DDF_InstrumentProvider.formatSymbol(getId().toString());
+			return Symbology.formatSymbol(getId().toString());
 		}
 
 		@Override

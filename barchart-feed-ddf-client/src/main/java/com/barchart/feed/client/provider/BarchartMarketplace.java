@@ -425,6 +425,18 @@ public class BarchartMarketplace implements Marketplace {
 		
 	}
 	
+	/* ***** ***** SnapshotProvider ***** ***** */
+	
+	@Override
+	public Market snapshot(Instrument instrument) {
+		return maker.snapshot(instrument);
+	}
+	
+	@Override
+	public Market snapshot(String symbol) {
+		return maker.snapshot(symbol);
+	}
+	
 	/* ***** ***** ***** AgentBuilder ***** ***** ***** */
 	
 	@Override
