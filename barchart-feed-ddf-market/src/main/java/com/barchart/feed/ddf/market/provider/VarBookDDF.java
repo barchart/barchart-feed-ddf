@@ -92,10 +92,10 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	public final UniBookResult setEntry(final MarketDoBookEntry entry) {
 
 		if(entry != null) {
-			// Why does this fire if I have a Market observer and not
-			// a Book observer?
 			lastEntry = entry.freeze();
 		}
+		
+		changeSet.clear();
 		
 		final Book.Side side = entry.side();
 
@@ -109,11 +109,13 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 		case BID:
 			if (place == ENTRY_TOP) {
 				topBid = entry;
+				changeSet.add(Component.TOP_BID);
 			}
 			break;
 		case ASK:
 			if (place == ENTRY_TOP) {
 				topAsk = entry;
+				changeSet.add(Component.TOP_ASK);
 			}
 			break;
 		default:
@@ -274,6 +276,13 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	public UniBookResult setSnapshot(final MarketDoBookEntry[] entries) {
 
 		clear();
+		
+		changeSet.add(Component.NORMAL_BID);
+		changeSet.add(Component.NORMAL_ASK);
+		changeSet.add(Component.TOP_BID);
+		changeSet.add(Component.TOP_ASK);
+		changeSet.add(Component.ANY_BID);
+		changeSet.add(Component.ANY_ASK);
 
 		for (final MarketDoBookEntry entry : entries) {
 

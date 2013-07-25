@@ -275,7 +275,7 @@ public final class DDF_InstrumentProvider {
 			
 			final InstrumentState iState = symbolMap.get(symbol);
 			
-			if(iState.isNull()) {
+			if(iState == null || iState.isNull()) {
 				symbolMap.put(symbol, InstrumentFactory.instrumentState(result.result()));
 			} else {
 				log.debug("Processing {}", result.result().toString());
@@ -320,70 +320,6 @@ public final class DDF_InstrumentProvider {
 		}
 		
 	}
-	
-	/*private static Runnable populateRunner(final String id) {
-		
-		return new Runnable() {
-
-			@Override
-			public void run() {
-				
-				try {
-				
-					// Should already have an instState in map, this just updates
-					InstrumentState iState = symbolMap.get(id);
-					
-					if(iState == null) {
-						log.error("Runner called for {}, expected stub missing", id);
-						return;
-					}
-					
-					InstrumentDefinition inst;
-					
-					inst = db.get(id);
-					
-					if(inst != null && inst != InstrumentDefinition.getDefaultInstance()) {
-						
-						observer.onNext(new InstDefResult(id, inst));
-						
-						log.debug("Instrument def found in db for {}", id);
-						
-						return;
-					}
-					
-					log.debug("{} was not found in local instrument db", id);
-					
-					 Remote lookup 
-					final Future<InstrumentDefinition> futdef = 
-							executor.submit(remoteSingle(id));
-					
-					 Runnable blocks here, waiting for remote 
-					inst = futdef.get(DEFAULT_TIMEOUT, MILLIS);
-					
-					if(inst != null) {
-						
-						
-						 * This updates all references to the instrument
-						 
-						iState.process(inst);
-						
-						log.debug("Instrument def found in remote for {}", id);
-						
-						return;
-					}
-					
-					// Here inst was null, so some error needs to be handled
-					
-				} catch (final Throwable t) {
-					log.error("Exception in runner {}", t);
-					observer.onNext(new InstDefResult(id, t));
-				}
-				
-			}
-			
-		};
-		
-	}*/
 	
 	private static final String SERVER_EXTRAS = "extras.ddfplus.com";
 

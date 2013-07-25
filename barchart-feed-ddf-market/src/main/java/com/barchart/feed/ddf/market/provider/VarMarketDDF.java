@@ -451,4 +451,14 @@ class VarMarketDDF extends VarMarket {
 
 	}
 
+	@Override
+	public void setChange(Component c) {
+		changeSet.add(c);
+	}
+
+	@Override
+	public void clearChanges() {
+		changeSet.clear();
+	}
+
 }

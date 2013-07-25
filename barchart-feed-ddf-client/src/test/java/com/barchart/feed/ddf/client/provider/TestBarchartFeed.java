@@ -35,7 +35,7 @@ public class TestBarchartFeed {
 				password(password).
 				useLocalInstDatabase().
 				dbaseFolder(dbFolder).
-				instrumentDefZip(new File("/home/gavin/logs/instrumentDef.zip")).
+				//instrumentDefZip(new File("/home/gavin/logs/instrumentDef.zip")).
 				syncWithRemote(false).
 				build();
 		
@@ -86,8 +86,8 @@ public class TestBarchartFeed {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		myAgent.include(Exchanges.fromName("CME"));
-		//myAgent.include("ESU13");
+		//myAgent.include(Exchanges.fromName("CME"));
+		myAgent.include("ESU13");
 		
 		Thread.sleep(1000000);
 		
