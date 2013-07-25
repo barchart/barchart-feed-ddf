@@ -306,9 +306,13 @@ class VarMarketDDF extends VarMarket {
 
 		final MarketDoCuvol cuvol = loadCuvol();
 
-		cuvol.add(price, size);
-
-		eventAdd(NEW_CUVOL_UPDATE);
+		if(!cuvol.isNull()) {
+		
+			cuvol.add(price, size);
+	
+			eventAdd(NEW_CUVOL_UPDATE);
+		
+		}
 
 	}
 

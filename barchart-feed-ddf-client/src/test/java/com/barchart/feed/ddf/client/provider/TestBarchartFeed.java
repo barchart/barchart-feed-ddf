@@ -1,5 +1,6 @@
 package com.barchart.feed.ddf.client.provider;
 
+import java.io.File;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -27,12 +28,14 @@ public class TestBarchartFeed {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 
-//		final File db
+		final File dbFolder = new File("/home/gavin/logs/");
 		
 		final Marketplace feed = BarchartMarketplace.builder().
 				username(username).
 				password(password).
 				useLocalInstDatabase().
+				dbaseFolder(dbFolder).
+				instrumentDefZip(new File("/home/gavin/logs/instrumentDef.zip")).
 				syncWithRemote(false).
 				build();
 		
@@ -70,8 +73,11 @@ public class TestBarchartFeed {
 			public void onNext(final Market v) {
 				
 				log.debug(
-				v.instrument().symbol() + " " +
-				printCuvol(v.cuvol().entryList())
+					v.instrument().symbol() + " " +
+					v.book().top().bid().price().asDouble() + " " +
+					v.book().top().bid().size().asDouble() + " " +
+					v.book().top().ask().size().asDouble() + " " +
+					v.book().top().ask().price().asDouble()
 				);
 				
 			}
@@ -80,8 +86,8 @@ public class TestBarchartFeed {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		//myAgent.include(Exchanges.fromName("CME"));
-		myAgent.include("ESU13");
+		myAgent.include(Exchanges.fromName("CME"));
+		//myAgent.include("ESU13");
 		
 		Thread.sleep(1000000);
 		

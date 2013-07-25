@@ -3,6 +3,7 @@ package com.barchart.feed.ddf.instrument.provider;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -213,6 +214,12 @@ public final class InstrumentDatabaseMap implements InstrumentMap {
 		log.info("DB Closed");
 		dbase.close();
 	}
+	
+	@Override
+	public Set<String> keySet() {
+		return map.keySet();
+	}
+
 	
 	private class SymbolBinding implements EntryBinding<String> {
 

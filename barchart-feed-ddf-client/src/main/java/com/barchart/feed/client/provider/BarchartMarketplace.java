@@ -53,6 +53,7 @@ public class BarchartMarketplace implements Marketplace {
 	/* Used if unable to retrieve system default temp directory */
 	private static final String TEMP_DIR = "C:\\windows\\temp\\";
 	private final File dbFolder;
+	private volatile File instDefZip;
 	private static final long DB_UPDATE_TIMEOUT = 2 * 60; // seconds
 	
 	private volatile DDF_FeedClientBase connection;
@@ -73,17 +74,18 @@ public class BarchartMarketplace implements Marketplace {
 	private final boolean syncWithRemote;
 	
 	public BarchartMarketplace(final String username, final String password) {
-		this(username, password, getDefault(), getTempFolder(), false, true);
+		this(username, password, getDefault(), getTempFolder(), null, false, true);
 	}
 	
 	BarchartMarketplace(final String username, final String password, 
-			final ExecutorService ex, final File dbFolder, final boolean useDB,
-			final boolean syncWithRemote) {
+			final ExecutorService ex, final File dbFolder, final File instDefZip, 
+			final boolean useDB, final boolean syncWithRemote) {
 		
 		this.username = username;
 		this.password = password;
 		this.executor = ex;
 		this.dbFolder = dbFolder;
+		this.instDefZip = instDefZip;
 		
 		connection = makeConnection();
 		
@@ -108,6 +110,7 @@ public class BarchartMarketplace implements Marketplace {
 		private String username = "NULL USERNAME";
 		private String password = "NULL PASSWORD";
 		private File dbFolder = getTempFolder();
+		private File instDefZip = null;
 		private boolean useLocalDB = false; 
 		private boolean syncWithRemote = true;
 		
@@ -136,6 +139,11 @@ public class BarchartMarketplace implements Marketplace {
 			return this;
 		}
 		
+		public Builder instrumentDefZip(final File instDefZip) {
+			this.instDefZip = instDefZip;
+			return this;
+		}
+		
 		public Builder useLocalInstDatabase() {
 			useLocalDB = true;
 			return this;
@@ -148,7 +156,7 @@ public class BarchartMarketplace implements Marketplace {
 		
 		public Marketplace build() {
 			return new BarchartMarketplace(username, password, executor, dbFolder, 
-					useLocalDB, syncWithRemote);
+					instDefZip, useLocalDB, syncWithRemote);
 		}
 		
 	}
@@ -248,7 +256,12 @@ public class BarchartMarketplace implements Marketplace {
 				
 				if(useLocalInstDB) {
 				
-					dbMap = InstrumentDBProvider.getMap(dbFolder);
+					/* If user injected their own db file */
+					if(instDefZip != null) {
+						dbMap = new InstrumentDatabaseMap(dbFolder, instDefZip);
+					} else {
+						dbMap = InstrumentDBProvider.getMap(dbFolder);
+					}
 					
 					DDF_InstrumentProvider.bindDatabaseMap(dbMap);
 					

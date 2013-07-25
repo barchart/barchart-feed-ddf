@@ -101,6 +101,9 @@ public final class DDF_InstrumentProvider {
 	 * @param e
 	 */
 	public synchronized static void bindExecutorService(final ExecutorService e) {
+		
+		log.debug("Binding new executor service");
+		
 		executor.shutdownNow();
 		executor = e;
 		executor.submit(new RemoteRunner());
@@ -110,6 +113,9 @@ public final class DDF_InstrumentProvider {
 	 * @param map Bind an already built db map
 	 */
 	public synchronized static void bindDatabaseMap(final InstrumentMap map) {
+		
+		log.debug("Binding new database map");
+		
 		db = map;
 	}
 	
@@ -139,6 +145,7 @@ public final class DDF_InstrumentProvider {
 		}
 		
 		if(db.containsKey(symbol)) {
+			
 			final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
 			instState.process(db.get(symbol));
 			symbolMap.put(symbol, instState);
