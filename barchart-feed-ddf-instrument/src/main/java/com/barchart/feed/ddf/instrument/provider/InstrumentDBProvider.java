@@ -266,7 +266,7 @@ public final class InstrumentDBProvider {
 		
 	};
 	
-	private static class PopulateDatabase implements Callable<Boolean> {
+	public static class PopulateDatabase implements Callable<Boolean> {
 
 		private final File resourceFolder;
 		private final InstrumentDatabaseMap map;
@@ -289,8 +289,9 @@ public final class InstrumentDBProvider {
 				final File instDef = getLocalInstDef(resourceFolder);
 				
 				if(instDef == null) {
-					throw new IllegalStateException("Unable to find instrument definition in" + 
-								"resource folder");
+					throw new IllegalStateException(
+							"Unable to find instrument definition in" + 
+							"resource folder");
 				}
 				
 				final ZipFile zFile= new ZipFile(instDef);

@@ -139,6 +139,13 @@ public final class DDF_InstrumentProvider {
 			return symbolMap.get(symbol);
 		}
 		
+		if(db.containsKey(symbol)) {
+			final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
+			instState.process(db.get(symbol));
+			symbolMap.put(symbol, instState);
+			return instState;
+		}
+		
 		/* New symbol, create stub */
 		final InstrumentState instState = InstrumentStateFactory.
 				newInstrumentFromStub(inst);
@@ -147,7 +154,12 @@ public final class DDF_InstrumentProvider {
 		log.debug("Put {} stub into map", symbol);
 		
 		/* Asnyc lookup */
-		executor.submit(populateRunner(symbol));
+		try {
+			remoteQueue.put(symbol);
+		} catch (final Exception e) {
+			failedRemoteQueue.add(symbol);
+		}
+		//executor.submit(populateRunner(symbol));
 		
 		return instState;
 		
@@ -163,6 +175,13 @@ public final class DDF_InstrumentProvider {
 		
 		if(symbolMap.containsKey(symbol)) {
 			return symbolMap.get(symbol);
+		}
+		
+		if(db.containsKey(symbol)) {
+			final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
+			instState.process(db.get(symbol));
+			symbolMap.put(symbol, instState);
+			return instState;
 		}
 		
 		final InstrumentState instState = InstrumentStateFactory.
@@ -317,6 +336,8 @@ public final class DDF_InstrumentProvider {
 						return;
 					}
 					
+					log.debug("{} was not found in local instrument db", id);
+					
 					/* Remote lookup */
 					final Future<InstrumentDefinition> futdef = 
 							executor.submit(remoteSingle(id));
@@ -349,7 +370,7 @@ public final class DDF_InstrumentProvider {
 		
 	}
 	
-	private static Runnable populateMulti(final List<String> symbols) {
+	/*private static Runnable populateMulti(final List<String> symbols) {
 		
 		return new Runnable() {
 
@@ -391,7 +412,7 @@ public final class DDF_InstrumentProvider {
 		}
 		
 		return true;
-	}
+	}*/
 	
 	private static final String SERVER_EXTRAS = "extras.ddfplus.com";
 
