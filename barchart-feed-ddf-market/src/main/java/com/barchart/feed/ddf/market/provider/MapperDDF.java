@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Market.Component;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;
@@ -88,6 +89,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		market.setBookSnapshot(entries, time);
 
+		/* Update changed comonents */
+		market.clearChanges();
+		market.setChange(Component.BOOK_COMBINED);
+		
 		return null;
 	}
 
@@ -100,6 +105,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		applyTop(message.entry(market.instrument(), Book.Side.ASK), time, market);
 
+		/* Update changed comonents */
+		market.clearChanges();
+		market.setChange(Component.BOOK_COMBINED);
+		
 		return null;
 	}
 
@@ -117,6 +126,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		final TimeValue time = message.getTime();
 
 		market.setCuvolSnapshot(entries, time);
+		
+		/* Update changed comonents */
+		market.clearChanges();
+		market.setChange(Component.CUVOL);
 
 		return null;
 	}
@@ -165,6 +178,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
+
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.TRADE);
 			
 			return null;
 			
@@ -176,11 +193,20 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
 			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.TRADE);
+			
 			return null;
 		
 		case TRADE_LAST_PRICE:
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.TRADE);
+			
 			return null;
 			
 		case ASK_LAST: // NEW
@@ -193,6 +219,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					MODIFY, Book.Side.ASK,
 					Book.Type.DEFAULT, ENTRY_TOP, price, top.side(Book.Side.ASK).sizeValue());
 			applyTop(topAskPrice, time, market);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.BOOK_COMBINED);
+			
 			return null;
 
 		case ASK_LAST_SIZE:
@@ -200,6 +231,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					MODIFY, Book.Side.ASK,
 					Book.Type.DEFAULT, ENTRY_TOP, top.side(Book.Side.ASK).priceValue(), size);
 			applyTop(topAskSize, time, market);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.BOOK_COMBINED);
+			
 			return null;
 
 		case BID_LAST: // NEW
@@ -212,6 +248,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					MODIFY, Book.Side.BID,
 					Book.Type.DEFAULT, ENTRY_TOP, price, top.side(Book.Side.BID).sizeValue());
 			applyTop(topBidPrice, time, market);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.BOOK_COMBINED);
+			
 			return null;
 
 		case BID_LAST_SIZE:
@@ -219,6 +260,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					MODIFY, Book.Side.BID,
 					Book.Type.DEFAULT, ENTRY_TOP, top.side(Book.Side.BID).priceValue(), size);
 			applyTop(topBidSize, time, market);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.BOOK_COMBINED);
+			
 			return null;
 
 		case CLOSE_LAST: // NEW
@@ -230,6 +276,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barCurrent.set(MarketBarField.CLOSE, price);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
 			market.setBar(CURRENT, barCurrent);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_CURRENT);
+			
 			return null;
 
 		case HIGH_LAST_PRICE:
@@ -238,6 +289,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barCurrent.set(MarketBarField.HIGH, price);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
 			market.setBar(CURRENT, barCurrent);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_CURRENT);
+			
 			return null;
 
 		case LOW_LAST_PRICE:
@@ -246,6 +302,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barCurrent.set(MarketBarField.LOW, price);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
 			market.setBar(CURRENT, barCurrent);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_CURRENT);
+			
 			return null;
 
 		case VOLUME_LAST_SIZE:
@@ -256,12 +317,22 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barPrevious.set(MarketBarField.VOLUME, size);
 			barPrevious.set(MarketBarField.BAR_TIME, time);
 			market.setBar(PREVIOUS, barPrevious);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_PREVIOUS);
+			
 			return null;
 
 		case VOLUME_THIS_SIZE:
 			barCurrent.set(MarketBarField.VOLUME, size);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
 			market.setBar(CURRENT, barCurrent);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_CURRENT);
+			
 			return null;
 
 		case OPEN_LAST_PRICE:
@@ -282,12 +353,22 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			//
 			market.setState(MarketStateEntry.IS_SETTLED, false);
 			//
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_CURRENT);
+			
 			return null;
 
 		case INTEREST_LAST_SIZE:
 			barCurrent.set(MarketBarField.INTEREST, size);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
 			market.setBar(CURRENT, barCurrent);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_CURRENT);
+			
 			return null;
 
 		case INTEREST_PAST_SIZE:
@@ -295,12 +376,21 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barPrevious.set(MarketBarField.BAR_TIME, time);
 			market.setBar(PREVIOUS, barPrevious);
 
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_PREVIOUS);
+			
 			return null;
 
 		case PREVIOUS_LAST_PRICE:
 			barPrevious.set(MarketBarField.CLOSE, price);
 			barPrevious.set(MarketBarField.BAR_TIME, time);
 			market.setBar(PREVIOUS, barPrevious);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_PREVIOUS);
+			
 			return null;
 
 			/** only "final" sets the flag */
@@ -315,6 +405,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barCurrent.set(MarketBarField.SETTLE, price);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
 			market.setBar(CURRENT, barCurrent);
+			
+			/* Update changed comonents */
+			market.clearChanges();
+			market.setChange(Component.DEFAULT_CURRENT);
+			
 			return null;
 
 		default:
@@ -339,6 +434,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	@Override
 	public Void visit(final DDF_MarketQuote message, final MarketDo market) {
 
+		market.clearChanges();
 		// ### process quote
 
 		// TODO part of instrument; should update definition?
@@ -394,8 +490,16 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 						.getSession().name(), indicator.name());
 				switch (indicator) {
 				case CURRENT:
+					visit(session, market);
+					
+					/* Update changed comonents */
+					market.setChange(Component.DEFAULT_CURRENT);
+					break;
 				case PREVIOUS:
 					visit(session, market);
+					
+					/* Update changed comonents */
+					market.setChange(Component.DEFAULT_PREVIOUS);
 					break;
 				default:
 					log.error("@@@ wrong indicator : {}", indicator);
@@ -408,6 +512,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		{
 			final DDF_MarketBookTop bookTop = message;
 			visit(bookTop, market);
+			
+			/* Update changed comonents */
+			market.setChange(Component.BOOK_COMBINED);
 		}
 
 		return null;
@@ -454,6 +561,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		market.setBar(MarketBarType.PREVIOUS, newBar);
 
+		/* Update changed comonents */
+		market.clearChanges();
+		market.setChange(Component.DEFAULT_PREVIOUS);
+		
 		return null;
 	}
 
@@ -471,6 +582,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		newBar.set(MarketBarField.VOLUME, message.getSizeVolume());
 
 		market.setBar(MarketBarType.PREVIOUS, newBar);
+		
+		/* Update changed comonents */
+		market.clearChanges();
+		market.setChange(Component.DEFAULT_PREVIOUS);
 
 		return null;
 	}
@@ -484,6 +599,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		newBar.set(MarketBarField.INTEREST, message.getSizeOpenInterest());
 
 		market.setBar(MarketBarType.PREVIOUS, newBar);
+		
+		/* Update changed comonents */
+		market.clearChanges();
+		market.setChange(Component.DEFAULT_PREVIOUS);
 
 		return null;
 	}
@@ -500,6 +619,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	@Override
 	public Void visit(final DDF_MarketSnapshot message, final MarketDo market) {
 
+		market.clearChanges();
+		
 		final TimeValue time = message.getTime();
 
 		/** Update SETTLE State */
@@ -541,6 +662,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			applyTop(entryBid, time, market);
 			applyTop(entryAsk, time, market);
+			
+			/* Update changed comonents */
+			market.setChange(Component.BOOK_COMBINED);
 
 		}
 
@@ -572,6 +696,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			market.setBar(type, bar);
 
+			/* Update changed comonents */
+			market.setChange(Component.DEFAULT_CURRENT);
 		}
 
 		/** Update PREVIOUS bar */
@@ -600,6 +726,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			market.setBar(type, bar);
 
+			/* Update changed comonents */
+			market.setChange(Component.DEFAULT_PREVIOUS);
+			
 		}
 
 		return null;
@@ -657,6 +786,12 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					MarketBarField.SETTLE_PREVIOUS, priceSettle);
 			
 		}
+		
+		/* Update changed comonents */
+		market.clearChanges();
+		market.setChange(Component.TRADE);
+		market.setChange(Component.DEFAULT_CURRENT);
+		market.setChange(Component.DEFAULT_PREVIOUS);
 
 		return null;
 	}
@@ -707,6 +842,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			break;
 
 		}
+		
+		/* Update changed comonents */
+		market.clearChanges();
+		market.setChange(Component.TRADE);
 
 		return null;
 	}
