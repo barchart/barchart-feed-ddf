@@ -1,5 +1,7 @@
 package com.barchart.feed.ddf.client.provider.legacy;
 
+import java.util.Set;
+
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.model.data.Book;
@@ -38,7 +40,8 @@ final static String SYMBOL = "CLU13";
 						top.ask().size().asDouble() + " " +
 						top.bid().size().asDouble() + " " +
 						top.bid().price().asDouble() + " " +
-						v.lastBookUpdate().price().asDouble()
+						v.lastBookUpdate().price().asDouble() + " " +
+						printChange(v.change())
 					);
 					
 				}
@@ -58,6 +61,19 @@ final static String SYMBOL = "CLU13";
 		feed.addTaker(new BookTaker(new Instrument[]{inst}));
 		
 		Thread.sleep(700000);
+		
+	}
+	
+	public static String printChange(final Set<Book.Component> changes) {
+		
+		final StringBuilder sb = new StringBuilder();
+
+		for(final Book.Component c : changes) {
+			sb.append(c.name());
+			sb.append(" ");
+		}
+		
+		return sb.toString();
 		
 	}
 	
