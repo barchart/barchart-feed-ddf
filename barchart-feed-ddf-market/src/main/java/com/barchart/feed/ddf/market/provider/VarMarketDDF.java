@@ -231,12 +231,6 @@ class VarMarketDDF extends VarMarket {
 				: CURRENT;
 		final MarketDoBar bar = loadBar(barType.field);
 
-		// XXX this is disabled to force compatibility with ddf2
-		// if (bar.get(BAR_TIME).compareTo(time) > 0) {
-		// log.error("ignoring past trade");
-		// return;
-		// }
-
 		eventAdd(barType.event);
 
 		// Reset current bar if session day changes
@@ -263,30 +257,6 @@ class VarMarketDDF extends VarMarket {
 			bar.set(VOLUME, volumeNew);
 			eventAdd(NEW_VOLUME);
 
-			// ### high
-
-			// XXX disable for dd2 compatibility
-			// final PriceValue high = bar.get(HIGH);
-			// if (price.compareTo(high) > 0 || high.isNull()) {
-			// bar.set(HIGH, price);
-			// if (type == CURRENT) {
-			// // events only for combo
-			// eventAdd(NEW_HIGH);
-			// }
-			// }
-
-			// ### low
-
-			// XXX disable for dd2 compatibility
-			// final PriceValue low = bar.get(LOW);
-			// if (price.compareTo(low) < 0 || low.isNull()) {
-			// bar.set(LOW, price);
-			// if (type == CURRENT) {
-			// // events only for combo
-			// eventAdd(NEW_LOW);
-			// }
-			// }
-
 		}
 
 		// ### last
@@ -308,7 +278,13 @@ class VarMarketDDF extends VarMarket {
 			// XXX: Update high / low, or just wait for refresh?
 		}
 
-		bar.set(MarketBarField.TRADE_DATE, date);
+		/*
+		 * This condition was added because Form-T trades were changing the date
+		 * and preventing the settled flag from being reset.
+		 */
+		if(session == DEFAULT) {
+			bar.set(MarketBarField.TRADE_DATE, date);
+		}
 
 	}
 
