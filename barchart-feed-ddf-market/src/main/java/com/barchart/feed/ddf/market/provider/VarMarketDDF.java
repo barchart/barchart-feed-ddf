@@ -312,21 +312,9 @@ class VarMarketDDF extends VarMarket {
 		assert time != null;
 		assert date != null;
 
-//		log.debug("Trade: symbol="
-//				+ get(MarketField.INSTRUMENT).get(InstrumentField.SYMBOL)
-//				+ "; type=" + type + "; session=" + session + "; sequencing="
-//				+ sequencing + "; price=" + price);
-		// assert isValidPrice(price);
-
 		// ### trade
 
 		final MarketDoTrade trade = loadTrade();
-
-		// XXX disabled to match ddf
-		// if (trade.get(TRADE_TIME).compareTo(time) > 0) {
-		// log.error("ignoring past trade");
-		// return;
-		// }
 
 		trade.set(TYPE, type);
 		trade.set(SESSION, session);
