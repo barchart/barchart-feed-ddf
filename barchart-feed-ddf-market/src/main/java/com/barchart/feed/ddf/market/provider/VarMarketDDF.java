@@ -221,12 +221,6 @@ class VarMarketDDF extends VarMarket {
 				: CURRENT;
 		final MarketDoBar bar = loadBar(barType.field);
 
-		// XXX this is disabled to force compatibility with ddf2
-		// if (bar.get(BAR_TIME).compareTo(time) > 0) {
-		// log.error("ignoring past trade");
-		// return;
-		// }
-
 		eventAdd(barType.event);
 
 		// Reset current bar if session day changes
@@ -252,30 +246,6 @@ class VarMarketDDF extends VarMarket {
 			final SizeValue volumeNew = volumeOld.add(size);
 			bar.set(VOLUME, volumeNew);
 			eventAdd(NEW_VOLUME);
-
-			// ### high
-
-			// XXX disable for dd2 compatibility
-			// final PriceValue high = bar.get(HIGH);
-			// if (price.compareTo(high) > 0 || high.isNull()) {
-			// bar.set(HIGH, price);
-			// if (type == CURRENT) {
-			// // events only for combo
-			// eventAdd(NEW_HIGH);
-			// }
-			// }
-
-			// ### low
-
-			// XXX disable for dd2 compatibility
-			// final PriceValue low = bar.get(LOW);
-			// if (price.compareTo(low) < 0 || low.isNull()) {
-			// bar.set(LOW, price);
-			// if (type == CURRENT) {
-			// // events only for combo
-			// eventAdd(NEW_LOW);
-			// }
-			// }
 
 		}
 
@@ -330,21 +300,9 @@ class VarMarketDDF extends VarMarket {
 		assert time != null;
 		assert date != null;
 
-//		log.debug("Trade: symbol="
-//				+ get(MarketField.INSTRUMENT).get(InstrumentField.SYMBOL)
-//				+ "; type=" + type + "; session=" + session + "; sequencing="
-//				+ sequencing + "; price=" + price);
-		// assert isValidPrice(price);
-
 		// ### trade
 
 		final MarketDoTrade trade = loadTrade();
-
-		// XXX disabled to match ddf
-		// if (trade.get(TRADE_TIME).compareTo(time) > 0) {
-		// log.error("ignoring past trade");
-		// return;
-		// }
 
 		trade.set(TYPE, type);
 		trade.set(SESSION, session);
@@ -358,12 +316,7 @@ class VarMarketDDF extends VarMarket {
 
 		// ### bar
 
-		// apply Form-T trades to CURRENT_EXT bar
-		if (session == EXTENDED) {
-			applyTradeToBar(session, sequencing, price, size, time, date);
-		} else {
-			applyTradeToBar(session, sequencing, price, size, time, date);
-		}
+		applyTradeToBar(session, sequencing, price, size, time, date);
 
 		// ### cuvol
 

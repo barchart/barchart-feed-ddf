@@ -246,6 +246,10 @@ public final class InstrumentDBProvider {
 				
 				File outFile = new File(resourceFolder.getPath() + "/" + 
 						remoteVersion + ".zip");
+				
+				/*
+				 * Client exception here
+				 */
 			    FileOutputStream out = new FileOutputStream(outFile);
 			        
 			    byte[] b = new byte[1024];
