@@ -93,6 +93,8 @@ public class TestDF_21_Snap extends TestDDFBase {
 	final static byte[] ba21 = "2SF0,12B10,,,,,-,-,,,,,,,,,Q JFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
+	final static byte[] ba21a = "2AAPL,1AQ15,,,,,-,-,,,,,,,,,O ".getBytes(ASCII_CHARSET);
+	
 	/**
 	 * Test decode21.
 	 */
