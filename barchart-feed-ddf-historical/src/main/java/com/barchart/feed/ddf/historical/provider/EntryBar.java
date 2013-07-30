@@ -101,16 +101,16 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 
 		final String[] inputArray = splitCSV(inputLine);
 
-		millisUTC = decodeMinsTime(inputArray[1], instrument);
+		millisUTC = decodeMinsTime(inputArray[0], instrument);
 
-		ordTradeDay = DDF_TradeDay.fromDay(decodeInt(inputArray[2])).ord;
+		ordTradeDay = DDF_TradeDay.fromDay(decodeInt(inputArray[1])).ord;
 
-		priceOpenMantissa = decodeMantissa(inputArray[3], priceExponent());
-		priceHighMantissa = decodeMantissa(inputArray[4], priceExponent());
-		priceLowMantissa = decodeMantissa(inputArray[5], priceExponent());
-		priceCloseMantissa = decodeMantissa(inputArray[6], priceExponent());
+		priceOpenMantissa = decodeMantissa(inputArray[2], priceExponent());
+		priceHighMantissa = decodeMantissa(inputArray[3], priceExponent());
+		priceLowMantissa = decodeMantissa(inputArray[4], priceExponent());
+		priceCloseMantissa = decodeMantissa(inputArray[5], priceExponent());
 
-		sizeVolume = decodeLong(inputArray[7]);
+		sizeVolume = decodeLong(inputArray[6]);
 
 	}
 
