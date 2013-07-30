@@ -43,7 +43,7 @@ public class DDF_QueryType<V extends DDF_Entry> extends
 
 	/** The Constant MINUTES_NEARBY. */
 	public static final DDF_QueryType<DDF_EntryBarMinNearby> MINUTES_NEARBY = NEW(
-			"queryminutes.ashx", "mins_nearby");
+			"querynearbyminutes.ashx", "mins_nearby");
 
 	/** The Constant MINUTES_FORM_T. */
 	public static final DDF_QueryType<DDF_EntryBarMinFormT> MINUTES_FORM_T = NEW(
