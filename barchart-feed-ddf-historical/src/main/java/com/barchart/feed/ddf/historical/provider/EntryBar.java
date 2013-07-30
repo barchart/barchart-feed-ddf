@@ -101,7 +101,7 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 
 		final String[] inputArray = splitCSV(inputLine);
 
-		millisUTC = decodeMinsTime(inputArray[0], instrument);
+		millisUTC = decodeMinsTime(inputArray[1], instrument);
 
 		ordTradeDay = DDF_TradeDay.fromDay(decodeInt(inputArray[1])).ord;
 
