@@ -294,7 +294,7 @@ public final class InstrumentDBProvider {
 				
 				if(instDef == null) {
 					throw new IllegalStateException(
-							"Unable to find instrument definition in" + 
+							"Unable to find instrument definition in " + 
 							"resource folder");
 				}
 				

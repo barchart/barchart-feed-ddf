@@ -17,6 +17,8 @@ public class FeedDDF {
 	public static final String VERSION_2 = "2";
 
 	public static final String VERSION_3 = "3";
+	
+	public static final String VERSION_4 = "4";
 
 	// ### tcp elements ###
 
