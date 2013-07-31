@@ -34,8 +34,8 @@ public final class InstrumentDBProvider {
 	private static final String S3_URL = "https://s3.amazonaws.com/instrument-def/";
 	private static final String S3_PATH = "active/instrumentDef.zip";
 	
-	private static final DateTimeFormatter TIMESTAMP_FORMATTER = 
-			DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");
+	public static final DateTimeFormatter TIMESTAMP_FORMATTER = 
+			DateTimeFormat.forPattern("yyyy-MM-dd'T'HH-mm-ss");
 	
 	private InstrumentDBProvider() {
 		
