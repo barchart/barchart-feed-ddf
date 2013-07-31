@@ -294,7 +294,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			return false;
 		}
 
-		/* Send VERSION 3 command to JERQ */
+		/* Send VERSION # command to JERQ */
 		writeEvent = blockingWrite(FeedDDF.tcpVersion(VERSION));
 
 		if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
@@ -386,7 +386,7 @@ class FeedClientDDF implements DDF_FeedClient {
 					if (DDF_FeedEvent.isConnectionError(event)) {
 
 						log.info("Setting feed state to logged out");
-						updateFeedStateListeners(Connection.State.CONNECTED);
+						updateFeedStateListeners(Connection.State.DISCONNECTED);
 
 					} else if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
 
@@ -400,7 +400,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					}
 
-					// log.warn("Enacting policy for :{}", event.name());
+					log.warn("Enacting policy for :{}", event.name());
 
 					eventPolicy.get(event).newEvent(event);
 
@@ -442,7 +442,7 @@ class FeedClientDDF implements DDF_FeedClient {
 					if (msgListener != null) {
 						
 						// #######################
-						//log.debug(message.toStringFields());
+						log.debug(message.toStringFields());
 						// #######################
 						
 						msgListener.handleMessage(message);
@@ -1151,7 +1151,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.info("got settings from settings service");
 
 			final DDF_Server server = settings.getServer(serverType);
-			final String primary = server.getPrimary();
+			//final String primary = server.getPrimary();
+			final String primary = "feed-test-b.eqx.bcinc.internal";
 			final String secondary = server.getSecondary();
 
 			log.info("trying primary server login " + primary);

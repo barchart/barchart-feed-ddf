@@ -155,7 +155,8 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 		switch (type) {
 		case TCP_ACCEPT:
 			/* Note: This is the only place a login success is set */
-			if (comment.contains(FeedDDF.RESPONSE_VERSION_SET_3)) {
+			if (comment.contains(FeedDDF.RESPONSE_VERSION_SET_3) ||
+					comment.contains(FeedDDF.RESPONSE_VERSION_SET_4)) {
 				eventQueue.put(DDF_FeedEvent.LOGIN_SUCCESS);
 			}
 			break;
