@@ -162,7 +162,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	/*
 	 * Handles login. Non-blocking.
 	 */
-	private void loginMain(final String username, final String password,
+	private synchronized void loginMain(final String username, final String password,
 			final DDF_Transport tp, final Executor executor) {
 
 		maker.clearAll();
@@ -174,7 +174,7 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 
 	}
 
-	private void loginProxy(final String username, final String password,
+	private synchronized void loginProxy(final String username, final String password,
 			final DDF_Transport tp, final Executor executor,
 			final DDF_SocksProxy proxySettings) {
 
