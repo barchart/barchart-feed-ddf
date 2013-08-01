@@ -719,7 +719,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 
-		if (!isConnected()) {
+		if (!isConnected() || subs.isEmpty()) {
 			return new DummyFuture();
 		}
 

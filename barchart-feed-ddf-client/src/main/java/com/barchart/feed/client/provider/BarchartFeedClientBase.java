@@ -72,7 +72,7 @@ public abstract class BarchartFeedClientBase {
 	/*
 	 * Handles login. Non-blocking.
 	 */
-	protected void setClient(final DDF_FeedClientBase client, final boolean proxy) {
+	protected synchronized void setClient(final DDF_FeedClientBase client, final boolean proxy) {
 
 		maker.clearAll();
 
