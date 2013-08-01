@@ -23,6 +23,7 @@ import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public final class InstrumentDBProvider {
@@ -189,6 +190,82 @@ public final class InstrumentDBProvider {
 		
 		} catch (Exception e) {
 			
+			log.error("Exception getting latest s3 version {}" + e.getMessage());
+			
+			return null;
+		}
+		
+	}
+	
+	public static void main(final String[] args) {
+		getLatestInstDefTimestamp();
+	}
+	
+	private static String DEF = "active/instrumentDef.zip";
+	
+	private static String getLatestInstDefTimestamp() {
+		
+		try {
+			
+			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			
+			Element element = db.parse(S3_URL).getDocumentElement();
+			NodeList nodeList = element.getChildNodes();
+			
+			for(int i = 0; i < nodeList.getLength(); i++) {
+				
+				if(nodeList.item(i).getNodeName().equals("Contents")) {
+					
+					NodeList contentNodes = nodeList.item(i).getChildNodes();
+					
+					Node instDefNode = null;
+					for(int n = 0; n < contentNodes.getLength(); n++) {
+						
+						if(contentNodes.item(n).getNodeName().equals("Key")) {
+							
+							if(contentNodes.item(n).getTextContent().equals(DEF)) {
+								instDefNode = contentNodes.item(n);
+								break;
+							}
+						}
+						
+					}
+						
+					NodeList instDefNodeList = instDefNode.getChildNodes();
+					for(int j = 0; j < instDefNodeList.getLength(); j++) {
+						
+						
+						System.out.println(instDefNodeList.item(j).getNodeName());
+						
+						if(instDefNodeList.item(j).getNodeName().equals("LastModified")) {
+							System.out.println(instDefNodeList.item(j).getTextContent());
+						}
+						
+					}
+					
+//					if(instDefNode != null) {
+//						
+//						NodeList instDefNodeList = instDefNode.getChildNodes();
+//						
+//						for(int j = 0; j < instDefNodeList.getLength(); j++) {
+//							
+//							if(instDefNodeList.item(j).getNodeName().equals("LastModified")) {
+//								System.out.println(instDefNodeList.item(j).getTextContent());
+//							}
+//							
+//						}
+//						
+//					} else {
+//						throw new Exception();
+//					}
+					
+				}
+				
+			}
+			
+			return null;
+			
+		} catch (final Exception e) {
 			log.error("Exception getting latest s3 version {}" + e.getMessage());
 			
 			return null;
