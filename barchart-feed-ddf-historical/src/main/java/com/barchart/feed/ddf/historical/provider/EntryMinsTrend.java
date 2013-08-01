@@ -60,7 +60,7 @@ class EntryMinsTrend extends Entry implements DDF_EntryTrend {
 	 */
 	@Override
 	public void decodeHead(final String[] inputArray) {
-
+		
 		millisUTC = decodeMinsTime(inputArray[0], instrument);
 
 		ordTradeDay = DDF_TradeDay.fromMillisUTC(millisUTC).ord;
