@@ -25,7 +25,10 @@ package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -38,6 +41,7 @@ import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.provider.MakerBaseAllMarkets;
+import com.barchart.feed.base.sub.Subscription;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
@@ -304,29 +308,39 @@ class BarchartFeedReceiver extends BarchartFeedClientBase {
 	private final MarketRegListener instrumentSubscriptionListener =
 			new MarketRegListener() {
 
-				@Override
-				public void onRegistrationChange(
-						final Instrument instrument,
-						final Set<MarketEvent> events) {
+		@Override
+		public void onRegistrationChange(final Map<Instrument, Set<MarketEvent>> 
+				instMap) {
 
-					/*
-					 * The market maker denotes 'unsubscribe' with an empty
-					 * event set
-					 */
-					if (events.isEmpty()) {
-						log.debug("Unsubscribing to "
-								+ instrument.marketGUID());
-						feed.unsubscribe(new DDF_Subscription(instrument, events));
-					} else {
-						log.debug("Subscribing to "
-								+ instrument.marketGUID()
-								+ " Events: " + printEvents(events));
-						feed.subscribe(new DDF_Subscription(instrument, events));
-					}
+			final Set<Subscription> subs = new HashSet<Subscription>();
+			final Set<Subscription> unsubs = new HashSet<Subscription>();
 
+			for(final Entry<Instrument, Set<MarketEvent>> e: instMap.entrySet()) {
+
+				/*
+				 * The market maker denotes 'unsubscribe' with an empty event set
+				 */
+				if (e.getValue().isEmpty()) {
+					log.debug("Unsubscribing to "
+							+ e.getKey().symbol());
+					unsubs.add(new DDF_Subscription(e.getKey(), e.getValue()));
+				} else {
+					log.debug("Subscribing to "
+							+ e.getKey().symbol() + " Events: "
+							+ printEvents(e.getValue()));
+					subs.add(new DDF_Subscription(e.getKey(), e.getValue()));
 				}
 
-			};
+			}
+
+			if(!unsubs.isEmpty()) {
+				feed.unsubscribe(unsubs);
+			}
+			feed.subscribe(subs);
+
+		}
+
+	};
 
 	private String printEvents(final Set<MarketEvent> events) {
 		final StringBuffer sb = new StringBuffer();

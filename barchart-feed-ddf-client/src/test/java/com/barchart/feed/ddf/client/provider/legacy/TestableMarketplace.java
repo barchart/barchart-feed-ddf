@@ -1,7 +1,9 @@
 package com.barchart.feed.ddf.client.provider.legacy;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -56,15 +58,18 @@ public class TestableMarketplace extends DDF_Marketplace {
 		
 	}
 	
-	protected final void notifyRegListeners(final MarketDo market) {
+	protected final void notifyRegListeners(final Set<MarketDo> markets) {
 
-		final Instrument inst = market.instrument();
-
-		final Set<MarketEvent> events = market.regEvents();
-
+		final Map<Instrument, Set<MarketEvent>> insts = 
+				new HashMap<Instrument, Set<MarketEvent>>();
+		
+		for(final MarketDo m : markets) {
+			insts.put(m.instrument(), m.regEvents());
+		}
+		
 		for (final MarketRegListener listener : listenerList) {
 			try {
-				listener.onRegistrationChange(inst, events);
+				listener.onRegistrationChange(insts);
 			} catch (final Exception e) {
 				log.error("", e);
 			}
@@ -90,6 +95,7 @@ public class TestableMarketplace extends DDF_Marketplace {
 		}
 		
 		if (wasAdded) {
+			final Set<MarketDo> ms = new HashSet<MarketDo>();
 			for (final Instrument inst : regTaker.getInstruments()) {
 
 				if (!isValid(inst)) {
@@ -104,9 +110,11 @@ public class TestableMarketplace extends DDF_Marketplace {
 
 				market.runSafe(safeRegister, regTaker);
 
-				notifyRegListeners(market);
+				ms.add(market);
 
 			}
+			
+			notifyRegListeners(ms);
 			
 		} else {
 			log.warn("already registered : {}", taker);
@@ -137,6 +145,7 @@ public class TestableMarketplace extends DDF_Marketplace {
 		final boolean wasRemoved = (regTaker != null);
 
 		if (wasRemoved) {
+			final Set<MarketDo> ms = new HashSet<MarketDo>();
 			for (final Instrument inst : regTaker.getInstruments()) {
 
 				if (!isValid(inst)) {
@@ -156,9 +165,11 @@ public class TestableMarketplace extends DDF_Marketplace {
 					unregister(inst);
 				}
 
-				notifyRegListeners(market);
+				ms.add(market);
 
 			}
+			
+			notifyRegListeners(ms);
 		} else {
 			log.warn("was not registered : {}", taker);
 		}
@@ -260,6 +271,7 @@ public class TestableMarketplace extends DDF_Marketplace {
 		}
 
 		/** remove / notify */
+		final Set<MarketDo> ms = new HashSet<MarketDo>();
 		for (final Instrument inst : changeNotifySet) {
 
 			final MarketDo market = marketMap.get(inst);
@@ -268,9 +280,11 @@ public class TestableMarketplace extends DDF_Marketplace {
 				unregister(inst);
 			}
 
-			notifyRegListeners(market);
+			ms.add(market);
 
 		}
+		
+		notifyRegListeners(ms);
 
 		return true;
 	}
