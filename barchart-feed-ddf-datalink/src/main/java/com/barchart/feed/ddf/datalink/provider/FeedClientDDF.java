@@ -785,6 +785,10 @@ class FeedClientDDF implements DDF_FeedClient {
 			return new DummyFuture();
 		}
 
+		if(subs.isEmpty()) {
+			return new DummyFuture();
+		}
+		
 		/*
 		 * Creates a single JERQ command from the set. Subscriptions are removed
 		 * individually.

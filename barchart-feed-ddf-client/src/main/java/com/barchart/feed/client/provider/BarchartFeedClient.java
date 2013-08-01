@@ -221,7 +221,9 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 			
 			}
 			
-			feed.unsubscribe(unsubs);
+			if(!unsubs.isEmpty()) {
+				feed.unsubscribe(unsubs);
+			}
 			feed.subscribe(subs);
 			
 		}
