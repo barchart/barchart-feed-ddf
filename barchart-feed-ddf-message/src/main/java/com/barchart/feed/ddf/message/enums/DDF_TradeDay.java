@@ -262,6 +262,7 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 		final int currentDayNum = todayDate.getDayOfMonth();
 
 		// positive for same month if trading date is in the future
+		// unless day enum is not a day in the month ???
 		final int difference = tradingDayNum - currentDayNum;
 
 		final boolean isSmall = Math.abs(difference) <= HOLIDAY_THESHOLD;
@@ -296,8 +297,7 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 				logger.error("should not happen");
 				generated = todayDate;
 			}
-		} catch (Exception e) {
-			logger.error("error parsing date, day code = " + tradeDay.code + " day = " + tradeDay.day);
+		} catch (final Exception e) {
 			generated = todayDate;
 		}
 

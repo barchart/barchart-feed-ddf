@@ -150,5 +150,15 @@ public class TestDDF_TradeDay {
 		assertEquals(trade.getDayOfMonth(), 18);
 
 	}
+	
+	@Test
+	public void testTradeDateFrom6() {
+		
+		final DateTime today = new DateTime("2013-06-30T00:00:00.000");
+		
+		final TimeValue value = DDF_TradeDay.tradeDateFrom(DDF_TradeDay.D31, today);
+		System.out.println(" " + value.toString());
+		
+	}
 
 }
