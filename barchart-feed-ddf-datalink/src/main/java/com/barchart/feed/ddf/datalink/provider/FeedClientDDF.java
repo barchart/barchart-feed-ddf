@@ -58,7 +58,7 @@ import com.barchart.feed.ddf.util.FeedDDF;
 
 class FeedClientDDF implements DDF_FeedClient {
 
-	private static final String VERSION = FeedDDF.VERSION_4;
+	private static final String VERSION = FeedDDF.VERSION_3;
 	private static final int PORT = 7500;
 
 	private static final int DEFAULT_IO_THREADS = 
@@ -441,8 +441,8 @@ class FeedClientDDF implements DDF_FeedClient {
 					final DDF_BaseMessage message = messageQueue.take();
 					if (msgListener != null) {
 						
-						// #######################
-						log.debug(message.toStringFields());
+						//// #######################
+						//log.debug(message.toStringFields());
 						// #######################
 						
 						msgListener.handleMessage(message);
@@ -1151,8 +1151,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.info("got settings from settings service");
 
 			final DDF_Server server = settings.getServer(serverType);
-			//final String primary = server.getPrimary();
-			final String primary = "feed-test-b.eqx.bcinc.internal";
+			final String primary = server.getPrimary();
+			//final String primary = "feed-test-b.eqx.bcinc.internal";
 			final String secondary = server.getSecondary();
 
 			log.info("trying primary server login " + primary);
