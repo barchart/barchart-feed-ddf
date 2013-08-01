@@ -24,6 +24,9 @@
  */
 package com.barchart.feed.client.provider;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
@@ -190,26 +193,37 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 	 * events are sent only when the instrument is not needed by any previously
 	 * registered market takers.
 	 */
-	private final MarketRegListener instrumentSubscriptionListener = new MarketRegListener() {
+	private final MarketRegListener instrumentSubscriptionListener = 
+			new MarketRegListener() {
 
 		@Override
-		public void onRegistrationChange(final MarketInstrument instrument,
-				final Set<MarketEvent> events) {
+		public void onRegistrationChange(final Map<MarketInstrument, Set<MarketEvent>> 
+				instMap) {
 
-			/*
-			 * The market maker denotes 'unsubscribe' with an empty event set
-			 */
-			if (events.isEmpty()) {
-				log.debug("Unsubscribing to "
-						+ instrument.get(InstrumentField.ID));
-				feed.unsubscribe(new Subscription(instrument, events));
-			} else {
-				log.debug("Subscribing to "
-						+ instrument.get(InstrumentField.ID) + " Events: "
-						+ printEvents(events));
-				feed.subscribe(new Subscription(instrument, events));
+			final Set<Subscription> subs = new HashSet<Subscription>();
+			final Set<Subscription> unsubs = new HashSet<Subscription>();
+			
+			for(final Entry<MarketInstrument, Set<MarketEvent>> e: instMap.entrySet()) {
+				
+				/*
+				 * The market maker denotes 'unsubscribe' with an empty event set
+				 */
+				if (e.getValue().isEmpty()) {
+					log.debug("Unsubscribing to "
+							+ e.getKey().get(InstrumentField.ID));
+					unsubs.add(new Subscription(e.getKey(), e.getValue()));
+				} else {
+					log.debug("Subscribing to "
+							+ e.getKey().get(InstrumentField.ID) + " Events: "
+							+ printEvents(e.getValue()));
+					subs.add(new Subscription(e.getKey(), e.getValue()));
+				}
+			
 			}
-
+			
+			feed.unsubscribe(unsubs);
+			feed.subscribe(subs);
+			
 		}
 
 	};
