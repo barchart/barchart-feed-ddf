@@ -90,44 +90,6 @@ public enum DDF_FeedInterest {
 
 		final Set<DDF_FeedInterest> result = fromEvents(eventSet);
 
-/*		for (final MarketEvent event : eventSet) {
-			switch (event) {
-
-			case MARKET_UPDATED:
-				result.addAll(DDF_FeedInterest.setValues());
-				break;
-				
-			case NEW_BOOK_ERROR:
-				// debug use only
-				continue;
-
-			case NEW_BOOK_SNAPSHOT:
-				result.add(BOOK_SNAPSHOT);
-				continue;
-
-			case NEW_BOOK_UPDATE:
-			case NEW_BOOK_TOP:
-				result.add(BOOK_UPDATE);
-				continue;
-
-			case NEW_CUVOL_SNAPSHOT:
-				result.add(CUVOL_SNAPSHOT);
-				continue;
-
-			case NEW_BAR_CURRENT_NET:
-			case NEW_BAR_CURRENT_PIT:
-			case NEW_BAR_CURRENT_EXT:
-			case NEW_BAR_CURRENT:
-			case NEW_BAR_PREVIOUS:
-				result.add(QUOTE_SNAPSHOT);
-				continue;
-			
-			default:
-				result.add(QUOTE_UPDATE);
-				continue;
-			}
-		}
-*/
 		if (result.isEmpty()) {
 			return NONE;
 		}
@@ -181,6 +143,7 @@ public enum DDF_FeedInterest {
 			case NEW_SETTLE:
 			case NEW_VOLUME:
 			case NEW_INTEREST:
+			case NEW_BOOK_TOP:
 				result.add(QUOTE_SNAPSHOT);
 				result.add(QUOTE_UPDATE);
 				continue;
@@ -194,7 +157,6 @@ public enum DDF_FeedInterest {
 				continue;
 
 			case NEW_BOOK_UPDATE:
-			case NEW_BOOK_TOP:
 				result.add(BOOK_UPDATE);
 				result.add(BOOK_SNAPSHOT);
 				continue;
