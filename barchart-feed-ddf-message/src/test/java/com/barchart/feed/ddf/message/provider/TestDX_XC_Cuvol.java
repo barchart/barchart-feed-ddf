@@ -187,13 +187,13 @@ public class TestDX_XC_Cuvol extends TestDDFBase {
 
 		msg.encodeXML(target);
 
-		// System.out.println(new String(target.array()));
+		System.out.println(new String(target.array()));
 
 		final byte[] arraySource = source.array();
 		final byte[] arrayTarget = target.array();
 
-		// System.out.println("source=" + new String(arraySource));
-		// System.out.println("target=" + new String(arrayTarget));
+		System.out.println("source=" + new String(arraySource));
+		System.out.println("target=" + new String(arrayTarget));
 
 		assertTrue(Arrays.equals(arraySource, arrayTarget));
 

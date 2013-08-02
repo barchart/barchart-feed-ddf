@@ -73,6 +73,7 @@ public final class DDF_InstrumentProvider {
 	/**
 	 * Default executor service with dameon threads
 	 */
+	// Consider ExecutorCompletionService
 	private volatile static ExecutorService executor = Executors.newCachedThreadPool( 
 			
 			new ThreadFactory() {
@@ -146,7 +147,8 @@ public final class DDF_InstrumentProvider {
 		
 		if(db.containsKey(symbol)) {
 			
-			final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
+			final InstrumentState instState = InstrumentStateFactory.
+					newInstrument(symbol);
 			instState.process(db.get(symbol));
 			symbolMap.put(symbol, instState);
 			return instState;
@@ -183,7 +185,8 @@ public final class DDF_InstrumentProvider {
 		}
 		
 		if(db.containsKey(symbol)) {
-			final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
+			final InstrumentState instState = InstrumentStateFactory.
+				newInstrument(symbol);
 			instState.process(db.get(symbol));
 			symbolMap.put(symbol, instState);
 			return instState;
