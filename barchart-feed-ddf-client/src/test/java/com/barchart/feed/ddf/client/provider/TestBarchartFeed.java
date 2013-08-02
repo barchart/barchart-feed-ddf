@@ -75,7 +75,7 @@ public class TestBarchartFeed {
 				
 				log.debug(
 					v.instrument().symbol() + " " +
-						printChange(v.change())
+							v.change()
 				);
 				
 			}
@@ -85,7 +85,7 @@ public class TestBarchartFeed {
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
 		//myAgent.include(Exchanges.fromName("NYSE"));
-		myAgent.include("GOOG");
+		myAgent.include("ESU3");
 		
 		Thread.sleep(1000000);
 		

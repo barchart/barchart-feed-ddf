@@ -406,11 +406,13 @@ class VarMarketDDF extends VarMarket {
 
 	@Override
 	public void setChange(Component c) {
+		log.debug("Change {} added", c);
 		changeSet.add(c);
 	}
 
 	@Override
 	public void clearChanges() {
+		log.debug("Change cleared, size = {}", changeSet.size());
 		changeSet.clear();
 	}
 
