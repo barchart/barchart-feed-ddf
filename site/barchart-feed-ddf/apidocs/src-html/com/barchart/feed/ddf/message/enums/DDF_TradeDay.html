@@ -265,42 +265,42 @@
 <FONT color="green">262</FONT>                    final int currentDayNum = todayDate.getDayOfMonth();<a name="line.262"></a>
 <FONT color="green">263</FONT>    <a name="line.263"></a>
 <FONT color="green">264</FONT>                    // positive for same month if trading date is in the future<a name="line.264"></a>
-<FONT color="green">265</FONT>                    final int difference = tradingDayNum - currentDayNum;<a name="line.265"></a>
-<FONT color="green">266</FONT>    <a name="line.266"></a>
-<FONT color="green">267</FONT>                    final boolean isSmall = Math.abs(difference) &lt;= HOLIDAY_THESHOLD;<a name="line.267"></a>
-<FONT color="green">268</FONT>                    final boolean isLarge = !isSmall;<a name="line.268"></a>
-<FONT color="green">269</FONT>    <a name="line.269"></a>
-<FONT color="green">270</FONT>                    //<a name="line.270"></a>
-<FONT color="green">271</FONT>    <a name="line.271"></a>
-<FONT color="green">272</FONT>                    final boolean isSameMonthSameDay = (difference == 0);<a name="line.272"></a>
-<FONT color="green">273</FONT>    <a name="line.273"></a>
-<FONT color="green">274</FONT>                    final boolean isSameMonthPastDay = difference &lt; 0 &amp; isSmall;<a name="line.274"></a>
-<FONT color="green">275</FONT>                    final boolean isSameMonthNextDay = difference &gt; 0 &amp; isSmall;<a name="line.275"></a>
-<FONT color="green">276</FONT>    <a name="line.276"></a>
-<FONT color="green">277</FONT>                    final boolean isPastMonthPastDay = difference &gt; 0 &amp; isLarge;<a name="line.277"></a>
-<FONT color="green">278</FONT>                    final boolean isNextMonthNextDay = difference &lt; 0 &amp; isLarge;<a name="line.278"></a>
-<FONT color="green">279</FONT>    <a name="line.279"></a>
-<FONT color="green">280</FONT>                    //<a name="line.280"></a>
-<FONT color="green">281</FONT>    <a name="line.281"></a>
-<FONT color="green">282</FONT>                    DateTime generated;<a name="line.282"></a>
-<FONT color="green">283</FONT>    <a name="line.283"></a>
-<FONT color="green">284</FONT>                    try {<a name="line.284"></a>
-<FONT color="green">285</FONT>                            if (isSameMonthSameDay) {<a name="line.285"></a>
-<FONT color="green">286</FONT>                                    generated = todayDate;<a name="line.286"></a>
-<FONT color="green">287</FONT>                            } else if (isSameMonthPastDay) {<a name="line.287"></a>
-<FONT color="green">288</FONT>                                    generated = todayDate.withDayOfMonth(tradingDayNum);<a name="line.288"></a>
-<FONT color="green">289</FONT>                            } else if (isSameMonthNextDay) {<a name="line.289"></a>
-<FONT color="green">290</FONT>                                    generated = todayDate.withDayOfMonth(tradingDayNum);<a name="line.290"></a>
-<FONT color="green">291</FONT>                            } else if (isPastMonthPastDay) {<a name="line.291"></a>
-<FONT color="green">292</FONT>                                    generated = todayDate.minusMonths(1).withDayOfMonth(tradingDayNum);<a name="line.292"></a>
-<FONT color="green">293</FONT>                            } else if (isNextMonthNextDay) {<a name="line.293"></a>
-<FONT color="green">294</FONT>                                    generated = todayDate.plusMonths(1).withDayOfMonth(tradingDayNum);<a name="line.294"></a>
-<FONT color="green">295</FONT>                            } else {<a name="line.295"></a>
-<FONT color="green">296</FONT>                                    logger.error("should not happen");<a name="line.296"></a>
-<FONT color="green">297</FONT>                                    generated = todayDate;<a name="line.297"></a>
-<FONT color="green">298</FONT>                            }<a name="line.298"></a>
-<FONT color="green">299</FONT>                    } catch (Exception e) {<a name="line.299"></a>
-<FONT color="green">300</FONT>                            logger.error("error parsing date, day code = " + tradeDay.code + " day = " + tradeDay.day);<a name="line.300"></a>
+<FONT color="green">265</FONT>                    // unless day enum is not a day in the month ???<a name="line.265"></a>
+<FONT color="green">266</FONT>                    final int difference = tradingDayNum - currentDayNum;<a name="line.266"></a>
+<FONT color="green">267</FONT>    <a name="line.267"></a>
+<FONT color="green">268</FONT>                    final boolean isSmall = Math.abs(difference) &lt;= HOLIDAY_THESHOLD;<a name="line.268"></a>
+<FONT color="green">269</FONT>                    final boolean isLarge = !isSmall;<a name="line.269"></a>
+<FONT color="green">270</FONT>    <a name="line.270"></a>
+<FONT color="green">271</FONT>                    //<a name="line.271"></a>
+<FONT color="green">272</FONT>    <a name="line.272"></a>
+<FONT color="green">273</FONT>                    final boolean isSameMonthSameDay = (difference == 0);<a name="line.273"></a>
+<FONT color="green">274</FONT>    <a name="line.274"></a>
+<FONT color="green">275</FONT>                    final boolean isSameMonthPastDay = difference &lt; 0 &amp; isSmall;<a name="line.275"></a>
+<FONT color="green">276</FONT>                    final boolean isSameMonthNextDay = difference &gt; 0 &amp; isSmall;<a name="line.276"></a>
+<FONT color="green">277</FONT>    <a name="line.277"></a>
+<FONT color="green">278</FONT>                    final boolean isPastMonthPastDay = difference &gt; 0 &amp; isLarge;<a name="line.278"></a>
+<FONT color="green">279</FONT>                    final boolean isNextMonthNextDay = difference &lt; 0 &amp; isLarge;<a name="line.279"></a>
+<FONT color="green">280</FONT>    <a name="line.280"></a>
+<FONT color="green">281</FONT>                    //<a name="line.281"></a>
+<FONT color="green">282</FONT>    <a name="line.282"></a>
+<FONT color="green">283</FONT>                    DateTime generated;<a name="line.283"></a>
+<FONT color="green">284</FONT>    <a name="line.284"></a>
+<FONT color="green">285</FONT>                    try {<a name="line.285"></a>
+<FONT color="green">286</FONT>                            if (isSameMonthSameDay) {<a name="line.286"></a>
+<FONT color="green">287</FONT>                                    generated = todayDate;<a name="line.287"></a>
+<FONT color="green">288</FONT>                            } else if (isSameMonthPastDay) {<a name="line.288"></a>
+<FONT color="green">289</FONT>                                    generated = todayDate.withDayOfMonth(tradingDayNum);<a name="line.289"></a>
+<FONT color="green">290</FONT>                            } else if (isSameMonthNextDay) {<a name="line.290"></a>
+<FONT color="green">291</FONT>                                    generated = todayDate.withDayOfMonth(tradingDayNum);<a name="line.291"></a>
+<FONT color="green">292</FONT>                            } else if (isPastMonthPastDay) {<a name="line.292"></a>
+<FONT color="green">293</FONT>                                    generated = todayDate.minusMonths(1).withDayOfMonth(tradingDayNum);<a name="line.293"></a>
+<FONT color="green">294</FONT>                            } else if (isNextMonthNextDay) {<a name="line.294"></a>
+<FONT color="green">295</FONT>                                    generated = todayDate.plusMonths(1).withDayOfMonth(tradingDayNum);<a name="line.295"></a>
+<FONT color="green">296</FONT>                            } else {<a name="line.296"></a>
+<FONT color="green">297</FONT>                                    logger.error("should not happen");<a name="line.297"></a>
+<FONT color="green">298</FONT>                                    generated = todayDate;<a name="line.298"></a>
+<FONT color="green">299</FONT>                            }<a name="line.299"></a>
+<FONT color="green">300</FONT>                    } catch (final Exception e) {<a name="line.300"></a>
 <FONT color="green">301</FONT>                            generated = todayDate;<a name="line.301"></a>
 <FONT color="green">302</FONT>                    }<a name="line.302"></a>
 <FONT color="green">303</FONT>    <a name="line.303"></a>

@@ -7,7 +7,7 @@
 <FONT color="green">004</FONT>    import java.io.IOException;<a name="line.4"></a>
 <FONT color="green">005</FONT>    <a name="line.5"></a>
 <FONT color="green">006</FONT>    import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;<a name="line.6"></a>
-<FONT color="green">007</FONT>    import com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;<a name="line.7"></a>
+<FONT color="green">007</FONT>    import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;<a name="line.7"></a>
 <FONT color="green">008</FONT>    <a name="line.8"></a>
 <FONT color="green">009</FONT>    public class LookupSymbolsInLocalDB {<a name="line.9"></a>
 <FONT color="green">010</FONT>    <a name="line.10"></a>
@@ -16,7 +16,7 @@
 <FONT color="green">013</FONT>            public static void main(final String[] args) {<a name="line.13"></a>
 <FONT color="green">014</FONT>                    <a name="line.14"></a>
 <FONT color="green">015</FONT>            <a name="line.15"></a>
-<FONT color="green">016</FONT>                    LocalInstrumentDBMap dbMap = InstrumentDBProvider.getMap(getTempFolder());<a name="line.16"></a>
+<FONT color="green">016</FONT>                    InstrumentDatabaseMap dbMap = InstrumentDBProvider.getMap(getTempFolder());<a name="line.16"></a>
 <FONT color="green">017</FONT>                    <a name="line.17"></a>
 <FONT color="green">018</FONT>                    System.out.println(dbMap.get("LEQ0|1100C").toString());<a name="line.18"></a>
 <FONT color="green">019</FONT>                    System.out.println(dbMap.get("ESV1450P").toString());<a name="line.19"></a>

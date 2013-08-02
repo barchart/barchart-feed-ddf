@@ -27,7 +27,7 @@
 <FONT color="green">024</FONT>    <a name="line.24"></a>
 <FONT color="green">025</FONT>            static final void find(final String symbol) {<a name="line.25"></a>
 <FONT color="green">026</FONT>    <a name="line.26"></a>
-<FONT color="green">027</FONT>                    final Instrument instrument = DDF_InstrumentProvider.find(symbol).get(0);<a name="line.27"></a>
+<FONT color="green">027</FONT>                    final Instrument instrument = DDF_InstrumentProvider.fromSymbol(symbol);<a name="line.27"></a>
 <FONT color="green">028</FONT>    <a name="line.28"></a>
 <FONT color="green">029</FONT>                    if (instrument.isNull()) {<a name="line.29"></a>
 <FONT color="green">030</FONT>                            log.error("instrument lookup failed for : {}", symbol);<a name="line.30"></a>

@@ -45,7 +45,7 @@
 <FONT color="green">042</FONT>                    <a name="line.42"></a>
 <FONT color="green">043</FONT>                    final Agent myAgent = feed.newAgent(Session.class, callback);<a name="line.43"></a>
 <FONT color="green">044</FONT>                    <a name="line.44"></a>
-<FONT color="green">045</FONT>                    final Instrument inst = DDF_InstrumentProvider.find(SYMBOL).get(0);<a name="line.45"></a>
+<FONT color="green">045</FONT>                    final Instrument inst = DDF_InstrumentProvider.fromSymbol(SYMBOL);<a name="line.45"></a>
 <FONT color="green">046</FONT>                    <a name="line.46"></a>
 <FONT color="green">047</FONT>                    myAgent.include(inst);<a name="line.47"></a>
 <FONT color="green">048</FONT>                    <a name="line.48"></a>

@@ -158,27 +158,28 @@
 <FONT color="green">155</FONT>                    switch (type) {<a name="line.155"></a>
 <FONT color="green">156</FONT>                    case TCP_ACCEPT:<a name="line.156"></a>
 <FONT color="green">157</FONT>                            /* Note: This is the only place a login success is set */<a name="line.157"></a>
-<FONT color="green">158</FONT>                            if (comment.contains(FeedDDF.RESPONSE_VERSION_SET_3)) {<a name="line.158"></a>
-<FONT color="green">159</FONT>                                    eventQueue.put(DDF_FeedEvent.LOGIN_SUCCESS);<a name="line.159"></a>
-<FONT color="green">160</FONT>                            }<a name="line.160"></a>
-<FONT color="green">161</FONT>                            break;<a name="line.161"></a>
-<FONT color="green">162</FONT>                    case TCP_REJECT:<a name="line.162"></a>
-<FONT color="green">163</FONT>                            if (comment.contains(FeedDDF.RESPONSE_LOGIN_FAILURE)) {<a name="line.163"></a>
-<FONT color="green">164</FONT>                                    eventQueue.put(DDF_FeedEvent.LOGIN_FAILURE);<a name="line.164"></a>
-<FONT color="green">165</FONT>                            }<a name="line.165"></a>
-<FONT color="green">166</FONT>                            break;<a name="line.166"></a>
-<FONT color="green">167</FONT>                    case TCP_COMMAND:<a name="line.167"></a>
-<FONT color="green">168</FONT>                            if (comment.contains(FeedDDF.RESPONSE_SESSION_LOCKOUT)) {<a name="line.168"></a>
-<FONT color="green">169</FONT>                                    eventQueue.put(DDF_FeedEvent.SESSION_LOCKOUT);<a name="line.169"></a>
-<FONT color="green">170</FONT>                            }<a name="line.170"></a>
-<FONT color="green">171</FONT>                            break;<a name="line.171"></a>
-<FONT color="green">172</FONT>                    default:<a name="line.172"></a>
-<FONT color="green">173</FONT>                            break;<a name="line.173"></a>
-<FONT color="green">174</FONT>                    }<a name="line.174"></a>
-<FONT color="green">175</FONT>    <a name="line.175"></a>
-<FONT color="green">176</FONT>            }<a name="line.176"></a>
-<FONT color="green">177</FONT>    <a name="line.177"></a>
-<FONT color="green">178</FONT>    }<a name="line.178"></a>
+<FONT color="green">158</FONT>                            if (comment.contains(FeedDDF.RESPONSE_VERSION_SET_3) ||<a name="line.158"></a>
+<FONT color="green">159</FONT>                                            comment.contains(FeedDDF.RESPONSE_VERSION_SET_4)) {<a name="line.159"></a>
+<FONT color="green">160</FONT>                                    eventQueue.put(DDF_FeedEvent.LOGIN_SUCCESS);<a name="line.160"></a>
+<FONT color="green">161</FONT>                            }<a name="line.161"></a>
+<FONT color="green">162</FONT>                            break;<a name="line.162"></a>
+<FONT color="green">163</FONT>                    case TCP_REJECT:<a name="line.163"></a>
+<FONT color="green">164</FONT>                            if (comment.contains(FeedDDF.RESPONSE_LOGIN_FAILURE)) {<a name="line.164"></a>
+<FONT color="green">165</FONT>                                    eventQueue.put(DDF_FeedEvent.LOGIN_FAILURE);<a name="line.165"></a>
+<FONT color="green">166</FONT>                            }<a name="line.166"></a>
+<FONT color="green">167</FONT>                            break;<a name="line.167"></a>
+<FONT color="green">168</FONT>                    case TCP_COMMAND:<a name="line.168"></a>
+<FONT color="green">169</FONT>                            if (comment.contains(FeedDDF.RESPONSE_SESSION_LOCKOUT)) {<a name="line.169"></a>
+<FONT color="green">170</FONT>                                    eventQueue.put(DDF_FeedEvent.SESSION_LOCKOUT);<a name="line.170"></a>
+<FONT color="green">171</FONT>                            }<a name="line.171"></a>
+<FONT color="green">172</FONT>                            break;<a name="line.172"></a>
+<FONT color="green">173</FONT>                    default:<a name="line.173"></a>
+<FONT color="green">174</FONT>                            break;<a name="line.174"></a>
+<FONT color="green">175</FONT>                    }<a name="line.175"></a>
+<FONT color="green">176</FONT>    <a name="line.176"></a>
+<FONT color="green">177</FONT>            }<a name="line.177"></a>
+<FONT color="green">178</FONT>    <a name="line.178"></a>
+<FONT color="green">179</FONT>    }<a name="line.179"></a>
 
 
 

@@ -272,42 +272,42 @@
 <a class="jxr_linenumber" name="262" href="#262">262</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> currentDayNum = todayDate.getDayOfMonth();
 <a class="jxr_linenumber" name="263" href="#263">263</a> 
 <a class="jxr_linenumber" name="264" href="#264">264</a> 		<em class="jxr_comment">// positive for same month if trading date is in the future</em>
-<a class="jxr_linenumber" name="265" href="#265">265</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> difference = tradingDayNum - currentDayNum;
-<a class="jxr_linenumber" name="266" href="#266">266</a> 
-<a class="jxr_linenumber" name="267" href="#267">267</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSmall = Math.abs(difference) &lt;= HOLIDAY_THESHOLD;
-<a class="jxr_linenumber" name="268" href="#268">268</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isLarge = !isSmall;
-<a class="jxr_linenumber" name="269" href="#269">269</a> 
-<a class="jxr_linenumber" name="270" href="#270">270</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="271" href="#271">271</a> 
-<a class="jxr_linenumber" name="272" href="#272">272</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSameMonthSameDay = (difference == 0);
-<a class="jxr_linenumber" name="273" href="#273">273</a> 
-<a class="jxr_linenumber" name="274" href="#274">274</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSameMonthPastDay = difference &lt; 0 &amp; isSmall;
-<a class="jxr_linenumber" name="275" href="#275">275</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSameMonthNextDay = difference &gt; 0 &amp; isSmall;
-<a class="jxr_linenumber" name="276" href="#276">276</a> 
-<a class="jxr_linenumber" name="277" href="#277">277</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isPastMonthPastDay = difference &gt; 0 &amp; isLarge;
-<a class="jxr_linenumber" name="278" href="#278">278</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isNextMonthNextDay = difference &lt; 0 &amp; isLarge;
-<a class="jxr_linenumber" name="279" href="#279">279</a> 
-<a class="jxr_linenumber" name="280" href="#280">280</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="281" href="#281">281</a> 
-<a class="jxr_linenumber" name="282" href="#282">282</a> 		DateTime generated;
-<a class="jxr_linenumber" name="283" href="#283">283</a> 
-<a class="jxr_linenumber" name="284" href="#284">284</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="285" href="#285">285</a> 			<strong class="jxr_keyword">if</strong> (isSameMonthSameDay) {
-<a class="jxr_linenumber" name="286" href="#286">286</a> 				generated = todayDate;
-<a class="jxr_linenumber" name="287" href="#287">287</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isSameMonthPastDay) {
-<a class="jxr_linenumber" name="288" href="#288">288</a> 				generated = todayDate.withDayOfMonth(tradingDayNum);
-<a class="jxr_linenumber" name="289" href="#289">289</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isSameMonthNextDay) {
-<a class="jxr_linenumber" name="290" href="#290">290</a> 				generated = todayDate.withDayOfMonth(tradingDayNum);
-<a class="jxr_linenumber" name="291" href="#291">291</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isPastMonthPastDay) {
-<a class="jxr_linenumber" name="292" href="#292">292</a> 				generated = todayDate.minusMonths(1).withDayOfMonth(tradingDayNum);
-<a class="jxr_linenumber" name="293" href="#293">293</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isNextMonthNextDay) {
-<a class="jxr_linenumber" name="294" href="#294">294</a> 				generated = todayDate.plusMonths(1).withDayOfMonth(tradingDayNum);
-<a class="jxr_linenumber" name="295" href="#295">295</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="296" href="#296">296</a> 				logger.error(<span class="jxr_string">"should not happen"</span>);
-<a class="jxr_linenumber" name="297" href="#297">297</a> 				generated = todayDate;
-<a class="jxr_linenumber" name="298" href="#298">298</a> 			}
-<a class="jxr_linenumber" name="299" href="#299">299</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="300" href="#300">300</a> 			logger.error(<span class="jxr_string">"error parsing date, day code = "</span> + tradeDay.code + <span class="jxr_string">" day = "</span> + tradeDay.day);
+<a class="jxr_linenumber" name="265" href="#265">265</a> 		<em class="jxr_comment">// unless day enum is not a day in the month ???</em>
+<a class="jxr_linenumber" name="266" href="#266">266</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> difference = tradingDayNum - currentDayNum;
+<a class="jxr_linenumber" name="267" href="#267">267</a> 
+<a class="jxr_linenumber" name="268" href="#268">268</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSmall = Math.abs(difference) &lt;= HOLIDAY_THESHOLD;
+<a class="jxr_linenumber" name="269" href="#269">269</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isLarge = !isSmall;
+<a class="jxr_linenumber" name="270" href="#270">270</a> 
+<a class="jxr_linenumber" name="271" href="#271">271</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="272" href="#272">272</a> 
+<a class="jxr_linenumber" name="273" href="#273">273</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSameMonthSameDay = (difference == 0);
+<a class="jxr_linenumber" name="274" href="#274">274</a> 
+<a class="jxr_linenumber" name="275" href="#275">275</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSameMonthPastDay = difference &lt; 0 &amp; isSmall;
+<a class="jxr_linenumber" name="276" href="#276">276</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSameMonthNextDay = difference &gt; 0 &amp; isSmall;
+<a class="jxr_linenumber" name="277" href="#277">277</a> 
+<a class="jxr_linenumber" name="278" href="#278">278</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isPastMonthPastDay = difference &gt; 0 &amp; isLarge;
+<a class="jxr_linenumber" name="279" href="#279">279</a> 		<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isNextMonthNextDay = difference &lt; 0 &amp; isLarge;
+<a class="jxr_linenumber" name="280" href="#280">280</a> 
+<a class="jxr_linenumber" name="281" href="#281">281</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="282" href="#282">282</a> 
+<a class="jxr_linenumber" name="283" href="#283">283</a> 		DateTime generated;
+<a class="jxr_linenumber" name="284" href="#284">284</a> 
+<a class="jxr_linenumber" name="285" href="#285">285</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="286" href="#286">286</a> 			<strong class="jxr_keyword">if</strong> (isSameMonthSameDay) {
+<a class="jxr_linenumber" name="287" href="#287">287</a> 				generated = todayDate;
+<a class="jxr_linenumber" name="288" href="#288">288</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isSameMonthPastDay) {
+<a class="jxr_linenumber" name="289" href="#289">289</a> 				generated = todayDate.withDayOfMonth(tradingDayNum);
+<a class="jxr_linenumber" name="290" href="#290">290</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isSameMonthNextDay) {
+<a class="jxr_linenumber" name="291" href="#291">291</a> 				generated = todayDate.withDayOfMonth(tradingDayNum);
+<a class="jxr_linenumber" name="292" href="#292">292</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isPastMonthPastDay) {
+<a class="jxr_linenumber" name="293" href="#293">293</a> 				generated = todayDate.minusMonths(1).withDayOfMonth(tradingDayNum);
+<a class="jxr_linenumber" name="294" href="#294">294</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isNextMonthNextDay) {
+<a class="jxr_linenumber" name="295" href="#295">295</a> 				generated = todayDate.plusMonths(1).withDayOfMonth(tradingDayNum);
+<a class="jxr_linenumber" name="296" href="#296">296</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="297" href="#297">297</a> 				logger.error(<span class="jxr_string">"should not happen"</span>);
+<a class="jxr_linenumber" name="298" href="#298">298</a> 				generated = todayDate;
+<a class="jxr_linenumber" name="299" href="#299">299</a> 			}
+<a class="jxr_linenumber" name="300" href="#300">300</a> 		} <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
 <a class="jxr_linenumber" name="301" href="#301">301</a> 			generated = todayDate;
 <a class="jxr_linenumber" name="302" href="#302">302</a> 		}
 <a class="jxr_linenumber" name="303" href="#303">303</a> 

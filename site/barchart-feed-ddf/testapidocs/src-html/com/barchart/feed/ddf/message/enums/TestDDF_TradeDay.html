@@ -153,8 +153,18 @@
 <FONT color="green">150</FONT>                    assertEquals(trade.getDayOfMonth(), 18);<a name="line.150"></a>
 <FONT color="green">151</FONT>    <a name="line.151"></a>
 <FONT color="green">152</FONT>            }<a name="line.152"></a>
-<FONT color="green">153</FONT>    <a name="line.153"></a>
-<FONT color="green">154</FONT>    }<a name="line.154"></a>
+<FONT color="green">153</FONT>            <a name="line.153"></a>
+<FONT color="green">154</FONT>            @Test<a name="line.154"></a>
+<FONT color="green">155</FONT>            public void testTradeDateFrom6() {<a name="line.155"></a>
+<FONT color="green">156</FONT>                    <a name="line.156"></a>
+<FONT color="green">157</FONT>                    final DateTime today = new DateTime("2013-06-30T00:00:00.000");<a name="line.157"></a>
+<FONT color="green">158</FONT>                    <a name="line.158"></a>
+<FONT color="green">159</FONT>                    final TimeValue value = DDF_TradeDay.tradeDateFrom(DDF_TradeDay.D31, today);<a name="line.159"></a>
+<FONT color="green">160</FONT>                    System.out.println(" " + value.toString());<a name="line.160"></a>
+<FONT color="green">161</FONT>                    <a name="line.161"></a>
+<FONT color="green">162</FONT>            }<a name="line.162"></a>
+<FONT color="green">163</FONT>    <a name="line.163"></a>
+<FONT color="green">164</FONT>    }<a name="line.164"></a>
 
 
 

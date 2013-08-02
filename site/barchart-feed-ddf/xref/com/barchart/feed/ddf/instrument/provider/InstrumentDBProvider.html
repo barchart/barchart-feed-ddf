@@ -29,12 +29,12 @@
 <a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> org.joda.time.DateTime;
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> org.joda.time.format.DateTimeFormat;
 <a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> org.joda.time.format.DateTimeFormatter;
-<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
-<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.Element;
-<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.NodeList;
-<a class="jxr_linenumber" name="26" href="#26">26</a>  
-<a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> com.barchart.proto.buf.inst.InstrumentDefinition;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> org.openfeed.proto.inst.InstrumentDefinition;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.Element;
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.Node;
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.NodeList;
 <a class="jxr_linenumber" name="28" href="#28">28</a>  
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">InstrumentDBProvider</a> {
 <a class="jxr_linenumber" name="30" href="#30">30</a>  
@@ -45,23 +45,23 @@
 <a class="jxr_linenumber" name="35" href="#35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String S3_URL = <span class="jxr_string">"https://s3.amazonaws.com/instrument-def/"</span>;
 <a class="jxr_linenumber" name="36" href="#36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String S3_PATH = <span class="jxr_string">"active/instrumentDef.zip"</span>;
 <a class="jxr_linenumber" name="37" href="#37">37</a>  	
-<a class="jxr_linenumber" name="38" href="#38">38</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> DateTimeFormatter TIMESTAMP_FORMATTER = 
-<a class="jxr_linenumber" name="39" href="#39">39</a>  			DateTimeFormat.forPattern(<span class="jxr_string">"yyyy-MM-dd'T'HH:mm:ss"</span>);
+<a class="jxr_linenumber" name="38" href="#38">38</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> DateTimeFormatter TIMESTAMP_FORMATTER = 
+<a class="jxr_linenumber" name="39" href="#39">39</a>  			DateTimeFormat.forPattern(<span class="jxr_string">"yyyy-MM-dd'T'HH-mm-ss"</span>);
 <a class="jxr_linenumber" name="40" href="#40">40</a>  	
 <a class="jxr_linenumber" name="41" href="#41">41</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">InstrumentDBProvider</a>() {
 <a class="jxr_linenumber" name="42" href="#42">42</a>  		
 <a class="jxr_linenumber" name="43" href="#43">43</a>  	}
 <a class="jxr_linenumber" name="44" href="#44">44</a>  	
-<a class="jxr_linenumber" name="45" href="#45">45</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/LocalInstrumentDBMap.html">LocalInstrumentDBMap</a> getMap(<strong class="jxr_keyword">final</strong> File resourceFolder) {
+<a class="jxr_linenumber" name="45" href="#45">45</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDatabaseMap.html">InstrumentDatabaseMap</a> getMap(<strong class="jxr_keyword">final</strong> File resourceFolder) {
 <a class="jxr_linenumber" name="46" href="#46">46</a>  		
 <a class="jxr_linenumber" name="47" href="#47">47</a>  		validateResourceFolder(resourceFolder);
 <a class="jxr_linenumber" name="48" href="#48">48</a>  		
-<a class="jxr_linenumber" name="49" href="#49">49</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/LocalInstrumentDBMap.html">LocalInstrumentDBMap</a>(getDBFolder(resourceFolder));
+<a class="jxr_linenumber" name="49" href="#49">49</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDatabaseMap.html">InstrumentDatabaseMap</a>(getDBFolder(resourceFolder));
 <a class="jxr_linenumber" name="50" href="#50">50</a>  		
 <a class="jxr_linenumber" name="51" href="#51">51</a>  	}
 <a class="jxr_linenumber" name="52" href="#52">52</a>  	
 <a class="jxr_linenumber" name="53" href="#53">53</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Callable&lt;Boolean&gt; updateDBMap(<strong class="jxr_keyword">final</strong> File resourceFolder,
-<a class="jxr_linenumber" name="54" href="#54">54</a>  			<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/LocalInstrumentDBMap.html">LocalInstrumentDBMap</a> map) {
+<a class="jxr_linenumber" name="54" href="#54">54</a>  			<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDatabaseMap.html">InstrumentDatabaseMap</a> map) {
 <a class="jxr_linenumber" name="55" href="#55">55</a>  		
 <a class="jxr_linenumber" name="56" href="#56">56</a>  		validateResourceFolder(resourceFolder);
 <a class="jxr_linenumber" name="57" href="#57">57</a>  		
@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="86" href="#86">86</a>  	}
 <a class="jxr_linenumber" name="87" href="#87">87</a>  	
 <a class="jxr_linenumber" name="88" href="#88">88</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Callable&lt;Boolean&gt; updateHistoricalDBMap(<strong class="jxr_keyword">final</strong> File resourceFolder,
-<a class="jxr_linenumber" name="89" href="#89">89</a>  			<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/LocalInstrumentDBMap.html">LocalInstrumentDBMap</a> map, <strong class="jxr_keyword">final</strong> DateTime date) {
+<a class="jxr_linenumber" name="89" href="#89">89</a>  			<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDatabaseMap.html">InstrumentDatabaseMap</a> map, <strong class="jxr_keyword">final</strong> DateTime date) {
 <a class="jxr_linenumber" name="90" href="#90">90</a>  		
 <a class="jxr_linenumber" name="91" href="#91">91</a>  		<em class="jxr_comment">//TODO</em>
 <a class="jxr_linenumber" name="92" href="#92">92</a>  		
@@ -207,162 +207,243 @@
 <a class="jxr_linenumber" name="197" href="#197">197</a> 		
 <a class="jxr_linenumber" name="198" href="#198">198</a> 	}
 <a class="jxr_linenumber" name="199" href="#199">199</a> 	
-<a class="jxr_linenumber" name="200" href="#200">200</a> 	<em class="jxr_comment">/*<em class="jxr_comment"> ***** ***** Begin private classes ***** ***** */</em></em>
-<a class="jxr_linenumber" name="201" href="#201">201</a> 	
-<a class="jxr_linenumber" name="202" href="#202">202</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">UpdateInstrumentDefinitions</a> <strong class="jxr_keyword">implements</strong> Callable&lt;Boolean&gt; {
-<a class="jxr_linenumber" name="203" href="#203">203</a> 
-<a class="jxr_linenumber" name="204" href="#204">204</a> 		<strong class="jxr_keyword">final</strong> File resourceFolder;
-<a class="jxr_linenumber" name="205" href="#205">205</a> 		
-<a class="jxr_linenumber" name="206" href="#206">206</a> 		<strong class="jxr_keyword">public</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">UpdateInstrumentDefinitions</a>(<strong class="jxr_keyword">final</strong> File resourceFolder) {
-<a class="jxr_linenumber" name="207" href="#207">207</a> 			<strong class="jxr_keyword">this</strong>.resourceFolder = resourceFolder;
-<a class="jxr_linenumber" name="208" href="#208">208</a> 		}
-<a class="jxr_linenumber" name="209" href="#209">209</a> 		
-<a class="jxr_linenumber" name="210" href="#210">210</a> 		@Override
-<a class="jxr_linenumber" name="211" href="#211">211</a> 		<strong class="jxr_keyword">public</strong> Boolean call() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="212" href="#212">212</a> 			
-<a class="jxr_linenumber" name="213" href="#213">213</a> 			<strong class="jxr_keyword">final</strong> File instDef = getLocalInstDef(resourceFolder);
+<a class="jxr_linenumber" name="200" href="#200">200</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(<strong class="jxr_keyword">final</strong> String[] args) {
+<a class="jxr_linenumber" name="201" href="#201">201</a> 		getLatestInstDefTimestamp();
+<a class="jxr_linenumber" name="202" href="#202">202</a> 	}
+<a class="jxr_linenumber" name="203" href="#203">203</a> 	
+<a class="jxr_linenumber" name="204" href="#204">204</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String DEF = <span class="jxr_string">"active/instrumentDef.zip"</span>;
+<a class="jxr_linenumber" name="205" href="#205">205</a> 	
+<a class="jxr_linenumber" name="206" href="#206">206</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getLatestInstDefTimestamp() {
+<a class="jxr_linenumber" name="207" href="#207">207</a> 		
+<a class="jxr_linenumber" name="208" href="#208">208</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="209" href="#209">209</a> 			
+<a class="jxr_linenumber" name="210" href="#210">210</a> 			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+<a class="jxr_linenumber" name="211" href="#211">211</a> 			
+<a class="jxr_linenumber" name="212" href="#212">212</a> 			Element element = db.parse(S3_URL).getDocumentElement();
+<a class="jxr_linenumber" name="213" href="#213">213</a> 			NodeList nodeList = element.getChildNodes();
 <a class="jxr_linenumber" name="214" href="#214">214</a> 			
-<a class="jxr_linenumber" name="215" href="#215">215</a> 			<strong class="jxr_keyword">final</strong> String remoteVersion = getLatestS3InstDefVersion();
-<a class="jxr_linenumber" name="216" href="#216">216</a> 			
-<a class="jxr_linenumber" name="217" href="#217">217</a> 			<strong class="jxr_keyword">if</strong>(remoteVersion == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="218" href="#218">218</a> 				
-<a class="jxr_linenumber" name="219" href="#219">219</a> 				<strong class="jxr_keyword">if</strong>(instDef == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="220" href="#220">220</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"No local instrument definitions "</span> +
-<a class="jxr_linenumber" name="221" href="#221">221</a> 							<span class="jxr_string">"and unable to reach remote resource"</span>);
-<a class="jxr_linenumber" name="222" href="#222">222</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="223" href="#223">223</a> 					log.debug(<span class="jxr_string">"Unable to reach remote, using local instrument definition file"</span>);
-<a class="jxr_linenumber" name="224" href="#224">224</a> 					<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="225" href="#225">225</a> 				}
-<a class="jxr_linenumber" name="226" href="#226">226</a> 				
-<a class="jxr_linenumber" name="227" href="#227">227</a> 			}
-<a class="jxr_linenumber" name="228" href="#228">228</a> 			
-<a class="jxr_linenumber" name="229" href="#229">229</a> 			<strong class="jxr_keyword">if</strong>(instDef == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="230" href="#230">230</a> 				log.debug(<span class="jxr_string">"No local instrument def file found, updating from remote"</span>);
-<a class="jxr_linenumber" name="231" href="#231">231</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="232" href="#232">232</a> 				log.debug(<span class="jxr_string">"Local instrument def file version {}"</span>, instDef.getName().split(<span class="jxr_string">"&#92;&#92;."</span>)[0]);
-<a class="jxr_linenumber" name="233" href="#233">233</a> 				log.debug(<span class="jxr_string">"Remote instrument def file version {}"</span>, remoteVersion);
-<a class="jxr_linenumber" name="234" href="#234">234</a> 			}
-<a class="jxr_linenumber" name="235" href="#235">235</a> 			
-<a class="jxr_linenumber" name="236" href="#236">236</a> 			<em class="jxr_comment">/*<em class="jxr_comment"> If local version is different, create new from remote */</em></em>
-<a class="jxr_linenumber" name="237" href="#237">237</a> 			<strong class="jxr_keyword">if</strong>(instDef == <strong class="jxr_keyword">null</strong> || !instDef.getName().split(<span class="jxr_string">"&#92;&#92;."</span>)[0].equals(remoteVersion)) {
-<a class="jxr_linenumber" name="238" href="#238">238</a> 				
-<a class="jxr_linenumber" name="239" href="#239">239</a> 				<em class="jxr_comment">// Purge old def files</em>
-<a class="jxr_linenumber" name="240" href="#240">240</a> 				
-<a class="jxr_linenumber" name="241" href="#241">241</a> 				log.debug(<span class="jxr_string">"Begin update of instrument definitions"</span>);
-<a class="jxr_linenumber" name="242" href="#242">242</a> 				
-<a class="jxr_linenumber" name="243" href="#243">243</a> 				<strong class="jxr_keyword">final</strong> URL instDefURL = <strong class="jxr_keyword">new</strong> URL(S3_URL + S3_PATH);
-<a class="jxr_linenumber" name="244" href="#244">244</a> 				URLConnection conn = instDefURL.openConnection();
-<a class="jxr_linenumber" name="245" href="#245">245</a> 		       
-<a class="jxr_linenumber" name="246" href="#246">246</a> 				InputStream in = conn.getInputStream();
-<a class="jxr_linenumber" name="247" href="#247">247</a> 				
-<a class="jxr_linenumber" name="248" href="#248">248</a> 				File outFile = <strong class="jxr_keyword">new</strong> File(resourceFolder.getPath() + <span class="jxr_string">"/"</span> + 
-<a class="jxr_linenumber" name="249" href="#249">249</a> 						remoteVersion + <span class="jxr_string">".zip"</span>);
-<a class="jxr_linenumber" name="250" href="#250">250</a> 			    FileOutputStream out = <strong class="jxr_keyword">new</strong> FileOutputStream(outFile);
-<a class="jxr_linenumber" name="251" href="#251">251</a> 			        
-<a class="jxr_linenumber" name="252" href="#252">252</a> 			    byte[] b = <strong class="jxr_keyword">new</strong> byte[1024];
-<a class="jxr_linenumber" name="253" href="#253">253</a> 			    <strong class="jxr_keyword">int</strong> count;
-<a class="jxr_linenumber" name="254" href="#254">254</a> 			    <strong class="jxr_keyword">while</strong> ((count = in.read(b)) &gt;= 0) {
-<a class="jxr_linenumber" name="255" href="#255">255</a> 			    	out.write(b, 0, count);
-<a class="jxr_linenumber" name="256" href="#256">256</a> 			    }
-<a class="jxr_linenumber" name="257" href="#257">257</a> 			    out.flush(); out.close(); in.close();
-<a class="jxr_linenumber" name="258" href="#258">258</a> 			    
-<a class="jxr_linenumber" name="259" href="#259">259</a> 			    log.debug(<span class="jxr_string">"Finished updating instrument definitions"</span>);
-<a class="jxr_linenumber" name="260" href="#260">260</a> 				
-<a class="jxr_linenumber" name="261" href="#261">261</a> 			    <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="262" href="#262">262</a> 			}
-<a class="jxr_linenumber" name="263" href="#263">263</a> 			
-<a class="jxr_linenumber" name="264" href="#264">264</a> 			log.debug(<span class="jxr_string">"Local instrument def file was up to date, skipping DB build"</span>);
-<a class="jxr_linenumber" name="265" href="#265">265</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="266" href="#266">266</a> 		}
-<a class="jxr_linenumber" name="267" href="#267">267</a> 		
-<a class="jxr_linenumber" name="268" href="#268">268</a> 	};
-<a class="jxr_linenumber" name="269" href="#269">269</a> 	
-<a class="jxr_linenumber" name="270" href="#270">270</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">PopulateDatabase</a> <strong class="jxr_keyword">implements</strong> Callable&lt;Boolean&gt; {
-<a class="jxr_linenumber" name="271" href="#271">271</a> 
-<a class="jxr_linenumber" name="272" href="#272">272</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File resourceFolder;
-<a class="jxr_linenumber" name="273" href="#273">273</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/LocalInstrumentDBMap.html">LocalInstrumentDBMap</a> map;
-<a class="jxr_linenumber" name="274" href="#274">274</a> 		
-<a class="jxr_linenumber" name="275" href="#275">275</a> 		<strong class="jxr_keyword">public</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">PopulateDatabase</a>(<strong class="jxr_keyword">final</strong> File resourceFolder,
-<a class="jxr_linenumber" name="276" href="#276">276</a> 			<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/LocalInstrumentDBMap.html">LocalInstrumentDBMap</a> map) {
-<a class="jxr_linenumber" name="277" href="#277">277</a> 			<strong class="jxr_keyword">this</strong>.resourceFolder = resourceFolder;
-<a class="jxr_linenumber" name="278" href="#278">278</a> 			<strong class="jxr_keyword">this</strong>.map = map;
-<a class="jxr_linenumber" name="279" href="#279">279</a> 		}
-<a class="jxr_linenumber" name="280" href="#280">280</a> 		
-<a class="jxr_linenumber" name="281" href="#281">281</a> 		@Override
-<a class="jxr_linenumber" name="282" href="#282">282</a> 		<strong class="jxr_keyword">public</strong> Boolean call() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="283" href="#283">283</a> 			
-<a class="jxr_linenumber" name="284" href="#284">284</a> 			log.debug(<span class="jxr_string">"Begin populating DB"</span>);
-<a class="jxr_linenumber" name="285" href="#285">285</a> 			
-<a class="jxr_linenumber" name="286" href="#286">286</a> 			InputStream inStream = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="287" href="#287">287</a> 			
-<a class="jxr_linenumber" name="288" href="#288">288</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="289" href="#289">289</a> 				
-<a class="jxr_linenumber" name="290" href="#290">290</a> 				<strong class="jxr_keyword">final</strong> File instDef = getLocalInstDef(resourceFolder);
-<a class="jxr_linenumber" name="291" href="#291">291</a> 				
-<a class="jxr_linenumber" name="292" href="#292">292</a> 				<strong class="jxr_keyword">if</strong>(instDef == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="293" href="#293">293</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Unable to find instrument definition in"</span> + 
-<a class="jxr_linenumber" name="294" href="#294">294</a> 								<span class="jxr_string">"resource folder"</span>);
-<a class="jxr_linenumber" name="295" href="#295">295</a> 				}
-<a class="jxr_linenumber" name="296" href="#296">296</a> 				
-<a class="jxr_linenumber" name="297" href="#297">297</a> 				<strong class="jxr_keyword">final</strong> ZipFile zFile= <strong class="jxr_keyword">new</strong> ZipFile(instDef);
-<a class="jxr_linenumber" name="298" href="#298">298</a> 				<strong class="jxr_keyword">final</strong> ZipEntry entry = zFile.entries().nextElement();
-<a class="jxr_linenumber" name="299" href="#299">299</a> 				inStream = zFile.getInputStream(entry);
-<a class="jxr_linenumber" name="300" href="#300">300</a> 				
-<a class="jxr_linenumber" name="301" href="#301">301</a> 				map.clear();
+<a class="jxr_linenumber" name="215" href="#215">215</a> 			<strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> i = 0; i &lt; nodeList.getLength(); i++) {
+<a class="jxr_linenumber" name="216" href="#216">216</a> 				
+<a class="jxr_linenumber" name="217" href="#217">217</a> 				<strong class="jxr_keyword">if</strong>(nodeList.item(i).getNodeName().equals(<span class="jxr_string">"Contents"</span>)) {
+<a class="jxr_linenumber" name="218" href="#218">218</a> 					
+<a class="jxr_linenumber" name="219" href="#219">219</a> 					NodeList contentNodes = nodeList.item(i).getChildNodes();
+<a class="jxr_linenumber" name="220" href="#220">220</a> 					
+<a class="jxr_linenumber" name="221" href="#221">221</a> 					Node instDefNode = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="222" href="#222">222</a> 					<strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> n = 0; n &lt; contentNodes.getLength(); n++) {
+<a class="jxr_linenumber" name="223" href="#223">223</a> 						
+<a class="jxr_linenumber" name="224" href="#224">224</a> 						<strong class="jxr_keyword">if</strong>(contentNodes.item(n).getNodeName().equals(<span class="jxr_string">"Key"</span>)) {
+<a class="jxr_linenumber" name="225" href="#225">225</a> 							
+<a class="jxr_linenumber" name="226" href="#226">226</a> 							<strong class="jxr_keyword">if</strong>(contentNodes.item(n).getTextContent().equals(DEF)) {
+<a class="jxr_linenumber" name="227" href="#227">227</a> 								instDefNode = contentNodes.item(n);
+<a class="jxr_linenumber" name="228" href="#228">228</a> 								<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="229" href="#229">229</a> 							}
+<a class="jxr_linenumber" name="230" href="#230">230</a> 							
+<a class="jxr_linenumber" name="231" href="#231">231</a> 						}
+<a class="jxr_linenumber" name="232" href="#232">232</a> 						
+<a class="jxr_linenumber" name="233" href="#233">233</a> 					}
+<a class="jxr_linenumber" name="234" href="#234">234</a> 						
+<a class="jxr_linenumber" name="235" href="#235">235</a> 					NodeList instDefNodeList = instDefNode.getChildNodes();
+<a class="jxr_linenumber" name="236" href="#236">236</a> 					<strong class="jxr_keyword">for</strong>(<strong class="jxr_keyword">int</strong> j = 0; j &lt; instDefNodeList.getLength(); j++) {
+<a class="jxr_linenumber" name="237" href="#237">237</a> 						
+<a class="jxr_linenumber" name="238" href="#238">238</a> 						System.out.println(instDefNodeList.item(j).getNodeName());
+<a class="jxr_linenumber" name="239" href="#239">239</a> 						
+<a class="jxr_linenumber" name="240" href="#240">240</a> 						<strong class="jxr_keyword">if</strong>(instDefNodeList.item(j).getNodeName().equals(<span class="jxr_string">"LastModified"</span>)) {
+<a class="jxr_linenumber" name="241" href="#241">241</a> 							System.out.println(instDefNodeList.item(j).getTextContent());
+<a class="jxr_linenumber" name="242" href="#242">242</a> 						}
+<a class="jxr_linenumber" name="243" href="#243">243</a> 						
+<a class="jxr_linenumber" name="244" href="#244">244</a> 					}
+<a class="jxr_linenumber" name="245" href="#245">245</a> 					
+<a class="jxr_linenumber" name="246" href="#246">246</a> <em class="jxr_comment">//					if(instDefNode != null) {</em>
+<a class="jxr_linenumber" name="247" href="#247">247</a> <em class="jxr_comment">//						</em>
+<a class="jxr_linenumber" name="248" href="#248">248</a> <em class="jxr_comment">//						NodeList instDefNodeList = instDefNode.getChildNodes();</em>
+<a class="jxr_linenumber" name="249" href="#249">249</a> <em class="jxr_comment">//						</em>
+<a class="jxr_linenumber" name="250" href="#250">250</a> <em class="jxr_comment">//						for(int j = 0; j &lt; instDefNodeList.getLength(); j++) {</em>
+<a class="jxr_linenumber" name="251" href="#251">251</a> <em class="jxr_comment">//							</em>
+<a class="jxr_linenumber" name="252" href="#252">252</a> <em class="jxr_comment">//							if(instDefNodeList.item(j).getNodeName().equals("LastModified")) {</em>
+<a class="jxr_linenumber" name="253" href="#253">253</a> <em class="jxr_comment">//								System.out.println(instDefNodeList.item(j).getTextContent());</em>
+<a class="jxr_linenumber" name="254" href="#254">254</a> <em class="jxr_comment">//							}</em>
+<a class="jxr_linenumber" name="255" href="#255">255</a> <em class="jxr_comment">//							</em>
+<a class="jxr_linenumber" name="256" href="#256">256</a> <em class="jxr_comment">//						}</em>
+<a class="jxr_linenumber" name="257" href="#257">257</a> <em class="jxr_comment">//						</em>
+<a class="jxr_linenumber" name="258" href="#258">258</a> <em class="jxr_comment">//					} else {</em>
+<a class="jxr_linenumber" name="259" href="#259">259</a> <em class="jxr_comment">//						throw new Exception();</em>
+<a class="jxr_linenumber" name="260" href="#260">260</a> <em class="jxr_comment">//					}</em>
+<a class="jxr_linenumber" name="261" href="#261">261</a> 					
+<a class="jxr_linenumber" name="262" href="#262">262</a> 				}
+<a class="jxr_linenumber" name="263" href="#263">263</a> 				
+<a class="jxr_linenumber" name="264" href="#264">264</a> 			}
+<a class="jxr_linenumber" name="265" href="#265">265</a> 			
+<a class="jxr_linenumber" name="266" href="#266">266</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="267" href="#267">267</a> 			
+<a class="jxr_linenumber" name="268" href="#268">268</a> 		} <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
+<a class="jxr_linenumber" name="269" href="#269">269</a> 			log.error(<span class="jxr_string">"Exception getting latest s3 version {}"</span> + e.getMessage());
+<a class="jxr_linenumber" name="270" href="#270">270</a> 			
+<a class="jxr_linenumber" name="271" href="#271">271</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="272" href="#272">272</a> 		}
+<a class="jxr_linenumber" name="273" href="#273">273</a> 		
+<a class="jxr_linenumber" name="274" href="#274">274</a> 	}
+<a class="jxr_linenumber" name="275" href="#275">275</a> 	
+<a class="jxr_linenumber" name="276" href="#276">276</a> 	<em class="jxr_comment">/*<em class="jxr_comment"> ***** ***** Begin private classes ***** ***** */</em></em>
+<a class="jxr_linenumber" name="277" href="#277">277</a> 	
+<a class="jxr_linenumber" name="278" href="#278">278</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">UpdateInstrumentDefinitions</a> <strong class="jxr_keyword">implements</strong> Callable&lt;Boolean&gt; {
+<a class="jxr_linenumber" name="279" href="#279">279</a> 
+<a class="jxr_linenumber" name="280" href="#280">280</a> 		<strong class="jxr_keyword">final</strong> File resourceFolder;
+<a class="jxr_linenumber" name="281" href="#281">281</a> 		
+<a class="jxr_linenumber" name="282" href="#282">282</a> 		<strong class="jxr_keyword">public</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">UpdateInstrumentDefinitions</a>(<strong class="jxr_keyword">final</strong> File resourceFolder) {
+<a class="jxr_linenumber" name="283" href="#283">283</a> 			<strong class="jxr_keyword">this</strong>.resourceFolder = resourceFolder;
+<a class="jxr_linenumber" name="284" href="#284">284</a> 		}
+<a class="jxr_linenumber" name="285" href="#285">285</a> 		
+<a class="jxr_linenumber" name="286" href="#286">286</a> 		@Override
+<a class="jxr_linenumber" name="287" href="#287">287</a> 		<strong class="jxr_keyword">public</strong> Boolean call() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="288" href="#288">288</a> 			
+<a class="jxr_linenumber" name="289" href="#289">289</a> 			<strong class="jxr_keyword">final</strong> File instDef = getLocalInstDef(resourceFolder);
+<a class="jxr_linenumber" name="290" href="#290">290</a> 			
+<a class="jxr_linenumber" name="291" href="#291">291</a> 			<strong class="jxr_keyword">final</strong> String remoteVersion = getLatestS3InstDefVersion();
+<a class="jxr_linenumber" name="292" href="#292">292</a> 			
+<a class="jxr_linenumber" name="293" href="#293">293</a> 			<strong class="jxr_keyword">if</strong>(remoteVersion == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="294" href="#294">294</a> 				
+<a class="jxr_linenumber" name="295" href="#295">295</a> 				<strong class="jxr_keyword">if</strong>(instDef == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="296" href="#296">296</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"No local instrument definitions "</span> +
+<a class="jxr_linenumber" name="297" href="#297">297</a> 							<span class="jxr_string">"and unable to reach remote resource"</span>);
+<a class="jxr_linenumber" name="298" href="#298">298</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="299" href="#299">299</a> 					log.debug(<span class="jxr_string">"Unable to reach remote, using local instrument definition file"</span>);
+<a class="jxr_linenumber" name="300" href="#300">300</a> 					<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="301" href="#301">301</a> 				}
 <a class="jxr_linenumber" name="302" href="#302">302</a> 				
-<a class="jxr_linenumber" name="303" href="#303">303</a> 				<strong class="jxr_keyword">long</strong> counter = 0;
-<a class="jxr_linenumber" name="304" href="#304">304</a> 				InstrumentDefinition def = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="305" href="#305">305</a> 				<strong class="jxr_keyword">while</strong>(<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="306" href="#306">306</a> 					def = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="307" href="#307">307</a> 					
-<a class="jxr_linenumber" name="308" href="#308">308</a> 					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="309" href="#309">309</a> 						def = InstrumentDefinition.
-<a class="jxr_linenumber" name="310" href="#310">310</a> 								parseDelimitedFrom(inStream);
-<a class="jxr_linenumber" name="311" href="#311">311</a> 					} <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
-<a class="jxr_linenumber" name="312" href="#312">312</a> 						<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="313" href="#313">313</a> 					}
-<a class="jxr_linenumber" name="314" href="#314">314</a> 					
-<a class="jxr_linenumber" name="315" href="#315">315</a> 					<strong class="jxr_keyword">if</strong>(def!= <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="316" href="#316">316</a> 						
-<a class="jxr_linenumber" name="317" href="#317">317</a> 						<strong class="jxr_keyword">if</strong>(def.hasSymbol()) {
-<a class="jxr_linenumber" name="318" href="#318">318</a> 							map.put(def.getSymbol(), def);
-<a class="jxr_linenumber" name="319" href="#319">319</a> 						}
-<a class="jxr_linenumber" name="320" href="#320">320</a> 						
-<a class="jxr_linenumber" name="321" href="#321">321</a> 						<strong class="jxr_keyword">if</strong>(counter % 100000 == 0) {
-<a class="jxr_linenumber" name="322" href="#322">322</a> 							log.debug(<span class="jxr_string">"Instrument DB build count "</span> + counter);
-<a class="jxr_linenumber" name="323" href="#323">323</a> 						}
-<a class="jxr_linenumber" name="324" href="#324">324</a> 						
-<a class="jxr_linenumber" name="325" href="#325">325</a> 						counter++;
-<a class="jxr_linenumber" name="326" href="#326">326</a> 						
-<a class="jxr_linenumber" name="327" href="#327">327</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="328" href="#328">328</a> 						<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="329" href="#329">329</a> 					}
-<a class="jxr_linenumber" name="330" href="#330">330</a> 				}
-<a class="jxr_linenumber" name="331" href="#331">331</a> 				
-<a class="jxr_linenumber" name="332" href="#332">332</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="333" href="#333">333</a> 			
-<a class="jxr_linenumber" name="334" href="#334">334</a> 			} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="335" href="#335">335</a> 				
-<a class="jxr_linenumber" name="336" href="#336">336</a> 				log.debug(<span class="jxr_string">"Finished populating DB"</span>);
-<a class="jxr_linenumber" name="337" href="#337">337</a> 				
-<a class="jxr_linenumber" name="338" href="#338">338</a> 				<strong class="jxr_keyword">if</strong>(inStream != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="339" href="#339">339</a> 					inStream.close();
-<a class="jxr_linenumber" name="340" href="#340">340</a> 				}
-<a class="jxr_linenumber" name="341" href="#341">341</a> 			}
-<a class="jxr_linenumber" name="342" href="#342">342</a> 		}
-<a class="jxr_linenumber" name="343" href="#343">343</a> 		
-<a class="jxr_linenumber" name="344" href="#344">344</a> 	};
-<a class="jxr_linenumber" name="345" href="#345">345</a> 	
-<a class="jxr_linenumber" name="346" href="#346">346</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">ZipFilter</a> <strong class="jxr_keyword">implements</strong> FileFilter {
-<a class="jxr_linenumber" name="347" href="#347">347</a> 
-<a class="jxr_linenumber" name="348" href="#348">348</a> 		@Override
-<a class="jxr_linenumber" name="349" href="#349">349</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(<strong class="jxr_keyword">final</strong> File pathname) {
-<a class="jxr_linenumber" name="350" href="#350">350</a> 			<strong class="jxr_keyword">return</strong> pathname.getName().toLowerCase().endsWith(<span class="jxr_string">".zip"</span>);
-<a class="jxr_linenumber" name="351" href="#351">351</a> 		}
-<a class="jxr_linenumber" name="352" href="#352">352</a> 		
-<a class="jxr_linenumber" name="353" href="#353">353</a> 	}
-<a class="jxr_linenumber" name="354" href="#354">354</a> 	
-<a class="jxr_linenumber" name="355" href="#355">355</a> }
+<a class="jxr_linenumber" name="303" href="#303">303</a> 			}
+<a class="jxr_linenumber" name="304" href="#304">304</a> 			
+<a class="jxr_linenumber" name="305" href="#305">305</a> 			<strong class="jxr_keyword">if</strong>(instDef == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="306" href="#306">306</a> 				log.debug(<span class="jxr_string">"No local instrument def file found, updating from remote"</span>);
+<a class="jxr_linenumber" name="307" href="#307">307</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="308" href="#308">308</a> 				log.debug(<span class="jxr_string">"Local instrument def file version {}"</span>, instDef.getName().split(<span class="jxr_string">"&#92;&#92;."</span>)[0]);
+<a class="jxr_linenumber" name="309" href="#309">309</a> 				log.debug(<span class="jxr_string">"Remote instrument def file version {}"</span>, remoteVersion);
+<a class="jxr_linenumber" name="310" href="#310">310</a> 			}
+<a class="jxr_linenumber" name="311" href="#311">311</a> 			
+<a class="jxr_linenumber" name="312" href="#312">312</a> 			<em class="jxr_comment">/*<em class="jxr_comment"> If local version is different, create new from remote */</em></em>
+<a class="jxr_linenumber" name="313" href="#313">313</a> 			<strong class="jxr_keyword">if</strong>(instDef == <strong class="jxr_keyword">null</strong> || !instDef.getName().split(<span class="jxr_string">"&#92;&#92;."</span>)[0].equals(remoteVersion)) {
+<a class="jxr_linenumber" name="314" href="#314">314</a> 				
+<a class="jxr_linenumber" name="315" href="#315">315</a> 				<em class="jxr_comment">// Purge old def files</em>
+<a class="jxr_linenumber" name="316" href="#316">316</a> 				
+<a class="jxr_linenumber" name="317" href="#317">317</a> 				log.debug(<span class="jxr_string">"Begin update of instrument definitions"</span>);
+<a class="jxr_linenumber" name="318" href="#318">318</a> 				
+<a class="jxr_linenumber" name="319" href="#319">319</a> 				<strong class="jxr_keyword">final</strong> URL instDefURL = <strong class="jxr_keyword">new</strong> URL(S3_URL + S3_PATH);
+<a class="jxr_linenumber" name="320" href="#320">320</a> 				URLConnection conn = instDefURL.openConnection();
+<a class="jxr_linenumber" name="321" href="#321">321</a> 		       
+<a class="jxr_linenumber" name="322" href="#322">322</a> 				InputStream in = conn.getInputStream();
+<a class="jxr_linenumber" name="323" href="#323">323</a> 				
+<a class="jxr_linenumber" name="324" href="#324">324</a> 				File outFile = <strong class="jxr_keyword">new</strong> File(resourceFolder.getPath() + <span class="jxr_string">"/"</span> + 
+<a class="jxr_linenumber" name="325" href="#325">325</a> 						remoteVersion + <span class="jxr_string">".zip"</span>);
+<a class="jxr_linenumber" name="326" href="#326">326</a> 				
+<a class="jxr_linenumber" name="327" href="#327">327</a> 				<em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="328" href="#328">328</a> <em class="jxr_comment">				 * Client exception here</em>
+<a class="jxr_linenumber" name="329" href="#329">329</a> <em class="jxr_comment">				 */</em>
+<a class="jxr_linenumber" name="330" href="#330">330</a> 			    FileOutputStream out = <strong class="jxr_keyword">new</strong> FileOutputStream(outFile);
+<a class="jxr_linenumber" name="331" href="#331">331</a> 			        
+<a class="jxr_linenumber" name="332" href="#332">332</a> 			    byte[] b = <strong class="jxr_keyword">new</strong> byte[1024];
+<a class="jxr_linenumber" name="333" href="#333">333</a> 			    <strong class="jxr_keyword">int</strong> count;
+<a class="jxr_linenumber" name="334" href="#334">334</a> 			    <strong class="jxr_keyword">while</strong> ((count = in.read(b)) &gt;= 0) {
+<a class="jxr_linenumber" name="335" href="#335">335</a> 			    	out.write(b, 0, count);
+<a class="jxr_linenumber" name="336" href="#336">336</a> 			    }
+<a class="jxr_linenumber" name="337" href="#337">337</a> 			    out.flush(); out.close(); in.close();
+<a class="jxr_linenumber" name="338" href="#338">338</a> 			    
+<a class="jxr_linenumber" name="339" href="#339">339</a> 			    log.debug(<span class="jxr_string">"Finished updating instrument definitions"</span>);
+<a class="jxr_linenumber" name="340" href="#340">340</a> 				
+<a class="jxr_linenumber" name="341" href="#341">341</a> 			    <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="342" href="#342">342</a> 			}
+<a class="jxr_linenumber" name="343" href="#343">343</a> 			
+<a class="jxr_linenumber" name="344" href="#344">344</a> 			log.debug(<span class="jxr_string">"Local instrument def file was up to date, skipping DB build"</span>);
+<a class="jxr_linenumber" name="345" href="#345">345</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="346" href="#346">346</a> 		}
+<a class="jxr_linenumber" name="347" href="#347">347</a> 		
+<a class="jxr_linenumber" name="348" href="#348">348</a> 	};
+<a class="jxr_linenumber" name="349" href="#349">349</a> 	
+<a class="jxr_linenumber" name="350" href="#350">350</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">PopulateDatabase</a> <strong class="jxr_keyword">implements</strong> Callable&lt;Boolean&gt; {
+<a class="jxr_linenumber" name="351" href="#351">351</a> 
+<a class="jxr_linenumber" name="352" href="#352">352</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File resourceFolder;
+<a class="jxr_linenumber" name="353" href="#353">353</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDatabaseMap.html">InstrumentDatabaseMap</a> map;
+<a class="jxr_linenumber" name="354" href="#354">354</a> 		
+<a class="jxr_linenumber" name="355" href="#355">355</a> 		<strong class="jxr_keyword">public</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">PopulateDatabase</a>(<strong class="jxr_keyword">final</strong> File resourceFolder,
+<a class="jxr_linenumber" name="356" href="#356">356</a> 			<strong class="jxr_keyword">final</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDatabaseMap.html">InstrumentDatabaseMap</a> map) {
+<a class="jxr_linenumber" name="357" href="#357">357</a> 			<strong class="jxr_keyword">this</strong>.resourceFolder = resourceFolder;
+<a class="jxr_linenumber" name="358" href="#358">358</a> 			<strong class="jxr_keyword">this</strong>.map = map;
+<a class="jxr_linenumber" name="359" href="#359">359</a> 		}
+<a class="jxr_linenumber" name="360" href="#360">360</a> 		
+<a class="jxr_linenumber" name="361" href="#361">361</a> 		@Override
+<a class="jxr_linenumber" name="362" href="#362">362</a> 		<strong class="jxr_keyword">public</strong> Boolean call() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="363" href="#363">363</a> 			
+<a class="jxr_linenumber" name="364" href="#364">364</a> 			log.debug(<span class="jxr_string">"Begin populating DB"</span>);
+<a class="jxr_linenumber" name="365" href="#365">365</a> 			
+<a class="jxr_linenumber" name="366" href="#366">366</a> 			InputStream inStream = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="367" href="#367">367</a> 			
+<a class="jxr_linenumber" name="368" href="#368">368</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="369" href="#369">369</a> 				
+<a class="jxr_linenumber" name="370" href="#370">370</a> 				<strong class="jxr_keyword">final</strong> File instDef = getLocalInstDef(resourceFolder);
+<a class="jxr_linenumber" name="371" href="#371">371</a> 				
+<a class="jxr_linenumber" name="372" href="#372">372</a> 				<strong class="jxr_keyword">if</strong>(instDef == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="373" href="#373">373</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(
+<a class="jxr_linenumber" name="374" href="#374">374</a> 							<span class="jxr_string">"Unable to find instrument definition in "</span> + 
+<a class="jxr_linenumber" name="375" href="#375">375</a> 							<span class="jxr_string">"resource folder"</span>);
+<a class="jxr_linenumber" name="376" href="#376">376</a> 				}
+<a class="jxr_linenumber" name="377" href="#377">377</a> 				
+<a class="jxr_linenumber" name="378" href="#378">378</a> 				<strong class="jxr_keyword">final</strong> ZipFile zFile= <strong class="jxr_keyword">new</strong> ZipFile(instDef);
+<a class="jxr_linenumber" name="379" href="#379">379</a> 				<strong class="jxr_keyword">final</strong> ZipEntry entry = zFile.entries().nextElement();
+<a class="jxr_linenumber" name="380" href="#380">380</a> 				inStream = zFile.getInputStream(entry);
+<a class="jxr_linenumber" name="381" href="#381">381</a> 				
+<a class="jxr_linenumber" name="382" href="#382">382</a> 				map.clear();
+<a class="jxr_linenumber" name="383" href="#383">383</a> 				
+<a class="jxr_linenumber" name="384" href="#384">384</a> 				<strong class="jxr_keyword">long</strong> counter = 0;
+<a class="jxr_linenumber" name="385" href="#385">385</a> 				InstrumentDefinition def = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="386" href="#386">386</a> 				<strong class="jxr_keyword">while</strong>(<strong class="jxr_keyword">true</strong>) {
+<a class="jxr_linenumber" name="387" href="#387">387</a> 					def = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="388" href="#388">388</a> 					
+<a class="jxr_linenumber" name="389" href="#389">389</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="390" href="#390">390</a> 						def = InstrumentDefinition.
+<a class="jxr_linenumber" name="391" href="#391">391</a> 								parseDelimitedFrom(inStream);
+<a class="jxr_linenumber" name="392" href="#392">392</a> 					} <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> Exception e) {
+<a class="jxr_linenumber" name="393" href="#393">393</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="394" href="#394">394</a> 					}
+<a class="jxr_linenumber" name="395" href="#395">395</a> 					
+<a class="jxr_linenumber" name="396" href="#396">396</a> 					<strong class="jxr_keyword">if</strong>(def!= <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="397" href="#397">397</a> 						
+<a class="jxr_linenumber" name="398" href="#398">398</a> 						<strong class="jxr_keyword">if</strong>(def.hasSymbol()) {
+<a class="jxr_linenumber" name="399" href="#399">399</a> 							map.put(def.getSymbol(), def);
+<a class="jxr_linenumber" name="400" href="#400">400</a> 						}
+<a class="jxr_linenumber" name="401" href="#401">401</a> 						
+<a class="jxr_linenumber" name="402" href="#402">402</a> 						<strong class="jxr_keyword">if</strong>(counter % 100000 == 0) {
+<a class="jxr_linenumber" name="403" href="#403">403</a> 							log.debug(<span class="jxr_string">"Instrument DB build count "</span> + counter);
+<a class="jxr_linenumber" name="404" href="#404">404</a> 						}
+<a class="jxr_linenumber" name="405" href="#405">405</a> 						
+<a class="jxr_linenumber" name="406" href="#406">406</a> 						counter++;
+<a class="jxr_linenumber" name="407" href="#407">407</a> 						
+<a class="jxr_linenumber" name="408" href="#408">408</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="409" href="#409">409</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="410" href="#410">410</a> 					}
+<a class="jxr_linenumber" name="411" href="#411">411</a> 				}
+<a class="jxr_linenumber" name="412" href="#412">412</a> 				
+<a class="jxr_linenumber" name="413" href="#413">413</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="414" href="#414">414</a> 			
+<a class="jxr_linenumber" name="415" href="#415">415</a> 			} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="416" href="#416">416</a> 				
+<a class="jxr_linenumber" name="417" href="#417">417</a> 				log.debug(<span class="jxr_string">"Finished populating DB"</span>);
+<a class="jxr_linenumber" name="418" href="#418">418</a> 				
+<a class="jxr_linenumber" name="419" href="#419">419</a> 				<strong class="jxr_keyword">if</strong>(inStream != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="420" href="#420">420</a> 					inStream.close();
+<a class="jxr_linenumber" name="421" href="#421">421</a> 				}
+<a class="jxr_linenumber" name="422" href="#422">422</a> 			}
+<a class="jxr_linenumber" name="423" href="#423">423</a> 		}
+<a class="jxr_linenumber" name="424" href="#424">424</a> 		
+<a class="jxr_linenumber" name="425" href="#425">425</a> 	};
+<a class="jxr_linenumber" name="426" href="#426">426</a> 	
+<a class="jxr_linenumber" name="427" href="#427">427</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/InstrumentDBProvider.html">ZipFilter</a> <strong class="jxr_keyword">implements</strong> FileFilter {
+<a class="jxr_linenumber" name="428" href="#428">428</a> 
+<a class="jxr_linenumber" name="429" href="#429">429</a> 		@Override
+<a class="jxr_linenumber" name="430" href="#430">430</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(<strong class="jxr_keyword">final</strong> File pathname) {
+<a class="jxr_linenumber" name="431" href="#431">431</a> 			<strong class="jxr_keyword">return</strong> pathname.getName().toLowerCase().endsWith(<span class="jxr_string">".zip"</span>);
+<a class="jxr_linenumber" name="432" href="#432">432</a> 		}
+<a class="jxr_linenumber" name="433" href="#433">433</a> 		
+<a class="jxr_linenumber" name="434" href="#434">434</a> 	}
+<a class="jxr_linenumber" name="435" href="#435">435</a> 	
+<a class="jxr_linenumber" name="436" href="#436">436</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

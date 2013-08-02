@@ -14,7 +14,7 @@
 <a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="5" href="#5">5</a>   
 <a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
-<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.LocalInstrumentDBMap;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
 <a class="jxr_linenumber" name="8" href="#8">8</a>   
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/client/provider/LookupSymbolsInLocalDB.html">LookupSymbolsInLocalDB</a> {
 <a class="jxr_linenumber" name="10" href="#10">10</a>  
@@ -23,7 +23,7 @@
 <a class="jxr_linenumber" name="13" href="#13">13</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(<strong class="jxr_keyword">final</strong> String[] args) {
 <a class="jxr_linenumber" name="14" href="#14">14</a>  		
 <a class="jxr_linenumber" name="15" href="#15">15</a>  	
-<a class="jxr_linenumber" name="16" href="#16">16</a>  		LocalInstrumentDBMap dbMap = InstrumentDBProvider.getMap(getTempFolder());
+<a class="jxr_linenumber" name="16" href="#16">16</a>  		InstrumentDatabaseMap dbMap = InstrumentDBProvider.getMap(getTempFolder());
 <a class="jxr_linenumber" name="17" href="#17">17</a>  		
 <a class="jxr_linenumber" name="18" href="#18">18</a>  		System.out.println(dbMap.get(<span class="jxr_string">"LEQ0|1100C"</span>).toString());
 <a class="jxr_linenumber" name="19" href="#19">19</a>  		System.out.println(dbMap.get(<span class="jxr_string">"ESV1450P"</span>).toString());

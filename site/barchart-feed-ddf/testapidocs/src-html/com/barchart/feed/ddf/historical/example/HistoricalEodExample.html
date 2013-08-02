@@ -71,7 +71,7 @@
 <FONT color="green">068</FONT>                    final String symbol = "EGM2";<a name="line.68"></a>
 <FONT color="green">069</FONT>    <a name="line.69"></a>
 <FONT color="green">070</FONT>                    final Instrument instrument = //<a name="line.70"></a>
-<FONT color="green">071</FONT>                                    DDF_InstrumentProvider.findHistorical(symbol).get(0);<a name="line.71"></a>
+<FONT color="green">071</FONT>                                    DDF_InstrumentProvider.fromHistorical(symbol);<a name="line.71"></a>
 <FONT color="green">072</FONT>    <a name="line.72"></a>
 <FONT color="green">073</FONT>                    if (instrument.isNull()) {<a name="line.73"></a>
 <FONT color="green">074</FONT>                            log.error("can not get insrument for : {}", symbol);<a name="line.74"></a>

@@ -5,80 +5,67 @@
 <FONT color="green">002</FONT>    <a name="line.2"></a>
 <FONT color="green">003</FONT>    import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;<a name="line.3"></a>
 <FONT color="green">004</FONT>    import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;<a name="line.4"></a>
-<FONT color="green">005</FONT>    import static com.barchart.feed.inst.InstrumentField.*;<a name="line.5"></a>
-<FONT color="green">006</FONT>    import static com.barchart.util.values.provider.ValueBuilder.*;<a name="line.6"></a>
-<FONT color="green">007</FONT>    import static org.junit.Assert.assertTrue;<a name="line.7"></a>
+<FONT color="green">005</FONT>    import static org.junit.Assert.assertTrue;<a name="line.5"></a>
+<FONT color="green">006</FONT>    <a name="line.6"></a>
+<FONT color="green">007</FONT>    import java.io.ByteArrayInputStream;<a name="line.7"></a>
 <FONT color="green">008</FONT>    <a name="line.8"></a>
-<FONT color="green">009</FONT>    import java.io.ByteArrayInputStream;<a name="line.9"></a>
-<FONT color="green">010</FONT>    <a name="line.10"></a>
-<FONT color="green">011</FONT>    import javax.xml.parsers.DocumentBuilder;<a name="line.11"></a>
-<FONT color="green">012</FONT>    import javax.xml.parsers.DocumentBuilderFactory;<a name="line.12"></a>
-<FONT color="green">013</FONT>    <a name="line.13"></a>
-<FONT color="green">014</FONT>    import org.junit.Test;<a name="line.14"></a>
-<FONT color="green">015</FONT>    import org.w3c.dom.Document;<a name="line.15"></a>
-<FONT color="green">016</FONT>    import org.w3c.dom.Element;<a name="line.16"></a>
-<FONT color="green">017</FONT>    <a name="line.17"></a>
-<FONT color="green">018</FONT>    import com.barchart.feed.api.model.meta.Instrument;<a name="line.18"></a>
-<FONT color="green">019</FONT>    import com.barchart.feed.inst.missive.BarchartFeedInstManifest;<a name="line.19"></a>
-<FONT color="green">020</FONT>    import com.barchart.missive.api.Tag;<a name="line.20"></a>
-<FONT color="green">021</FONT>    import com.barchart.missive.core.Manifest;<a name="line.21"></a>
-<FONT color="green">022</FONT>    import com.barchart.missive.core.ObjectMap;<a name="line.22"></a>
-<FONT color="green">023</FONT>    import com.barchart.missive.core.ObjectMapFactory;<a name="line.23"></a>
-<FONT color="green">024</FONT>    import com.barchart.util.value.api.Factory;<a name="line.24"></a>
-<FONT color="green">025</FONT>    import com.barchart.util.value.api.FactoryLoader;<a name="line.25"></a>
-<FONT color="green">026</FONT>    import com.barchart.util.value.api.TimeInterval;<a name="line.26"></a>
-<FONT color="green">027</FONT>    import com.barchart.util.values.provider.ValueConst;<a name="line.27"></a>
-<FONT color="green">028</FONT>    <a name="line.28"></a>
-<FONT color="green">029</FONT>    public class TestInstrumentXML {<a name="line.29"></a>
-<FONT color="green">030</FONT>    <a name="line.30"></a>
-<FONT color="green">031</FONT>            private static final Factory factory = FactoryLoader.load();<a name="line.31"></a>
-<FONT color="green">032</FONT>            <a name="line.32"></a>
-<FONT color="green">033</FONT>            private static final String IBM = "&lt;instruments status=\"200\" count=\"1\"&gt;       &lt;instrument lookup=\"IBM\" status=\"200\" guid=\"IBM\" id=\"1298146\" symbol_realtime=\"IBM\" symbol_ddf=\"IBM\" symbol_historical=\"IBM\" "+<a name="line.33"></a>
-<FONT color="green">034</FONT>                    "symbol_description=\"International Business Machines Corp.\" symbol_cfi=\"EXXXXX\" exchange=\"XNYS\" exchange_channel=\"NYSE\" exchange_description=\"New York Stock Exchange\" exchange_ddf=\"N\" time_zone_ddf=\"America/New_York\" " + <a name="line.34"></a>
-<FONT color="green">035</FONT>                    "tick_increment=\"1\" unit_code=\"2\" base_code=\"A\" point_value=\"1\"/&gt; &lt;/instruments&gt;";<a name="line.35"></a>
-<FONT color="green">036</FONT>            <a name="line.36"></a>
-<FONT color="green">037</FONT>            @Test<a name="line.37"></a>
-<FONT color="green">038</FONT>            public void testXML() throws Exception {<a name="line.38"></a>
-<FONT color="green">039</FONT>                    <a name="line.39"></a>
-<FONT color="green">040</FONT>                    ObjectMapFactory.install(new BarchartFeedInstManifest());<a name="line.40"></a>
-<FONT color="green">041</FONT>                    final Manifest&lt;ObjectMap&gt; ddfManifest = new Manifest&lt;ObjectMap&gt;();<a name="line.41"></a>
-<FONT color="green">042</FONT>                    ddfManifest.put(InstrumentDDF.class, new Tag&lt;?&gt;[0]);<a name="line.42"></a>
-<FONT color="green">043</FONT>                    ObjectMapFactory.install(ddfManifest);<a name="line.43"></a>
-<FONT color="green">044</FONT>                    <a name="line.44"></a>
-<FONT color="green">045</FONT>                    final DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();<a name="line.45"></a>
-<FONT color="green">046</FONT>                    final DocumentBuilder builder = fac.newDocumentBuilder();<a name="line.46"></a>
-<FONT color="green">047</FONT>                    <a name="line.47"></a>
-<FONT color="green">048</FONT>                    final Document document = builder.parse(new ByteArrayInputStream(IBM.getBytes()));<a name="line.48"></a>
-<FONT color="green">049</FONT>                    final Element root = document.getDocumentElement();<a name="line.49"></a>
-<FONT color="green">050</FONT>                    final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);<a name="line.50"></a>
-<FONT color="green">051</FONT>                    final InstrumentDDF IBMInst = InstrumentXML.decodeXML(tag);<a name="line.51"></a>
-<FONT color="green">052</FONT>                    <a name="line.52"></a>
-<FONT color="green">053</FONT>                    System.out.println(IBMInst.toString());<a name="line.53"></a>
-<FONT color="green">054</FONT>                    <a name="line.54"></a>
-<FONT color="green">055</FONT>                    assertTrue(IBMInst.get(MARKET_GUID).equals("1298146"));<a name="line.55"></a>
-<FONT color="green">056</FONT>                    assertTrue(IBMInst.get(SECURITY_TYPE) == Instrument.SecurityType.NULL_TYPE);<a name="line.56"></a>
-<FONT color="green">057</FONT>                    assertTrue(IBMInst.get(BOOK_LIQUIDITY) == Instrument.BookLiquidityType.NONE);<a name="line.57"></a>
-<FONT color="green">058</FONT>                    assertTrue(IBMInst.get(BOOK_STRUCTURE) == Instrument.BookStructureType.NONE);<a name="line.58"></a>
-<FONT color="green">059</FONT>                    assertTrue(IBMInst.get(BOOK_DEPTH) == ValueConst.NULL_SIZE);<a name="line.59"></a>
-<FONT color="green">060</FONT>                    assertTrue(IBMInst.get(VENDOR).equals(newText("Barchart")));<a name="line.60"></a>
-<FONT color="green">061</FONT>                    assertTrue(IBMInst.get(SYMBOL).equals(newText("IBM")));<a name="line.61"></a>
-<FONT color="green">062</FONT>                    assertTrue(IBMInst.get(DESCRIPTION).equals("International Business Machines Corp."));<a name="line.62"></a>
-<FONT color="green">063</FONT>                    assertTrue(IBMInst.get(CFI_CODE).equals(newText("EXXXXX")));<a name="line.63"></a>
-<FONT color="green">064</FONT>                    assertTrue(IBMInst.get(EXCHANGE_CODE).equals(newText("N")));<a name="line.64"></a>
-<FONT color="green">065</FONT>                    assertTrue(IBMInst.get(TICK_SIZE).equals(newPrice(0.01)));<a name="line.65"></a>
-<FONT color="green">066</FONT>                    assertTrue(IBMInst.get(POINT_VALUE).equals(newPrice(1)));<a name="line.66"></a>
-<FONT color="green">067</FONT>                    assertTrue(IBMInst.get(DISPLAY_FRACTION).equals(factory.newFraction(10, -2)));<a name="line.67"></a>
-<FONT color="green">068</FONT>                    assertTrue(IBMInst.get(LIFETIME) == TimeInterval.NULL);<a name="line.68"></a>
-<FONT color="green">069</FONT>                    assertTrue(IBMInst.get(MARKET_HOURS).size() == 0);<a name="line.69"></a>
-<FONT color="green">070</FONT>                    assertTrue(IBMInst.get(TIME_ZONE_OFFSET).equals(newSize(-18000000)));<a name="line.70"></a>
-<FONT color="green">071</FONT>                    assertTrue(IBMInst.get(TIME_ZONE_NAME).equals(newText("NEW_YORK")));<a name="line.71"></a>
-<FONT color="green">072</FONT>                    <a name="line.72"></a>
-<FONT color="green">073</FONT>            }<a name="line.73"></a>
-<FONT color="green">074</FONT>            <a name="line.74"></a>
-<FONT color="green">075</FONT>            <a name="line.75"></a>
-<FONT color="green">076</FONT>            <a name="line.76"></a>
-<FONT color="green">077</FONT>            <a name="line.77"></a>
-<FONT color="green">078</FONT>    }<a name="line.78"></a>
+<FONT color="green">009</FONT>    import javax.xml.parsers.DocumentBuilder;<a name="line.9"></a>
+<FONT color="green">010</FONT>    import javax.xml.parsers.DocumentBuilderFactory;<a name="line.10"></a>
+<FONT color="green">011</FONT>    <a name="line.11"></a>
+<FONT color="green">012</FONT>    import org.junit.Test;<a name="line.12"></a>
+<FONT color="green">013</FONT>    import org.w3c.dom.Document;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import org.w3c.dom.Element;<a name="line.14"></a>
+<FONT color="green">015</FONT>    <a name="line.15"></a>
+<FONT color="green">016</FONT>    import com.barchart.feed.api.model.meta.Instrument;<a name="line.16"></a>
+<FONT color="green">017</FONT>    import com.barchart.feed.inst.provider.InstrumentFactory;<a name="line.17"></a>
+<FONT color="green">018</FONT>    import com.barchart.util.value.api.Factory;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import com.barchart.util.value.api.FactoryLoader;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import com.barchart.util.value.api.Size;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import com.barchart.util.value.api.TimeInterval;<a name="line.21"></a>
+<FONT color="green">022</FONT>    <a name="line.22"></a>
+<FONT color="green">023</FONT>    public class TestInstrumentXML {<a name="line.23"></a>
+<FONT color="green">024</FONT>    <a name="line.24"></a>
+<FONT color="green">025</FONT>            private static final Factory factory = FactoryLoader.load();<a name="line.25"></a>
+<FONT color="green">026</FONT>            <a name="line.26"></a>
+<FONT color="green">027</FONT>            private static final String IBM = "&lt;instruments status=\"200\" count=\"1\"&gt;       &lt;instrument lookup=\"IBM\" status=\"200\" guid=\"IBM\" id=\"1298146\" symbol_realtime=\"IBM\" symbol_ddf=\"IBM\" symbol_historical=\"IBM\" "+<a name="line.27"></a>
+<FONT color="green">028</FONT>                    "symbol_description=\"International Business Machines Corp.\" symbol_cfi=\"EXXXXX\" exchange=\"XNYS\" exchange_channel=\"NYSE\" exchange_description=\"New York Stock Exchange\" exchange_ddf=\"N\" time_zone_ddf=\"America/New_York\" " + <a name="line.28"></a>
+<FONT color="green">029</FONT>                    "tick_increment=\"1\" unit_code=\"2\" base_code=\"A\" point_value=\"1\"/&gt; &lt;/instruments&gt;";<a name="line.29"></a>
+<FONT color="green">030</FONT>            <a name="line.30"></a>
+<FONT color="green">031</FONT>            @Test<a name="line.31"></a>
+<FONT color="green">032</FONT>            public void testXML() throws Exception {<a name="line.32"></a>
+<FONT color="green">033</FONT>                    <a name="line.33"></a>
+<FONT color="green">034</FONT>                    final DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();<a name="line.34"></a>
+<FONT color="green">035</FONT>                    final DocumentBuilder builder = fac.newDocumentBuilder();<a name="line.35"></a>
+<FONT color="green">036</FONT>                    <a name="line.36"></a>
+<FONT color="green">037</FONT>                    final Document document = builder.parse(new ByteArrayInputStream(IBM.getBytes()));<a name="line.37"></a>
+<FONT color="green">038</FONT>                    final Element root = document.getDocumentElement();<a name="line.38"></a>
+<FONT color="green">039</FONT>                    final Element tag = xmlFirstChild(root, XmlTagExtras.TAG, XML_STOP);<a name="line.39"></a>
+<FONT color="green">040</FONT>                    final Instrument IBMInst = InstrumentFactory.instrument(InstrumentXML.decodeXML(tag));<a name="line.40"></a>
+<FONT color="green">041</FONT>                    <a name="line.41"></a>
+<FONT color="green">042</FONT>                    assertTrue(IBMInst.marketGUID().equals("IBM"));<a name="line.42"></a>
+<FONT color="green">043</FONT>                    assertTrue(IBMInst.securityType() == Instrument.SecurityType.NULL_TYPE);<a name="line.43"></a>
+<FONT color="green">044</FONT>                    assertTrue(IBMInst.liquidityType() == Instrument.BookLiquidityType.NONE);<a name="line.44"></a>
+<FONT color="green">045</FONT>                    assertTrue(IBMInst.bookStructure() == Instrument.BookStructureType.NONE);<a name="line.45"></a>
+<FONT color="green">046</FONT>                    assertTrue(IBMInst.maxBookDepth() == Size.NULL);<a name="line.46"></a>
+<FONT color="green">047</FONT>                    assertTrue(IBMInst.instrumentDataVendor().equals("Barchart"));<a name="line.47"></a>
+<FONT color="green">048</FONT>                    assertTrue(IBMInst.symbol().equals("IBM"));<a name="line.48"></a>
+<FONT color="green">049</FONT>                    assertTrue(IBMInst.description().equals("International Business Machines Corp."));<a name="line.49"></a>
+<FONT color="green">050</FONT>                    assertTrue(IBMInst.CFICode().equals("EXXXXX"));<a name="line.50"></a>
+<FONT color="green">051</FONT>                    assertTrue(IBMInst.exchangeCode().equals("N"));<a name="line.51"></a>
+<FONT color="green">052</FONT>                    assertTrue(IBMInst.tickSize().equals(factory.newPrice(1, -2)));<a name="line.52"></a>
+<FONT color="green">053</FONT>                    assertTrue(IBMInst.pointValue().equals(factory.newPrice(1, 0)));<a name="line.53"></a>
+<FONT color="green">054</FONT>                    assertTrue(IBMInst.displayFraction().equals(factory.newFraction(10, -2)));<a name="line.54"></a>
+<FONT color="green">055</FONT>                    assertTrue(IBMInst.lifetime() == TimeInterval.NULL);<a name="line.55"></a>
+<FONT color="green">056</FONT>                    assertTrue(IBMInst.marketHours().size() == 0);<a name="line.56"></a>
+<FONT color="green">057</FONT>                    assertTrue(IBMInst.timeZoneOffset() == -18000000);<a name="line.57"></a>
+<FONT color="green">058</FONT>                    assertTrue(IBMInst.timeZoneName().equals("NEW_YORK"));<a name="line.58"></a>
+<FONT color="green">059</FONT>                    <a name="line.59"></a>
+<FONT color="green">060</FONT>            }<a name="line.60"></a>
+<FONT color="green">061</FONT>            <a name="line.61"></a>
+<FONT color="green">062</FONT>            <a name="line.62"></a>
+<FONT color="green">063</FONT>            <a name="line.63"></a>
+<FONT color="green">064</FONT>            <a name="line.64"></a>
+<FONT color="green">065</FONT>    }<a name="line.65"></a>
 
 
 
