@@ -11,6 +11,7 @@ import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.lookupFromSymb
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,6 +106,11 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 
 	}
 
+	@Override
+	public Map<String, DDF_Instrument> lookupMap(List<String> symbolList) {
+		return DDF_InstrumentProvider.fetchMap(symbolList);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -118,5 +124,7 @@ public class ServiceBasicDDF implements DDF_DefinitionService {
 		return null;
 
 	}
+
+	
 
 }

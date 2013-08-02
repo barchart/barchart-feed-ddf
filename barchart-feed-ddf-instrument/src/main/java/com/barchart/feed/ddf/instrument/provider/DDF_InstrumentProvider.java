@@ -7,10 +7,12 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.util.values.provider.ValueBuilder.*;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlDocumentDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
+import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
+import static com.barchart.util.values.provider.ValueBuilder.newText;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -18,7 +20,10 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -55,8 +60,8 @@ public final class DDF_InstrumentProvider {
 	/** The Constant NULL_INSTRUMENT. */
 	public static final DDF_Instrument NULL_INSTRUMENT = new InstrumentDDF();
 
-	static final List<DDF_Instrument> NULL_LIST = Collections
-			.unmodifiableList(new ArrayList<DDF_Instrument>(0));
+	static final List<DDF_Instrument> NULL_LIST = Collections.emptyList();
+	static final Map<String, DDF_Instrument> NULL_MAP = Collections.emptyMap();
 
 	static final String SERVER_EXTRAS = "extras.ddfplus.com";
 
@@ -204,6 +209,37 @@ public final class DDF_InstrumentProvider {
 	public static List<DDF_Instrument> find(final List<String> symbolList) {
 		return instance().lookup(symbolList);
 	}
+	
+	
+	public static void main(final String[] args) {
+		
+		final List<String> symbols = new ArrayList<String>();
+		
+		symbols.add("GOOG");
+		symbols.add("IBM");
+		symbols.add("ESU3");
+		
+		final Map<String, DDF_Instrument> res = 
+				DDF_InstrumentProvider.findMap(symbols);
+		
+		for(final Entry<String, DDF_Instrument> e : res.entrySet()) {
+			System.out.println(e.getKey() + " " + e.getValue().toString());
+		}
+		
+		DDF_InstrumentProvider.findMap(symbols);
+		
+		
+	}
+	
+	/**
+	 * NOTE: cache via instrument service;.
+	 * 
+	 * @param symbolList
+	 * @return
+	 */
+	public static Map<String, DDF_Instrument> findMap(final List<String> symbolList) {
+		return instance().lookupMap(symbolList);
+	}
 
 	class RetrieveInstrumentList implements Future<List<DDF_Instrument>> {
 
@@ -267,6 +303,29 @@ public final class DDF_InstrumentProvider {
 			return NULL_LIST;
 		}
 
+	}
+	
+	/**
+	 * NOTE: does NOT cache NOR use instrument service.
+	 * 
+	 * @param symbolList
+	 * 		
+	 * @return
+	 */
+	public static Map<String, DDF_Instrument> fetchMap(
+			final List<String> symbolList) {
+		
+		if (CodecHelper.isEmpty(symbolList)) {
+			return NULL_MAP;
+		}
+		
+		try {
+			return remoteMapLookup(symbolList);
+		} catch (final Exception e) {
+			log.error("", e);
+			return NULL_MAP;
+		}
+		
 	}
 
 	/**
@@ -332,6 +391,89 @@ public final class DDF_InstrumentProvider {
 
 		return text.toString();
 
+	}
+	
+	static Map<String, DDF_Instrument> remoteMapLookup(final List<String> symbolList) 
+			throws Exception {
+		
+		final Map<String, DDF_Instrument> map = 
+				new HashMap<String, DDF_Instrument>();
+				
+		final List<String> forRemote = new ArrayList<String>();
+		
+		for(final String symbol : symbolList) {
+			
+			
+			
+		}
+		
+
+		final String symbolString = concatenate(symbolList);
+
+		final String symbolURI = urlInstrumentLookup(symbolString);
+
+		log.debug("BATCH symbolURI : {}", symbolURI);
+		
+		final URL url = new URL(symbolURI);
+
+		final InputStream input = url.openStream();
+
+		final BufferedInputStream stream = new BufferedInputStream(input);
+		
+		try {
+			
+			final SAXParserFactory factory = SAXParserFactory.newInstance();
+
+			final SAXParser parser = factory.newSAXParser();
+
+			final DefaultHandler handler = new DefaultHandler() {
+		
+				@Override
+				public void startElement(final String uri,
+						final String localName, final String qName,
+						final Attributes ats) throws SAXException {
+					
+					if (XmlTagExtras.TAG.equals(qName)) {
+
+						try {
+					
+							final InstrumentSAX instrument =
+									new InstrumentSAX();
+
+							instrument.decodeSAX(ats);
+							
+							map.put(xmlStringDecode(ats, LOOKUP, XML_STOP), instrument);
+							
+						} catch (final SymbolNotFoundException e) {
+
+							log.warn("symbol not found : {}", e.getMessage());
+							map.put(xmlStringDecode(ats, LOOKUP, XML_STOP), null);
+							
+						} catch (final Exception e) {
+
+							log.error("decode failure", e);
+							HelperXML.log(ats);
+
+						}
+						
+					}
+					
+				}
+				
+			};
+			
+			parser.parse(stream, handler);
+			
+		} catch (Exception e) {
+			
+		} finally {
+
+			input.close();
+
+		}
+		
+		return map;
+		
 	}
 
 	static List<DDF_Instrument> remoteLookup(final List<String> symbolList)

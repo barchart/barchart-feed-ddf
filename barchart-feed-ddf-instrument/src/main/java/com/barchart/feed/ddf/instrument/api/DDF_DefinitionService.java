@@ -8,6 +8,7 @@
 package com.barchart.feed.ddf.instrument.api;
 
 import java.util.List;
+import java.util.Map;
 
 import com.barchart.feed.base.instrument.api.DefinitionService;
 import com.barchart.util.values.api.TextValue;
@@ -25,6 +26,13 @@ public interface DDF_DefinitionService extends
 	 */
 	List<DDF_Instrument> lookup(List<String> symbolList);
 
+	/**
+	 * 
+	 * @param symbolList
+	 * @return
+	 */
+	Map<String, DDF_Instrument> lookupMap(List<String> symbolList);
+	
 	/**
 	 * 
 	 * @param symbol

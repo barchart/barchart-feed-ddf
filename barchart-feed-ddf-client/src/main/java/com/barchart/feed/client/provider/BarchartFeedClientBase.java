@@ -25,7 +25,10 @@
 package com.barchart.feed.client.provider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
@@ -235,6 +238,30 @@ public abstract class BarchartFeedClientBase {
 				DDF_InstrumentProvider.find(symbolList);
 
 		return new ArrayList<MarketInstrument>(list);
+	}
+	
+	/**
+	 * Retrieves a list of instrument objects denoted by symbols provided. The
+	 * local instrument cache will be checked first. If any instruments are not
+	 * stored locally, a remote call to the instrument service is made.
+	 * 
+	 * @param symbolList
+	 * @return
+	 */
+	public Map<String, MarketInstrument> lookupMap(final List<String> symbolList) {
+		
+		final Map<String, DDF_Instrument> map = 
+				DDF_InstrumentProvider.findMap(symbolList);
+		
+		final Map<String, MarketInstrument> result = 
+				new HashMap<String, MarketInstrument>();
+		
+		for(final Entry<String, DDF_Instrument> e : map.entrySet()) {
+			result.put(e.getKey(), e.getValue());
+		}
+		
+		return result;
+		
 	}
 
 	/**

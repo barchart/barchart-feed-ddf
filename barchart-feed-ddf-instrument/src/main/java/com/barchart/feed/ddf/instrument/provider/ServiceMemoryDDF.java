@@ -13,7 +13,10 @@ import static com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField.DDF_SYM
 import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.lookupFromSymbol;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -230,6 +233,47 @@ public class ServiceMemoryDDF extends ServiceBasicDDF {
 
 		return oldList;
 
+	}
+	
+	@Override
+	public Map<String, DDF_Instrument> lookupMap(List<String> symbolList) {
+		
+		final Map<String, DDF_Instrument> map = 
+				new HashMap<String, DDF_Instrument>();
+				
+		final List<String> forRemote = new ArrayList<String>();
+		
+		for(final String symbol : symbolList) {
+			
+			final TextValue id = ValueBuilder.newText(symbol);
+
+			final DDF_Instrument instrument = load(id);
+			
+			if(instrument == null) {
+				forRemote.add(symbol);
+			} else {
+				map.put(symbol, instrument);
+			}
+			
+		}
+		
+		if(!forRemote.isEmpty()) {
+		
+			final Map<String, DDF_Instrument> remoteMap = 
+					DDF_InstrumentProvider.fetchMap(forRemote);
+			
+			for(final Entry<String, DDF_Instrument> e : remoteMap.entrySet()) {
+				if(e.getValue() != null) {
+					store(e.getValue());
+				}
+			}
+			
+			map.putAll(remoteMap);
+
+		}
+		
+		return map;
+		
 	}
 
 }

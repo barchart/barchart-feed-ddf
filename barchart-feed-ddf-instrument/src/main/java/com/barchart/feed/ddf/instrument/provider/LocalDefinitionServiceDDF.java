@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -191,6 +192,12 @@ public class LocalDefinitionServiceDDF implements DDF_DefinitionService {
 		}
 		
 		return instrument;
+	}
+
+	@Override
+	public Map<String, DDF_Instrument> lookupMap(List<String> symbolList) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
