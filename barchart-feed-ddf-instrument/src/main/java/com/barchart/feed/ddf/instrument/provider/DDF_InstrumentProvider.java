@@ -210,27 +210,6 @@ public final class DDF_InstrumentProvider {
 		return instance().lookup(symbolList);
 	}
 	
-	
-	public static void main(final String[] args) {
-		
-		final List<String> symbols = new ArrayList<String>();
-		
-		symbols.add("GOOG");
-		symbols.add("IBM");
-		symbols.add("ESU3");
-		
-		final Map<String, DDF_Instrument> res = 
-				DDF_InstrumentProvider.findMap(symbols);
-		
-		for(final Entry<String, DDF_Instrument> e : res.entrySet()) {
-			System.out.println(e.getKey() + " " + e.getValue().toString());
-		}
-		
-		DDF_InstrumentProvider.findMap(symbols);
-		
-		
-	}
-	
 	/**
 	 * NOTE: cache via instrument service;.
 	 * 
@@ -334,9 +313,7 @@ public final class DDF_InstrumentProvider {
 	 * @return the dD f_ instrument do
 	 */
 	public static DDF_InstrumentDo newInstrumentDDF() {
-
 		return new InstrumentDDF();
-
 	}
 
 	/**
