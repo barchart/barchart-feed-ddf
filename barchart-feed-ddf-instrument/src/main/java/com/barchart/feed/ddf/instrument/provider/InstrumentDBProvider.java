@@ -227,13 +227,13 @@ public final class InstrumentDBProvider {
 								instDefNode = contentNodes.item(n);
 								break;
 							}
+							
 						}
 						
 					}
 						
 					NodeList instDefNodeList = instDefNode.getChildNodes();
 					for(int j = 0; j < instDefNodeList.getLength(); j++) {
-						
 						
 						System.out.println(instDefNodeList.item(j).getNodeName());
 						
