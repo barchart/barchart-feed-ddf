@@ -134,23 +134,27 @@ public class BarchartMarketplace implements Marketplace {
 			return this;
 		}
 		
+		@Deprecated
 		public Builder dbaseFolder(final File dbFolder) {
-			this.dbFolder = dbFolder; 
+			//this.dbFolder = dbFolder; 
 			return this;
 		}
 		
+		@Deprecated
 		public Builder instrumentDefZip(final File instDefZip) {
-			this.instDefZip = instDefZip;
+			//this.instDefZip = instDefZip;
 			return this;
 		}
 		
+		@Deprecated
 		public Builder useLocalInstDatabase() {
-			useLocalDB = true;
+			//useLocalDB = true;
 			return this;
 		}
 		
+		@Deprecated
 		public Builder syncWithRemote(final boolean sync) {
-			syncWithRemote = sync;
+			//syncWithRemote = sync;
 			return this;
 		}
 		

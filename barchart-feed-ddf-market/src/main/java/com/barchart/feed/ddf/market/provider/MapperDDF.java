@@ -767,7 +767,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		/* Update changed comonents */
 		market.clearChanges();
-		market.setChange(Component.TRADE);
 		market.setChange(Component.DEFAULT_CURRENT);
 		market.setChange(Component.DEFAULT_PREVIOUS);
 		
