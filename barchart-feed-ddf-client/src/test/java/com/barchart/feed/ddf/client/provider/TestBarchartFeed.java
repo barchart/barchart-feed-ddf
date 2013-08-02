@@ -2,6 +2,7 @@ package com.barchart.feed.ddf.client.provider;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,10 +75,7 @@ public class TestBarchartFeed {
 				
 				log.debug(
 					v.instrument().symbol() + " " +
-					v.book().top().bid().price().asDouble() + " " +
-					v.book().top().bid().size().asDouble() + " " +
-					v.book().top().ask().size().asDouble() + " " +
-					v.book().top().ask().price().asDouble()
+						printChange(v.change())
 				);
 				
 			}
@@ -86,8 +84,8 @@ public class TestBarchartFeed {
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		myAgent.include(Exchanges.fromName("NYSE"));
-		//myAgent.include("ESU13");
+		//myAgent.include(Exchanges.fromName("NYSE"));
+		myAgent.include("GOOG");
 		
 		Thread.sleep(1000000);
 		
@@ -104,6 +102,12 @@ public class TestBarchartFeed {
 		}
 		
 		return sb.toString();
+	}
+	
+	public static String printChange(final Set<Market.Component> changes) {
+	
+		return "";
+		
 	}
 	
 }
