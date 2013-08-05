@@ -49,7 +49,6 @@ public final class DDF_SettingsService {
 		final String settingsURI = ConstSettingsDDF.urlCentral(username,
 				password);
 
-		System.out.println(settingsURI);
 		return newSettings(settingsURI, username, password);
 
 	}
