@@ -1148,11 +1148,10 @@ class FeedClientDDF implements DDF_FeedClient {
 				return;
 			}
 
-			log.info("got settings from settings service");
+			log.info("received settings from settings service");
 
 			final DDF_Server server = settings.getServer(serverType);
 			final String primary = server.getPrimary();
-			//final String primary = "feed-test-b.eqx.bcinc.internal";
 			final String secondary = server.getSecondary();
 
 			log.info("trying primary server login " + primary);

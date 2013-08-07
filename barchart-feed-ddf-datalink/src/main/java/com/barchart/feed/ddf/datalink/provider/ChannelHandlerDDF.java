@@ -87,7 +87,7 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 	public void exceptionCaught(final ChannelHandlerContext ctx,
 			final ExceptionEvent e) throws Exception {
 
-		log.warn("SimpleChannelHandler caught exception ");
+		log.warn("SimpleChannelHandler caught exception {}", e.getCause());
 		//e.getCause().printStackTrace();
 
 		/*try {

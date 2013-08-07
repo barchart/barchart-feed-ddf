@@ -5,6 +5,7 @@ import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +25,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.zip.GZIPInputStream;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -381,7 +383,20 @@ public final class DDF_InstrumentProvider {
 					log.debug("remote batch on {}", urlInstrumentLookup(symbols));
 					
 					final URL url = new URL(urlInstrumentLookup(symbols));
-					final InputStream input = url.openStream();
+					
+					final HttpURLConnection connection = (HttpURLConnection) url
+							.openConnection();
+					
+					connection.setRequestProperty("Accept-Encoding", "gzip");
+					
+					connection.connect();
+					
+					InputStream input = connection.getInputStream();
+
+					if (connection.getContentEncoding().equals("gzip")) {
+						input = new GZIPInputStream(input);
+					}
+					
 					final BufferedInputStream stream =
 							new BufferedInputStream(input);
 
@@ -408,8 +423,9 @@ public final class DDF_InstrumentProvider {
 								} catch (final SymbolNotFoundException se) {
 									observer.onNext(new InstDefResult(se.getMessage(), se));
 								} catch (final Exception e) {
-									
+									log.error("Exception in parsing batch lookup {}", e);
 								}
+								
 							}
 							
 						}
