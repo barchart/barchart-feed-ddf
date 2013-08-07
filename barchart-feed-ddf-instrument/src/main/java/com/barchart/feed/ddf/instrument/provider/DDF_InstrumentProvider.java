@@ -17,7 +17,9 @@ import static com.barchart.util.values.provider.ValueBuilder.newText;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.zip.GZIPInputStream;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -393,7 +396,18 @@ public final class DDF_InstrumentProvider {
 		
 		final URL url = new URL(symbolURI);
 
-		final InputStream input = url.openStream();
+		final HttpURLConnection connection = (HttpURLConnection) url
+				.openConnection();
+		
+		connection.setRequestProperty("Accept-Encoding", "gzip");
+		
+		connection.connect();
+		
+		InputStream input = connection.getInputStream();
+
+		if (connection.getContentEncoding().equals("gzip")) {
+			input = new GZIPInputStream(input);
+		}
 
 		final BufferedInputStream stream = new BufferedInputStream(input);
 		
@@ -468,7 +482,18 @@ public final class DDF_InstrumentProvider {
 
 		final URL url = new URL(symbolURI);
 
-		final InputStream input = url.openStream();
+		final URLConnection connection = (HttpURLConnection) url
+				.openConnection();
+		
+		connection.setRequestProperty("Accept-Encoding", "gzip");
+		
+		connection.connect();
+		
+		InputStream input = connection.getInputStream();
+
+		if (connection.getContentEncoding().equals("gzip")) {
+			input = new GZIPInputStream(input);
+		}
 
 		final BufferedInputStream stream = new BufferedInputStream(input);
 
