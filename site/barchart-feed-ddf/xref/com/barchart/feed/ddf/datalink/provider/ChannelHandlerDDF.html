@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="87" href="#87">87</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> exceptionCaught(<strong class="jxr_keyword">final</strong> ChannelHandlerContext ctx,
 <a class="jxr_linenumber" name="88" href="#88">88</a>  			<strong class="jxr_keyword">final</strong> ExceptionEvent e) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="89" href="#89">89</a>  
-<a class="jxr_linenumber" name="90" href="#90">90</a>  		log.warn(<span class="jxr_string">"SimpleChannelHandler caught exception "</span>);
+<a class="jxr_linenumber" name="90" href="#90">90</a>  		log.warn(<span class="jxr_string">"SimpleChannelHandler caught exception {}"</span>, e.getCause());
 <a class="jxr_linenumber" name="91" href="#91">91</a>  		<em class="jxr_comment">//e.getCause().printStackTrace();</em>
 <a class="jxr_linenumber" name="92" href="#92">92</a>  
 <a class="jxr_linenumber" name="93" href="#93">93</a>  		<em class="jxr_comment">/*<em class="jxr_comment">try {</em></em>
