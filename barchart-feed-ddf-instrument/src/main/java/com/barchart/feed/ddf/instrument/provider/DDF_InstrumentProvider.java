@@ -519,6 +519,9 @@ public final class DDF_InstrumentProvider {
 			
 		}
 		
+		/* Remove trailing comma */
+		sb.deleteCharAt(sb.length() - 1);
+		
 		log.debug("Sending {} to remote lookup", sb.toString());
 		
 		return sb.toString();
