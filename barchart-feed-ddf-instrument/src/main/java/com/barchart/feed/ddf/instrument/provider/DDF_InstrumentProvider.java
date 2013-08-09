@@ -274,7 +274,7 @@ public final class DDF_InstrumentProvider {
 			final InstrumentDefinition def = result.result();
 			
 			if(def == InstrumentDefinition.getDefaultInstance()) {
-				log.warn("Instrument result was empty for {}", symbol);
+				log.trace("Instrument result was empty for {}", symbol);
 				return;  // Ignore
 			}
 			
@@ -349,7 +349,7 @@ public final class DDF_InstrumentProvider {
 					final InstrumentDefinition instDOM = InstrumentXML.decodeXML(tag);
 					
 					if(instDOM == null || instDOM == InstrumentDefinition.getDefaultInstance()) {
-						log.warn("Empty instrument def returned from remote lookup: {}", lookup);
+						log.trace("Empty instrument def returned from remote lookup: {}", lookup);
 						failedRemoteQueue.add(lookup);
 						return InstrumentDefinition.getDefaultInstance();
 					}
@@ -358,7 +358,7 @@ public final class DDF_InstrumentProvider {
 					
 				} catch (final Throwable t) {
 					failedRemoteQueue.add(lookup);
-					log.error("Remote instrument lookup callable exception: {}", t);
+					log.trace("Remote instrument lookup callable exception: {}", t);
 					return InstrumentDefinition.getDefaultInstance();
 				}
 				
@@ -423,7 +423,7 @@ public final class DDF_InstrumentProvider {
 								} catch (final SymbolNotFoundException se) {
 									observer.onNext(new InstDefResult(se.getMessage(), se));
 								} catch (final Exception e) {
-									log.error("Exception in parsing batch lookup {}", e);
+									log.trace("Exception in parsing batch lookup {}", e);
 								}
 								
 							}
