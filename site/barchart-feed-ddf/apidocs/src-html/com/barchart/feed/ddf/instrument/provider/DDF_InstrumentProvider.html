@@ -277,7 +277,7 @@
 <FONT color="green">274</FONT>                            final InstrumentDefinition def = result.result();<a name="line.274"></a>
 <FONT color="green">275</FONT>                            <a name="line.275"></a>
 <FONT color="green">276</FONT>                            if(def == InstrumentDefinition.getDefaultInstance()) {<a name="line.276"></a>
-<FONT color="green">277</FONT>                                    log.warn("Instrument result was empty for {}", symbol);<a name="line.277"></a>
+<FONT color="green">277</FONT>                                    log.trace("Instrument result was empty for {}", symbol);<a name="line.277"></a>
 <FONT color="green">278</FONT>                                    return;  // Ignore<a name="line.278"></a>
 <FONT color="green">279</FONT>                            }<a name="line.279"></a>
 <FONT color="green">280</FONT>                            <a name="line.280"></a>
@@ -286,249 +286,251 @@
 <FONT color="green">283</FONT>                            if(iState == null || iState.isNull()) {<a name="line.283"></a>
 <FONT color="green">284</FONT>                                    symbolMap.put(symbol, InstrumentFactory.instrumentState(result.result()));<a name="line.284"></a>
 <FONT color="green">285</FONT>                            } else {<a name="line.285"></a>
-<FONT color="green">286</FONT>                                    log.debug("Processing {}", result.result().toString());<a name="line.286"></a>
-<FONT color="green">287</FONT>                                    iState.process(result.result());<a name="line.287"></a>
-<FONT color="green">288</FONT>                            }<a name="line.288"></a>
-<FONT color="green">289</FONT>                            <a name="line.289"></a>
-<FONT color="green">290</FONT>                    }<a name="line.290"></a>
-<FONT color="green">291</FONT>                    <a name="line.291"></a>
-<FONT color="green">292</FONT>            };<a name="line.292"></a>
-<FONT color="green">293</FONT>            <a name="line.293"></a>
-<FONT color="green">294</FONT>            private static class InstDefResult implements InstrumentDefinitionResult {<a name="line.294"></a>
-<FONT color="green">295</FONT>    <a name="line.295"></a>
-<FONT color="green">296</FONT>                    private final String symbol;<a name="line.296"></a>
-<FONT color="green">297</FONT>                    private final InstrumentDefinition def;<a name="line.297"></a>
-<FONT color="green">298</FONT>                    private final Throwable t;<a name="line.298"></a>
-<FONT color="green">299</FONT>                    <a name="line.299"></a>
-<FONT color="green">300</FONT>                    InstDefResult(final String symbol, final InstrumentDefinition def) {<a name="line.300"></a>
-<FONT color="green">301</FONT>                            this.symbol = symbol;<a name="line.301"></a>
-<FONT color="green">302</FONT>                            this.def = def;<a name="line.302"></a>
-<FONT color="green">303</FONT>                            t = null;<a name="line.303"></a>
-<FONT color="green">304</FONT>                    }<a name="line.304"></a>
-<FONT color="green">305</FONT>                    <a name="line.305"></a>
-<FONT color="green">306</FONT>                    InstDefResult(final String symbol, final Throwable t) {<a name="line.306"></a>
-<FONT color="green">307</FONT>                            this.symbol = symbol;<a name="line.307"></a>
-<FONT color="green">308</FONT>                            def = InstrumentDefinition.getDefaultInstance();<a name="line.308"></a>
-<FONT color="green">309</FONT>                            this.t = t;<a name="line.309"></a>
-<FONT color="green">310</FONT>                    }<a name="line.310"></a>
-<FONT color="green">311</FONT>                    <a name="line.311"></a>
-<FONT color="green">312</FONT>                    @Override<a name="line.312"></a>
-<FONT color="green">313</FONT>                    public InstrumentDefinition result() {<a name="line.313"></a>
-<FONT color="green">314</FONT>                            return def;<a name="line.314"></a>
-<FONT color="green">315</FONT>                    }<a name="line.315"></a>
-<FONT color="green">316</FONT>    <a name="line.316"></a>
-<FONT color="green">317</FONT>                    @Override<a name="line.317"></a>
-<FONT color="green">318</FONT>                    public String expression() {<a name="line.318"></a>
-<FONT color="green">319</FONT>                            return symbol;<a name="line.319"></a>
-<FONT color="green">320</FONT>                    }<a name="line.320"></a>
-<FONT color="green">321</FONT>    <a name="line.321"></a>
-<FONT color="green">322</FONT>                    @Override<a name="line.322"></a>
-<FONT color="green">323</FONT>                    public Throwable exception() {<a name="line.323"></a>
-<FONT color="green">324</FONT>                            return t;<a name="line.324"></a>
-<FONT color="green">325</FONT>                    }<a name="line.325"></a>
-<FONT color="green">326</FONT>                    <a name="line.326"></a>
-<FONT color="green">327</FONT>            }<a name="line.327"></a>
-<FONT color="green">328</FONT>            <a name="line.328"></a>
-<FONT color="green">329</FONT>            private static final String SERVER_EXTRAS = "extras.ddfplus.com";<a name="line.329"></a>
-<FONT color="green">330</FONT>    <a name="line.330"></a>
-<FONT color="green">331</FONT>            private static final String urlInstrumentLookup(final CharSequence lookup) {<a name="line.331"></a>
-<FONT color="green">332</FONT>                    return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;<a name="line.332"></a>
-<FONT color="green">333</FONT>            }<a name="line.333"></a>
-<FONT color="green">334</FONT>            <a name="line.334"></a>
-<FONT color="green">335</FONT>            static Callable&lt;InstrumentDefinition&gt; remoteSingle(final String lookup) {<a name="line.335"></a>
-<FONT color="green">336</FONT>                    <a name="line.336"></a>
-<FONT color="green">337</FONT>                    return new Callable&lt;InstrumentDefinition&gt;() {<a name="line.337"></a>
-<FONT color="green">338</FONT>            <a name="line.338"></a>
-<FONT color="green">339</FONT>                            @Override<a name="line.339"></a>
-<FONT color="green">340</FONT>                            public InstrumentDefinition call() throws Exception {<a name="line.340"></a>
-<FONT color="green">341</FONT>                                    <a name="line.341"></a>
-<FONT color="green">342</FONT>                                    try {<a name="line.342"></a>
-<FONT color="green">343</FONT>                                            <a name="line.343"></a>
-<FONT color="green">344</FONT>                                            log.debug("Starting remote lookup for {}", lookup);<a name="line.344"></a>
-<FONT color="green">345</FONT>                                            <a name="line.345"></a>
-<FONT color="green">346</FONT>                                            final String symbolURI = urlInstrumentLookup(lookup);<a name="line.346"></a>
-<FONT color="green">347</FONT>                                            final Element root = HelperXML.xmlDocumentDecode(symbolURI);<a name="line.347"></a>
-<FONT color="green">348</FONT>                                            final Element tag = xmlFirstChild(root, "instrument", XML_STOP);<a name="line.348"></a>
-<FONT color="green">349</FONT>                                            final InstrumentDefinition instDOM = InstrumentXML.decodeXML(tag);<a name="line.349"></a>
-<FONT color="green">350</FONT>                                            <a name="line.350"></a>
-<FONT color="green">351</FONT>                                            if(instDOM == null || instDOM == InstrumentDefinition.getDefaultInstance()) {<a name="line.351"></a>
-<FONT color="green">352</FONT>                                                    log.warn("Empty instrument def returned from remote lookup: {}", lookup);<a name="line.352"></a>
-<FONT color="green">353</FONT>                                                    failedRemoteQueue.add(lookup);<a name="line.353"></a>
-<FONT color="green">354</FONT>                                                    return InstrumentDefinition.getDefaultInstance();<a name="line.354"></a>
-<FONT color="green">355</FONT>                                            }<a name="line.355"></a>
-<FONT color="green">356</FONT>                                            <a name="line.356"></a>
-<FONT color="green">357</FONT>                                            return instDOM;<a name="line.357"></a>
-<FONT color="green">358</FONT>                                            <a name="line.358"></a>
-<FONT color="green">359</FONT>                                    } catch (final Throwable t) {<a name="line.359"></a>
-<FONT color="green">360</FONT>                                            failedRemoteQueue.add(lookup);<a name="line.360"></a>
-<FONT color="green">361</FONT>                                            log.error("Remote instrument lookup callable exception: {}", t);<a name="line.361"></a>
-<FONT color="green">362</FONT>                                            return InstrumentDefinition.getDefaultInstance();<a name="line.362"></a>
-<FONT color="green">363</FONT>                                    }<a name="line.363"></a>
-<FONT color="green">364</FONT>                                    <a name="line.364"></a>
-<FONT color="green">365</FONT>                            }<a name="line.365"></a>
-<FONT color="green">366</FONT>                    <a name="line.366"></a>
-<FONT color="green">367</FONT>                    };<a name="line.367"></a>
-<FONT color="green">368</FONT>                    <a name="line.368"></a>
-<FONT color="green">369</FONT>            }<a name="line.369"></a>
-<FONT color="green">370</FONT>            <a name="line.370"></a>
-<FONT color="green">371</FONT>            static Callable&lt;Map&lt;String, InstrumentDefinition&gt;&gt; remoteBatch(final String symbols) {<a name="line.371"></a>
-<FONT color="green">372</FONT>                    <a name="line.372"></a>
-<FONT color="green">373</FONT>                    return new Callable&lt;Map&lt;String, InstrumentDefinition&gt;&gt;() {<a name="line.373"></a>
-<FONT color="green">374</FONT>    <a name="line.374"></a>
-<FONT color="green">375</FONT>                            @Override<a name="line.375"></a>
-<FONT color="green">376</FONT>                            public Map&lt;String, InstrumentDefinition&gt; call() throws Exception {<a name="line.376"></a>
-<FONT color="green">377</FONT>                                    <a name="line.377"></a>
-<FONT color="green">378</FONT>                                    try {<a name="line.378"></a>
-<FONT color="green">379</FONT>                                            <a name="line.379"></a>
-<FONT color="green">380</FONT>                                            final Map&lt;String, InstrumentDefinition&gt; defs = <a name="line.380"></a>
-<FONT color="green">381</FONT>                                                            new HashMap&lt;String, InstrumentDefinition&gt;();<a name="line.381"></a>
-<FONT color="green">382</FONT>                                            <a name="line.382"></a>
-<FONT color="green">383</FONT>                                            log.debug("remote batch on {}", urlInstrumentLookup(symbols));<a name="line.383"></a>
-<FONT color="green">384</FONT>                                            <a name="line.384"></a>
-<FONT color="green">385</FONT>                                            final URL url = new URL(urlInstrumentLookup(symbols));<a name="line.385"></a>
-<FONT color="green">386</FONT>                                            <a name="line.386"></a>
-<FONT color="green">387</FONT>                                            final HttpURLConnection connection = (HttpURLConnection) url<a name="line.387"></a>
-<FONT color="green">388</FONT>                                                            .openConnection();<a name="line.388"></a>
-<FONT color="green">389</FONT>                                            <a name="line.389"></a>
-<FONT color="green">390</FONT>                                            connection.setRequestProperty("Accept-Encoding", "gzip");<a name="line.390"></a>
-<FONT color="green">391</FONT>                                            <a name="line.391"></a>
-<FONT color="green">392</FONT>                                            connection.connect();<a name="line.392"></a>
-<FONT color="green">393</FONT>                                            <a name="line.393"></a>
-<FONT color="green">394</FONT>                                            InputStream input = connection.getInputStream();<a name="line.394"></a>
-<FONT color="green">395</FONT>    <a name="line.395"></a>
-<FONT color="green">396</FONT>                                            if (connection.getContentEncoding().equals("gzip")) {<a name="line.396"></a>
-<FONT color="green">397</FONT>                                                    input = new GZIPInputStream(input);<a name="line.397"></a>
-<FONT color="green">398</FONT>                                            }<a name="line.398"></a>
-<FONT color="green">399</FONT>                                            <a name="line.399"></a>
-<FONT color="green">400</FONT>                                            final BufferedInputStream stream =<a name="line.400"></a>
-<FONT color="green">401</FONT>                                                            new BufferedInputStream(input);<a name="line.401"></a>
-<FONT color="green">402</FONT>    <a name="line.402"></a>
-<FONT color="green">403</FONT>                                            final SAXParserFactory factory =<a name="line.403"></a>
-<FONT color="green">404</FONT>                                                            SAXParserFactory.newInstance();<a name="line.404"></a>
-<FONT color="green">405</FONT>                                            final SAXParser parser = factory.newSAXParser();<a name="line.405"></a>
-<FONT color="green">406</FONT>                                            <a name="line.406"></a>
-<FONT color="green">407</FONT>                                            final DefaultHandler handler = new DefaultHandler() {<a name="line.407"></a>
-<FONT color="green">408</FONT>                                                    <a name="line.408"></a>
-<FONT color="green">409</FONT>                                                    InstrumentDefinition def;<a name="line.409"></a>
-<FONT color="green">410</FONT>                                                    <a name="line.410"></a>
-<FONT color="green">411</FONT>                                                    @Override<a name="line.411"></a>
-<FONT color="green">412</FONT>                                                    public void startElement(final String uri,<a name="line.412"></a>
-<FONT color="green">413</FONT>                                                                    final String localName, final String qName,<a name="line.413"></a>
-<FONT color="green">414</FONT>                                                                    final Attributes ats) throws SAXException {<a name="line.414"></a>
-<FONT color="green">415</FONT>                                                            <a name="line.415"></a>
-<FONT color="green">416</FONT>                                                            if (qName != null &amp;&amp; qName.equals("instrument")) {<a name="line.416"></a>
-<FONT color="green">417</FONT>    <a name="line.417"></a>
-<FONT color="green">418</FONT>                                                                    try {<a name="line.418"></a>
-<FONT color="green">419</FONT>                                                                            def = InstrumentXML.decodeSAX(ats);<a name="line.419"></a>
-<FONT color="green">420</FONT>                                                                            if (def != InstrumentDefinition.getDefaultInstance()) {<a name="line.420"></a>
-<FONT color="green">421</FONT>                                                                                    defs.put(def.getSymbol(), def);<a name="line.421"></a>
-<FONT color="green">422</FONT>                                                                            }<a name="line.422"></a>
-<FONT color="green">423</FONT>                                                                    } catch (final SymbolNotFoundException se) {<a name="line.423"></a>
-<FONT color="green">424</FONT>                                                                            observer.onNext(new InstDefResult(se.getMessage(), se));<a name="line.424"></a>
-<FONT color="green">425</FONT>                                                                    } catch (final Exception e) {<a name="line.425"></a>
-<FONT color="green">426</FONT>                                                                            log.error("Exception in parsing batch lookup {}", e);<a name="line.426"></a>
-<FONT color="green">427</FONT>                                                                    }<a name="line.427"></a>
-<FONT color="green">428</FONT>                                                                    <a name="line.428"></a>
-<FONT color="green">429</FONT>                                                            }<a name="line.429"></a>
-<FONT color="green">430</FONT>                                                            <a name="line.430"></a>
-<FONT color="green">431</FONT>                                                    }<a name="line.431"></a>
-<FONT color="green">432</FONT>                                                    <a name="line.432"></a>
-<FONT color="green">433</FONT>                                            };<a name="line.433"></a>
-<FONT color="green">434</FONT>                                            <a name="line.434"></a>
-<FONT color="green">435</FONT>                                            parser.parse(stream, handler);<a name="line.435"></a>
-<FONT color="green">436</FONT>                                            <a name="line.436"></a>
-<FONT color="green">437</FONT>                                            return defs;<a name="line.437"></a>
-<FONT color="green">438</FONT>                                            <a name="line.438"></a>
-<FONT color="green">439</FONT>                                    } catch (final Throwable t) {<a name="line.439"></a>
-<FONT color="green">440</FONT>                                            failedRemoteQueue.addAll(Arrays.asList(symbols.split(",")));<a name="line.440"></a>
-<FONT color="green">441</FONT>                                            return null;<a name="line.441"></a>
-<FONT color="green">442</FONT>                                    }<a name="line.442"></a>
-<FONT color="green">443</FONT>                                    <a name="line.443"></a>
-<FONT color="green">444</FONT>                            }<a name="line.444"></a>
-<FONT color="green">445</FONT>                            <a name="line.445"></a>
-<FONT color="green">446</FONT>                    };<a name="line.446"></a>
-<FONT color="green">447</FONT>                    <a name="line.447"></a>
-<FONT color="green">448</FONT>            }<a name="line.448"></a>
-<FONT color="green">449</FONT>            <a name="line.449"></a>
-<FONT color="green">450</FONT>            static class RemoteRunner implements Runnable {<a name="line.450"></a>
-<FONT color="green">451</FONT>                    <a name="line.451"></a>
-<FONT color="green">452</FONT>                    private List&lt;Future&lt;Map&lt;String, InstrumentDefinition&gt;&gt;&gt; futures = <a name="line.452"></a>
-<FONT color="green">453</FONT>                                    new ArrayList&lt;Future&lt;Map&lt;String, InstrumentDefinition&gt;&gt;&gt;();<a name="line.453"></a>
-<FONT color="green">454</FONT>                    <a name="line.454"></a>
-<FONT color="green">455</FONT>                    private final List&lt;Callable&lt;Map&lt;String, InstrumentDefinition&gt;&gt;&gt; callables = <a name="line.455"></a>
-<FONT color="green">456</FONT>                                    new ArrayList&lt;Callable&lt;Map&lt;String, InstrumentDefinition&gt;&gt;&gt;();<a name="line.456"></a>
-<FONT color="green">457</FONT>                    <a name="line.457"></a>
-<FONT color="green">458</FONT>                    @Override<a name="line.458"></a>
-<FONT color="green">459</FONT>                    public void run() {<a name="line.459"></a>
-<FONT color="green">460</FONT>                            <a name="line.460"></a>
-<FONT color="green">461</FONT>                            try {<a name="line.461"></a>
-<FONT color="green">462</FONT>                                    <a name="line.462"></a>
-<FONT color="green">463</FONT>                                    while(!Thread.interrupted()) {<a name="line.463"></a>
-<FONT color="green">464</FONT>                                            <a name="line.464"></a>
-<FONT color="green">465</FONT>                                            Thread.sleep(REMOTE_LOOKUP_INTERVAL);<a name="line.465"></a>
-<FONT color="green">466</FONT>                                            <a name="line.466"></a>
-<FONT color="green">467</FONT>                                            while(!remoteQueue.isEmpty()) {<a name="line.467"></a>
-<FONT color="green">468</FONT>                                                    callables.add(remoteBatch(buildQuerey()));<a name="line.468"></a>
-<FONT color="green">469</FONT>                                            }<a name="line.469"></a>
-<FONT color="green">470</FONT>                                            <a name="line.470"></a>
-<FONT color="green">471</FONT>                                            futures = executor.invokeAll(callables, DEFAULT_TIMEOUT, MILLIS);<a name="line.471"></a>
-<FONT color="green">472</FONT>                                            <a name="line.472"></a>
-<FONT color="green">473</FONT>                                            for(final Future&lt;Map&lt;String, InstrumentDefinition&gt;&gt; f : futures) {<a name="line.473"></a>
-<FONT color="green">474</FONT>                                                    <a name="line.474"></a>
-<FONT color="green">475</FONT>                                                    for(final Entry&lt;String, InstrumentDefinition&gt; e : f.get().entrySet()) {<a name="line.475"></a>
-<FONT color="green">476</FONT>                                                            <a name="line.476"></a>
-<FONT color="green">477</FONT>                                                            final InstrumentDefinition def = e.getValue();<a name="line.477"></a>
-<FONT color="green">478</FONT>                                                            <a name="line.478"></a>
-<FONT color="green">479</FONT>                                                            if(def == null || def == InstrumentDefinition.getDefaultInstance()) {<a name="line.479"></a>
-<FONT color="green">480</FONT>                                                                    observer.onNext(new InstDefResult(e.getKey(),<a name="line.480"></a>
-<FONT color="green">481</FONT>                                                                                    new Throwable("Could not find " + e.getKey())));<a name="line.481"></a>
-<FONT color="green">482</FONT>                                                            } else {<a name="line.482"></a>
-<FONT color="green">483</FONT>                                                                    observer.onNext(new InstDefResult(e.getKey(), def));<a name="line.483"></a>
-<FONT color="green">484</FONT>                                                            }<a name="line.484"></a>
-<FONT color="green">485</FONT>                                                            <a name="line.485"></a>
-<FONT color="green">486</FONT>                                                    }<a name="line.486"></a>
-<FONT color="green">487</FONT>                                                    <a name="line.487"></a>
-<FONT color="green">488</FONT>                                            }<a name="line.488"></a>
-<FONT color="green">489</FONT>                                            <a name="line.489"></a>
-<FONT color="green">490</FONT>                                            futures.clear();<a name="line.490"></a>
-<FONT color="green">491</FONT>                                            callables.clear();<a name="line.491"></a>
-<FONT color="green">492</FONT>                                            <a name="line.492"></a>
-<FONT color="green">493</FONT>                                    }<a name="line.493"></a>
-<FONT color="green">494</FONT>                                    <a name="line.494"></a>
-<FONT color="green">495</FONT>                            } catch (final Throwable t) {<a name="line.495"></a>
-<FONT color="green">496</FONT>                                    log.error("Exception in Remote Runner Thread", t);<a name="line.496"></a>
-<FONT color="green">497</FONT>                            }<a name="line.497"></a>
-<FONT color="green">498</FONT>                            <a name="line.498"></a>
-<FONT color="green">499</FONT>                    }<a name="line.499"></a>
-<FONT color="green">500</FONT>                    <a name="line.500"></a>
-<FONT color="green">501</FONT>            }<a name="line.501"></a>
-<FONT color="green">502</FONT>            <a name="line.502"></a>
-<FONT color="green">503</FONT>            private static String buildQuerey() throws Exception {<a name="line.503"></a>
-<FONT color="green">504</FONT>                    <a name="line.504"></a>
-<FONT color="green">505</FONT>                    final StringBuilder sb = new StringBuilder();<a name="line.505"></a>
-<FONT color="green">506</FONT>                    <a name="line.506"></a>
-<FONT color="green">507</FONT>                    int len = 0;<a name="line.507"></a>
-<FONT color="green">508</FONT>                    int symCount = 0;<a name="line.508"></a>
-<FONT color="green">509</FONT>                    <a name="line.509"></a>
-<FONT color="green">510</FONT>                    while(len &lt; MAX_URL_LEN &amp;&amp; symCount &lt; 400 &amp;&amp; !remoteQueue.isEmpty()) {<a name="line.510"></a>
-<FONT color="green">511</FONT>                            <a name="line.511"></a>
-<FONT color="green">512</FONT>                            final String s = remoteQueue.take();<a name="line.512"></a>
-<FONT color="green">513</FONT>                            <a name="line.513"></a>
-<FONT color="green">514</FONT>                            log.debug("Pulled {} from remote queue", s);<a name="line.514"></a>
-<FONT color="green">515</FONT>                            <a name="line.515"></a>
-<FONT color="green">516</FONT>                            symCount++;<a name="line.516"></a>
-<FONT color="green">517</FONT>                            len += s.length() + 1;<a name="line.517"></a>
-<FONT color="green">518</FONT>                            sb.append(s).append(",");<a name="line.518"></a>
-<FONT color="green">519</FONT>                            <a name="line.519"></a>
-<FONT color="green">520</FONT>                    }<a name="line.520"></a>
-<FONT color="green">521</FONT>                    <a name="line.521"></a>
-<FONT color="green">522</FONT>                    log.debug("Sending {} to remote lookup", sb.toString());<a name="line.522"></a>
+<FONT color="green">286</FONT>                                    iState.process(result.result());<a name="line.286"></a>
+<FONT color="green">287</FONT>                            }<a name="line.287"></a>
+<FONT color="green">288</FONT>                            <a name="line.288"></a>
+<FONT color="green">289</FONT>                    }<a name="line.289"></a>
+<FONT color="green">290</FONT>                    <a name="line.290"></a>
+<FONT color="green">291</FONT>            };<a name="line.291"></a>
+<FONT color="green">292</FONT>            <a name="line.292"></a>
+<FONT color="green">293</FONT>            private static class InstDefResult implements InstrumentDefinitionResult {<a name="line.293"></a>
+<FONT color="green">294</FONT>    <a name="line.294"></a>
+<FONT color="green">295</FONT>                    private final String symbol;<a name="line.295"></a>
+<FONT color="green">296</FONT>                    private final InstrumentDefinition def;<a name="line.296"></a>
+<FONT color="green">297</FONT>                    private final Throwable t;<a name="line.297"></a>
+<FONT color="green">298</FONT>                    <a name="line.298"></a>
+<FONT color="green">299</FONT>                    InstDefResult(final String symbol, final InstrumentDefinition def) {<a name="line.299"></a>
+<FONT color="green">300</FONT>                            this.symbol = symbol;<a name="line.300"></a>
+<FONT color="green">301</FONT>                            this.def = def;<a name="line.301"></a>
+<FONT color="green">302</FONT>                            t = null;<a name="line.302"></a>
+<FONT color="green">303</FONT>                    }<a name="line.303"></a>
+<FONT color="green">304</FONT>                    <a name="line.304"></a>
+<FONT color="green">305</FONT>                    InstDefResult(final String symbol, final Throwable t) {<a name="line.305"></a>
+<FONT color="green">306</FONT>                            this.symbol = symbol;<a name="line.306"></a>
+<FONT color="green">307</FONT>                            def = InstrumentDefinition.getDefaultInstance();<a name="line.307"></a>
+<FONT color="green">308</FONT>                            this.t = t;<a name="line.308"></a>
+<FONT color="green">309</FONT>                    }<a name="line.309"></a>
+<FONT color="green">310</FONT>                    <a name="line.310"></a>
+<FONT color="green">311</FONT>                    @Override<a name="line.311"></a>
+<FONT color="green">312</FONT>                    public InstrumentDefinition result() {<a name="line.312"></a>
+<FONT color="green">313</FONT>                            return def;<a name="line.313"></a>
+<FONT color="green">314</FONT>                    }<a name="line.314"></a>
+<FONT color="green">315</FONT>    <a name="line.315"></a>
+<FONT color="green">316</FONT>                    @Override<a name="line.316"></a>
+<FONT color="green">317</FONT>                    public String expression() {<a name="line.317"></a>
+<FONT color="green">318</FONT>                            return symbol;<a name="line.318"></a>
+<FONT color="green">319</FONT>                    }<a name="line.319"></a>
+<FONT color="green">320</FONT>    <a name="line.320"></a>
+<FONT color="green">321</FONT>                    @Override<a name="line.321"></a>
+<FONT color="green">322</FONT>                    public Throwable exception() {<a name="line.322"></a>
+<FONT color="green">323</FONT>                            return t;<a name="line.323"></a>
+<FONT color="green">324</FONT>                    }<a name="line.324"></a>
+<FONT color="green">325</FONT>                    <a name="line.325"></a>
+<FONT color="green">326</FONT>            }<a name="line.326"></a>
+<FONT color="green">327</FONT>            <a name="line.327"></a>
+<FONT color="green">328</FONT>            private static final String SERVER_EXTRAS = "extras.ddfplus.com";<a name="line.328"></a>
+<FONT color="green">329</FONT>    <a name="line.329"></a>
+<FONT color="green">330</FONT>            private static final String urlInstrumentLookup(final CharSequence lookup) {<a name="line.330"></a>
+<FONT color="green">331</FONT>                    return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;<a name="line.331"></a>
+<FONT color="green">332</FONT>            }<a name="line.332"></a>
+<FONT color="green">333</FONT>            <a name="line.333"></a>
+<FONT color="green">334</FONT>            static Callable&lt;InstrumentDefinition&gt; remoteSingle(final String lookup) {<a name="line.334"></a>
+<FONT color="green">335</FONT>                    <a name="line.335"></a>
+<FONT color="green">336</FONT>                    return new Callable&lt;InstrumentDefinition&gt;() {<a name="line.336"></a>
+<FONT color="green">337</FONT>            <a name="line.337"></a>
+<FONT color="green">338</FONT>                            @Override<a name="line.338"></a>
+<FONT color="green">339</FONT>                            public InstrumentDefinition call() throws Exception {<a name="line.339"></a>
+<FONT color="green">340</FONT>                                    <a name="line.340"></a>
+<FONT color="green">341</FONT>                                    try {<a name="line.341"></a>
+<FONT color="green">342</FONT>                                            <a name="line.342"></a>
+<FONT color="green">343</FONT>                                            log.debug("Starting remote lookup for {}", lookup);<a name="line.343"></a>
+<FONT color="green">344</FONT>                                            <a name="line.344"></a>
+<FONT color="green">345</FONT>                                            final String symbolURI = urlInstrumentLookup(lookup);<a name="line.345"></a>
+<FONT color="green">346</FONT>                                            final Element root = HelperXML.xmlDocumentDecode(symbolURI);<a name="line.346"></a>
+<FONT color="green">347</FONT>                                            final Element tag = xmlFirstChild(root, "instrument", XML_STOP);<a name="line.347"></a>
+<FONT color="green">348</FONT>                                            final InstrumentDefinition instDOM = InstrumentXML.decodeXML(tag);<a name="line.348"></a>
+<FONT color="green">349</FONT>                                            <a name="line.349"></a>
+<FONT color="green">350</FONT>                                            if(instDOM == null || instDOM == InstrumentDefinition.getDefaultInstance()) {<a name="line.350"></a>
+<FONT color="green">351</FONT>                                                    log.trace("Empty instrument def returned from remote lookup: {}", lookup);<a name="line.351"></a>
+<FONT color="green">352</FONT>                                                    failedRemoteQueue.add(lookup);<a name="line.352"></a>
+<FONT color="green">353</FONT>                                                    return InstrumentDefinition.getDefaultInstance();<a name="line.353"></a>
+<FONT color="green">354</FONT>                                            }<a name="line.354"></a>
+<FONT color="green">355</FONT>                                            <a name="line.355"></a>
+<FONT color="green">356</FONT>                                            return instDOM;<a name="line.356"></a>
+<FONT color="green">357</FONT>                                            <a name="line.357"></a>
+<FONT color="green">358</FONT>                                    } catch (final Throwable t) {<a name="line.358"></a>
+<FONT color="green">359</FONT>                                            failedRemoteQueue.add(lookup);<a name="line.359"></a>
+<FONT color="green">360</FONT>                                            log.trace("Remote instrument lookup callable exception: {}", t);<a name="line.360"></a>
+<FONT color="green">361</FONT>                                            return InstrumentDefinition.getDefaultInstance();<a name="line.361"></a>
+<FONT color="green">362</FONT>                                    }<a name="line.362"></a>
+<FONT color="green">363</FONT>                                    <a name="line.363"></a>
+<FONT color="green">364</FONT>                            }<a name="line.364"></a>
+<FONT color="green">365</FONT>                    <a name="line.365"></a>
+<FONT color="green">366</FONT>                    };<a name="line.366"></a>
+<FONT color="green">367</FONT>                    <a name="line.367"></a>
+<FONT color="green">368</FONT>            }<a name="line.368"></a>
+<FONT color="green">369</FONT>            <a name="line.369"></a>
+<FONT color="green">370</FONT>            static Callable&lt;Map&lt;String, InstrumentDefinition&gt;&gt; remoteBatch(final String symbols) {<a name="line.370"></a>
+<FONT color="green">371</FONT>                    <a name="line.371"></a>
+<FONT color="green">372</FONT>                    return new Callable&lt;Map&lt;String, InstrumentDefinition&gt;&gt;() {<a name="line.372"></a>
+<FONT color="green">373</FONT>    <a name="line.373"></a>
+<FONT color="green">374</FONT>                            @Override<a name="line.374"></a>
+<FONT color="green">375</FONT>                            public Map&lt;String, InstrumentDefinition&gt; call() throws Exception {<a name="line.375"></a>
+<FONT color="green">376</FONT>                                    <a name="line.376"></a>
+<FONT color="green">377</FONT>                                    try {<a name="line.377"></a>
+<FONT color="green">378</FONT>                                            <a name="line.378"></a>
+<FONT color="green">379</FONT>                                            final Map&lt;String, InstrumentDefinition&gt; defs = <a name="line.379"></a>
+<FONT color="green">380</FONT>                                                            new HashMap&lt;String, InstrumentDefinition&gt;();<a name="line.380"></a>
+<FONT color="green">381</FONT>                                            <a name="line.381"></a>
+<FONT color="green">382</FONT>                                            log.debug("remote batch on {}", urlInstrumentLookup(symbols));<a name="line.382"></a>
+<FONT color="green">383</FONT>                                            <a name="line.383"></a>
+<FONT color="green">384</FONT>                                            final URL url = new URL(urlInstrumentLookup(symbols));<a name="line.384"></a>
+<FONT color="green">385</FONT>                                            <a name="line.385"></a>
+<FONT color="green">386</FONT>                                            final HttpURLConnection connection = (HttpURLConnection) url<a name="line.386"></a>
+<FONT color="green">387</FONT>                                                            .openConnection();<a name="line.387"></a>
+<FONT color="green">388</FONT>                                            <a name="line.388"></a>
+<FONT color="green">389</FONT>                                            connection.setRequestProperty("Accept-Encoding", "gzip");<a name="line.389"></a>
+<FONT color="green">390</FONT>                                            <a name="line.390"></a>
+<FONT color="green">391</FONT>                                            connection.connect();<a name="line.391"></a>
+<FONT color="green">392</FONT>                                            <a name="line.392"></a>
+<FONT color="green">393</FONT>                                            InputStream input = connection.getInputStream();<a name="line.393"></a>
+<FONT color="green">394</FONT>    <a name="line.394"></a>
+<FONT color="green">395</FONT>                                            if (connection.getContentEncoding().equals("gzip")) {<a name="line.395"></a>
+<FONT color="green">396</FONT>                                                    input = new GZIPInputStream(input);<a name="line.396"></a>
+<FONT color="green">397</FONT>                                            }<a name="line.397"></a>
+<FONT color="green">398</FONT>                                            <a name="line.398"></a>
+<FONT color="green">399</FONT>                                            final BufferedInputStream stream =<a name="line.399"></a>
+<FONT color="green">400</FONT>                                                            new BufferedInputStream(input);<a name="line.400"></a>
+<FONT color="green">401</FONT>    <a name="line.401"></a>
+<FONT color="green">402</FONT>                                            final SAXParserFactory factory =<a name="line.402"></a>
+<FONT color="green">403</FONT>                                                            SAXParserFactory.newInstance();<a name="line.403"></a>
+<FONT color="green">404</FONT>                                            final SAXParser parser = factory.newSAXParser();<a name="line.404"></a>
+<FONT color="green">405</FONT>                                            <a name="line.405"></a>
+<FONT color="green">406</FONT>                                            final DefaultHandler handler = new DefaultHandler() {<a name="line.406"></a>
+<FONT color="green">407</FONT>                                                    <a name="line.407"></a>
+<FONT color="green">408</FONT>                                                    InstrumentDefinition def;<a name="line.408"></a>
+<FONT color="green">409</FONT>                                                    <a name="line.409"></a>
+<FONT color="green">410</FONT>                                                    @Override<a name="line.410"></a>
+<FONT color="green">411</FONT>                                                    public void startElement(final String uri,<a name="line.411"></a>
+<FONT color="green">412</FONT>                                                                    final String localName, final String qName,<a name="line.412"></a>
+<FONT color="green">413</FONT>                                                                    final Attributes ats) throws SAXException {<a name="line.413"></a>
+<FONT color="green">414</FONT>                                                            <a name="line.414"></a>
+<FONT color="green">415</FONT>                                                            if (qName != null &amp;&amp; qName.equals("instrument")) {<a name="line.415"></a>
+<FONT color="green">416</FONT>    <a name="line.416"></a>
+<FONT color="green">417</FONT>                                                                    try {<a name="line.417"></a>
+<FONT color="green">418</FONT>                                                                            def = InstrumentXML.decodeSAX(ats);<a name="line.418"></a>
+<FONT color="green">419</FONT>                                                                            if (def != InstrumentDefinition.getDefaultInstance()) {<a name="line.419"></a>
+<FONT color="green">420</FONT>                                                                                    defs.put(def.getSymbol(), def);<a name="line.420"></a>
+<FONT color="green">421</FONT>                                                                            }<a name="line.421"></a>
+<FONT color="green">422</FONT>                                                                    } catch (final SymbolNotFoundException se) {<a name="line.422"></a>
+<FONT color="green">423</FONT>                                                                            observer.onNext(new InstDefResult(se.getMessage(), se));<a name="line.423"></a>
+<FONT color="green">424</FONT>                                                                    } catch (final Exception e) {<a name="line.424"></a>
+<FONT color="green">425</FONT>                                                                            log.trace("Exception in parsing batch lookup {}", e);<a name="line.425"></a>
+<FONT color="green">426</FONT>                                                                    }<a name="line.426"></a>
+<FONT color="green">427</FONT>                                                                    <a name="line.427"></a>
+<FONT color="green">428</FONT>                                                            }<a name="line.428"></a>
+<FONT color="green">429</FONT>                                                            <a name="line.429"></a>
+<FONT color="green">430</FONT>                                                    }<a name="line.430"></a>
+<FONT color="green">431</FONT>                                                    <a name="line.431"></a>
+<FONT color="green">432</FONT>                                            };<a name="line.432"></a>
+<FONT color="green">433</FONT>                                            <a name="line.433"></a>
+<FONT color="green">434</FONT>                                            parser.parse(stream, handler);<a name="line.434"></a>
+<FONT color="green">435</FONT>                                            <a name="line.435"></a>
+<FONT color="green">436</FONT>                                            return defs;<a name="line.436"></a>
+<FONT color="green">437</FONT>                                            <a name="line.437"></a>
+<FONT color="green">438</FONT>                                    } catch (final Throwable t) {<a name="line.438"></a>
+<FONT color="green">439</FONT>                                            failedRemoteQueue.addAll(Arrays.asList(symbols.split(",")));<a name="line.439"></a>
+<FONT color="green">440</FONT>                                            return null;<a name="line.440"></a>
+<FONT color="green">441</FONT>                                    }<a name="line.441"></a>
+<FONT color="green">442</FONT>                                    <a name="line.442"></a>
+<FONT color="green">443</FONT>                            }<a name="line.443"></a>
+<FONT color="green">444</FONT>                            <a name="line.444"></a>
+<FONT color="green">445</FONT>                    };<a name="line.445"></a>
+<FONT color="green">446</FONT>                    <a name="line.446"></a>
+<FONT color="green">447</FONT>            }<a name="line.447"></a>
+<FONT color="green">448</FONT>            <a name="line.448"></a>
+<FONT color="green">449</FONT>            static class RemoteRunner implements Runnable {<a name="line.449"></a>
+<FONT color="green">450</FONT>                    <a name="line.450"></a>
+<FONT color="green">451</FONT>                    private List&lt;Future&lt;Map&lt;String, InstrumentDefinition&gt;&gt;&gt; futures = <a name="line.451"></a>
+<FONT color="green">452</FONT>                                    new ArrayList&lt;Future&lt;Map&lt;String, InstrumentDefinition&gt;&gt;&gt;();<a name="line.452"></a>
+<FONT color="green">453</FONT>                    <a name="line.453"></a>
+<FONT color="green">454</FONT>                    private final List&lt;Callable&lt;Map&lt;String, InstrumentDefinition&gt;&gt;&gt; callables = <a name="line.454"></a>
+<FONT color="green">455</FONT>                                    new ArrayList&lt;Callable&lt;Map&lt;String, InstrumentDefinition&gt;&gt;&gt;();<a name="line.455"></a>
+<FONT color="green">456</FONT>                    <a name="line.456"></a>
+<FONT color="green">457</FONT>                    @Override<a name="line.457"></a>
+<FONT color="green">458</FONT>                    public void run() {<a name="line.458"></a>
+<FONT color="green">459</FONT>                            <a name="line.459"></a>
+<FONT color="green">460</FONT>                            try {<a name="line.460"></a>
+<FONT color="green">461</FONT>                                    <a name="line.461"></a>
+<FONT color="green">462</FONT>                                    while(!Thread.interrupted()) {<a name="line.462"></a>
+<FONT color="green">463</FONT>                                            <a name="line.463"></a>
+<FONT color="green">464</FONT>                                            Thread.sleep(REMOTE_LOOKUP_INTERVAL);<a name="line.464"></a>
+<FONT color="green">465</FONT>                                            <a name="line.465"></a>
+<FONT color="green">466</FONT>                                            while(!remoteQueue.isEmpty()) {<a name="line.466"></a>
+<FONT color="green">467</FONT>                                                    callables.add(remoteBatch(buildQuerey()));<a name="line.467"></a>
+<FONT color="green">468</FONT>                                            }<a name="line.468"></a>
+<FONT color="green">469</FONT>                                            <a name="line.469"></a>
+<FONT color="green">470</FONT>                                            futures = executor.invokeAll(callables, DEFAULT_TIMEOUT, MILLIS);<a name="line.470"></a>
+<FONT color="green">471</FONT>                                            <a name="line.471"></a>
+<FONT color="green">472</FONT>                                            for(final Future&lt;Map&lt;String, InstrumentDefinition&gt;&gt; f : futures) {<a name="line.472"></a>
+<FONT color="green">473</FONT>                                                    <a name="line.473"></a>
+<FONT color="green">474</FONT>                                                    for(final Entry&lt;String, InstrumentDefinition&gt; e : f.get().entrySet()) {<a name="line.474"></a>
+<FONT color="green">475</FONT>                                                            <a name="line.475"></a>
+<FONT color="green">476</FONT>                                                            final InstrumentDefinition def = e.getValue();<a name="line.476"></a>
+<FONT color="green">477</FONT>                                                            <a name="line.477"></a>
+<FONT color="green">478</FONT>                                                            if(def == null || def == InstrumentDefinition.getDefaultInstance()) {<a name="line.478"></a>
+<FONT color="green">479</FONT>                                                                    observer.onNext(new InstDefResult(e.getKey(),<a name="line.479"></a>
+<FONT color="green">480</FONT>                                                                                    new Throwable("Could not find " + e.getKey())));<a name="line.480"></a>
+<FONT color="green">481</FONT>                                                            } else {<a name="line.481"></a>
+<FONT color="green">482</FONT>                                                                    observer.onNext(new InstDefResult(e.getKey(), def));<a name="line.482"></a>
+<FONT color="green">483</FONT>                                                            }<a name="line.483"></a>
+<FONT color="green">484</FONT>                                                            <a name="line.484"></a>
+<FONT color="green">485</FONT>                                                    }<a name="line.485"></a>
+<FONT color="green">486</FONT>                                                    <a name="line.486"></a>
+<FONT color="green">487</FONT>                                            }<a name="line.487"></a>
+<FONT color="green">488</FONT>                                            <a name="line.488"></a>
+<FONT color="green">489</FONT>                                            futures.clear();<a name="line.489"></a>
+<FONT color="green">490</FONT>                                            callables.clear();<a name="line.490"></a>
+<FONT color="green">491</FONT>                                            <a name="line.491"></a>
+<FONT color="green">492</FONT>                                    }<a name="line.492"></a>
+<FONT color="green">493</FONT>                                    <a name="line.493"></a>
+<FONT color="green">494</FONT>                            } catch (final Throwable t) {<a name="line.494"></a>
+<FONT color="green">495</FONT>                                    log.error("Exception in Remote Runner Thread", t);<a name="line.495"></a>
+<FONT color="green">496</FONT>                            }<a name="line.496"></a>
+<FONT color="green">497</FONT>                            <a name="line.497"></a>
+<FONT color="green">498</FONT>                    }<a name="line.498"></a>
+<FONT color="green">499</FONT>                    <a name="line.499"></a>
+<FONT color="green">500</FONT>            }<a name="line.500"></a>
+<FONT color="green">501</FONT>            <a name="line.501"></a>
+<FONT color="green">502</FONT>            private static String buildQuerey() throws Exception {<a name="line.502"></a>
+<FONT color="green">503</FONT>                    <a name="line.503"></a>
+<FONT color="green">504</FONT>                    final StringBuilder sb = new StringBuilder();<a name="line.504"></a>
+<FONT color="green">505</FONT>                    <a name="line.505"></a>
+<FONT color="green">506</FONT>                    int len = 0;<a name="line.506"></a>
+<FONT color="green">507</FONT>                    int symCount = 0;<a name="line.507"></a>
+<FONT color="green">508</FONT>                    <a name="line.508"></a>
+<FONT color="green">509</FONT>                    while(len &lt; MAX_URL_LEN &amp;&amp; symCount &lt; 400 &amp;&amp; !remoteQueue.isEmpty()) {<a name="line.509"></a>
+<FONT color="green">510</FONT>                            <a name="line.510"></a>
+<FONT color="green">511</FONT>                            final String s = remoteQueue.take();<a name="line.511"></a>
+<FONT color="green">512</FONT>                            <a name="line.512"></a>
+<FONT color="green">513</FONT>                            log.debug("Pulled {} from remote queue", s);<a name="line.513"></a>
+<FONT color="green">514</FONT>                            <a name="line.514"></a>
+<FONT color="green">515</FONT>                            symCount++;<a name="line.515"></a>
+<FONT color="green">516</FONT>                            len += s.length() + 1;<a name="line.516"></a>
+<FONT color="green">517</FONT>                            sb.append(s).append(",");<a name="line.517"></a>
+<FONT color="green">518</FONT>                            <a name="line.518"></a>
+<FONT color="green">519</FONT>                    }<a name="line.519"></a>
+<FONT color="green">520</FONT>                    <a name="line.520"></a>
+<FONT color="green">521</FONT>                    /* Remove trailing comma */<a name="line.521"></a>
+<FONT color="green">522</FONT>                    sb.deleteCharAt(sb.length() - 1);<a name="line.522"></a>
 <FONT color="green">523</FONT>                    <a name="line.523"></a>
-<FONT color="green">524</FONT>                    return sb.toString();<a name="line.524"></a>
+<FONT color="green">524</FONT>                    log.debug("Sending {} to remote lookup", sb.toString());<a name="line.524"></a>
 <FONT color="green">525</FONT>                    <a name="line.525"></a>
-<FONT color="green">526</FONT>            }<a name="line.526"></a>
-<FONT color="green">527</FONT>            <a name="line.527"></a>
-<FONT color="green">528</FONT>    }<a name="line.528"></a>
+<FONT color="green">526</FONT>                    return sb.toString();<a name="line.526"></a>
+<FONT color="green">527</FONT>                    <a name="line.527"></a>
+<FONT color="green">528</FONT>            }<a name="line.528"></a>
+<FONT color="green">529</FONT>            <a name="line.529"></a>
+<FONT color="green">530</FONT>    }<a name="line.530"></a>
 
 
 
