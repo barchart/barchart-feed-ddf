@@ -283,7 +283,6 @@ public final class DDF_InstrumentProvider {
 			if(iState == null || iState.isNull()) {
 				symbolMap.put(symbol, InstrumentFactory.instrumentState(result.result()));
 			} else {
-				log.debug("Processing {}", result.result().toString());
 				iState.process(result.result());
 			}
 			
