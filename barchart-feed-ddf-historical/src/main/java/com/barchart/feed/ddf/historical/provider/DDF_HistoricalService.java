@@ -52,9 +52,11 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New query.
-	 *
-	 * @param <E> the element type
-	 * @param type the type
+	 * 
+	 * @param <E>
+	 *            the element type
+	 * @param type
+	 *            the type
 	 * @return the dD f_ query
 	 */
 	public static final <E extends DDF_Entry> DDF_Query<E> newQuery(
@@ -64,20 +66,20 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New query ticks.
-	 *
+	 * 
 	 * @return the dD f_ query
 	 */
 	public static final DDF_Query<DDF_EntryTick> newQueryTicks() {
 		return newQuery(TICKS);
 	}
-	
+
 	public static final DDF_Query<DDF_EntryTickFormT> newQueryTicksFormT() {
 		return newQuery(TICKS_FORM_T);
 	}
 
 	/**
 	 * New query mins.
-	 *
+	 * 
 	 * @return the dD f_ query
 	 */
 	public static final DDF_Query<DDF_EntryBarMin> newQueryMins() {
@@ -86,7 +88,7 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New query mins nearby.
-	 *
+	 * 
 	 * @return the dD f_ query
 	 */
 	public static final DDF_Query<DDF_EntryBarMinNearby> newQueryMinsNearby() {
@@ -95,7 +97,7 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New query mins form t.
-	 *
+	 * 
 	 * @return the dD f_ query
 	 */
 	public static final DDF_Query<DDF_EntryBarMinFormT> newQueryMinsFormT() {
@@ -104,7 +106,7 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New query eod.
-	 *
+	 * 
 	 * @return the dD f_ query
 	 */
 	public static final DDF_Query<DDF_EntryBarEod> newQueryEod() {
@@ -115,13 +117,18 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result.
-	 *
-	 * @param <E> the element type
-	 * @param settings the settings
-	 * @param query the query
-	 * @param listener the listener
+	 * 
+	 * @param <E>
+	 *            the element type
+	 * @param settings
+	 *            the settings
+	 * @param query
+	 *            the query
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
-	 * @throws RuntimeException the runtime exception
+	 * @throws RuntimeException
+	 *             the runtime exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static final <E extends DDF_Entry> DDF_Result<E> newResult(
@@ -146,9 +153,9 @@ public final class DDF_HistoricalService {
 		final Result<E> result = new Result<E>(query, entryReference, listener);
 
 		// set url query for debugging
-		
+
 		result.urlQuery = stringURL;
-		
+
 		String firstLine = "";
 		int index = 0;
 
@@ -156,7 +163,7 @@ public final class DDF_HistoricalService {
 
 			final ZipReader reader = ZipReader.fromURL(stringURL);
 
-			while (true) {
+			while (!Thread.currentThread().isInterrupted()) {
 				final String inputLine = reader.readLine();
 				if (inputLine == null) {
 					break;
@@ -205,6 +212,15 @@ public final class DDF_HistoricalService {
 			result.status = DDF_ResultStatus.SUCCESS;
 			result.statusComment = STATUS_COUNT + 0;
 
+		} catch (final InterruptedException e) {
+
+			log.debug("query lookup interrupted; query={}", query);
+
+			result.status = DDF_ResultStatus.INTERRUPTED;
+			result.statusComment = e.getMessage() + " at " + index;
+
+			Thread.currentThread().interrupt();
+
 		} catch (final Exception e) {
 
 			log.debug("query lookup failed; query={}", query);
@@ -223,10 +239,13 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result ticks.
-	 *
-	 * @param settings the settings
-	 * @param query the query
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param query
+	 *            the query
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
 	 */
 	public static final DDF_Result<DDF_EntryTick> newResultTicks(
@@ -237,16 +256,24 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result ticks.
-	 *
-	 * @param settings the settings
-	 * @param instrument the instrument
-	 * @param timeStart the time start
-	 * @param timeEnd the time end
-	 * @param resultOrder the result order
-	 * @param maxRecords the max records
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param instrument
+	 *            the instrument
+	 * @param timeStart
+	 *            the time start
+	 * @param timeEnd
+	 *            the time end
+	 * @param resultOrder
+	 *            the result order
+	 * @param maxRecords
+	 *            the max records
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
-	 * @throws RuntimeException the runtime exception
+	 * @throws RuntimeException
+	 *             the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryTick> newResultTicks(
 			final DDF_Settings settings, final DDF_Instrument instrument,
@@ -265,9 +292,10 @@ public final class DDF_HistoricalService {
 		return newResult(settings, query, listener);
 
 	}
-	
+
 	public static final DDF_Result<DDF_EntryTickFormT> newResultTicksFormT(
-			final DDF_Settings settings, final DDF_Query<DDF_EntryTickFormT> query,
+			final DDF_Settings settings,
+			final DDF_Query<DDF_EntryTickFormT> query,
 			final DDF_ResultListener listener) {
 		return newResult(settings, query, listener);
 	}
@@ -294,10 +322,13 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result mins.
-	 *
-	 * @param settings the settings
-	 * @param query the query
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param query
+	 *            the query
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
 	 */
 	public static final DDF_Result<DDF_EntryBarMin> newResultMins(
@@ -309,17 +340,26 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result mins.
-	 *
-	 * @param settings the settings
-	 * @param instrument the instrument
-	 * @param timeStart the time start
-	 * @param timeEnd the time end
-	 * @param resultOrder the result order
-	 * @param maxRecords the max records
-	 * @param groupBy the group by
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param instrument
+	 *            the instrument
+	 * @param timeStart
+	 *            the time start
+	 * @param timeEnd
+	 *            the time end
+	 * @param resultOrder
+	 *            the result order
+	 * @param maxRecords
+	 *            the max records
+	 * @param groupBy
+	 *            the group by
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
-	 * @throws RuntimeException the runtime exception
+	 * @throws RuntimeException
+	 *             the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryBarMin> newResultMins(
 			final DDF_Settings settings, final DDF_Instrument instrument,
@@ -345,10 +385,13 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result mins nearby.
-	 *
-	 * @param settings the settings
-	 * @param query the query
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param query
+	 *            the query
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
 	 */
 	public static final DDF_Result<DDF_EntryBarMinNearby> newResultMinsNearby(
@@ -360,17 +403,26 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result mins near by.
-	 *
-	 * @param settings the settings
-	 * @param instrument the instrument
-	 * @param timeStart the time start
-	 * @param timeEnd the time end
-	 * @param resultOrder the result order
-	 * @param maxRecords the max records
-	 * @param groupBy the group by
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param instrument
+	 *            the instrument
+	 * @param timeStart
+	 *            the time start
+	 * @param timeEnd
+	 *            the time end
+	 * @param resultOrder
+	 *            the result order
+	 * @param maxRecords
+	 *            the max records
+	 * @param groupBy
+	 *            the group by
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
-	 * @throws RuntimeException the runtime exception
+	 * @throws RuntimeException
+	 *             the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryBarMinNearby> newResultMinsNearBy(
 			final DDF_Settings settings, final DDF_Instrument instrument,
@@ -398,10 +450,13 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result mins form t.
-	 *
-	 * @param settings the settings
-	 * @param query the query
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param query
+	 *            the query
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
 	 */
 	public static final DDF_Result<DDF_EntryBarMinFormT> newResultMinsFormT(
@@ -413,17 +468,26 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result mins form t.
-	 *
-	 * @param settings the settings
-	 * @param instrument the instrument
-	 * @param timeStart the time start
-	 * @param timeEnd the time end
-	 * @param resultOrder the result order
-	 * @param maxRecords the max records
-	 * @param groupBy the group by
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param instrument
+	 *            the instrument
+	 * @param timeStart
+	 *            the time start
+	 * @param timeEnd
+	 *            the time end
+	 * @param resultOrder
+	 *            the result order
+	 * @param maxRecords
+	 *            the max records
+	 * @param groupBy
+	 *            the group by
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
-	 * @throws RuntimeException the runtime exception
+	 * @throws RuntimeException
+	 *             the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryBarMinFormT> newResultMinsFormT(
 			final DDF_Settings settings, final DDF_Instrument instrument,
@@ -451,10 +515,13 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result eod.
-	 *
-	 * @param settings the settings
-	 * @param query the query
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param query
+	 *            the query
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
 	 */
 	public static final DDF_Result<DDF_EntryBarEod> newResultEod(
@@ -466,18 +533,28 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New result eod.
-	 *
-	 * @param settings the settings
-	 * @param instrument the instrument
-	 * @param timeStart the time start
-	 * @param timeEnd the time end
-	 * @param resultOrder the result order
-	 * @param maxRecords the max records
-	 * @param eodType the eod type
-	 * @param eodVolume the eod volume
-	 * @param listener the listener
+	 * 
+	 * @param settings
+	 *            the settings
+	 * @param instrument
+	 *            the instrument
+	 * @param timeStart
+	 *            the time start
+	 * @param timeEnd
+	 *            the time end
+	 * @param resultOrder
+	 *            the result order
+	 * @param maxRecords
+	 *            the max records
+	 * @param eodType
+	 *            the eod type
+	 * @param eodVolume
+	 *            the eod volume
+	 * @param listener
+	 *            the listener
 	 * @return the dD f_ result
-	 * @throws RuntimeException the runtime exception
+	 * @throws RuntimeException
+	 *             the runtime exception
 	 */
 	public static final DDF_Result<DDF_EntryBarEod> newResultEod(
 			final DDF_Settings settings, final DDF_Instrument instrument,
@@ -504,7 +581,7 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New query trend ticks.
-	 *
+	 * 
 	 * @return the dD f_ query
 	 */
 	public static final DDF_Query<DDF_EntryTrend> newQueryTrendTicks() {
@@ -513,7 +590,7 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New query trend mins.
-	 *
+	 * 
 	 * @return the dD f_ query
 	 */
 	public static final DDF_Query<DDF_EntryTrend> newQueryTrendMins() {
@@ -522,7 +599,7 @@ public final class DDF_HistoricalService {
 
 	/**
 	 * New query trend eod.
-	 *
+	 * 
 	 * @return the dD f_ query
 	 */
 	public static final DDF_Query<DDF_EntryTrend> newQueryTrendEod() {
