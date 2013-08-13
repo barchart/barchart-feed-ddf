@@ -149,7 +149,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		switch (kind) {
 		default:
-			log.error("wrong kind; treat as size : {}", kind);
+			
 		case SIZE:
 			price = ValueConst.NULL_PRICE;
 			size = message.getAsSize();
