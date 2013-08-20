@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.instrument.enums.DDF_InstrumentField;
 
@@ -37,7 +38,7 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("IBM");
 		symbolList.add("ORCL");
 		symbolList.add("MSFT");
-		symbolList.add("GEZ2");
+		symbolList.add("GEZ3");
 		symbolList.add("_S_FX_A6H2_A6Z1");
 
 		final List<DDF_Instrument> list = DDF_InstrumentProvider
@@ -48,6 +49,7 @@ public class TestDDF_InstrumentProvider {
 		for (final DDF_Instrument instrument : list) {
 
 			System.out.println(instrument);
+			System.out.println("CQG: " + instrument.get(InstrumentField.CQG_TRADING_SYMBOL));
 
 		}
 
@@ -67,7 +69,7 @@ public class TestDDF_InstrumentProvider {
 		symbolList.add("IBM");
 		symbolList.add("ORCL");
 		symbolList.add("MSFT");
-		symbolList.add("GEZ2");
+		symbolList.add("GEZ3");
 		symbolList.add("_S_FX_A6H2_A6Z1");
 		symbolList.add("_S_BF_ZSQ2_ZSU2_ZSX2");
 
@@ -86,6 +88,8 @@ public class TestDDF_InstrumentProvider {
 							.toString());
 
 			System.out.println(instrument);
+			
+			System.out.println("CQG: " + instrument.get(InstrumentField.CQG_TRADING_SYMBOL));
 
 		}
 

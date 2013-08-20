@@ -20,6 +20,7 @@ import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPI
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REALTIME;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_REAL;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_CQG_TRADING;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.GUID;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.TIME_ZONE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_MONTH;
@@ -44,6 +45,7 @@ import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.api.TimeValue;
 import com.barchart.util.values.provider.ValueBuilder;
+import com.barchart.util.values.provider.ValueConst;
 
 class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 
@@ -81,6 +83,8 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 		
 		final String symbolDDFReal = xmlStringDecode(tag, SYMBOL_DDF_REAL, XML_STOP);
 
+		final String symbolCQG = xmlStringDecode(tag, SYMBOL_CQG_TRADING, XML_PASS);
+		
 		final byte exchCode = xmlByteDecode(tag, EXCHANGE_DDF, XML_PASS); // XXX
 
 		final byte baseCode = xmlByteDecode(tag, BASE_CODE_DDF, XML_STOP);
@@ -137,6 +141,13 @@ class InstrumentDOM extends InstrumentDDF implements CodecDOM {
 
 		set(InstrumentField.ID, newText(guid));
 		set(InstrumentField.SYMBOL, newText(symbolReal));
+		
+		if(symbolCQG.equals("")) {
+			set(InstrumentField.CQG_TRADING_SYMBOL, ValueConst.NULL_TEXT);
+		} else {
+			set(InstrumentField.CQG_TRADING_SYMBOL, newText(symbolCQG));
+		}
+		
 		set(InstrumentField.DESCRIPTION, newText(symolComment));
 		set(InstrumentField.TYPE, CodeCFI.fromCode(codeCFI));
 		set(InstrumentField.EXCHANGE_ID, newText(exchange.name()));

@@ -73,6 +73,9 @@ interface XmlTagExtras {
 	
 	/** used by historical query system */
 	String SYMBOL_HIST = "symbol_historical";
+	
+	/** cqg trading symbol */
+	String SYMBOL_CQG_TRADING = "alternate_symbol";
 
 	/** ddf feed codes */
 	String EXCHANGE_DDF = "exchange_ddf";

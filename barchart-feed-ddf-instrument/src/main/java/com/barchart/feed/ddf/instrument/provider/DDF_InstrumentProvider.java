@@ -67,11 +67,13 @@ public final class DDF_InstrumentProvider {
 	static final Map<String, DDF_Instrument> NULL_MAP = Collections.emptyMap();
 
 	static final String SERVER_EXTRAS = "extras.ddfplus.com";
-
+	static final String LOOKUP_SUFFIX = "&symbology=CQG";
+	
 	static final String urlInstrumentLookup(final CharSequence lookup) {
-		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
+		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup +
+				LOOKUP_SUFFIX;
 	}
-
+	
 	private DDF_InstrumentProvider() {
 	}
 
