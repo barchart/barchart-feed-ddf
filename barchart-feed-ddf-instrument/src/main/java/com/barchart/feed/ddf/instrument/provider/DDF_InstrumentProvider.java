@@ -9,6 +9,7 @@ package com.barchart.feed.ddf.instrument.provider;
 
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
+import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
 import static com.barchart.feed.ddf.util.HelperXML.xmlDocumentDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
 import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
@@ -38,6 +39,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -72,6 +74,14 @@ public final class DDF_InstrumentProvider {
 	static final String urlInstrumentLookup(final CharSequence lookup) {
 		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup +
 				LOOKUP_SUFFIX;
+	}
+	
+	// http://extras.ddfplus.com/symbology/?symbol=F.US.ZCEZ13&provider=CQG
+	// http://extras.ddfplus.com/symbology/?symbol=F.US.ZCEZ13&provider=CQG
+	
+	static final String cqgInstLoopURL(final CharSequence lookup) {
+		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup +
+				"&provider=CQG";
 	}
 	
 	private DDF_InstrumentProvider() {
@@ -148,6 +158,41 @@ public final class DDF_InstrumentProvider {
 		return instance().lookupDDF(symbol);
 	}
 
+	private static final Map<TextValue, DDF_Instrument> cqgMap =
+			new HashMap<TextValue, DDF_Instrument>();
+	
+	public static DDF_Instrument findCQG(final String symbol) {
+		return findCQG(newText(symbol));
+	}
+			
+	public static DDF_Instrument findCQG(final TextValue symbol) {
+		
+		DDF_Instrument result = cqgMap.get(symbol);
+		
+		if(result == null) {
+			
+			try {
+				String barSymbol = remoteCQGLookup(symbol.toString());
+				
+				result = find(barSymbol);
+				
+				if(result == null || result.isNull()) {
+					log.warn("Unable to find barchart instrument for {}", symbol);
+					return NULL_INSTRUMENT;
+				}
+				
+				cqgMap.put(symbol, result);
+				
+			} catch (final Exception e) {
+				log.error("Exception in CQG lookup on {} {}", symbol, e);
+				return NULL_INSTRUMENT;
+			}
+		}
+		
+		return result;
+		
+	}
+	
 	/**
 	 * NOTE: cache via instrument service;.
 	 * 
@@ -357,6 +402,18 @@ public final class DDF_InstrumentProvider {
 
 	}
 
+	static String remoteCQGLookup(String symbol) throws Exception {
+		
+		final String symbolURI = cqgInstLoopURL(symbol);
+		
+		final Element root = xmlDocumentDecode(symbolURI);
+
+		final Element tag = xmlFirstChild(root, "symbol", XML_STOP);
+		
+		return tag.getTextContent();
+		
+	}
+	
 	static String concatenate(final List<String> symbolList) {
 
 		final StringBuilder text = new StringBuilder(1024);
