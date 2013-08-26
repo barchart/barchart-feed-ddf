@@ -156,7 +156,7 @@ public final class DDF_InstrumentProvider {
 	 * @return the dD f_ instrument
 	 */
 	public static DDF_Instrument findDDF(final TextValue symbol) {
-		return instance().lookup(symbol);
+		return instance().lookupDDF(symbol);
 	}
 
 	private static final Map<TextValue, DDF_Instrument> cqgMap =
