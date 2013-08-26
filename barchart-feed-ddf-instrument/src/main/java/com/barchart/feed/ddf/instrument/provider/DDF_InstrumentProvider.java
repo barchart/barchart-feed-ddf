@@ -45,6 +45,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.barchart.feed.base.instrument.enums.InstrumentField;
 import com.barchart.feed.ddf.instrument.api.DDF_DefinitionService;
 import com.barchart.feed.ddf.instrument.api.DDF_Instrument;
 import com.barchart.feed.ddf.util.HelperXML;
@@ -155,7 +156,7 @@ public final class DDF_InstrumentProvider {
 	 * @return the dD f_ instrument
 	 */
 	public static DDF_Instrument findDDF(final TextValue symbol) {
-		return instance().lookupDDF(symbol);
+		return instance().lookup(symbol);
 	}
 
 	private static final Map<TextValue, DDF_Instrument> cqgMap =
