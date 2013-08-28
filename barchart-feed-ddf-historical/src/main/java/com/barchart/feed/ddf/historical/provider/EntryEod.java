@@ -60,8 +60,9 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 
 		final String[] inputArray = splitCSV(inputLine);
 
-		instrument = decodeInstrument(inputArray[0]);
-
+		//instrument = decodeInstrument(inputArray[0]);
+		symbol = inputArray[0];
+		
 		millisUTC = decodeEodTime(inputArray[1], instrument);
 
 		ordTradeDay = DDF_TradeDay.fromMillisUTC(millisUTC).ord;
