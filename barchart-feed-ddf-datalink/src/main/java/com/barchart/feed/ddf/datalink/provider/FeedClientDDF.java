@@ -295,7 +295,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		writeEvent = blockingWrite(FeedDDF.tcpVersion(VERSION));
 
 		if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
-			log.error("error sending VERSION 3 command to jerq");
+			log.error("error sending VERSION 4 command to jerq");
 			return false;
 		}
 
