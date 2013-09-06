@@ -17,6 +17,8 @@ public class FeedDDF {
 	public static final String VERSION_2 = "2";
 
 	public static final String VERSION_3 = "3";
+	
+	public static final String VERSION_4 = "4";
 
 	// ### tcp elements ###
 
@@ -144,5 +146,5 @@ public class FeedDDF {
 	public static final String RESPONSE_SESSION_LOCKOUT = "IP Lockout";
 	public static final String RESPONSE_UNKNOWN_COMMAND = "Unknown Command";
 	public static final String RESPONSE_VERSION_SET_3 = "Version set to 3";
-
+	public static final String RESPONSE_VERSION_SET_4 = "Version set to 4";
 }

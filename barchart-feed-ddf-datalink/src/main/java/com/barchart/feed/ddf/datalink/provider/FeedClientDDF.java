@@ -58,6 +58,8 @@ import com.barchart.feed.ddf.util.FeedDDF;
 class FeedClientDDF implements DDF_FeedClient {
 
 	private static final int PORT = 7500;
+	
+	private static final String VERSION = FeedDDF.VERSION_4;
 
 	/** use slf4j for internal NETTY LoggingHandler facade */
 	static {
@@ -289,8 +291,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			return false;
 		}
 
-		/* Send VERSION 3 command to JERQ */
-		writeEvent = blockingWrite(FeedDDF.tcpVersion(FeedDDF.VERSION_3));
+		/* Send VERSION command to JERQ */
+		writeEvent = blockingWrite(FeedDDF.tcpVersion(VERSION));
 
 		if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
 			log.error("error sending VERSION 3 command to jerq");
@@ -1045,8 +1047,8 @@ class FeedClientDDF implements DDF_FeedClient {
 				return DDF_FeedEvent.COMMAND_WRITE_FAILURE;
 			}
 
-			/* Send VERSION 3 command to JERQ */
-			writeEvent = blockingWrite(FeedDDF.tcpVersion(FeedDDF.VERSION_3));
+			/* Send VERSION command to JERQ */
+			writeEvent = blockingWrite(FeedDDF.tcpVersion(VERSION));
 
 			if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
 				return DDF_FeedEvent.COMMAND_WRITE_FAILURE;
