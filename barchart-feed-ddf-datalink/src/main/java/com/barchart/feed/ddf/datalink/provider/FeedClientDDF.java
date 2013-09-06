@@ -58,7 +58,7 @@ import com.barchart.feed.ddf.util.FeedDDF;
 
 class FeedClientDDF implements DDF_FeedClient {
 
-	private static final String VERSION = FeedDDF.VERSION_3;
+	private static final String VERSION = FeedDDF.VERSION_4;
 	private static final int PORT = 7500;
 
 	private static final int DEFAULT_IO_THREADS = 
