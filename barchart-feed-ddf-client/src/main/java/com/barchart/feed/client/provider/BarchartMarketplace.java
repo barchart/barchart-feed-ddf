@@ -26,6 +26,7 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
@@ -445,12 +446,17 @@ public class BarchartMarketplace implements Marketplace {
 	/* ***** ***** SnapshotProvider ***** ***** */
 	
 	@Override
-	public Market snapshot(Instrument instrument) {
+	public Market snapshot(final Instrument instrument) {
 		return maker.snapshot(instrument);
 	}
 	
 	@Override
-	public Market snapshot(String symbol) {
+	public Market snapshot(final Identifier instID) {
+		return maker.snapshot(instID);
+	}
+	
+	@Override
+	public Market snapshot(final String symbol) {
 		return maker.snapshot(symbol);
 	}
 	

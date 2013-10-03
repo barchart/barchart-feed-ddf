@@ -30,6 +30,7 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.util.Identifier;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -421,6 +422,12 @@ public class TestableFeed implements Marketplace {
 	@Override
 	public Market snapshot(String symbol) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Market snapshot(Identifier instID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
