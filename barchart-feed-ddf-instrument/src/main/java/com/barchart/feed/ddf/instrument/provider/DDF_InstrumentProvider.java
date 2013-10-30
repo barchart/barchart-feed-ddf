@@ -39,13 +39,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.Observer;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.InstrumentDefinitionResult;
 import com.barchart.feed.inst.participant.InstrumentState;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.feed.inst.provider.InstrumentMap;
+import com.barchart.util.observer.Observer;
 
 public final class DDF_InstrumentProvider {
 	
@@ -285,6 +285,18 @@ public final class DDF_InstrumentProvider {
 			} else {
 				iState.process(result.result());
 			}
+			
+		}
+
+		@Override
+		public void onError(Throwable error) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onCompleted() {
+			// TODO Auto-generated method stub
 			
 		}
 		
