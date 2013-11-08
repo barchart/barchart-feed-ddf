@@ -38,6 +38,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import rx.Observer;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.ddf.util.HelperXML;
@@ -45,7 +47,6 @@ import com.barchart.feed.inst.InstrumentDefinitionResult;
 import com.barchart.feed.inst.participant.InstrumentState;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.feed.inst.provider.InstrumentMap;
-import com.barchart.util.observer.Observer;
 
 public final class DDF_InstrumentProvider {
 	
@@ -258,7 +259,7 @@ public final class DDF_InstrumentProvider {
 		
 	}
 	
-	private static Observer<InstrumentDefinitionResult> observer = 
+	private static rx.Observer<InstrumentDefinitionResult> observer = 
 			new Observer<InstrumentDefinitionResult>() {
 
 		@Override
