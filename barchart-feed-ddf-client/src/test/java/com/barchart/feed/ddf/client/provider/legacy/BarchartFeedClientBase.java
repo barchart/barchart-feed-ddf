@@ -46,7 +46,7 @@ import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
+import com.barchart.util.value.impl.FactoryImpl;
 import com.barchart.util.values.api.Value;
 
 /**
@@ -58,7 +58,7 @@ abstract class BarchartFeedClientBase {
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartFeedClientBase.class);
 
-	private static final Factory factory = FactoryLoader.load();
+	private static final Factory factory = new FactoryImpl();
 	
 	protected volatile DDF_FeedClientBase feed = null;
 

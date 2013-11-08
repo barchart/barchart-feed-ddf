@@ -7,8 +7,20 @@
  */
 package com.barchart.feed.ddf.util;
 
-import static com.barchart.feed.ddf.util.HelperDDF.*;
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.feed.ddf.util.HelperDDF.DDF_CLEAR;
+import static com.barchart.feed.ddf.util.HelperDDF.DDF_EMPTY;
+import static com.barchart.feed.ddf.util.HelperDDF.byteAsString;
+import static com.barchart.feed.ddf.util.HelperDDF.fromBinaryToDecimal;
+import static com.barchart.feed.ddf.util.HelperDDF.fromDecimalToBinary;
+import static com.barchart.feed.ddf.util.HelperDDF.longDecode;
+import static com.barchart.feed.ddf.util.HelperDDF.longEncode;
+import static com.barchart.feed.ddf.util.HelperDDF.priceDecode;
+import static com.barchart.feed.ddf.util.HelperDDF.priceEncode;
+import static com.barchart.feed.ddf.util.HelperDDF.timeDecode;
+import static com.barchart.feed.ddf.util.HelperDDF.timeEncode;
+import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
+import static com.barchart.util.ascii.ASCII.NUL;
+import static com.barchart.util.ascii.ASCII.STRING_DASH;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -36,8 +48,8 @@ import org.xml.sax.Attributes;
 
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.impl.FactoryImpl;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 import com.barchart.util.values.provider.ValueConst;
@@ -48,7 +60,7 @@ import com.barchart.util.values.provider.ValueConst;
  */
 public final class HelperXML {
 
-	static final Factory factory = FactoryLoader.load();
+	static final Factory factory = new FactoryImpl();
 
 	private static Logger log = LoggerFactory.getLogger(HelperXML.class);
 

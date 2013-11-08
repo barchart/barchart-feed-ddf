@@ -36,15 +36,15 @@ import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.inst.provider.Exchanges;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.api.FactoryLoader;
 import com.barchart.util.value.api.Time;
+import com.barchart.util.value.impl.FactoryImpl;
 import com.barchart.util.values.api.PriceValue;
 import com.barchart.util.values.provider.ValueBuilder;
 
 public final class InstrumentXML {
 	
 	@SuppressWarnings("unused")
-	private static final Factory factory = FactoryLoader.load();
+	private static final Factory factory = new FactoryImpl();
 	
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory
