@@ -45,7 +45,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		for(final FrameworkAgent agent : agentMap.get(clazz)) {
 			
 			if(agent.isActive()) {
-				agent.callback().onNext(agent.data(this));
+				agent.callback().onNext(agent.data(this.freeze()));
 			}
 			
 		}
@@ -53,7 +53,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		for(final FrameworkAgent agent : agentMap.get(Market.class)) {
 			
 			if(agent.isActive()) {
-				agent.callback().onNext(agent.data(this));
+				agent.callback().onNext(agent.data(this.freeze()));
 			}
 			
 		}
