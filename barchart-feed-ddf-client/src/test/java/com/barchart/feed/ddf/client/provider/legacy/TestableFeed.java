@@ -30,7 +30,7 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.Identifier;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
@@ -46,8 +46,8 @@ import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
+import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.impl.FactoryImpl;
 import com.barchart.util.values.api.Value;
 
 public class TestableFeed implements Marketplace {
@@ -425,7 +425,7 @@ public class TestableFeed implements Marketplace {
 	}
 
 	@Override
-	public Market snapshot(Identifier instID) {
+	public Market snapshot(InstrumentID instID) {
 		// TODO Auto-generated method stub
 		return null;
 	}

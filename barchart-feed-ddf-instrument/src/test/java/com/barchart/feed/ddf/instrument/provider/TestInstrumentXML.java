@@ -15,10 +15,10 @@ import org.w3c.dom.Element;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.provider.InstrumentFactory;
+import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.TimeInterval;
-import com.barchart.util.value.impl.FactoryImpl;
 
 public class TestInstrumentXML {
 

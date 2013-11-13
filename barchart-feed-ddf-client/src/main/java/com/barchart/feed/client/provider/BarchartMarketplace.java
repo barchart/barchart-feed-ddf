@@ -26,7 +26,7 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.util.Identifier;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
@@ -38,8 +38,8 @@ import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
+import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.value.impl.FactoryImpl;
 
 public class BarchartMarketplace implements Marketplace {
 	
@@ -451,7 +451,7 @@ public class BarchartMarketplace implements Marketplace {
 	}
 	
 	@Override
-	public Market snapshot(final Identifier instID) {
+	public Market snapshot(final InstrumentID instID) {
 		return maker.snapshot(instID);
 	}
 	
