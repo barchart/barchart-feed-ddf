@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.Subscription.Type;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -736,10 +737,13 @@ class FeedClientDDF implements DDF_FeedClient {
 		final Set<Subscription> exch = new HashSet<Subscription>();
 		
 		for(final Subscription sub : subs) {
-			if(isExchange(sub)) {
-				exch.add(sub);
-			} else {
+			switch(sub.type()) {
+			case INSTRUMENT:
 				insts.add(sub);
+				break;
+			case EXCHANGE:
+				exch.add(sub);
+				break;
 			}
 		}
 		
@@ -780,7 +784,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				if(subscriptions.containsKey(interest)) {
 					subscriptions.get(interest).addTypes(sub.types());
 				} else {
-					subscriptions.put(interest, new DDF_Subscription(sub));
+					subscriptions.put(interest, new DDF_Subscription(sub, Type.INSTRUMENT));
 				}
 				
 				sb.append(subscriptions.get(interest).encode() + ",");
@@ -808,7 +812,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				
 				if(!subscriptions.containsKey(interest)) {
 					
-					subscriptions.put(interest, new DDF_Subscription(sub));
+					subscriptions.put(interest, new DDF_Subscription(sub, Type.EXCHANGE));
 					
 				}
 				
@@ -824,14 +828,6 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 		return writeAsync(sb.toString());
 	}
-
-	private boolean isExchange(final Subscription sub) {
-		if(sub.interest().length() == 1) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 	
 	@Override
 	public Future<Boolean> subscribe(final Subscription sub) {
@@ -841,8 +837,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.error("Null subscribe request recieved");
 			return null;
 		}
-
-		if(isExchange(sub)) {
+		
+		if(sub.type() == Type.EXCHANGE) {
 			return subExc(sub);
 		} else {
 			return subInst(sub);
@@ -857,7 +853,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		if(subscriptions.containsKey(inst)) {
 			subscriptions.get(inst).addTypes(sub.types());
 		} else {
-			subscriptions.put(inst, new DDF_Subscription(sub));
+			subscriptions.put(inst, new DDF_Subscription(sub, Type.INSTRUMENT));
 		}
 		
 		if (!isConnected()) {
@@ -874,7 +870,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		final String interest = sub.interest();
 		
 		if(!subscriptions.containsKey(interest)) {
-			subscriptions.put(interest, new DDF_Subscription(sub));
+			subscriptions.put(interest, new DDF_Subscription(sub, Type.EXCHANGE));
 		} else {
 			return new DummyFuture();
 		}
@@ -898,10 +894,13 @@ class FeedClientDDF implements DDF_FeedClient {
 		final Set<Subscription> exch = new HashSet<Subscription>();
 		
 		for(final Subscription sub : subs) {
-			if(isExchange(sub)) {
-				exch.add(sub);
-			} else {
+			switch(sub.type()) {
+			case INSTRUMENT:
 				insts.add(sub);
+				break;
+			case EXCHANGE:
+				exch.add(sub);
+				break;
 			}
 		}
 		
@@ -976,7 +975,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			return null;
 		}
 		
-		if(isExchange(sub)) {
+		if(sub.type() == Type.EXCHANGE) {
 			return unsubExc(sub);
 		} else {
 			return unsubInst(sub);

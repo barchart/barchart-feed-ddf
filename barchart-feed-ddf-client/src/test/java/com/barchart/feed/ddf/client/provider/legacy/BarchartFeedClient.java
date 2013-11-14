@@ -38,6 +38,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.Subscription.Type;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
@@ -201,12 +202,12 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 				if (e.getValue().isEmpty()) {
 					log.debug("Unsubscribing to "
 							+ e.getKey().symbol());
-					unsubs.add(new DDF_Subscription(e.getKey(), e.getValue()));
+					unsubs.add(new DDF_Subscription(e.getKey(), e.getValue(), Type.INSTRUMENT));
 				} else {
 					log.debug("Subscribing to "
 							+ e.getKey().symbol() + " Events: "
 							+ printEvents(e.getValue()));
-					subs.add(new DDF_Subscription(e.getKey(), e.getValue()));
+					subs.add(new DDF_Subscription(e.getKey(), e.getValue(), Type.INSTRUMENT));
 				}
 
 			}

@@ -16,6 +16,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.sub.Subscription;
 import com.barchart.feed.base.sub.SubscriptionType;
+import com.barchart.feed.base.sub.Subscription.Type;
 
 /**
  * Represents a subscription to a single instrument for JERQ.
@@ -24,6 +25,7 @@ public class DDF_Subscription implements Subscription {
 
 	private final String interest;
 	private final Set<SubscriptionType> interests;
+	private final Type type;
 
 	/**
 	 * @param instrument
@@ -33,15 +35,17 @@ public class DDF_Subscription implements Subscription {
 	 *            send a client. An empty set is interpreted as a request to
 	 *            unsubscribe.
 	 */
-	public DDF_Subscription(final String instrument,
+	public DDF_Subscription(final String instrument, Type type, 
 			final Set<SubscriptionType> interests) {
 		this.interest = instrument;
 		this.interests = interests;
+		this.type = type;
 	}
 	
-	public DDF_Subscription(final Subscription sub) {
+	public DDF_Subscription(final Subscription sub, Type type) {
 		interest = sub.interest();
 		interests = sub.types();
+		this.type = type;
 	}
 
 	/**
@@ -51,12 +55,18 @@ public class DDF_Subscription implements Subscription {
 	 * @param events
 	 */
 	public DDF_Subscription(final Instrument instrument,
-			final Set<MarketEvent> events) {
+			final Set<MarketEvent> events, Type type) {
 		this.interest =
 				instrument.symbol();
 		this.interests = DDF_FeedInterest.fromEvents(events);
+		this.type = type;
 	}
 
+	@Override
+	public Type type() {
+		return type;
+	}
+	
 	@Override
 	public Set<SubscriptionType> types() {
 		return interests;

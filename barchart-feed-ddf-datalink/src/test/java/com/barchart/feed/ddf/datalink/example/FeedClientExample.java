@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.base.sub.SubscriptionType;
+import com.barchart.feed.base.sub.Subscription.Type;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
@@ -90,7 +91,7 @@ public class FeedClientExample {
 		insts.add(SubscriptionType.BOOK_UPDATE);
 		insts.add(SubscriptionType.QUOTE_SNAPSHOT);
 		insts.add(SubscriptionType.QUOTE_UPDATE);
-		client.subscribe(new DDF_Subscription("$OEX", insts));
+		client.subscribe(new DDF_Subscription("$OEX", Type.INSTRUMENT, insts));
 //		 if (!isSent) {
 //		 log.error("invalid session");
 //		 return;
