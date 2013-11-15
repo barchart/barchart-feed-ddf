@@ -33,18 +33,6 @@ public class XX_TradeCompareTest {
 				
 			}
 
-			@Override
-			public void onError(Throwable error) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onCompleted() {
-				// TODO Auto-generated method stub
-				
-			}
-			
 		};
 		
 		feed.startup();

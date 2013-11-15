@@ -48,18 +48,6 @@ final static String SYMBOL = "CLU13";
 				
 			}
 
-			@Override
-			public void onError(Throwable error) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onCompleted() {
-				// TODO Auto-generated method stub
-				
-			}
-			
 		};
 		
 		feed.startup();

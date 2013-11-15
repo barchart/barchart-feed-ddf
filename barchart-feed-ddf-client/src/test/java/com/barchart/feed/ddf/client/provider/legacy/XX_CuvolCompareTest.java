@@ -32,18 +32,6 @@ public class XX_CuvolCompareTest {
 				printCuvol(v.entryList()));
 				
 			}
-
-			@Override
-			public void onError(Throwable error) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onCompleted() {
-				// TODO Auto-generated method stub
-				
-			}
 			
 		};
 		

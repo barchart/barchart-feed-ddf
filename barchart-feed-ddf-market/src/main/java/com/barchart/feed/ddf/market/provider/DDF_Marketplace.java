@@ -1,6 +1,5 @@
 package com.barchart.feed.ddf.market.provider;
 
-import com.barchart.feed.api.AgentBuilder;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -13,7 +12,7 @@ import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.inst.InstrumentService;
 
 public class DDF_Marketplace extends MarketplaceBase<DDF_MarketBase> implements 
-		DDF_MarketProvider, AgentBuilder {
+		DDF_MarketProvider {
 
 	protected DDF_Marketplace(MarketFactory factory,
 			InstrumentService<String> instLookup,

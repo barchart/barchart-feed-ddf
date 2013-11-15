@@ -80,18 +80,6 @@ public class TestBarchartFeed {
 				
 			}
 
-			@Override
-			public void onError(Throwable error) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onCompleted() {
-				// TODO Auto-generated method stub
-				
-			}
-			
 		};
 		
 		final Agent myAgent = feed.newAgent(Market.class, callback);
