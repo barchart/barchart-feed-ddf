@@ -259,7 +259,7 @@ public final class DDF_InstrumentProvider {
 		
 	}
 	
-	private static rx.Observer<InstrumentDefinitionResult> observer = 
+	private static Observer<InstrumentDefinitionResult> observer = 
 			new Observer<InstrumentDefinitionResult>() {
 
 		@Override
