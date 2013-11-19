@@ -132,7 +132,6 @@
 							<includeGroupIds>com.barchart.feed,com.barchart.util</includeGroupIds>
 							<failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
 							<outputDirectory>${unpackSource}</outputDirectory>
-							<excludeArtifactIds>rxjava-core</excludeArtifactIds>
 						</configuration>
 					</execution>
 				</executions>
