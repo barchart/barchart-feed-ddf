@@ -5,6 +5,7 @@ import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.provider.MarketProviderBase;
 import com.barchart.feed.base.sub.SubscriptionHandler;
+import com.barchart.feed.ddf.instrument.provider.DDF_MetadataServiceWrapper;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
@@ -15,7 +16,7 @@ public class DDF_ConsumerMarketProvider extends MarketProviderBase<DDF_MarketBas
 		
 	protected DDF_ConsumerMarketProvider(final MarketFactory factory,
 			final SubscriptionHandler handler) {
-		super(factory, handler);
+		super(factory, new DDF_MetadataServiceWrapper(), handler);
 	}
 			
 	private final DDF_MessageVisitor<Void, MarketDo> visitor = new MapperDDF();
