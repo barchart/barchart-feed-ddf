@@ -96,6 +96,12 @@
 			<version>${protoBufVersion}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+		   	<groupId>com.netflix.rxjava</groupId>
+		   	<artifactId>rxjava-core</artifactId>
+		   	<version>[0.14-SNAPSHOT,0.15-SNAPSHOT)</version>
+		</dependency>
 
 	</dependencies>
 
