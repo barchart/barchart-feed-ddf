@@ -4,30 +4,33 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
 import com.barchart.feed.base.provider.MarketProviderBase;
+import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 
-public class DDF_NewMarketProvider extends MarketProviderBase<DDF_MarketBase> 
+public class DDF_ConsumerMarketProvider extends MarketProviderBase<DDF_MarketBase> 
 		implements DDF_MarketProvider {
 
 		
-	protected DDF_NewMarketProvider(final MarketFactory factory) {
-		super(factory);
+	protected DDF_ConsumerMarketProvider(final MarketFactory factory,
+			final SubscriptionHandler handler) {
+		super(factory, handler);
 	}
 			
 	private final DDF_MessageVisitor<Void, MarketDo> visitor = new MapperDDF();
 	
-	public static final DDF_MarketProvider newInstance() {
+	public static final DDF_ConsumerMarketProvider newInstance(
+			final SubscriptionHandler handler) {
 		
-		return new DDF_NewMarketProvider(new MarketFactory() {
+		return new DDF_ConsumerMarketProvider(new MarketFactory() {
 			
 			@Override
 			public MarketDo newMarket(final Instrument instrument) {
 				return new VarMarketDDF(instrument);
 			}
 			
-		});
+		}, handler);
 	}
 
 	@Override

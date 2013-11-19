@@ -4,6 +4,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -12,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import rx.Observable;
 
 import com.barchart.feed.api.MarketObserver;
-import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.Connection;
+import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
@@ -26,6 +27,7 @@ import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
+import com.barchart.feed.ddf.market.provider.DDF_ConsumerMarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
@@ -41,6 +43,8 @@ public class BarchartMarketProvider implements MarketService {
 	private static final Factory values = new FactoryImpl();
 	
 	private volatile DDF_FeedClientBase connection;
+	private final DDF_ConsumerMarketProvider maker;
+	private final ExecutorService executor;
 	
 	@SuppressWarnings("unused")
 	private volatile Connection.Monitor stateListener;
@@ -60,7 +64,10 @@ public class BarchartMarketProvider implements MarketService {
 		connection = DDF_FeedClientFactory.newConnectionClient(
 				DDF_Transport.TCP, username, password, exe);
 		
-		// 
+		connection.bindMessageListener(msgListener);
+		
+		maker = DDF_ConsumerMarketProvider.newInstance(connection);
+		executor = exe;
 		
 	}
 	
@@ -104,39 +111,109 @@ public class BarchartMarketProvider implements MarketService {
 			if (message instanceof DDF_MarketBase) {
 				final DDF_MarketBase marketMessage = (DDF_MarketBase) message;
 				
-				// *************************
-				// TODO
-				//maker.make(marketMessage);
+				maker.make(marketMessage);
 			}
-
 		}
-
 	};
 	
+	/* ***** ***** ***** Begin Lifecycle ***** ***** ***** */
+	
+	private final AtomicBoolean isStartingup = new AtomicBoolean(false);
+	private final AtomicBoolean isShuttingdown = new AtomicBoolean(false);
+	
+	@Override
+	public void startup() {
+		
+		if(isStartingup.get()) {
+			throw new IllegalStateException("Startup called while already starting up");
+		}
+		
+		if(isShuttingdown.get()) {
+			throw new IllegalStateException("Startup called while shutting down");
+		}
+		
+		isStartingup.set(true);
+		executor.execute(new StartupRunnable());
+		
+		/** Currently just letting it run */
+	}
+
+	private final class StartupRunnable implements Runnable {
+		
+		@Override
+		public void run() {
+			
+			try {
+			
+				log.debug("Startup Runnable starting");
+				connection.startup();
+			
+			} catch (final Throwable t) {
+				log.error("Exception starting up marketplace {}", t);
+				isStartingup.set(false);
+				return;
+			}
+			
+			isStartingup.set(false);
+		}
+		
+	}
+	
+	@Override
+	public void shutdown() {
+		
+		if(isStartingup.get()) {
+			throw new IllegalStateException(
+					"Shutdown called while starting up");
+		}
+		
+		if(isShuttingdown.get()) {
+			throw new IllegalStateException(
+					"Shutdown called while already shutting down");
+		}
+		
+		isShuttingdown.set(true);
+		executor.execute(new ShutdownRunnable());
+		
+		/** Currently just letting it run */
+	}
+	
+	private final class ShutdownRunnable implements Runnable {
+
+		@Override
+		public void run() {
+			
+			try {
+				if(maker != null) {
+					maker.clearAll();
+				}
+				
+				connection.shutdown();
+				log.debug("Barchart Feed shutdown");
+				
+			} catch (final Throwable t) {
+				
+				log.error("Error {}", t);
+				isShuttingdown.set(false);
+				return;
+			}
+			
+			isShuttingdown.set(false);
+			log.debug("Barchart Feed shutdown succeeded");
+		}
+	}
+	
+	/* ***** ***** ***** Begin MarketProvider Methods ***** ***** ***** */
 	
 	@Override
 	public <V extends MarketData<V>> ConsumerAgent register(
 			MarketObserver<V> callback, Class<V> clazz) {
-		// TODO Auto-generated method stub
-		return null;
+		return maker.register(callback, clazz);
 	}
 
 	@Override
 	public Observable<Market> snapshot(InstrumentID instrument) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void startup() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shutdown() {
-		// TODO Auto-generated method stub
-		
+		return maker.snapshot(instrument);
 	}
 
 	@Override
