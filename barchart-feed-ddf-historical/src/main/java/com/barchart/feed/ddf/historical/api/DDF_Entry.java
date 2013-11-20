@@ -18,6 +18,8 @@ public interface DDF_Entry {
 	DDF_TradeDay getTradeDay();
 
 	Instrument getInstrument();
+	
+	String symbol();
 
 	/** index of this entry in the result */
 	int getIndex();

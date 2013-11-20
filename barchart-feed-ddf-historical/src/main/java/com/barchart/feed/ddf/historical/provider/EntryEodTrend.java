@@ -8,7 +8,6 @@
 package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeEodTime;
-import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeInstrument;
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeMantissa;
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeEodTime;
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeInstrument;
@@ -66,7 +65,7 @@ class EntryEodTrend extends Entry implements DDF_EntryTrend {
 	@Override
 	public void decodeHead(final String[] inputArray) {
 
-		inst = decodeInstrument(inputArray[0]);
+		symbol = inputArray[0];
 
 		millisUTC = decodeEodTime(inputArray[1], inst);
 

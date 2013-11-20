@@ -24,12 +24,15 @@ abstract class Entry implements DDF_Entry, Codec {
 
 	protected Instrument inst;
 
+	protected String symbol;
+	
 	protected byte ordTradeDay = DDF_TradeDay.UNKNOWN.ord;
 
 	//
 
 	Entry(final Instrument instrument) {
 		this.inst = instrument;
+		symbol = instrument.symbol();
 	}
 
 	//
@@ -54,6 +57,12 @@ abstract class Entry implements DDF_Entry, Codec {
 		return inst;
 	}
 
+	@Override
+	public String symbol() {
+		return symbol;
+	}
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * 

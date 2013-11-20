@@ -59,7 +59,7 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 
 		final String[] inputArray = splitCSV(inputLine);
 
-		inst = decodeInstrument(inputArray[0]);
+		symbol = inputArray[0];
 
 		millisUTC = decodeEodTime(inputArray[1], inst);
 

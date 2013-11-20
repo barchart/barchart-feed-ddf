@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -138,7 +139,15 @@ public class DDF_RxInstrumentProvider {
 				final List<String> queries = buildQueries(toBatch);
 				
 				for(final String query : queries) {
-					res.putAll(remoteLookup(query));
+					
+					final Map<String, List<Instrument>> lookup = remoteLookup(query);
+					
+					/* Store instruments returned from lookup */
+					for(final Entry<String, List<Instrument>> e : lookup.entrySet()) {
+						symbolMap.put(e.getKey(), e.getValue());
+					}
+					
+					res.putAll(lookup);
 				}
 				
 				return result(res);
