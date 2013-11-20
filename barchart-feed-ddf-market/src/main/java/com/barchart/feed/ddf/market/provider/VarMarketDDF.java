@@ -186,7 +186,7 @@ class VarMarketDDF extends VarMarket {
 
 		assert entry != null && time != null;
 
-		makeCuvol(entry.priceValue(), entry.sizeValue());
+		makeCuvol(entry.priceValue(), entry.sizeValue(), time);
 
 		updateMarket(time);
 
@@ -203,7 +203,7 @@ class VarMarketDDF extends VarMarket {
 		cuvol.clear();
 
 		for (final MarketDoCuvolEntry entry : entries) {
-			cuvol.add(entry.priceValue(), entry.sizeValue());
+			cuvol.add(entry.priceValue(), entry.sizeValue(), time);
 		}
 
 		eventAdd(NEW_CUVOL_SNAPSHOT);
@@ -272,13 +272,14 @@ class VarMarketDDF extends VarMarket {
 
 	}
 
-	private final void makeCuvol(final PriceValue price, final SizeValue size) {
+	private final void makeCuvol(final PriceValue price, final SizeValue size,
+			final TimeValue time) {
 
 		final MarketDoCuvol cuvol = loadCuvol();
 
 		if(!cuvol.isNull()) {
 		
-			cuvol.add(price, size);
+			cuvol.add(price, size, time);
 	
 			eventAdd(NEW_CUVOL_UPDATE);
 		
@@ -320,7 +321,7 @@ class VarMarketDDF extends VarMarket {
 
 		// ### cuvol
 
-		makeCuvol(price, size);
+		makeCuvol(price, size, time);
 
 		// ### time
 

@@ -42,6 +42,8 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	private <V extends MarketData<V>> void fireCallbacks(
 			final Class<V> clazz) {
 		
+		log.debug("Firing Callbacks in VarMarketEntityDDF");
+		
 		for(final FrameworkAgent agent : agentMap.get(clazz)) {
 			
 			if(agent.isActive()) {

@@ -1,5 +1,8 @@
 package com.barchart.feed.ddf.market.provider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -13,7 +16,9 @@ import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 public class DDF_ConsumerMarketProvider extends MarketProviderBase<DDF_MarketBase> 
 		implements DDF_MarketProvider {
 
-		
+	protected static final Logger log = LoggerFactory.getLogger(
+			DDF_ConsumerMarketProvider.class);
+			
 	protected DDF_ConsumerMarketProvider(final MarketFactory factory,
 			final SubscriptionHandler handler) {
 		super(factory, new DDF_MetadataServiceWrapper(), handler);
@@ -28,7 +33,7 @@ public class DDF_ConsumerMarketProvider extends MarketProviderBase<DDF_MarketBas
 			
 			@Override
 			public MarketDo newMarket(final Instrument instrument) {
-				return new VarMarketDDF(instrument);
+				return new VarMarketEntityDDF(instrument);
 			}
 			
 		}, handler);
