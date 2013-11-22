@@ -69,6 +69,11 @@ public final class DDF_InstrumentProvider {
 	
 	private static volatile InstrumentMap db = InstrumentMap.NULL;
 	
+	 static final String cqgInstLoopURL(final CharSequence lookup) {
+         return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup +
+                         "&provider=CQG";
+	 }
+	
 	private DDF_InstrumentProvider() {
 		
 	}
@@ -257,6 +262,50 @@ public final class DDF_InstrumentProvider {
 		
 		return instState;
 		
+	}
+	
+	private static final Map<String, Instrument> cqgMap =
+            new HashMap<String, Instrument>();
+
+	public static Instrument findCQG(final String symbol) {
+	    
+	   Instrument result = cqgMap.get(symbol);
+	    
+	    if(result == null) {
+	            
+            try {
+                String barSymbol = remoteCQGLookup(symbol.toString());
+                
+                // ************** TODO
+                //result = find(barSymbol);
+                
+                if(result == null || result.isNull()) {
+                    log.warn("Unable to find barchart instrument for {}", symbol);
+                    return Instrument.NULL;
+                }
+                
+                cqgMap.put(symbol, result);
+                    
+            } catch (final Exception e) {
+                log.error("Exception in CQG lookup on {} {}", symbol, e);
+                return Instrument.NULL;
+            }
+	    }
+	    
+	    return result;
+	    
+	}
+	
+	static String remoteCQGLookup(String symbol) throws Exception {
+        
+        final String symbolURI = cqgInstLoopURL(symbol);
+        
+        final Element root = HelperXML.xmlDocumentDecode(symbolURI);
+
+        final Element tag = xmlFirstChild(root, "symbol", XML_STOP);
+        
+        return tag.getTextContent();
+        
 	}
 	
 	private static Observer<InstrumentDefinitionResult> observer = 

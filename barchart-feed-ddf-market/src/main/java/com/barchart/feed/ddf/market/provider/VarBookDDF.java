@@ -286,9 +286,10 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 		for (final MarketDoBookEntry entry : entries) {
 
-			final EntryMap map = map(entry.side());
-
-			map.put(entry.priceValue(), entry);
+			if(entry != null && !entry.isNull()) {
+				final EntryMap map = map(entry.side());
+				map.put(entry.priceValue(), entry);
+			}
 
 		}
 

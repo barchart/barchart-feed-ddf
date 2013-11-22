@@ -14,14 +14,14 @@ import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionType;
-import com.barchart.feed.base.sub.Subscription.Type;
+import com.barchart.feed.base.sub.Sub.Type;
 
 /**
  * Represents a subscription to a single instrument for JERQ.
  */
-public class DDF_Subscription implements Subscription {
+public class DDF_Subscription implements Sub {
 
 	private final String interest;
 	private final Set<SubscriptionType> interests;
@@ -42,7 +42,7 @@ public class DDF_Subscription implements Subscription {
 		this.type = type;
 	}
 	
-	public DDF_Subscription(final Subscription sub, Type type) {
+	public DDF_Subscription(final Sub sub, Type type) {
 		interest = sub.interest();
 		interests = sub.types();
 		this.type = type;

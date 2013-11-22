@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
-import com.barchart.feed.base.sub.Subscription;
+import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.DummyFuture;
@@ -65,8 +65,8 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 
 	private final int socketAddress;
 
-	private final Map<String, Subscription> subscriptions = 
-			new ConcurrentHashMap<String, Subscription>();
+	private final Map<String, Sub> subscriptions = 
+			new ConcurrentHashMap<String, Sub>();
 	
 	HistoricReplayListenerClientDDF(final int socketAddress, final Executor executor) {
 
@@ -225,14 +225,14 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 	}
 	
 	@Override
-	public Future<Boolean> subscribe(Set<Subscription> subs) {
+	public Future<Boolean> subscribe(Set<Sub> subs) {
 		
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return new FailedFuture();
 		}
 		
-		for (final Subscription sub : subs) {
+		for (final Sub sub : subs) {
 
 			if (sub != null) {
 				
@@ -252,7 +252,7 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 	}
 
 	@Override
-	public Future<Boolean> subscribe(Subscription sub) {
+	public Future<Boolean> subscribe(Sub sub) {
 		
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
@@ -273,14 +273,14 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 	// the registration and unregistration of instruments in the 
 	// market maker and the feed.  
 	@Override
-	public Future<Boolean> unsubscribe(Set<Subscription> subs) {
+	public Future<Boolean> unsubscribe(Set<Sub> subs) {
 		
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return new FailedFuture();
 		}
 		
-		for (final Subscription sub : subs) {
+		for (final Sub sub : subs) {
 
 			if (sub != null) {
 				subscriptions.remove(sub.encode());
@@ -291,7 +291,7 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 	}
 	
 	@Override
-	public Future<Boolean> unsubscribe(Subscription sub) {
+	public Future<Boolean> unsubscribe(Sub sub) {
 		
 		if (sub == null) {
 			log.error("Null subscribe request recieved");

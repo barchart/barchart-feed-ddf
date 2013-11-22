@@ -34,8 +34,8 @@ import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.feed.base.sub.Subscription;
-import com.barchart.feed.base.sub.Subscription.Type;
+import com.barchart.feed.base.sub.Sub;
+import com.barchart.feed.base.sub.Sub.Type;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
@@ -115,8 +115,8 @@ public class TestableFeed implements Marketplace {
 		public void onRegistrationChange(final Map<Instrument, Set<MarketEvent>> 
 				instMap) {
 
-			final Set<Subscription> subs = new HashSet<Subscription>();
-			final Set<Subscription> unsubs = new HashSet<Subscription>();
+			final Set<Sub> subs = new HashSet<Sub>();
+			final Set<Sub> unsubs = new HashSet<Sub>();
 
 			for(final Entry<Instrument, Set<MarketEvent>> e: instMap.entrySet()) {
 

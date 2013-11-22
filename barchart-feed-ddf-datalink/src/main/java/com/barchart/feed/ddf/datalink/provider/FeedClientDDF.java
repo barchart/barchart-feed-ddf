@@ -41,8 +41,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
-import com.barchart.feed.base.sub.Subscription;
-import com.barchart.feed.base.sub.Subscription.Type;
+import com.barchart.feed.base.sub.Sub;
+import com.barchart.feed.base.sub.Sub.Type;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -327,7 +327,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		public void newEvent(DDF_FeedEvent event) {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
-				final Set<Subscription> subs = new HashSet<Subscription>();
+				final Set<Sub> subs = new HashSet<Sub>();
 				for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
 					subs.add(e.getValue());
 				}
@@ -726,17 +726,17 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Set<Subscription> subs) {
+	public Future<Boolean> subscribe(final Set<Sub> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return null;
 		}
 
-		final Set<Subscription> insts = new HashSet<Subscription>();
-		final Set<Subscription> exch = new HashSet<Subscription>();
+		final Set<Sub> insts = new HashSet<Sub>();
+		final Set<Sub> exch = new HashSet<Sub>();
 		
-		for(final Subscription sub : subs) {
+		for(final Sub sub : subs) {
 			switch(sub.type()) {
 			case INSTRUMENT:
 				insts.add(sub);
@@ -766,7 +766,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 	}
 	
-	private Future<Boolean> subInsts(final Set<Subscription> subs) {
+	private Future<Boolean> subInsts(final Set<Sub> subs) {
 		
 		/*
 		 * Creates a single JERQ command from the set, subscriptions are added
@@ -774,7 +774,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		 */
 		final StringBuffer sb = new StringBuffer();
 		sb.append("GO ");
-		for (final Subscription sub : subs) {
+		for (final Sub sub : subs) {
 
 			if (sub != null) {
 				
@@ -799,12 +799,12 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 	}
 	
-	private Future<Boolean> subExcs(final Set<Subscription> subs) {
+	private Future<Boolean> subExcs(final Set<Sub> subs) {
 		
 		final StringBuffer sb = new StringBuffer();
 		
 		sb.append("STR L ");
-		for(final Subscription sub : subs) {
+		for(final Sub sub : subs) {
 			
 			if(sub != null) {
 			
@@ -830,7 +830,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 	
 	@Override
-	public Future<Boolean> subscribe(final Subscription sub) {
+	public Future<Boolean> subscribe(final Sub sub) {
 
 		//TODO Should these just return DummyFutures? NULL seems bad
 		if (sub == null) {
@@ -846,7 +846,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 	}
 
-	private Future<Boolean> subInst(final Subscription sub) {
+	private Future<Boolean> subInst(final Sub sub) {
 		
 		/* If we're subscribed already, add new interests, otherwise add */
 		final String inst = sub.interest();
@@ -865,7 +865,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 	}
 	
-	private Future<Boolean> subExc(final Subscription sub) {
+	private Future<Boolean> subExc(final Sub sub) {
 		
 		final String interest = sub.interest();
 		
@@ -883,17 +883,17 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 	
 	@Override
-	public Future<Boolean> unsubscribe(final Set<Subscription> subs) {
+	public Future<Boolean> unsubscribe(final Set<Sub> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return null;
 		}
 
-		final Set<Subscription> insts = new HashSet<Subscription>();
-		final Set<Subscription> exch = new HashSet<Subscription>();
+		final Set<Sub> insts = new HashSet<Sub>();
+		final Set<Sub> exch = new HashSet<Sub>();
 		
-		for(final Subscription sub : subs) {
+		for(final Sub sub : subs) {
 			switch(sub.type()) {
 			case INSTRUMENT:
 				insts.add(sub);
@@ -923,7 +923,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 	}
 
-	private Future<Boolean> unsubInsts(final Set<Subscription> subs) {
+	private Future<Boolean> unsubInsts(final Set<Sub> subs) {
 		
 		/*
 		 * Creates a single JERQ command from the set. Subscriptions are removed
@@ -931,7 +931,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		 */
 		final StringBuffer sb = new StringBuffer();
 		sb.append("STOP ");
-		for (final Subscription sub : subs) {
+		for (final Sub sub : subs) {
 
 			if (sub != null) {
 				subscriptions.remove(sub.interest());
@@ -946,9 +946,9 @@ class FeedClientDDF implements DDF_FeedClient {
 		return writeAsync(sb.toString());
 	}
 	
-	private Future<Boolean> unsubExchs(final Set<Subscription> subs) {
+	private Future<Boolean> unsubExchs(final Set<Sub> subs) {
 		
-		for(final Subscription sub : subs) {
+		for(final Sub sub : subs) {
 			subscriptions.remove(sub.interest());
 		}
 		
@@ -959,7 +959,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		/* Have to unsub from everything and resub */
 		writeAsync("STOP");
 		
-		final Set<Subscription> resubs = new HashSet<Subscription>();
+		final Set<Sub> resubs = new HashSet<Sub>();
 		for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
 			resubs.add(e.getValue());
 		}
@@ -968,7 +968,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 	
 	@Override
-	public Future<Boolean> unsubscribe(final Subscription sub) {
+	public Future<Boolean> unsubscribe(final Sub sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
@@ -983,7 +983,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	}
 	
-	private Future<Boolean> unsubInst(final Subscription sub) {
+	private Future<Boolean> unsubInst(final Sub sub) {
 		
 		subscriptions.remove(sub.interest());
 
@@ -996,7 +996,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 	}
 	
-	private Future<Boolean> unsubExc(final Subscription sub) {
+	private Future<Boolean> unsubExc(final Sub sub) {
 		
 		subscriptions.remove(sub.interest());
 		
@@ -1007,7 +1007,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		/* Have to unsub from everything and resub */
 		writeAsync("STOP");
 		
-		final Set<Subscription> subs = new HashSet<Subscription>();
+		final Set<Sub> subs = new HashSet<Sub>();
 		for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
 			subs.add(e.getValue());
 		}

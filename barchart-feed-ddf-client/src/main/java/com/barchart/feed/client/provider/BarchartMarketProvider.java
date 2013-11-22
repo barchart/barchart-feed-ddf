@@ -1,5 +1,6 @@
 package com.barchart.feed.client.provider;
 
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,12 +16,15 @@ import rx.Observable;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.Connection.Monitor;
+import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.MarketData;
+import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -247,6 +251,18 @@ public class BarchartMarketProvider implements MarketService {
 	public Observable<Result<Instrument>> instrument(SearchContext ctx,
 			String... symbols) {
 		return DDF_RxInstrumentProvider.fromString(ctx, symbols);
+	}
+
+	/* ***** ***** SubscriptionService ***** ***** */
+	
+	@Override
+	public Map<InstrumentID, Subscription<Instrument>> instruments() {
+		return maker.instruments();
+	}
+
+	@Override
+	public Map<ExchangeID, Subscription<Exchange>> exchanges() {
+		return maker.exchanges();
 	}
 
 }
