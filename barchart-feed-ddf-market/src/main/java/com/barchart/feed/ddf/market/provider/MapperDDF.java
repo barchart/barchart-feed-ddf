@@ -473,9 +473,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			case SNAPSHOT:
 			case UNKNOWN:
 				market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, false);
+				market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, true);
 				break;
 			case REALTIME:
 				market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, true);
+				market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, false);
 				break;
 			default:
 				break;
