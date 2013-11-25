@@ -69,10 +69,10 @@ public final class DDF_InstrumentProvider {
 	
 	private static volatile InstrumentMap db = InstrumentMap.NULL;
 	
-	 static final String cqgInstLoopURL(final CharSequence lookup) {
-         return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup +
-                         "&provider=CQG";
-	 }
+	static final String cqgInstLoopURL(final CharSequence lookup) {
+		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup +
+                 "&provider=CQG";
+	}
 	
 	private DDF_InstrumentProvider() {
 		

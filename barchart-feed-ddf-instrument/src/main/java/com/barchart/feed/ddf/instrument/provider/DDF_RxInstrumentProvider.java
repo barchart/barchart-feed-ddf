@@ -2,6 +2,7 @@ package com.barchart.feed.ddf.instrument.provider;
 
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
+import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
 import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 
 import java.io.BufferedInputStream;
@@ -29,6 +30,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -40,6 +42,7 @@ import com.barchart.feed.api.consumer.MetadataService.SearchContext;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider.RemoteRunner;
+import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.provider.InstrumentImpl;
 
 public class DDF_RxInstrumentProvider {
@@ -157,7 +160,7 @@ public class DDF_RxInstrumentProvider {
 		
 	}
 	
-	static Map<String, List<Instrument>> remoteLookup(final String query) {
+	private static Map<String, List<Instrument>> remoteLookup(final String query) {
 		
 		try {
 		
@@ -235,6 +238,53 @@ public class DDF_RxInstrumentProvider {
 		
 	}
 	
+	/* ***** ***** ***** CQG ***** ***** ***** */
+	
+	private static final ConcurrentMap<String, String> cqgSymMap =
+			new ConcurrentHashMap<String, String>();
+	
+	public static Observable<String> fromCQGString(final String symbol) {
+		try {
+			return Observable.from(executor.submit(
+					callableFromCQGString(SearchContext.NULL, symbol)));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static Callable<String> callableFromCQGString(
+			final SearchContext ctx, final String symbol) {
+		
+		return new Callable<String>() {
+
+			@Override
+			public String call() throws Exception {
+				
+				/* Filter out cached symbols */
+				if(cqgSymMap.containsKey(symbol)) {
+					return cqgSymMap.get(symbol);
+				}
+				
+				final String query = cqgInstLoopURL(symbol);
+				
+				final Element root = HelperXML.xmlDocumentDecode(query);
+
+		        final Element tag = xmlFirstChild(root, "symbol", XML_STOP);
+		        
+		        final String result = tag.getTextContent();
+		        
+		        if(result != null) {
+		        	cqgSymMap.put(symbol, result);
+		        }
+		        
+		        return result;
+				
+			}
+			
+		};
+		
+	}
+	
 	private static Result<Instrument> result(final Map<String, List<Instrument>> res) {
 		
 		return new Result<Instrument>() {
@@ -263,6 +313,11 @@ public class DDF_RxInstrumentProvider {
 
 	private static final String urlInstrumentLookup(final CharSequence lookup) {
 		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
+	}
+	
+	private static final String cqgInstLoopURL(final CharSequence lookup) {
+		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup +
+                 "&provider=CQG";
 	}
 	
 	static List<String> buildQueries(final List<String> symbols) throws Exception {
@@ -299,11 +354,5 @@ public class DDF_RxInstrumentProvider {
 		return queries;
 		
 	}
-	
-	
-	
-	
-	
-	
 	
 }

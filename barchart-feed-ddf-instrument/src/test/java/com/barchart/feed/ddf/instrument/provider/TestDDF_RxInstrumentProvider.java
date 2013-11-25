@@ -20,10 +20,18 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString(SearchContext.NULL, "GOOG", "IBM", "CLZ13")
-				.subscribe(obs());
+//		DDF_RxInstrumentProvider.fromString(SearchContext.NULL, "GOOG", "IBM", "CLZ13")
+//				.subscribe(obs());
+//		
+//		Thread.sleep(10 * 5000);
 		
-		Thread.sleep(10 * 5000);
+		// "F.US.CLES2X12"
+		
+		DDF_RxInstrumentProvider.fromCQGString("F.US.CLES2X14");  
+		
+		// 
+		
+		Thread.sleep(5 * 1000);
 		
 	}
 	
