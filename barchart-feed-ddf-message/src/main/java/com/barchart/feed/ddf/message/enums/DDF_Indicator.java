@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.ddf.message.enums;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeString;
 import com.barchart.util.math.MathExtra;
@@ -37,8 +40,11 @@ public enum DDF_Indicator implements EnumCodeString, EnumByteOrdinal {
 	UNKNOWN(""), //
 
 	/** The ord. */
- ;
+	;
 
+	private static final Logger log = LoggerFactory.getLogger(
+			DDF_Indicator.class);
+	
 	public final byte ord;
 
 	/** The code. */
@@ -104,6 +110,7 @@ public enum DDF_Indicator implements EnumCodeString, EnumByteOrdinal {
 				return known;
 			}
 		}
+		log.debug("Unknown Indicator {}", code);
 		return UNKNOWN;
 	}
 

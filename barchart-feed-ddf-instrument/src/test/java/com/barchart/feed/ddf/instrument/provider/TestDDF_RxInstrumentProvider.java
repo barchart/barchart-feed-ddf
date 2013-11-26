@@ -27,7 +27,8 @@ public class TestDDF_RxInstrumentProvider {
 		
 		// "F.US.CLES2X12"
 		
-		DDF_RxInstrumentProvider.fromCQGString("F.US.CLES2X14");  
+		DDF_RxInstrumentProvider.fromCQGString("F.US.CLES2X14")
+				.subscribe(strObs());  
 		
 		// 
 		
@@ -72,6 +73,27 @@ public class TestDDF_RxInstrumentProvider {
 		};
 	}
 	
+	static Observer<String> strObs() {
+		return new Observer<String>() {
+
+			@Override
+			public void onCompleted() {
+				
+			}
+
+			@Override
+			public void onError(final Throwable e) {
+				
+			}
+
+			@Override
+			public void onNext(final String args) {
+				System.out.println(args);
+			}
+			
+		};
+		
+	}
 	
 	
 }

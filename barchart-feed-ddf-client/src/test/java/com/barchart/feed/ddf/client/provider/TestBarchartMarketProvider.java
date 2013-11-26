@@ -77,7 +77,8 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market v) {
 				final Book.Top top = v.book().top();
-				log.debug("UPDATE: {}", top);
+				final Book book = v.book();
+				log.debug("UPDATE: {}", book);
 			}
 		};
 	}
