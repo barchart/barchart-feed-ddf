@@ -21,7 +21,7 @@ import com.barchart.feed.base.market.api.Market;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
-import com.barchart.util.values.util.ValueUtil;
+import com.barchart.feed.base.values.util.ValueUtil;
 
 public class TestAllMarketsReceiver {
 

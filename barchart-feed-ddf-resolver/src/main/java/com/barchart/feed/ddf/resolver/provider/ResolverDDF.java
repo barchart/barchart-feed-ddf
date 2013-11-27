@@ -31,9 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.thread.ExecutorCallable;
+import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
-import com.barchart.util.thread.ExecutorCallable;
-import com.barchart.util.values.api.TextValue;
 
 // TODO: Auto-generated Javadoc
 class ResolverDDF extends ResolverState implements DDF_Resolver {

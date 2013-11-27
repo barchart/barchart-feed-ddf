@@ -3,9 +3,9 @@ package com.barchart.feed.ddf.instrument.provider;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.inst.provider.InstrumentBase;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 /**
  * Base implementation, implement symbol and marketGUID

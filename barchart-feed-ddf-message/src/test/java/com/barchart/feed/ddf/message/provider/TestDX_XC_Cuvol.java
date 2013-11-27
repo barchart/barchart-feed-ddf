@@ -7,9 +7,9 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
+import static com.barchart.feed.base.values.provider.ValueBuilder.newPrice;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newSize;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.values.provider.ValueBuilder.newPrice;
-import static com.barchart.util.values.provider.ValueBuilder.newSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -22,6 +22,9 @@ import org.junit.Test;
 
 import com.barchart.feed.base.cuvol.api.MarketCuvolEntry;
 import com.barchart.feed.base.provider.DefCuvolEntry;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
@@ -29,9 +32,6 @@ import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 /**

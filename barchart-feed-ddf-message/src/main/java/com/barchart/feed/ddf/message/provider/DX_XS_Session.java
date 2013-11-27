@@ -39,6 +39,9 @@ import static com.barchart.feed.ddf.util.HelperXML.xmlTimeEncode;
 
 import org.w3c.dom.Element;
 
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.message.api.DDF_MarketSession;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_Indicator;
@@ -50,9 +53,6 @@ import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 class DX_XS_Session extends DF_21_Snap implements DDF_MarketSession {

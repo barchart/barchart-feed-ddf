@@ -7,7 +7,21 @@
  */
 package com.barchart.feed.ddf.symbol.provider;
 
-import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.*;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.OPTION_SEPARATOR;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.getFutureExpireMonth;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.getFutureExpireYear;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.getGroupEquityCAN;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.getGroupEquityLSE;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.getGroupEquityNSE;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.getGroupFuture;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.isEquityCAN;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.isEquityLSE;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.isEquityNSE;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.isEquityOther;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.isFuture;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.isIndex;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.isOptionBasic;
+import static com.barchart.feed.ddf.symbol.provider.DDF_Symbology.isOptionExtended;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -15,6 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
 import com.barchart.feed.ddf.symbol.api.DDF_SymbolEquity;
 import com.barchart.feed.ddf.symbol.api.DDF_SymbolFuture;
@@ -27,7 +42,6 @@ import com.barchart.feed.ddf.symbol.enums.DDF_ExpireYear;
 import com.barchart.feed.ddf.symbol.enums.DDF_Option;
 import com.barchart.feed.ddf.symbol.enums.DDF_OptionYear;
 import com.barchart.util.ascii.ASCII;
-import com.barchart.util.values.api.TextValue;
 
 // TODO: Auto-generated Javadoc
 /**

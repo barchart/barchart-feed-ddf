@@ -37,6 +37,7 @@ import com.barchart.feed.api.connection.TimestampListener;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
@@ -47,7 +48,6 @@ import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.values.api.Value;
 
 /**
  * The entry point for Barchart data feed services.

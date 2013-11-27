@@ -8,6 +8,8 @@
 package com.barchart.feed.ddf.message.api;
 
 import com.barchart.feed.base.market.api.MarketMessage;
+import com.barchart.feed.base.values.api.TextValue;
+import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.api.DDF_Symbol;
@@ -15,8 +17,6 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.api.TimeValue;
 
 /**
  * Base type for ddf feed market data messages.

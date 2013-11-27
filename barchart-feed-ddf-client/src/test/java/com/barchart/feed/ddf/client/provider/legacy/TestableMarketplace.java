@@ -22,11 +22,11 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.RegTaker;
 import com.barchart.feed.base.sub.SubscriptionHandler;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.ddf.instrument.provider.InstrumentProviderWrapper;
 import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
 import com.barchart.feed.ddf.market.provider.VarMarketEntityDDF;
 import com.barchart.feed.inst.InstrumentService;
-import com.barchart.util.values.api.Value;
 
 public class TestableMarketplace extends DDF_Marketplace {
 

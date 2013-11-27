@@ -10,7 +10,7 @@
  */
 package com.barchart.feed.ddf.message.api;
 
-import com.barchart.util.values.api.PriceValue;
+import com.barchart.feed.base.values.api.PriceValue;
 
 /**
  * @author g-litchfield

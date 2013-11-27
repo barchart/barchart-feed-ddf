@@ -12,10 +12,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.barchart.feed.base.thread.ExecutorCallable;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver.Mode;
 import com.barchart.feed.ddf.resolver.provider.DDF_ResolverProvider;
-import com.barchart.util.thread.ExecutorCallable;
 
 // TODO: Auto-generated Javadoc
 /**

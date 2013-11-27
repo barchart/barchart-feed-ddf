@@ -7,10 +7,10 @@
  */
 package com.barchart.feed.ddf.symbol.enums;
 
+import com.barchart.feed.base.values.api.Value;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.util.ByteConverters;
 import com.barchart.util.math.MathExtra;
-import com.barchart.util.values.api.Value;
-import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 /**

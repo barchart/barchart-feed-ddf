@@ -46,13 +46,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
+import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.provider.ValueBuilder;
-import com.barchart.util.values.provider.ValueConst;
 
 // TODO: Auto-generated Javadoc
 /**

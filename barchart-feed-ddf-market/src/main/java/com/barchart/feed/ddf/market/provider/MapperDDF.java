@@ -32,6 +32,11 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TextValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_EOD_Commodity;
@@ -56,11 +61,6 @@ import com.barchart.feed.ddf.message.enums.DDF_QuoteState;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.anno.ThreadSafe;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueConst;
 
 // TODO: Auto-generated Javadoc
 @ThreadSafe

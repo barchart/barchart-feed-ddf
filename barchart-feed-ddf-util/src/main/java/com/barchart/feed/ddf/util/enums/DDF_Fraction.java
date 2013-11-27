@@ -29,11 +29,11 @@ import static com.barchart.util.ascii.ASCII._G_;
 import static com.barchart.util.ascii.ASCII._H_;
 import static java.lang.Math.pow;
 
+import com.barchart.feed.base.values.api.Fraction;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.util.enums.EnumByteOrdinal;
 import com.barchart.util.enums.EnumCodeByte;
 import com.barchart.util.math.MathExtra;
-import com.barchart.util.values.api.Fraction;
-import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 /** a.k.a base code */

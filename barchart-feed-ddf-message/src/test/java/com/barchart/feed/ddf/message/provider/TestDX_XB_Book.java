@@ -23,13 +23,13 @@ import org.junit.Test;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 /**

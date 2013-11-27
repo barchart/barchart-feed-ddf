@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.client.provider.legacy;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.util.values.api.Value;
+import com.barchart.feed.base.values.api.Value;
 
 interface MarketEventCallback<V extends Value<V>> {
 

@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.message.api.DDF_MarketBookTop;
@@ -24,7 +25,6 @@ import com.barchart.feed.ddf.message.api.DDF_MarketSnapshot;
 import com.barchart.feed.ddf.message.api.DDF_MarketTrade;
 import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
 import com.barchart.feed.ddf.util.provider.DDF_NulVal;
-import com.barchart.util.values.provider.ValueConst;
 
 /**
  * The Class TestDDF_MessageService.

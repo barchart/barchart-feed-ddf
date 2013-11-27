@@ -12,6 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.thread.Runner;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.api.DDF_Result;
@@ -23,9 +26,6 @@ import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 import com.barchart.feed.ddf.settings.provider.DDF_SettingsService;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
 import com.barchart.util.bench.time.StopWatch;
-import com.barchart.util.thread.Runner;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 /**
  * The Class HistoricalTrendExample.

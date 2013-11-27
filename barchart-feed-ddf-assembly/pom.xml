@@ -208,8 +208,7 @@
 							Ignore-Package,
 						</_removeheaders>
 						<Import-Package>
-							<!-- jackson is optional dependency from legacy util-values -->
-							!org.codehaus.jackson.*,
+							
 							!org.junit.*,
 							*,
 						</Import-Package>

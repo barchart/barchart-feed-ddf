@@ -9,9 +9,9 @@ package com.barchart.feed.ddf.historical.api;
 
 import java.util.List;
 
+import com.barchart.feed.base.thread.Runner;
+import com.barchart.feed.base.thread.RunnerLoop;
 import com.barchart.feed.ddf.historical.enums.DDF_ResultStatus;
-import com.barchart.util.thread.Runner;
-import com.barchart.util.thread.RunnerLoop;
 
 /**
  * The Interface DDF_Result.

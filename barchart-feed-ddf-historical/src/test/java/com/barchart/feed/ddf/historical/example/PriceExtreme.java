@@ -10,8 +10,8 @@ package com.barchart.feed.ddf.historical.example;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDisplay;
 import com.barchart.feed.base.provider.MarketDisplayBaseImpl;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.provider.ValueBuilder;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 
 /**
  * helper class to demonstrate batch processing of historical data

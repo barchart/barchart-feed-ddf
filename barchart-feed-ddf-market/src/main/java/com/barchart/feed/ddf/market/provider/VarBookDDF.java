@@ -28,14 +28,14 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.provider.DefBook;
 import com.barchart.feed.base.provider.MarketConst;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
+import com.barchart.feed.base.values.provider.ValueFreezer;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.anno.ThreadSafe;
 import com.barchart.util.value.api.Time;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueBuilder;
-import com.barchart.util.values.provider.ValueFreezer;
 
 @Mutable
 @ThreadSafe(rule = "use in runSafe() only")

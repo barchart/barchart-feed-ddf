@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.resolver.provider;
 
+import com.barchart.feed.base.thread.ExecutorCallable;
 import com.barchart.feed.ddf.resolver.api.DDF_Resolver;
-import com.barchart.util.thread.ExecutorCallable;
 
 // TODO: Auto-generated Javadoc
 /**

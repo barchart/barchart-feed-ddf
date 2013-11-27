@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.message.api;
 
+import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.values.api.TextValue;
 
 /**
  * represents ddf feed server response message.

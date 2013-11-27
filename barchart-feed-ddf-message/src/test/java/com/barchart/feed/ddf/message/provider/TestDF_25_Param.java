@@ -12,6 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_ParamType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
@@ -19,8 +21,6 @@ import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 public class TestDF_25_Param extends TestDDFBase {
 

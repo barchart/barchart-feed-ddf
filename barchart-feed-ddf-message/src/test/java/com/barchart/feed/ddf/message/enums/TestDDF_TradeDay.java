@@ -14,8 +14,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
-import com.barchart.util.values.api.TimeValue;
 
 // TODO: Auto-generated Javadoc
 /**

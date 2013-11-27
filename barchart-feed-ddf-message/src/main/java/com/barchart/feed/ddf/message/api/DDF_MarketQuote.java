@@ -7,12 +7,12 @@
  */
 package com.barchart.feed.ddf.message.api;
 
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.ddf.message.enums.DDF_Condition;
 import com.barchart.feed.ddf.message.enums.DDF_QuoteMode;
 import com.barchart.feed.ddf.message.enums.DDF_QuoteState;
 import com.barchart.util.anno.NotMutable;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.TextValue;
 
 /**
  * represents xml "market quote"; a collection of sessions.

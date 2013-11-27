@@ -58,12 +58,12 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.util.anno.Mutable;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 /**
  * Logic #1

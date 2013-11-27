@@ -13,12 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
+import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
-import com.barchart.util.values.api.TimeValue;
 
 // TODO: Auto-generated Javadoc
 abstract class Base implements DDF_BaseMessage, Codec {

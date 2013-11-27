@@ -50,6 +50,9 @@ import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.provider.DefCuvolEntry;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.base.provider.ValueConverter;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstBase;
 import com.barchart.feed.ddf.message.api.DDF_MarketCuvol;
@@ -63,9 +66,6 @@ import com.barchart.util.ascii.ASCII;
 import com.barchart.util.math.MathExtra;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 /**

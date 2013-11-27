@@ -14,12 +14,12 @@ import static com.barchart.util.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.ddf.message.api.DDF_EOD_EquityForex;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
 
 /**
  * @author g-litchfield

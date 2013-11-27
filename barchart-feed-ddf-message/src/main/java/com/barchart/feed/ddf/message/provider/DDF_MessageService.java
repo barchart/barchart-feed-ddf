@@ -18,6 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
+import com.barchart.feed.base.values.api.DecimalValue;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.message.api.DDF_MarketCuvol;
@@ -27,10 +31,6 @@ import com.barchart.feed.ddf.util.FeedDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
 import com.barchart.feed.ddf.util.provider.DDF_NulVal;
-import com.barchart.util.values.api.DecimalValue;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
-import com.barchart.util.values.api.TimeValue;
 
 // TODO: Auto-generated Javadoc
 /**

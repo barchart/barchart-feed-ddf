@@ -11,13 +11,13 @@ import static com.barchart.util.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.ddf.message.api.DDF_MarketParameter;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_ParamType;
 import com.barchart.feed.ddf.util.HelperDDF;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
 
 // TODO: Auto-generated Javadoc
 class DF_20_Param extends BaseMarket implements DDF_MarketParameter {

@@ -28,6 +28,9 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.base.provider.ValueConverter;
+import com.barchart.feed.base.values.api.TextValue;
+import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.InstBase;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
@@ -42,9 +45,6 @@ import com.barchart.feed.ddf.symbol.provider.DDF_Symbology;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.ascii.ASCII;
 import com.barchart.util.value.api.Fraction;
-import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.api.TimeValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 abstract class BaseMarket extends Base implements DDF_MarketBase {

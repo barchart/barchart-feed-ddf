@@ -7,14 +7,14 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
+import static com.barchart.feed.base.values.provider.ValueBuilder.newPrice;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newSize;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newTime;
+import static com.barchart.feed.base.values.provider.ValueConst.NULL_PRICE;
+import static com.barchart.feed.base.values.provider.ValueConst.ZERO_PRICE;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isClear;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isEmpty;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.values.provider.ValueBuilder.newPrice;
-import static com.barchart.util.values.provider.ValueBuilder.newSize;
-import static com.barchart.util.values.provider.ValueBuilder.newTime;
-import static com.barchart.util.values.provider.ValueConst.NULL_PRICE;
-import static com.barchart.util.values.provider.ValueConst.ZERO_PRICE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

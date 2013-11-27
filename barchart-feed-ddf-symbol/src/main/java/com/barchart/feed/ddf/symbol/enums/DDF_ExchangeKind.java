@@ -7,12 +7,17 @@
  */
 package com.barchart.feed.ddf.symbol.enums;
 
-import static com.barchart.feed.ddf.symbol.enums.DDF_TimeZone.*;
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.feed.ddf.symbol.enums.DDF_TimeZone.CHICAGO;
+import static com.barchart.feed.ddf.symbol.enums.DDF_TimeZone.NEW_YORK;
+import static com.barchart.util.ascii.ASCII.QUEST;
+import static com.barchart.util.ascii.ASCII._0_;
+import static com.barchart.util.ascii.ASCII._1_;
+import static com.barchart.util.ascii.ASCII._2_;
+import static com.barchart.util.ascii.ASCII._3_;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.math.MathExtra;
-import com.barchart.util.values.api.Value;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -10,13 +10,13 @@ package com.barchart.feed.ddf.historical.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.barchart.feed.base.thread.Runner;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.api.DDF_Result;
 import com.barchart.feed.ddf.historical.api.DDF_ResultInterruptedException;
 import com.barchart.feed.ddf.historical.api.DDF_ResultListener;
 import com.barchart.feed.ddf.historical.enums.DDF_ResultStatus;
-import com.barchart.util.thread.Runner;
 
 // TODO: Auto-generated Javadoc
 class Result<E extends DDF_Entry> implements DDF_Result<E> {

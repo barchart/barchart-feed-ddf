@@ -9,11 +9,11 @@ package com.barchart.feed.ddf.message.provider;
 
 import java.nio.ByteBuffer;
 
+import com.barchart.feed.base.values.api.TextValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
-import com.barchart.util.values.api.TextValue;
-import com.barchart.util.values.provider.ValueBuilder;
 
 class DF_C1_Response extends BaseControl implements DDF_ControlResponse {
 

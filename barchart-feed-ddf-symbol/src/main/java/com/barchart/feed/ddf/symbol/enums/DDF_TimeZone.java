@@ -9,9 +9,9 @@ package com.barchart.feed.ddf.symbol.enums;
 
 import org.joda.time.DateTimeZone;
 
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.util.enums.EnumCodeString;
 import com.barchart.util.math.MathExtra;
-import com.barchart.util.values.api.Value;
 
 // TODO: Auto-generated Javadoc
 /**

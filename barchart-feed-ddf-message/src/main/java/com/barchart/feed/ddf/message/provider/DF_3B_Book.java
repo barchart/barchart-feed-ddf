@@ -28,13 +28,13 @@ import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketBook;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;
+import com.barchart.feed.base.values.api.PriceValue;
+import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.values.api.PriceValue;
-import com.barchart.util.values.api.SizeValue;
 
 // TODO: Auto-generated Javadoc
 /** zero size in size array means an empty book entry for this place */

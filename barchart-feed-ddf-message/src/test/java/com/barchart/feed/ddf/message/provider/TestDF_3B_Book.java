@@ -8,8 +8,8 @@
 package com.barchart.feed.ddf.message.provider;
 
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
+import static com.barchart.feed.base.values.provider.ValueBuilder.newTime;
 import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.values.provider.ValueBuilder.newTime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -23,6 +23,7 @@ import org.junit.Test;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.base.book.api.MarketBookEntry;
 import com.barchart.feed.base.provider.DefBookEntry;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
@@ -30,7 +31,6 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.values.provider.ValueBuilder;
 
 // TODO: Auto-generated Javadoc
 /**

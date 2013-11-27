@@ -43,13 +43,13 @@ import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.provider.MakerBaseAllMarkets;
 import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.Sub.Type;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.datalink.provider.DDF_Subscription;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
 import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.market.provider.DDF_MarketServiceAllMarkets;
-import com.barchart.util.values.api.Value;
 
 /**
  * The entry point for Barchart data feed services.

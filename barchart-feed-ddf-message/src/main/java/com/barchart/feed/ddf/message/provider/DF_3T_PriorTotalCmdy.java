@@ -14,10 +14,10 @@ import static com.barchart.util.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
+import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.ddf.message.api.DDF_Prior_TotCmdy;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
-import com.barchart.util.values.api.SizeValue;
 
 /*
  * This should not be a BaseMarket message. Will revisit when it's needed. For

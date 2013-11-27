@@ -36,6 +36,7 @@ import com.barchart.feed.base.market.api.MarketTaker;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.Sub.Type;
+import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
@@ -49,7 +50,6 @@ import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
-import com.barchart.util.values.api.Value;
 
 public class TestableFeed implements Marketplace {
 
