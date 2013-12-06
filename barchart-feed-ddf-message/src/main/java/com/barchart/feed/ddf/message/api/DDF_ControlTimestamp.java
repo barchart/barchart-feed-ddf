@@ -8,7 +8,7 @@
 package com.barchart.feed.ddf.message.api;
 
 import com.barchart.feed.base.values.api.TimeValue;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 /**
  * represents ddf feed server time stamp or heart beat message.

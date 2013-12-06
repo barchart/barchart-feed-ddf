@@ -15,10 +15,10 @@ import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeFeedTimeS
 import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeUnsigned_1;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeUnsigned_2;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.read;
-import static com.barchart.util.ascii.ASCII.COMMA;
-import static com.barchart.util.ascii.ASCII.ETX;
-import static com.barchart.util.ascii.ASCII.SOH;
-import static com.barchart.util.ascii.ASCII.STX;
+import static com.barchart.util.common.ascii.ASCII.COMMA;
+import static com.barchart.util.common.ascii.ASCII.ETX;
+import static com.barchart.util.common.ascii.ASCII.SOH;
+import static com.barchart.util.common.ascii.ASCII.STX;
 
 import java.nio.ByteBuffer;
 
@@ -43,7 +43,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
 import com.barchart.feed.ddf.symbol.provider.DDF_Symbology;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 import com.barchart.util.value.api.Fraction;
 
 // TODO: Auto-generated Javadoc

@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.example;
 
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
+import static com.barchart.util.common.ascii.ASCII.ASCII_CHARSET;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -68,7 +68,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 

@@ -8,7 +8,7 @@
 package com.barchart.feed.ddf.message.api;
 
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 /**
  * base type for all ddf/xml messasges;

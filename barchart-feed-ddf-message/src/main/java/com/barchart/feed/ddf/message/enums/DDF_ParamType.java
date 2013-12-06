@@ -7,17 +7,43 @@
  */
 package com.barchart.feed.ddf.message.enums;
 
-import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.*;
-import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.*;
-import static com.barchart.feed.ddf.message.enums.DDF_ParamType.Kind.*;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.ASK;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.BID;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.CLOSE;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.CLOSE_2;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.ETF_INFO;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.HIGH;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.INTEREST;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.LOW;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.OPEN;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.OPEN_2;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.PREVIOUS;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.SETTLE_END;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.SETTLE_NOW;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.TRADE;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.VOLUME;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.YEAR_BACK;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.ASK_PRICE;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.ASK_SIZE;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.BID_PRICE;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.BID_SIZE;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.EFT_VALUE;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.LAST;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.PAST;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.THIS;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.YEAR_HIGH;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.YEAR_LOW;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamType.Kind.NONE;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamType.Kind.PRICE;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamType.Kind.SIZE;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.enums.EnumByteOrdinal;
+import com.barchart.feed.base.enums.EnumCodeChar;
 import com.barchart.feed.ddf.util.ByteConverters;
-import com.barchart.util.enums.EnumByteOrdinal;
-import com.barchart.util.enums.EnumCodeChar;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc
 /**

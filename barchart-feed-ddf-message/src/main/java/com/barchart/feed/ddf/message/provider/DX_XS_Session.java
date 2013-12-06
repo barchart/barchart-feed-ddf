@@ -52,7 +52,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc
 class DX_XS_Session extends DF_21_Snap implements DDF_MarketSession {

@@ -8,7 +8,7 @@
 package com.barchart.feed.ddf.settings.api;
 
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 /**
  * Encapsulates all necessary data on the server to which a connection is made.

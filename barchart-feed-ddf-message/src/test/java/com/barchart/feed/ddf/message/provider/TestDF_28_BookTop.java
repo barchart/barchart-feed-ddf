@@ -11,7 +11,7 @@ import static com.barchart.feed.base.values.provider.ValueBuilder.newPrice;
 import static com.barchart.feed.base.values.provider.ValueBuilder.newSize;
 import static com.barchart.feed.base.values.provider.ValueBuilder.newTime;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isEmpty;
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
+import static com.barchart.util.common.ascii.ASCII.ASCII_CHARSET;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -31,7 +31,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_ExchangeKind;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc
 /**

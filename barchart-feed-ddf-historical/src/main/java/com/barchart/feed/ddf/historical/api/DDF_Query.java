@@ -21,8 +21,7 @@ import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryType;
-import com.barchart.util.anno.Mutable;
-import com.barchart.util.clone.PublicCloneable;
+import com.barchart.util.common.anno.Mutable;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -32,8 +31,7 @@ import com.barchart.util.clone.PublicCloneable;
  *            the element type
  */
 @Mutable
-public final class DDF_Query<E extends DDF_Entry> implements
-		PublicCloneable<DDF_Query<E>> {
+public final class DDF_Query<E extends DDF_Entry> {
 
 	/**
 	 * Instantiates a new dD f_ query.
@@ -94,7 +92,6 @@ public final class DDF_Query<E extends DDF_Entry> implements
 	// public boolean isTrend;
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public final DDF_Query<E> clone() {
 		try {
 			return (DDF_Query<E>) super.clone();

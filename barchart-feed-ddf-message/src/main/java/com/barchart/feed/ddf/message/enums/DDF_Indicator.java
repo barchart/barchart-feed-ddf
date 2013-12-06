@@ -10,9 +10,9 @@ package com.barchart.feed.ddf.message.enums;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.util.enums.EnumByteOrdinal;
-import com.barchart.util.enums.EnumCodeString;
-import com.barchart.util.math.MathExtra;
+import com.barchart.feed.base.enums.EnumByteOrdinal;
+import com.barchart.feed.base.enums.EnumCodeString;
+import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc
 /**

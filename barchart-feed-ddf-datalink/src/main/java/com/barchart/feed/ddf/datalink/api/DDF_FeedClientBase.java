@@ -17,7 +17,7 @@ import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
-import com.barchart.util.anno.UsedOnce;
+import com.barchart.util.common.anno.UsedOnce;
 
 /**
  * Base interface for DDF feed clients. Classes directly implementing this

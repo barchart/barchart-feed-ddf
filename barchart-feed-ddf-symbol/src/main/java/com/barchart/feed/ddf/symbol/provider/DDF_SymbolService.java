@@ -41,7 +41,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireYear;
 import com.barchart.feed.ddf.symbol.enums.DDF_Option;
 import com.barchart.feed.ddf.symbol.enums.DDF_OptionYear;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc
 /**

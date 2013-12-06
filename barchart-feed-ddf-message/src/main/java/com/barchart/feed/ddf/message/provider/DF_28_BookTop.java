@@ -8,7 +8,7 @@
 package com.barchart.feed.ddf.message.provider;
 
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
-import static com.barchart.util.ascii.ASCII.COMMA;
+import static com.barchart.util.common.ascii.ASCII.COMMA;
 
 import java.nio.ByteBuffer;
 

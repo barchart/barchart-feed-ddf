@@ -14,7 +14,7 @@ import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc
 class EntryTicksDetail extends EntryTicks implements DDF_EntryTick {

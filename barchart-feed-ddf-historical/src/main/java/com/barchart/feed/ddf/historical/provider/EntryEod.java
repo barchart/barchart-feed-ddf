@@ -15,7 +15,7 @@ import org.joda.time.DateTimeZone;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc
 class EntryEod extends EntryBar implements DDF_EntryBarEod {

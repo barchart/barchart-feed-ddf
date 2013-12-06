@@ -7,13 +7,6 @@
  */
 package com.barchart.feed.ddf.util;
 
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.ascii.ASCII.DASH;
-import static com.barchart.util.ascii.ASCII.NUL;
-import static com.barchart.util.ascii.ASCII.STRING_DASH;
-import static com.barchart.util.ascii.ASCII.STRING_EMPTY;
-import static com.barchart.util.ascii.ASCII._0_;
-
 import java.nio.ByteBuffer;
 
 import org.joda.time.DateTime;
@@ -27,8 +20,8 @@ import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
 import com.barchart.feed.ddf.util.provider.DDF_NulVal;
-import com.barchart.util.ascii.ASCII;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.ascii.ASCII;
+import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -301,13 +294,13 @@ public final class HelperDDF {
 			return;
 		}
 		if (value == DDF_CLEAR) {
-			buffer.put(DASH);
+			buffer.put(ASCII.DASH);
 			buffer.put(marker);
 			return;
 		}
 		// TODO optimize
-		buffer.put(Long.toString(value).getBytes(ASCII_CHARSET));
-		if (marker == NUL) {
+		buffer.put(Long.toString(value).getBytes(ASCII.ASCII_CHARSET));
+		if (marker == ASCII.NUL) {
 			// write no marker
 			return;
 		}
@@ -328,7 +321,7 @@ public final class HelperDDF {
 
 		buffer.mark();
 
-		final boolean isDash = (buffer.get() == DASH);
+		final boolean isDash = (buffer.get() == ASCII.DASH);
 
 		if (!isDash) {
 			buffer.reset();
@@ -347,13 +340,13 @@ public final class HelperDDF {
 
 			if (ASCII.isDigit(alpha)) {
 				value *= 10;
-				value += alpha - _0_;
+				value += alpha - ASCII._0_;
 				count++;
 				continue;
 			}
 
 			// stop on any; do not consume
-			if (marker == NUL) {
+			if (marker == ASCII.NUL) {
 				buffer.position(buffer.position() - 1);
 				break;
 			}
@@ -402,7 +395,7 @@ public final class HelperDDF {
 	 * @return true, if is dash ddf
 	 */
 	public static final boolean isDashDDF(final String string) {
-		return string.length() == 1 && string.charAt(0) == DASH;
+		return string.length() == 1 && string.charAt(0) == ASCII.DASH;
 	}
 
 	/**
@@ -491,9 +484,9 @@ public final class HelperDDF {
 	 */
 	public static final String longEncode(final long value) {
 		if (value == DDF_EMPTY) {
-			return STRING_EMPTY;
+			return ASCII.STRING_EMPTY;
 		} else if (value == DDF_CLEAR) {
-			return STRING_DASH;
+			return ASCII.STRING_DASH;
 		} else {
 			return Long.toString(value);
 		}

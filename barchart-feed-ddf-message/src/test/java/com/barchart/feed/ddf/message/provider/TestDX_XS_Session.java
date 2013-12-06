@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.util.common.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 

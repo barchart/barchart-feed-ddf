@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.util;
 
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.ascii.ASCII.COMMA;
+import static com.barchart.util.common.ascii.ASCII.ASCII_CHARSET;
+import static com.barchart.util.common.ascii.ASCII.COMMA;
 import static org.junit.Assert.assertEquals;
 
 import java.nio.ByteBuffer;

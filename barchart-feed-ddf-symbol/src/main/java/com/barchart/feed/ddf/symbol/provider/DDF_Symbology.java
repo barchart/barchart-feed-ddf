@@ -7,11 +7,11 @@
  */
 package com.barchart.feed.ddf.symbol.provider;
 
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.ascii.ASCII.STRING_UNDER;
-import static com.barchart.util.ascii.ASCII.UNDER;
-import static com.barchart.util.ascii.ASCII.containsDigit;
-import static com.barchart.util.ascii.ASCII.isDigit;
+import static com.barchart.util.common.ascii.ASCII.ASCII_CHARSET;
+import static com.barchart.util.common.ascii.ASCII.STRING_UNDER;
+import static com.barchart.util.common.ascii.ASCII.UNDER;
+import static com.barchart.util.common.ascii.ASCII.containsDigit;
+import static com.barchart.util.common.ascii.ASCII.isDigit;
 
 import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
@@ -20,7 +20,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_ExpireMonth;
 import com.barchart.feed.ddf.symbol.enums.DDF_ExpireYear;
 import com.barchart.feed.ddf.symbol.enums.DDF_Option;
 import com.barchart.feed.ddf.symbol.enums.DDF_OptionYear;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc
 /**

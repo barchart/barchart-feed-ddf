@@ -18,9 +18,6 @@ import static com.barchart.feed.ddf.util.HelperDDF.priceDecode;
 import static com.barchart.feed.ddf.util.HelperDDF.priceEncode;
 import static com.barchart.feed.ddf.util.HelperDDF.timeDecode;
 import static com.barchart.feed.ddf.util.HelperDDF.timeEncode;
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.ascii.ASCII.NUL;
-import static com.barchart.util.ascii.ASCII.STRING_DASH;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -50,6 +47,7 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.util.common.ascii.ASCII;
 import com.barchart.util.value.FactoryImpl;
 import com.barchart.util.value.api.Factory;
 import com.barchart.util.value.api.Time;
@@ -205,7 +203,7 @@ public final class HelperXML {
 			XML_XFORMER.get().transform(source, result);
 			final String string = stream.toString();
 			if (ValueBuilder.isPureAscii(string)) {
-				return string.getBytes(ASCII_CHARSET);
+				return string.getBytes(ASCII.ASCII_CHARSET);
 			}
 		} catch (final Exception e) {
 			// will return/throw below
@@ -488,7 +486,7 @@ public final class HelperXML {
 			throw new IllegalArgumentException("attribute not valid : "
 					+ attribute);
 		}
-		return NUL;
+		return ASCII.NUL;
 	}
 
 	/**
@@ -512,7 +510,7 @@ public final class HelperXML {
 			throw new IllegalArgumentException("attribute not valid : "
 					+ attribute);
 		}
-		return NUL;
+		return ASCII.NUL;
 	}
 
 	// decimal array
@@ -598,7 +596,7 @@ public final class HelperXML {
 			final String attribute, final boolean isThrow) {
 		final String string = tag.getAttribute(attribute);
 		if (string.length() > 0) {
-			return string.getBytes(ASCII_CHARSET);
+			return string.getBytes(ASCII.ASCII_CHARSET);
 		}
 		if (isThrow) {
 			throw new IllegalArgumentException("attribute not valid : "
@@ -622,7 +620,7 @@ public final class HelperXML {
 		if (array == null) {
 			return;
 		}
-		tag.setAttribute(attribute, new String(array, ASCII_CHARSET));
+		tag.setAttribute(attribute, new String(array, ASCII.ASCII_CHARSET));
 	}
 
 	/**
@@ -828,7 +826,7 @@ public final class HelperXML {
 			return;
 		}
 		if (value == DDF_CLEAR) {
-			tag.setAttribute(attribute, STRING_DASH);
+			tag.setAttribute(attribute, ASCII.STRING_DASH);
 			return;
 		}
 		final String string = longEncode(value);

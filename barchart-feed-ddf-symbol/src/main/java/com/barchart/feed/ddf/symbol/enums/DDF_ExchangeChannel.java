@@ -7,9 +7,31 @@
  */
 package com.barchart.feed.ddf.symbol.enums;
 
-import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.*;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.AMEX;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.CBOE_Futures;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.CBOE_Index;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.CME_CBOT;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.CME_COMEX;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.CME_KBOT;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.CME_MGEX;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.CME_Main;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.CME_NYMEX;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.Forex;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.ICE_Canada;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.ICE_EU;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.ICE_US;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.Index_DOW_Full;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.Index_NO_DOW_NO_SP;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.Index_SP;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.Mutual_Funds;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.NASDAQ;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.NASDAQ_OTC_BB;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.NASDAQ_OTC_PinkSheets;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.NYSE;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.NYSE_Metals;
+import static com.barchart.feed.ddf.symbol.enums.DDF_Exchange.TEST;
 
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc
 /**

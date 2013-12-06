@@ -14,7 +14,7 @@ import static com.barchart.feed.base.values.provider.ValueConst.NULL_PRICE;
 import static com.barchart.feed.base.values.provider.ValueConst.ZERO_PRICE;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isClear;
 import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isEmpty;
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
+import static com.barchart.util.common.ascii.ASCII.ASCII_CHARSET;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

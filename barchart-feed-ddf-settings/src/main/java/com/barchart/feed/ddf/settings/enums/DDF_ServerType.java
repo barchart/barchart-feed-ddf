@@ -10,8 +10,8 @@
  */
 package com.barchart.feed.ddf.settings.enums;
 
-import com.barchart.util.enums.EnumCodeString;
-import com.barchart.util.math.MathExtra;
+import com.barchart.feed.base.enums.EnumCodeString;
+import com.barchart.util.common.math.MathExtra;
 
 /**
  * Enum denoting the data source/server type for a connection.

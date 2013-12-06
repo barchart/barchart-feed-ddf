@@ -7,23 +7,25 @@
  */
 package com.barchart.feed.ddf.message.enums;
 
-import static com.barchart.util.ascii.ASCII.NUL;
-import static com.barchart.util.ascii.ASCII._0_;
-import static com.barchart.util.ascii.ASCII._1_;
-import static com.barchart.util.ascii.ASCII._2_;
-import static com.barchart.util.ascii.ASCII._3_;
-import static com.barchart.util.ascii.ASCII._4_;
-import static com.barchart.util.ascii.ASCII._5_;
-import static com.barchart.util.ascii.ASCII._6_;
-import static com.barchart.util.ascii.ASCII._7_;
-import static com.barchart.util.ascii.ASCII._8_;
-import static com.barchart.util.ascii.ASCII._B_;
-import static com.barchart.util.ascii.ASCII._C_;
-import static com.barchart.util.ascii.ASCII._I_;
-import static com.barchart.util.ascii.ASCII._S_;
-import static com.barchart.util.ascii.ASCII._T_;
-import static com.barchart.util.ascii.ASCII._Z_;
+import static com.barchart.util.common.ascii.ASCII.NUL;
+import static com.barchart.util.common.ascii.ASCII._0_;
+import static com.barchart.util.common.ascii.ASCII._1_;
+import static com.barchart.util.common.ascii.ASCII._2_;
+import static com.barchart.util.common.ascii.ASCII._3_;
+import static com.barchart.util.common.ascii.ASCII._4_;
+import static com.barchart.util.common.ascii.ASCII._5_;
+import static com.barchart.util.common.ascii.ASCII._6_;
+import static com.barchart.util.common.ascii.ASCII._7_;
+import static com.barchart.util.common.ascii.ASCII._8_;
+import static com.barchart.util.common.ascii.ASCII._B_;
+import static com.barchart.util.common.ascii.ASCII._C_;
+import static com.barchart.util.common.ascii.ASCII._I_;
+import static com.barchart.util.common.ascii.ASCII._S_;
+import static com.barchart.util.common.ascii.ASCII._T_;
+import static com.barchart.util.common.ascii.ASCII._Z_;
 
+import com.barchart.feed.base.enums.EnumByteOrdinal;
+import com.barchart.feed.base.enums.EnumCodeChar;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_EOD_Commodity;
@@ -41,9 +43,7 @@ import com.barchart.feed.ddf.message.api.DDF_Prior_IndividCmdy;
 import com.barchart.feed.ddf.message.api.DDF_Prior_TotCmdy;
 import com.barchart.feed.ddf.util.ByteConverters;
 import com.barchart.feed.ddf.util.FeedDDF;
-import com.barchart.util.enums.EnumByteOrdinal;
-import com.barchart.util.enums.EnumCodeChar;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc
 /**

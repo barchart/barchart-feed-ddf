@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
 import com.barchart.feed.ddf.message.provider.DDF_SpreadParser;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 /**
  * convert DDF message frames into {@link DDF_BaseMessage} messages

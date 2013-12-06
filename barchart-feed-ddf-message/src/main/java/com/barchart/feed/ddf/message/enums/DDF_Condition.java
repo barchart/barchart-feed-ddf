@@ -7,11 +7,23 @@
  */
 package com.barchart.feed.ddf.message.enums;
 
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.util.common.ascii.ASCII.NUL;
+import static com.barchart.util.common.ascii.ASCII.QUEST;
+import static com.barchart.util.common.ascii.ASCII._1_;
+import static com.barchart.util.common.ascii.ASCII._4_;
+import static com.barchart.util.common.ascii.ASCII._A_;
+import static com.barchart.util.common.ascii.ASCII._B_;
+import static com.barchart.util.common.ascii.ASCII._C_;
+import static com.barchart.util.common.ascii.ASCII._E_;
+import static com.barchart.util.common.ascii.ASCII._F_;
+import static com.barchart.util.common.ascii.ASCII._L_;
+import static com.barchart.util.common.ascii.ASCII._M_;
+import static com.barchart.util.common.ascii.ASCII._P_;
+import static com.barchart.util.common.ascii.ASCII._Q_;
 
-import com.barchart.util.enums.EnumByteOrdinal;
-import com.barchart.util.enums.EnumCodeByte;
-import com.barchart.util.math.MathExtra;
+import com.barchart.feed.base.enums.EnumByteOrdinal;
+import com.barchart.feed.base.enums.EnumCodeByte;
+import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -14,7 +14,7 @@ import com.barchart.feed.base.provider.MakerBase;
 import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.common.anno.ThreadSafe;
 
 /**
  * The DDF extension of MakerBase from the feed-base library. Sets the Market

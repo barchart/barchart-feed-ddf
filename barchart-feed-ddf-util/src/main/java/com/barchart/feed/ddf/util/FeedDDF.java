@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.util;
 
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 /**
  * DDF data feed protocol constants

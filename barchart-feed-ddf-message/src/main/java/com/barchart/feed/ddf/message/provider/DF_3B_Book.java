@@ -18,9 +18,9 @@ import static com.barchart.feed.ddf.message.provider.CodecHelper.bookBidCodeFrom
 import static com.barchart.feed.ddf.message.provider.CodecHelper.bookBidIndexFrom;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.decodeUnsigned_1_book;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeUnsigned_1_book;
-import static com.barchart.util.ascii.ASCII.COMMA;
-import static com.barchart.util.ascii.ASCII.ETX;
-import static com.barchart.util.ascii.ASCII.NUL;
+import static com.barchart.util.common.ascii.ASCII.COMMA;
+import static com.barchart.util.common.ascii.ASCII.ETX;
+import static com.barchart.util.common.ascii.ASCII.NUL;
 
 import java.nio.ByteBuffer;
 

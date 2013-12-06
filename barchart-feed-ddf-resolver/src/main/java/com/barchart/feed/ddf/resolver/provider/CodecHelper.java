@@ -7,9 +7,6 @@
  */
 package com.barchart.feed.ddf.resolver.provider;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
@@ -25,14 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.base.enums.ParaEnumBase;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
-import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.api.Value;
 import com.barchart.feed.base.values.provider.ValueBuilder;
-import com.barchart.util.enums.DictEnum;
-import com.barchart.util.enums.ParaEnumBase;
 
 class CodecHelper {
 

@@ -10,7 +10,7 @@ package com.barchart.feed.ddf.message.provider;
 import static com.barchart.feed.ddf.message.provider.CodecHelper.*;
 import static com.barchart.feed.ddf.message.provider.XmlTagBook.*;
 import static com.barchart.feed.ddf.util.HelperXML.*;
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.util.common.ascii.ASCII.*;
 
 import org.w3c.dom.Element;
 
@@ -19,7 +19,7 @@ import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 // TODO: Auto-generated Javadoc
 class DX_XB_Book extends DF_3B_Book {

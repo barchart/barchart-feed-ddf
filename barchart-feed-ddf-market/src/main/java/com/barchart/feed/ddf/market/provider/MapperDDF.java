@@ -60,7 +60,7 @@ import com.barchart.feed.ddf.message.enums.DDF_QuoteMode;
 import com.barchart.feed.ddf.message.enums.DDF_QuoteState;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.common.anno.ThreadSafe;
 
 // TODO: Auto-generated Javadoc
 @ThreadSafe

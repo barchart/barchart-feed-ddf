@@ -7,11 +7,22 @@
  */
 package com.barchart.feed.ddf.message.enums;
 
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.util.common.ascii.ASCII.EQUAL;
+import static com.barchart.util.common.ascii.ASCII.LESS;
+import static com.barchart.util.common.ascii.ASCII.MORE;
+import static com.barchart.util.common.ascii.ASCII.QUEST;
+import static com.barchart.util.common.ascii.ASCII._0_;
+import static com.barchart.util.common.ascii.ASCII._1_;
+import static com.barchart.util.common.ascii.ASCII._2_;
+import static com.barchart.util.common.ascii.ASCII._6_;
+import static com.barchart.util.common.ascii.ASCII._H_;
+import static com.barchart.util.common.ascii.ASCII._L_;
+import static com.barchart.util.common.ascii.ASCII._N_;
+import static com.barchart.util.common.ascii.ASCII._S_;
 
-import com.barchart.util.enums.EnumByteOrdinal;
-import com.barchart.util.enums.EnumCodeByte;
-import com.barchart.util.math.MathExtra;
+import com.barchart.feed.base.enums.EnumByteOrdinal;
+import com.barchart.feed.base.enums.EnumCodeByte;
+import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc
 /**

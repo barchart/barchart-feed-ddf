@@ -33,8 +33,8 @@ import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.base.values.provider.ValueFreezer;
-import com.barchart.util.anno.Mutable;
-import com.barchart.util.anno.ThreadSafe;
+import com.barchart.util.common.anno.Mutable;
+import com.barchart.util.common.anno.ThreadSafe;
 import com.barchart.util.value.api.Time;
 
 @Mutable

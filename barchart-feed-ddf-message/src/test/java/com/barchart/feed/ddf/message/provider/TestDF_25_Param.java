@@ -1,6 +1,6 @@
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
+import static com.barchart.util.common.ascii.ASCII.ASCII_CHARSET;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

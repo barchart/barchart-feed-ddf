@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.message.api;
 
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 /** internal */
 @NotMutable

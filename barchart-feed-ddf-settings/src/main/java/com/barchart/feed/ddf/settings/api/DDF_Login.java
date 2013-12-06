@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.settings.api;
 
 import java.util.Set;
 
-import com.barchart.util.anno.NotMutable;
+import com.barchart.util.common.anno.NotMutable;
 
 /**
  * Encapsulates all necessary data for a user login.

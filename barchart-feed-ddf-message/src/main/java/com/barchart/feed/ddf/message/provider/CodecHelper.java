@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.ascii.ASCII.*;
+import static com.barchart.util.common.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
@@ -20,7 +20,7 @@ import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.symbol.provider.DDF_Symbology;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
-import com.barchart.util.ascii.ASCII;
+import com.barchart.util.common.ascii.ASCII;
 
 /* TODO make public ? */
 

@@ -7,8 +7,8 @@
  */
 package com.barchart.feed.ddf.instrument.provider;
 
-import com.barchart.util.enums.EnumCodeString;
-import com.barchart.util.math.MathExtra;
+import com.barchart.feed.base.enums.EnumCodeString;
+import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc
 enum StatusXML implements EnumCodeString {

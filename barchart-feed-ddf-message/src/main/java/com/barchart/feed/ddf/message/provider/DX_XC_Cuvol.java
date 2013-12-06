@@ -35,10 +35,10 @@ import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlTextEncode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlTimeDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlTimeEncode;
-import static com.barchart.util.ascii.ASCII.ASCII_CHARSET;
-import static com.barchart.util.ascii.ASCII.COMMA;
-import static com.barchart.util.ascii.ASCII.NUL;
-import static com.barchart.util.ascii.ASCII.STRING_COLON;
+import static com.barchart.util.common.ascii.ASCII.ASCII_CHARSET;
+import static com.barchart.util.common.ascii.ASCII.COMMA;
+import static com.barchart.util.common.ascii.ASCII.NUL;
+import static com.barchart.util.common.ascii.ASCII.STRING_COLON;
 
 import java.nio.ByteBuffer;
 
@@ -62,8 +62,8 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
-import com.barchart.util.ascii.ASCII;
-import com.barchart.util.math.MathExtra;
+import com.barchart.util.common.ascii.ASCII;
+import com.barchart.util.common.math.MathExtra;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
 

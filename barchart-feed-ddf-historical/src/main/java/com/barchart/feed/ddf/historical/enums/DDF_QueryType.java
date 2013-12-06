@@ -7,6 +7,9 @@
  */
 package com.barchart.feed.ddf.historical.enums;
 
+import com.barchart.feed.base.enums.DictEnum;
+import com.barchart.feed.base.enums.EnumCodeString;
+import com.barchart.feed.base.enums.ParaEnumBase;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarMin;
@@ -15,10 +18,7 @@ import com.barchart.feed.ddf.historical.api.DDF_EntryBarMinNearby;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTick;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTickFormT;
 import com.barchart.feed.ddf.historical.api.DDF_EntryTrend;
-import com.barchart.util.anno.NotMutable;
-import com.barchart.util.enums.DictEnum;
-import com.barchart.util.enums.EnumCodeString;
-import com.barchart.util.enums.ParaEnumBase;
+import com.barchart.util.common.anno.NotMutable;
 
 // TODO: Auto-generated Javadoc
 /**

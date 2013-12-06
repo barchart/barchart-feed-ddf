@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.enums;
 
-import com.barchart.util.enums.EnumCodeString;
+import com.barchart.feed.base.enums.EnumCodeString;
 
 // TODO: Auto-generated Javadoc
 /**
