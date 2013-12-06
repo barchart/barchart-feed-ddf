@@ -48,8 +48,8 @@ import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.util.common.ascii.ASCII;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 import com.barchart.util.value.api.Time;
 
 // TODO: Auto-generated Javadoc
@@ -58,7 +58,7 @@ import com.barchart.util.value.api.Time;
  */
 public final class HelperXML {
 
-	static final Factory factory = new FactoryImpl();
+	static final ValueFactory factory = new ValueFactoryImpl();
 
 	private static Logger log = LoggerFactory.getLogger(HelperXML.class);
 

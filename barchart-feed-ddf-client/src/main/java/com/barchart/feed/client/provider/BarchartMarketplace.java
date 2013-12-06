@@ -38,8 +38,8 @@ import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 
 public class BarchartMarketplace implements Marketplace {
 	
@@ -49,7 +49,7 @@ public class BarchartMarketplace implements Marketplace {
 	private static final long DB_UPDATE_INTERVAL = 1000 * 60 * 60 * 4; // 4 hours
 	
 	/* Value api factory */
-	private static final Factory factory = new FactoryImpl();
+	private static final ValueFactory factory = new ValueFactoryImpl();
 	
 	/* Used if unable to retrieve system default temp directory */
 	private static final String TEMP_DIR = "C:\\windows\\temp\\";

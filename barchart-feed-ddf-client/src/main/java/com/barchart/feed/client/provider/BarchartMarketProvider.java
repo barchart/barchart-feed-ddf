@@ -35,8 +35,8 @@ import com.barchart.feed.ddf.market.provider.DDF_ConsumerMarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
-import com.barchart.util.value.FactoryImpl;
-import com.barchart.util.value.api.Factory;
+import com.barchart.util.value.ValueFactoryImpl;
+import com.barchart.util.value.api.ValueFactory;
 
 public class BarchartMarketProvider implements MarketService {
 
@@ -44,7 +44,7 @@ public class BarchartMarketProvider implements MarketService {
 			BarchartMarketProvider.class);
 			
 	/* Value api factory */
-	private static final Factory values = new FactoryImpl();
+	private static final ValueFactory values = new ValueFactoryImpl();
 	
 	private volatile DDF_FeedClientBase connection;
 	private final DDF_ConsumerMarketProvider maker;
