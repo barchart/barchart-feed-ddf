@@ -143,7 +143,7 @@ public final class DDF_HistoricalService {
 		checkNull(query.type, "query type is null");
 
 		// detach from source
-		query = query.clone();
+		//query = query.clone();
 
 		final String stringURL = urlQuery(settings, query);
 		log.debug("stringURL : \n\t {}", stringURL);
