@@ -1,5 +1,6 @@
 package com.barchart.feed.ddf.instrument.provider;
 
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ALT_SYMBOL;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.BASE_CODE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.EXCHANGE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ID;
@@ -26,6 +27,7 @@ import org.openfeed.proto.inst.Decimal;
 import org.openfeed.proto.inst.InstrumentDefinition;
 import org.openfeed.proto.inst.InstrumentType;
 import org.openfeed.proto.inst.Interval;
+import org.openfeed.proto.inst.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -193,6 +195,17 @@ public final class InstrumentXML {
 			
 			/* market symbol; can be non unique; */
 			builder.setSymbol(xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));
+			
+			// NOTE: Hard coded for CQG
+			final String cqg = xmlStringDecode(ats, ALT_SYMBOL, XML_PASS);
+			
+			if(cqg != null) {
+				Symbol.Builder b = Symbol.newBuilder();
+				b.setVendor(DDF_RxInstrumentProvider.CQG_VENDOR_ID.toString());
+				b.setSymbol(cqg);
+				final Symbol symbol = b.build();
+				builder.addSymbols(symbol);
+			}
 			
 			/* market free style description; can be used in full text search */
 			builder.setDescription(String.valueOf(xmlStringDecode(ats, SYMBOL_COMMENT,

@@ -1,6 +1,8 @@
 package com.barchart.feed.ddf.instrument.provider;
 
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ALT_SYMBOL;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
+import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
 import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
@@ -40,6 +42,7 @@ import rx.Observable;
 import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.consumer.MetadataService.SearchContext;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider.RemoteRunner;
 import com.barchart.feed.ddf.util.HelperXML;
@@ -54,6 +57,8 @@ public class DDF_RxInstrumentProvider {
 			
 	static final ConcurrentMap<String, List<Instrument>> symbolMap =
 			new ConcurrentHashMap<String, List<Instrument>>();
+	
+	public static VendorID CQG_VENDOR_ID = new VendorID("CQG");
 	
 	/* ***** ***** ***** Begin Executor ***** ***** ***** */
 	
@@ -204,6 +209,7 @@ public class DDF_RxInstrumentProvider {
 							
 							final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
 							final InstrumentDefinition def = InstrumentXML.decodeSAX(ats);
+							
 							Instrument inst;
 							
 							if (def != InstrumentDefinition.getDefaultInstance()) {
@@ -271,7 +277,7 @@ public class DDF_RxInstrumentProvider {
 
 		        final Element tag = xmlFirstChild(root, "symbol", XML_STOP);
 		        
-		        final String result = tag.getTextContent();
+		        final String result = Symbology.formatSymbol(tag.getTextContent());
 		        
 		        if(result != null) {
 		        	cqgSymMap.put(symbol, result);
@@ -310,9 +316,11 @@ public class DDF_RxInstrumentProvider {
 	/* ***** ***** ***** Begin Remote Lookup ***** ***** ***** */
 	
 	private static final String SERVER_EXTRAS = "extras.ddfplus.com";
+	
+	private static final String CQG_SYMBOL = "&symbology=CQG";
 
 	private static final String urlInstrumentLookup(final CharSequence lookup) {
-		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
+		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup + CQG_SYMBOL;
 	}
 	
 	private static final String cqgInstLoopURL(final CharSequence lookup) {

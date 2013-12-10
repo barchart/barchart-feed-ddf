@@ -73,6 +73,8 @@ public interface XmlTagExtras {
 	
 	/** used by historical query system */
 	String SYMBOL_HIST = "symbol_historical";
+	
+	String ALT_SYMBOL = "alternate_symbol";
 
 	/** ddf feed codes */
 	String EXCHANGE_DDF = "exchange_ddf";
