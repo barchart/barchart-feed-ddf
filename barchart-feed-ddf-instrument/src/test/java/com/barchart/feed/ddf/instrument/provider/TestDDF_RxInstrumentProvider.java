@@ -20,10 +20,10 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-//		DDF_RxInstrumentProvider.fromString(SearchContext.NULL, "GOOG", "IBM", "CLZ13")
-//				.subscribe(obs());
-//		
-//		Thread.sleep(10 * 5000);
+		DDF_RxInstrumentProvider.fromString(SearchContext.NULL, "GOOG", "IBM", "CLZ13")
+				.subscribe(obs());
+		
+		Thread.sleep(10 * 5000);
 		
 		// "F.US.CLES2X12"
 		
@@ -33,6 +33,7 @@ public class TestDDF_RxInstrumentProvider {
 		// 
 		
 		Thread.sleep(5 * 1000);
+		System.exit(0);
 		
 	}
 	
@@ -64,6 +65,7 @@ public class TestDDF_RxInstrumentProvider {
 					
 					for(final Instrument i : is) {
 						log.debug("Result : \n{}", i);
+						log.debug("Inst Type : {}", i.securityType());
 					}
 					
 				}
