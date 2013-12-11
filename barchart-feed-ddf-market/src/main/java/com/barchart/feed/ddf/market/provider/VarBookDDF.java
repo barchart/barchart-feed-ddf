@@ -175,6 +175,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 		return new DefBook(instrument, time(), 
 				entries(Book.Side.BID),
 				entries(Book.Side.ASK),
+				topBid, topAsk,
 				lastEntry, EnumSet.copyOf(changeSet));
 	}
 	
