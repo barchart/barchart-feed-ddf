@@ -2,10 +2,13 @@ package com.barchart.feed.ddf.client.provider;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import rx.observables.BlockingObservable;
 
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
@@ -15,9 +18,9 @@ import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.Session;
-import com.barchart.feed.api.model.data.Trade;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.client.provider.BarchartMarketplace;
+import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
 import com.barchart.feed.inst.provider.Exchanges;
 
 public class TestBarchartFeed {
@@ -51,45 +54,53 @@ public class TestBarchartFeed {
 		
 		feed.startup();
 		
-//		final MarketObserver<Book> callback = new MarketObserver<Book>() {
-//
-//			@Override
-//			public void onNext(final Book v) {
-//				
-//				log.debug(
-//				v.instrument().symbol() + " " +
-//				
-//				v.top().bid().price().asDouble() + " " +
-//				v.top().bid().size().asDouble() + " " +
-//				v.top().ask().size().asDouble() + " " +
-//				v.top().ask().price().asDouble());
-//				
-//			}
-//			
-//		};
-		
-		final MarketObserver<Market> callback = new MarketObserver<Market>() {
+		final MarketObserver<Book> callback = new MarketObserver<Book>() {
 
 			@Override
-			public void onNext(final Market v) {
+			public void onNext(final Book v) {
 				
-				log.debug(
-					v.instrument().symbol() + " " +
-							v.change()
-				);
+				System.out.println(v.toString());
+				System.out.println(v.top().toString());
+				System.out.println("\n***********************************************\n");
 				
 			}
-
+			
 		};
 		
-		final Agent myAgent = feed.newAgent(Market.class, callback);
+//		final MarketObserver<Market> callback = new MarketObserver<Market>() {
+//
+//			@Override
+//			public void onNext(final Market v) {
+//				
+//				log.debug(
+//					v.instrument().symbol() + " " +
+//							v.change()
+//				);
+//				
+//			}
+//
+//		};
 		
-		//myAgent.include(Exchanges.fromName("NYSE"));
-		myAgent.include("ESU3");
+		final Agent myAgent = feed.newAgent(Book.class, callback);
+		
+		myAgent.include(getInst("AAPL"));
+		//myAgent.include("ESU3");
 		
 		Thread.sleep(1000000);
 		
 		feed.shutdown();
+		
+	}
+	
+	public static Instrument getInst(final String barSym) {
+		
+		final Map<String, List<Instrument>> map = BlockingObservable.from(DDF_RxInstrumentProvider
+				.fromString(barSym)).single().results();
+		
+		Instrument result = BlockingObservable.from(DDF_RxInstrumentProvider
+				.fromString(barSym)).single().results().get(barSym).get(0);
+		
+		return result;
 		
 	}
 	

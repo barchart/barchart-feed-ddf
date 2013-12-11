@@ -75,8 +75,8 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	private final EntryMap bids = new EntryMap(CMP_ASC);
 	private final EntryMap asks = new EntryMap(CMP_DES);
 
-	private MarketBookEntry topBid;
-	private MarketBookEntry topAsk;
+	private volatile MarketBookEntry topBid;
+	private volatile MarketBookEntry topAsk;
 
 	private final Instrument instrument;
 	
@@ -91,6 +91,8 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public final UniBookResult setEntry(final MarketDoBookEntry entry) {
 
+		log.debug("SetEntry called {}", entry);
+		
 		if(entry != null) {
 			lastEntry = entry.freeze();
 		}
@@ -276,6 +278,8 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public UniBookResult setSnapshot(final MarketDoBookEntry[] entries) {
 
+		log.debug("SetSnapshot called");
+		
 		clear();
 		
 		changeSet.add(Component.NORMAL_BID);
@@ -290,10 +294,23 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 			if(entry != null && !entry.isNull()) {
 				final EntryMap map = map(entry.side());
 				map.put(entry.priceValue(), entry);
+				
+				/*
+				 * Set top of book from snapshot update
+				 */
+				if(entry.level() == 1) {
+					
+					if(entry.side() == Book.Side.BID) {
+						topBid = entry;
+					} else {
+						topAsk = entry;
+					}
+					
+				}
 			}
 
 		}
-
+		
 		/*
 		 * 
 		 */
