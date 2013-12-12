@@ -68,7 +68,7 @@ final class CodecHelper {
 		final CharSequence password = settings.getAuthPass();
 
 		final Instrument instrument = query.instrument;
-		final CharSequence symbol = Symbology.formatHistoricalSymbol(instrument.symbol());  // TODO Need to modify symbol
+		final CharSequence symbol = Symbology.formatHistoricalSymbol(instrument.symbol());  
 
 		final DateTimeZone timeZone = DateTimeZone.forOffsetMillis(
 				(int)instrument.timeZoneOffset());
