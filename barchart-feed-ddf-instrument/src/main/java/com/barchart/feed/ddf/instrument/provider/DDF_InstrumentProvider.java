@@ -58,8 +58,8 @@ public final class DDF_InstrumentProvider {
 	private static final Logger log = LoggerFactory
 			.getLogger(DDF_InstrumentProvider.class);
 	
-	private static final ConcurrentMap<String, InstrumentState> symbolMap =
-			new ConcurrentHashMap<String, InstrumentState>();
+	private static final ConcurrentMap<String, List<InstrumentState>> symbolMap =
+			DDF_RxInstrumentProvider.symbolMap;
 	
 	private static final ArrayBlockingQueue<String> remoteQueue = 
 			new ArrayBlockingQueue<String>(1000 * 1000);
@@ -150,7 +150,7 @@ public final class DDF_InstrumentProvider {
 		final String symbol = Symbology.formatSymbol(inst.id().toString());
 		
 		if(symbolMap.containsKey(symbol)) {
-			return symbolMap.get(symbol);
+			return symbolMap.get(symbol).get(0);
 		}
 		
 		if(db.containsKey(symbol)) {
@@ -158,7 +158,9 @@ public final class DDF_InstrumentProvider {
 			final InstrumentState instState = InstrumentStateFactory.
 					newInstrument(symbol);
 			instState.process(db.get(symbol));
-			symbolMap.put(symbol, instState);
+			final List<InstrumentState> list = new ArrayList<InstrumentState>();
+			list.add(instState);
+			symbolMap.put(symbol, list);
 			return instState;
 		}
 		
@@ -166,7 +168,9 @@ public final class DDF_InstrumentProvider {
 		final InstrumentState instState = InstrumentStateFactory.
 				newInstrumentFromStub(inst);
 		
-		symbolMap.put(symbol, instState);
+		final List<InstrumentState> list = new ArrayList<InstrumentState>();
+		list.add(instState);
+		symbolMap.put(symbol, list);
 		log.debug("Put {} stub into map", symbol);
 		
 		/* Asnyc lookup */
@@ -189,21 +193,25 @@ public final class DDF_InstrumentProvider {
 		symbol = Symbology.formatSymbol(symbol);
 		
 		if(symbolMap.containsKey(symbol)) {
-			return symbolMap.get(symbol);
+			return symbolMap.get(symbol).get(0);
 		}
 		
 		if(db.containsKey(symbol)) {
 			final InstrumentState instState = InstrumentStateFactory.
 				newInstrument(symbol);
 			instState.process(db.get(symbol));
-			symbolMap.put(symbol, instState);
+			final List<InstrumentState> list = new ArrayList<InstrumentState>();
+			list.add(instState);
+			symbolMap.put(symbol, list);
 			return instState;
 		}
 		
 		final InstrumentState instState = InstrumentStateFactory.
 				newInstrument(symbol);
 		
-		symbolMap.put(symbol, instState);
+		final List<InstrumentState> list = new ArrayList<InstrumentState>();
+		list.add(instState);
+		symbolMap.put(symbol, list);
 		
 		/* Asnyc lookup */
 		try {
@@ -238,20 +246,24 @@ public final class DDF_InstrumentProvider {
 		symbol = Symbology.formatHistoricalSymbol(symbol);
 		
 		if(symbolMap.containsKey(symbol)) {
-			return symbolMap.get(symbol);
+			return symbolMap.get(symbol).get(0);
 		}
 		
 		if(db.containsKey(symbol)) {
 			final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
 			instState.process(db.get(symbol));
-			symbolMap.put(symbol, instState);
+			final List<InstrumentState> list = new ArrayList<InstrumentState>();
+			list.add(instState);
+			symbolMap.put(symbol, list);
 			return instState;
 		}
 		
 		final InstrumentState instState = InstrumentStateFactory.
 				newInstrument(symbol);
 		
-		symbolMap.put(symbol, instState);
+		final List<InstrumentState> list = new ArrayList<InstrumentState>();
+		list.add(instState);
+		symbolMap.put(symbol, list);
 		
 		/* Asnyc lookup */
 		try {
@@ -328,10 +340,12 @@ public final class DDF_InstrumentProvider {
 				return;  // Ignore
 			}
 			
-			final InstrumentState iState = symbolMap.get(symbol);
+			final InstrumentState iState = symbolMap.get(symbol).get(0);
 			
 			if(iState == null || iState.isNull()) {
-				symbolMap.put(symbol, InstrumentFactory.instrumentState(result.result()));
+				final List<InstrumentState> list = new ArrayList<InstrumentState>();
+				list.add(InstrumentFactory.instrumentState(result.result()));
+				symbolMap.put(symbol, list);
 			} else {
 				iState.process(result.result());
 			}

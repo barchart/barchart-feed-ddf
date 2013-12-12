@@ -35,7 +35,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import rx.Observable;
-import rx.subjects.PublishSubject;
 import rx.subjects.ReplaySubject;
 
 import com.barchart.feed.api.consumer.MetadataService.Result;
@@ -45,7 +44,8 @@ import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider.RemoteRunner;
 import com.barchart.feed.ddf.util.HelperXML;
-import com.barchart.feed.inst.provider.InstrumentImpl;
+import com.barchart.feed.inst.participant.InstrumentState;
+import com.barchart.feed.inst.provider.InstrumentFactory;
 
 public class DDF_RxInstrumentProvider {
 
@@ -54,8 +54,8 @@ public class DDF_RxInstrumentProvider {
 	
 	private static final int MAX_URL_LEN = 7500;
 			
-	static final ConcurrentMap<String, List<Instrument>> symbolMap =
-			new ConcurrentHashMap<String, List<Instrument>>();
+	static final ConcurrentMap<String, List<InstrumentState>> symbolMap =
+			new ConcurrentHashMap<String, List<InstrumentState>>();
 	
 	public static VendorID CQG_VENDOR_ID = new VendorID("CQG");
 	
@@ -122,8 +122,8 @@ public class DDF_RxInstrumentProvider {
 			@Override
 			public void run() {
 				
-				final Map<String, List<Instrument>> res = 
-						new HashMap<String, List<Instrument>>();
+				final Map<String, List<InstrumentState>> res = 
+						new HashMap<String, List<InstrumentState>>();
 				
 				final List<String> toBatch = new ArrayList<String>();
 				
@@ -146,10 +146,10 @@ public class DDF_RxInstrumentProvider {
 					
 					for(final String query : queries) {
 						
-						final Map<String, List<Instrument>> lookup = remoteLookup(query);
+						final Map<String, List<InstrumentState>> lookup = remoteLookup(query);
 						
 						/* Store instruments returned from lookup */
-						for(final Entry<String, List<Instrument>> e : lookup.entrySet()) {
+						for(final Entry<String, List<InstrumentState>> e : lookup.entrySet()) {
 							symbolMap.put(e.getKey(), e.getValue());
 						}
 						
@@ -167,12 +167,12 @@ public class DDF_RxInstrumentProvider {
 		
 	}
 	
-	private static Map<String, List<Instrument>> remoteLookup(final String query) {
+	private static Map<String, List<InstrumentState>> remoteLookup(final String query) {
 		
 		try {
 		
-			final Map<String, List<Instrument>> result = 
-					new HashMap<String, List<Instrument>>();
+			final Map<String, List<InstrumentState>> result = 
+					new HashMap<String, List<InstrumentState>>();
 			
 			log.debug("remote batch on {}", urlInstrumentLookup(query));
 			
@@ -212,15 +212,15 @@ public class DDF_RxInstrumentProvider {
 							final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
 							final InstrumentDefinition def = InstrumentXML.decodeSAX(ats);
 							
-							Instrument inst;
+							InstrumentState inst;
 							
 							if (def != InstrumentDefinition.getDefaultInstance()) {
-								inst = new InstrumentImpl(def);
+								inst = InstrumentFactory.instrumentState(def);
 							} else {
-								inst = Instrument.NULL;
+								inst = InstrumentState.NULL;
 							}
 							
-							final List<Instrument> insts = new ArrayList<Instrument>();
+							final List<InstrumentState> insts = new ArrayList<InstrumentState>();
 							insts.add(inst);
 							result.put(lookup, insts);
 							
@@ -288,12 +288,11 @@ public class DDF_RxInstrumentProvider {
 		        return result;
 				
 			}
-			
 		};
 		
 	}
 	
-	private static Result<Instrument> result(final Map<String, List<Instrument>> res) {
+	private static Result<Instrument> result(final Map<String, List<InstrumentState>> res) {
 		
 		return new Result<Instrument>() {
 
@@ -304,14 +303,20 @@ public class DDF_RxInstrumentProvider {
 
 			@Override
 			public Map<String, List<Instrument>> results() {
-				return res;
+				Map<String, List<Instrument>> result = new HashMap<String, List<Instrument>>();
+				for(final Entry<String, List<InstrumentState>> e : res.entrySet()) {
+					final List<Instrument> list = new ArrayList<Instrument>();
+					list.add(e.getValue().get(0));
+					result.put(e.getKey(), list);
+				}
+				return result;
 			}
 
 			@Override
 			public boolean isNull() {
 				return false;
-			}}
-		;
+			}
+		};
 		
 	}
 	
