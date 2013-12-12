@@ -1,8 +1,6 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ALT_SYMBOL;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
-import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
 import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
@@ -21,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.zip.GZIPInputStream;
@@ -38,6 +35,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import rx.Observable;
+import rx.subjects.PublishSubject;
+import rx.subjects.ReplaySubject;
 
 import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.consumer.MetadataService.SearchContext;
@@ -108,23 +107,20 @@ public class DDF_RxInstrumentProvider {
 	public static Observable<Result<Instrument>> fromString(final SearchContext ctx, 
 			final String... symbols) {
 		
-		return Observable.from(futureFromString(ctx, symbols));
+		ReplaySubject<Result<Instrument>> sub = ReplaySubject.create();
+		executor.submit(runnableFromString(sub, ctx, symbols));
+		
+		return sub;
 	}
 	
-	public static Future<Result<Instrument>> futureFromString(final SearchContext ctx, 
-			final String... symbols) {
+	public static Runnable runnableFromString(
+			final ReplaySubject<Result<Instrument>> sub,
+			final SearchContext ctx, final String... symbols) {
 		
-		return executor.submit(callableFromString(ctx, symbols));
-		
-	}
-	
-	public static Callable<Result<Instrument>> callableFromString(final SearchContext ctx, 
-			final String... symbols) {
-		
-		return new Callable<Result<Instrument>>() {
+		return new Runnable() {
 
 			@Override
-			public Result<Instrument> call() throws Exception {
+			public void run() {
 				
 				final Map<String, List<Instrument>> res = 
 						new HashMap<String, List<Instrument>>();
@@ -144,21 +140,27 @@ public class DDF_RxInstrumentProvider {
 					
 				}
 				
-				final List<String> queries = buildQueries(toBatch);
-				
-				for(final String query : queries) {
+				try {
 					
-					final Map<String, List<Instrument>> lookup = remoteLookup(query);
+					final List<String> queries = buildQueries(toBatch);
 					
-					/* Store instruments returned from lookup */
-					for(final Entry<String, List<Instrument>> e : lookup.entrySet()) {
-						symbolMap.put(e.getKey(), e.getValue());
+					for(final String query : queries) {
+						
+						final Map<String, List<Instrument>> lookup = remoteLookup(query);
+						
+						/* Store instruments returned from lookup */
+						for(final Entry<String, List<Instrument>> e : lookup.entrySet()) {
+							symbolMap.put(e.getKey(), e.getValue());
+						}
+						
+						res.putAll(lookup);
 					}
 					
-					res.putAll(lookup);
+					sub.onNext(result(res));
+					sub.onCompleted();
+				} catch (Exception e1) {
+					sub.onError(e1);
 				}
-				
-				return result(res);
 			}
 			
 		};
