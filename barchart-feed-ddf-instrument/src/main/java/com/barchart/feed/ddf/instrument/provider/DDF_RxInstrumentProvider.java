@@ -64,7 +64,6 @@ public class DDF_RxInstrumentProvider {
 	/**
 	 * Default executor service with dameon threads
 	 */
-	// Consider ExecutorCompletionService
 	private volatile static ExecutorService executor = Executors.newCachedThreadPool( 
 			
 			new ThreadFactory() {
