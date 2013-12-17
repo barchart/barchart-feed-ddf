@@ -24,7 +24,7 @@ public class TestBarchartMarketProvider {
 	private static final Logger log = LoggerFactory.getLogger(
 			TestBarchartMarketProvider.class);
 	
-	private static final String[] insts = {"GOOG", "AAPL"};
+	private static final String[] insts = {"KCN15"};
 	
 	public static void main(final String[] args) throws Exception {
 		
@@ -43,11 +43,11 @@ public class TestBarchartMarketProvider {
 		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 		
 		agent1.include(insts).subscribe(instObs());
-		
-		Thread.sleep(5 * 1000);
+		Thread.sleep(20 * 1000);
 		
 		agent1.exclude(insts).subscribe(instObs());
 		Thread.sleep(5 * 1000);
+		
 		log.debug("Shutting down");
 		market.shutdown();
 		
@@ -76,9 +76,8 @@ public class TestBarchartMarketProvider {
 
 			@Override
 			public void onNext(final Market v) {
-				final Book.Top top = v.book().top();
 				final Book book = v.book();
-				log.debug("UPDATE: {}", book);
+				log.debug("UPDATE: \n{}", book);
 			}
 		};
 	}

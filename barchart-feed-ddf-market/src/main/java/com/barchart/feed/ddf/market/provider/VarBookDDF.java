@@ -42,7 +42,6 @@ import com.barchart.util.value.api.Time;
 public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 		MarketDoBook {
 	
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(VarBookDDF.class);
 	
 	protected volatile MarketBookEntry lastEntry = MarketConst.NULL_BOOK_ENTRY;
@@ -75,8 +74,8 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	private final EntryMap bids = new EntryMap(CMP_ASC);
 	private final EntryMap asks = new EntryMap(CMP_DES);
 
-	private volatile MarketBookEntry topBid;
-	private volatile MarketBookEntry topAsk;
+	private volatile MarketBookEntry topBid = MarketBookEntry.NULL;
+	private volatile MarketBookEntry topAsk = MarketBookEntry.NULL;
 
 	private final Instrument instrument;
 	
@@ -91,8 +90,6 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public final UniBookResult setEntry(final MarketDoBookEntry entry) {
 
-		log.debug("SetEntry called {}", entry);
-		
 		if(entry != null) {
 			lastEntry = entry.freeze();
 		}
