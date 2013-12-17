@@ -150,6 +150,17 @@ public class DDF_RxInstrumentProvider {
 						/* Store instruments returned from lookup */
 						for(final Entry<String, List<InstrumentState>> e : lookup.entrySet()) {
 							symbolMap.put(e.getKey(), e.getValue());
+							
+							/* Add alternate options symbol */
+							final InstrumentState inst = e.getValue().get(0);
+							if(inst != null) {
+								
+								if(inst.symbol().contains("|")) {
+									symbolMap.put(inst.vendorSymbols().get(VendorID.BARCHART), e.getValue());
+								}
+								
+							}
+							
 						}
 						
 						res.putAll(lookup);

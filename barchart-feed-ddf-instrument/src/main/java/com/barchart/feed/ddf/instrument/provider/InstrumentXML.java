@@ -1,6 +1,6 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ALT_SYMBOL;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.*;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.BASE_CODE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.EXCHANGE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ID;
@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
@@ -195,6 +196,17 @@ public final class InstrumentXML {
 			
 			/* market symbol; can be non unique; */
 			builder.setSymbol(xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));
+			
+			/* Barchart symbol, only used for options */
+			final String bar = xmlStringDecode(ats, SYMBOL_DDF_REAL, XML_PASS);
+			
+			if(bar != null) {
+				Symbol.Builder b = Symbol.newBuilder();
+				b.setVendor(VendorID.BARCHART.toString());
+				b.setSymbol(bar);
+				final Symbol symbol = b.build();
+				builder.addSymbols(symbol);
+			}
 			
 			// NOTE: Hard coded for CQG
 			final String cqg = xmlStringDecode(ats, ALT_SYMBOL, XML_PASS);
