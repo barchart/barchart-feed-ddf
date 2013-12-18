@@ -30,13 +30,6 @@
 	
 	<dependencies>
 
-<!-- 		<dependency> -->
-<!--   			<groupId>com.barchart.missive</groupId> -->
-<!-- 			<artifactId>barchart-missive</artifactId> -->
-<!-- 			<version>${barchartMissiveVersion}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!--   		</dependency> -->
-
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-settings</artifactId>
@@ -49,12 +42,6 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.barchart.util</groupId>
-			<artifactId>barchart-util-bench</artifactId>
-			<version>[2-SNAPSHOT,3-SNAPSHOT)</version>
-		</dependency>
-		
 	</dependencies>
 	
 </project>

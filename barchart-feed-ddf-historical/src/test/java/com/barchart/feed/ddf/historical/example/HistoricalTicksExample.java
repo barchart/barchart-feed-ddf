@@ -23,7 +23,7 @@ import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 import com.barchart.feed.ddf.settings.provider.DDF_SettingsService;
 import com.barchart.feed.ddf.symbol.enums.DDF_TimeZone;
-import com.barchart.util.bench.time.StopWatch;
+import com.barchart.util.common.bench.StopWatch;
 
 // TODO: Auto-generated Javadoc
 /**
