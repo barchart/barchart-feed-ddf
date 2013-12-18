@@ -40,7 +40,7 @@ public class TestInstrumentXML {
 		final Instrument IBMInst = InstrumentFactory.instrument(InstrumentXML.decodeXML(tag));
 		
 		assertTrue(IBMInst.marketGUID().equals("IBM"));
-		assertTrue(IBMInst.securityType() == Instrument.SecurityType.NULL_TYPE);
+		assertTrue(IBMInst.securityType() == Instrument.SecurityType.EQUITY);
 		assertTrue(IBMInst.liquidityType() == Instrument.BookLiquidityType.NONE);
 		assertTrue(IBMInst.bookStructure() == Instrument.BookStructureType.NONE);
 		assertTrue(IBMInst.maxBookDepth() == Size.NULL);
