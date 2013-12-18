@@ -24,7 +24,7 @@ public class TestBarchartMarketProvider {
 	private static final Logger log = LoggerFactory.getLogger(
 			TestBarchartMarketProvider.class);
 	
-	private static final String[] insts = {"CLF14"};
+	private static final String[] insts = {"ESF2014|550C"};
 	
 	public static void main(final String[] args) throws Exception {
 		

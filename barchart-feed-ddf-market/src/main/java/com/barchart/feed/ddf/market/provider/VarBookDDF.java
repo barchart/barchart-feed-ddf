@@ -275,6 +275,11 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	@Override
 	public UniBookResult setSnapshot(final MarketDoBookEntry[] entries) {
 
+		if(entries == null) {
+			log.error("SetSnapshot called with null book entries");
+			return UniBookResult.ERROR;
+		}
+		
 		log.debug("SetSnapshot called");
 		
 		clear();

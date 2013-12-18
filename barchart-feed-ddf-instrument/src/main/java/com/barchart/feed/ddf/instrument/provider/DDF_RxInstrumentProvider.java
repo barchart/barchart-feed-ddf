@@ -156,7 +156,8 @@ public class DDF_RxInstrumentProvider {
 							if(inst != null) {
 								
 								if(inst.symbol().contains("|")) {
-									symbolMap.put(inst.vendorSymbols().get(VendorID.BARCHART), e.getValue());
+									symbolMap.put(inst.vendorSymbols().get(
+											VendorID.BARCHART), e.getValue());
 								}
 								
 							}
