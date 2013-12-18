@@ -30,13 +30,6 @@
 
 	<dependencies>
 	
-<!-- 		<dependency> -->
-<!--   			<groupId>com.barchart.missive</groupId> -->
-<!-- 			<artifactId>barchart-missive</artifactId> -->
-<!-- 			<version>${barchartMissiveVersion}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!--   		</dependency> -->
-
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-message</artifactId>
@@ -47,6 +40,13 @@
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-datalink</artifactId>
 			<version>${project.parent.version}</version>
+		</dependency>
+		
+		<!-- Logging framework. -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>

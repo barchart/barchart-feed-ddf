@@ -41,6 +41,13 @@
 			<artifactId>barchart-feed-ddf-message</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		
+		<!-- Logging framework. -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
 	

@@ -30,19 +30,6 @@
 
 	<dependencies>
 	
-<!-- 		<dependency> -->
-<!--   			<groupId>com.barchart.missive</groupId> -->
-<!-- 			<artifactId>barchart-missive</artifactId> -->
-<!-- 			<version>${barchartMissiveVersion}</version> -->
-<!-- 			<scope>provided</scope> -->
-<!--   		</dependency> -->
-
-		<!-- <dependency>
-        	<groupId>com.yammer.metrics</groupId>
-        	<artifactId>metrics-core</artifactId>
-        	<version>2.2.0</version>
-    	</dependency> -->
-
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-settings</artifactId>
@@ -59,6 +46,13 @@
 			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
 			<version>${barchartNettyVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Logging framework. -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

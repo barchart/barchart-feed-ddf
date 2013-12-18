@@ -51,27 +51,6 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 
-		<!-- missive -->
-
-<!-- 		<dependency> -->
-<!--   			<groupId>com.barchart.missive</groupId> -->
-<!-- 			<artifactId>barchart-missive</artifactId> -->
-<!-- 			<version>${barchartMissiveVersion}</version> -->
-<!--   		</dependency> -->
-
-		<!-- protocol buffers - original -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.google.protobuf</groupId> -->
-<!-- 			<artifactId>protobuf-java</artifactId> -->
-<!-- 			<version>${protoBufVersion}</version> -->
-<!-- 		</dependency>	 -->
-  		
-<!--   		<dependency> -->
-<!--   			<groupId>com.barchart.proto</groupId> -->
-<!--   			<artifactId>barchart-proto-buf-inst</artifactId> -->
-<!-- 			<version>${barchartProtoInstVersion}</version> -->
-<!--   		</dependency> -->
-
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
@@ -79,12 +58,12 @@
 			<scope>provided</scope>
 		</dependency>
 		
-		<!-- berkeley db --> 
-<!--   		<dependency> -->
-<!-- 			<groupId>com.sleepycat</groupId> -->
-<!-- 			<artifactId>je</artifactId> -->
-<!-- 			<version>${bdbjeVersion}</version> -->
-<!-- 		</dependency> -->
+<!-- Logging framework. -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
 
