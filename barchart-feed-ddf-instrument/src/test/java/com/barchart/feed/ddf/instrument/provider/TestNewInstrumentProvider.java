@@ -1,29 +1,18 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
-
-import org.junit.Test;
-import org.openfeed.proto.inst.InstrumentDefinition;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 public class TestNewInstrumentProvider {
 	
 	public static final String resource = "/home/gavin/logs/";
 	
 	public static void main(final String[] args) throws Exception {
-		
-		final File dbFolder = new File(resource);
-		DDF_InstrumentProvider.bindDatabaseMap(new InstrumentDatabaseMap(dbFolder));
 		
 		final Collection<String> symbolList = new ArrayList<String>();
 

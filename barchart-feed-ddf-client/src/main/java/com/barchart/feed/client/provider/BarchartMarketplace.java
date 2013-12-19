@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -31,9 +30,6 @@ import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
-import com.barchart.feed.ddf.instrument.provider.InstrumentDBProvider;
-import com.barchart.feed.ddf.instrument.provider.InstrumentDatabaseMap;
 import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
@@ -60,8 +56,6 @@ public class BarchartMarketplace implements Marketplace {
 	private volatile DDF_FeedClientBase connection;
 	private final DDF_Marketplace maker;
 	private final ExecutorService executor;
-	
-	private volatile InstrumentDatabaseMap dbMap = null;
 	
 	private final String username, password;
 	
@@ -259,37 +253,6 @@ public class BarchartMarketplace implements Marketplace {
 			
 				log.debug("Startup Runnable starting");
 				
-				if(useLocalInstDB) {
-				
-					/* If user injected their own db file */
-					if(instDefZip != null) {
-						dbMap = new InstrumentDatabaseMap(dbFolder, instDefZip);
-					} else {
-						dbMap = InstrumentDBProvider.getMap(dbFolder);
-					}
-					
-					DDF_InstrumentProvider.bindDatabaseMap(dbMap);
-					
-					if(syncWithRemote) {
-						
-						final Future<Boolean> dbUpdate = executor.submit(
-								InstrumentDBProvider.updateDBMap(dbFolder, dbMap));
-						
-						dbUpdate.get(DB_UPDATE_TIMEOUT, TimeUnit.SECONDS);
-						
-						/* Start background db update runnable, kill previous task if needed */
-						if(dbUpdater != null) {
-							dbUpdater.cancel(true);
-							while(!dbUpdater.isCancelled() || !dbUpdater.isDone()) {
-								// 
-							}
-						}
-						
-						dbUpdater = executor.submit(dbUpdateRunnable());
-						
-					}
-				}
-				
 				connection.startup();
 			
 			} catch (final Throwable t) {
@@ -304,35 +267,6 @@ public class BarchartMarketplace implements Marketplace {
 			
 		}
 		
-	}
-	
-	private final Runnable dbUpdateRunnable() { 
-		
-		return new Runnable() {
-
-			@Override
-			public void run() {
-				
-				log.debug("Starting database update task");
-				
-				try {
-					
-					while(!Thread.currentThread().isInterrupted()) {
-						
-						Thread.sleep(DB_UPDATE_INTERVAL); // 4 hours
-						log.debug("Updating instrument database");
-						InstrumentDBProvider.updateDBMap(dbFolder, dbMap);
-						
-					}
-				
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-				}
-				
-			}
-			
-		};
-
 	}
 	
 	@Override
@@ -365,10 +299,6 @@ public class BarchartMarketplace implements Marketplace {
 				
 				if(maker != null) {
 					maker.clearAll();
-				}
-				
-				if(dbMap != null) {
-					dbMap.close();
 				}
 				
 				//dbUpdater.cancel(true);
