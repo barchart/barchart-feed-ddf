@@ -13,37 +13,31 @@
 <FONT color="green">010</FONT>     */<a name="line.10"></a>
 <FONT color="green">011</FONT>    package com.barchart.feed.ddf.util.provider;<a name="line.11"></a>
 <FONT color="green">012</FONT>    <a name="line.12"></a>
-<FONT color="green">013</FONT>    import static com.barchart.util.values.provider.ValueBuilder.newDecimalMutable;<a name="line.13"></a>
-<FONT color="green">014</FONT>    import static com.barchart.util.values.provider.ValueBuilder.newPriceMutable;<a name="line.14"></a>
-<FONT color="green">015</FONT>    import static com.barchart.util.values.provider.ValueBuilder.newSizeMutable;<a name="line.15"></a>
-<FONT color="green">016</FONT>    import static com.barchart.util.values.provider.ValueBuilder.newTimeMutable;<a name="line.16"></a>
-<FONT color="green">017</FONT>    <a name="line.17"></a>
-<FONT color="green">018</FONT>    import com.barchart.util.values.api.DecimalValue;<a name="line.18"></a>
-<FONT color="green">019</FONT>    import com.barchart.util.values.api.PriceValue;<a name="line.19"></a>
-<FONT color="green">020</FONT>    import com.barchart.util.values.api.SizeValue;<a name="line.20"></a>
-<FONT color="green">021</FONT>    import com.barchart.util.values.api.TimeValue;<a name="line.21"></a>
-<FONT color="green">022</FONT>    <a name="line.22"></a>
-<FONT color="green">023</FONT>    /**<a name="line.23"></a>
-<FONT color="green">024</FONT>     * The DDF null instance of the respective DDF Value classes<a name="line.24"></a>
-<FONT color="green">025</FONT>     * <a name="line.25"></a>
-<FONT color="green">026</FONT>     * @author g-litchfield<a name="line.26"></a>
-<FONT color="green">027</FONT>     * <a name="line.27"></a>
-<FONT color="green">028</FONT>     */<a name="line.28"></a>
-<FONT color="green">029</FONT>    public final class DDF_NulVal {<a name="line.29"></a>
+<FONT color="green">013</FONT>    import com.barchart.feed.base.values.api.DecimalValue;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import com.barchart.feed.base.values.api.PriceValue;<a name="line.14"></a>
+<FONT color="green">015</FONT>    import com.barchart.feed.base.values.api.SizeValue;<a name="line.15"></a>
+<FONT color="green">016</FONT>    import com.barchart.feed.base.values.api.TimeValue;<a name="line.16"></a>
+<FONT color="green">017</FONT>    import com.barchart.feed.base.values.provider.ValueBuilder;<a name="line.17"></a>
+<FONT color="green">018</FONT>    <a name="line.18"></a>
+<FONT color="green">019</FONT>    /**<a name="line.19"></a>
+<FONT color="green">020</FONT>     * The DDF null instance of the respective DDF Value classes<a name="line.20"></a>
+<FONT color="green">021</FONT>     * <a name="line.21"></a>
+<FONT color="green">022</FONT>     */<a name="line.22"></a>
+<FONT color="green">023</FONT>    public final class DDF_NulVal {<a name="line.23"></a>
+<FONT color="green">024</FONT>    <a name="line.24"></a>
+<FONT color="green">025</FONT>            /** The Constant DECIMAL_EMPTY. */<a name="line.25"></a>
+<FONT color="green">026</FONT>            public static final DecimalValue DECIMAL_EMPTY = ValueBuilder.newDecimalMutable(0, 0);<a name="line.26"></a>
+<FONT color="green">027</FONT>    <a name="line.27"></a>
+<FONT color="green">028</FONT>            /** The Constant PRICE_EMPTY. */<a name="line.28"></a>
+<FONT color="green">029</FONT>            public static final PriceValue PRICE_EMPTY = ValueBuilder.newPriceMutable(0, 0);<a name="line.29"></a>
 <FONT color="green">030</FONT>    <a name="line.30"></a>
-<FONT color="green">031</FONT>            /** The Constant DECIMAL_EMPTY. */<a name="line.31"></a>
-<FONT color="green">032</FONT>            public static final DecimalValue DECIMAL_EMPTY = newDecimalMutable(0, 0);<a name="line.32"></a>
+<FONT color="green">031</FONT>            /** The Constant SIZE_EMPTY. */<a name="line.31"></a>
+<FONT color="green">032</FONT>            public static final SizeValue SIZE_EMPTY = ValueBuilder.newSizeMutable(0);<a name="line.32"></a>
 <FONT color="green">033</FONT>    <a name="line.33"></a>
-<FONT color="green">034</FONT>            /** The Constant PRICE_EMPTY. */<a name="line.34"></a>
-<FONT color="green">035</FONT>            public static final PriceValue PRICE_EMPTY = newPriceMutable(0, 0);<a name="line.35"></a>
+<FONT color="green">034</FONT>            /** The Constant TIME_EMPTY. */<a name="line.34"></a>
+<FONT color="green">035</FONT>            public static final TimeValue TIME_EMPTY = ValueBuilder.newTimeMutable(0);<a name="line.35"></a>
 <FONT color="green">036</FONT>    <a name="line.36"></a>
-<FONT color="green">037</FONT>            /** The Constant SIZE_EMPTY. */<a name="line.37"></a>
-<FONT color="green">038</FONT>            public static final SizeValue SIZE_EMPTY = newSizeMutable(0);<a name="line.38"></a>
-<FONT color="green">039</FONT>    <a name="line.39"></a>
-<FONT color="green">040</FONT>            /** The Constant TIME_EMPTY. */<a name="line.40"></a>
-<FONT color="green">041</FONT>            public static final TimeValue TIME_EMPTY = newTimeMutable(0);<a name="line.41"></a>
-<FONT color="green">042</FONT>    <a name="line.42"></a>
-<FONT color="green">043</FONT>    }<a name="line.43"></a>
+<FONT color="green">037</FONT>    }<a name="line.37"></a>
 
 
 

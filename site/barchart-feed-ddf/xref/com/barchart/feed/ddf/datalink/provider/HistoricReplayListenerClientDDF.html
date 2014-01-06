@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
 <a class="jxr_linenumber" name="33" href="#33">33</a>  
 <a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.api.connection.Connection;
-<a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.base.sub.Subscription;
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.base.sub.Sub;
 <a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 <a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.datalink.api.DummyFuture;
@@ -75,8 +75,8 @@
 <a class="jxr_linenumber" name="65" href="#65">65</a>  
 <a class="jxr_linenumber" name="66" href="#66">66</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> socketAddress;
 <a class="jxr_linenumber" name="67" href="#67">67</a>  
-<a class="jxr_linenumber" name="68" href="#68">68</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String, Subscription&gt; subscriptions = 
-<a class="jxr_linenumber" name="69" href="#69">69</a>  			<strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;String, Subscription&gt;();
+<a class="jxr_linenumber" name="68" href="#68">68</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String, Sub&gt; subscriptions = 
+<a class="jxr_linenumber" name="69" href="#69">69</a>  			<strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;String, Sub&gt;();
 <a class="jxr_linenumber" name="70" href="#70">70</a>  	
 <a class="jxr_linenumber" name="71" href="#71">71</a>  	HistoricReplayListenerClientDDF(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> socketAddress, <strong class="jxr_keyword">final</strong> Executor executor) {
 <a class="jxr_linenumber" name="72" href="#72">72</a>  
@@ -235,14 +235,14 @@
 <a class="jxr_linenumber" name="225" href="#225">225</a> 	}
 <a class="jxr_linenumber" name="226" href="#226">226</a> 	
 <a class="jxr_linenumber" name="227" href="#227">227</a> 	@Override
-<a class="jxr_linenumber" name="228" href="#228">228</a> 	<strong class="jxr_keyword">public</strong> Future&lt;Boolean&gt; subscribe(Set&lt;Subscription&gt; subs) {
+<a class="jxr_linenumber" name="228" href="#228">228</a> 	<strong class="jxr_keyword">public</strong> Future&lt;Boolean&gt; subscribe(Set&lt;Sub&gt; subs) {
 <a class="jxr_linenumber" name="229" href="#229">229</a> 		
 <a class="jxr_linenumber" name="230" href="#230">230</a> 		<strong class="jxr_keyword">if</strong> (subs == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="231" href="#231">231</a> 			log.error(<span class="jxr_string">"Null subscribes request recieved"</span>);
 <a class="jxr_linenumber" name="232" href="#232">232</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/api/FailedFuture.html">FailedFuture</a>();
 <a class="jxr_linenumber" name="233" href="#233">233</a> 		}
 <a class="jxr_linenumber" name="234" href="#234">234</a> 		
-<a class="jxr_linenumber" name="235" href="#235">235</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Subscription sub : subs) {
+<a class="jxr_linenumber" name="235" href="#235">235</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Sub sub : subs) {
 <a class="jxr_linenumber" name="236" href="#236">236</a> 
 <a class="jxr_linenumber" name="237" href="#237">237</a> 			<strong class="jxr_keyword">if</strong> (sub != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="238" href="#238">238</a> 				
@@ -262,7 +262,7 @@
 <a class="jxr_linenumber" name="252" href="#252">252</a> 	}
 <a class="jxr_linenumber" name="253" href="#253">253</a> 
 <a class="jxr_linenumber" name="254" href="#254">254</a> 	@Override
-<a class="jxr_linenumber" name="255" href="#255">255</a> 	<strong class="jxr_keyword">public</strong> Future&lt;Boolean&gt; subscribe(Subscription sub) {
+<a class="jxr_linenumber" name="255" href="#255">255</a> 	<strong class="jxr_keyword">public</strong> Future&lt;Boolean&gt; subscribe(Sub sub) {
 <a class="jxr_linenumber" name="256" href="#256">256</a> 		
 <a class="jxr_linenumber" name="257" href="#257">257</a> 		<strong class="jxr_keyword">if</strong> (sub == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="258" href="#258">258</a> 			log.error(<span class="jxr_string">"Null subscribe request recieved"</span>);
@@ -283,14 +283,14 @@
 <a class="jxr_linenumber" name="273" href="#273">273</a> 	<em class="jxr_comment">// the registration and unregistration of instruments in the </em>
 <a class="jxr_linenumber" name="274" href="#274">274</a> 	<em class="jxr_comment">// market maker and the feed.  </em>
 <a class="jxr_linenumber" name="275" href="#275">275</a> 	@Override
-<a class="jxr_linenumber" name="276" href="#276">276</a> 	<strong class="jxr_keyword">public</strong> Future&lt;Boolean&gt; unsubscribe(Set&lt;Subscription&gt; subs) {
+<a class="jxr_linenumber" name="276" href="#276">276</a> 	<strong class="jxr_keyword">public</strong> Future&lt;Boolean&gt; unsubscribe(Set&lt;Sub&gt; subs) {
 <a class="jxr_linenumber" name="277" href="#277">277</a> 		
 <a class="jxr_linenumber" name="278" href="#278">278</a> 		<strong class="jxr_keyword">if</strong> (subs == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="279" href="#279">279</a> 			log.error(<span class="jxr_string">"Null subscribes request recieved"</span>);
 <a class="jxr_linenumber" name="280" href="#280">280</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/barchart/feed/ddf/datalink/api/FailedFuture.html">FailedFuture</a>();
 <a class="jxr_linenumber" name="281" href="#281">281</a> 		}
 <a class="jxr_linenumber" name="282" href="#282">282</a> 		
-<a class="jxr_linenumber" name="283" href="#283">283</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Subscription sub : subs) {
+<a class="jxr_linenumber" name="283" href="#283">283</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Sub sub : subs) {
 <a class="jxr_linenumber" name="284" href="#284">284</a> 
 <a class="jxr_linenumber" name="285" href="#285">285</a> 			<strong class="jxr_keyword">if</strong> (sub != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="286" href="#286">286</a> 				subscriptions.remove(sub.encode());
@@ -301,7 +301,7 @@
 <a class="jxr_linenumber" name="291" href="#291">291</a> 	}
 <a class="jxr_linenumber" name="292" href="#292">292</a> 	
 <a class="jxr_linenumber" name="293" href="#293">293</a> 	@Override
-<a class="jxr_linenumber" name="294" href="#294">294</a> 	<strong class="jxr_keyword">public</strong> Future&lt;Boolean&gt; unsubscribe(Subscription sub) {
+<a class="jxr_linenumber" name="294" href="#294">294</a> 	<strong class="jxr_keyword">public</strong> Future&lt;Boolean&gt; unsubscribe(Sub sub) {
 <a class="jxr_linenumber" name="295" href="#295">295</a> 		
 <a class="jxr_linenumber" name="296" href="#296">296</a> 		<strong class="jxr_keyword">if</strong> (sub == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="297" href="#297">297</a> 			log.error(<span class="jxr_string">"Null subscribe request recieved"</span>);

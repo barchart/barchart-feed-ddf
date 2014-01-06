@@ -17,10 +17,10 @@
 <FONT color="green">014</FONT>    import java.util.concurrent.Future;<a name="line.14"></a>
 <FONT color="green">015</FONT>    <a name="line.15"></a>
 <FONT color="green">016</FONT>    import com.barchart.feed.api.connection.Connection;<a name="line.16"></a>
-<FONT color="green">017</FONT>    import com.barchart.feed.base.sub.Subscription;<a name="line.17"></a>
+<FONT color="green">017</FONT>    import com.barchart.feed.base.sub.Sub;<a name="line.17"></a>
 <FONT color="green">018</FONT>    import com.barchart.feed.base.sub.SubscriptionHandler;<a name="line.18"></a>
 <FONT color="green">019</FONT>    import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;<a name="line.19"></a>
-<FONT color="green">020</FONT>    import com.barchart.util.anno.UsedOnce;<a name="line.20"></a>
+<FONT color="green">020</FONT>    import com.barchart.util.common.anno.UsedOnce;<a name="line.20"></a>
 <FONT color="green">021</FONT>    <a name="line.21"></a>
 <FONT color="green">022</FONT>    /**<a name="line.22"></a>
 <FONT color="green">023</FONT>     * Base interface for DDF feed clients. Classes directly implementing this<a name="line.23"></a>
@@ -68,7 +68,7 @@
 <FONT color="green">065</FONT>             * @return A Future which returns true if successful.<a name="line.65"></a>
 <FONT color="green">066</FONT>             */<a name="line.66"></a>
 <FONT color="green">067</FONT>            @Override<a name="line.67"></a>
-<FONT color="green">068</FONT>            Future&lt;Boolean&gt; subscribe(Set&lt;Subscription&gt; subscriptions);<a name="line.68"></a>
+<FONT color="green">068</FONT>            Future&lt;Boolean&gt; subscribe(Set&lt;Sub&gt; subscriptions);<a name="line.68"></a>
 <FONT color="green">069</FONT>    <a name="line.69"></a>
 <FONT color="green">070</FONT>            /**<a name="line.70"></a>
 <FONT color="green">071</FONT>             * Handles a subscription request.<a name="line.71"></a>
@@ -84,7 +84,7 @@
 <FONT color="green">081</FONT>             * @return A Future which returns true if successful.<a name="line.81"></a>
 <FONT color="green">082</FONT>             */<a name="line.82"></a>
 <FONT color="green">083</FONT>            @Override<a name="line.83"></a>
-<FONT color="green">084</FONT>            Future&lt;Boolean&gt; subscribe(Subscription subscription);<a name="line.84"></a>
+<FONT color="green">084</FONT>            Future&lt;Boolean&gt; subscribe(Sub subscription);<a name="line.84"></a>
 <FONT color="green">085</FONT>    <a name="line.85"></a>
 <FONT color="green">086</FONT>            /**<a name="line.86"></a>
 <FONT color="green">087</FONT>             * Handles multiple unsubscription requests.<a name="line.87"></a>
@@ -97,7 +97,7 @@
 <FONT color="green">094</FONT>             * @return A Future which returns true if successful.<a name="line.94"></a>
 <FONT color="green">095</FONT>             */<a name="line.95"></a>
 <FONT color="green">096</FONT>            @Override<a name="line.96"></a>
-<FONT color="green">097</FONT>            Future&lt;Boolean&gt; unsubscribe(Set&lt;Subscription&gt; subscriptions);<a name="line.97"></a>
+<FONT color="green">097</FONT>            Future&lt;Boolean&gt; unsubscribe(Set&lt;Sub&gt; subscriptions);<a name="line.97"></a>
 <FONT color="green">098</FONT>    <a name="line.98"></a>
 <FONT color="green">099</FONT>            /**<a name="line.99"></a>
 <FONT color="green">100</FONT>             * Handles an unsubscription request.<a name="line.100"></a>
@@ -110,7 +110,7 @@
 <FONT color="green">107</FONT>             * @return A Future which returns true if successful.<a name="line.107"></a>
 <FONT color="green">108</FONT>             */<a name="line.108"></a>
 <FONT color="green">109</FONT>            @Override<a name="line.109"></a>
-<FONT color="green">110</FONT>            Future&lt;Boolean&gt; unsubscribe(Subscription subscription);<a name="line.110"></a>
+<FONT color="green">110</FONT>            Future&lt;Boolean&gt; unsubscribe(Sub subscription);<a name="line.110"></a>
 <FONT color="green">111</FONT>    <a name="line.111"></a>
 <FONT color="green">112</FONT>            /**<a name="line.112"></a>
 <FONT color="green">113</FONT>             * Sets the event policy for a specific feed event. Default policies are set<a name="line.113"></a>

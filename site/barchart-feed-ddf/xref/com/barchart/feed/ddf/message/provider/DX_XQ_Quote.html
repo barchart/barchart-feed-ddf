@@ -61,26 +61,26 @@
 <a class="jxr_linenumber" name="51" href="#51">51</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.api.model.meta.Instrument;
 <a class="jxr_linenumber" name="52" href="#52">52</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.base.provider.Symbology;
 <a class="jxr_linenumber" name="53" href="#53">53</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.base.provider.ValueConverter;
-<a class="jxr_linenumber" name="54" href="#54">54</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
-<a class="jxr_linenumber" name="55" href="#55">55</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.InstBase;
-<a class="jxr_linenumber" name="56" href="#56">56</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MarketQuote;
-<a class="jxr_linenumber" name="57" href="#57">57</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MarketSession;
-<a class="jxr_linenumber" name="58" href="#58">58</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
-<a class="jxr_linenumber" name="59" href="#59">59</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_Condition;
-<a class="jxr_linenumber" name="60" href="#60">60</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_MessageType;
-<a class="jxr_linenumber" name="61" href="#61">61</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_QuoteMode;
-<a class="jxr_linenumber" name="62" href="#62">62</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_QuoteState;
-<a class="jxr_linenumber" name="63" href="#63">63</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
-<a class="jxr_linenumber" name="64" href="#64">64</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.util.HelperDDF;
-<a class="jxr_linenumber" name="65" href="#65">65</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.util.HelperXML;
-<a class="jxr_linenumber" name="66" href="#66">66</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.util.enums.DDF_Fraction;
-<a class="jxr_linenumber" name="67" href="#67">67</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.ascii.ASCII;
-<a class="jxr_linenumber" name="68" href="#68">68</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.api.Fraction;
-<a class="jxr_linenumber" name="69" href="#69">69</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.api.Price;
-<a class="jxr_linenumber" name="70" href="#70">70</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.values.api.PriceValue;
-<a class="jxr_linenumber" name="71" href="#71">71</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.values.api.TextValue;
-<a class="jxr_linenumber" name="72" href="#72">72</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.values.provider.ValueBuilder;
-<a class="jxr_linenumber" name="73" href="#73">73</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.values.provider.ValueConst;
+<a class="jxr_linenumber" name="54" href="#54">54</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.base.values.api.PriceValue;
+<a class="jxr_linenumber" name="55" href="#55">55</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.base.values.api.TextValue;
+<a class="jxr_linenumber" name="56" href="#56">56</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.base.values.provider.ValueBuilder;
+<a class="jxr_linenumber" name="57" href="#57">57</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.base.values.provider.ValueConst;
+<a class="jxr_linenumber" name="58" href="#58">58</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+<a class="jxr_linenumber" name="59" href="#59">59</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.instrument.provider.InstBase;
+<a class="jxr_linenumber" name="60" href="#60">60</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MarketQuote;
+<a class="jxr_linenumber" name="61" href="#61">61</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MarketSession;
+<a class="jxr_linenumber" name="62" href="#62">62</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
+<a class="jxr_linenumber" name="63" href="#63">63</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_Condition;
+<a class="jxr_linenumber" name="64" href="#64">64</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_MessageType;
+<a class="jxr_linenumber" name="65" href="#65">65</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_QuoteMode;
+<a class="jxr_linenumber" name="66" href="#66">66</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_QuoteState;
+<a class="jxr_linenumber" name="67" href="#67">67</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
+<a class="jxr_linenumber" name="68" href="#68">68</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.util.HelperDDF;
+<a class="jxr_linenumber" name="69" href="#69">69</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.util.HelperXML;
+<a class="jxr_linenumber" name="70" href="#70">70</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.util.enums.DDF_Fraction;
+<a class="jxr_linenumber" name="71" href="#71">71</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.common.ascii.ASCII;
+<a class="jxr_linenumber" name="72" href="#72">72</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.api.Fraction;
+<a class="jxr_linenumber" name="73" href="#73">73</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.api.Price;
 <a class="jxr_linenumber" name="74" href="#74">74</a>  
 <a class="jxr_linenumber" name="75" href="#75">75</a>  <em class="jxr_comment">// TODO: Auto-generated Javadoc</em>
 <a class="jxr_linenumber" name="76" href="#76">76</a>  <em class="jxr_javadoccomment">/**</em>

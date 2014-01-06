@@ -10,263 +10,289 @@
 <FONT color="green">007</FONT>     */<a name="line.7"></a>
 <FONT color="green">008</FONT>    package com.barchart.feed.ddf.message.enums;<a name="line.8"></a>
 <FONT color="green">009</FONT>    <a name="line.9"></a>
-<FONT color="green">010</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.*;<a name="line.10"></a>
-<FONT color="green">011</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.*;<a name="line.11"></a>
-<FONT color="green">012</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamType.Kind.*;<a name="line.12"></a>
-<FONT color="green">013</FONT>    <a name="line.13"></a>
-<FONT color="green">014</FONT>    import org.slf4j.Logger;<a name="line.14"></a>
-<FONT color="green">015</FONT>    import org.slf4j.LoggerFactory;<a name="line.15"></a>
-<FONT color="green">016</FONT>    <a name="line.16"></a>
-<FONT color="green">017</FONT>    import com.barchart.feed.ddf.util.ByteConverters;<a name="line.17"></a>
-<FONT color="green">018</FONT>    import com.barchart.util.enums.EnumByteOrdinal;<a name="line.18"></a>
-<FONT color="green">019</FONT>    import com.barchart.util.enums.EnumCodeChar;<a name="line.19"></a>
-<FONT color="green">020</FONT>    import com.barchart.util.math.MathExtra;<a name="line.20"></a>
-<FONT color="green">021</FONT>    <a name="line.21"></a>
-<FONT color="green">022</FONT>    // TODO: Auto-generated Javadoc<a name="line.22"></a>
-<FONT color="green">023</FONT>    /**<a name="line.23"></a>
-<FONT color="green">024</FONT>     * subset of supported market parameter message qualifiers.<a name="line.24"></a>
-<FONT color="green">025</FONT>     */<a name="line.25"></a>
-<FONT color="green">026</FONT>    public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {<a name="line.26"></a>
-<FONT color="green">027</FONT>    <a name="line.27"></a>
-<FONT color="green">028</FONT>            /** 00 : last trade price */<a name="line.28"></a>
-<FONT color="green">029</FONT>            TRADE_LAST_PRICE(TRADE, LAST, PRICE), //<a name="line.29"></a>
-<FONT color="green">030</FONT>            /** 01 : trade ask price */<a name="line.30"></a>
-<FONT color="green">031</FONT>            TRADE_ASK_PRICE(TRADE, ASK_PRICE, PRICE), //<a name="line.31"></a>
-<FONT color="green">032</FONT>            /** 02 : trade bid price */<a name="line.32"></a>
-<FONT color="green">033</FONT>            TRADE_BID_PRICE(TRADE, BID_PRICE, PRICE), //<a name="line.33"></a>
-<FONT color="green">034</FONT>            <a name="line.34"></a>
-<FONT color="green">035</FONT>            /** 10 : last ask */<a name="line.35"></a>
-<FONT color="green">036</FONT>            ASK_LAST(ASK, LAST, PRICE), //<a name="line.36"></a>
-<FONT color="green">037</FONT>            /** 11 : last ask price */<a name="line.37"></a>
-<FONT color="green">038</FONT>            ASK_LAST_PRICE(ASK, ASK_PRICE, PRICE), //<a name="line.38"></a>
-<FONT color="green">039</FONT>            /** 1= : last ask size */<a name="line.39"></a>
-<FONT color="green">040</FONT>            ASK_LAST_SIZE(ASK, ASK_SIZE, SIZE), //<a name="line.40"></a>
-<FONT color="green">041</FONT>    <a name="line.41"></a>
-<FONT color="green">042</FONT>            /** 20 : last bid */<a name="line.42"></a>
-<FONT color="green">043</FONT>            BID_LAST(BID, LAST, PRICE), //<a name="line.43"></a>
-<FONT color="green">044</FONT>            /** 22 : last bid price */<a name="line.44"></a>
-<FONT color="green">045</FONT>            BID_LAST_PRICE(BID, BID_PRICE, PRICE), //<a name="line.45"></a>
-<FONT color="green">046</FONT>            /** 2&lt; : last bid size */<a name="line.46"></a>
-<FONT color="green">047</FONT>            BID_LAST_SIZE(BID, BID_SIZE, SIZE), //<a name="line.47"></a>
-<FONT color="green">048</FONT>    <a name="line.48"></a>
-<FONT color="green">049</FONT>            /** 30 : close last */<a name="line.49"></a>
-<FONT color="green">050</FONT>            CLOSE_LAST(CLOSE, LAST, PRICE), //<a name="line.50"></a>
-<FONT color="green">051</FONT>            /** 31 : close ask price */<a name="line.51"></a>
-<FONT color="green">052</FONT>            CLOSE_ASK_PRICE(CLOSE, ASK_PRICE, PRICE), //<a name="line.52"></a>
-<FONT color="green">053</FONT>            /** 32 : close bid price */<a name="line.53"></a>
-<FONT color="green">054</FONT>            CLOSE_BID_PRICE(CLOSE, BID_PRICE, PRICE), //<a name="line.54"></a>
-<FONT color="green">055</FONT>    <a name="line.55"></a>
-<FONT color="green">056</FONT>            /** 40 : close last */<a name="line.56"></a>
-<FONT color="green">057</FONT>            CLOSE_2_LAST(CLOSE_2, LAST, PRICE), //<a name="line.57"></a>
-<FONT color="green">058</FONT>            /** 41 : close ask price */<a name="line.58"></a>
-<FONT color="green">059</FONT>            CLOSE_2_ASK_PRICE(CLOSE_2, ASK_PRICE, PRICE), //<a name="line.59"></a>
-<FONT color="green">060</FONT>            /** 42 : close bid price */<a name="line.60"></a>
-<FONT color="green">061</FONT>            CLOSE_2_BID_PRICE(CLOSE_2, BID_PRICE, PRICE), //<a name="line.61"></a>
-<FONT color="green">062</FONT>    <a name="line.62"></a>
-<FONT color="green">063</FONT>            /** 50 : last high price */<a name="line.63"></a>
-<FONT color="green">064</FONT>            HIGH_LAST_PRICE(HIGH, LAST, PRICE), //<a name="line.64"></a>
-<FONT color="green">065</FONT>            /** 52 : is high made by valid bid */<a name="line.65"></a>
-<FONT color="green">066</FONT>            HIGH_BID_PRICE(HIGH, BID_PRICE, PRICE), //<a name="line.66"></a>
+<FONT color="green">010</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.ASK;<a name="line.10"></a>
+<FONT color="green">011</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.BID;<a name="line.11"></a>
+<FONT color="green">012</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.CLOSE;<a name="line.12"></a>
+<FONT color="green">013</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.CLOSE_2;<a name="line.13"></a>
+<FONT color="green">014</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.ETF_INFO;<a name="line.14"></a>
+<FONT color="green">015</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.HIGH;<a name="line.15"></a>
+<FONT color="green">016</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.INTEREST;<a name="line.16"></a>
+<FONT color="green">017</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.LOW;<a name="line.17"></a>
+<FONT color="green">018</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.OPEN;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.OPEN_2;<a name="line.19"></a>
+<FONT color="green">020</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.PREVIOUS;<a name="line.20"></a>
+<FONT color="green">021</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.SETTLE_END;<a name="line.21"></a>
+<FONT color="green">022</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.SETTLE_NOW;<a name="line.22"></a>
+<FONT color="green">023</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.TRADE;<a name="line.23"></a>
+<FONT color="green">024</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.VOLUME;<a name="line.24"></a>
+<FONT color="green">025</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.YEAR_BACK;<a name="line.25"></a>
+<FONT color="green">026</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.ASK_PRICE;<a name="line.26"></a>
+<FONT color="green">027</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.ASK_SIZE;<a name="line.27"></a>
+<FONT color="green">028</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.BID_PRICE;<a name="line.28"></a>
+<FONT color="green">029</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.BID_SIZE;<a name="line.29"></a>
+<FONT color="green">030</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.EFT_VALUE;<a name="line.30"></a>
+<FONT color="green">031</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.LAST;<a name="line.31"></a>
+<FONT color="green">032</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.PAST;<a name="line.32"></a>
+<FONT color="green">033</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.THIS;<a name="line.33"></a>
+<FONT color="green">034</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.YEAR_HIGH;<a name="line.34"></a>
+<FONT color="green">035</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.YEAR_LOW;<a name="line.35"></a>
+<FONT color="green">036</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamType.Kind.NONE;<a name="line.36"></a>
+<FONT color="green">037</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamType.Kind.PRICE;<a name="line.37"></a>
+<FONT color="green">038</FONT>    import static com.barchart.feed.ddf.message.enums.DDF_ParamType.Kind.SIZE;<a name="line.38"></a>
+<FONT color="green">039</FONT>    <a name="line.39"></a>
+<FONT color="green">040</FONT>    import org.slf4j.Logger;<a name="line.40"></a>
+<FONT color="green">041</FONT>    import org.slf4j.LoggerFactory;<a name="line.41"></a>
+<FONT color="green">042</FONT>    <a name="line.42"></a>
+<FONT color="green">043</FONT>    import com.barchart.feed.base.enums.EnumByteOrdinal;<a name="line.43"></a>
+<FONT color="green">044</FONT>    import com.barchart.feed.base.enums.EnumCodeChar;<a name="line.44"></a>
+<FONT color="green">045</FONT>    import com.barchart.feed.ddf.util.ByteConverters;<a name="line.45"></a>
+<FONT color="green">046</FONT>    import com.barchart.util.common.math.MathExtra;<a name="line.46"></a>
+<FONT color="green">047</FONT>    <a name="line.47"></a>
+<FONT color="green">048</FONT>    // TODO: Auto-generated Javadoc<a name="line.48"></a>
+<FONT color="green">049</FONT>    /**<a name="line.49"></a>
+<FONT color="green">050</FONT>     * subset of supported market parameter message qualifiers.<a name="line.50"></a>
+<FONT color="green">051</FONT>     */<a name="line.51"></a>
+<FONT color="green">052</FONT>    public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {<a name="line.52"></a>
+<FONT color="green">053</FONT>    <a name="line.53"></a>
+<FONT color="green">054</FONT>            /** 00 : last trade price */<a name="line.54"></a>
+<FONT color="green">055</FONT>            TRADE_LAST_PRICE(TRADE, LAST, PRICE), //<a name="line.55"></a>
+<FONT color="green">056</FONT>            /** 01 : trade ask price */<a name="line.56"></a>
+<FONT color="green">057</FONT>            TRADE_ASK_PRICE(TRADE, ASK_PRICE, PRICE), //<a name="line.57"></a>
+<FONT color="green">058</FONT>            /** 02 : trade bid price */<a name="line.58"></a>
+<FONT color="green">059</FONT>            TRADE_BID_PRICE(TRADE, BID_PRICE, PRICE), //<a name="line.59"></a>
+<FONT color="green">060</FONT>            <a name="line.60"></a>
+<FONT color="green">061</FONT>            /** 10 : last ask */<a name="line.61"></a>
+<FONT color="green">062</FONT>            ASK_LAST(ASK, LAST, PRICE), //<a name="line.62"></a>
+<FONT color="green">063</FONT>            /** 11 : last ask price */<a name="line.63"></a>
+<FONT color="green">064</FONT>            ASK_LAST_PRICE(ASK, ASK_PRICE, PRICE), //<a name="line.64"></a>
+<FONT color="green">065</FONT>            /** 1= : last ask size */<a name="line.65"></a>
+<FONT color="green">066</FONT>            ASK_LAST_SIZE(ASK, ASK_SIZE, SIZE), //<a name="line.66"></a>
 <FONT color="green">067</FONT>    <a name="line.67"></a>
-<FONT color="green">068</FONT>            /** 60 : last low price */<a name="line.68"></a>
-<FONT color="green">069</FONT>            LOW_LAST_PRICE(LOW, LAST, PRICE), //<a name="line.69"></a>
-<FONT color="green">070</FONT>            /** 61 : is low made by valid offer */<a name="line.70"></a>
-<FONT color="green">071</FONT>            LOW_ASK_PRICE(LOW, ASK_PRICE, PRICE), //<a name="line.71"></a>
-<FONT color="green">072</FONT>    <a name="line.72"></a>
-<FONT color="green">073</FONT>            /** 70 : volume */<a name="line.73"></a>
-<FONT color="green">074</FONT>            VOLUME_LAST_SIZE(VOLUME, LAST, SIZE), //<a name="line.74"></a>
-<FONT color="green">075</FONT>            /** 71 : yesterday's volume */<a name="line.75"></a>
-<FONT color="green">076</FONT>            VOLUME_PAST_SIZE(VOLUME, PAST, SIZE), //<a name="line.76"></a>
-<FONT color="green">077</FONT>            /** 76 : today's cumulative volume */<a name="line.77"></a>
-<FONT color="green">078</FONT>            VOLUME_THIS_SIZE(VOLUME, THIS, SIZE), //<a name="line.78"></a>
-<FONT color="green">079</FONT>    <a name="line.79"></a>
-<FONT color="green">080</FONT>            /** A0 : open price */<a name="line.80"></a>
-<FONT color="green">081</FONT>            OPEN_LAST_PRICE(OPEN, LAST, PRICE), //<a name="line.81"></a>
-<FONT color="green">082</FONT>            /** A1 : open ask price; */<a name="line.82"></a>
-<FONT color="green">083</FONT>            OPEN_ASK_PRICE(OPEN, ASK_PRICE, PRICE), //<a name="line.83"></a>
-<FONT color="green">084</FONT>            /** A2 : open bid price */<a name="line.84"></a>
-<FONT color="green">085</FONT>            OPEN_BID_PRICE(OPEN, BID_PRICE, PRICE), //<a name="line.85"></a>
-<FONT color="green">086</FONT>    <a name="line.86"></a>
-<FONT color="green">087</FONT>            /** B0 : open 2 price */<a name="line.87"></a>
-<FONT color="green">088</FONT>            OPEN_2_LAST_PRICE(OPEN_2, LAST, PRICE), //<a name="line.88"></a>
-<FONT color="green">089</FONT>            /** B1 : open 2 ask price; */<a name="line.89"></a>
-<FONT color="green">090</FONT>            OPEN_2_ASK_PRICE(OPEN_2, ASK_PRICE, PRICE), //<a name="line.90"></a>
-<FONT color="green">091</FONT>            /** B2 : open 2 bid price */<a name="line.91"></a>
-<FONT color="green">092</FONT>            OPEN_2_BID_PRICE(OPEN_2, BID_PRICE, PRICE), //<a name="line.92"></a>
+<FONT color="green">068</FONT>            /** 20 : last bid */<a name="line.68"></a>
+<FONT color="green">069</FONT>            BID_LAST(BID, LAST, PRICE), //<a name="line.69"></a>
+<FONT color="green">070</FONT>            /** 22 : last bid price */<a name="line.70"></a>
+<FONT color="green">071</FONT>            BID_LAST_PRICE(BID, BID_PRICE, PRICE), //<a name="line.71"></a>
+<FONT color="green">072</FONT>            /** 2&lt; : last bid size */<a name="line.72"></a>
+<FONT color="green">073</FONT>            BID_LAST_SIZE(BID, BID_SIZE, SIZE), //<a name="line.73"></a>
+<FONT color="green">074</FONT>    <a name="line.74"></a>
+<FONT color="green">075</FONT>            /** 30 : close last */<a name="line.75"></a>
+<FONT color="green">076</FONT>            CLOSE_LAST(CLOSE, LAST, PRICE), //<a name="line.76"></a>
+<FONT color="green">077</FONT>            /** 31 : close ask price */<a name="line.77"></a>
+<FONT color="green">078</FONT>            CLOSE_ASK_PRICE(CLOSE, ASK_PRICE, PRICE), //<a name="line.78"></a>
+<FONT color="green">079</FONT>            /** 32 : close bid price */<a name="line.79"></a>
+<FONT color="green">080</FONT>            CLOSE_BID_PRICE(CLOSE, BID_PRICE, PRICE), //<a name="line.80"></a>
+<FONT color="green">081</FONT>    <a name="line.81"></a>
+<FONT color="green">082</FONT>            /** 40 : close last */<a name="line.82"></a>
+<FONT color="green">083</FONT>            CLOSE_2_LAST(CLOSE_2, LAST, PRICE), //<a name="line.83"></a>
+<FONT color="green">084</FONT>            /** 41 : close ask price */<a name="line.84"></a>
+<FONT color="green">085</FONT>            CLOSE_2_ASK_PRICE(CLOSE_2, ASK_PRICE, PRICE), //<a name="line.85"></a>
+<FONT color="green">086</FONT>            /** 42 : close bid price */<a name="line.86"></a>
+<FONT color="green">087</FONT>            CLOSE_2_BID_PRICE(CLOSE_2, BID_PRICE, PRICE), //<a name="line.87"></a>
+<FONT color="green">088</FONT>    <a name="line.88"></a>
+<FONT color="green">089</FONT>            /** 50 : last high price */<a name="line.89"></a>
+<FONT color="green">090</FONT>            HIGH_LAST_PRICE(HIGH, LAST, PRICE), //<a name="line.90"></a>
+<FONT color="green">091</FONT>            /** 52 : is high made by valid bid */<a name="line.91"></a>
+<FONT color="green">092</FONT>            HIGH_BID_PRICE(HIGH, BID_PRICE, PRICE), //<a name="line.92"></a>
 <FONT color="green">093</FONT>    <a name="line.93"></a>
-<FONT color="green">094</FONT>            /** C0 : open interest */<a name="line.94"></a>
-<FONT color="green">095</FONT>            INTEREST_LAST_SIZE(INTEREST, LAST, SIZE), //<a name="line.95"></a>
-<FONT color="green">096</FONT>            /** C1 : yesterday's open interest */<a name="line.96"></a>
-<FONT color="green">097</FONT>            INTEREST_PAST_SIZE(INTEREST, PAST, SIZE), //<a name="line.97"></a>
+<FONT color="green">094</FONT>            /** 60 : last low price */<a name="line.94"></a>
+<FONT color="green">095</FONT>            LOW_LAST_PRICE(LOW, LAST, PRICE), //<a name="line.95"></a>
+<FONT color="green">096</FONT>            /** 61 : is low made by valid offer */<a name="line.96"></a>
+<FONT color="green">097</FONT>            LOW_ASK_PRICE(LOW, ASK_PRICE, PRICE), //<a name="line.97"></a>
 <FONT color="green">098</FONT>    <a name="line.98"></a>
-<FONT color="green">099</FONT>            /** E0 : previous last price */<a name="line.99"></a>
-<FONT color="green">100</FONT>            PREVIOUS_LAST_PRICE(PREVIOUS, LAST, PRICE), //<a name="line.100"></a>
-<FONT color="green">101</FONT>    <a name="line.101"></a>
-<FONT color="green">102</FONT>            /** d0 : preliminary settlement */<a name="line.102"></a>
-<FONT color="green">103</FONT>            SETTLE_EARLY_PRICE(SETTLE_NOW, LAST, PRICE), //<a name="line.103"></a>
-<FONT color="green">104</FONT>            /** D0 : final settlement */<a name="line.104"></a>
-<FONT color="green">105</FONT>            SETTLE_FINAL_PRICE(SETTLE_END, LAST, PRICE), //<a name="line.105"></a>
-<FONT color="green">106</FONT>    <a name="line.106"></a>
-<FONT color="green">107</FONT>            /** FN : ETF info value */<a name="line.107"></a>
-<FONT color="green">108</FONT>            ETF_INFO_VALUE(ETF_INFO, EFT_VALUE, PRICE), //<a name="line.108"></a>
-<FONT color="green">109</FONT>            <a name="line.109"></a>
-<FONT color="green">110</FONT>            /** SH : 52 week high price */<a name="line.110"></a>
-<FONT color="green">111</FONT>            YEAR_HIGH_PRICE(YEAR_BACK, YEAR_HIGH, PRICE), //<a name="line.111"></a>
-<FONT color="green">112</FONT>            /** SL : 52 week low price */<a name="line.112"></a>
-<FONT color="green">113</FONT>            YEAR_LOW_PRICE(YEAR_BACK, YEAR_LOW, PRICE), //<a name="line.113"></a>
-<FONT color="green">114</FONT>    <a name="line.114"></a>
-<FONT color="green">115</FONT>            //<a name="line.115"></a>
-<FONT color="green">116</FONT>    <a name="line.116"></a>
-<FONT color="green">117</FONT>            UNKNOWN(DDF_ParamElement.UNKNOWN, DDF_ParamModifier.UNKNOWN, NONE), //<a name="line.117"></a>
-<FONT color="green">118</FONT>    <a name="line.118"></a>
-<FONT color="green">119</FONT>            ;<a name="line.119"></a>
-<FONT color="green">120</FONT>    <a name="line.120"></a>
-<FONT color="green">121</FONT>            private static final Logger log = LoggerFactory<a name="line.121"></a>
-<FONT color="green">122</FONT>                            .getLogger(DDF_ParamType.class);<a name="line.122"></a>
-<FONT color="green">123</FONT>    <a name="line.123"></a>
-<FONT color="green">124</FONT>            /**<a name="line.124"></a>
-<FONT color="green">125</FONT>             * The Enum Kind.<a name="line.125"></a>
-<FONT color="green">126</FONT>             */<a name="line.126"></a>
-<FONT color="green">127</FONT>            public enum Kind {<a name="line.127"></a>
-<FONT color="green">128</FONT>                    PRICE, SIZE, NONE<a name="line.128"></a>
-<FONT color="green">129</FONT>            }<a name="line.129"></a>
-<FONT color="green">130</FONT>    <a name="line.130"></a>
-<FONT color="green">131</FONT>            /* (non-Javadoc)<a name="line.131"></a>
-<FONT color="green">132</FONT>             * @see com.barchart.util.enums.EnumByteOrdinal#ord()<a name="line.132"></a>
-<FONT color="green">133</FONT>             */<a name="line.133"></a>
-<FONT color="green">134</FONT>            @Override<a name="line.134"></a>
-<FONT color="green">135</FONT>            public final byte ord() {<a name="line.135"></a>
-<FONT color="green">136</FONT>                    return ord;<a name="line.136"></a>
-<FONT color="green">137</FONT>            }<a name="line.137"></a>
-<FONT color="green">138</FONT>    <a name="line.138"></a>
-<FONT color="green">139</FONT>            /* (non-Javadoc)<a name="line.139"></a>
-<FONT color="green">140</FONT>             * @see com.barchart.util.enums.EnumCodeChar#code()<a name="line.140"></a>
-<FONT color="green">141</FONT>             */<a name="line.141"></a>
-<FONT color="green">142</FONT>            @Override<a name="line.142"></a>
-<FONT color="green">143</FONT>            public final char code() {<a name="line.143"></a>
-<FONT color="green">144</FONT>                    return code;<a name="line.144"></a>
-<FONT color="green">145</FONT>            }<a name="line.145"></a>
+<FONT color="green">099</FONT>            /** 70 : volume */<a name="line.99"></a>
+<FONT color="green">100</FONT>            VOLUME_LAST_SIZE(VOLUME, LAST, SIZE), //<a name="line.100"></a>
+<FONT color="green">101</FONT>            /** 71 : yesterday's volume */<a name="line.101"></a>
+<FONT color="green">102</FONT>            VOLUME_PAST_SIZE(VOLUME, PAST, SIZE), //<a name="line.102"></a>
+<FONT color="green">103</FONT>            /** 76 : today's cumulative volume */<a name="line.103"></a>
+<FONT color="green">104</FONT>            VOLUME_THIS_SIZE(VOLUME, THIS, SIZE), //<a name="line.104"></a>
+<FONT color="green">105</FONT>    <a name="line.105"></a>
+<FONT color="green">106</FONT>            /** A0 : open price */<a name="line.106"></a>
+<FONT color="green">107</FONT>            OPEN_LAST_PRICE(OPEN, LAST, PRICE), //<a name="line.107"></a>
+<FONT color="green">108</FONT>            /** A1 : open ask price; */<a name="line.108"></a>
+<FONT color="green">109</FONT>            OPEN_ASK_PRICE(OPEN, ASK_PRICE, PRICE), //<a name="line.109"></a>
+<FONT color="green">110</FONT>            /** A2 : open bid price */<a name="line.110"></a>
+<FONT color="green">111</FONT>            OPEN_BID_PRICE(OPEN, BID_PRICE, PRICE), //<a name="line.111"></a>
+<FONT color="green">112</FONT>    <a name="line.112"></a>
+<FONT color="green">113</FONT>            /** B0 : open 2 price */<a name="line.113"></a>
+<FONT color="green">114</FONT>            OPEN_2_LAST_PRICE(OPEN_2, LAST, PRICE), //<a name="line.114"></a>
+<FONT color="green">115</FONT>            /** B1 : open 2 ask price; */<a name="line.115"></a>
+<FONT color="green">116</FONT>            OPEN_2_ASK_PRICE(OPEN_2, ASK_PRICE, PRICE), //<a name="line.116"></a>
+<FONT color="green">117</FONT>            /** B2 : open 2 bid price */<a name="line.117"></a>
+<FONT color="green">118</FONT>            OPEN_2_BID_PRICE(OPEN_2, BID_PRICE, PRICE), //<a name="line.118"></a>
+<FONT color="green">119</FONT>    <a name="line.119"></a>
+<FONT color="green">120</FONT>            /** C0 : open interest */<a name="line.120"></a>
+<FONT color="green">121</FONT>            INTEREST_LAST_SIZE(INTEREST, LAST, SIZE), //<a name="line.121"></a>
+<FONT color="green">122</FONT>            /** C1 : yesterday's open interest */<a name="line.122"></a>
+<FONT color="green">123</FONT>            INTEREST_PAST_SIZE(INTEREST, PAST, SIZE), //<a name="line.123"></a>
+<FONT color="green">124</FONT>    <a name="line.124"></a>
+<FONT color="green">125</FONT>            /** E0 : previous last price */<a name="line.125"></a>
+<FONT color="green">126</FONT>            PREVIOUS_LAST_PRICE(PREVIOUS, LAST, PRICE), //<a name="line.126"></a>
+<FONT color="green">127</FONT>    <a name="line.127"></a>
+<FONT color="green">128</FONT>            /** d0 : preliminary settlement */<a name="line.128"></a>
+<FONT color="green">129</FONT>            SETTLE_EARLY_PRICE(SETTLE_NOW, LAST, PRICE), //<a name="line.129"></a>
+<FONT color="green">130</FONT>            /** D0 : final settlement */<a name="line.130"></a>
+<FONT color="green">131</FONT>            SETTLE_FINAL_PRICE(SETTLE_END, LAST, PRICE), //<a name="line.131"></a>
+<FONT color="green">132</FONT>    <a name="line.132"></a>
+<FONT color="green">133</FONT>            /** FN : ETF info value */<a name="line.133"></a>
+<FONT color="green">134</FONT>            ETF_INFO_VALUE(ETF_INFO, EFT_VALUE, PRICE), //<a name="line.134"></a>
+<FONT color="green">135</FONT>            <a name="line.135"></a>
+<FONT color="green">136</FONT>            /** SH : 52 week high price */<a name="line.136"></a>
+<FONT color="green">137</FONT>            YEAR_HIGH_PRICE(YEAR_BACK, YEAR_HIGH, PRICE), //<a name="line.137"></a>
+<FONT color="green">138</FONT>            /** SL : 52 week low price */<a name="line.138"></a>
+<FONT color="green">139</FONT>            YEAR_LOW_PRICE(YEAR_BACK, YEAR_LOW, PRICE), //<a name="line.139"></a>
+<FONT color="green">140</FONT>    <a name="line.140"></a>
+<FONT color="green">141</FONT>            //<a name="line.141"></a>
+<FONT color="green">142</FONT>    <a name="line.142"></a>
+<FONT color="green">143</FONT>            UNKNOWN(DDF_ParamElement.UNKNOWN, DDF_ParamModifier.UNKNOWN, NONE), //<a name="line.143"></a>
+<FONT color="green">144</FONT>    <a name="line.144"></a>
+<FONT color="green">145</FONT>            ;<a name="line.145"></a>
 <FONT color="green">146</FONT>    <a name="line.146"></a>
-<FONT color="green">147</FONT>            /** The ord. */<a name="line.147"></a>
-<FONT color="green">148</FONT>            public final byte ord;<a name="line.148"></a>
+<FONT color="green">147</FONT>            private static final Logger log = LoggerFactory<a name="line.147"></a>
+<FONT color="green">148</FONT>                            .getLogger(DDF_ParamType.class);<a name="line.148"></a>
 <FONT color="green">149</FONT>    <a name="line.149"></a>
-<FONT color="green">150</FONT>            /** The element. */<a name="line.150"></a>
-<FONT color="green">151</FONT>            public final DDF_ParamElement element;<a name="line.151"></a>
-<FONT color="green">152</FONT>            <a name="line.152"></a>
-<FONT color="green">153</FONT>            /** The modifier. */<a name="line.153"></a>
-<FONT color="green">154</FONT>            public final DDF_ParamModifier modifier;<a name="line.154"></a>
-<FONT color="green">155</FONT>    <a name="line.155"></a>
-<FONT color="green">156</FONT>            /** combination of 2 element + modifier. */<a name="line.156"></a>
-<FONT color="green">157</FONT>            public final char code;<a name="line.157"></a>
-<FONT color="green">158</FONT>    <a name="line.158"></a>
-<FONT color="green">159</FONT>            /** The kind. */<a name="line.159"></a>
-<FONT color="green">160</FONT>            public final Kind kind;<a name="line.160"></a>
-<FONT color="green">161</FONT>    <a name="line.161"></a>
-<FONT color="green">162</FONT>            private DDF_ParamType(final DDF_ParamElement element,<a name="line.162"></a>
-<FONT color="green">163</FONT>                            final DDF_ParamModifier modifier, final Kind kind) {<a name="line.163"></a>
+<FONT color="green">150</FONT>            /**<a name="line.150"></a>
+<FONT color="green">151</FONT>             * The Enum Kind.<a name="line.151"></a>
+<FONT color="green">152</FONT>             */<a name="line.152"></a>
+<FONT color="green">153</FONT>            public enum Kind {<a name="line.153"></a>
+<FONT color="green">154</FONT>                    PRICE, SIZE, NONE<a name="line.154"></a>
+<FONT color="green">155</FONT>            }<a name="line.155"></a>
+<FONT color="green">156</FONT>    <a name="line.156"></a>
+<FONT color="green">157</FONT>            /* (non-Javadoc)<a name="line.157"></a>
+<FONT color="green">158</FONT>             * @see com.barchart.util.enums.EnumByteOrdinal#ord()<a name="line.158"></a>
+<FONT color="green">159</FONT>             */<a name="line.159"></a>
+<FONT color="green">160</FONT>            @Override<a name="line.160"></a>
+<FONT color="green">161</FONT>            public final byte ord() {<a name="line.161"></a>
+<FONT color="green">162</FONT>                    return ord;<a name="line.162"></a>
+<FONT color="green">163</FONT>            }<a name="line.163"></a>
 <FONT color="green">164</FONT>    <a name="line.164"></a>
-<FONT color="green">165</FONT>                    this.ord = (byte) ordinal();<a name="line.165"></a>
-<FONT color="green">166</FONT>    <a name="line.166"></a>
-<FONT color="green">167</FONT>                    this.element = element;<a name="line.167"></a>
-<FONT color="green">168</FONT>                    this.modifier = modifier;<a name="line.168"></a>
-<FONT color="green">169</FONT>    <a name="line.169"></a>
-<FONT color="green">170</FONT>                    this.code = ByteConverters.charFromBytes(element.code, modifier.code);<a name="line.170"></a>
-<FONT color="green">171</FONT>    <a name="line.171"></a>
-<FONT color="green">172</FONT>                    this.kind = kind;<a name="line.172"></a>
-<FONT color="green">173</FONT>    <a name="line.173"></a>
-<FONT color="green">174</FONT>            }<a name="line.174"></a>
+<FONT color="green">165</FONT>            /* (non-Javadoc)<a name="line.165"></a>
+<FONT color="green">166</FONT>             * @see com.barchart.util.enums.EnumCodeChar#code()<a name="line.166"></a>
+<FONT color="green">167</FONT>             */<a name="line.167"></a>
+<FONT color="green">168</FONT>            @Override<a name="line.168"></a>
+<FONT color="green">169</FONT>            public final char code() {<a name="line.169"></a>
+<FONT color="green">170</FONT>                    return code;<a name="line.170"></a>
+<FONT color="green">171</FONT>            }<a name="line.171"></a>
+<FONT color="green">172</FONT>    <a name="line.172"></a>
+<FONT color="green">173</FONT>            /** The ord. */<a name="line.173"></a>
+<FONT color="green">174</FONT>            public final byte ord;<a name="line.174"></a>
 <FONT color="green">175</FONT>    <a name="line.175"></a>
-<FONT color="green">176</FONT>            private final static DDF_ParamType[] ENUM_VALUES = values();<a name="line.176"></a>
-<FONT color="green">177</FONT>    <a name="line.177"></a>
-<FONT color="green">178</FONT>            /**<a name="line.178"></a>
-<FONT color="green">179</FONT>             * Values unsafe.<a name="line.179"></a>
-<FONT color="green">180</FONT>             *<a name="line.180"></a>
-<FONT color="green">181</FONT>             * @return the dD f_ param type[]<a name="line.181"></a>
-<FONT color="green">182</FONT>             */<a name="line.182"></a>
-<FONT color="green">183</FONT>            @Deprecated<a name="line.183"></a>
-<FONT color="green">184</FONT>            public final static DDF_ParamType[] valuesUnsafe() {<a name="line.184"></a>
-<FONT color="green">185</FONT>                    return ENUM_VALUES;<a name="line.185"></a>
-<FONT color="green">186</FONT>            }<a name="line.186"></a>
+<FONT color="green">176</FONT>            /** The element. */<a name="line.176"></a>
+<FONT color="green">177</FONT>            public final DDF_ParamElement element;<a name="line.177"></a>
+<FONT color="green">178</FONT>            <a name="line.178"></a>
+<FONT color="green">179</FONT>            /** The modifier. */<a name="line.179"></a>
+<FONT color="green">180</FONT>            public final DDF_ParamModifier modifier;<a name="line.180"></a>
+<FONT color="green">181</FONT>    <a name="line.181"></a>
+<FONT color="green">182</FONT>            /** combination of 2 element + modifier. */<a name="line.182"></a>
+<FONT color="green">183</FONT>            public final char code;<a name="line.183"></a>
+<FONT color="green">184</FONT>    <a name="line.184"></a>
+<FONT color="green">185</FONT>            /** The kind. */<a name="line.185"></a>
+<FONT color="green">186</FONT>            public final Kind kind;<a name="line.186"></a>
 <FONT color="green">187</FONT>    <a name="line.187"></a>
-<FONT color="green">188</FONT>            static {<a name="line.188"></a>
-<FONT color="green">189</FONT>                    // validate use of byte ord<a name="line.189"></a>
-<FONT color="green">190</FONT>                    MathExtra.castIntToByte(ENUM_VALUES.length);<a name="line.190"></a>
-<FONT color="green">191</FONT>            }<a name="line.191"></a>
+<FONT color="green">188</FONT>            private DDF_ParamType(final DDF_ParamElement element,<a name="line.188"></a>
+<FONT color="green">189</FONT>                            final DDF_ParamModifier modifier, final Kind kind) {<a name="line.189"></a>
+<FONT color="green">190</FONT>    <a name="line.190"></a>
+<FONT color="green">191</FONT>                    this.ord = (byte) ordinal();<a name="line.191"></a>
 <FONT color="green">192</FONT>    <a name="line.192"></a>
-<FONT color="green">193</FONT>            /**<a name="line.193"></a>
-<FONT color="green">194</FONT>             * From ord.<a name="line.194"></a>
-<FONT color="green">195</FONT>             *<a name="line.195"></a>
-<FONT color="green">196</FONT>             * @param ord the ord<a name="line.196"></a>
-<FONT color="green">197</FONT>             * @return the dD f_ param type<a name="line.197"></a>
-<FONT color="green">198</FONT>             */<a name="line.198"></a>
-<FONT color="green">199</FONT>            public final static DDF_ParamType fromOrd(final byte ord) {<a name="line.199"></a>
-<FONT color="green">200</FONT>                    return ENUM_VALUES[ord];<a name="line.200"></a>
-<FONT color="green">201</FONT>            }<a name="line.201"></a>
-<FONT color="green">202</FONT>    <a name="line.202"></a>
-<FONT color="green">203</FONT>            /**<a name="line.203"></a>
-<FONT color="green">204</FONT>             * From pair.<a name="line.204"></a>
-<FONT color="green">205</FONT>             *<a name="line.205"></a>
-<FONT color="green">206</FONT>             * @param element the element<a name="line.206"></a>
-<FONT color="green">207</FONT>             * @param modifier the modifier<a name="line.207"></a>
-<FONT color="green">208</FONT>             * @return the dD f_ param type<a name="line.208"></a>
-<FONT color="green">209</FONT>             */<a name="line.209"></a>
-<FONT color="green">210</FONT>            public final static DDF_ParamType fromPair(final byte element,<a name="line.210"></a>
-<FONT color="green">211</FONT>                            final byte modifier) {<a name="line.211"></a>
-<FONT color="green">212</FONT>                    return fromCode(ByteConverters.charFromBytes(element, modifier));<a name="line.212"></a>
-<FONT color="green">213</FONT>            }<a name="line.213"></a>
-<FONT color="green">214</FONT>    <a name="line.214"></a>
-<FONT color="green">215</FONT>            /**<a name="line.215"></a>
-<FONT color="green">216</FONT>             * From code.<a name="line.216"></a>
-<FONT color="green">217</FONT>             *<a name="line.217"></a>
-<FONT color="green">218</FONT>             * @param code the code<a name="line.218"></a>
-<FONT color="green">219</FONT>             * @return the dD f_ param type<a name="line.219"></a>
-<FONT color="green">220</FONT>             */<a name="line.220"></a>
-<FONT color="green">221</FONT>            public final static DDF_ParamType fromCode(final char code) {<a name="line.221"></a>
-<FONT color="green">222</FONT>                    for (final DDF_ParamType known : ENUM_VALUES) {<a name="line.222"></a>
-<FONT color="green">223</FONT>                            if (known.code == code) {<a name="line.223"></a>
-<FONT color="green">224</FONT>                                    return known;<a name="line.224"></a>
-<FONT color="green">225</FONT>                            }<a name="line.225"></a>
-<FONT color="green">226</FONT>                    }<a name="line.226"></a>
-<FONT color="green">227</FONT>                    log.debug("UNKNOWN PARAM CODE = " + code);<a name="line.227"></a>
-<FONT color="green">228</FONT>                    return UNKNOWN;<a name="line.228"></a>
-<FONT color="green">229</FONT>            }<a name="line.229"></a>
-<FONT color="green">230</FONT>    <a name="line.230"></a>
-<FONT color="green">231</FONT>            /**<a name="line.231"></a>
-<FONT color="green">232</FONT>             * Checks if is known.<a name="line.232"></a>
-<FONT color="green">233</FONT>             *<a name="line.233"></a>
-<FONT color="green">234</FONT>             * @return true, if is known<a name="line.234"></a>
+<FONT color="green">193</FONT>                    this.element = element;<a name="line.193"></a>
+<FONT color="green">194</FONT>                    this.modifier = modifier;<a name="line.194"></a>
+<FONT color="green">195</FONT>    <a name="line.195"></a>
+<FONT color="green">196</FONT>                    this.code = ByteConverters.charFromBytes(element.code, modifier.code);<a name="line.196"></a>
+<FONT color="green">197</FONT>    <a name="line.197"></a>
+<FONT color="green">198</FONT>                    this.kind = kind;<a name="line.198"></a>
+<FONT color="green">199</FONT>    <a name="line.199"></a>
+<FONT color="green">200</FONT>            }<a name="line.200"></a>
+<FONT color="green">201</FONT>    <a name="line.201"></a>
+<FONT color="green">202</FONT>            private final static DDF_ParamType[] ENUM_VALUES = values();<a name="line.202"></a>
+<FONT color="green">203</FONT>    <a name="line.203"></a>
+<FONT color="green">204</FONT>            /**<a name="line.204"></a>
+<FONT color="green">205</FONT>             * Values unsafe.<a name="line.205"></a>
+<FONT color="green">206</FONT>             *<a name="line.206"></a>
+<FONT color="green">207</FONT>             * @return the dD f_ param type[]<a name="line.207"></a>
+<FONT color="green">208</FONT>             */<a name="line.208"></a>
+<FONT color="green">209</FONT>            @Deprecated<a name="line.209"></a>
+<FONT color="green">210</FONT>            public final static DDF_ParamType[] valuesUnsafe() {<a name="line.210"></a>
+<FONT color="green">211</FONT>                    return ENUM_VALUES;<a name="line.211"></a>
+<FONT color="green">212</FONT>            }<a name="line.212"></a>
+<FONT color="green">213</FONT>    <a name="line.213"></a>
+<FONT color="green">214</FONT>            static {<a name="line.214"></a>
+<FONT color="green">215</FONT>                    // validate use of byte ord<a name="line.215"></a>
+<FONT color="green">216</FONT>                    MathExtra.castIntToByte(ENUM_VALUES.length);<a name="line.216"></a>
+<FONT color="green">217</FONT>            }<a name="line.217"></a>
+<FONT color="green">218</FONT>    <a name="line.218"></a>
+<FONT color="green">219</FONT>            /**<a name="line.219"></a>
+<FONT color="green">220</FONT>             * From ord.<a name="line.220"></a>
+<FONT color="green">221</FONT>             *<a name="line.221"></a>
+<FONT color="green">222</FONT>             * @param ord the ord<a name="line.222"></a>
+<FONT color="green">223</FONT>             * @return the dD f_ param type<a name="line.223"></a>
+<FONT color="green">224</FONT>             */<a name="line.224"></a>
+<FONT color="green">225</FONT>            public final static DDF_ParamType fromOrd(final byte ord) {<a name="line.225"></a>
+<FONT color="green">226</FONT>                    return ENUM_VALUES[ord];<a name="line.226"></a>
+<FONT color="green">227</FONT>            }<a name="line.227"></a>
+<FONT color="green">228</FONT>    <a name="line.228"></a>
+<FONT color="green">229</FONT>            /**<a name="line.229"></a>
+<FONT color="green">230</FONT>             * From pair.<a name="line.230"></a>
+<FONT color="green">231</FONT>             *<a name="line.231"></a>
+<FONT color="green">232</FONT>             * @param element the element<a name="line.232"></a>
+<FONT color="green">233</FONT>             * @param modifier the modifier<a name="line.233"></a>
+<FONT color="green">234</FONT>             * @return the dD f_ param type<a name="line.234"></a>
 <FONT color="green">235</FONT>             */<a name="line.235"></a>
-<FONT color="green">236</FONT>            public final boolean isKnown() {<a name="line.236"></a>
-<FONT color="green">237</FONT>                    return this != UNKNOWN;<a name="line.237"></a>
-<FONT color="green">238</FONT>            }<a name="line.238"></a>
-<FONT color="green">239</FONT>    <a name="line.239"></a>
-<FONT color="green">240</FONT>            /* (non-Javadoc)<a name="line.240"></a>
-<FONT color="green">241</FONT>             * @see java.lang.Enum#toString()<a name="line.241"></a>
-<FONT color="green">242</FONT>             */<a name="line.242"></a>
-<FONT color="green">243</FONT>            @Override<a name="line.243"></a>
-<FONT color="green">244</FONT>            public String toString() {<a name="line.244"></a>
-<FONT color="green">245</FONT>                    return String.format("%c%c   %-20s", element.code, modifier.code,<a name="line.245"></a>
-<FONT color="green">246</FONT>                                    name());<a name="line.246"></a>
-<FONT color="green">247</FONT>            }<a name="line.247"></a>
-<FONT color="green">248</FONT>    <a name="line.248"></a>
-<FONT color="green">249</FONT>            /**<a name="line.249"></a>
-<FONT color="green">250</FONT>             * The main method.<a name="line.250"></a>
-<FONT color="green">251</FONT>             *<a name="line.251"></a>
-<FONT color="green">252</FONT>             * @param args the arguments<a name="line.252"></a>
-<FONT color="green">253</FONT>             */<a name="line.253"></a>
-<FONT color="green">254</FONT>            public static void main(final String... args) {<a name="line.254"></a>
-<FONT color="green">255</FONT>    <a name="line.255"></a>
-<FONT color="green">256</FONT>                    log.debug("init");<a name="line.256"></a>
-<FONT color="green">257</FONT>    <a name="line.257"></a>
-<FONT color="green">258</FONT>                    for (final DDF_ParamType known : ENUM_VALUES) {<a name="line.258"></a>
-<FONT color="green">259</FONT>                            System.out.println(known);<a name="line.259"></a>
-<FONT color="green">260</FONT>                    }<a name="line.260"></a>
-<FONT color="green">261</FONT>    <a name="line.261"></a>
-<FONT color="green">262</FONT>                    log.debug("done");<a name="line.262"></a>
-<FONT color="green">263</FONT>    <a name="line.263"></a>
+<FONT color="green">236</FONT>            public final static DDF_ParamType fromPair(final byte element,<a name="line.236"></a>
+<FONT color="green">237</FONT>                            final byte modifier) {<a name="line.237"></a>
+<FONT color="green">238</FONT>                    return fromCode(ByteConverters.charFromBytes(element, modifier));<a name="line.238"></a>
+<FONT color="green">239</FONT>            }<a name="line.239"></a>
+<FONT color="green">240</FONT>    <a name="line.240"></a>
+<FONT color="green">241</FONT>            /**<a name="line.241"></a>
+<FONT color="green">242</FONT>             * From code.<a name="line.242"></a>
+<FONT color="green">243</FONT>             *<a name="line.243"></a>
+<FONT color="green">244</FONT>             * @param code the code<a name="line.244"></a>
+<FONT color="green">245</FONT>             * @return the dD f_ param type<a name="line.245"></a>
+<FONT color="green">246</FONT>             */<a name="line.246"></a>
+<FONT color="green">247</FONT>            public final static DDF_ParamType fromCode(final char code) {<a name="line.247"></a>
+<FONT color="green">248</FONT>                    for (final DDF_ParamType known : ENUM_VALUES) {<a name="line.248"></a>
+<FONT color="green">249</FONT>                            if (known.code == code) {<a name="line.249"></a>
+<FONT color="green">250</FONT>                                    return known;<a name="line.250"></a>
+<FONT color="green">251</FONT>                            }<a name="line.251"></a>
+<FONT color="green">252</FONT>                    }<a name="line.252"></a>
+<FONT color="green">253</FONT>                    log.debug("UNKNOWN PARAM CODE = " + code);<a name="line.253"></a>
+<FONT color="green">254</FONT>                    return UNKNOWN;<a name="line.254"></a>
+<FONT color="green">255</FONT>            }<a name="line.255"></a>
+<FONT color="green">256</FONT>    <a name="line.256"></a>
+<FONT color="green">257</FONT>            /**<a name="line.257"></a>
+<FONT color="green">258</FONT>             * Checks if is known.<a name="line.258"></a>
+<FONT color="green">259</FONT>             *<a name="line.259"></a>
+<FONT color="green">260</FONT>             * @return true, if is known<a name="line.260"></a>
+<FONT color="green">261</FONT>             */<a name="line.261"></a>
+<FONT color="green">262</FONT>            public final boolean isKnown() {<a name="line.262"></a>
+<FONT color="green">263</FONT>                    return this != UNKNOWN;<a name="line.263"></a>
 <FONT color="green">264</FONT>            }<a name="line.264"></a>
 <FONT color="green">265</FONT>    <a name="line.265"></a>
-<FONT color="green">266</FONT>    }<a name="line.266"></a>
+<FONT color="green">266</FONT>            /* (non-Javadoc)<a name="line.266"></a>
+<FONT color="green">267</FONT>             * @see java.lang.Enum#toString()<a name="line.267"></a>
+<FONT color="green">268</FONT>             */<a name="line.268"></a>
+<FONT color="green">269</FONT>            @Override<a name="line.269"></a>
+<FONT color="green">270</FONT>            public String toString() {<a name="line.270"></a>
+<FONT color="green">271</FONT>                    return String.format("%c%c   %-20s", element.code, modifier.code,<a name="line.271"></a>
+<FONT color="green">272</FONT>                                    name());<a name="line.272"></a>
+<FONT color="green">273</FONT>            }<a name="line.273"></a>
+<FONT color="green">274</FONT>    <a name="line.274"></a>
+<FONT color="green">275</FONT>            /**<a name="line.275"></a>
+<FONT color="green">276</FONT>             * The main method.<a name="line.276"></a>
+<FONT color="green">277</FONT>             *<a name="line.277"></a>
+<FONT color="green">278</FONT>             * @param args the arguments<a name="line.278"></a>
+<FONT color="green">279</FONT>             */<a name="line.279"></a>
+<FONT color="green">280</FONT>            public static void main(final String... args) {<a name="line.280"></a>
+<FONT color="green">281</FONT>    <a name="line.281"></a>
+<FONT color="green">282</FONT>                    log.debug("init");<a name="line.282"></a>
+<FONT color="green">283</FONT>    <a name="line.283"></a>
+<FONT color="green">284</FONT>                    for (final DDF_ParamType known : ENUM_VALUES) {<a name="line.284"></a>
+<FONT color="green">285</FONT>                            System.out.println(known);<a name="line.285"></a>
+<FONT color="green">286</FONT>                    }<a name="line.286"></a>
+<FONT color="green">287</FONT>    <a name="line.287"></a>
+<FONT color="green">288</FONT>                    log.debug("done");<a name="line.288"></a>
+<FONT color="green">289</FONT>    <a name="line.289"></a>
+<FONT color="green">290</FONT>            }<a name="line.290"></a>
+<FONT color="green">291</FONT>    <a name="line.291"></a>
+<FONT color="green">292</FONT>    }<a name="line.292"></a>
 
 
 

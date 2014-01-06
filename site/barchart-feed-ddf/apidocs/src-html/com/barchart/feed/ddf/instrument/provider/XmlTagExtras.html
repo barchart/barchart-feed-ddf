@@ -76,39 +76,41 @@
 <FONT color="green">073</FONT>            <a name="line.73"></a>
 <FONT color="green">074</FONT>            /** used by historical query system */<a name="line.74"></a>
 <FONT color="green">075</FONT>            String SYMBOL_HIST = "symbol_historical";<a name="line.75"></a>
-<FONT color="green">076</FONT>    <a name="line.76"></a>
-<FONT color="green">077</FONT>            /** ddf feed codes */<a name="line.77"></a>
-<FONT color="green">078</FONT>            String EXCHANGE_DDF = "exchange_ddf";<a name="line.78"></a>
-<FONT color="green">079</FONT>            String SYMBOL_DDF_REAL = "symbol_ddf";<a name="line.79"></a>
-<FONT color="green">080</FONT>            String SYMBOL_DDF_EXPIRE_YEAR = "symbol_ddf_expire_year";<a name="line.80"></a>
-<FONT color="green">081</FONT>            String SYMBOL_DDF_EXPIRE_MONTH = "symbol_ddf_expire_month";<a name="line.81"></a>
-<FONT color="green">082</FONT>            String BASE_CODE_DDF = "base_code";<a name="line.82"></a>
-<FONT color="green">083</FONT>    <a name="line.83"></a>
-<FONT color="green">084</FONT>            /** not used by ddf feed; but one-to-one mapping to base code */<a name="line.84"></a>
-<FONT color="green">085</FONT>            String UNIT_CODE_DDF = "unit_code";<a name="line.85"></a>
-<FONT color="green">086</FONT>    <a name="line.86"></a>
-<FONT color="green">087</FONT>            /** implied by symbol/exchange */<a name="line.87"></a>
-<FONT color="green">088</FONT>            String TIME_ZONE_DDF = "time_zone_ddf";<a name="line.88"></a>
-<FONT color="green">089</FONT>    <a name="line.89"></a>
-<FONT color="green">090</FONT>            /** http://en.wikipedia.org/wiki/Market_identification_code */<a name="line.90"></a>
-<FONT color="green">091</FONT>            String EXCHANGE = "exchange";<a name="line.91"></a>
-<FONT color="green">092</FONT>            String EXCHANGE_CHANNEL = "exchange_channel";<a name="line.92"></a>
-<FONT color="green">093</FONT>            String EXCHANGE_COMMENT = "exchange_description";<a name="line.93"></a>
-<FONT color="green">094</FONT>    <a name="line.94"></a>
-<FONT color="green">095</FONT>            String SYMBOL_CODE_CFI = "symbol_cfi";<a name="line.95"></a>
+<FONT color="green">076</FONT>            <a name="line.76"></a>
+<FONT color="green">077</FONT>            String ALT_SYMBOL = "alternate_symbol";<a name="line.77"></a>
+<FONT color="green">078</FONT>    <a name="line.78"></a>
+<FONT color="green">079</FONT>            /** ddf feed codes */<a name="line.79"></a>
+<FONT color="green">080</FONT>            String EXCHANGE_DDF = "exchange_ddf";<a name="line.80"></a>
+<FONT color="green">081</FONT>            String SYMBOL_DDF_REAL = "symbol_ddf";<a name="line.81"></a>
+<FONT color="green">082</FONT>            String SYMBOL_DDF_EXPIRE_YEAR = "symbol_ddf_expire_year";<a name="line.82"></a>
+<FONT color="green">083</FONT>            String SYMBOL_DDF_EXPIRE_MONTH = "symbol_ddf_expire_month";<a name="line.83"></a>
+<FONT color="green">084</FONT>            String BASE_CODE_DDF = "base_code";<a name="line.84"></a>
+<FONT color="green">085</FONT>    <a name="line.85"></a>
+<FONT color="green">086</FONT>            /** not used by ddf feed; but one-to-one mapping to base code */<a name="line.86"></a>
+<FONT color="green">087</FONT>            String UNIT_CODE_DDF = "unit_code";<a name="line.87"></a>
+<FONT color="green">088</FONT>    <a name="line.88"></a>
+<FONT color="green">089</FONT>            /** implied by symbol/exchange */<a name="line.89"></a>
+<FONT color="green">090</FONT>            String TIME_ZONE_DDF = "time_zone_ddf";<a name="line.90"></a>
+<FONT color="green">091</FONT>    <a name="line.91"></a>
+<FONT color="green">092</FONT>            /** http://en.wikipedia.org/wiki/Market_identification_code */<a name="line.92"></a>
+<FONT color="green">093</FONT>            String EXCHANGE = "exchange";<a name="line.93"></a>
+<FONT color="green">094</FONT>            String EXCHANGE_CHANNEL = "exchange_channel";<a name="line.94"></a>
+<FONT color="green">095</FONT>            String EXCHANGE_COMMENT = "exchange_description";<a name="line.95"></a>
 <FONT color="green">096</FONT>    <a name="line.96"></a>
-<FONT color="green">097</FONT>            /** expiration date, if any */<a name="line.97"></a>
-<FONT color="green">098</FONT>            String SYMBOL_EXPIRE = "symbol_expire";<a name="line.98"></a>
-<FONT color="green">099</FONT>    <a name="line.99"></a>
-<FONT color="green">100</FONT>    <a name="line.100"></a>
-<FONT color="green">101</FONT>            String SYMBOL_COMMENT = "symbol_description";<a name="line.101"></a>
+<FONT color="green">097</FONT>            String SYMBOL_CODE_CFI = "symbol_cfi";<a name="line.97"></a>
+<FONT color="green">098</FONT>    <a name="line.98"></a>
+<FONT color="green">099</FONT>            /** expiration date, if any */<a name="line.99"></a>
+<FONT color="green">100</FONT>            String SYMBOL_EXPIRE = "symbol_expire";<a name="line.100"></a>
+<FONT color="green">101</FONT>    <a name="line.101"></a>
 <FONT color="green">102</FONT>    <a name="line.102"></a>
-<FONT color="green">103</FONT>            /** price step expressed as ddf base code fraction */<a name="line.103"></a>
-<FONT color="green">104</FONT>            String PRICE_TICK_INCREMENT = "tick_increment";<a name="line.104"></a>
-<FONT color="green">105</FONT>    <a name="line.105"></a>
-<FONT color="green">106</FONT>            String PRICE_POINT_VALUE = "point_value";<a name="line.106"></a>
+<FONT color="green">103</FONT>            String SYMBOL_COMMENT = "symbol_description";<a name="line.103"></a>
+<FONT color="green">104</FONT>    <a name="line.104"></a>
+<FONT color="green">105</FONT>            /** price step expressed as ddf base code fraction */<a name="line.105"></a>
+<FONT color="green">106</FONT>            String PRICE_TICK_INCREMENT = "tick_increment";<a name="line.106"></a>
 <FONT color="green">107</FONT>    <a name="line.107"></a>
-<FONT color="green">108</FONT>    }<a name="line.108"></a>
+<FONT color="green">108</FONT>            String PRICE_POINT_VALUE = "point_value";<a name="line.108"></a>
+<FONT color="green">109</FONT>    <a name="line.109"></a>
+<FONT color="green">110</FONT>    }<a name="line.110"></a>
 
 
 

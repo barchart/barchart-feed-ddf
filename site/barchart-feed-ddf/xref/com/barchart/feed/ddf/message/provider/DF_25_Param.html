@@ -10,17 +10,17 @@
 
 <a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> com.barchart.feed.ddf.message.provider;
 <a class="jxr_linenumber" name="2" href="#2">2</a>   
-<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.barchart.util.ascii.ASCII.COMMA;
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.barchart.util.common.ascii.ASCII.COMMA;
 <a class="jxr_linenumber" name="4" href="#4">4</a>   
 <a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> java.nio.ByteBuffer;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   
-<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MarketParameter;
-<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
-<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_MessageType;
-<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_ParamType;
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.util.HelperDDF;
-<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.values.api.PriceValue;
-<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.values.api.SizeValue;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> com.barchart.feed.base.values.api.PriceValue;
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> com.barchart.feed.base.values.api.SizeValue;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MarketParameter;
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_MessageType;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.message.enums.DDF_ParamType;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.ddf.util.HelperDDF;
 <a class="jxr_linenumber" name="14" href="#14">14</a>  
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/message/provider/DF_25_Param.html">DF_25_Param</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../com/barchart/feed/ddf/message/provider/BaseMarket.html">BaseMarket</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../../com/barchart/feed/ddf/message/api/DDF_MarketParameter.html">DDF_MarketParameter</a> {
 <a class="jxr_linenumber" name="16" href="#16">16</a>  

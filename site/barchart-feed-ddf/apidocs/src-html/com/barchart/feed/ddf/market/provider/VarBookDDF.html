@@ -31,153 +31,153 @@
 <FONT color="green">028</FONT>    import com.barchart.feed.base.book.enums.UniBookResult;<a name="line.28"></a>
 <FONT color="green">029</FONT>    import com.barchart.feed.base.provider.DefBook;<a name="line.29"></a>
 <FONT color="green">030</FONT>    import com.barchart.feed.base.provider.MarketConst;<a name="line.30"></a>
-<FONT color="green">031</FONT>    import com.barchart.util.anno.Mutable;<a name="line.31"></a>
-<FONT color="green">032</FONT>    import com.barchart.util.anno.ThreadSafe;<a name="line.32"></a>
-<FONT color="green">033</FONT>    import com.barchart.util.value.api.Time;<a name="line.33"></a>
-<FONT color="green">034</FONT>    import com.barchart.util.values.api.PriceValue;<a name="line.34"></a>
-<FONT color="green">035</FONT>    import com.barchart.util.values.api.SizeValue;<a name="line.35"></a>
-<FONT color="green">036</FONT>    import com.barchart.util.values.api.TimeValue;<a name="line.36"></a>
-<FONT color="green">037</FONT>    import com.barchart.util.values.provider.ValueBuilder;<a name="line.37"></a>
-<FONT color="green">038</FONT>    import com.barchart.util.values.provider.ValueFreezer;<a name="line.38"></a>
+<FONT color="green">031</FONT>    import com.barchart.feed.base.values.api.PriceValue;<a name="line.31"></a>
+<FONT color="green">032</FONT>    import com.barchart.feed.base.values.api.SizeValue;<a name="line.32"></a>
+<FONT color="green">033</FONT>    import com.barchart.feed.base.values.api.TimeValue;<a name="line.33"></a>
+<FONT color="green">034</FONT>    import com.barchart.feed.base.values.provider.ValueBuilder;<a name="line.34"></a>
+<FONT color="green">035</FONT>    import com.barchart.feed.base.values.provider.ValueFreezer;<a name="line.35"></a>
+<FONT color="green">036</FONT>    import com.barchart.util.common.anno.Mutable;<a name="line.36"></a>
+<FONT color="green">037</FONT>    import com.barchart.util.common.anno.ThreadSafe;<a name="line.37"></a>
+<FONT color="green">038</FONT>    import com.barchart.util.value.api.Time;<a name="line.38"></a>
 <FONT color="green">039</FONT>    <a name="line.39"></a>
 <FONT color="green">040</FONT>    @Mutable<a name="line.40"></a>
 <FONT color="green">041</FONT>    @ThreadSafe(rule = "use in runSafe() only")<a name="line.41"></a>
 <FONT color="green">042</FONT>    public final class VarBookDDF extends ValueFreezer&lt;MarketBook&gt; implements<a name="line.42"></a>
 <FONT color="green">043</FONT>                    MarketDoBook {<a name="line.43"></a>
 <FONT color="green">044</FONT>            <a name="line.44"></a>
-<FONT color="green">045</FONT>            @SuppressWarnings("unused")<a name="line.45"></a>
-<FONT color="green">046</FONT>            private static final Logger log = LoggerFactory.getLogger(VarBookDDF.class);<a name="line.46"></a>
-<FONT color="green">047</FONT>            <a name="line.47"></a>
-<FONT color="green">048</FONT>            protected volatile MarketBookEntry lastEntry = MarketConst.NULL_BOOK_ENTRY;<a name="line.48"></a>
-<FONT color="green">049</FONT>            <a name="line.49"></a>
-<FONT color="green">050</FONT>            private Set&lt;Component&gt; changeSet = EnumSet.noneOf(Component.class);<a name="line.50"></a>
-<FONT color="green">051</FONT>    <a name="line.51"></a>
-<FONT color="green">052</FONT>            @SuppressWarnings("serial")<a name="line.52"></a>
-<FONT color="green">053</FONT>            private static class EntryMap extends TreeMap&lt;PriceValue, MarketBookEntry&gt; {<a name="line.53"></a>
-<FONT color="green">054</FONT>                    public EntryMap(final Comparator&lt;PriceValue&gt; comp) {<a name="line.54"></a>
-<FONT color="green">055</FONT>                            super(comp);<a name="line.55"></a>
-<FONT color="green">056</FONT>                    }<a name="line.56"></a>
-<FONT color="green">057</FONT>            }<a name="line.57"></a>
-<FONT color="green">058</FONT>    <a name="line.58"></a>
-<FONT color="green">059</FONT>            private long millisUTC;<a name="line.59"></a>
-<FONT color="green">060</FONT>            <a name="line.60"></a>
-<FONT color="green">061</FONT>            private static final Comparator&lt;PriceValue&gt; CMP_ASC = new Comparator&lt;PriceValue&gt;() {<a name="line.61"></a>
-<FONT color="green">062</FONT>                    @Override<a name="line.62"></a>
-<FONT color="green">063</FONT>                    public int compare(final PriceValue o1, final PriceValue o2) {<a name="line.63"></a>
-<FONT color="green">064</FONT>                            return o1.compareTo(o2);<a name="line.64"></a>
-<FONT color="green">065</FONT>                    }<a name="line.65"></a>
-<FONT color="green">066</FONT>            };<a name="line.66"></a>
-<FONT color="green">067</FONT>    <a name="line.67"></a>
-<FONT color="green">068</FONT>            private static final Comparator&lt;PriceValue&gt; CMP_DES = new Comparator&lt;PriceValue&gt;() {<a name="line.68"></a>
-<FONT color="green">069</FONT>                    @Override<a name="line.69"></a>
-<FONT color="green">070</FONT>                    public int compare(final PriceValue o1, final PriceValue o2) {<a name="line.70"></a>
-<FONT color="green">071</FONT>                            return o2.compareTo(o1);<a name="line.71"></a>
-<FONT color="green">072</FONT>                    }<a name="line.72"></a>
-<FONT color="green">073</FONT>            };<a name="line.73"></a>
-<FONT color="green">074</FONT>    <a name="line.74"></a>
-<FONT color="green">075</FONT>            private final EntryMap bids = new EntryMap(CMP_ASC);<a name="line.75"></a>
-<FONT color="green">076</FONT>            private final EntryMap asks = new EntryMap(CMP_DES);<a name="line.76"></a>
-<FONT color="green">077</FONT>    <a name="line.77"></a>
-<FONT color="green">078</FONT>            private MarketBookEntry topBid;<a name="line.78"></a>
-<FONT color="green">079</FONT>            private MarketBookEntry topAsk;<a name="line.79"></a>
-<FONT color="green">080</FONT>    <a name="line.80"></a>
-<FONT color="green">081</FONT>            private final Instrument instrument;<a name="line.81"></a>
-<FONT color="green">082</FONT>            <a name="line.82"></a>
-<FONT color="green">083</FONT>            VarBookDDF(final Instrument instrument, final Book.Type type, <a name="line.83"></a>
-<FONT color="green">084</FONT>                            final SizeValue size, final PriceValue step) {<a name="line.84"></a>
-<FONT color="green">085</FONT>                    // XXX<a name="line.85"></a>
-<FONT color="green">086</FONT>                    this.instrument = instrument;<a name="line.86"></a>
-<FONT color="green">087</FONT>            }<a name="line.87"></a>
-<FONT color="green">088</FONT>    <a name="line.88"></a>
-<FONT color="green">089</FONT>            // #####################################<a name="line.89"></a>
-<FONT color="green">090</FONT>    <a name="line.90"></a>
-<FONT color="green">091</FONT>            @Override<a name="line.91"></a>
-<FONT color="green">092</FONT>            public final UniBookResult setEntry(final MarketDoBookEntry entry) {<a name="line.92"></a>
-<FONT color="green">093</FONT>    <a name="line.93"></a>
-<FONT color="green">094</FONT>                    if(entry != null) {<a name="line.94"></a>
-<FONT color="green">095</FONT>                            lastEntry = entry.freeze();<a name="line.95"></a>
-<FONT color="green">096</FONT>                    }<a name="line.96"></a>
-<FONT color="green">097</FONT>                    <a name="line.97"></a>
-<FONT color="green">098</FONT>                    changeSet.clear();<a name="line.98"></a>
-<FONT color="green">099</FONT>                    <a name="line.99"></a>
-<FONT color="green">100</FONT>                    final Book.Side side = entry.side();<a name="line.100"></a>
-<FONT color="green">101</FONT>    <a name="line.101"></a>
-<FONT color="green">102</FONT>                    final int place = entry.place();<a name="line.102"></a>
-<FONT color="green">103</FONT>    <a name="line.103"></a>
-<FONT color="green">104</FONT>                    // NOTE: This only updates top.  <a name="line.104"></a>
-<FONT color="green">105</FONT>    <a name="line.105"></a>
-<FONT color="green">106</FONT>                    //final EntryMap map = map(side);<a name="line.106"></a>
-<FONT color="green">107</FONT>    <a name="line.107"></a>
-<FONT color="green">108</FONT>                    switch (side) {<a name="line.108"></a>
-<FONT color="green">109</FONT>                    case BID:<a name="line.109"></a>
-<FONT color="green">110</FONT>                            if (place == ENTRY_TOP) {<a name="line.110"></a>
-<FONT color="green">111</FONT>                                    topBid = entry;<a name="line.111"></a>
-<FONT color="green">112</FONT>                                    changeSet.add(Component.TOP_BID);<a name="line.112"></a>
-<FONT color="green">113</FONT>                            }<a name="line.113"></a>
-<FONT color="green">114</FONT>                            break;<a name="line.114"></a>
-<FONT color="green">115</FONT>                    case ASK:<a name="line.115"></a>
-<FONT color="green">116</FONT>                            if (place == ENTRY_TOP) {<a name="line.116"></a>
-<FONT color="green">117</FONT>                                    topAsk = entry;<a name="line.117"></a>
-<FONT color="green">118</FONT>                                    changeSet.add(Component.TOP_ASK);<a name="line.118"></a>
-<FONT color="green">119</FONT>                            }<a name="line.119"></a>
-<FONT color="green">120</FONT>                            break;<a name="line.120"></a>
-<FONT color="green">121</FONT>                    default:<a name="line.121"></a>
-<FONT color="green">122</FONT>                            return UniBookResult.ERROR;<a name="line.122"></a>
-<FONT color="green">123</FONT>                    }<a name="line.123"></a>
-<FONT color="green">124</FONT>    <a name="line.124"></a>
-<FONT color="green">125</FONT>                    if (place == ENTRY_TOP) {<a name="line.125"></a>
-<FONT color="green">126</FONT>                            return UniBookResult.TOP;<a name="line.126"></a>
-<FONT color="green">127</FONT>                    } else {<a name="line.127"></a>
-<FONT color="green">128</FONT>                            return UniBookResult.NORMAL;<a name="line.128"></a>
-<FONT color="green">129</FONT>                    }<a name="line.129"></a>
-<FONT color="green">130</FONT>    <a name="line.130"></a>
-<FONT color="green">131</FONT>            }<a name="line.131"></a>
-<FONT color="green">132</FONT>    <a name="line.132"></a>
-<FONT color="green">133</FONT>            private EntryMap map(final Book.Side side) {<a name="line.133"></a>
-<FONT color="green">134</FONT>                    switch (side) {<a name="line.134"></a>
-<FONT color="green">135</FONT>                    default:<a name="line.135"></a>
-<FONT color="green">136</FONT>                    case BID:<a name="line.136"></a>
-<FONT color="green">137</FONT>                            return bids;<a name="line.137"></a>
-<FONT color="green">138</FONT>                    case ASK:<a name="line.138"></a>
-<FONT color="green">139</FONT>                            return asks;<a name="line.139"></a>
-<FONT color="green">140</FONT>                    }<a name="line.140"></a>
-<FONT color="green">141</FONT>            }<a name="line.141"></a>
-<FONT color="green">142</FONT>    <a name="line.142"></a>
-<FONT color="green">143</FONT>            @Override<a name="line.143"></a>
-<FONT color="green">144</FONT>            public final MarketBookEntry[] entries(final Book.Side side) {<a name="line.144"></a>
-<FONT color="green">145</FONT>    <a name="line.145"></a>
-<FONT color="green">146</FONT>                    final EntryMap map = map(side);<a name="line.146"></a>
-<FONT color="green">147</FONT>    <a name="line.147"></a>
-<FONT color="green">148</FONT>                    final Collection&lt;MarketBookEntry&gt; values = map.values();<a name="line.148"></a>
-<FONT color="green">149</FONT>    <a name="line.149"></a>
-<FONT color="green">150</FONT>                    final int size = values.size();<a name="line.150"></a>
-<FONT color="green">151</FONT>                    <a name="line.151"></a>
-<FONT color="green">152</FONT>                    if(size == 0) {<a name="line.152"></a>
-<FONT color="green">153</FONT>                            if(side == Side.BID) {<a name="line.153"></a>
-<FONT color="green">154</FONT>                                    return new MarketBookEntry[]{topBid};<a name="line.154"></a>
-<FONT color="green">155</FONT>                            } else {<a name="line.155"></a>
-<FONT color="green">156</FONT>                                    return new MarketBookEntry[]{topAsk};<a name="line.156"></a>
-<FONT color="green">157</FONT>                            }<a name="line.157"></a>
-<FONT color="green">158</FONT>                    }<a name="line.158"></a>
-<FONT color="green">159</FONT>    <a name="line.159"></a>
-<FONT color="green">160</FONT>                    final MarketBookEntry[] array = new MarketBookEntry[size];<a name="line.160"></a>
-<FONT color="green">161</FONT>    <a name="line.161"></a>
-<FONT color="green">162</FONT>                    int index = 0;<a name="line.162"></a>
-<FONT color="green">163</FONT>    <a name="line.163"></a>
-<FONT color="green">164</FONT>                    for (final MarketBookEntry entry : values) {<a name="line.164"></a>
-<FONT color="green">165</FONT>                            array[index] = entry;<a name="line.165"></a>
-<FONT color="green">166</FONT>                            index++;<a name="line.166"></a>
-<FONT color="green">167</FONT>                    }<a name="line.167"></a>
-<FONT color="green">168</FONT>    <a name="line.168"></a>
-<FONT color="green">169</FONT>                    return array;<a name="line.169"></a>
-<FONT color="green">170</FONT>    <a name="line.170"></a>
-<FONT color="green">171</FONT>            }<a name="line.171"></a>
-<FONT color="green">172</FONT>    <a name="line.172"></a>
-<FONT color="green">173</FONT>            @Override<a name="line.173"></a>
-<FONT color="green">174</FONT>            public final DefBook freeze() {<a name="line.174"></a>
-<FONT color="green">175</FONT>                    return new DefBook(instrument, time(), <a name="line.175"></a>
-<FONT color="green">176</FONT>                                    entries(Book.Side.BID),<a name="line.176"></a>
-<FONT color="green">177</FONT>                                    entries(Book.Side.ASK),<a name="line.177"></a>
+<FONT color="green">045</FONT>            private static final Logger log = LoggerFactory.getLogger(VarBookDDF.class);<a name="line.45"></a>
+<FONT color="green">046</FONT>            <a name="line.46"></a>
+<FONT color="green">047</FONT>            protected volatile MarketBookEntry lastEntry = MarketConst.NULL_BOOK_ENTRY;<a name="line.47"></a>
+<FONT color="green">048</FONT>            <a name="line.48"></a>
+<FONT color="green">049</FONT>            private Set&lt;Component&gt; changeSet = EnumSet.noneOf(Component.class);<a name="line.49"></a>
+<FONT color="green">050</FONT>    <a name="line.50"></a>
+<FONT color="green">051</FONT>            @SuppressWarnings("serial")<a name="line.51"></a>
+<FONT color="green">052</FONT>            private static class EntryMap extends TreeMap&lt;PriceValue, MarketBookEntry&gt; {<a name="line.52"></a>
+<FONT color="green">053</FONT>                    public EntryMap(final Comparator&lt;PriceValue&gt; comp) {<a name="line.53"></a>
+<FONT color="green">054</FONT>                            super(comp);<a name="line.54"></a>
+<FONT color="green">055</FONT>                    }<a name="line.55"></a>
+<FONT color="green">056</FONT>            }<a name="line.56"></a>
+<FONT color="green">057</FONT>    <a name="line.57"></a>
+<FONT color="green">058</FONT>            private long millisUTC;<a name="line.58"></a>
+<FONT color="green">059</FONT>            <a name="line.59"></a>
+<FONT color="green">060</FONT>            private static final Comparator&lt;PriceValue&gt; CMP_ASC = new Comparator&lt;PriceValue&gt;() {<a name="line.60"></a>
+<FONT color="green">061</FONT>                    @Override<a name="line.61"></a>
+<FONT color="green">062</FONT>                    public int compare(final PriceValue o1, final PriceValue o2) {<a name="line.62"></a>
+<FONT color="green">063</FONT>                            return o1.compareTo(o2);<a name="line.63"></a>
+<FONT color="green">064</FONT>                    }<a name="line.64"></a>
+<FONT color="green">065</FONT>            };<a name="line.65"></a>
+<FONT color="green">066</FONT>    <a name="line.66"></a>
+<FONT color="green">067</FONT>            private static final Comparator&lt;PriceValue&gt; CMP_DES = new Comparator&lt;PriceValue&gt;() {<a name="line.67"></a>
+<FONT color="green">068</FONT>                    @Override<a name="line.68"></a>
+<FONT color="green">069</FONT>                    public int compare(final PriceValue o1, final PriceValue o2) {<a name="line.69"></a>
+<FONT color="green">070</FONT>                            return o2.compareTo(o1);<a name="line.70"></a>
+<FONT color="green">071</FONT>                    }<a name="line.71"></a>
+<FONT color="green">072</FONT>            };<a name="line.72"></a>
+<FONT color="green">073</FONT>    <a name="line.73"></a>
+<FONT color="green">074</FONT>            private final EntryMap bids = new EntryMap(CMP_ASC);<a name="line.74"></a>
+<FONT color="green">075</FONT>            private final EntryMap asks = new EntryMap(CMP_DES);<a name="line.75"></a>
+<FONT color="green">076</FONT>    <a name="line.76"></a>
+<FONT color="green">077</FONT>            private volatile MarketBookEntry topBid = MarketBookEntry.NULL;<a name="line.77"></a>
+<FONT color="green">078</FONT>            private volatile MarketBookEntry topAsk = MarketBookEntry.NULL;<a name="line.78"></a>
+<FONT color="green">079</FONT>    <a name="line.79"></a>
+<FONT color="green">080</FONT>            private final Instrument instrument;<a name="line.80"></a>
+<FONT color="green">081</FONT>            <a name="line.81"></a>
+<FONT color="green">082</FONT>            VarBookDDF(final Instrument instrument, final Book.Type type, <a name="line.82"></a>
+<FONT color="green">083</FONT>                            final SizeValue size, final PriceValue step) {<a name="line.83"></a>
+<FONT color="green">084</FONT>                    // XXX<a name="line.84"></a>
+<FONT color="green">085</FONT>                    this.instrument = instrument;<a name="line.85"></a>
+<FONT color="green">086</FONT>            }<a name="line.86"></a>
+<FONT color="green">087</FONT>    <a name="line.87"></a>
+<FONT color="green">088</FONT>            // #####################################<a name="line.88"></a>
+<FONT color="green">089</FONT>    <a name="line.89"></a>
+<FONT color="green">090</FONT>            @Override<a name="line.90"></a>
+<FONT color="green">091</FONT>            public final UniBookResult setEntry(final MarketDoBookEntry entry) {<a name="line.91"></a>
+<FONT color="green">092</FONT>    <a name="line.92"></a>
+<FONT color="green">093</FONT>                    if(entry != null) {<a name="line.93"></a>
+<FONT color="green">094</FONT>                            lastEntry = entry.freeze();<a name="line.94"></a>
+<FONT color="green">095</FONT>                    }<a name="line.95"></a>
+<FONT color="green">096</FONT>                    <a name="line.96"></a>
+<FONT color="green">097</FONT>                    changeSet.clear();<a name="line.97"></a>
+<FONT color="green">098</FONT>                    <a name="line.98"></a>
+<FONT color="green">099</FONT>                    final Book.Side side = entry.side();<a name="line.99"></a>
+<FONT color="green">100</FONT>    <a name="line.100"></a>
+<FONT color="green">101</FONT>                    final int place = entry.place();<a name="line.101"></a>
+<FONT color="green">102</FONT>    <a name="line.102"></a>
+<FONT color="green">103</FONT>                    // NOTE: This only updates top.  <a name="line.103"></a>
+<FONT color="green">104</FONT>    <a name="line.104"></a>
+<FONT color="green">105</FONT>                    //final EntryMap map = map(side);<a name="line.105"></a>
+<FONT color="green">106</FONT>    <a name="line.106"></a>
+<FONT color="green">107</FONT>                    switch (side) {<a name="line.107"></a>
+<FONT color="green">108</FONT>                    case BID:<a name="line.108"></a>
+<FONT color="green">109</FONT>                            if (place == ENTRY_TOP) {<a name="line.109"></a>
+<FONT color="green">110</FONT>                                    topBid = entry;<a name="line.110"></a>
+<FONT color="green">111</FONT>                                    changeSet.add(Component.TOP_BID);<a name="line.111"></a>
+<FONT color="green">112</FONT>                            }<a name="line.112"></a>
+<FONT color="green">113</FONT>                            break;<a name="line.113"></a>
+<FONT color="green">114</FONT>                    case ASK:<a name="line.114"></a>
+<FONT color="green">115</FONT>                            if (place == ENTRY_TOP) {<a name="line.115"></a>
+<FONT color="green">116</FONT>                                    topAsk = entry;<a name="line.116"></a>
+<FONT color="green">117</FONT>                                    changeSet.add(Component.TOP_ASK);<a name="line.117"></a>
+<FONT color="green">118</FONT>                            }<a name="line.118"></a>
+<FONT color="green">119</FONT>                            break;<a name="line.119"></a>
+<FONT color="green">120</FONT>                    default:<a name="line.120"></a>
+<FONT color="green">121</FONT>                            return UniBookResult.ERROR;<a name="line.121"></a>
+<FONT color="green">122</FONT>                    }<a name="line.122"></a>
+<FONT color="green">123</FONT>    <a name="line.123"></a>
+<FONT color="green">124</FONT>                    if (place == ENTRY_TOP) {<a name="line.124"></a>
+<FONT color="green">125</FONT>                            return UniBookResult.TOP;<a name="line.125"></a>
+<FONT color="green">126</FONT>                    } else {<a name="line.126"></a>
+<FONT color="green">127</FONT>                            return UniBookResult.NORMAL;<a name="line.127"></a>
+<FONT color="green">128</FONT>                    }<a name="line.128"></a>
+<FONT color="green">129</FONT>    <a name="line.129"></a>
+<FONT color="green">130</FONT>            }<a name="line.130"></a>
+<FONT color="green">131</FONT>    <a name="line.131"></a>
+<FONT color="green">132</FONT>            private EntryMap map(final Book.Side side) {<a name="line.132"></a>
+<FONT color="green">133</FONT>                    switch (side) {<a name="line.133"></a>
+<FONT color="green">134</FONT>                    default:<a name="line.134"></a>
+<FONT color="green">135</FONT>                    case BID:<a name="line.135"></a>
+<FONT color="green">136</FONT>                            return bids;<a name="line.136"></a>
+<FONT color="green">137</FONT>                    case ASK:<a name="line.137"></a>
+<FONT color="green">138</FONT>                            return asks;<a name="line.138"></a>
+<FONT color="green">139</FONT>                    }<a name="line.139"></a>
+<FONT color="green">140</FONT>            }<a name="line.140"></a>
+<FONT color="green">141</FONT>    <a name="line.141"></a>
+<FONT color="green">142</FONT>            @Override<a name="line.142"></a>
+<FONT color="green">143</FONT>            public final MarketBookEntry[] entries(final Book.Side side) {<a name="line.143"></a>
+<FONT color="green">144</FONT>    <a name="line.144"></a>
+<FONT color="green">145</FONT>                    final EntryMap map = map(side);<a name="line.145"></a>
+<FONT color="green">146</FONT>    <a name="line.146"></a>
+<FONT color="green">147</FONT>                    final Collection&lt;MarketBookEntry&gt; values = map.values();<a name="line.147"></a>
+<FONT color="green">148</FONT>    <a name="line.148"></a>
+<FONT color="green">149</FONT>                    final int size = values.size();<a name="line.149"></a>
+<FONT color="green">150</FONT>                    <a name="line.150"></a>
+<FONT color="green">151</FONT>                    if(size == 0) {<a name="line.151"></a>
+<FONT color="green">152</FONT>                            if(side == Side.BID) {<a name="line.152"></a>
+<FONT color="green">153</FONT>                                    return new MarketBookEntry[]{topBid};<a name="line.153"></a>
+<FONT color="green">154</FONT>                            } else {<a name="line.154"></a>
+<FONT color="green">155</FONT>                                    return new MarketBookEntry[]{topAsk};<a name="line.155"></a>
+<FONT color="green">156</FONT>                            }<a name="line.156"></a>
+<FONT color="green">157</FONT>                    }<a name="line.157"></a>
+<FONT color="green">158</FONT>    <a name="line.158"></a>
+<FONT color="green">159</FONT>                    final MarketBookEntry[] array = new MarketBookEntry[size];<a name="line.159"></a>
+<FONT color="green">160</FONT>    <a name="line.160"></a>
+<FONT color="green">161</FONT>                    int index = 0;<a name="line.161"></a>
+<FONT color="green">162</FONT>    <a name="line.162"></a>
+<FONT color="green">163</FONT>                    for (final MarketBookEntry entry : values) {<a name="line.163"></a>
+<FONT color="green">164</FONT>                            array[index] = entry;<a name="line.164"></a>
+<FONT color="green">165</FONT>                            index++;<a name="line.165"></a>
+<FONT color="green">166</FONT>                    }<a name="line.166"></a>
+<FONT color="green">167</FONT>    <a name="line.167"></a>
+<FONT color="green">168</FONT>                    return array;<a name="line.168"></a>
+<FONT color="green">169</FONT>    <a name="line.169"></a>
+<FONT color="green">170</FONT>            }<a name="line.170"></a>
+<FONT color="green">171</FONT>    <a name="line.171"></a>
+<FONT color="green">172</FONT>            @Override<a name="line.172"></a>
+<FONT color="green">173</FONT>            public final DefBook freeze() {<a name="line.173"></a>
+<FONT color="green">174</FONT>                    return new DefBook(instrument, time(), <a name="line.174"></a>
+<FONT color="green">175</FONT>                                    entries(Book.Side.BID),<a name="line.175"></a>
+<FONT color="green">176</FONT>                                    entries(Book.Side.ASK),<a name="line.176"></a>
+<FONT color="green">177</FONT>                                    topBid, topAsk,<a name="line.177"></a>
 <FONT color="green">178</FONT>                                    lastEntry, EnumSet.copyOf(changeSet));<a name="line.178"></a>
 <FONT color="green">179</FONT>            }<a name="line.179"></a>
 <FONT color="green">180</FONT>            <a name="line.180"></a>
@@ -278,47 +278,68 @@
 <FONT color="green">275</FONT>            @Override<a name="line.275"></a>
 <FONT color="green">276</FONT>            public UniBookResult setSnapshot(final MarketDoBookEntry[] entries) {<a name="line.276"></a>
 <FONT color="green">277</FONT>    <a name="line.277"></a>
-<FONT color="green">278</FONT>                    clear();<a name="line.278"></a>
-<FONT color="green">279</FONT>                    <a name="line.279"></a>
-<FONT color="green">280</FONT>                    changeSet.add(Component.NORMAL_BID);<a name="line.280"></a>
-<FONT color="green">281</FONT>                    changeSet.add(Component.NORMAL_ASK);<a name="line.281"></a>
-<FONT color="green">282</FONT>                    changeSet.add(Component.TOP_BID);<a name="line.282"></a>
-<FONT color="green">283</FONT>                    changeSet.add(Component.TOP_ASK);<a name="line.283"></a>
-<FONT color="green">284</FONT>                    changeSet.add(Component.ANY_BID);<a name="line.284"></a>
-<FONT color="green">285</FONT>                    changeSet.add(Component.ANY_ASK);<a name="line.285"></a>
-<FONT color="green">286</FONT>    <a name="line.286"></a>
-<FONT color="green">287</FONT>                    for (final MarketDoBookEntry entry : entries) {<a name="line.287"></a>
-<FONT color="green">288</FONT>    <a name="line.288"></a>
-<FONT color="green">289</FONT>                            final EntryMap map = map(entry.side());<a name="line.289"></a>
-<FONT color="green">290</FONT>    <a name="line.290"></a>
-<FONT color="green">291</FONT>                            map.put(entry.priceValue(), entry);<a name="line.291"></a>
-<FONT color="green">292</FONT>    <a name="line.292"></a>
-<FONT color="green">293</FONT>                    }<a name="line.293"></a>
-<FONT color="green">294</FONT>    <a name="line.294"></a>
-<FONT color="green">295</FONT>                    /*<a name="line.295"></a>
-<FONT color="green">296</FONT>                     * <a name="line.296"></a>
-<FONT color="green">297</FONT>                     */<a name="line.297"></a>
-<FONT color="green">298</FONT>                    <a name="line.298"></a>
-<FONT color="green">299</FONT>                    return UniBookResult.NORMAL;<a name="line.299"></a>
-<FONT color="green">300</FONT>    <a name="line.300"></a>
-<FONT color="green">301</FONT>            }<a name="line.301"></a>
-<FONT color="green">302</FONT>    <a name="line.302"></a>
-<FONT color="green">303</FONT>            @Override<a name="line.303"></a>
-<FONT color="green">304</FONT>            public List&lt;Entry&gt; entryList(Book.Side side) {<a name="line.304"></a>
-<FONT color="green">305</FONT>                    throw new UnsupportedOperationException("UNUSED");<a name="line.305"></a>
-<FONT color="green">306</FONT>            }<a name="line.306"></a>
-<FONT color="green">307</FONT>    <a name="line.307"></a>
-<FONT color="green">308</FONT>            @Override<a name="line.308"></a>
-<FONT color="green">309</FONT>            public Instrument instrument() {<a name="line.309"></a>
-<FONT color="green">310</FONT>                    return instrument;<a name="line.310"></a>
-<FONT color="green">311</FONT>            }<a name="line.311"></a>
-<FONT color="green">312</FONT>    <a name="line.312"></a>
-<FONT color="green">313</FONT>            @Override<a name="line.313"></a>
-<FONT color="green">314</FONT>            public Set&lt;Component&gt; change() {<a name="line.314"></a>
-<FONT color="green">315</FONT>                    throw new UnsupportedOperationException("UNUSED");<a name="line.315"></a>
-<FONT color="green">316</FONT>            }<a name="line.316"></a>
-<FONT color="green">317</FONT>    <a name="line.317"></a>
-<FONT color="green">318</FONT>    }<a name="line.318"></a>
+<FONT color="green">278</FONT>                    if(entries == null) {<a name="line.278"></a>
+<FONT color="green">279</FONT>                            log.error("SetSnapshot called with null book entries");<a name="line.279"></a>
+<FONT color="green">280</FONT>                            return UniBookResult.ERROR;<a name="line.280"></a>
+<FONT color="green">281</FONT>                    }<a name="line.281"></a>
+<FONT color="green">282</FONT>                    <a name="line.282"></a>
+<FONT color="green">283</FONT>                    log.debug("SetSnapshot called");<a name="line.283"></a>
+<FONT color="green">284</FONT>                    <a name="line.284"></a>
+<FONT color="green">285</FONT>                    clear();<a name="line.285"></a>
+<FONT color="green">286</FONT>                    <a name="line.286"></a>
+<FONT color="green">287</FONT>                    changeSet.add(Component.NORMAL_BID);<a name="line.287"></a>
+<FONT color="green">288</FONT>                    changeSet.add(Component.NORMAL_ASK);<a name="line.288"></a>
+<FONT color="green">289</FONT>                    changeSet.add(Component.TOP_BID);<a name="line.289"></a>
+<FONT color="green">290</FONT>                    changeSet.add(Component.TOP_ASK);<a name="line.290"></a>
+<FONT color="green">291</FONT>                    changeSet.add(Component.ANY_BID);<a name="line.291"></a>
+<FONT color="green">292</FONT>                    changeSet.add(Component.ANY_ASK);<a name="line.292"></a>
+<FONT color="green">293</FONT>    <a name="line.293"></a>
+<FONT color="green">294</FONT>                    for (final MarketDoBookEntry entry : entries) {<a name="line.294"></a>
+<FONT color="green">295</FONT>    <a name="line.295"></a>
+<FONT color="green">296</FONT>                            if(entry != null &amp;&amp; !entry.isNull()) {<a name="line.296"></a>
+<FONT color="green">297</FONT>                                    final EntryMap map = map(entry.side());<a name="line.297"></a>
+<FONT color="green">298</FONT>                                    map.put(entry.priceValue(), entry);<a name="line.298"></a>
+<FONT color="green">299</FONT>                                    <a name="line.299"></a>
+<FONT color="green">300</FONT>                                    /*<a name="line.300"></a>
+<FONT color="green">301</FONT>                                     * Set top of book from snapshot update<a name="line.301"></a>
+<FONT color="green">302</FONT>                                     */<a name="line.302"></a>
+<FONT color="green">303</FONT>                                    if(entry.level() == 1) {<a name="line.303"></a>
+<FONT color="green">304</FONT>                                            <a name="line.304"></a>
+<FONT color="green">305</FONT>                                            if(entry.side() == Book.Side.BID) {<a name="line.305"></a>
+<FONT color="green">306</FONT>                                                    topBid = entry;<a name="line.306"></a>
+<FONT color="green">307</FONT>                                            } else {<a name="line.307"></a>
+<FONT color="green">308</FONT>                                                    topAsk = entry;<a name="line.308"></a>
+<FONT color="green">309</FONT>                                            }<a name="line.309"></a>
+<FONT color="green">310</FONT>                                            <a name="line.310"></a>
+<FONT color="green">311</FONT>                                    }<a name="line.311"></a>
+<FONT color="green">312</FONT>                            }<a name="line.312"></a>
+<FONT color="green">313</FONT>    <a name="line.313"></a>
+<FONT color="green">314</FONT>                    }<a name="line.314"></a>
+<FONT color="green">315</FONT>                    <a name="line.315"></a>
+<FONT color="green">316</FONT>                    /*<a name="line.316"></a>
+<FONT color="green">317</FONT>                     * <a name="line.317"></a>
+<FONT color="green">318</FONT>                     */<a name="line.318"></a>
+<FONT color="green">319</FONT>                    <a name="line.319"></a>
+<FONT color="green">320</FONT>                    return UniBookResult.NORMAL;<a name="line.320"></a>
+<FONT color="green">321</FONT>    <a name="line.321"></a>
+<FONT color="green">322</FONT>            }<a name="line.322"></a>
+<FONT color="green">323</FONT>    <a name="line.323"></a>
+<FONT color="green">324</FONT>            @Override<a name="line.324"></a>
+<FONT color="green">325</FONT>            public List&lt;Entry&gt; entryList(Book.Side side) {<a name="line.325"></a>
+<FONT color="green">326</FONT>                    throw new UnsupportedOperationException("UNUSED");<a name="line.326"></a>
+<FONT color="green">327</FONT>            }<a name="line.327"></a>
+<FONT color="green">328</FONT>    <a name="line.328"></a>
+<FONT color="green">329</FONT>            @Override<a name="line.329"></a>
+<FONT color="green">330</FONT>            public Instrument instrument() {<a name="line.330"></a>
+<FONT color="green">331</FONT>                    return instrument;<a name="line.331"></a>
+<FONT color="green">332</FONT>            }<a name="line.332"></a>
+<FONT color="green">333</FONT>    <a name="line.333"></a>
+<FONT color="green">334</FONT>            @Override<a name="line.334"></a>
+<FONT color="green">335</FONT>            public Set&lt;Component&gt; change() {<a name="line.335"></a>
+<FONT color="green">336</FONT>                    throw new UnsupportedOperationException("UNUSED");<a name="line.336"></a>
+<FONT color="green">337</FONT>            }<a name="line.337"></a>
+<FONT color="green">338</FONT>    <a name="line.338"></a>
+<FONT color="green">339</FONT>    }<a name="line.339"></a>
 
 
 

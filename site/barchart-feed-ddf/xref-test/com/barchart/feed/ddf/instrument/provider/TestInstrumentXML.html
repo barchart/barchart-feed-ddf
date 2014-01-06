@@ -25,14 +25,14 @@
 <a class="jxr_linenumber" name="15" href="#15">15</a>  
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.api.model.meta.Instrument;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> com.barchart.feed.inst.provider.InstrumentFactory;
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.api.Factory;
-<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.api.FactoryLoader;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.ValueFactoryImpl;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.api.ValueFactory;
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.api.Size;
 <a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> com.barchart.util.value.api.TimeInterval;
 <a class="jxr_linenumber" name="22" href="#22">22</a>  
 <a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../com/barchart/feed/ddf/instrument/provider/TestInstrumentXML.html">TestInstrumentXML</a> {
 <a class="jxr_linenumber" name="24" href="#24">24</a>  
-<a class="jxr_linenumber" name="25" href="#25">25</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Factory factory = FactoryLoader.load();
+<a class="jxr_linenumber" name="25" href="#25">25</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ValueFactory factory = <strong class="jxr_keyword">new</strong> ValueFactoryImpl();
 <a class="jxr_linenumber" name="26" href="#26">26</a>  	
 <a class="jxr_linenumber" name="27" href="#27">27</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String IBM = <span class="jxr_string">"&lt;instruments status=\&quot;200\&quot; count=\&quot;1\&quot;&gt;	&lt;instrument lookup=\&quot;IBM\&quot; status=\&quot;200\&quot; guid=\&quot;IBM\&quot; id=\&quot;1298146\&quot; symbol_realtime=\&quot;IBM\&quot; symbol_ddf=\&quot;IBM\&quot; symbol_historical=\&quot;IBM\&quot; "</span>+
 <a class="jxr_linenumber" name="28" href="#28">28</a>  		<span class="jxr_string">"symbol_description=\&quot;International Business Machines Corp.\&quot; symbol_cfi=\&quot;EXXXXX\&quot; exchange=\&quot;XNYS\&quot; exchange_channel=\&quot;NYSE\&quot; exchange_description=\&quot;New York Stock Exchange\&quot; exchange_ddf=\&quot;N\&quot; time_zone_ddf=\&quot;America/New_York\&quot; "</span> + 
@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="40" href="#40">40</a>  		<strong class="jxr_keyword">final</strong> Instrument IBMInst = InstrumentFactory.instrument(InstrumentXML.decodeXML(tag));
 <a class="jxr_linenumber" name="41" href="#41">41</a>  		
 <a class="jxr_linenumber" name="42" href="#42">42</a>  		assertTrue(IBMInst.marketGUID().equals(<span class="jxr_string">"IBM"</span>));
-<a class="jxr_linenumber" name="43" href="#43">43</a>  		assertTrue(IBMInst.securityType() == Instrument.SecurityType.NULL_TYPE);
+<a class="jxr_linenumber" name="43" href="#43">43</a>  		assertTrue(IBMInst.securityType() == Instrument.SecurityType.EQUITY);
 <a class="jxr_linenumber" name="44" href="#44">44</a>  		assertTrue(IBMInst.liquidityType() == Instrument.BookLiquidityType.NONE);
 <a class="jxr_linenumber" name="45" href="#45">45</a>  		assertTrue(IBMInst.bookStructure() == Instrument.BookStructureType.NONE);
 <a class="jxr_linenumber" name="46" href="#46">46</a>  		assertTrue(IBMInst.maxBookDepth() == Size.NULL);

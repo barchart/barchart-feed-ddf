@@ -35,7 +35,7 @@
 <FONT color="green">032</FONT>    import org.slf4j.LoggerFactory;<a name="line.32"></a>
 <FONT color="green">033</FONT>    <a name="line.33"></a>
 <FONT color="green">034</FONT>    import com.barchart.feed.api.connection.Connection;<a name="line.34"></a>
-<FONT color="green">035</FONT>    import com.barchart.feed.base.sub.Subscription;<a name="line.35"></a>
+<FONT color="green">035</FONT>    import com.barchart.feed.base.sub.Sub;<a name="line.35"></a>
 <FONT color="green">036</FONT>    import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;<a name="line.36"></a>
 <FONT color="green">037</FONT>    import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;<a name="line.37"></a>
 <FONT color="green">038</FONT>    import com.barchart.feed.ddf.datalink.api.DummyFuture;<a name="line.38"></a>
@@ -68,8 +68,8 @@
 <FONT color="green">065</FONT>    <a name="line.65"></a>
 <FONT color="green">066</FONT>            private final int socketAddress;<a name="line.66"></a>
 <FONT color="green">067</FONT>    <a name="line.67"></a>
-<FONT color="green">068</FONT>            private final Map&lt;String, Subscription&gt; subscriptions = <a name="line.68"></a>
-<FONT color="green">069</FONT>                            new ConcurrentHashMap&lt;String, Subscription&gt;();<a name="line.69"></a>
+<FONT color="green">068</FONT>            private final Map&lt;String, Sub&gt; subscriptions = <a name="line.68"></a>
+<FONT color="green">069</FONT>                            new ConcurrentHashMap&lt;String, Sub&gt;();<a name="line.69"></a>
 <FONT color="green">070</FONT>            <a name="line.70"></a>
 <FONT color="green">071</FONT>            HistoricReplayListenerClientDDF(final int socketAddress, final Executor executor) {<a name="line.71"></a>
 <FONT color="green">072</FONT>    <a name="line.72"></a>
@@ -228,14 +228,14 @@
 <FONT color="green">225</FONT>            }<a name="line.225"></a>
 <FONT color="green">226</FONT>            <a name="line.226"></a>
 <FONT color="green">227</FONT>            @Override<a name="line.227"></a>
-<FONT color="green">228</FONT>            public Future&lt;Boolean&gt; subscribe(Set&lt;Subscription&gt; subs) {<a name="line.228"></a>
+<FONT color="green">228</FONT>            public Future&lt;Boolean&gt; subscribe(Set&lt;Sub&gt; subs) {<a name="line.228"></a>
 <FONT color="green">229</FONT>                    <a name="line.229"></a>
 <FONT color="green">230</FONT>                    if (subs == null) {<a name="line.230"></a>
 <FONT color="green">231</FONT>                            log.error("Null subscribes request recieved");<a name="line.231"></a>
 <FONT color="green">232</FONT>                            return new FailedFuture();<a name="line.232"></a>
 <FONT color="green">233</FONT>                    }<a name="line.233"></a>
 <FONT color="green">234</FONT>                    <a name="line.234"></a>
-<FONT color="green">235</FONT>                    for (final Subscription sub : subs) {<a name="line.235"></a>
+<FONT color="green">235</FONT>                    for (final Sub sub : subs) {<a name="line.235"></a>
 <FONT color="green">236</FONT>    <a name="line.236"></a>
 <FONT color="green">237</FONT>                            if (sub != null) {<a name="line.237"></a>
 <FONT color="green">238</FONT>                                    <a name="line.238"></a>
@@ -255,7 +255,7 @@
 <FONT color="green">252</FONT>            }<a name="line.252"></a>
 <FONT color="green">253</FONT>    <a name="line.253"></a>
 <FONT color="green">254</FONT>            @Override<a name="line.254"></a>
-<FONT color="green">255</FONT>            public Future&lt;Boolean&gt; subscribe(Subscription sub) {<a name="line.255"></a>
+<FONT color="green">255</FONT>            public Future&lt;Boolean&gt; subscribe(Sub sub) {<a name="line.255"></a>
 <FONT color="green">256</FONT>                    <a name="line.256"></a>
 <FONT color="green">257</FONT>                    if (sub == null) {<a name="line.257"></a>
 <FONT color="green">258</FONT>                            log.error("Null subscribe request recieved");<a name="line.258"></a>
@@ -276,14 +276,14 @@
 <FONT color="green">273</FONT>            // the registration and unregistration of instruments in the <a name="line.273"></a>
 <FONT color="green">274</FONT>            // market maker and the feed.  <a name="line.274"></a>
 <FONT color="green">275</FONT>            @Override<a name="line.275"></a>
-<FONT color="green">276</FONT>            public Future&lt;Boolean&gt; unsubscribe(Set&lt;Subscription&gt; subs) {<a name="line.276"></a>
+<FONT color="green">276</FONT>            public Future&lt;Boolean&gt; unsubscribe(Set&lt;Sub&gt; subs) {<a name="line.276"></a>
 <FONT color="green">277</FONT>                    <a name="line.277"></a>
 <FONT color="green">278</FONT>                    if (subs == null) {<a name="line.278"></a>
 <FONT color="green">279</FONT>                            log.error("Null subscribes request recieved");<a name="line.279"></a>
 <FONT color="green">280</FONT>                            return new FailedFuture();<a name="line.280"></a>
 <FONT color="green">281</FONT>                    }<a name="line.281"></a>
 <FONT color="green">282</FONT>                    <a name="line.282"></a>
-<FONT color="green">283</FONT>                    for (final Subscription sub : subs) {<a name="line.283"></a>
+<FONT color="green">283</FONT>                    for (final Sub sub : subs) {<a name="line.283"></a>
 <FONT color="green">284</FONT>    <a name="line.284"></a>
 <FONT color="green">285</FONT>                            if (sub != null) {<a name="line.285"></a>
 <FONT color="green">286</FONT>                                    subscriptions.remove(sub.encode());<a name="line.286"></a>
@@ -294,7 +294,7 @@
 <FONT color="green">291</FONT>            }<a name="line.291"></a>
 <FONT color="green">292</FONT>            <a name="line.292"></a>
 <FONT color="green">293</FONT>            @Override<a name="line.293"></a>
-<FONT color="green">294</FONT>            public Future&lt;Boolean&gt; unsubscribe(Subscription sub) {<a name="line.294"></a>
+<FONT color="green">294</FONT>            public Future&lt;Boolean&gt; unsubscribe(Sub sub) {<a name="line.294"></a>
 <FONT color="green">295</FONT>                    <a name="line.295"></a>
 <FONT color="green">296</FONT>                    if (sub == null) {<a name="line.296"></a>
 <FONT color="green">297</FONT>                            log.error("Null subscribe request recieved");<a name="line.297"></a>

@@ -18,14 +18,14 @@
 <FONT color="green">015</FONT>    <a name="line.15"></a>
 <FONT color="green">016</FONT>    import com.barchart.feed.api.model.meta.Instrument;<a name="line.16"></a>
 <FONT color="green">017</FONT>    import com.barchart.feed.inst.provider.InstrumentFactory;<a name="line.17"></a>
-<FONT color="green">018</FONT>    import com.barchart.util.value.api.Factory;<a name="line.18"></a>
-<FONT color="green">019</FONT>    import com.barchart.util.value.api.FactoryLoader;<a name="line.19"></a>
+<FONT color="green">018</FONT>    import com.barchart.util.value.ValueFactoryImpl;<a name="line.18"></a>
+<FONT color="green">019</FONT>    import com.barchart.util.value.api.ValueFactory;<a name="line.19"></a>
 <FONT color="green">020</FONT>    import com.barchart.util.value.api.Size;<a name="line.20"></a>
 <FONT color="green">021</FONT>    import com.barchart.util.value.api.TimeInterval;<a name="line.21"></a>
 <FONT color="green">022</FONT>    <a name="line.22"></a>
 <FONT color="green">023</FONT>    public class TestInstrumentXML {<a name="line.23"></a>
 <FONT color="green">024</FONT>    <a name="line.24"></a>
-<FONT color="green">025</FONT>            private static final Factory factory = FactoryLoader.load();<a name="line.25"></a>
+<FONT color="green">025</FONT>            private static final ValueFactory factory = new ValueFactoryImpl();<a name="line.25"></a>
 <FONT color="green">026</FONT>            <a name="line.26"></a>
 <FONT color="green">027</FONT>            private static final String IBM = "&lt;instruments status=\"200\" count=\"1\"&gt;       &lt;instrument lookup=\"IBM\" status=\"200\" guid=\"IBM\" id=\"1298146\" symbol_realtime=\"IBM\" symbol_ddf=\"IBM\" symbol_historical=\"IBM\" "+<a name="line.27"></a>
 <FONT color="green">028</FONT>                    "symbol_description=\"International Business Machines Corp.\" symbol_cfi=\"EXXXXX\" exchange=\"XNYS\" exchange_channel=\"NYSE\" exchange_description=\"New York Stock Exchange\" exchange_ddf=\"N\" time_zone_ddf=\"America/New_York\" " + <a name="line.28"></a>
@@ -43,7 +43,7 @@
 <FONT color="green">040</FONT>                    final Instrument IBMInst = InstrumentFactory.instrument(InstrumentXML.decodeXML(tag));<a name="line.40"></a>
 <FONT color="green">041</FONT>                    <a name="line.41"></a>
 <FONT color="green">042</FONT>                    assertTrue(IBMInst.marketGUID().equals("IBM"));<a name="line.42"></a>
-<FONT color="green">043</FONT>                    assertTrue(IBMInst.securityType() == Instrument.SecurityType.NULL_TYPE);<a name="line.43"></a>
+<FONT color="green">043</FONT>                    assertTrue(IBMInst.securityType() == Instrument.SecurityType.EQUITY);<a name="line.43"></a>
 <FONT color="green">044</FONT>                    assertTrue(IBMInst.liquidityType() == Instrument.BookLiquidityType.NONE);<a name="line.44"></a>
 <FONT color="green">045</FONT>                    assertTrue(IBMInst.bookStructure() == Instrument.BookStructureType.NONE);<a name="line.45"></a>
 <FONT color="green">046</FONT>                    assertTrue(IBMInst.maxBookDepth() == Size.NULL);<a name="line.46"></a>
