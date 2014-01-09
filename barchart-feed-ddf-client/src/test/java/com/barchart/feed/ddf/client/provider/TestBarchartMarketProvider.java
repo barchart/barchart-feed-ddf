@@ -78,6 +78,7 @@ public class TestBarchartMarketProvider {
 			public void onNext(final Market v) {
 				final LastPrice lp = v.lastPrice();
 				log.debug("LastPrice={} {}", lp.price().toString(), lp.source());
+				log.debug("LastTrade={}", v.trade().price().toString());
 			}
 		};
 	}

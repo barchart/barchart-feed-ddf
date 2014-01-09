@@ -869,6 +869,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
 
+			market.setLastPrice(new LastPriceImpl(Source.LAST_TRADE, 
+					ValueConverter.price(price)));
 		}
 			break;
 
@@ -886,7 +888,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		}
 		
 		// 
-		updateLastPrice(market, message.toString());
 		
 		return null;
 	}
@@ -987,33 +988,33 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		/* SETTLE */
 		Price price = market.session().settle();
 		if(!price.isNull()) {
-			log.debug("Upated Last Price From Settle=" + price.toString());
+			//log.debug("Upated Last Price From Settle=" + price.toString());
 			market.setLastPrice(new LastPriceImpl(Source.SETTLE, price));
 			return;
 		}
 		
-		/* CLOSE == TRADE because we don't actually have close messages */
-		price = market.session().close();
+		/* TRADE because we don't actually have close messages */
+		price = market.trade().price();
 		if(!price.isNull()) {
-			log.debug("Updated Last Price From Close=" + price.toString());
+			//log.debug("Updated Last Price From Trade=" + price.toString());
 			market.setLastPrice(new LastPriceImpl(Source.LAST_TRADE, price));
 			return;
 		}
 		
-		/* TRADE 
-		price = market.trade().price();
+		/* CLOSE after TRADE because of snapshots give last price */ 
+		price = market.session().close();
 		if(!price.isNull()) {
-			log.trace("Updated Last Price From Trade=" + price.toString());
+			//log.trace("Updated Last Price From Close=" + price.toString());
 			market.setLastPrice(new LastPriceImpl(Source.LAST_TRADE, price));
 			return;
-		}*/
+		}
 
 		/* PREV CLOSE */
 		SessionData session = market.sessionSet().session(Type.DEFAULT_PREVIOUS);
 		if(session != null) {
 			price = session.settle();
 			if(!price.isNull()) {
-				log.debug("Updated Last Price From Previous=" + price.toString());
+				//log.debug("Updated Last Price From Previous=" + price.toString());
 				market.setLastPrice(new LastPriceImpl(Source.PREV_SETTLE, price));
 				return;
 			}
