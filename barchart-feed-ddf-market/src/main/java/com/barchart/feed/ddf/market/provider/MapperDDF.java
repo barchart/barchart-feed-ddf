@@ -18,7 +18,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Market.Component;
+import com.barchart.feed.api.model.data.Market.LastPrice;
+import com.barchart.feed.api.model.data.Market.LastPrice.Source;
+import com.barchart.feed.api.model.data.Session.Type;
+import com.barchart.feed.api.model.data.SessionData;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;
@@ -30,11 +35,11 @@ import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.DefBookEntry;
+import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
-import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
@@ -52,7 +57,6 @@ import com.barchart.feed.ddf.message.api.DDF_MarketSnapshot;
 import com.barchart.feed.ddf.message.api.DDF_MarketTrade;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.api.DDF_Prior_IndividCmdy;
-import com.barchart.feed.ddf.message.enums.DDF_Condition;
 import com.barchart.feed.ddf.message.enums.DDF_Indicator;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_ParamType;
@@ -61,6 +65,7 @@ import com.barchart.feed.ddf.message.enums.DDF_QuoteState;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.common.anno.ThreadSafe;
+import com.barchart.util.value.api.Price;
 
 // TODO: Auto-generated Javadoc
 @ThreadSafe
@@ -177,9 +182,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			market.clearChanges();
 			market.setChange(Component.TRADE);
 			
-			log.debug("Mapper saw TRADE_ASK_PRICE - Price=" + price.toString() + 
-					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-					+ message.getInstrument().symbol());
+//			log.debug("Mapper saw TRADE_ASK_PRICE - Price=" + price.toString() + 
+//					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
+//					+ message.getInstrument().symbol());
 			
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
@@ -192,9 +197,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			market.clearChanges();
 			market.setChange(Component.TRADE);
 			
-			log.debug("Mapper saw TRADE_BID_PRICE - Price=" + price.toString() + 
-					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-					+ message.getInstrument().symbol());
+//			log.debug("Mapper saw TRADE_BID_PRICE - Price=" + price.toString() + 
+//					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
+//					+ message.getInstrument().symbol());
 			
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
@@ -214,9 +219,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			
 		case ASK_LAST: // NEW
 			
-			log.debug("Mapper saw ASK_LAST - Price=" + price.toString() + 
-					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-					+ message.getInstrument().symbol());
+//			log.debug("Mapper saw ASK_LAST - Price=" + price.toString() + 
+//					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
+//					+ message.getInstrument().symbol());
 			
 		case ASK_LAST_PRICE:
 			
@@ -245,9 +250,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			return null;
 
 		case BID_LAST: // NEW
-			log.debug("Mapper saw BID_LAST - Price=" + price.toString() + 
-					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-					+ message.getInstrument().symbol());
+//			log.debug("Mapper saw BID_LAST - Price=" + price.toString() + 
+//					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
+//					+ message.getInstrument().symbol());
 			
 		case BID_LAST_PRICE:
 			
@@ -428,6 +433,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barCurrent.set(MarketBarField.BAR_TIME, time);
 			market.setBar(CURRENT, barCurrent);
 			
+			/* Update last price to settle price */
+			market.setLastPrice(new LastPriceImpl(LastPrice.Source.SETTLE, ValueConverter.price(price)));
+			
 			return null;
 
 		default:
@@ -455,13 +463,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		market.clearChanges();
 		// ### process quote
 
-		// TODO part of instrument; should update definition?
-		final TextValue symbolName = message.getSymbolName();
-		final PriceValue priceStep = message.getPriceStep();
-		final PriceValue pointValue = message.getPointValue();
-
-		// TODO add more complete flag support?
-		final DDF_Condition condition = message.getCondition();
 		final DDF_QuoteState state = message.getState();
 		final DDF_QuoteMode mode = message.getMode();
 
@@ -542,6 +543,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			visit(bookTop, market);
 			
 		}
+		
+		// 
+		updateLastPrice(market, message.toString());
 
 		return null;
 	}
@@ -557,12 +561,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	 */
 	@Override
 	public Void visit(final DDF_MarketSession message, final MarketDo market) {
-
-		// ### process session
-
-		// TODO are these trade fields?
-		final SizeValue sizeLast = message.getSizeLast();
-		final TimeValue timeLast = message.getTimeLast();
 
 		// ### process snapshot
 
@@ -758,6 +756,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		}
 
+		// 
+		updateLastPrice(market, message.toString());
+		
 		return null;
 	}
 
@@ -819,6 +820,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			
 		}
 		
+		// 
+		updateLastPrice(market, message.toString());
+		
 		return null;
 	}
 
@@ -872,6 +876,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			break;
 
 		}
+		
+		// 
+		updateLastPrice(market, message.toString());
 		
 		return null;
 	}
@@ -965,6 +972,72 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		market.setBookUpdate(entry, time);
 
+	}
+	
+	private void updateLastPrice(final MarketDo market, final String message) {
+		
+		/* SETTLE */
+		Price price = market.session().settle();
+		if(!price.isNull()) {
+			log.debug("Upated Last Price From Settle=" + price.toString());
+			market.setLastPrice(new LastPriceImpl(Source.SETTLE, price));
+			return;
+		}
+		
+		/* CLOSE */
+		price = market.session().close();
+		if(!price.isNull()) {
+			log.debug("Updated Last Price From Close=" + price.toString());
+			market.setLastPrice(new LastPriceImpl(Source.CLOSE, price));
+			return;
+		}
+		
+		/* TRADE */
+		price = market.trade().price();
+		if(!price.isNull()) {
+			log.trace("Updated Last Price From Trade=" + price.toString());
+			market.setLastPrice(new LastPriceImpl(Source.LAST_TRADE, price));
+			return;
+		}
+
+		/* PREV CLOSE */
+		SessionData session = market.sessionSet().session(Type.DEFAULT_PREVIOUS);
+		if(session != null) {
+			price = session.settle();
+			if(!price.isNull()) {
+				log.debug("Updated Last Price From Previous=" + price.toString());
+				market.setLastPrice(new LastPriceImpl(Source.PREV_SETTLE, price));
+				return;
+			}
+		}
+		
+		if(price.isNull()) {
+			log.warn("Failed to update last price from Market : \n{}\n{}", market.toString(), message);
+			market.setLastPrice(LastPrice.NULL);
+		}
+		
+	}
+	
+	private class LastPriceImpl implements Market.LastPrice {
+
+		private final Source source; 
+		private final Price price;
+		
+		public LastPriceImpl(final Source source, final Price price) {
+			this.source = source;
+			this.price = price;
+		}
+		
+		@Override
+		public Source source() {
+			return source;
+		}
+
+		@Override
+		public Price price() {
+			return price;
+		}
+		
 	}
 
 }

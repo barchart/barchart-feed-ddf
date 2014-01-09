@@ -40,6 +40,7 @@ import rx.subjects.ReplaySubject;
 import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.consumer.MetadataService.SearchContext;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider.RemoteRunner;
@@ -97,7 +98,14 @@ public class DDF_RxInstrumentProvider {
 		
 	}
 	
-	/* ***** ***** ***** End Executor ***** ***** ***** */
+	/* ***** ***** ***** Begin ID Lookup ***** ***** ***** */
+	
+	public static Observable<Instrument> fromID(final InstrumentID... ids) {
+		// TODO
+		return null;
+	}
+	
+	/* ***** ***** ***** Begin String Search ***** ***** ***** */
 	
 	public static Observable<Result<Instrument>> fromString(final String... symbols) {
 		return fromString(SearchContext.NULL, symbols);

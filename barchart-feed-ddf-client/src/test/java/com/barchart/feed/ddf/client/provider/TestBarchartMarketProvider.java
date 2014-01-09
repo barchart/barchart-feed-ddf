@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 import rx.Observer;
 
 import com.barchart.feed.api.MarketObserver;
-import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
-import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Market.LastPrice;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.client.provider.BarchartMarketProvider;
 
@@ -24,7 +24,7 @@ public class TestBarchartMarketProvider {
 	private static final Logger log = LoggerFactory.getLogger(
 			TestBarchartMarketProvider.class);
 	
-	private static final String[] insts = {"ESF2014|550C"};
+	private static final String[] insts = {"AAPL"};
 	
 	public static void main(final String[] args) throws Exception {
 		
@@ -76,8 +76,8 @@ public class TestBarchartMarketProvider {
 
 			@Override
 			public void onNext(final Market v) {
-				final Book book = v.book();
-				log.debug("UPDATE: \n{}", book);
+				final LastPrice lp = v.lastPrice();
+				log.debug("LastPrice={} {}", lp.price().toString(), lp.source());
 			}
 		};
 	}
