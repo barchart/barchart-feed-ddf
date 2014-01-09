@@ -557,8 +557,13 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			final PriceValue priceHigh = message.getPriceHigh();
 			final PriceValue priceLow = message.getPriceLow();
 			final PriceValue priceClose = message.getPriceLast(); // XXX
-			final PriceValue priceSettle = message.getPriceSettle();
+			
 			final SizeValue sizeVolume = message.getSizeVolume();
+			
+			PriceValue priceSettle = ValueConst.NULL_PRICE;
+			if(market.get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED)) {
+				priceSettle = message.getPriceSettle();
+			}
 
 			applyBar(bar, MarketBarField.OPEN, priceOpen);
 			applyBar(bar, MarketBarField.HIGH, priceHigh);
@@ -627,10 +632,14 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		final PriceValue priceHigh = message.getPriceHigh();
 		final PriceValue priceLow = message.getPriceLow();
 		final PriceValue priceClose = message.getPriceLast(); // XXX note: LAST
-		final PriceValue priceSettle = message.getPriceSettle();
 		final SizeValue sizeVolume = message.getSizeVolume();
 		final SizeValue sizeInterest = message.getSizeInterest();
 
+		PriceValue priceSettle = ValueConst.NULL_PRICE;
+		if(market.get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED)) {
+			priceSettle = message.getPriceSettle();
+		}
+		
 		// apply
 
 		applyBar(bar, MarketBarField.OPEN, priceOpen);
