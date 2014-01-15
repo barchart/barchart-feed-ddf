@@ -279,6 +279,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barCurrent.set(MarketBarField.INTEREST, size);
 			barCurrent.set(MarketBarField.VOLUME, size);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
+			barCurrent.set(MarketBarField.SETTLE, ValueConst.NULL_PRICE);  // Test
 			market.setBar(CURRENT, barCurrent);
 			//
 			market.setState(MarketStateEntry.IS_SETTLED, false);
