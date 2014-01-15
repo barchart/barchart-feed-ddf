@@ -53,8 +53,8 @@ public class BarchartMarketplace implements Marketplace {
 	private volatile File instDefZip;
 	private static final long DB_UPDATE_TIMEOUT = 2 * 60; // seconds
 	
-	private volatile DDF_FeedClientBase connection;
-	private final DDF_Marketplace maker;
+	protected volatile DDF_FeedClientBase connection;
+	protected volatile DDF_Marketplace maker;
 	private final ExecutorService executor;
 	
 	private final String username, password;
@@ -329,7 +329,7 @@ public class BarchartMarketplace implements Marketplace {
 	 * This is the default message listener. Users wishing to handle raw
 	 * messages will need to implement their own feed client.
 	 */
-	private final DDF_MessageListener msgListener = new DDF_MessageListener() {
+	protected final DDF_MessageListener msgListener = new DDF_MessageListener() {
 
 		@Override
 		public void handleMessage(final DDF_BaseMessage message) {

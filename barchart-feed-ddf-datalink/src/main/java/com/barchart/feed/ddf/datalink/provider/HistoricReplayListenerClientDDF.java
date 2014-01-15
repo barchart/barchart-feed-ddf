@@ -68,7 +68,7 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 	private final Map<String, Sub> subscriptions = 
 			new ConcurrentHashMap<String, Sub>();
 	
-	HistoricReplayListenerClientDDF(final int socketAddress, final Executor executor) {
+	public HistoricReplayListenerClientDDF(final int socketAddress, final Executor executor) {
 
 		this.socketAddress = socketAddress;
 		runner = executor;
