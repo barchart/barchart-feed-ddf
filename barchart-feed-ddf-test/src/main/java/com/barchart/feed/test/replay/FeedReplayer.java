@@ -8,6 +8,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.base.util.ASCII;
 import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
@@ -20,6 +23,8 @@ import com.barchart.feed.ddf.message.provider.DDF_SpreadParser;
  * adjustments.
  */
 public class FeedReplayer {
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final URL source;
 	private final double speed;
@@ -42,7 +47,7 @@ public class FeedReplayer {
 	 * Replay from a file, using the given speed multiplier.
 	 * 
 	 * @param source_ The source file
-	 * @param speed_ The multiplier to speed up the feed by, -1 for maximumum
+	 * @param speed_ The multiplier to speed up the feed by, -1 for maximum
 	 */
 	public FeedReplayer(final File source_, final double speed_) {
 		try {
@@ -57,7 +62,7 @@ public class FeedReplayer {
 	 * Replay from a URL, using the given speed multiplier.
 	 * 
 	 * @param source_ The source URL
-	 * @param speed_ The multiplier to speed up the feed by, -1 for maximumum
+	 * @param speed_ The multiplier to speed up the feed by, -1 for maximum
 	 */
 	public FeedReplayer(final URL source_, final double speed_) {
 		source = source_;
@@ -65,6 +70,9 @@ public class FeedReplayer {
 	}
 
 	public void run(final DDF_Marketplace marketplace) {
+
+		long baseline = 0;
+		long adjustment = 0;
 
 		try {
 
@@ -83,7 +91,7 @@ public class FeedReplayer {
 				byte[] message = line.getBytes();
 
 				if (message.length < 2) {
-					System.out.println("Short message, discarded");
+					log.warn("Short message, discarded");
 					continue;
 				}
 
@@ -97,9 +105,8 @@ public class FeedReplayer {
 				try {
 					decoded = DDF_MessageService.decode(message);
 				} catch (final Exception e) {
-					System.out
-							.println("decode failed : " + new String(message));
-					System.out.println(new String(Arrays.toString(message)));
+					log.warn("decode failed : " + new String(message));
+					log.debug(new String(Arrays.toString(message)));
 					continue;
 				}
 
@@ -108,7 +115,35 @@ public class FeedReplayer {
 					final DDF_MarketBase marketMessage =
 							(DDF_MarketBase) decoded;
 
-					System.out.println(marketMessage.toString());
+					if (speed > 0) {
+
+						final long time = marketMessage.getTime().asMillisUTC();
+
+						if (baseline == 0) {
+
+							// Set baseline time difference
+							baseline = time;
+							adjustment = System.currentTimeMillis() - baseline;
+
+						} else {
+
+							final double delay = (time - baseline) * speed;
+							final double elapsed =
+									(System.currentTimeMillis() - (baseline + adjustment))
+											* speed;
+
+							if (delay > elapsed) {
+								try {
+									Thread.sleep((long) (delay - elapsed));
+								} catch (final InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
+						}
+
+					}
+
+					log.debug(marketMessage.toString());
 
 					if (marketplace != null) {
 						marketplace.make(marketMessage);
