@@ -97,9 +97,9 @@ public class FeedReplayer {
 				try {
 					decoded = DDF_MessageService.decode(message);
 				} catch (final Exception e) {
-					System.out
-							.println("decode failed : " + new String(message));
-					System.out.println(new String(Arrays.toString(message)));
+//					System.out
+//							.println("decode failed : " + new String(message));
+//					System.out.println(new String(Arrays.toString(message)));
 					continue;
 				}
 
@@ -108,7 +108,7 @@ public class FeedReplayer {
 					final DDF_MarketBase marketMessage =
 							(DDF_MarketBase) decoded;
 
-					System.out.println(marketMessage.toString());
+					//System.out.println(marketMessage.toString());
 
 					if (marketplace != null) {
 						marketplace.make(marketMessage);

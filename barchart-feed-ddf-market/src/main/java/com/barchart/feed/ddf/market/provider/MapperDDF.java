@@ -641,6 +641,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	 *            the market
 	 * @return the void
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public Void visit(final DDF_MarketSnapshot message, final MarketDo market) {
 

@@ -1,5 +1,8 @@
 package com.barchart.feed.ddf.market.provider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -13,6 +16,10 @@ import com.barchart.feed.inst.InstrumentService;
 
 public class DDF_Marketplace extends MarketplaceBase<DDF_MarketBase> implements 
 		DDF_MarketProvider {
+	
+	@SuppressWarnings("unused")
+	private static final Logger log = LoggerFactory.getLogger(
+			DDF_Marketplace.class);
 
 	protected DDF_Marketplace(MarketFactory factory,
 			InstrumentService<String> instLookup,

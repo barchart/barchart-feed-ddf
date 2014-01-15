@@ -13,7 +13,7 @@ import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 
 public class BarchartMarketplaceReplay extends BarchartMarketplace {
 	
-	public BarchartMarketplaceReplay(final int socketAddress) {
+	public BarchartMarketplaceReplay() {
 		super("", "");
 		
 		maker = DDF_Marketplace.newInstance(new DummySubHandler());
