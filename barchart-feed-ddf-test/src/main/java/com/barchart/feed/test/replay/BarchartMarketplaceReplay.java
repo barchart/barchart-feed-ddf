@@ -1,4 +1,4 @@
-package com.barchart.feed.ddf.client.provider;
+package com.barchart.feed.test.replay;
 
 import java.util.Set;
 import java.util.concurrent.Future;
