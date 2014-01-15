@@ -519,8 +519,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				// no change of current value
 			} else {
 				// ",12345," : means replace with new value
-				//log.debug("Set State IS_SETTLED true inside visit 
-				//MarketSnapshot because priceSettle is not empty");
+				log.debug("Set State IS_SETTLED true inside visit MarketSnapshot because priceSettle is not empty  {}  {}", 
+						market.get(MarketField.INSTRUMENT).get(InstrumentField.SYMBOL),
+						message.toStringFields());
 				market.setState(MarketStateEntry.IS_SETTLED, true);
 			}
 
@@ -552,12 +553,27 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			final MarketDoBar bar = market.loadBar(type.field);
 
 			final DDF_TradeDay tradeDay = message.getTradeDay();
+			
+			// NEW
+			final DDF_TradeDay curDay = DDF_TradeDay.fromMillisUTC(
+					bar.get(MarketBarField.TRADE_DATE).asMillisUTC());
+			
+			if(curDay.ord() < tradeDay.ord() || 
+					(tradeDay.ord() < curDay.ord() && tradeDay == DDF_TradeDay.D01)) {
+				log.debug("Current bar date not equal to trade date, resetting flag {} {}",
+						market.get(MarketField.INSTRUMENT).get(InstrumentField.SYMBOL),
+						message.toStringFields());
+				log.debug("ORDS {} {}", curDay.ord(), tradeDay.ord());
+				market.setState(MarketStateEntry.IS_SETTLED, false);
+				
+			}
+			
 			bar.set(MarketBarField.TRADE_DATE, tradeDay.tradeDate());
 
 			final PriceValue priceOpen = message.getPriceOpen();
 			final PriceValue priceHigh = message.getPriceHigh();
 			final PriceValue priceLow = message.getPriceLow();
-			final PriceValue priceClose = message.getPriceLast(); // XXX
+			final PriceValue priceClose = message.getPriceLast(); 
 			
 			final SizeValue sizeVolume = message.getSizeVolume();
 			
