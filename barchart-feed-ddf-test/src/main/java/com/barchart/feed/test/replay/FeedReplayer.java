@@ -139,7 +139,7 @@ public class FeedReplayer {
 
 					}
 
-					log.debug(marketMessage.toString());
+					//log.debug(marketMessage.toString());
 
 					if (marketplace != null) {
 						marketplace.make(marketMessage);

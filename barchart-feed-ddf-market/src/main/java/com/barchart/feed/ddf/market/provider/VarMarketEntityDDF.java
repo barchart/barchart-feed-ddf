@@ -57,7 +57,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			}
 			
 		}
-		
 	}
 	
 	@Override
