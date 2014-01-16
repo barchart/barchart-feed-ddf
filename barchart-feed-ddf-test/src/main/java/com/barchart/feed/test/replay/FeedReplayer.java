@@ -1,9 +1,8 @@
 package com.barchart.feed.test.replay;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -76,19 +75,16 @@ public class FeedReplayer {
 
 		try {
 
-			final BufferedReader reader =
-					new BufferedReader(new InputStreamReader(
-							source.openStream()));
+			final InputStream is = source.openStream();
+			final DDFLogDeframer deframer = new DDFLogDeframer(is);
 
-			String line;
+			byte[] message;
 			for (;;) {
 
-				line = reader.readLine();
-				if (line == null) {
+				message = deframer.next();
+				if (message == null) {
 					break;
 				}
-
-				byte[] message = line.getBytes();
 
 				if (message.length < 2) {
 					log.warn("Short message, discarded");
