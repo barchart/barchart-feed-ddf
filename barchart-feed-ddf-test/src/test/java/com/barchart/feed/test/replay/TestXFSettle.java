@@ -1,19 +1,9 @@
 package com.barchart.feed.test.replay;
 
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.barchart.feed.api.Agent;
-import com.barchart.feed.api.MarketObserver;
-import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.Session.Type;
-import com.barchart.util.value.api.Price;
-
 public class TestXFSettle {
-	
-	protected static final Logger log = LoggerFactory.getLogger(
-			TestXFSettle.class);
+
+	protected static final Logger log = LoggerFactory
+			.getLogger(TestXFSettle.class);
 
 	@Test
 	public void testXFSettle() throws Exception {
@@ -23,7 +13,7 @@ public class TestXFSettle {
 
 		final Agent agent = market.newAgent(Market.class, obs);
 
-		agent.include("XFK14");
+		agent.include(Exchanges.fromName("BMF"));
 
 		final FeedReplayer replayer =
 				new FeedReplayer(
@@ -35,6 +25,49 @@ public class TestXFSettle {
 		
 		log.debug("Previous = " + v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle().toString() + 
 				" Current = " + v.session().settle());
+
+	}
+
+	@Test
+	public void testXFSettle_JJ() throws Exception {
+
+		final BarchartMarketplaceReplay marketplace =
+				new BarchartMarketplaceReplay();
+
+		final SettleObserver so = new SettleObserver();
+		final Agent agent = marketplace.newAgent(Market.class, so);
+
+		agent.include(Exchanges.fromName("BMF"));
+
+		final FeedReplayer replayer =
+				new FeedReplayer(
+						FeedReplayer.class.getResource("/XF_20140113.txt"));
+
+		replayer.run(marketplace.maker(), null);
+
+		System.out.println("Final settlement states:");
+		for (final String sym : new String[] {
+				"XFH14", "XFK14", "XFN14", "XFU14"
+		}) {
+			final Market snapshot = marketplace.snapshot(sym);
+			System.out.println(sym
+					+ ": settle="
+					+ snapshot.sessionSet()
+							.session(Session.Type.DEFAULT_CURRENT).settle()
+							.asDouble()
+					+ ", prevSettle="
+					+ snapshot.sessionSet()
+							.session(Session.Type.DEFAULT_PREVIOUS).settle()
+							.asDouble());
+		}
+
+	}
+
+	private static class SettleObserver implements MarketObserver<Market> {
+
+		@Override
+		public void onNext(final Market m) {
+		}
 
 	}
 
