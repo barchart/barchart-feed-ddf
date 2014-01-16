@@ -111,7 +111,6 @@ public class FeedReplayer {
 					final DDF_MarketBase marketMessage =
 							(DDF_MarketBase) decoded;
 
-					//System.out.println(marketMessage.toString());
 					if (speed > 0) {
 
 						final long time = marketMessage.getTime().asMillisUTC();

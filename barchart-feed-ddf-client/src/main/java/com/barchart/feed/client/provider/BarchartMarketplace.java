@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -38,173 +37,171 @@ import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.ValueFactory;
 
 public class BarchartMarketplace implements Marketplace {
-	
+
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartMarketplace.class);
-	
-	private static final long DB_UPDATE_INTERVAL = 1000 * 60 * 60 * 4; // 4 hours
-	
+
 	/* Value api factory */
 	private static final ValueFactory factory = new ValueFactoryImpl();
-	
+
 	/* Used if unable to retrieve system default temp directory */
 	private static final String TEMP_DIR = "C:\\windows\\temp\\";
-	private final File dbFolder;
-	private volatile File instDefZip;
-	private static final long DB_UPDATE_TIMEOUT = 2 * 60; // seconds
-	
+
 	protected volatile DDF_FeedClientBase connection;
 	protected volatile DDF_Marketplace maker;
 	private final ExecutorService executor;
-	
-	private final String username, password;
-	
+
 	@SuppressWarnings("unused")
 	private volatile Connection.Monitor stateListener;
-	
+
 	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
 			new CopyOnWriteArrayList<TimestampListener>();
-	
-	private final boolean useLocalInstDB;
-	private final boolean syncWithRemote;
-	
+
 	public BarchartMarketplace(final String username, final String password) {
-		this(username, password, getDefault(), getTempFolder(), null, false, true);
+		this(username, password, getDefault(), getTempFolder(), null, false,
+				true);
 	}
-	
-	BarchartMarketplace(final String username, final String password, 
-			final ExecutorService ex, final File dbFolder, final File instDefZip, 
-			final boolean useDB, final boolean syncWithRemote) {
-		
-		this.username = username;
-		this.password = password;
-		this.executor = ex;
-		this.dbFolder = dbFolder;
-		this.instDefZip = instDefZip;
-		
-		connection = makeConnection();
-		
+
+	protected BarchartMarketplace(final String username, final String password,
+			final ExecutorService ex, final File dbFolder,
+			final File instDefZip, final boolean useDB,
+			final boolean syncWithRemote) {
+
+		executor = ex;
+
+		connection = makeConnection(username, password);
 		connection.bindMessageListener(msgListener);
-		
-		// Need a way to set maker up with a new connection.
+
 		maker = DDF_Marketplace.newInstance(connection);
-		
-		this.useLocalInstDB = useDB; 
-		this.syncWithRemote = syncWithRemote;
+
 	}
-	
+
+	protected BarchartMarketplace(final DDF_Marketplace marketplace) {
+		this(marketplace, getDefault());
+	}
+
+	protected BarchartMarketplace(final DDF_Marketplace marketplace,
+			final ExecutorService ex) {
+
+		executor = ex;
+		maker = marketplace;
+
+	}
+
 	public static Builder builder() {
 		return new Builder();
 	}
-	
+
 	/**
 	 * Builder for different BarchartFeed configurations
 	 */
 	public static class Builder {
-		
+
 		private String username = "NULL USERNAME";
 		private String password = "NULL PASSWORD";
-		private File dbFolder = getTempFolder();
-		private File instDefZip = null;
-		private boolean useLocalDB = false; 
-		private boolean syncWithRemote = true;
-		
+		private final File dbFolder = getTempFolder();
+		private final File instDefZip = null;
+		private final boolean useLocalDB = false;
+		private final boolean syncWithRemote = true;
+
 		private ExecutorService executor = getDefault();
-		
+
 		public Builder() {
 		}
-		
+
 		public Builder username(final String username) {
 			this.username = username;
 			return this;
 		}
-		
+
 		public Builder password(final String password) {
 			this.password = password;
 			return this;
 		}
-		
+
 		public Builder executor(final ExecutorService executor) {
 			this.executor = executor;
 			return this;
 		}
-		
+
 		@Deprecated
 		public Builder dbaseFolder(final File dbFolder) {
-			//this.dbFolder = dbFolder; 
+			// this.dbFolder = dbFolder;
 			return this;
 		}
-		
+
 		@Deprecated
 		public Builder instrumentDefZip(final File instDefZip) {
-			//this.instDefZip = instDefZip;
+			// this.instDefZip = instDefZip;
 			return this;
 		}
-		
+
 		@Deprecated
 		public Builder useLocalInstDatabase() {
-			//useLocalDB = true;
+			// useLocalDB = true;
 			return this;
 		}
-		
+
 		@Deprecated
 		public Builder syncWithRemote(final boolean sync) {
-			//syncWithRemote = sync;
+			// syncWithRemote = sync;
 			return this;
 		}
-		
+
 		public Marketplace build() {
-			return new BarchartMarketplace(username, password, executor, dbFolder, 
-					instDefZip, useLocalDB, syncWithRemote);
+			return new BarchartMarketplace(username, password, executor,
+					dbFolder, instDefZip, useLocalDB, syncWithRemote);
 		}
-		
+
 	}
-	
+
 	private static ExecutorService getDefault() {
-		return Executors.newCachedThreadPool( 
-				
-				new ThreadFactory() {
+		return Executors.newCachedThreadPool(
+
+		new ThreadFactory() {
 
 			final AtomicLong counter = new AtomicLong(0);
-			
+
 			@Override
 			public Thread newThread(final Runnable r) {
-				
-				final Thread t = new Thread(r, "Feed thread " + 
-						counter.getAndIncrement()); 
-				
+
+				final Thread t =
+						new Thread(r, "Feed thread "
+								+ counter.getAndIncrement());
+
 				t.setDaemon(true);
-				
+
 				return t;
 			}
-			
+
 		});
 	}
-	
+
 	/*
 	 * Returns the default temp folder
 	 */
 	private static File getTempFolder() {
-		
+
 		try {
-			
+
 			return File.createTempFile("temp", null).getParentFile();
-			
-		} catch (IOException e) {
-			log.warn("Unable to retrieve system temp folder, using default {}", 
+
+		} catch (final IOException e) {
+			log.warn("Unable to retrieve system temp folder, using default {}",
 					TEMP_DIR);
 			return new File(TEMP_DIR);
 		}
-		
+
 	}
-	
-	private DDF_FeedClientBase makeConnection() {
-		return DDF_FeedClientFactory.newConnectionClient(
-				DDF_Transport.TCP, username, password, executor);
+
+	private DDF_FeedClientBase makeConnection(final String username,
+			final String password) {
+		return DDF_FeedClientFactory.newConnectionClient(DDF_Transport.TCP,
+				username, password, executor);
 	}
-	
+
 	/* ***** ***** ***** ConnectionLifecycle ***** ***** ***** */
-	
+
 	/**
 	 * Starts the data feed asynchronously. Notification of login success is
 	 * reported by FeedStateListeners which are bound to this object.
@@ -215,142 +212,143 @@ public class BarchartMarketplace implements Marketplace {
 	 * @param username
 	 * @param password
 	 */
-	
+
 	private final AtomicBoolean isStartingup = new AtomicBoolean(false);
 	private final AtomicBoolean isShuttingdown = new AtomicBoolean(false);
-	
+
 	@Override
 	public synchronized void startup() {
-		
-		if(isStartingup.get()) {
-			throw new IllegalStateException("Startup called while already starting up");
+
+		if (isStartingup.get()) {
+			throw new IllegalStateException(
+					"Startup called while already starting up");
 		}
-		
-		if(isShuttingdown.get()) {
-			throw new IllegalStateException("Startup called while shutting down");
+
+		if (isShuttingdown.get()) {
+			throw new IllegalStateException(
+					"Startup called while shutting down");
 		}
-		
+
 		isStartingup.set(true);
-		
+
 		executor.execute(new StartupRunnable());
-		
+
 		/** Currently just letting it run */
-		
+
 	}
-	
-	private volatile Future<?> dbUpdater = null;
-	
+
 	private final class StartupRunnable implements Runnable {
 
 		/*
-		 * Ensures instrument database is installed/updated before
-		 * user is able to send subscriptions to JERQ
+		 * Ensures instrument database is installed/updated before user is able
+		 * to send subscriptions to JERQ
 		 */
 		@Override
 		public void run() {
-			
+
 			try {
-			
+
 				log.debug("Startup Runnable starting");
-				
+
 				connection.startup();
-			
+
 			} catch (final Throwable t) {
-				
+
 				log.error("Exception starting up marketplace {}", t);
 				isStartingup.set(false);
-				
+
 				return;
 			}
-			
+
 			isStartingup.set(false);
-			
+
 		}
-		
+
 	}
-	
+
 	@Override
 	public synchronized void shutdown() {
 
-		if(isStartingup.get()) {
-			throw new IllegalStateException(
-					"Shutdown called while starting up");
+		if (isStartingup.get()) {
+			throw new IllegalStateException("Shutdown called while starting up");
 		}
-		
-		if(isShuttingdown.get()) {
+
+		if (isShuttingdown.get()) {
 			throw new IllegalStateException(
 					"Shutdown called while already shutting down");
 		}
-		
+
 		isShuttingdown.set(true);
-		
+
 		executor.execute(new ShutdownRunnable());
-		
+
 		/** Currently just letting it run */
 
 	}
-	
+
 	private final class ShutdownRunnable implements Runnable {
 
 		@Override
 		public void run() {
-			
+
 			try {
-				
-				if(maker != null) {
+
+				if (maker != null) {
 					maker.clearAll();
 				}
-				
-				//dbUpdater.cancel(true);
-	
+
+				// dbUpdater.cancel(true);
+
 				connection.shutdown();
 
 				log.debug("Barchart Feed shutdown");
-				
+
 			} catch (final Throwable t) {
-				
+
 				log.error("Error {}", t);
-				
+
 				isShuttingdown.set(false);
-				
+
 				return;
 			}
-			
-			
+
 			isShuttingdown.set(false);
-			
+
 			log.debug("Barchart Feed shutdown succeeded");
-			
+
 		}
-		
+
 	}
-	
+
 	/*
 	 * This is the default message listener. Users wishing to handle raw
 	 * messages will need to implement their own feed client.
 	 */
-	protected final DDF_MessageListener msgListener = new DDF_MessageListener() {
+	protected final DDF_MessageListener msgListener =
+			new DDF_MessageListener() {
 
-		@Override
-		public void handleMessage(final DDF_BaseMessage message) {
+				@Override
+				public void handleMessage(final DDF_BaseMessage message) {
 
-			if (message instanceof DDF_ControlTimestamp) {
-				for (final TimestampListener listener : timeStampListeners) {
-					listener.listen(factory.newTime(((DDF_ControlTimestamp) message)
-							.getStampUTC().asMillisUTC(), ""));
+					if (message instanceof DDF_ControlTimestamp) {
+						for (final TimestampListener listener : timeStampListeners) {
+							listener.listen(factory.newTime(
+									((DDF_ControlTimestamp) message)
+											.getStampUTC().asMillisUTC(), ""));
+						}
+					}
+
+					if (message instanceof DDF_MarketBase) {
+						final DDF_MarketBase marketMessage =
+								(DDF_MarketBase) message;
+
+						maker.make(marketMessage);
+					}
+
 				}
-			}
 
-			if (message instanceof DDF_MarketBase) {
-				final DDF_MarketBase marketMessage = (DDF_MarketBase) message;
-				
-				maker.make(marketMessage);
-			}
+			};
 
-		}
-
-	};
-	
 	@Override
 	public void bindConnectionStateListener(final Connection.Monitor listener) {
 
@@ -359,68 +357,69 @@ public class BarchartMarketplace implements Marketplace {
 		if (connection != null) {
 			connection.bindStateListener(listener);
 		} else {
-			throw new RuntimeException("Connection state listener already bound");
+			throw new RuntimeException(
+					"Connection state listener already bound");
 		}
 
 	}
-	
+
 	@Override
 	public void bindTimestampListener(final TimestampListener listener) {
-		
-		if(listener != null) {
+
+		if (listener != null) {
 			timeStampListeners.add(listener);
 		}
-		
+
 	}
-	
+
 	/* ***** ***** SnapshotProvider ***** ***** */
-	
+
 	@Override
 	public Market snapshot(final Instrument instrument) {
 		return maker.snapshot(instrument);
 	}
-	
+
 	@Override
 	public Market snapshot(final InstrumentID instID) {
 		return maker.snapshot(instID);
 	}
-	
+
 	@Override
 	public Market snapshot(final String symbol) {
 		return maker.snapshot(symbol);
 	}
-	
+
 	/* ***** ***** ***** AgentBuilder ***** ***** ***** */
-	
+
 	@Override
-	public <V extends MarketData<V>> Agent newAgent(final Class<V> dataType, 
+	public <V extends MarketData<V>> Agent newAgent(final Class<V> dataType,
 			final MarketObserver<V> callback) {
-		
+
 		return maker.newAgent(dataType, callback);
-		
+
 	}
-	
+
 	/* ***** ***** ***** Helper subscribe methods ***** ***** ***** */
-	
+
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
 			final MarketObserver<V> callback, final String... symbols) {
-		
+
 		final Agent agent = newAgent(clazz, callback);
-		
+
 		agent.include(symbols);
-		
+
 		return agent;
 	}
 
 	@Override
 	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
 			final MarketObserver<V> callback, final Instrument... instruments) {
-		
+
 		final Agent agent = newAgent(clazz, callback);
-		
+
 		agent.include(instruments);
-		
+
 		return agent;
 	}
 
@@ -429,51 +428,51 @@ public class BarchartMarketplace implements Marketplace {
 			final MarketObserver<V> callback, final Exchange... exchanges) {
 
 		final Agent agent = newAgent(clazz, callback);
-		
+
 		agent.include(exchanges);
-		
+
 		return agent;
 	}
 
 	@Override
 	public Agent subscribeMarket(final MarketObserver<Market> callback,
 			final String... symbols) {
-		
+
 		final Agent agent = newAgent(Market.class, callback);
-		
+
 		agent.include(symbols);
-		
+
 		return agent;
 	}
 
 	@Override
 	public Agent subscribeTrade(final MarketObserver<Trade> lastTrade,
 			final String... symbols) {
-		
+
 		final Agent agent = newAgent(Trade.class, lastTrade);
-		
+
 		agent.include(symbols);
-		
+
 		return agent;
 	}
 
 	@Override
 	public Agent subscribeBook(final MarketObserver<Book> book,
 			final String... symbols) {
-		
+
 		final Agent agent = newAgent(Book.class, book);
-		
+
 		agent.include(symbols);
-		
+
 		return agent;
 	}
 
 	@Override
 	public Agent subscribeCuvol(final MarketObserver<Cuvol> cuvol,
 			final String... symbols) {
-		
+
 		final Agent agent = newAgent(Cuvol.class, cuvol);
-		
+
 		return agent;
 	}
 

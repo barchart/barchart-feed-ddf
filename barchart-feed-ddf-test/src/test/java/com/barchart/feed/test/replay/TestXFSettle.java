@@ -1,20 +1,25 @@
 package com.barchart.feed.test.replay;
 
+import static org.junit.Assert.fail;
+
+import org.junit.Test;
+
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.model.data.Market;
 
-
 public class TestXFSettle {
 
-	public static void main(final String[] args) {
+	@Test
+	public void testXFSettle() throws Exception {
 
-		BarchartMarketplaceReplay market = new BarchartMarketplaceReplay();
-		
-		Agent agent = market.newAgent(Market.class, obs);
-		
-		agent.include("XFH4");
-		
+		final BarchartMarketplaceReplay market =
+				new BarchartMarketplaceReplay();
+
+		final Agent agent = market.newAgent(Market.class, obs);
+
+		agent.include("XFH14");
+
 		final FeedReplayer replayer =
 				new FeedReplayer(
 						FeedReplayer.class.getResource("/XF_20140113.txt"));
@@ -22,14 +27,14 @@ public class TestXFSettle {
 		replayer.run(market.maker());
 
 	}
-	
+
 	static MarketObserver<Market> obs = new MarketObserver<Market>() {
 
 		@Override
 		public void onNext(final Market v) {
-			//System.out.println(v.updated() + " ");		
+			fail("Check market state");
 		}
-		
+
 	};
 
 }
