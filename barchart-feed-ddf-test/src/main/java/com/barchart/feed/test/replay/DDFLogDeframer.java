@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-import org.joda.time.ReadableDateTime;
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -218,7 +218,7 @@ class DDFLogDeframer {
 	static final void encodeTimeStamp(final String timestamp,
 			final ByteBuffer buffer) {
 
-		final ReadableDateTime dateTime = timeParser.parseDateTime(timestamp);
+		DateTime dateTime = timeParser.parseDateTime(timestamp);
 
 		// base fields
 		buffer.put(DDF_CENTURY); // century

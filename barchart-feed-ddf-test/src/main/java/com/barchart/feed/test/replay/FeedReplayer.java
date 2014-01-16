@@ -68,7 +68,7 @@ public class FeedReplayer {
 		speed = speed_;
 	}
 
-	public void run(final DDF_Marketplace marketplace) {
+	public void run(final DDF_Marketplace marketplace, final String symbol) {
 
 		long baseline = 0;
 		long adjustment = 0;
@@ -101,8 +101,9 @@ public class FeedReplayer {
 				try {
 					decoded = DDF_MessageService.decode(message);
 				} catch (final Exception e) {
-					log.warn("decode failed : " + new String(message));
-					log.debug(new String(Arrays.toString(message)));
+					//PUT ME BACK 
+					//log.warn("decode failed : " + new String(message));
+					//log.debug(new String(Arrays.toString(message)));
 					continue;
 				}
 
@@ -142,14 +143,16 @@ public class FeedReplayer {
 					//log.debug(marketMessage.toString());
 
 					if (marketplace != null) {
-						marketplace.make(marketMessage);
+						if(symbol == null || symbol.equals(marketMessage.getSymbol().getName())) {
+							marketplace.make(marketMessage);
+						}
 					}
 
 				}
 
 			}
 
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 

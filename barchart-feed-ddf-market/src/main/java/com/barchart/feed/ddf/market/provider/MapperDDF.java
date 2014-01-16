@@ -145,6 +145,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		final DDF_ParamType param = message.getParamType();
 
 		final TimeValue time = message.getTime();
+		
 		final TimeValue date = message.getTradeDay().tradeDate();
 
 		final DDF_ParamType.Kind kind = param.kind;
@@ -182,10 +183,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			market.clearChanges();
 			market.setChange(Component.TRADE);
 			
-//			log.debug("Mapper saw TRADE_ASK_PRICE - Price=" + price.toString() + 
-//					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-//					+ message.getInstrument().symbol());
-			
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
 
@@ -196,10 +193,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			/* Update changed comonents */
 			market.clearChanges();
 			market.setChange(Component.TRADE);
-			
-//			log.debug("Mapper saw TRADE_BID_PRICE - Price=" + price.toString() + 
-//					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-//					+ message.getInstrument().symbol());
 			
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
@@ -218,10 +211,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			return null;
 			
 		case ASK_LAST: // NEW
-			
-//			log.debug("Mapper saw ASK_LAST - Price=" + price.toString() + 
-//					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-//					+ message.getInstrument().symbol());
 			
 		case ASK_LAST_PRICE:
 			
@@ -250,9 +239,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			return null;
 
 		case BID_LAST: // NEW
-//			log.debug("Mapper saw BID_LAST - Price=" + price.toString() + 
-//					" " + message.getSession() + " " + message.getTradeDay().toString() + " "
-//					+ message.getInstrument().symbol());
 			
 		case BID_LAST_PRICE:
 			
@@ -372,7 +358,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barCurrent.set(MarketBarField.INTEREST, size);
 			barCurrent.set(MarketBarField.VOLUME, size);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
-			barCurrent.set(MarketBarField.SETTLE, ValueConst.NULL_PRICE);  // Test
+			//barCurrent.set(MarketBarField.SETTLE, ValueConst.NULL_PRICE);  // Test
 			market.setBar(CURRENT, barCurrent);
 			//
 			market.setState(MarketStateEntry.IS_SETTLED, false);
@@ -419,20 +405,37 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			/** only "final" sets the flag */
 		case SETTLE_FINAL_PRICE:
 			//log.debug("Set State IS_SETTLED true inside VISIT MARKET PARAMETER, SETTLE_FINAL_PRICE");
-			market.setState(MarketStateEntry.IS_SETTLED, true);
 			/** falls through */
 
 			/** "early" does NOT set the flag */
 		case SETTLE_EARLY_PRICE:
+			
+			final DDF_TradeDay tradeDay = message.getTradeDay();
+			final DDF_TradeDay curDay = DDF_TradeDay.fromMillisUTC(
+					barCurrent.get(MarketBarField.TRADE_DATE).asMillisUTC());
+			
+			if(curDay.equals(tradeDay) && param == DDF_ParamType.SETTLE_EARLY_PRICE) {
+				market.setState(MarketStateEntry.IS_SETTLED, true);
+			}
+			
+			//log.debug("PARAM Message = {} Current = {}", tradeDay, curDay);
 			
 			/* Update changed comonents */
 			market.clearChanges();
 			market.setChange(Component.DEFAULT_CURRENT);
 			
 			//log.debug("Set prelim settle value but not IS_SETTLED flag inside VISIT MARKET PARAMETER, SETTLE_EARLY_PRICE");
-			barCurrent.set(MarketBarField.SETTLE, price);
-			barCurrent.set(MarketBarField.BAR_TIME, time);
-			market.setBar(CURRENT, barCurrent);
+			if(curDay == tradeDay) {
+				barCurrent.set(MarketBarField.SETTLE, price);
+				barCurrent.set(MarketBarField.BAR_TIME, time);
+			} else {
+				final DDF_TradeDay prevDay = DDF_TradeDay.fromMillisUTC(
+						barPrevious.get(MarketBarField.TRADE_DATE).asMillisUTC());
+				if(prevDay == tradeDay) {
+					barPrevious.set(MarketBarField.SETTLE, price);
+					barPrevious.set(MarketBarField.BAR_TIME, time);
+				}
+			}
 			
 			/* Update last price to settle price */
 			market.setLastPrice(new LastPriceImpl(LastPrice.Source.SETTLE, ValueConverter.price(price)));
@@ -633,7 +636,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	}
 
 	/**
-	 * via feed message 21.
+	 * via feed message 21, 22, 23, 24.
 	 * 
 	 * @param message
 	 *            the message
@@ -648,25 +651,68 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		market.clearChanges();
 		
 		final TimeValue time = message.getTime();
+		
+		/** Update PREVIOUS bar */
+		if(message.getMessageType() == DDF_MessageType.SNAP_BACK_PLUS_PREV) {
+			
+			/* Update changed comonents */
+			market.setChange(Component.DEFAULT_PREVIOUS);
+			
+			final MarketBarType type = PREVIOUS;
+
+			final MarketDoBar bar = market.loadBar(type.field);
+			final PriceValue priceOpen = message.getPriceOpen();
+			final PriceValue priceHigh = message.getPriceHigh();
+			final PriceValue priceLow = message.getPriceLow();
+			final PriceValue priceClose = message.getPriceLastPrevious();
+			final PriceValue priceSettle = message.getPriceSettle();
+			final SizeValue sizeVolume = message.getSizeVolumePrevious();
+			final SizeValue sizeInterest = message.getSizeInterest(); // XXX
+
+			applyBar(bar, MarketBarField.OPEN, priceOpen);
+			applyBar(bar, MarketBarField.HIGH, priceHigh);
+			applyBar(bar, MarketBarField.LOW, priceLow);
+			applyBar(bar, MarketBarField.CLOSE, priceClose);
+			applyBar(bar, MarketBarField.SETTLE, priceSettle);
+			applyBar(bar, MarketBarField.VOLUME, sizeVolume);
+			applyBar(bar, MarketBarField.INTEREST, sizeInterest);
+
+			bar.set(MarketBarField.BAR_TIME, time);
+
+			market.setBar(type, bar);
+			return null;
+			
+		}
+		
+		/* Update changed comonents */
+		market.setChange(Component.DEFAULT_CURRENT);
+		final MarketBarType type = CURRENT;
+		final MarketDoBar bar = market.loadBar(type.field);
+
 
 		/** Update SETTLE State */
 		{
+			final DDF_TradeDay tradeDay = message.getTradeDay();
+			
+			final DDF_TradeDay curDay = DDF_TradeDay.fromMillisUTC(
+					bar.get(MarketBarField.TRADE_DATE).asMillisUTC());
 
 			final PriceValue priceSettle = message.getPriceSettle();
 
 			if (isClear(priceSettle)) {
 				// ",-, " : means remove old value
-				//log.debug("Set State IS_SETTLED false inside visit 
-				//MarketSnapshot because priceSettle is clear");
+				//log.debug("Set State IS_SETTLED false inside visit MarketSnapshot because priceSettle is clear");
 				market.setState(MarketStateEntry.IS_SETTLED, false);
+				applyBar(bar, MarketBarField.SETTLE, ValueConst.NULL_PRICE);
 			} else if (isEmpty(priceSettle)) {
 				// ",," : means leave alone
 				// no change of current value
 			} else {
 				// ",12345," : means replace with new value
-				//log.debug("Set State IS_SETTLED true inside visit 
-				//MarketSnapshot because priceSettle is not empty");
+				//log.debug("Set State IS_SETTLED true inside visit MarketSnapshot because priceSettle is not empty");
 				market.setState(MarketStateEntry.IS_SETTLED, true);
+				applyBar(bar, MarketBarField.SETTLE, message.getPriceSettle().freeze());
+				log.debug("SNAPSHOT Message = {} Current = {}", tradeDay, curDay);
 			}
 
 		}
@@ -697,89 +743,63 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		/** Update CURRENT bar */
 		{
 
-			/* Update changed comonents */
-			market.setChange(Component.DEFAULT_CURRENT);
-			
-			final MarketBarType type = CURRENT;
-
-			final MarketDoBar bar = market.loadBar(type.field);
-
 			final DDF_TradeDay tradeDay = message.getTradeDay();
 			
-			final DDF_TradeDay curDay = DDF_TradeDay.fromMillisUTC(bar.updated().millisecond());
+			final DDF_TradeDay curDay = DDF_TradeDay.fromMillisUTC(
+					bar.get(MarketBarField.TRADE_DATE).asMillisUTC());
 			
+			/* Check for new Day Code */
 			if(curDay.ord() < tradeDay.ord() || 
 					(tradeDay.ord() < curDay.ord() && tradeDay == DDF_TradeDay.D01)) {
-//				log.debug("Current bar date not equal to trade date, resetting flag {} {}",
-//						market.instrument().symbol(), message.toStringFields());
-//				log.debug("ORDS {} {}", curDay.ord(), tradeDay.ord());
+				
+				//log.debug("Current bar date not equal to trade date, resetting flag {} {} {}\n",
+				//		market.instrument().symbol(), message.toStringFields(), message.toString());
+//				log.debug("Bar Day Code = {} Message Day Code = {}", curDay, tradeDay);
 				market.setState(MarketStateEntry.IS_SETTLED, false);
 				
 				/* Set trade date */
 				bar.set(MarketBarField.TRADE_DATE, tradeDay.tradeDate());
 				
+				/* Roll current session to previous */
+				final MarketDoBar prev = market.loadBar(MarketBarType.PREVIOUS.field);
+				applyBar(prev, MarketBarField.OPEN, bar.get(MarketBarField.OPEN).freeze());
+				applyBar(prev, MarketBarField.HIGH, bar.get(MarketBarField.HIGH).freeze());
+				applyBar(prev, MarketBarField.LOW, bar.get(MarketBarField.LOW).freeze());
+				applyBar(prev, MarketBarField.CLOSE, bar.get(MarketBarField.CLOSE).freeze());
+				applyBar(prev, MarketBarField.SETTLE, bar.get(MarketBarField.SETTLE).freeze());
+				applyBar(prev, MarketBarField.VOLUME, bar.get(MarketBarField.VOLUME).freeze());
+				market.setBar(MarketBarType.PREVIOUS, prev);
+				
+				/* Clear current bar */
+				applyBar(bar, MarketBarField.OPEN, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.HIGH, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.LOW, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.CLOSE, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.SETTLE, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.VOLUME, ValueConst.NULL_SIZE);
+				
 			}
 			
-			if(tradeDay.ord < curDay.ord()) {
-//				log.debug("TRADE BEFORE CURRENT " + curDay + " " + message.toStringFields() + " " 
-//						+ market.get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED) + "\n");
-			}
-			
-			
-
 			final PriceValue priceOpen = message.getPriceOpen();
 			final PriceValue priceHigh = message.getPriceHigh();
 			final PriceValue priceLow = message.getPriceLow();
 			final PriceValue priceClose = message.getPriceLast(); // XXX
 			final SizeValue sizeVolume = message.getSizeVolume();
 			
-			PriceValue priceSettle = ValueConst.NULL_PRICE;
-			if(market.get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED)) {
-				priceSettle = message.getPriceSettle();
+			if(!market.get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED)) {
+				applyBar(bar, MarketBarField.SETTLE, ValueConst.NULL_PRICE);
 			}
 
 			applyBar(bar, MarketBarField.OPEN, priceOpen);
 			applyBar(bar, MarketBarField.HIGH, priceHigh);
 			applyBar(bar, MarketBarField.LOW, priceLow);
 			applyBar(bar, MarketBarField.CLOSE, priceClose);
-			applyBar(bar, MarketBarField.SETTLE, priceSettle);
 			applyBar(bar, MarketBarField.VOLUME, sizeVolume);
 
 			bar.set(MarketBarField.BAR_TIME, time);
 
 			market.setBar(type, bar);
-
-		}
-
-		/** Update PREVIOUS bar */
-		{
-
-			/* Update changed comonents */
-			market.setChange(Component.DEFAULT_PREVIOUS);
 			
-			final MarketBarType type = PREVIOUS;
-
-			final MarketDoBar bar = market.loadBar(type.field);
-			final PriceValue priceOpen = message.getPriceOpen();
-			final PriceValue priceHigh = message.getPriceHigh();
-			final PriceValue priceLow = message.getPriceLow();
-			final PriceValue priceClose = message.getPriceLastPrevious();
-			final PriceValue priceSettle = message.getPriceSettle();
-			final SizeValue sizeVolume = message.getSizeVolumePrevious();
-			final SizeValue sizeInterest = message.getSizeInterest(); // XXX
-
-			applyBar(bar, MarketBarField.OPEN, priceOpen);
-			applyBar(bar, MarketBarField.HIGH, priceHigh);
-			applyBar(bar, MarketBarField.LOW, priceLow);
-			applyBar(bar, MarketBarField.CLOSE, priceClose);
-			applyBar(bar, MarketBarField.SETTLE, priceSettle);
-			applyBar(bar, MarketBarField.VOLUME, sizeVolume);
-			applyBar(bar, MarketBarField.INTEREST, sizeInterest);
-
-			bar.set(MarketBarField.BAR_TIME, time);
-
-			market.setBar(type, bar);
-
 		}
 
 		// 
@@ -1043,7 +1063,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		}
 		
 		if(price.isNull()) {
-			log.warn("Failed to update last price from Market : \n{}\n{}", market.toString(), message);
 			market.setLastPrice(LastPrice.NULL);
 		}
 		

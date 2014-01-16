@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.util.value.api.Time;
+import com.barchart.feed.api.model.data.Session.Type;
+import com.barchart.util.value.api.Price;
 
 public class TestXFSettle {
 	
@@ -22,33 +23,51 @@ public class TestXFSettle {
 
 		final Agent agent = market.newAgent(Market.class, obs);
 
-		agent.include("XFH14");
+		agent.include("XFK14");
 
 		final FeedReplayer replayer =
 				new FeedReplayer(
 						FeedReplayer.class.getResource("/XF_20140113.txt"));
 
-		replayer.run(market.maker());
+		replayer.run(market.maker(), "XFK4");
+		
+		Market v = market.snapshot("XFK14");
+		
+		log.debug("Previous = " + v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle().toString() + 
+				" Current = " + v.session().settle());
 
 	}
 
 	static MarketObserver<Market> obs = new MarketObserver<Market>() {
 
-		private Time updated = Time.NULL;
+		private Price prev = Price.NULL;
+		private Price cur = Price.NULL;
 		
 		@Override
 		public void onNext(final Market v) {
 			
-			if(updated.isNull()) {
-				updated = v.session().updated();
-				return;
-			}
+//			if(!prev.equals(v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle()) ||
+//					!cur.equals(v.session().settle())) {
+//			
+//				log.debug("Previous = " + v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle().toString() + 
+//					" Current = " + v.session().settle() + " ");
+//				
+//				prev = v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle();
+//				cur = v.session().settle();
+//			
+//			}
 			
-			if(updated.compareTo(v.session().updated()) > 0) {
-				log.debug("Updated time less than previous time {}", 
-						updated.millisecond() - v.session().updated().millisecond());
-			}
-			
+//			if(cur == Price.NULL) {
+//				System.out.println();
+//			} else {
+//				System.out.println();
+//			}
+//
+//			log.debug("Previous = " + v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle().toString() + 
+//					" Current = " + v.session().settle());
+//			prev = v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle();
+//			cur = v.session().settle();
+
 		}
 
 	};
