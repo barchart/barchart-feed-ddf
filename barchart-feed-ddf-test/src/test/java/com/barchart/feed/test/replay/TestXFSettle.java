@@ -27,7 +27,7 @@ public class TestXFSettle {
 
 		@Override
 		public void onNext(final Market v) {
-			System.out.println(v.updated() + " ");		
+			//System.out.println(v.updated() + " ");		
 		}
 		
 	};

@@ -706,6 +706,22 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			final DDF_TradeDay tradeDay = message.getTradeDay();
 			
+			final DDF_TradeDay curDay = DDF_TradeDay.fromMillisUTC(bar.updated().millisecond());
+			
+			if(curDay.ord() < tradeDay.ord() || 
+					(tradeDay.ord() < curDay.ord() && tradeDay == DDF_TradeDay.D01)) {
+				log.debug("Current bar date not equal to trade date, resetting flag {} {}",
+						market.instrument().symbol(), message.toStringFields());
+				log.debug("ORDS {} {}", curDay.ord(), tradeDay.ord());
+				market.setState(MarketStateEntry.IS_SETTLED, false);
+				
+			}
+			
+			if(tradeDay.ord < curDay.ord()) {
+				log.debug("TRADE BEFORE CURRENT " + curDay + " " + message.toStringFields() + " " 
+						+ market.get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED) + "\n");
+			}
+			
 			bar.set(MarketBarField.TRADE_DATE, tradeDay.tradeDate());
 
 			final PriceValue priceOpen = message.getPriceOpen();
