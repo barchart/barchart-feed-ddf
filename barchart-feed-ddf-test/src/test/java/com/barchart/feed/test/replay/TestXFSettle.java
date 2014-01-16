@@ -1,5 +1,16 @@
 package com.barchart.feed.test.replay;
 
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.barchart.feed.api.Agent;
+import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.inst.provider.Exchanges;
+import com.barchart.util.value.api.Price;
+
 public class TestXFSettle {
 
 	protected static final Logger log = LoggerFactory
@@ -23,7 +34,7 @@ public class TestXFSettle {
 		
 		Market v = market.snapshot("XFK14");
 		
-		log.debug("Previous = " + v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle().toString() + 
+		log.debug("Previous = " + v.sessionSet().session(Session.Type.DEFAULT_PREVIOUS).settle().toString() + 
 				" Current = " + v.session().settle());
 
 	}
