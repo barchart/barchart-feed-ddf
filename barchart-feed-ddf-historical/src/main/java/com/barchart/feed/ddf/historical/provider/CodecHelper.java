@@ -68,22 +68,23 @@ final class CodecHelper {
 		final CharSequence password = settings.getAuthPass();
 
 		final Instrument instrument = query.instrument;
-		final CharSequence symbol = Symbology.formatHistoricalSymbol(instrument.symbol());  
+		final CharSequence symbol =
+				Symbology.formatHistoricalSymbol(instrument.symbol());
 
-		final DateTimeZone timeZone = DateTimeZone.forOffsetMillis(
-				(int)instrument.timeZoneOffset());
+		final DateTimeZone timeZone =
+				DateTimeZone.forID(instrument.timeZoneName());
 		final CharSequence start = requestTime(query.timeStart, timeZone);
 		final CharSequence end = requestTime(query.timeEnd, timeZone);
 
-		final CharSequence maxRecords = query.maxRecords <= 0 ? "" : ""
-				+ query.maxRecords;
+		final CharSequence maxRecords =
+				query.maxRecords <= 0 ? "" : "" + query.maxRecords;
 
 		final DDF_QueryOrder resultOrder = query.resultOrder;
-		final CharSequence order = resultOrder == null ? ASCENDING.code
-				: resultOrder.code;
+		final CharSequence order =
+				resultOrder == null ? ASCENDING.code : resultOrder.code;
 
-		final CharSequence interval = query.groupBy <= 1 ? "1" : ""
-				+ query.groupBy;
+		final CharSequence interval =
+				query.groupBy <= 1 ? "1" : "" + query.groupBy;
 
 		final DDF_QueryEodType eodType = query.eodType;
 		final CharSequence data = eodType == null ? "" : eodType.code;
@@ -211,7 +212,7 @@ final class CodecHelper {
 	 */
 
 	static final DateTimeFormatter QUERY_TIME = //
-	DateTimeFormat.forPattern("yyyyMMddHHmmss");
+			DateTimeFormat.forPattern("yyyyMMddHHmmss");
 
 	static final String requestTime(final DateTime dateTime,
 			final DateTimeZone timeZone) {
@@ -235,10 +236,9 @@ final class CodecHelper {
 	 */
 
 	static final DateTimeFormatter RESULT_TIME_TICKS = //
-	DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
+			DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
-	static long decodeTicksTime(final String string,
-			final Instrument instrument) {
+	static long decodeTicksTime(final String string, final Instrument instrument) {
 		return decodeTime(string, instrument, RESULT_TIME_TICKS);
 	}
 
@@ -252,10 +252,9 @@ final class CodecHelper {
 	 */
 
 	static final DateTimeFormatter RESULT_TIME_MINS = //
-	DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+			DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 
-	static long decodeMinsTime(final String string,
-			final Instrument instrument) {
+	static long decodeMinsTime(final String string, final Instrument instrument) {
 		return decodeTime(string, instrument, RESULT_TIME_MINS);
 	}
 
@@ -268,10 +267,9 @@ final class CodecHelper {
 	 * SYMBOL,YYYY­MM­DD,OPEN,HIGH,LOW,CLOSE,VOLUME[,OPENINTEREST]
 	 */
 	static final DateTimeFormatter RESULT_TIME_EOD = //
-	DateTimeFormat.forPattern("yyyy-MM-dd");
+			DateTimeFormat.forPattern("yyyy-MM-dd");
 
-	static long decodeEodTime(final String string,
-			final Instrument instrument) {
+	static long decodeEodTime(final String string, final Instrument instrument) {
 		return decodeTime(string, instrument, RESULT_TIME_EOD);
 	}
 
@@ -317,19 +315,19 @@ final class CodecHelper {
 		final int spaces;
 
 		switch (parts.length) {
-		default:
-		case 0:
-			return 0;
-		case 1:
-			whole = decodeLong(parts[0]);
-			part = 0;
-			spaces = 0;
-			break;
-		case 2:
-			whole = decodeLong(parts[0]);
-			part = decodeInt(parts[1]);
-			spaces = parts[1].length();
-			break;
+			default:
+			case 0:
+				return 0;
+			case 1:
+				whole = decodeLong(parts[0]);
+				part = 0;
+				spaces = 0;
+				break;
+			case 2:
+				whole = decodeLong(parts[0]);
+				part = decodeInt(parts[1]);
+				spaces = parts[1].length();
+				break;
 		}
 
 		int thisExp;
@@ -433,15 +431,15 @@ final class CodecHelper {
 
 	}
 
-	static long decodeTime(final String string,
-			final Instrument instrument, final DateTimeFormatter format) {
-		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument.timeZoneOffset()));
+	static long decodeTime(final String string, final Instrument instrument,
+			final DateTimeFormatter format) {
+		final DateTimeZone zone = DateTimeZone.forID(instrument.timeZoneName());
 		return format.withZone(zone).parseMillis(string);
 	}
 
-	static String encodeTime(final long millisUTC,
-			final Instrument instrument, final DateTimeFormatter format) {
-		final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument.timeZoneOffset()));
+	static String encodeTime(final long millisUTC, final Instrument instrument,
+			final DateTimeFormatter format) {
+		final DateTimeZone zone = DateTimeZone.forID(instrument.timeZoneName());
 		return format.withZone(zone).print(millisUTC);
 	}
 
