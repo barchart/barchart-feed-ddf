@@ -406,11 +406,6 @@ class VarMarketDDF extends VarMarket {
 	}
 	
 	@Override
-	public void setLastPrice(final LastPrice lastPrice) {
-		this.lastPrice = lastPrice;
-	}
-
-	@Override
 	public void setChange(Component c) {
 		changeSet.add(c);
 	}
@@ -419,5 +414,5 @@ class VarMarketDDF extends VarMarket {
 	public void clearChanges() {
 		changeSet.clear();
 	}
-
+	
 }

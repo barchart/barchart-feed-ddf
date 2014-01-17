@@ -18,12 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.data.Book;
-import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Market.Component;
-import com.barchart.feed.api.model.data.Market.LastPrice;
-import com.barchart.feed.api.model.data.Market.LastPrice.Source;
-import com.barchart.feed.api.model.data.Session.Type;
-import com.barchart.feed.api.model.data.SessionData;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
 import com.barchart.feed.base.bar.enums.MarketBarType;
@@ -35,7 +30,6 @@ import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.DefBookEntry;
-import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.values.api.PriceValue;
@@ -65,7 +59,6 @@ import com.barchart.feed.ddf.message.enums.DDF_QuoteState;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.util.common.anno.ThreadSafe;
-import com.barchart.util.value.api.Price;
 
 // TODO: Auto-generated Javadoc
 @ThreadSafe
@@ -437,9 +430,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				}
 			}
 			
-			/* Update last price to settle price */
-			market.setLastPrice(new LastPriceImpl(LastPrice.Source.SETTLE, ValueConverter.price(price)));
-			
 			return null;
 
 		default:
@@ -548,9 +538,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			
 		}
 		
-		// 
-		updateLastPrice(market, message.toString());
-
 		return null;
 	}
 
@@ -802,9 +789,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			
 		}
 
-		// 
-		updateLastPrice(market, message.toString());
-		
 		return null;
 	}
 
@@ -870,9 +854,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			
 		}
 		
-		// 
-		updateLastPrice(market, message.toString());
-		
 		return null;
 	}
 
@@ -911,8 +892,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			market.setTrade(ddfSession.type, ddfSession.session,
 					ddfSession.sequencing, price, size, time, date);
 
-			market.setLastPrice(new LastPriceImpl(Source.LAST_TRADE, 
-					ValueConverter.price(price)));
 		}
 			break;
 
@@ -1025,69 +1004,4 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 	}
 	
-	private void updateLastPrice(final MarketDo market, final String message) {
-		
-		/* SETTLE */
-		Price price = market.session().settle();
-		if(!price.isNull()) {
-			//log.debug("Upated Last Price From Settle=" + price.toString());
-			market.setLastPrice(new LastPriceImpl(Source.SETTLE, price));
-			return;
-		}
-		
-		/* TRADE because we don't actually have close messages */
-		price = market.trade().price();
-		if(!price.isNull()) {
-			//log.debug("Updated Last Price From Trade=" + price.toString());
-			market.setLastPrice(new LastPriceImpl(Source.LAST_TRADE, price));
-			return;
-		}
-		
-		/* CLOSE after TRADE because of snapshots give last price */ 
-		price = market.session().close();
-		if(!price.isNull()) {
-			//log.trace("Updated Last Price From Close=" + price.toString());
-			market.setLastPrice(new LastPriceImpl(Source.LAST_TRADE, price));
-			return;
-		}
-
-		/* PREV CLOSE */
-		SessionData session = market.sessionSet().session(Type.DEFAULT_PREVIOUS);
-		if(session != null) {
-			price = session.settle();
-			if(!price.isNull()) {
-				//log.debug("Updated Last Price From Previous=" + price.toString());
-				market.setLastPrice(new LastPriceImpl(Source.PREV_SETTLE, price));
-				return;
-			}
-		}
-		
-		if(price.isNull()) {
-			market.setLastPrice(LastPrice.NULL);
-		}
-		
-	}
-	
-	private class LastPriceImpl implements Market.LastPrice {
-
-		private final Source source; 
-		private final Price price;
-		
-		public LastPriceImpl(final Source source, final Price price) {
-			this.source = source;
-			this.price = price;
-		}
-		
-		@Override
-		public Source source() {
-			return source;
-		}
-
-		@Override
-		public Price price() {
-			return price;
-		}
-		
-	}
-
 }
