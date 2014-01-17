@@ -169,6 +169,7 @@ public final class DDF_HistoricalService {
 
 			while (true) {
 				final String inputLine = reader.readLine();
+				
 				if (inputLine == null) {
 					break;
 				}
@@ -186,6 +187,7 @@ public final class DDF_HistoricalService {
 				final E entry = (E) builder.newEntry(index, inputLine,
 						instrument);
 				result.add(index, entry);
+				
 				index++;
 			}
 

@@ -14,6 +14,7 @@ import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
 import com.barchart.feed.api.consumer.MetadataService.Result;
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Market.LastPrice;
 import com.barchart.feed.api.model.meta.Instrument;
@@ -24,7 +25,7 @@ public class TestBarchartMarketProvider {
 	private static final Logger log = LoggerFactory.getLogger(
 			TestBarchartMarketProvider.class);
 	
-	private static final String[] insts = {"AAPL"};
+	private static final String[] insts = {"_S_SP_KCH14_KCK14"};
 	
 	public static void main(final String[] args) throws Exception {
 		
@@ -40,10 +41,10 @@ public class TestBarchartMarketProvider {
 		
 		lock.await();
 		
-		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
+		final ConsumerAgent agent1 = market.register(marketObs(), Book.class);
 		
 		agent1.include(insts).subscribe(instObs());
-		Thread.sleep(20 * 1000);
+		Thread.sleep(2 * 60 * 60 * 1000);
 		
 		agent1.exclude(insts).subscribe(instObs());
 		Thread.sleep(5 * 1000);
@@ -70,15 +71,18 @@ public class TestBarchartMarketProvider {
 		};
 	}
 	
-	private static MarketObserver<Market> marketObs() {
+	private static MarketObserver<Book> marketObs() {
 		
-		return new MarketObserver<Market>() {
+		return new MarketObserver<Book>() {
 
 			@Override
-			public void onNext(final Market v) {
-				final LastPrice lp = v.lastPrice();
-				log.debug("LastPrice={} {}", lp.price().toString(), lp.source());
-				log.debug("LastTrade={}", v.trade().price().toString());
+			public void onNext(final Book b) {
+				
+				//final Book b = v.book();
+				final Book.Top t = b.top();
+				
+				System.out.println(t.ask().price() + " " + t.bid().price());
+				
 			}
 		};
 	}

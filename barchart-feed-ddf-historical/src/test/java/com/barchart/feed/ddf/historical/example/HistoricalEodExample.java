@@ -11,6 +11,8 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rx.observables.BlockingObservable;
+
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.thread.Runner;
 import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;
@@ -18,6 +20,7 @@ import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.api.DDF_Result;
 import com.barchart.feed.ddf.historical.provider.DDF_HistoricalService;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
@@ -41,7 +44,7 @@ public class HistoricalEodExample {
 	 * @param args
 	 *            the arguments
 	 */
-	public final static void main(final String[] args) {
+	public final static void main(final String[] args) throws Exception {
 
 		/*
 		 * 1) obtain user access settings
@@ -65,10 +68,11 @@ public class HistoricalEodExample {
 		 * 2) lookup instrument definition
 		 */
 
-		final String symbol = "EGM2";
+		final String symbol = "_S_SP_KCH14_KCK14";
 
 		final Instrument instrument = //
-				DDF_InstrumentProvider.fromHistorical(symbol);
+				BlockingObservable.from(DDF_RxInstrumentProvider.fromString(symbol))
+					.single().results().get(symbol).get(0);
 
 		if (instrument.isNull()) {
 			log.error("can not get insrument for : {}", symbol);
@@ -87,10 +91,10 @@ public class HistoricalEodExample {
 		query.instrument = instrument;
 
 		query.timeStart = //
-				new DateTime(2012, 04, 20, /**/00, 00, 00, /**/
+				new DateTime(2013, 12, 5, /**/00, 00, 00, /**/
 				000, DDF_TimeZone.CHICAGO.zone);
 
-		query.timeEnd = query.timeStart.plusDays(20);
+		query.timeEnd = query.timeStart.plusDays(40);
 
 		/*
 		 * 4) obtain query result
