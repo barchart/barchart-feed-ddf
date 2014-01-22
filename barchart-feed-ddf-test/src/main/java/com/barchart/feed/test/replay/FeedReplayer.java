@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,8 @@ public class FeedReplayer {
 
 	private final URL source;
 	private final double speed;
+
+	private MessageListener listener = null;
 
 	/**
 	 * Replay from a file as fast as possible.
@@ -66,10 +69,22 @@ public class FeedReplayer {
 		speed = speed_;
 	}
 
+	public void setListener(MessageListener listener_) {
+		listener = listener_;
+	}
+
 	public void run(final DDF_Marketplace marketplace, final String symbol) {
+		run(marketplace, symbol, null, null);
+	}
+
+	public void run(final DDF_Marketplace marketplace, final String symbol,
+			final Date start, final Date end) {
+
+		final long maxTime = System.currentTimeMillis() - 1000;
 
 		long baseline = 0;
 		long adjustment = 0;
+		boolean inRange = (start == null && end == null);
 
 		try {
 
@@ -99,9 +114,8 @@ public class FeedReplayer {
 				try {
 					decoded = DDF_MessageService.decode(message);
 				} catch (final Exception e) {
-					//PUT ME BACK 
 					//log.warn("decode failed : " + new String(message));
-					//log.debug(new String(Arrays.toString(message)));
+					//log.trace(new String(Arrays.toString(message)));
 					continue;
 				}
 
@@ -110,9 +124,35 @@ public class FeedReplayer {
 					final DDF_MarketBase marketMessage =
 							(DDF_MarketBase) decoded;
 
-					if (speed > 0) {
+					final long time = marketMessage.getTime().asMillisUTC();
 
-						final long time = marketMessage.getTime().asMillisUTC();
+					if (time > maxTime) {
+
+						// Auto-generated timestamp, skip if not previously
+						// in range
+						if (!inRange) {
+							continue;
+						}
+
+					} else {
+
+						// Before range start, skip
+						if (start != null && time <= start.getTime()) {
+							continue;
+						}
+
+						// After range end, completed
+						if (end != null && time >= end.getTime()) {
+							return;
+						}
+
+						inRange = true;
+
+					}
+
+					notifyListener(message, decoded);
+
+					if (speed > 0) {
 
 						if (baseline == 0) {
 
@@ -138,10 +178,12 @@ public class FeedReplayer {
 
 					}
 
-					//log.debug(marketMessage.toString());
+					// log.debug(marketMessage.toString());
 
 					if (marketplace != null) {
-						if(symbol == null || symbol.equals(marketMessage.getSymbol().getName())) {
+						if (symbol == null
+								|| symbol.equals(marketMessage.getSymbol()
+										.getName())) {
 							marketplace.make(marketMessage);
 						}
 					}
@@ -153,6 +195,20 @@ public class FeedReplayer {
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
+
+	}
+
+	private void notifyListener(byte[] raw, DDF_BaseMessage parsed) {
+
+		if (listener != null) {
+			listener.messageProcessed(parsed, raw);
+		}
+
+	}
+
+	public static interface MessageListener {
+
+		void messageProcessed(DDF_BaseMessage parsed, byte[] raw);
 
 	}
 

@@ -17,6 +17,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.base.util.ASCII;
 import com.barchart.feed.ddf.util.FeedDDF;
 
 /**
@@ -115,6 +116,8 @@ class DDFLogDeframer {
 			}
 
 			final byte alpha = (byte) b;
+			if (alpha == ASCII.CR)
+				continue;
 			count++;
 
 			/* UDP is not \n delimited, so must check for message start */

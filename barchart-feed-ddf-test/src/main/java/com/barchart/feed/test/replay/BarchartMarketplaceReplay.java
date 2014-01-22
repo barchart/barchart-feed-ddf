@@ -1,7 +1,11 @@
 package com.barchart.feed.test.replay;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import com.barchart.feed.base.sub.Sub;
 import com.barchart.feed.base.sub.SubscriptionHandler;
@@ -13,7 +17,8 @@ import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 public class BarchartMarketplaceReplay extends BarchartMarketplace {
 
 	public BarchartMarketplaceReplay() {
-		super(DDF_Marketplace.newInstance(new DummySubHandler()));
+		super(DDF_Marketplace.newInstance(new DummySubHandler()),
+				new InlineExecutorService());
 	}
 
 	public void handleMessage(final DDF_BaseMessage message) {
@@ -47,6 +52,48 @@ public class BarchartMarketplaceReplay extends BarchartMarketplace {
 		@Override
 		public Future<Boolean> unsubscribe(final Set<Sub> subscriptions) {
 			return null;
+		}
+
+	}
+
+	private static class InlineExecutorService extends AbstractExecutorService {
+
+		private boolean shutdown = false;
+
+		@Override
+		public void shutdown() {
+			shutdown = true;
+		}
+
+		@Override
+		public List<Runnable> shutdownNow() {
+			shutdown = true;
+			return Collections.emptyList();
+		}
+
+		@Override
+		public boolean isShutdown() {
+			return shutdown;
+		}
+
+		@Override
+		public boolean isTerminated() {
+			return shutdown;
+		}
+
+		@Override
+		public boolean awaitTermination(final long timeout, final TimeUnit unit)
+				throws InterruptedException {
+			shutdown();
+			return true;
+		}
+
+		@Override
+		public void execute(final Runnable command) {
+			if (shutdown) {
+				throw new IllegalStateException("Executor is shutdown");
+			}
+			command.run();
 		}
 
 	}
