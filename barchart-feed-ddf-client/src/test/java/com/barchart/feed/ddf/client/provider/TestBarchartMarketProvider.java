@@ -76,7 +76,7 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market m) {
 				
-				System.out.println(m.updated());
+				System.out.println(m.session().updated());
 				
 			}
 		};
