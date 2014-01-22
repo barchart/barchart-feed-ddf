@@ -35,13 +35,11 @@ import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
-import com.barchart.feed.base.values.provider.DefBoolean;
 import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_EOD_Commodity;
 import com.barchart.feed.ddf.message.api.DDF_EOD_EquityForex;
-import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.message.api.DDF_MarketBookTop;
 import com.barchart.feed.ddf.message.api.DDF_MarketCondition;
@@ -60,9 +58,10 @@ import com.barchart.feed.ddf.message.enums.DDF_QuoteMode;
 import com.barchart.feed.ddf.message.enums.DDF_QuoteState;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
+import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
+import com.barchart.feed.ddf.util.provider.DDF_NulVal;
 import com.barchart.util.common.anno.ThreadSafe;
 
-// TODO: Auto-generated Javadoc
 @ThreadSafe
 class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
@@ -354,7 +353,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			barCurrent.set(MarketBarField.VOLUME, size);
 			barCurrent.set(MarketBarField.BAR_TIME, time);
 			//barCurrent.set(MarketBarField.SETTLE, ValueConst.NULL_PRICE);  // Test
-			barCurrent.set(MarketBarField.IS_SETTLED, new DefBoolean(false));
+			barCurrent.set(MarketBarField.IS_SETTLED, ValueConst.FALSE_BOOLEAN);
 			market.setBar(CURRENT, barCurrent);
 			//
 			market.setState(MarketStateEntry.IS_SETTLED, false);
@@ -426,8 +425,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				barCurrent.set(MarketBarField.SETTLE, price);
 				barCurrent.set(MarketBarField.BAR_TIME, time);
 				if (param == DDF_ParamType.SETTLE_FINAL_PRICE) {
-					barCurrent.set(MarketBarField.IS_SETTLED, new DefBoolean(
-							true));
+					barCurrent.set(MarketBarField.IS_SETTLED,
+							ValueConst.TRUE_BOOLEAN);
 				}
 			} else {
 				final DDF_TradeDay prevDay = DDF_TradeDay.fromMillisUTC(
@@ -437,7 +436,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					barPrevious.set(MarketBarField.BAR_TIME, time);
 					if (param == DDF_ParamType.SETTLE_FINAL_PRICE) {
 						barPrevious.set(MarketBarField.IS_SETTLED,
-								new DefBoolean(true));
+								ValueConst.TRUE_BOOLEAN);
 					}
 				}
 			}
@@ -683,11 +682,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			
 		}
 		
-		/* Update changed comonents */
-		market.setChange(Component.DEFAULT_CURRENT);
-		final MarketBarType type = CURRENT;
-		final MarketDoBar bar = market.loadBar(type.field);
-
 		/** Update top of book */
 		{
 
@@ -713,44 +707,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		/** Update CURRENT bar */
 		{
-
+		
 			final DDF_TradeDay tradeDay = message.getTradeDay();
-			
-			final DDF_TradeDay curDay = DDF_TradeDay.fromMillisUTC(
-					bar.get(MarketBarField.TRADE_DATE).asMillisUTC());
-			
-			/* Check for new Day Code */
-			if(curDay.ord() < tradeDay.ord() || 
-					(tradeDay.ord() < curDay.ord() && tradeDay == DDF_TradeDay.D01)) {
-
-				/* Clear settled flag */
-				market.setState(MarketStateEntry.IS_SETTLED, false);
-				
-				/* Set trade date */
-				bar.set(MarketBarField.TRADE_DATE, tradeDay.tradeDate());
-				
-				/* Roll current session to previous */
-				final MarketDoBar prev = market.loadBar(MarketBarType.PREVIOUS.field);
-				applyBar(prev, MarketBarField.OPEN, bar.get(MarketBarField.OPEN).freeze());
-				applyBar(prev, MarketBarField.HIGH, bar.get(MarketBarField.HIGH).freeze());
-				applyBar(prev, MarketBarField.LOW, bar.get(MarketBarField.LOW).freeze());
-				applyBar(prev, MarketBarField.CLOSE, bar.get(MarketBarField.CLOSE).freeze());
-				applyBar(prev, MarketBarField.SETTLE, bar.get(MarketBarField.SETTLE).freeze());
-				applyBar(prev, MarketBarField.VOLUME, bar.get(MarketBarField.VOLUME).freeze());
-				prev.set(MarketBarField.IS_SETTLED,
-						bar.get(MarketBarField.IS_SETTLED).freeze());
-				market.setBar(MarketBarType.PREVIOUS, prev);
-				
-				/* Clear current bar */
-				applyBar(bar, MarketBarField.OPEN, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.HIGH, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.LOW, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.CLOSE, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.SETTLE, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.VOLUME, ValueConst.NULL_SIZE);
-				bar.set(MarketBarField.IS_SETTLED, ValueConst.NULL_BOOLEAN);
-				
-			}
+			final MarketBarType type = findBar(market, tradeDay, true, true);
+			final MarketDoBar bar = market.loadBar(type.field);
 			
 			final PriceValue priceOpen = message.getPriceOpen();
 			final PriceValue priceHigh = message.getPriceHigh();
@@ -768,11 +728,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			// Check settled flag
 			if (isClear(priceSettle)) {
-				bar.set(MarketBarField.IS_SETTLED, new DefBoolean(false));
+				bar.set(MarketBarField.IS_SETTLED, ValueConst.FALSE_BOOLEAN);
 				// Backwards compat
 				market.setState(MarketStateEntry.IS_SETTLED, false);
 			} else if (!isEmpty(priceSettle)) {
-				bar.set(MarketBarField.IS_SETTLED, new DefBoolean(true));
+				bar.set(MarketBarField.IS_SETTLED, ValueConst.TRUE_BOOLEAN);
 				// Backwards compat
 				market.setState(MarketStateEntry.IS_SETTLED, true);
 			}
@@ -786,9 +746,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		return null;
 	}
 
-	
 	/**
-	 * Find the session with the matching trading day code in the given market.
+	 * Find the session/bar with the matching trading day code in this market.
 	 * If roll is specified and the latest session is earlier than the trading
 	 * day code referenced in the message, the current session will be rolled to
 	 * the previous and a new empty session will be returned. This automatically
@@ -805,77 +764,92 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	 *            True if the current session should be rolled if message is
 	 *            newer
 	 */
-	private MarketDoBar findSession(final DDF_MarketBase message,
-			final MarketDo market, boolean roll) {
+	protected MarketBarType findBar(MarketDo market,
+			final DDF_TradeDay tradeDay,
+			boolean markChanged, boolean roll) {
 
 		final MarketDoBar bar = market.loadBar(MarketBarType.CURRENT.field);
-
-		final DDF_TradeDay tradeDay = message.getTradeDay();
 
 		final DDF_TradeDay curDay = DDF_TradeDay.fromMillisUTC(bar.get(
 				MarketBarField.TRADE_DATE).asMillisUTC());
 
 		if (curDay.ord() == tradeDay.ord()) {
-			market.setChange(Component.DEFAULT_CURRENT);
-			return bar;
+			if (markChanged)
+				market.setChange(Component.DEFAULT_CURRENT);
+			return MarketBarType.CURRENT;
 		}
 
-		// Roll sessions if needed
-		if (roll) {
+		// Check for new trading session
+		if (roll
+				&& (curDay.ord() < tradeDay.ord() || (tradeDay.ord() < curDay
+						.ord() && tradeDay == DDF_TradeDay.D01))) {
 
-			// Check for new trading session
-			if (curDay.ord() < tradeDay.ord() || (tradeDay.ord() < curDay.ord() && tradeDay == DDF_TradeDay.D01)) {
+			rollBars(market, bar, market.loadBar(MarketBarType.PREVIOUS.field));
 
-				market.setState(MarketStateEntry.IS_SETTLED, false);
+			bar.set(MarketBarField.TRADE_DATE, tradeDay.tradeDate());
 
-				// Roll current session to previous
-				final MarketDoBar prev = market.loadBar(MarketBarType.PREVIOUS.field);
-				applyBar(prev, MarketBarField.OPEN, bar
-						.get(MarketBarField.OPEN).freeze());
-				applyBar(prev, MarketBarField.HIGH, bar
-						.get(MarketBarField.HIGH).freeze());
-				applyBar(prev, MarketBarField.LOW, bar.get(MarketBarField.LOW)
-						.freeze());
-				applyBar(prev, MarketBarField.CLOSE,
-						bar.get(MarketBarField.CLOSE).freeze());
-				applyBar(prev, MarketBarField.SETTLE,
-						bar.get(MarketBarField.SETTLE).freeze());
-				applyBar(prev, MarketBarField.VOLUME,
-						bar.get(MarketBarField.VOLUME).freeze());
-				prev.set(MarketBarField.IS_SETTLED,
-						bar.get(MarketBarField.IS_SETTLED).freeze());
-				market.setBar(MarketBarType.PREVIOUS, prev);
-
-				// Reset current bar
-				bar.set(MarketBarField.TRADE_DATE, tradeDay.tradeDate());
-				applyBar(bar, MarketBarField.OPEN, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.HIGH, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.LOW, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.CLOSE, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.SETTLE, ValueConst.NULL_PRICE);
-				applyBar(bar, MarketBarField.VOLUME, ValueConst.NULL_SIZE);
-				bar.set(MarketBarField.IS_SETTLED, ValueConst.NULL_BOOLEAN);
-
+			if (markChanged)
 				market.setChange(Component.DEFAULT_CURRENT);
-				return bar;
 
-			}
+			return MarketBarType.CURRENT;
 
 		}
 
 		// Check previous bar
 		final MarketDoBar prev = market.loadBar(MarketBarType.PREVIOUS.field);
 
-		final DDF_TradeDay prevDay = DDF_TradeDay.fromMillisUTC(bar.get(
+		final DDF_TradeDay prevDay = DDF_TradeDay.fromMillisUTC(prev.get(
 				MarketBarField.TRADE_DATE).asMillisUTC());
 
 		if (prevDay.ord() == tradeDay.ord()) {
-			market.setChange(Component.DEFAULT_PREVIOUS);
-			return prev;
+
+			if (markChanged)
+				market.setChange(Component.DEFAULT_PREVIOUS);
+
+			return MarketBarType.PREVIOUS;
+
 		}
 
 		// No match, nothing to update
-		return null;
+		return MarketBarType.NULL_BAR_TYPE;
+
+	}
+
+	/**
+	 * Roll values from the current to the previous bar and reset the current
+	 * for new data.
+	 */
+	protected MarketDoBar rollBars(MarketDo market, MarketDoBar curr,
+			MarketDoBar prev) {
+
+		market.setState(MarketStateEntry.IS_SETTLED, false);
+
+		applyBar(prev, MarketBarField.OPEN, curr.get(MarketBarField.OPEN)
+				.freeze());
+		applyBar(prev, MarketBarField.HIGH, curr.get(MarketBarField.HIGH)
+				.freeze());
+		applyBar(prev, MarketBarField.LOW, curr.get(MarketBarField.LOW)
+				.freeze());
+		applyBar(prev, MarketBarField.CLOSE, curr.get(MarketBarField.CLOSE)
+				.freeze());
+		applyBar(prev, MarketBarField.SETTLE, curr.get(MarketBarField.SETTLE)
+				.freeze());
+		applyBar(prev, MarketBarField.VOLUME, curr.get(MarketBarField.VOLUME)
+				.freeze());
+		prev.set(MarketBarField.IS_SETTLED, curr.get(MarketBarField.IS_SETTLED)
+				.freeze());
+		market.setBar(MarketBarType.PREVIOUS, prev);
+
+		// Reset current bar
+		curr.set(MarketBarField.OPEN, ValueConst.NULL_PRICE);
+		curr.set(MarketBarField.HIGH, ValueConst.NULL_PRICE);
+		curr.set(MarketBarField.LOW, ValueConst.NULL_PRICE);
+		curr.set(MarketBarField.CLOSE, ValueConst.NULL_PRICE);
+		curr.set(MarketBarField.SETTLE, ValueConst.NULL_PRICE);
+		curr.set(MarketBarField.VOLUME, ValueConst.NULL_SIZE);
+		curr.set(MarketBarField.IS_SETTLED, ValueConst.NULL_BOOLEAN);
+
+		return curr;
 
 	}
 
@@ -908,12 +882,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		final PriceValue priceClose = message.getPriceLast(); // XXX note: LAST
 		final SizeValue sizeVolume = message.getSizeVolume();
 		final SizeValue sizeInterest = message.getSizeInterest();
-
-		PriceValue priceSettle = ValueConst.NULL_PRICE;
-		if(market.get(MarketField.STATE).contains(MarketStateEntry.IS_SETTLED)) {
-			priceSettle = message.getPriceSettle();
-		}
-		
+		final PriceValue priceSettle = message.getPriceSettle();
 		// apply
 		applyBar(bar, MarketBarField.OPEN, priceOpen);
 		applyBar(bar, MarketBarField.HIGH, priceHigh);
@@ -926,6 +895,17 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		//
 
 		bar.set(MarketBarField.BAR_TIME, message.getTime());
+
+		if (priceSettle == DDF_ClearVal.PRICE_CLEAR) {
+			bar.set(MarketBarField.IS_SETTLED, ValueConst.FALSE_BOOLEAN);
+			if (type == CURRENT)
+				market.setState(MarketStateEntry.IS_SETTLED, false);
+		} else if (priceSettle == DDF_NulVal.PRICE_EMPTY) {
+		} else {
+			bar.set(MarketBarField.IS_SETTLED, ValueConst.TRUE_BOOLEAN);
+			if (type == CURRENT)
+				market.setState(MarketStateEntry.IS_SETTLED, true);
+		}
 
 		market.setBar(type, bar);
 		
