@@ -901,10 +901,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			if (type == CURRENT)
 				market.setState(MarketStateEntry.IS_SETTLED, false);
 		} else if (priceSettle == DDF_NulVal.PRICE_EMPTY) {
-		} else {
+		} else if (type == PREVIOUS
+				|| (type == CURRENT && market.get(MarketField.STATE).contains(
+						MarketStateEntry.IS_SETTLED))) {
 			bar.set(MarketBarField.IS_SETTLED, ValueConst.TRUE_BOOLEAN);
-			if (type == CURRENT)
-				market.setState(MarketStateEntry.IS_SETTLED, true);
 		}
 
 		market.setBar(type, bar);
