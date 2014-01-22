@@ -520,7 +520,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					/* Update changed comonents */
 					market.setChange(Component.DEFAULT_CURRENT);
 					
-					visit(session, market);
+					visit(session, market, state == DDF_QuoteState.GOT_SETTLE);
 					
 					break;
 				case PREVIOUS:
@@ -528,7 +528,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					/* Update changed comonents */
 					market.setChange(Component.DEFAULT_PREVIOUS);
 					
-					visit(session, market);
+					visit(session, market, false);
 					
 					break;
 				default:
@@ -563,13 +563,18 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	 */
 	@Override
 	public Void visit(final DDF_MarketSession message, final MarketDo market) {
+		return visit(message, market, false);
+	}
+
+	public Void visit(final DDF_MarketSession message, final MarketDo market,
+			boolean forceSettle) {
 
 		// ### process snapshot
 
 		final DDF_MarketSnapshot snapshot = message;
 		final DDF_Indicator indicator = message.getIndicator();
 
-		visit(snapshot, market, indicator);
+		visit(snapshot, market, indicator, forceSettle);
 
 		return null;
 	}
@@ -858,6 +863,12 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	 */
 	protected Void visit(final DDF_MarketSnapshot message,
 			final MarketDo market, final DDF_Indicator indicator) {
+		return visit(message, market, indicator, false);
+	}
+
+	protected Void visit(final DDF_MarketSnapshot message,
+			final MarketDo market, final DDF_Indicator indicator,
+			boolean forceSettle) {
 
 		/* Update changed comonents */
 		market.clearChanges();
@@ -901,9 +912,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			if (type == CURRENT)
 				market.setState(MarketStateEntry.IS_SETTLED, false);
 		} else if (priceSettle == DDF_NulVal.PRICE_EMPTY) {
-		} else if (type == PREVIOUS
-				|| (type == CURRENT && market.get(MarketField.STATE).contains(
-						MarketStateEntry.IS_SETTLED))) {
+		} else if (type == PREVIOUS || forceSettle) {
 			bar.set(MarketBarField.IS_SETTLED, ValueConst.TRUE_BOOLEAN);
 		}
 
