@@ -882,6 +882,100 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	}
 
 	/**
+	 * Find the session with the matching trading day code in the given market.
+	 * If roll is specified and the latest session is earlier than the trading
+	 * day code referenced in the message, the current session will be rolled to
+	 * the previous and a new empty session will be returned. This automatically
+	 * marks the matching session as changed in the Market object.
+	 * 
+	 * Note that if a session is rolled, the returned session will have all null
+	 * values, and the caller is responsible for properly initializing it.
+	 * 
+	 * @param message
+	 *            The message to check the day code from
+	 * @param market
+	 *            The Market containing the sessions to match
+	 * @param roll
+	 *            True if the current session should be rolled if message is
+	 *            newer
+	 */
+	private MarketDoBar findSession(final DDF_MarketBase message,
+			final MarketDo market, boolean roll) {
+
+		final MarketDoBar bar = market.loadBar(MarketBarType.CURRENT.field);
+
+		final DDF_TradeDay tradeDay = message.getTradeDay();
+
+		final DDF_TradeDay curDay = DDF_TradeDay.fromMillisUTC(bar.get(
+				MarketBarField.TRADE_DATE).asMillisUTC());
+
+		if (curDay.ord() == tradeDay.ord()) {
+			market.setChange(Component.DEFAULT_CURRENT);
+			return bar;
+		}
+
+		// Roll sessions if needed
+		if (roll) {
+
+			// Check for new trading session
+			if (curDay.ord() < tradeDay.ord()
+					|| (tradeDay.ord() < curDay.ord() && tradeDay == DDF_TradeDay.D01)) {
+
+				market.setState(MarketStateEntry.IS_SETTLED, false);
+
+				// Roll current session to previous
+				final MarketDoBar prev = market
+						.loadBar(MarketBarType.PREVIOUS.field);
+				applyBar(prev, MarketBarField.OPEN, bar
+						.get(MarketBarField.OPEN).freeze());
+				applyBar(prev, MarketBarField.HIGH, bar
+						.get(MarketBarField.HIGH).freeze());
+				applyBar(prev, MarketBarField.LOW, bar.get(MarketBarField.LOW)
+						.freeze());
+				applyBar(prev, MarketBarField.CLOSE,
+						bar.get(MarketBarField.CLOSE).freeze());
+				applyBar(prev, MarketBarField.SETTLE,
+						bar.get(MarketBarField.SETTLE).freeze());
+				applyBar(prev, MarketBarField.VOLUME,
+						bar.get(MarketBarField.VOLUME).freeze());
+				prev.set(MarketBarField.IS_SETTLED,
+						bar.get(MarketBarField.IS_SETTLED).freeze());
+				market.setBar(MarketBarType.PREVIOUS, prev);
+
+				// Reset current bar
+				bar.set(MarketBarField.TRADE_DATE, tradeDay.tradeDate());
+				applyBar(bar, MarketBarField.OPEN, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.HIGH, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.LOW, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.CLOSE, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.SETTLE, ValueConst.NULL_PRICE);
+				applyBar(bar, MarketBarField.VOLUME, ValueConst.NULL_SIZE);
+				bar.set(MarketBarField.IS_SETTLED, ValueConst.NULL_BOOLEAN);
+
+				market.setChange(Component.DEFAULT_CURRENT);
+				return bar;
+
+			}
+
+		}
+
+		// Check previous bar
+		final MarketDoBar prev = market.loadBar(MarketBarType.PREVIOUS.field);
+
+		final DDF_TradeDay prevDay = DDF_TradeDay.fromMillisUTC(bar.get(
+				MarketBarField.TRADE_DATE).asMillisUTC());
+
+		if (prevDay.ord() == tradeDay.ord()) {
+			market.setChange(Component.DEFAULT_PREVIOUS);
+			return prev;
+		}
+
+		// No match, nothing to update
+		return null;
+
+	}
+
+	/**
 	 * via xml quote >> xml session
 	 */
 	protected Void visit(final DDF_MarketSnapshot message,
