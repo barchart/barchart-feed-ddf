@@ -903,6 +903,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		bar.set(MarketBarField.TRADE_DATE, tradeDay.tradeDate());
 		
 		// extract
+		
 		final PriceValue priceOpen = message.getPriceOpen();
 		final PriceValue priceHigh = message.getPriceHigh();
 		final PriceValue priceLow = message.getPriceLow();
