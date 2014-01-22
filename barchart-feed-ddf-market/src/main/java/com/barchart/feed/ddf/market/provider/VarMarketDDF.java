@@ -62,8 +62,6 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
-import com.barchart.feed.base.values.provider.ValueConst;
-import com.barchart.feed.ddf.message.provider.DDF_MessageService;
 import com.barchart.util.common.anno.Mutable;
 import com.barchart.util.value.api.Price;
 
@@ -272,42 +270,6 @@ class VarMarketDDF extends VarMarket {
 		}
 
 		bar.set(MarketBarField.TRADE_DATE, date);
-
-	}
-
-	protected void applyBar(final MarketDoBar bar,
-			final MarketBarField<PriceValue> field, final PriceValue value) {
-
-		if (DDF_MessageService.isEmpty(value)) {
-			// no change in market field value
-			return;
-		}
-
-		if (DDF_MessageService.isClear(value)) {
-			// NULL_PRICE should be rendered as "price value not available"
-			bar.set(field, ValueConst.NULL_PRICE);
-			return;
-		}
-
-		bar.set(field, value);
-
-	}
-
-	protected void applyBar(final MarketDoBar bar,
-			final MarketBarField<SizeValue> field, final SizeValue value) {
-
-		if (DDF_MessageService.isEmpty(value)) {
-			// no change in market field value
-			return;
-		}
-
-		if (DDF_MessageService.isClear(value)) {
-			// NULL_SIZE should be rendered as "size value not available"
-			bar.set(field, ValueConst.NULL_SIZE);
-			return;
-		}
-
-		bar.set(field, value);
 
 	}
 

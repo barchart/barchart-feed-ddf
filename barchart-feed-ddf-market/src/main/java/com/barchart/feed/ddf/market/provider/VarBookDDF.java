@@ -46,7 +46,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 	
 	protected volatile MarketBookEntry lastEntry = MarketConst.NULL_BOOK_ENTRY;
 	
-	private Set<Component> changeSet = EnumSet.noneOf(Component.class);
+	private final Set<Component> changeSet = EnumSet.noneOf(Component.class);
 
 	@SuppressWarnings("serial")
 	private static class EntryMap extends TreeMap<PriceValue, MarketBookEntry> {
@@ -280,7 +280,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 			return UniBookResult.ERROR;
 		}
 		
-		log.debug("SetSnapshot called");
+		// log.debug("SetSnapshot called");
 		
 		clear();
 		
