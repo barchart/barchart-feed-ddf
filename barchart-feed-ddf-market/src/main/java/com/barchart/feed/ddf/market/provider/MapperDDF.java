@@ -580,7 +580,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				message.getPriceLow(),
 				message.getPriceClose(),
 				settle,
-				DDF_NulVal.PRICE_EMPTY,
+				message.getPriceLastPrevious(),
 				message.getSizeVolume(),
 				message.getSizeInterest(),
 				settled,
@@ -623,7 +623,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				message.getPriceLow(),
 				message.getPriceClose(),
 				settle,
-				DDF_NulVal.PRICE_EMPTY,
+				message.getPriceLastPrevious(),
 				message.getSizeVolume(),
 				message.getSizeInterest(),
 				settled,
@@ -634,7 +634,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		 */
 		if (indicator == DDF_Indicator.PREVIOUS) {
 			market.loadBar(MarketBarType.CURRENT.field).set(
-					MarketBarField.SETTLE_PREVIOUS, settle);
+					MarketBarField.CLOSE_PREVIOUS, settle);
 		}
 
 		return null;

@@ -290,7 +290,7 @@ class VarMarketDDF extends VarMarket {
 		applyBar(bar, MarketBarField.LOW, low);
 		applyBar(bar, MarketBarField.CLOSE, close);
 		applyBar(bar, MarketBarField.SETTLE, settle);
-		applyBar(bar, MarketBarField.SETTLE_PREVIOUS, previousSettle);
+		applyBar(bar, MarketBarField.CLOSE_PREVIOUS, previousSettle);
 		applyBar(bar, MarketBarField.VOLUME, volume);
 		applyBar(bar, MarketBarField.INTEREST, interest);
 
