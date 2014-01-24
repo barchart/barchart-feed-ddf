@@ -66,9 +66,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		}
 		
 		toFire.clear();
-
-		log.debug("\n");
-
 		// for(final FrameworkAgent agent : agentMap.get(clazz)) {
 		//
 		// if(agent.isActive()) {
