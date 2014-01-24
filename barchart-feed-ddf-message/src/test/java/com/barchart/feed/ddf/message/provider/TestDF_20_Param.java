@@ -17,6 +17,7 @@ import java.util.Arrays;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.barchart.feed.base.values.api.PriceValue;
@@ -40,7 +41,7 @@ public class TestDF_20_Param extends TestDDFBase {
 
 	/**
 	 * Sets the up.
-	 * 
+	 *
 	 * @throws Exception
 	 *             the exception
 	 */
@@ -50,7 +51,7 @@ public class TestDF_20_Param extends TestDDFBase {
 
 	/**
 	 * Tear down.
-	 * 
+	 *
 	 * @throws Exception
 	 *             the exception
 	 */
@@ -64,7 +65,11 @@ public class TestDF_20_Param extends TestDDFBase {
 
 	/**
 	 * Test decode spread.
+	 * 
+	 * Invalid test, 2,0 will never have spread info, and S,* is not supported
+	 * yet.
 	 */
+	@Ignore
 	@Test
 	public void testDecodeSpread() {
 
@@ -90,7 +95,7 @@ public class TestDF_20_Param extends TestDDFBase {
 	// 20
 	final static byte[] ba20 = "2SF0,02B1010533,D0Q JFTKDw9"
 			.getBytes(ASCII_CHARSET);
-	
+
 //	final static byte[] ba20 = "2LCQ1300D,0BM104900,??HRLLRMAf"
 //			.getBytes(ASCII_CHARSET);
 	/**
@@ -253,7 +258,7 @@ public class TestDF_20_Param extends TestDDFBase {
 
 	/**
 	 * Test decode1.
-	 * 
+	 *
 	 * @throws Exception
 	 *             the exception
 	 */

@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * 
+ *
  */
 package com.barchart.feed.ddf.message.provider;
 
@@ -18,17 +18,17 @@ import org.junit.Test;
 
 /**
  * @author g-litchfield
- * 
+ *
  */
 public class TestDF_3C_CmdyEOD extends TestDDFBase {
 
 	// 3C
 	final static byte[] msg3C =
-			"3CLN2,CCJ10,105365,105802,105010,105758,SGJFTKDw9"
+			"3CLN2,CCJ>>,01/01/2013,105365,105802,105010,105758JFTKDw9"
 					.getBytes(ASCII_CHARSET);
 
 	@Test
-	public void testDecodeSpread() {
+	public void testDecode() {
 		final DF_3C_CmdyEOD msg = new DF_3C_CmdyEOD();
 
 		final ByteBuffer buffer = ByteBuffer.wrap(msg3C);

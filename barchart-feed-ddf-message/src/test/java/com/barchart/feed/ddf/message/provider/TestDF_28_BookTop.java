@@ -21,6 +21,7 @@ import java.util.Arrays;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -63,7 +64,11 @@ public class TestDF_28_BookTop extends TestDDFBase {
 
 	/**
 	 * Test decode spread.
+	 *
+	 * Invalid test, 2,8 will never have spread info, and S,* is not supported
+	 * yet.
 	 */
+	@Ignore
 	@Test
 	public void testDecodeSpread() {
 

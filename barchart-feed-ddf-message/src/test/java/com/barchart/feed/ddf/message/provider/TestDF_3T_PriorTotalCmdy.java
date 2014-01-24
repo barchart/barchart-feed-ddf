@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * 
+ *
  */
 package com.barchart.feed.ddf.message.provider;
 
@@ -18,12 +18,12 @@ import org.junit.Test;
 
 /**
  * @author g-litchfield
- * 
+ *
  */
 public class TestDF_3T_PriorTotalCmdy extends TestDDFBase {
 
 	// 3T
-	final static byte[] msg3T = "3CL,CCJ10,2160838,2323862,SGJFTKDw9"
+	final static byte[] msg3T = "3CL,CCJ>>,01/01/2013,2160838,2323862JFTKDw9"
 			.getBytes(ASCII_CHARSET);
 
 	@Test
