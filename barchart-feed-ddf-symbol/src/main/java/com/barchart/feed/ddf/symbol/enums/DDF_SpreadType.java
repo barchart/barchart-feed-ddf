@@ -35,7 +35,7 @@ public enum DDF_SpreadType implements Value<DDF_SpreadType> {
 
 	HORIZ_STRADDLE("HS", "Horizontal Straddle"),
 
-	DOUBLE("DB ", "Double"),
+	DOUBLE("DB", "Double"),
 
 	CONDOR_CO("CO", "Condor"),
 

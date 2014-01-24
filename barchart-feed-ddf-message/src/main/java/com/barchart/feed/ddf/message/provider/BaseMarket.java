@@ -112,7 +112,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 		@Override
 		public String exchangeCode() {
-			return new String(new byte[] {getExchange().code});
+			return new String(new byte[] {
+					getExchange().code
+			});
 		}
 
 		@Override
