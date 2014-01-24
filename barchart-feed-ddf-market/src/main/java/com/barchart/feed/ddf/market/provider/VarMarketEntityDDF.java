@@ -1,11 +1,14 @@
 package com.barchart.feed.ddf.market.provider;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
-import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
@@ -26,6 +29,20 @@ import com.barchart.feed.base.values.api.TimeValue;
 @SuppressWarnings("rawtypes")
 public class VarMarketEntityDDF extends VarMarketDDF {
 	
+	enum MKData {
+
+		MARKET(Market.class), BOOK(Book.class), CUVOL(Cuvol.class),
+		TRADE(Trade.class), SESSION(Session.class);
+
+		final Class<? extends MarketData<?>> clazz;
+
+		private MKData(final Class<? extends MarketData<?>> clazz) {
+			this.clazz = clazz;
+		}
+	}
+	
+	private final Set<MKData> toFire = EnumSet.noneOf(MKData.class);
+
 	@SuppressWarnings("unused")
 	private static final Logger log = 
 			LoggerFactory.getLogger(VarMarketEntityDDF.class);
@@ -38,25 +55,35 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	/* ***** ***** ***** Update State Methods ***** ***** ***** */
 	
 	
+	@Override
 	@SuppressWarnings("unchecked")
-	private <V extends MarketData<V>> void fireCallbacks(
-			final Class<V> clazz) {
+	public void fireCallbacks() {
 		
-		for(final FrameworkAgent agent : agentMap.get(clazz)) {
-			
-			if(agent.isActive()) {
-				agent.callback().onNext(agent.data(this.freeze()));
+		for (final MKData d : toFire) {
+			for (final FrameworkAgent fa : agentMap.get(d.clazz)) {
+				fa.callback().onNext(fa.data(this.freeze()));
 			}
-			
 		}
 		
-		for(final FrameworkAgent agent : agentMap.get(Market.class)) {
-			
-			if(agent.isActive()) {
-				agent.callback().onNext(agent.data(this.freeze()));
-			}
-			
-		}
+		toFire.clear();
+
+		log.debug("\n");
+
+		// for(final FrameworkAgent agent : agentMap.get(clazz)) {
+		//
+		// if(agent.isActive()) {
+		// agent.callback().onNext(agent.data(this.freeze()));
+		// }
+		//
+		// }
+		//
+		// for(final FrameworkAgent agent : agentMap.get(Market.class)) {
+		//
+		// if(agent.isActive()) {
+		// agent.callback().onNext(agent.data(this.freeze()));
+		// }
+		//
+		// }
 	}
 	
 	@Override
@@ -73,7 +100,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set book snapshot, firing callbacks");
 		
-		fireCallbacks(Book.class);
+		// fireCallbacks(Book.class);
+		toFire.add(MKData.BOOK);
+		toFire.add(MKData.MARKET);
 	}
 	
 	@Override
@@ -83,7 +112,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set book update, firing callbacks");
 		
-		fireCallbacks(Book.class);
+		// fireCallbacks(Book.class);
+		toFire.add(MKData.BOOK);
+		toFire.add(MKData.MARKET);
 	}
 	
 	@Override
@@ -93,7 +124,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set cuvol update, firing callbacks");
 		
-		fireCallbacks(Cuvol.class);
+		// fireCallbacks(Cuvol.class);
+		toFire.add(MKData.CUVOL);
+		toFire.add(MKData.MARKET);
 	}
 	
 	@Override
@@ -103,7 +136,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set cuvol snapshot, firing callbacks");
 
-		fireCallbacks(Cuvol.class);
+		// fireCallbacks(Cuvol.class);
+		toFire.add(MKData.CUVOL);
+		toFire.add(MKData.MARKET);
 	}
 	
 	@Override
@@ -115,9 +150,13 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set trade, firing callbacks");
 		
-		fireCallbacks(Trade.class);
-		fireCallbacks(Cuvol.class);  // HACK FOR DDF
-		fireCallbacks(Session.class);  // HACK FOR DDF
+		// fireCallbacks(Trade.class);
+		// fireCallbacks(Cuvol.class); // HACK FOR DDF
+		// fireCallbacks(Session.class); // HACK FOR DDF
+		toFire.add(MKData.TRADE);
+		toFire.add(MKData.CUVOL);
+		toFire.add(MKData.SESSION);
+		toFire.add(MKData.MARKET);
 	}
 	
 	@Override
@@ -126,7 +165,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set bar, firing callbacks");
 		
-		fireCallbacks(Session.class);
+		// fireCallbacks(Session.class);
+		toFire.add(MKData.SESSION);
+		toFire.add(MKData.MARKET);
 	}
 	
 	@Override

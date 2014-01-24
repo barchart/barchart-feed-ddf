@@ -88,6 +88,16 @@ class VarMarketDDF extends VarMarket {
 
 	}
 
+	/*
+	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
+	 * 
+	 * @see com.barchart.feed.base.market.api.MarketDo#fireCallbacks()
+	 */
+	@Override
+	public void fireCallbacks() {
+		throw new UnsupportedOperationException();
+	}
+
 	@Override
 	public void setInstrument(final Instrument newSymbol) {
 		instrument = newSymbol;
