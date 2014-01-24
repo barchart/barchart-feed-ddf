@@ -38,6 +38,7 @@ public class TestFeed {
 
 		while (true) {
 			Thread.sleep(10000);
+			MarketSnapshot.printReport(marketplace, symbols);
 		}
 
 	}

@@ -21,11 +21,11 @@ class MarketSnapshot {
 
 	public static void printReport(final Marketplace marketplace, final PrintStream stream, final String... symbols) {
 
-		stream.println(String.format("---------------------------- %28s ----------------------------",
+		stream.println(String.format("---------------------------------- %28s ----------------------------------",
 				new Date().toString()));
 
-		stream.println(" Symbol   | Time           |     Last  |       Source |   Settle | Settled | Previous ");
-		stream.println("--------------------------------------------------------------------------------------");
+		stream.println(" Symbol   | Time           |     Last  |       Source |  Previous |   Settle | Settled | Previous ");
+		stream.println("--------------------------------------------------------------------------------------------------");
 
 		Arrays.sort(symbols);
 
@@ -40,12 +40,13 @@ class MarketSnapshot {
 			final SessionData previous = m.sessionSet().session(Session.Type.DEFAULT_PREVIOUS);
 
 			stream.println(String.format(
-					" %-8s | %s | %8.3f%1s | %12s | %8.3f | %7b | %8.3f ",
+					" %-8s | %s | %8.3f%1s | %12s | %9.3f | %8.3f | %7b | %8.3f ",
 					m.instrument().symbol(),
 					DF.format(new Date(current.updated().millisecond())),
 					m.lastPrice().price().asDouble(),
 					m.lastPrice().source().flag(),
 					m.lastPrice().source().name(),
+					previous.close().asDouble(),
 					current.settle().asDouble(),
 					current.isSettled().value(),
 					previous.settle().asDouble()));
