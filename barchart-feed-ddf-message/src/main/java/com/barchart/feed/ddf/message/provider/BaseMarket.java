@@ -74,18 +74,18 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	// NOTE: invokes resolver
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getInstrument()
 	 */
 	@Override
 	public Instrument getInstrument() {
-		
+
 		return DDF_InstrumentProvider.fromMessage(stub);
-		
+
 	}
-	
-	/*  
-	 * Lazy eval instrument stub 
+
+	/*
+	 * Lazy eval instrument stub
 	 */
 	private final Instrument stub = new InstBase() {
 
@@ -121,16 +121,16 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		}
 
 	};
-	
+
 	@Override
 	public final TimeValue getTime() {
 		return ValueBuilder.newTime(millisUTC);
 	}
-	
+
 	// NOTE: invokes parser
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getSymbol()
 	 */
 	@Override
@@ -142,7 +142,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getDelay()
 	 */
 	@Override
@@ -152,7 +152,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getFraction()
 	 */
 	@Override
@@ -166,7 +166,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getExchange()
 	 */
 	@Override
@@ -180,7 +180,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getSession()
 	 */
 	@Override
@@ -194,7 +194,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getTradeDay()
 	 */
 	@Override
@@ -208,7 +208,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getSpreadType()
 	 */
 	@Override
@@ -226,7 +226,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		return DDF_Symbology.byteArrayFromSymbolArray(symbolArray);
 	}
 
-	private final byte[] getSymbolMain() {
+	protected final byte[] getSymbolMain() {
 		if (symbolArray == null || symbolArray.length == 0) {
 			return DDF_Symbology.DDF_NO_NAME;
 		}
@@ -235,14 +235,14 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/*
 	 * non spread: <symbol>
-	 * 
+	 *
 	 * or
-	 * 
+	 *
 	 * for spread: <symbol1>_<symbol2>_..._<symbolN>
 	 */
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketBase#getId()
 	 */
 	@Override
@@ -254,14 +254,14 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/*
 	 * <soh><rec><symbol>,<subrec><stx><base><exch>(<delay>)(,)(<spread>)||
-	 * 
+	 *
 	 * ... body ...
-	 * 
+	 *
 	 * ||<day><session><etx>||<time stamp>
 	 */
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.barchart.feed.ddf.message.provider.Base#encodeDDF(java.nio.ByteBuffer
 	 * )
@@ -276,7 +276,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	/*
 	 * <soh><rec><symbol>,<subrec><stx><base><exch>(<delay>)(,)(<spread>)||
 	 */
-	protected final void encodeHead(final ByteBuffer buffer) {
+	protected void encodeHead(final ByteBuffer buffer) {
 		final DDF_MessageType type = getMessageType();
 		//
 		buffer.put(SOH); // <soh>
@@ -314,7 +314,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.barchart.feed.ddf.message.provider.Base#decodeDDF(java.nio.ByteBuffer
 	 * )
@@ -329,7 +329,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	/*
 	 * <soh><rec><symbol>,<subrec><stx><base><exch>(<delay>)(,)(<spread>)||
 	 */
-	protected final void decodeHead(final ByteBuffer buffer) {
+	protected void decodeHead(final ByteBuffer buffer) {
 		check(buffer.get(), SOH); // <soh>
 		final byte record = buffer.get(); // <rec>
 		final byte[] symbolMain = read(buffer, COMMA); // <symbol>,
@@ -338,15 +338,15 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		final byte baseCode = buffer.get(); // <base code>
 		final byte exchCode = buffer.get(); // <exch code>
 		decodeDelay(buffer); // optional (<delay>)(,)
-		final byte[][] symbolLegs = decodeSpread(buffer); // optional (<spread>)
-		//
-		setSymbol(symbolMain, symbolLegs);
+		// final byte[][] symbolLegs = decodeSpread(buffer);
+		// setSymbol(symbolMain, symbolLegs);
+		setSymbol(symbolMain, null);
 		setMessageType(DDF_MessageType.fromPair(record, subRecord));
 		ordFraction = DDF_Fraction.fromBaseCode(baseCode).ord;
 		ordExchange = DDF_Exchange.fromCode(exchCode).ord;
 	}
 
-	private final void setSymbol(final byte[] symbolMain,
+	protected final void setSymbol(final byte[] symbolMain,
 			final byte[][] symbolLegs) {
 		if (symbolMain == null) {
 			symbolArray = null;
@@ -389,7 +389,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 
 	/* <spread type> <num of legs> <symbol2>, <symbol3>, <symbol4>, */
 
-	private final void encodeSpread(final ByteBuffer buffer) {
+	protected final void encodeSpread(final ByteBuffer buffer) {
 		final DDF_SpreadType spread = getSpreadType();
 		if (!spread.isKnown() || symbolArray == null || symbolArray.length == 1) {
 			return;
@@ -403,15 +403,15 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		}
 	}
 
-	private final byte[][] decodeSpread(final ByteBuffer buffer) {
+	protected final byte[][] decodeSpread(final ByteBuffer buffer) {
 		buffer.mark();
 		final char spreadCode = buffer.getChar(); // <spread type>
 		final DDF_SpreadType spread = DDF_SpreadType.fromCode(spreadCode);
 		setSpread(spread);
 		if (spread.isKnown()) {
 			final int legCount = decodeUnsigned_1(buffer); // <num of legs>
-			final byte[][] symbolLegs = new byte[legCount][];
-			for (int k = 0; k < legCount; k++) {
+			final byte[][] symbolLegs = new byte[legCount - 1][];
+			for (int k = 0; k < symbolLegs.length; k++) {
 				symbolLegs[k] = read(buffer, COMMA); // <symbol N>,
 			}
 			return symbolLegs;

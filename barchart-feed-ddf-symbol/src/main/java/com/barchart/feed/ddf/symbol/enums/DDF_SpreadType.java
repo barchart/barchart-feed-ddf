@@ -12,32 +12,106 @@ import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.util.ByteConverters;
 import com.barchart.util.common.math.MathExtra;
 
-// TODO: Auto-generated Javadoc
 /**
  * ddf spread type.
  */
 public enum DDF_SpreadType implements Value<DDF_SpreadType> {
 
-	DEFAULT("SP"), //
+	DEFAULT("SP", "Standard"),
 
-	//
+	GENERIC("GN", "Generic"),
 
-	UNKNOWN("??"), //
+	CRACK("CR", "Crack Spread"),
 
-	/** The ord. */
- ;
+	XMAS_TREE("XT", "Xmas Tree"),
+
+	STRADDLE_STRIP("SS", "Straddle Strips"),
+
+	RISK_REVERSAL("RR", "Risk Reversal"),
+
+	STRIP_SR("SR", "Strip"),
+
+	IRON_CONDOR("IC", "Iron Condor"),
+
+	HORIZ_STRADDLE("HS", "Horizontal Straddle"),
+
+	DOUBLE("DB ", "Double"),
+
+	CONDOR_CO("CO", "Condor"),
+
+	CONDITIONAL_CURVE("CC", "Conditional Curve"),
+
+	BUTTERFLY_BO("BO", "Butterfly"),
+
+	BOX("BX", "Box"),
+
+	EQ_PUT_VERTICAL("VP", "Equity Put Vertical"),
+
+	EQ_CALL_VERTICAL("VC", "Equity Call Vertical"),
+
+	VERTICAL("VT", "Vertical"),
+
+	STRANGLE("SG", "Strangle"),
+
+	STRADDLE("ST", "Straddle"),
+
+	HORIZ_CALENDAR("HO", "Horizontal Calendar"),
+
+	DIAG_CALENDAR("DO", "Diagonal Calendar"),
+
+	BUNDLE_SPREAD("BS", "Bundle Spread"),
+
+	BUNDLE("FB", "Bundle"),
+
+	PACK_SPREAD("PS", "Pack Spread"),
+
+	DOUBLE_BUTTERFLY("DF", "Double Butterfly"),
+
+	PACK_BUTTERFLY("PB", "Pack Butterfly"),
+
+	MONTH_PACK("MP", "Month Pack"),
+
+	PACK("PK", "Pack"),
+
+	CRACK1("C1", "Crack"),
+
+	INTERCOMMODITY("IS", "Inter-Commodity"),
+
+	STRIP_FS("FS", "Strip"),
+
+	CONDOR_CF("CF", "Condor"),
+
+	BUTTERFLY_BF("BF", "Butterfly"),
+
+	EQUITIES("EQ", "Equities"),
+
+	REDUCED_TICK("RT", "Reduced Tick"),
+
+	FOREX("FX", "Foreign Exchange"),
+
+	THREE_WAY("3W", "3-Way"),
+
+	RATIO_2_3("23", "Ratio 2x3"),
+
+	RATIO_1_3("13", "Ratio 1x3"),
+
+	RATIO_1_2("12", "Ratio 1x2"),
+
+	UNKNOWN("??", "Unknown");
 
 	public final byte ord;
 
 	/** The code. */
 	public final char code;
+	public final String name;
 
-	private DDF_SpreadType(final String name) {
+	private DDF_SpreadType(final String code, final String name) {
 		this.ord = (byte) ordinal();
-		assert name.length() == 2;
-		assert ValueBuilder.isPureAscii(name);
-		this.code = ByteConverters.charFromBytes((byte) name.charAt(0),
-				(byte) name.charAt(1));
+		assert code.length() == 2;
+		assert ValueBuilder.isPureAscii(code);
+		this.code = ByteConverters.charFromBytes((byte) code.charAt(0),
+				(byte) code.charAt(1));
+		this.name = name;
 	}
 
 	private final static DDF_SpreadType[] ENUM_VALUES = values();
@@ -91,7 +165,9 @@ public enum DDF_SpreadType implements Value<DDF_SpreadType> {
 		return this != UNKNOWN;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see com.barchart.util.values.api.Value#freeze()
 	 */
 	@Override
@@ -99,7 +175,9 @@ public enum DDF_SpreadType implements Value<DDF_SpreadType> {
 		return this;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see com.barchart.util.values.api.Value#isFrozen()
 	 */
 	@Override
@@ -107,7 +185,9 @@ public enum DDF_SpreadType implements Value<DDF_SpreadType> {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see com.barchart.util.values.api.Value#isNull()
 	 */
 	@Override

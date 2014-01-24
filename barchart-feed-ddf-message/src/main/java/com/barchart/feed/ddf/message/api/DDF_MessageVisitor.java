@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.message.api;
 
 /**
  * http://en.wikipedia.org/wiki/Visitor_pattern
- * 
+ *
  * @param <Result>
  *            the generic type
  * @param <Param>
@@ -52,10 +52,16 @@ public interface DDF_MessageVisitor<Result, Param> {
 	/** processed as part of {@link DDF_MarketQuote} */
 	Result visit(DDF_MarketSession message, Param param);
 
+	/** EOD messages */
+
 	Result visit(DDF_EOD_Commodity message, Param param);
+
+	Result visit(DDF_EOD_CommoditySpread message, Param param);
 
 	Result visit(DDF_EOD_EquityForex message, Param param);
 
 	Result visit(DDF_Prior_IndividCmdy message, Param param);
+
+	Result visit(DDF_Prior_TotCmdy message, Param param);
 
 }

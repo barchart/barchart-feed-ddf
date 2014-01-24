@@ -16,7 +16,8 @@ import static com.barchart.util.common.ascii.ASCII.NUL;
 import java.nio.ByteBuffer;
 
 import com.barchart.feed.base.values.api.PriceValue;
-import com.barchart.feed.ddf.message.api.DDF_EOD_Commodity;
+import com.barchart.feed.base.values.api.SizeValue;
+import com.barchart.feed.ddf.message.api.DDF_EOD_CommoditySpread;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
@@ -26,13 +27,13 @@ import com.barchart.feed.ddf.util.enums.DDF_Fraction;
  * @author g-litchfield
  *
  */
-class DF_3C_CmdyEOD extends BaseEOD implements DDF_EOD_Commodity {
+class DF_3R_CmdySpreadEOD extends BaseEOD implements DDF_EOD_CommoditySpread {
 
-	DF_3C_CmdyEOD() {
+	DF_3R_CmdySpreadEOD() {
 		super(DDF_MessageType.EOD_CMDY);
 	}
 
-	DF_3C_CmdyEOD(final DDF_MessageType messageType) {
+	DF_3R_CmdySpreadEOD(final DDF_MessageType messageType) {
 		super(messageType);
 	}
 
@@ -42,6 +43,7 @@ class DF_3C_CmdyEOD extends BaseEOD implements DDF_EOD_Commodity {
 	protected long priceHigh = HelperDDF.DDF_EMPTY;
 	protected long priceLow = HelperDDF.DDF_EMPTY;
 	protected long priceLast = HelperDDF.DDF_EMPTY;
+	protected long sizeVolume = HelperDDF.DDF_EMPTY;
 
 	// //////////////////////////////////////
 
@@ -59,14 +61,14 @@ class DF_3C_CmdyEOD extends BaseEOD implements DDF_EOD_Commodity {
 	@Override
 	protected void encodeHead(final ByteBuffer buffer) {
 		super.encodeHead(buffer);
-		buffer.put(COMMA);
 		encodeDay(buffer);
 	}
 
 	@Override
 	protected void decodeHead(final ByteBuffer buffer) {
 		super.decodeHead(buffer);
-		check(buffer.get(), COMMA);
+		final byte[][] symbolLegs = decodeSpread(buffer);
+		setSymbol(getSymbolMain(), symbolLegs);
 		decodeDay(buffer);
 	}
 
@@ -77,7 +79,8 @@ class DF_3C_CmdyEOD extends BaseEOD implements DDF_EOD_Commodity {
 		HelperDDF.decimalEncode(priceOpen, frac, buffer, COMMA); // <open>,
 		HelperDDF.decimalEncode(priceHigh, frac, buffer, COMMA); // <high>,
 		HelperDDF.decimalEncode(priceLow, frac, buffer, COMMA); // <low>,
-		HelperDDF.decimalEncode(priceLast, frac, buffer, NUL); // <last>,
+		HelperDDF.decimalEncode(priceLast, frac, buffer, COMMA); // <last>,
+		HelperDDF.longEncode(sizeVolume, buffer, NUL); // <volume>,
 	}
 
 	@Override
@@ -87,7 +90,8 @@ class DF_3C_CmdyEOD extends BaseEOD implements DDF_EOD_Commodity {
 		priceOpen = HelperDDF.decimalDecode(frac, buffer, COMMA); //
 		priceHigh = HelperDDF.decimalDecode(frac, buffer, COMMA); //
 		priceLow = HelperDDF.decimalDecode(frac, buffer, COMMA); //
-		priceLast = HelperDDF.decimalDecode(frac, buffer, NUL); //
+		priceLast = HelperDDF.decimalDecode(frac, buffer, COMMA); //
+		sizeVolume = HelperDDF.longDecode(buffer, NUL);
 	}
 
 	@Override
@@ -111,6 +115,10 @@ class DF_3C_CmdyEOD extends BaseEOD implements DDF_EOD_Commodity {
 		text.append(getPriceLast());
 		text.append("\n");
 
+		text.append("sizeVolume : ");
+		text.append(getSizeVolume());
+		text.append("\n");
+
 	}
 
 	@Override
@@ -131,6 +139,11 @@ class DF_3C_CmdyEOD extends BaseEOD implements DDF_EOD_Commodity {
 	@Override
 	public PriceValue getPriceLast() {
 		return HelperDDF.newPriceDDF(priceLast, getFraction());
+	}
+
+	@Override
+	public SizeValue getSizeVolume() {
+		return HelperDDF.newSizeDDF(sizeVolume);
 	}
 
 }

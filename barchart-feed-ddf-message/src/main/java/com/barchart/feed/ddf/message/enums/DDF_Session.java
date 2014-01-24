@@ -27,6 +27,7 @@ import static com.barchart.feed.base.trade.enums.MarketTradeType.MARKET_CLOSING;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.MARKET_OPENING;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.MARKET_REOPENING;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.NYSE_RULE_127;
+import static com.barchart.feed.base.trade.enums.MarketTradeType.ODD_LOT;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.PRIOR_REFERENCE_PRICE;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.REGULAR_SALE;
 import static com.barchart.feed.base.trade.enums.MarketTradeType.RESERVED;
@@ -131,7 +132,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 	$_G_NET(_G_, DDF_Exchange.UNKNOWN, FUTURE_ELECTRONIC, DEFAULT, NORMAL), // XXX
 
 	$_H_(_H_, MarketTradeType.UNKNOWN), //
-	$_I_(_I_, MarketTradeType.UNKNOWN), //
+	$_I_(_I_, ODD_LOT), //
 	$_J_(_J_, MarketTradeType.UNKNOWN), //
 	$_K_(_K_, NYSE_RULE_127), //
 	$_L_(_L_, SOLD_LAST), //
@@ -366,7 +367,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * The main method.
-	 * 
+	 *
 	 * @param strings
 	 *            the arguments
 	 */
@@ -388,7 +389,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Enum#toString()
 	 */
 	@Override
@@ -398,7 +399,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
 	 */
 	@Override
@@ -408,7 +409,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.util.enums.EnumCodeByte#code()
 	 */
 	@Override
@@ -458,7 +459,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * Values unsafe.
-	 * 
+	 *
 	 * @return the dD f_ session[]
 	 */
 	@Deprecated
@@ -473,7 +474,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * From ord.
-	 * 
+	 *
 	 * @param ord
 	 *            the ord
 	 * @return the dD f_ session
@@ -509,7 +510,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * NOTE: ORD vs CODE.
-	 * 
+	 *
 	 * @param exchOrd
 	 *            the exch ord
 	 * @param sessCode
@@ -533,7 +534,7 @@ public enum DDF_Session implements EnumCodeByte, EnumByteOrdinal {
 
 	/**
 	 * Checks if is known.
-	 * 
+	 *
 	 * @return true, if is known
 	 */
 	public final boolean isKnown() {

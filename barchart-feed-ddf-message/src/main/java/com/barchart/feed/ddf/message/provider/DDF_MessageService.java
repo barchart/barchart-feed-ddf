@@ -50,9 +50,8 @@ public final class DDF_MessageService {
 
 	/**
 	 * Checks if is blank.
-	 * 
-	 * @param value
-	 *            the value
+	 *
+	 * @param value the value
 	 * @return true, if is blank
 	 */
 	public static final boolean isBlank(final DecimalValue value) {
@@ -61,9 +60,8 @@ public final class DDF_MessageService {
 
 	/**
 	 * Checks if is empty.
-	 * 
-	 * @param value
-	 *            the value
+	 *
+	 * @param value the value
 	 * @return true, if is empty
 	 */
 	public static final boolean isEmpty(final PriceValue value) {
@@ -72,9 +70,8 @@ public final class DDF_MessageService {
 
 	/**
 	 * Checks if is empty.
-	 * 
-	 * @param value
-	 *            the value
+	 *
+	 * @param value the value
 	 * @return true, if is empty
 	 */
 	public static final boolean isEmpty(final SizeValue value) {
@@ -83,9 +80,8 @@ public final class DDF_MessageService {
 
 	/**
 	 * Checks if is empty.
-	 * 
-	 * @param value
-	 *            the value
+	 *
+	 * @param value the value
 	 * @return true, if is empty
 	 */
 	public static final boolean isEmpty(final TimeValue value) {
@@ -96,9 +92,8 @@ public final class DDF_MessageService {
 
 	/**
 	 * Checks if is clear.
-	 * 
-	 * @param value
-	 *            the value
+	 *
+	 * @param value the value
 	 * @return true, if is clear
 	 */
 	public static final boolean isClear(final DecimalValue value) {
@@ -107,9 +102,8 @@ public final class DDF_MessageService {
 
 	/**
 	 * Checks if is clear.
-	 * 
-	 * @param value
-	 *            the value
+	 *
+	 * @param value the value
 	 * @return true, if is clear
 	 */
 	public static final boolean isClear(final PriceValue value) {
@@ -118,9 +112,8 @@ public final class DDF_MessageService {
 
 	/**
 	 * Checks if is clear.
-	 * 
-	 * @param value
-	 *            the value
+	 *
+	 * @param value the value
 	 * @return true, if is clear
 	 */
 	public static final boolean isClear(final SizeValue value) {
@@ -129,9 +122,8 @@ public final class DDF_MessageService {
 
 	/**
 	 * Checks if is clear.
-	 * 
-	 * @param value
-	 *            the value
+	 *
+	 * @param value the value
 	 * @return true, if is clear
 	 */
 	public static final boolean isClear(final TimeValue value) {
@@ -145,70 +137,76 @@ public final class DDF_MessageService {
 
 		switch (type) {
 
-		case BOOK_TOP:
-			assert type.klaz.isAssignableFrom(DF_28_BookTop.class);
-			return new DF_28_BookTop(type);
+			case BOOK_TOP:
+				assert type.klaz.isAssignableFrom(DF_28_BookTop.class);
+				return new DF_28_BookTop(type);
 
-		case BOOK_SNAP:
-			assert type.klaz.isAssignableFrom(DF_3B_Book.class);
-			return new DF_3B_Book(type);
+			case BOOK_SNAP:
+				assert type.klaz.isAssignableFrom(DF_3B_Book.class);
+				return new DF_3B_Book(type);
 
-		case TRADE:
-		case TRADE_VOL:
-			assert type.klaz.isAssignableFrom(DF_27_Trade.class);
-			return new DF_27_Trade(type);
+			case TRADE:
+			case TRADE_VOL:
+				assert type.klaz.isAssignableFrom(DF_27_Trade.class);
+				return new DF_27_Trade(type);
 
-		case PARAM:
-			assert type.klaz.isAssignableFrom(DF_20_Param.class);
-			return new DF_20_Param(type);
+			case PARAM:
+				assert type.klaz.isAssignableFrom(DF_20_Param.class);
+				return new DF_20_Param(type);
 
-		case DDF_25:
-			assert type.klaz.isAssignableFrom(DF_25_Param.class);
-			return new DF_25_Param(type);
-			
-		case TIME_STAMP:
-			assert type.klaz.isAssignableFrom(DF_C0_Time.class);
-			return new DF_C0_Time(type);
+			case DDF_25:
+				assert type.klaz.isAssignableFrom(DF_25_Param.class);
+				return new DF_25_Param(type);
 
-		case SNAP_FORE_EXCH:
-		case SNAP_FORE_PLUS:
-		case SNAP_BACK_PLUS_CURR:
-		case SNAP_BACK_PLUS_PREV:
-		case SNAP_FORE_PLUS_QUOTE:
-			assert type.klaz.isAssignableFrom(DF_21_Snap.class);
-			return new DF_21_Snap(type);
+			case TIME_STAMP:
+				assert type.klaz.isAssignableFrom(DF_C0_Time.class);
+				return new DF_C0_Time(type);
 
-		case QUOTE_SNAP_XML:
-			assert type.klaz.isAssignableFrom(DX_XQ_Quote.class);
-			return new DX_XQ_Quote(type);
+			case SNAP_FORE_EXCH:
+			case SNAP_FORE_PLUS:
+			case SNAP_BACK_PLUS_CURR:
+			case SNAP_BACK_PLUS_PREV:
+			case SNAP_FORE_PLUS_QUOTE:
+				assert type.klaz.isAssignableFrom(DF_21_Snap.class);
+				return new DF_21_Snap(type);
 
-		case CUVOL_SNAP_XML:
-			assert type.klaz.isAssignableFrom(DX_XC_Cuvol.class);
-			return new DX_XC_Cuvol(type);
+			case QUOTE_SNAP_XML:
+				assert type.klaz.isAssignableFrom(DX_XQ_Quote.class);
+				return new DX_XQ_Quote(type);
 
-		case BOOK_SNAP_XML:
-			assert type.klaz.isAssignableFrom(DX_XB_Book.class);
-			return new DX_XB_Book(type);
+			case CUVOL_SNAP_XML:
+				assert type.klaz.isAssignableFrom(DX_XC_Cuvol.class);
+				return new DX_XC_Cuvol(type);
 
-		case TCP_ACCEPT:
-		case TCP_REJECT:
-		case TCP_COMMAND:
-		case TCP_WELCOME:
-			assert type.klaz.isAssignableFrom(DF_C1_Response.class);
-			return new DF_C1_Response(type);
+			case BOOK_SNAP_XML:
+				assert type.klaz.isAssignableFrom(DX_XB_Book.class);
+				return new DX_XB_Book(type);
 
-		case EOD_EQTY_FORE:
-			assert type.klaz.isAssignableFrom(DF_3S_StockEOD.class);
-			return new DF_3S_StockEOD(type);
-		case EOD_CMDY:
-			assert type.klaz.isAssignableFrom(DF_3C_CmdyEOD.class);
-			return new DF_3C_CmdyEOD(type);
-		case PRIOR_INDIV_CMDY:
-			assert type.klaz.isAssignableFrom(DF_3I_PriorCmdy.class);
-			return new DF_3I_PriorCmdy(type);
+			case TCP_ACCEPT:
+			case TCP_REJECT:
+			case TCP_COMMAND:
+			case TCP_WELCOME:
+				assert type.klaz.isAssignableFrom(DF_C1_Response.class);
+				return new DF_C1_Response(type);
 
-		default:
-			throw new IllegalArgumentException("unknown type=" + type);
+			case EOD_EQTY_FORE:
+				assert type.klaz.isAssignableFrom(DF_3S_StockEOD.class);
+				return new DF_3S_StockEOD(type);
+			case EOD_CMDY:
+				assert type.klaz.isAssignableFrom(DF_3C_CmdyEOD.class);
+				return new DF_3C_CmdyEOD(type);
+			case EOD_CMDY_SPREAD:
+				assert type.klaz.isAssignableFrom(DF_3R_CmdySpreadEOD.class);
+				return new DF_3R_CmdySpreadEOD(type);
+			case PRIOR_INDIV_CMDY:
+				assert type.klaz.isAssignableFrom(DF_3I_PriorCmdy.class);
+				return new DF_3I_PriorCmdy(type);
+			case PRIOR_TOTAL_CMDY:
+				assert type.klaz.isAssignableFrom(DF_3T_PriorTotalCmdy.class);
+				return new DF_3T_PriorTotalCmdy(type);
+
+			default:
+				throw new IllegalArgumentException("unknown type=" + type);
 
 		}
 
@@ -216,12 +214,10 @@ public final class DDF_MessageService {
 
 	/**
 	 * Decode.
-	 * 
-	 * @param buffer
-	 *            the buffer
+	 *
+	 * @param buffer the buffer
 	 * @return the dD f_ base message
-	 * @throws Exception
-	 *             the exception
+	 * @throws Exception the exception
 	 */
 	public static final DDF_BaseMessage decode(final ByteBuffer buffer)
 			throws Exception {
@@ -230,12 +226,10 @@ public final class DDF_MessageService {
 
 	/**
 	 * Decode.
-	 * 
-	 * @param array
-	 *            the array
+	 *
+	 * @param array the array
 	 * @return the dD f_ base message
-	 * @throws Exception
-	 *             the exception
+	 * @throws Exception the exception
 	 */
 	public static final DDF_BaseMessage decode(final byte[] array)
 			throws Exception {
@@ -251,42 +245,42 @@ public final class DDF_MessageService {
 		final Element element;
 
 		switch (kind) {
-		case FeedDDF.DDF_START:
-			element = null;
-			record = array[1];
-			subRecord = find(array, 2, (byte) FeedDDF.DDF_MIDDLE);
-			break;
-		case FeedDDF.XML_SNAPSHOT:
-			element = HelperXML.xmlDocumentDecode(array, 1, array.length, true);
-			record = FeedDDF.XML_RECORD;
-			if (isXmlBook(element)) {
-				subRecord = FeedDDF.XML_SUB_BOOK;
+			case FeedDDF.DDF_START:
+				element = null;
+				record = array[1];
+				subRecord = find(array, 2, (byte) FeedDDF.DDF_MIDDLE);
 				break;
-			}
-			if (isXmlCuvol(element)) {
-				subRecord = FeedDDF.XML_SUB_CUVOL;
+			case FeedDDF.XML_SNAPSHOT:
+				element = HelperXML.xmlDocumentDecode(array, 1, array.length, true);
+				record = FeedDDF.XML_RECORD;
+				if (isXmlBook(element)) {
+					subRecord = FeedDDF.XML_SUB_BOOK;
+					break;
+				}
+				if (isXmlCuvol(element)) {
+					subRecord = FeedDDF.XML_SUB_CUVOL;
+					break;
+				}
+				if (isXmlQuote(element)) {
+					subRecord = FeedDDF.XML_SUB_QUOTE;
+					break;
+				}
+				throw new IllegalArgumentException("unknown xml kind : \n"
+						+ new String(array));
+			case FeedDDF.TCP_ACCEPT:
+			case FeedDDF.TCP_REJECT:
+			case FeedDDF.TCP_COMMAND:
+			case FeedDDF.TCP_WELCOME:
+				element = null;
+				record = array[0]; // kind
+				subRecord = FeedDDF.NUL;
 				break;
-			}
-			if (isXmlQuote(element)) {
-				subRecord = FeedDDF.XML_SUB_QUOTE;
+			default:
+				element = null;
+				record = DDF_MessageType.UNKNOWN.record;
+				subRecord = DDF_MessageType.UNKNOWN.subRecord;
+				log.debug("unknown kind : {}", kind);
 				break;
-			}
-			throw new IllegalArgumentException("unknown xml kind : \n"
-					+ new String(array));
-		case FeedDDF.TCP_ACCEPT:
-		case FeedDDF.TCP_REJECT:
-		case FeedDDF.TCP_COMMAND:
-		case FeedDDF.TCP_WELCOME:
-			element = null;
-			record = array[0]; // kind
-			subRecord = FeedDDF.NUL;
-			break;
-		default:
-			element = null;
-			record = DDF_MessageType.UNKNOWN.record;
-			subRecord = DDF_MessageType.UNKNOWN.subRecord;
-			log.debug("unknown kind : {}", kind);
-			break;
 		}
 
 		// System.out.println("array=" + new String(array));
@@ -301,14 +295,14 @@ public final class DDF_MessageService {
 		final ByteBuffer buffer = ByteBuffer.wrap(array);
 
 		switch (record) {
-		default:
-			// ddf line message
-			message.decodeDDF(buffer);
-			break;
-		case FeedDDF.XML_RECORD:
-			// xml formatted message
-			message.decodeXML(element);
-			break;
+			default:
+				// ddf line message
+				message.decodeDDF(buffer);
+				break;
+			case FeedDDF.XML_RECORD:
+				// xml formatted message
+				message.decodeXML(element);
+				break;
 		}
 
 		return message;
@@ -317,12 +311,10 @@ public final class DDF_MessageService {
 
 	/**
 	 * Market book from url.
-	 * 
-	 * @param symbolURI
-	 *            the symbol uri
+	 *
+	 * @param symbolURI the symbol uri
 	 * @return the dD f_ market book
-	 * @throws Exception
-	 *             the exception
+	 * @throws Exception the exception
 	 */
 	public static final DDF_MarketBook marketBookFromUrl(final String symbolURI)
 			throws Exception {
@@ -344,12 +336,10 @@ public final class DDF_MessageService {
 
 	/**
 	 * Market cuvol from url.
-	 * 
-	 * @param symbolURI
-	 *            the symbol uri
+	 *
+	 * @param symbolURI the symbol uri
 	 * @return the dD f_ market cuvol
-	 * @throws Exception
-	 *             the exception
+	 * @throws Exception the exception
 	 */
 	public static final DDF_MarketCuvol marketCuvolFromUrl(
 			final String symbolURI) throws Exception {
@@ -371,12 +361,10 @@ public final class DDF_MessageService {
 
 	/**
 	 * Market quote from url.
-	 * 
-	 * @param symbolURI
-	 *            the symbol uri
+	 *
+	 * @param symbolURI the symbol uri
 	 * @return the dD f_ market quote
-	 * @throws Exception
-	 *             the exception
+	 * @throws Exception the exception
 	 */
 	public static final DDF_MarketQuote marketQuoteFromUrl(
 			final String symbolURI) throws Exception {

@@ -6,26 +6,28 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * 
+ *
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.common.ascii.ASCII.*;
+import static com.barchart.util.common.ascii.ASCII.COMMA;
+import static com.barchart.util.common.ascii.ASCII.NUL;
 
 import java.nio.ByteBuffer;
 
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.ddf.message.api.DDF_EOD_EquityForex;
+import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 
 /**
  * @author g-litchfield
- * 
+ *
  */
-class DF_3S_StockEOD extends BaseMarket implements DDF_EOD_EquityForex {
+class DF_3S_StockEOD extends BaseEOD implements DDF_EOD_EquityForex {
 
 	DF_3S_StockEOD() {
 		super(DDF_MessageType.EOD_EQTY_FORE);
@@ -52,6 +54,26 @@ class DF_3S_StockEOD extends BaseMarket implements DDF_EOD_EquityForex {
 	 */
 
 	@Override
+	public <Result, Param> Result accept(
+			final DDF_MessageVisitor<Result, Param> visitor, final Param param) {
+		return visitor.visit(this, param);
+	}
+
+	@Override
+	protected void encodeHead(final ByteBuffer buffer) {
+		super.encodeHead(buffer);
+		buffer.put(COMMA);
+		encodeDay(buffer);
+	}
+
+	@Override
+	protected void decodeHead(final ByteBuffer buffer) {
+		super.decodeHead(buffer);
+		check(buffer.get(), COMMA);
+		decodeDay(buffer);
+	}
+
+	@Override
 	protected final void encodeBody(final ByteBuffer buffer) {
 		final DDF_Fraction frac = getFraction();
 		//
@@ -60,7 +82,7 @@ class DF_3S_StockEOD extends BaseMarket implements DDF_EOD_EquityForex {
 		HelperDDF.decimalEncode(priceLow, frac, buffer, COMMA); // <low>,
 		HelperDDF.decimalEncode(priceLast, frac, buffer, COMMA); // <last>,
 		//
-		HelperDDF.longEncode(sizeVolume, buffer, COMMA); // <cur volume>,
+		HelperDDF.longEncode(sizeVolume, buffer, NUL); // <cur volume>,
 	}
 
 	@Override
@@ -72,7 +94,7 @@ class DF_3S_StockEOD extends BaseMarket implements DDF_EOD_EquityForex {
 		priceLow = HelperDDF.decimalDecode(frac, buffer, COMMA); //
 		priceLast = HelperDDF.decimalDecode(frac, buffer, COMMA); //
 		//
-		sizeVolume = HelperDDF.longDecode(buffer, COMMA); //
+		sizeVolume = HelperDDF.longDecode(buffer, NUL); //
 	}
 
 	@Override
@@ -125,18 +147,6 @@ class DF_3S_StockEOD extends BaseMarket implements DDF_EOD_EquityForex {
 	@Override
 	public SizeValue getSizeVolume() {
 		return HelperDDF.newSizeDDF(sizeVolume);
-	}
-
-	@Override
-	protected final void encodeDelay(final ByteBuffer buffer) {
-		super.encodeDelay(buffer);
-		buffer.put(COMMA); // (,)
-	}
-
-	@Override
-	protected final void decodeDelay(final ByteBuffer buffer) {
-		super.decodeDelay(buffer);
-		check(buffer.get(), COMMA); // (,)
 	}
 
 }

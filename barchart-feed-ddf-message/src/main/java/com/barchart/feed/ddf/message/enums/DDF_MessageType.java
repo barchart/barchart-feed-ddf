@@ -20,6 +20,7 @@ import static com.barchart.util.common.ascii.ASCII._8_;
 import static com.barchart.util.common.ascii.ASCII._B_;
 import static com.barchart.util.common.ascii.ASCII._C_;
 import static com.barchart.util.common.ascii.ASCII._I_;
+import static com.barchart.util.common.ascii.ASCII._R_;
 import static com.barchart.util.common.ascii.ASCII._S_;
 import static com.barchart.util.common.ascii.ASCII._T_;
 import static com.barchart.util.common.ascii.ASCII._Z_;
@@ -29,6 +30,7 @@ import com.barchart.feed.base.enums.EnumCodeChar;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_EOD_Commodity;
+import com.barchart.feed.ddf.message.api.DDF_EOD_CommoditySpread;
 import com.barchart.feed.ddf.message.api.DDF_EOD_EquityForex;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;
@@ -114,6 +116,9 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 	/** 3C: end-of-day commodity prices */
 	EOD_CMDY(_3_, _C_, DDF_EOD_Commodity.class), //
 
+	/** 3C: end-of-day commodity prices */
+	EOD_CMDY_SPREAD(_3_, _R_, DDF_EOD_CommoditySpread.class), //
+
 	/** prior day's commodity individual vol & open int. */
 	PRIOR_INDIV_CMDY(_3_, _I_, DDF_Prior_IndividCmdy.class), //
 
@@ -143,7 +148,7 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.util.enums.EnumByteOrdinal#ord()
 	 */
 	;
@@ -155,7 +160,7 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.util.enums.EnumCodeChar#code()
 	 */
 	@Override
@@ -213,7 +218,7 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/**
 	 * Values unsafe.
-	 * 
+	 *
 	 * @return the dD f_ message type[]
 	 */
 	@Deprecated
@@ -228,9 +233,8 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/**
 	 * From ord.
-	 * 
-	 * @param ord
-	 *            the ord
+	 *
+	 * @param ord the ord
 	 * @return the dD f_ message type
 	 */
 	public final static DDF_MessageType fromOrd(final byte ord) {
@@ -239,114 +243,113 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 
 	/**
 	 * From pair.
-	 * 
-	 * @param record
-	 *            the record
-	 * @param subRecord
-	 *            the sub record
+	 *
+	 * @param record the record
+	 * @param subRecord the sub record
 	 * @return the dD f_ message type
 	 */
 	public final static DDF_MessageType fromPair(final byte record,
 			final byte subRecord) {
 		switch (record) {
-		case _2_:
-			switch (subRecord) {
-			case _0_:
-				return PARAM;
-			case _1_:
-				return SNAP_FORE_EXCH;
 			case _2_:
-				return SNAP_FORE_PLUS;
+				switch (subRecord) {
+					case _0_:
+						return PARAM;
+					case _1_:
+						return SNAP_FORE_EXCH;
+					case _2_:
+						return SNAP_FORE_PLUS;
+					case _3_:
+						return SNAP_BACK_PLUS_CURR;
+					case _4_:
+						return SNAP_BACK_PLUS_PREV;
+					case _5_:
+						return DDF_25;
+					case _6_:
+						return SNAP_FORE_PLUS_QUOTE;
+					case _7_:
+						return TRADE;
+					case _Z_:
+						return TRADE_VOL;
+					case _8_:
+						return BOOK_TOP;
+					default:
+						return UNKNOWN;
+				}
 			case _3_:
-				return SNAP_BACK_PLUS_CURR;
-			case _4_:
-				return SNAP_BACK_PLUS_PREV;
-			case _5_:
-				return DDF_25;
-			case _6_:
-				return SNAP_FORE_PLUS_QUOTE;
-			case _7_:
-				return TRADE;
-			case _Z_:
-				return TRADE_VOL;
-			case _8_:
-				return BOOK_TOP;
+				switch (subRecord) {
+					case _B_:
+						return BOOK_SNAP;
+					case _S_:
+						return EOD_EQTY_FORE;
+					case _C_:
+						return EOD_CMDY;
+					case _I_:
+						return PRIOR_INDIV_CMDY;
+					case _R_:
+						return EOD_CMDY_SPREAD;
+					case _T_:
+						return PRIOR_TOTAL_CMDY;
+					default:
+						return UNKNOWN;
+				}
+			case FeedDDF.DDF_TIMESTAMP:
+				switch (subRecord) {
+					case NUL:
+						return TIME_STAMP;
+					default:
+						return UNKNOWN;
+				}
+			case FeedDDF.XML_RECORD:
+				switch (subRecord) {
+					case FeedDDF.XML_SUB_BOOK:
+						return BOOK_SNAP_XML;
+					case FeedDDF.XML_SUB_CUVOL:
+						return CUVOL_SNAP_XML;
+					case FeedDDF.XML_SUB_QUOTE:
+						return QUOTE_SNAP_XML;
+					case FeedDDF.XML_SUB_SESSION:
+						return SESSION_SNAP_XML;
+					default:
+						return UNKNOWN;
+				}
+			case FeedDDF.TCP_ACCEPT:
+				switch (subRecord) {
+					case NUL:
+						return TCP_ACCEPT;
+					default:
+						return UNKNOWN;
+				}
+			case FeedDDF.TCP_REJECT:
+				switch (subRecord) {
+					case NUL:
+						return TCP_REJECT;
+					default:
+						return UNKNOWN;
+				}
+			case FeedDDF.TCP_COMMAND:
+				switch (subRecord) {
+					case NUL:
+						return TCP_COMMAND;
+					default:
+						return UNKNOWN;
+				}
+			case FeedDDF.TCP_WELCOME:
+				switch (subRecord) {
+					case NUL:
+						return TCP_WELCOME;
+					default:
+						return UNKNOWN;
+				}
 			default:
 				return UNKNOWN;
-			}
-		case _3_:
-			switch (subRecord) {
-			case _B_:
-				return BOOK_SNAP;
-			case _S_:
-				return EOD_EQTY_FORE;
-			case _C_:
-				return EOD_CMDY;
-			case _I_:
-				return PRIOR_INDIV_CMDY;
-			case _T_:
-				return PRIOR_TOTAL_CMDY;
-			default:
-				return UNKNOWN;
-			}
-		case FeedDDF.DDF_TIMESTAMP:
-			switch (subRecord) {
-			case NUL:
-				return TIME_STAMP;
-			default:
-				return UNKNOWN;
-			}
-		case FeedDDF.XML_RECORD:
-			switch (subRecord) {
-			case FeedDDF.XML_SUB_BOOK:
-				return BOOK_SNAP_XML;
-			case FeedDDF.XML_SUB_CUVOL:
-				return CUVOL_SNAP_XML;
-			case FeedDDF.XML_SUB_QUOTE:
-				return QUOTE_SNAP_XML;
-			case FeedDDF.XML_SUB_SESSION:
-				return SESSION_SNAP_XML;
-			default:
-				return UNKNOWN;
-			}
-		case FeedDDF.TCP_ACCEPT:
-			switch (subRecord) {
-			case NUL:
-				return TCP_ACCEPT;
-			default:
-				return UNKNOWN;
-			}
-		case FeedDDF.TCP_REJECT:
-			switch (subRecord) {
-			case NUL:
-				return TCP_REJECT;
-			default:
-				return UNKNOWN;
-			}
-		case FeedDDF.TCP_COMMAND:
-			switch (subRecord) {
-			case NUL:
-				return TCP_COMMAND;
-			default:
-				return UNKNOWN;
-			}
-		case FeedDDF.TCP_WELCOME:
-			switch (subRecord) {
-			case NUL:
-				return TCP_WELCOME;
-			default:
-				return UNKNOWN;
-			}
-		default:
-			return UNKNOWN;
 		}
 	}
 
 	/**
 	 * From code.
-	 * 
-	 * @param code
-	 *            the code
+	 *
+	 * @param code the code
 	 * @return the dD f_ message type
 	 */
 	public final static DDF_MessageType fromCode(final char code) {
@@ -356,31 +359,31 @@ public enum DDF_MessageType implements EnumCodeChar, EnumByteOrdinal {
 	@SuppressWarnings("unused")
 	private final boolean isMarketSnapshot() {
 		switch (record) {
-		case _2_:
-			switch (subRecord) {
-			case _1_:
-				return true;
 			case _2_:
-				return true;
-			case _3_:
-				return true;
-			case _4_:
-				return true;
-			case _5_:
-				return false; // keep
-			case _6_:
-				return true;
+				switch (subRecord) {
+					case _1_:
+						return true;
+					case _2_:
+						return true;
+					case _3_:
+						return true;
+					case _4_:
+						return true;
+					case _5_:
+						return false; // keep
+					case _6_:
+						return true;
+					default:
+						return false;
+				}
 			default:
 				return false;
-			}
-		default:
-			return false;
 		}
 	}
 
 	/**
 	 * Checks if is known.
-	 * 
+	 *
 	 * @return true, if is known
 	 */
 	public final boolean isKnown() {

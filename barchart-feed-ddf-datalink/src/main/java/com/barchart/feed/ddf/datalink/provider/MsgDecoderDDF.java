@@ -42,7 +42,7 @@ class MsgDecoderDDF extends SimpleChannelHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.jboss.netty.channel.SimpleChannelHandler#messageReceived(org.jboss
 	 * .netty.channel.ChannelHandlerContext,

@@ -193,6 +193,7 @@ public class FeedReplay {
 					decoded = DDF_MessageService.decode(message);
 				} catch (final Exception e) {
 					log.warn("decode failed : " + new String(message));
+					e.printStackTrace();
 					log.debug(new String(Arrays.toString(message)));
 					continue;
 				}

@@ -31,6 +31,7 @@ import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.DefBookEntry;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
+import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.values.api.BooleanValue;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
@@ -39,6 +40,7 @@ import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_EOD_Commodity;
+import com.barchart.feed.ddf.message.api.DDF_EOD_CommoditySpread;
 import com.barchart.feed.ddf.message.api.DDF_EOD_EquityForex;
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.message.api.DDF_MarketBookTop;
@@ -51,6 +53,7 @@ import com.barchart.feed.ddf.message.api.DDF_MarketSnapshot;
 import com.barchart.feed.ddf.message.api.DDF_MarketTrade;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.api.DDF_Prior_IndividCmdy;
+import com.barchart.feed.ddf.message.api.DDF_Prior_TotCmdy;
 import com.barchart.feed.ddf.message.enums.DDF_Indicator;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_ParamType;
@@ -512,6 +515,22 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 	}
 
+	@Override
+	public Void visit(final DDF_Prior_TotCmdy message, final MarketDo market) {
+
+		// TODO No support for total volume/OI yet
+		return null;
+
+	}
+
+	@Override
+	public Void visit(final DDF_EOD_CommoditySpread message, final MarketDo market) {
+
+		// TODO No support for EOD spreads yet
+		return null;
+
+	}
+
 	/**
 	 * via feed message 21, 22, 23, 24.
 	 *
@@ -628,27 +647,27 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		final DDF_MessageType tradeType = message.getMessageType();
 
+		final TimeValue time = message.getTime();
+		final TimeValue date = message.getTradeDay().tradeDate();
+		final DDF_Session ddfSession = message.getSession();
+
 		PriceValue price = message.getPrice();
 		SizeValue size = message.getSize();
+
+		if (isClear(price) || isEmpty(price)) {
+			price = ValueConst.NULL_PRICE;
+			size = ValueConst.NULL_SIZE;
+		}
+
+		if (isClear(size) || isEmpty(size)) {
+			size = ValueConst.NULL_SIZE;
+		}
 
 		switch (tradeType) {
 
 			case TRADE:
 
 				// message "27" : normal trade
-
-				if (isClear(price) || isEmpty(price)) {
-					price = ValueConst.NULL_PRICE;
-					size = ValueConst.NULL_SIZE;
-				}
-
-				if (isClear(size) || isEmpty(size)) {
-					size = ValueConst.NULL_SIZE;
-				}
-
-				final DDF_Session ddfSession = message.getSession();
-				final TimeValue time = message.getTime();
-				final TimeValue date = message.getTradeDay().tradeDate();
 
 				market.setTrade(ddfSession.type, ddfSession.session,
 						ddfSession.sequencing, price, size, time, date);
@@ -657,7 +676,13 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			case TRADE_VOL:
 
-				// TODO Only updates volume for special sale conditions
+				// message "2Z" : volume updates for stocks
+
+				// Override sequencing since the feed translator seems to be
+				// looking at sale conditions we don't have
+				market.setTrade(ddfSession.type, ddfSession.session,
+						MarketTradeSequencing.UNSEQUENCED_VOLUME, price, size, time, date);
+
 				break;
 
 			default:

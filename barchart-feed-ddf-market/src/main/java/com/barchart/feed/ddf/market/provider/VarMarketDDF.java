@@ -9,6 +9,8 @@ package com.barchart.feed.ddf.market.provider;
 
 import static com.barchart.feed.base.bar.enums.MarketBarField.BAR_TIME;
 import static com.barchart.feed.base.bar.enums.MarketBarField.CLOSE;
+import static com.barchart.feed.base.bar.enums.MarketBarField.HIGH;
+import static com.barchart.feed.base.bar.enums.MarketBarField.LOW;
 import static com.barchart.feed.base.bar.enums.MarketBarField.OPEN;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
@@ -26,6 +28,7 @@ import static com.barchart.feed.base.market.enums.MarketEvent.NEW_VOLUME;
 import static com.barchart.feed.base.market.enums.MarketField.BOOK;
 import static com.barchart.feed.base.market.enums.MarketField.BOOK_TOP;
 import static com.barchart.feed.base.market.enums.MarketField.MARKET_TIME;
+import static com.barchart.feed.base.market.enums.MarketField.TRADE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.PRICE;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.SEQUENCING;
 import static com.barchart.feed.base.trade.enums.MarketTradeField.SESSION;
@@ -93,7 +96,7 @@ class VarMarketDDF extends VarMarket {
 
 	/*
 	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.base.market.api.MarketDo#fireCallbacks()
 	 */
 	@Override
@@ -228,91 +231,6 @@ class VarMarketDDF extends VarMarket {
 
 	}
 
-	private final void applyTradeToBar(final MarketTradeSession session,
-			final MarketTradeSequencing sequencing, final PriceValue price,
-			final SizeValue size, final TimeValue time, final TimeValue date) {
-
-		MarketBarType barType = ensureBar(date);
-		if (session == EXTENDED && barType == CURRENT)
-			barType = CURRENT_EXT;
-
-		final MarketDoBar bar = loadBar(barType.field);
-
-		eventAdd(barType.event);
-
-		final SizeValue volumeOld = bar.get(VOLUME);
-
-		if (volumeOld.isNull()) {
-			bar.set(VOLUME, size);
-		} else {
-			final SizeValue volumeNew = volumeOld.add(size);
-			bar.set(VOLUME, volumeNew);
-		}
-
-		eventAdd(NEW_VOLUME);
-
-		// ### last
-
-		// Only update last for normal in-sequence trades
-		if (sequencing == NORMAL || bar.get(CLOSE).isNull()) {
-
-			if (price.isNull()) {
-
-				log.warn("null or zero price on trade message, not applying to bar");
-
-			} else {
-
-				// Set open if first trade
-				if (bar.get(OPEN).isNull())
-					bar.set(OPEN, price);
-
-				bar.set(CLOSE, price);
-
-				if (session == DEFAULT) {
-					// events only for combo
-					eventAdd(NEW_CLOSE);
-				}
-
-				// Update time
-				bar.set(BAR_TIME, time);
-
-			}
-
-		}
-
-		// Update high/low if missing for all trades
-		// XXX Right now we get this from refresh, good enough
-
-		// final PriceValue high = bar.get(HIGH);
-		// if (high.isNull())
-		// bar.set(HIGH, price);
-		// else if (high.compareTo(price) < 0)
-		// bar.set(HIGH, price);
-
-		// final PriceValue low = bar.get(HIGH);
-		// if (low.isNull())
-		// bar.set(LOW, price);
-		// else if (low.compareTo(price) > 0)
-		// bar.set(LOW, price);
-
-	}
-
-	private final void makeCuvol(final PriceValue price, final SizeValue size,
-			final TimeValue time) {
-
-		final MarketDoCuvol cuvol = loadCuvol();
-
-		if (!cuvol.isNull()) {
-
-			cuvol.add(price, size, time);
-
-			setChange(Component.CUVOL);
-			eventAdd(NEW_CUVOL_UPDATE);
-
-		}
-
-	}
-
 	@Override
 	public void setTrade(final MarketTradeType type,
 			final MarketTradeSession session,
@@ -327,30 +245,29 @@ class VarMarketDDF extends VarMarket {
 		assert time != null;
 		assert date != null;
 
-		// ### trade
+		// Update trade
+		if (sequencing != MarketTradeSequencing.UNSEQUENCED_VOLUME) {
 
-		final MarketDoTrade trade = loadTrade();
+			final MarketDoTrade trade = loadTrade();
 
-		trade.set(TYPE, type);
-		trade.set(SESSION, session);
-		trade.set(SEQUENCING, sequencing);
-		trade.set(PRICE, price);
-		trade.set(SIZE, size);
-		trade.set(TRADE_TIME, time);
-		trade.set(MarketTradeField.TRADE_DATE, date);
+			trade.set(TYPE, type);
+			trade.set(SESSION, session);
+			trade.set(SEQUENCING, sequencing);
+			trade.set(PRICE, price);
+			trade.set(SIZE, size);
+			trade.set(TRADE_TIME, time);
+			trade.set(MarketTradeField.TRADE_DATE, date);
 
-		setChange(Component.TRADE);
-		eventAdd(NEW_TRADE);
+			setChange(Component.TRADE);
+			eventAdd(NEW_TRADE);
 
-		// ### bar
+			set(TRADE, trade);
+
+		}
 
 		applyTradeToBar(session, sequencing, price, size, time, date);
 
-		// ### cuvol
-
 		makeCuvol(price, size, time);
-
-		// ### time
 
 		updateMarket(time);
 
@@ -384,42 +301,6 @@ class VarMarketDDF extends VarMarket {
 			bar.set(MarketBarField.BAR_TIME, barTime);
 
 		setBar(type, bar);
-
-	}
-
-	protected void applyBar(final MarketDoBar bar,
-			final MarketBarField<PriceValue> field, final PriceValue value) {
-
-		if (DDF_MessageService.isEmpty(value)) {
-			// no change in market field value
-			return;
-		}
-
-		if (DDF_MessageService.isClear(value)) {
-			// NULL_PRICE should be rendered as "price value not available"
-			bar.set(field, ValueConst.NULL_PRICE);
-			return;
-		}
-
-		bar.set(field, value);
-
-	}
-
-	protected void applyBar(final MarketDoBar bar,
-			final MarketBarField<SizeValue> field, final SizeValue value) {
-
-		if (DDF_MessageService.isEmpty(value)) {
-			// no change in market field value
-			return;
-		}
-
-		if (DDF_MessageService.isClear(value)) {
-			// NULL_SIZE should be rendered as "size value not available"
-			bar.set(field, ValueConst.NULL_SIZE);
-			return;
-		}
-
-		bar.set(field, value);
 
 	}
 
@@ -522,6 +403,133 @@ class VarMarketDDF extends VarMarket {
 	@Override
 	public void clearChanges() {
 		changeSet.clear();
+	}
+
+	// ##################################################################################
+
+	private void applyBar(final MarketDoBar bar,
+			final MarketBarField<PriceValue> field, final PriceValue value) {
+
+		if (DDF_MessageService.isEmpty(value)) {
+			// no change in market field value
+			return;
+		}
+
+		if (DDF_MessageService.isClear(value)) {
+			// NULL_PRICE should be rendered as "price value not available"
+			bar.set(field, ValueConst.NULL_PRICE);
+			return;
+		}
+
+		bar.set(field, value);
+
+	}
+
+	private void applyBar(final MarketDoBar bar,
+			final MarketBarField<SizeValue> field, final SizeValue value) {
+
+		if (DDF_MessageService.isEmpty(value)) {
+			// no change in market field value
+			return;
+		}
+
+		if (DDF_MessageService.isClear(value)) {
+			// NULL_SIZE should be rendered as "size value not available"
+			bar.set(field, ValueConst.NULL_SIZE);
+			return;
+		}
+
+		bar.set(field, value);
+
+	}
+
+	private final void applyTradeToBar(final MarketTradeSession session,
+			final MarketTradeSequencing sequencing, final PriceValue price,
+			final SizeValue size, final TimeValue time, final TimeValue date) {
+
+		MarketBarType barType = ensureBar(date);
+		if (session == EXTENDED && barType == CURRENT)
+			barType = CURRENT_EXT;
+
+		final MarketDoBar bar = loadBar(barType.field);
+
+		eventAdd(barType.event);
+
+		final SizeValue volumeOld = bar.get(VOLUME);
+
+		if (volumeOld.isNull()) {
+			bar.set(VOLUME, size);
+		} else {
+			final SizeValue volumeNew = volumeOld.add(size);
+			bar.set(VOLUME, volumeNew);
+		}
+
+		eventAdd(NEW_VOLUME);
+
+		if (sequencing != MarketTradeSequencing.UNSEQUENCED_VOLUME) {
+
+			// Only update last price for normal in-sequence trades unless null
+			if (sequencing == NORMAL || bar.get(CLOSE).isNull()) {
+
+				if (price.isNull()) {
+
+					log.warn("null or zero price on trade message, not applying to bar");
+
+				} else {
+
+					// Set open if first trade
+					if (bar.get(OPEN).isNull())
+						bar.set(OPEN, price);
+
+					bar.set(CLOSE, price);
+
+					if (session == DEFAULT) {
+						// events only for combo
+						eventAdd(NEW_CLOSE);
+					}
+
+					// Update time
+					bar.set(BAR_TIME, time);
+
+				}
+
+			}
+
+			// Update high/low for sequential and non-sequential trades
+			if (!price.isNull() && !price.isZero()) {
+
+				final PriceValue high = bar.get(HIGH);
+				if (high.isNull())
+					bar.set(HIGH, price);
+				else if (high.compareTo(price) < 0)
+					bar.set(HIGH, price);
+
+				final PriceValue low = bar.get(LOW);
+				if (low.isNull())
+					bar.set(LOW, price);
+				else if (low.compareTo(price) > 0)
+					bar.set(LOW, price);
+
+			}
+
+		}
+
+	}
+
+	private final void makeCuvol(final PriceValue price, final SizeValue size,
+			final TimeValue time) {
+
+		final MarketDoCuvol cuvol = loadCuvol();
+
+		if (!cuvol.isNull()) {
+
+			cuvol.add(price, size, time);
+
+			setChange(Component.CUVOL);
+			eventAdd(NEW_CUVOL_UPDATE);
+
+		}
+
 	}
 
 }
