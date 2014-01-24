@@ -26,15 +26,15 @@ public class TestXFSettle {
 
 		agent.include(Exchanges.fromName("BMF"));
 
-		final FeedReplayer replayer =
-				new FeedReplayer(
-						FeedReplayer.class.getResource("/XF_20140113.txt"));
+		FeedReplay.builder()
+				.source(FeedReplay.class.getResource("/XF_20140113.txt"))
+				.symbols("XFK4")
+				.build(market.maker())
+				.run();
 
-		replayer.run(market.maker(), "XFK4");
-		
-		Market v = market.snapshot("XFK14");
-		
-		log.debug("Previous = " + v.sessionSet().session(Session.Type.DEFAULT_PREVIOUS).settle().toString() + 
+		final Market v = market.snapshot("XFK14");
+
+		log.debug("Previous = " + v.sessionSet().session(Session.Type.DEFAULT_PREVIOUS).settle().toString() +
 				" Current = " + v.session().settle());
 
 	}
@@ -50,11 +50,10 @@ public class TestXFSettle {
 
 		agent.include(Exchanges.fromName("BMF"));
 
-		final FeedReplayer replayer =
-				new FeedReplayer(
-						FeedReplayer.class.getResource("/XF_20140113.txt"));
-
-		replayer.run(marketplace.maker(), null);
+		FeedReplay.builder()
+				.source(FeedReplay.class.getResource("/XF_20140113.txt"))
+				.build(marketplace.maker())
+				.run();
 
 		System.out.println("Final settlement states:");
 		for (final String sym : new String[] {
@@ -84,30 +83,30 @@ public class TestXFSettle {
 
 	static MarketObserver<Market> obs = new MarketObserver<Market>() {
 
-		private Price prev = Price.NULL;
-		private Price cur = Price.NULL;
-		
+		private final Price prev = Price.NULL;
+		private final Price cur = Price.NULL;
+
 		@Override
 		public void onNext(final Market v) {
-			
+
 //			if(!prev.equals(v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle()) ||
 //					!cur.equals(v.session().settle())) {
-//			
-//				log.debug("Previous = " + v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle().toString() + 
+//
+//				log.debug("Previous = " + v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle().toString() +
 //					" Current = " + v.session().settle() + " ");
-//				
+//
 //				prev = v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle();
 //				cur = v.session().settle();
-//			
+//
 //			}
-			
+
 //			if(cur == Price.NULL) {
 //				System.out.println();
 //			} else {
 //				System.out.println();
 //			}
 //
-//			log.debug("Previous = " + v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle().toString() + 
+//			log.debug("Previous = " + v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle().toString() +
 //					" Current = " + v.session().settle());
 //			prev = v.sessionSet().session(Type.DEFAULT_PREVIOUS).settle();
 //			cur = v.session().settle();

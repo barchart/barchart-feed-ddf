@@ -9,7 +9,7 @@ package com.barchart.feed.ddf.market.provider;
 
 import static com.barchart.feed.base.bar.enums.MarketBarField.BAR_TIME;
 import static com.barchart.feed.base.bar.enums.MarketBarField.CLOSE;
-import static com.barchart.feed.base.bar.enums.MarketBarField.TRADE_DATE;
+import static com.barchart.feed.base.bar.enums.MarketBarField.OPEN;
 import static com.barchart.feed.base.bar.enums.MarketBarField.VOLUME;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
 import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT_EXT;
@@ -58,22 +58,25 @@ import com.barchart.feed.base.trade.enums.MarketTradeField;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
 import com.barchart.feed.base.trade.enums.MarketTradeType;
+import com.barchart.feed.base.values.api.BooleanValue;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
+import com.barchart.feed.base.values.provider.ValueConst;
+import com.barchart.feed.ddf.message.provider.DDF_MessageService;
 import com.barchart.util.common.anno.Mutable;
 import com.barchart.util.value.api.Price;
 
 /**
  * Logic #1
- * 
+ *
  * keep here value relations and event management logic only
  **/
 @Mutable
 class VarMarketDDF extends VarMarket {
 
-	public VarMarketDDF(Instrument instrument) {
+	public VarMarketDDF(final Instrument instrument) {
 		super(instrument);
 	}
 
@@ -106,7 +109,7 @@ class VarMarketDDF extends VarMarket {
 	@Override
 	public void setBookSnapshot(final MarketDoBookEntry[] entries,
 			final TimeValue time) {
-		
+
 		assert entries != null;
 		assert time != null;
 
@@ -114,6 +117,7 @@ class VarMarketDDF extends VarMarket {
 
 		book.setSnapshot(entries);
 
+		setChange(Component.BOOK_COMBINED);
 		eventAdd(NEW_BOOK_SNAPSHOT);
 
 		book.setTime(time);
@@ -141,13 +145,13 @@ class VarMarketDDF extends VarMarket {
 			final UniBookResult result = book.setEntry(entry);
 
 			switch (result) {
-			case TOP:
-			case NORMAL:
-				break;
-			default:
-				eventAdd(NEW_BOOK_ERROR);
-				log.error("result : {} entry : {}", result, entry);
-				break;
+				case TOP:
+				case NORMAL:
+					break;
+				default:
+					eventAdd(NEW_BOOK_ERROR);
+					log.error("result : {} entry : {}", result, entry);
+					break;
 			}
 
 		}
@@ -170,22 +174,23 @@ class VarMarketDDF extends VarMarket {
 		final UniBookResult result = book.setEntry(entry);
 
 		switch (result) {
-		case TOP:
-			eventAdd(NEW_BOOK_TOP);
-			// continue
-		case NORMAL:
-			eventAdd(NEW_BOOK_UPDATE);
-			break;
-		default:
-			eventAdd(NEW_BOOK_ERROR);
-			final CharSequence id = instrument.id().toString();
-			final CharSequence comment = instrument.description();
-			log.error("instrument : {} : {}", id, comment);
-			log.error("result : {} ; entry : {} ;", result, entry);
-			return;
+			case TOP:
+				eventAdd(NEW_BOOK_TOP);
+				// continue
+			case NORMAL:
+				eventAdd(NEW_BOOK_UPDATE);
+				break;
+			default:
+				eventAdd(NEW_BOOK_ERROR);
+				final CharSequence id = instrument.id().toString();
+				final CharSequence comment = instrument.description();
+				log.error("instrument : {} : {}", id, comment);
+				log.error("result : {} ; entry : {} ;", result, entry);
+				return;
 		}
 
 		book.setTime(time);
+		setChange(Component.BOOK_COMBINED);
 		updateMarket(time);
 
 	}
@@ -216,70 +221,79 @@ class VarMarketDDF extends VarMarket {
 			cuvol.add(entry.priceValue(), entry.sizeValue(), time);
 		}
 
+		setChange(Component.CUVOL);
 		eventAdd(NEW_CUVOL_SNAPSHOT);
 
 		updateMarket(time);
 
 	}
 
-	@SuppressWarnings("deprecation")
 	private final void applyTradeToBar(final MarketTradeSession session,
 			final MarketTradeSequencing sequencing, final PriceValue price,
 			final SizeValue size, final TimeValue time, final TimeValue date) {
 
-		final MarketBarType barType = session == EXTENDED ? CURRENT_EXT
-				: CURRENT;
+		MarketBarType barType = ensureBar(date);
+		if (session == EXTENDED && barType == CURRENT)
+			barType = CURRENT_EXT;
+
 		final MarketDoBar bar = loadBar(barType.field);
 
 		eventAdd(barType.event);
 
-		// Reset current bar if session day changes
-		final TimeValue prevDate = bar.get(TRADE_DATE);
+		final SizeValue volumeOld = bar.get(VOLUME);
 
-		if (session == DEFAULT && !prevDate.isNull() && !date.equals(prevDate)) {
-
-			log.debug("New day code: old=" + prevDate + "; new=" + date);
-
-			// TODO use findSession() to roll sessions
-			bar.set(MarketBarField.OPEN, price);
-			bar.set(MarketBarField.HIGH, price);
-			bar.set(MarketBarField.LOW, price);
-			bar.set(MarketBarField.INTEREST, size);
-			bar.set(MarketBarField.VOLUME, size);
-
-			setState(MarketStateEntry.IS_SETTLED, false);
-
+		if (volumeOld.isNull()) {
+			bar.set(VOLUME, size);
 		} else {
-
-			// ### volume
-
-			final SizeValue volumeOld = bar.get(VOLUME);
 			final SizeValue volumeNew = volumeOld.add(size);
 			bar.set(VOLUME, volumeNew);
-			eventAdd(NEW_VOLUME);
-
 		}
+
+		eventAdd(NEW_VOLUME);
 
 		// ### last
 
 		// Only update last for normal in-sequence trades
-		if (sequencing == NORMAL) {
+		if (sequencing == NORMAL || bar.get(CLOSE).isNull()) {
+
 			if (price.isNull()) {
+
 				log.warn("null or zero price on trade message, not applying to bar");
+
 			} else {
+
+				// Set open if first trade
+				if (bar.get(OPEN).isNull())
+					bar.set(OPEN, price);
+
 				bar.set(CLOSE, price);
+
 				if (session == DEFAULT) {
 					// events only for combo
 					eventAdd(NEW_CLOSE);
 				}
-				// ### time
+
+				// Update time
 				bar.set(BAR_TIME, time);
+
 			}
-		} else {
-			// XXX: Update high / low, or just wait for refresh?
+
 		}
 
-		bar.set(MarketBarField.TRADE_DATE, date);
+		// Update high/low if missing for all trades
+		// XXX Right now we get this from refresh, good enough
+
+		// final PriceValue high = bar.get(HIGH);
+		// if (high.isNull())
+		// bar.set(HIGH, price);
+		// else if (high.compareTo(price) < 0)
+		// bar.set(HIGH, price);
+
+		// final PriceValue low = bar.get(HIGH);
+		// if (low.isNull())
+		// bar.set(LOW, price);
+		// else if (low.compareTo(price) > 0)
+		// bar.set(LOW, price);
 
 	}
 
@@ -288,12 +302,13 @@ class VarMarketDDF extends VarMarket {
 
 		final MarketDoCuvol cuvol = loadCuvol();
 
-		if(!cuvol.isNull()) {
-		
+		if (!cuvol.isNull()) {
+
 			cuvol.add(price, size, time);
-	
+
+			setChange(Component.CUVOL);
 			eventAdd(NEW_CUVOL_UPDATE);
-		
+
 		}
 
 	}
@@ -324,6 +339,7 @@ class VarMarketDDF extends VarMarket {
 		trade.set(TRADE_TIME, time);
 		trade.set(MarketTradeField.TRADE_DATE, date);
 
+		setChange(Component.TRADE);
 		eventAdd(NEW_TRADE);
 
 		// ### bar
@@ -341,12 +357,93 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	@Override
+	public void setSnapshot(final TimeValue tradeDate, final PriceValue open, final PriceValue high,
+			final PriceValue low, final PriceValue close, final PriceValue settle, final PriceValue previousSettle,
+			final SizeValue volume, final SizeValue interest, final BooleanValue isSettled, final TimeValue barTime) {
+
+		final MarketBarType type = ensureBar(tradeDate);
+
+		if (type.isNull())
+			return;
+
+		final MarketDoBar bar = loadBar(type.field);
+
+		applyBar(bar, MarketBarField.OPEN, open);
+		applyBar(bar, MarketBarField.HIGH, high);
+		applyBar(bar, MarketBarField.LOW, low);
+		applyBar(bar, MarketBarField.CLOSE, close);
+		applyBar(bar, MarketBarField.SETTLE, settle);
+		applyBar(bar, MarketBarField.SETTLE_PREVIOUS, previousSettle);
+		applyBar(bar, MarketBarField.VOLUME, volume);
+		applyBar(bar, MarketBarField.INTEREST, interest);
+
+		if (isSettled != null)
+			bar.set(MarketBarField.IS_SETTLED, isSettled);
+
+		if (barTime != null)
+			bar.set(MarketBarField.BAR_TIME, barTime);
+
+		setBar(type, bar);
+
+	}
+
+	protected void applyBar(final MarketDoBar bar,
+			final MarketBarField<PriceValue> field, final PriceValue value) {
+
+		if (DDF_MessageService.isEmpty(value)) {
+			// no change in market field value
+			return;
+		}
+
+		if (DDF_MessageService.isClear(value)) {
+			// NULL_PRICE should be rendered as "price value not available"
+			bar.set(field, ValueConst.NULL_PRICE);
+			return;
+		}
+
+		bar.set(field, value);
+
+	}
+
+	protected void applyBar(final MarketDoBar bar,
+			final MarketBarField<SizeValue> field, final SizeValue value) {
+
+		if (DDF_MessageService.isEmpty(value)) {
+			// no change in market field value
+			return;
+		}
+
+		if (DDF_MessageService.isClear(value)) {
+			// NULL_SIZE should be rendered as "size value not available"
+			bar.set(field, ValueConst.NULL_SIZE);
+			return;
+		}
+
+		bar.set(field, value);
+
+	}
+
+	@Override
 	public void setBar(final MarketBarType type, final MarketDoBar bar) {
 
 		assert type != null;
 		assert bar != null;
 
 		set(type.field, bar);
+
+		switch (type) {
+			case CURRENT:
+				setChange(Component.DEFAULT_PREVIOUS);
+				break;
+			case PREVIOUS:
+				setChange(Component.DEFAULT_CURRENT);
+				break;
+			case CURRENT_EXT:
+				setChange(Component.EXTENDED_CURRENT);
+				break;
+			default:
+				break;
+		}
 
 		eventAdd(type.event);
 
@@ -365,27 +462,27 @@ class VarMarketDDF extends VarMarket {
 		if (book.isFrozen()) {
 
 			Book.Type type = null;
-			switch(instrument.liquidityType()) {
-			default :
-				type = Book.Type.NONE;
-				break;
-			case NONE:
-				type = Book.Type.NONE;
-				break;
-			case DEFAULT:
-				type = Book.Type.DEFAULT;
-				break;
-			case IMPLIED:
-				type = Book.Type.IMPLIED;
-				break;
-			case COMBINED:
-				type = Book.Type.COMBINED;
-				break;
+			switch (instrument.liquidityType()) {
+				default:
+					type = Book.Type.NONE;
+					break;
+				case NONE:
+					type = Book.Type.NONE;
+					break;
+				case DEFAULT:
+					type = Book.Type.DEFAULT;
+					break;
+				case IMPLIED:
+					type = Book.Type.IMPLIED;
+					break;
+				case COMBINED:
+					type = Book.Type.COMBINED;
+					break;
 			}
 			final SizeValue size = LIMIT;
 			// TODO ValueConverter
 			final Price tempStep = instrument.tickSize();
-			final PriceValue step = ValueBuilder.newPrice(tempStep.mantissa(), 
+			final PriceValue step = ValueBuilder.newPrice(tempStep.mantissa(),
 					tempStep.exponent());
 
 			final VarBookDDF varBook = new VarBookDDF(instrument, type, size, step);
@@ -416,9 +513,9 @@ class VarMarketDDF extends VarMarket {
 		}
 
 	}
-	
+
 	@Override
-	public void setChange(Component c) {
+	public void setChange(final Component c) {
 		changeSet.add(c);
 	}
 
@@ -426,5 +523,5 @@ class VarMarketDDF extends VarMarket {
 	public void clearChanges() {
 		changeSet.clear();
 	}
-	
+
 }
