@@ -37,7 +37,7 @@ public class FeedSnapshot implements Runnable {
 		}, symbols);
 
 		FeedReplay.builder()
-				.source(getClass().getResource("/DX-20140110-week.ddf"))
+				.source(getClass().getResource("/DX-20140110-week.ddf.gz"))
 				.start("2014-01-13 00:00:00")
 				.end("2014-01-14 08:30:00")
 				.listener(new MessageListener() {

@@ -40,7 +40,7 @@ public class TestSettlements {
 
 	public void testXFH14() throws Exception {
 
-		testSettlements("XFH4", "/XF-20140110-week.ddf", //
+		testSettlements("XFH4", "/XF-20140110-week.ddf.gz", //
 				"09:35:00", // Time when settlements should be reset
 				"13:30:00", // Time when settlements should be in
 				new Double[] { 145.95, null }, // Friday
@@ -57,7 +57,7 @@ public class TestSettlements {
 
 	public void testXFK14() throws Exception {
 
-		testSettlements("XFK4", "/XF-20140110-week.ddf", //
+		testSettlements("XFK4", "/XF-20140110-week.ddf.gz", //
 				"09:35:00", // Time when settlements should be reset
 				"13:30:00", // Time when settlements should be in
 				new Double[] { 148.70, null }, // Friday
@@ -72,7 +72,7 @@ public class TestSettlements {
 
 	public void testXFN14() throws Exception {
 
-		testSettlements("XFN4", "/XF-20140110-week.ddf", //
+		testSettlements("XFN4", "/XF-20140110-week.ddf.gz", //
 				"09:35:00", //
 				"14:30:00", // Later settlement window, low traded
 
@@ -105,7 +105,7 @@ public class TestSettlements {
 
 	public void testXFU14() throws Exception {
 
-		testSettlements("XFU4", "/XF-20140110-week.ddf", //
+		testSettlements("XFU4", "/XF-20140110-week.ddf.gz", //
 				"09:35:00", // Time when settlements should be reset
 				"13:30:00", // Time when settlements should be in
 				new Double[] { 149.50, null }, // Friday

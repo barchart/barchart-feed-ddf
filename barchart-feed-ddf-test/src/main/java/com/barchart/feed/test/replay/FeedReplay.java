@@ -1,9 +1,9 @@
 package com.barchart.feed.test.replay;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,8 +162,14 @@ public class FeedReplay {
 
 		try {
 
-			final InputStream is = source.openStream();
-			final DDFLogDeframer deframer = new DDFLogDeframer(is);
+			final DDFLogDeframer deframer;
+
+			final URLConnection conn = source.openConnection();
+			if (source.getPath().endsWith(".gz") || "application/x-gzip".equals(conn.getContentType())) {
+				deframer = new DDFLogDeframer(new GZIPInputStream(conn.getInputStream()));
+			} else {
+				deframer = new DDFLogDeframer(source.openStream());
+			}
 
 			byte[] message;
 			for (;;) {
