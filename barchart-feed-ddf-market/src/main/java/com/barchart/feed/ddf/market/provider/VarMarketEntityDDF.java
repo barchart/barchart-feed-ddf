@@ -66,21 +66,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		}
 		
 		toFire.clear();
-		// for(final FrameworkAgent agent : agentMap.get(clazz)) {
-		//
-		// if(agent.isActive()) {
-		// agent.callback().onNext(agent.data(this.freeze()));
-		// }
-		//
-		// }
-		//
-		// for(final FrameworkAgent agent : agentMap.get(Market.class)) {
-		//
-		// if(agent.isActive()) {
-		// agent.callback().onNext(agent.data(this.freeze()));
-		// }
-		//
-		// }
 	}
 	
 	@Override
@@ -97,7 +82,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set book snapshot, firing callbacks");
 		
-		// fireCallbacks(Book.class);
 		toFire.add(MKData.BOOK);
 		toFire.add(MKData.MARKET);
 	}
@@ -109,7 +93,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set book update, firing callbacks");
 		
-		// fireCallbacks(Book.class);
 		toFire.add(MKData.BOOK);
 		toFire.add(MKData.MARKET);
 	}
@@ -121,7 +104,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set cuvol update, firing callbacks");
 		
-		// fireCallbacks(Cuvol.class);
 		toFire.add(MKData.CUVOL);
 		toFire.add(MKData.MARKET);
 	}
@@ -133,7 +115,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set cuvol snapshot, firing callbacks");
 
-		// fireCallbacks(Cuvol.class);
 		toFire.add(MKData.CUVOL);
 		toFire.add(MKData.MARKET);
 	}
@@ -147,9 +128,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set trade, firing callbacks");
 		
-		// fireCallbacks(Trade.class);
-		// fireCallbacks(Cuvol.class); // HACK FOR DDF
-		// fireCallbacks(Session.class); // HACK FOR DDF
 		toFire.add(MKData.TRADE);
 		toFire.add(MKData.CUVOL);
 		toFire.add(MKData.SESSION);
@@ -162,7 +140,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		//log.debug("Set bar, firing callbacks");
 		
-		// fireCallbacks(Session.class);
 		toFire.add(MKData.SESSION);
 		toFire.add(MKData.MARKET);
 	}
