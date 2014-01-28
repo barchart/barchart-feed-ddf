@@ -19,7 +19,6 @@ import com.barchart.feed.ddf.historical.api.DDF_EntryBarEod;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.api.DDF_Result;
 import com.barchart.feed.ddf.historical.provider.DDF_HistoricalService;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
@@ -68,7 +67,8 @@ public class HistoricalEodExample {
 		 * 2) lookup instrument definition
 		 */
 
-		final String symbol = "_S_SP_KCH14_KCK14";
+		// final String symbol = "_S_SP_KCH14_KCK14";
+		final String symbol = "ESG14|1745P";
 
 		final Instrument instrument = //
 				BlockingObservable.from(DDF_RxInstrumentProvider.fromString(symbol))

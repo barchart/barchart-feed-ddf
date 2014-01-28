@@ -10,6 +10,7 @@ package com.barchart.feed.ddf.historical.provider;
 import static com.barchart.feed.ddf.historical.provider.CodecHelper.splitCSV;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.ddf.historical.api.DDF_Entry;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 
@@ -32,7 +33,11 @@ abstract class Entry implements DDF_Entry, Codec {
 
 	Entry(final Instrument instrument) {
 		this.inst = instrument;
-		symbol = instrument.symbol();
+		symbol = instrument.vendorSymbols().get(VendorID.BARCHART_HISTORICAL);
+		if (symbol == null) {
+			throw new IllegalStateException("Instrument " + instrument.symbol()
+					+ " does not have a historica symbol");
+		}
 	}
 
 	//
@@ -70,7 +75,7 @@ abstract class Entry implements DDF_Entry, Codec {
 	 */
 	@Override
 	public int priceExponent() {
-		return (int)inst.displayFraction().decimalExponent();
+		return inst.displayFraction().decimalExponent();
 	}
 
 	//

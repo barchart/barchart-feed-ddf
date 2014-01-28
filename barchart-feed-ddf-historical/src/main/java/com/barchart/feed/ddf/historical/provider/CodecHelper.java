@@ -23,7 +23,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.base.provider.Symbology;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
@@ -68,11 +68,9 @@ final class CodecHelper {
 		final CharSequence password = settings.getAuthPass();
 
 		final Instrument instrument = query.instrument;
-		final CharSequence symbol =
-				Symbology.formatHistoricalSymbol(instrument.symbol());
+		final CharSequence symbol = instrument.vendorSymbols().get(VendorID.BARCHART_HISTORICAL);
 
-		final DateTimeZone timeZone =
-				DateTimeZone.forID(instrument.timeZoneName());
+		final DateTimeZone timeZone = DateTimeZone.forID(instrument.timeZoneName());
 		final CharSequence start = requestTime(query.timeStart, timeZone);
 		final CharSequence end = requestTime(query.timeEnd, timeZone);
 
