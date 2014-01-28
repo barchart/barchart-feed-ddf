@@ -74,8 +74,7 @@ public class DDF_RxInstrumentProvider {
 		@Override
 		public Thread newThread(final Runnable r) {
 			
-			final Thread t = new Thread(r, "Feed thread " + 
-					counter.getAndIncrement()); 
+					final Thread t = new Thread(r, "Feed thread " + counter.getAndIncrement());
 			
 			t.setDaemon(true);
 			
@@ -164,8 +163,7 @@ public class DDF_RxInstrumentProvider {
 							if(inst != null) {
 								
 								if(inst.symbol().contains("|")) {
-									symbolMap.put(inst.vendorSymbols().get(
-											VendorID.BARCHART), e.getValue());
+									symbolMap.put(inst.vendorSymbols().get(VendorID.BARCHART), e.getValue());
 								}
 								
 							}
@@ -197,8 +195,7 @@ public class DDF_RxInstrumentProvider {
 			
 			final URL url = new URL(urlInstrumentLookup(query));
 			
-			final HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
+			final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			
 			connection.setRequestProperty("Accept-Encoding", "gzip");
 			
@@ -210,50 +207,11 @@ public class DDF_RxInstrumentProvider {
 				input = new GZIPInputStream(input);
 			}
 			
-			final BufferedInputStream stream =
-					new BufferedInputStream(input);
+			final BufferedInputStream stream = new BufferedInputStream(input);
 	
-			final SAXParserFactory factory =
-					SAXParserFactory.newInstance();
+			final SAXParserFactory factory = SAXParserFactory.newInstance();
 			final SAXParser parser = factory.newSAXParser();
-			
-			final DefaultHandler handler = new DefaultHandler() {
-				
-				@Override
-				public void startElement(final String uri,
-						final String localName, final String qName,
-						final Attributes ats) throws SAXException {
-					
-					if (qName != null && qName.equals("instrument")) {
-
-						try {
-							
-							final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
-							final InstrumentDefinition def = InstrumentXML.decodeSAX(ats);
-							
-							InstrumentState inst;
-							
-							if (def != InstrumentDefinition.getDefaultInstance()) {
-								inst = InstrumentFactory.instrumentState(def);
-							} else {
-								inst = InstrumentState.NULL;
-							}
-							
-							final List<InstrumentState> insts = new ArrayList<InstrumentState>();
-							insts.add(inst);
-							result.put(lookup, insts);
-							
-						} catch (final SymbolNotFoundException se) {
-							throw new RuntimeException(se); // would be nice to add to map
-						} catch (final Exception e) {
-							throw new RuntimeException(e);
-						}
-						
-					}
-					
-				}
-				
-			};
+			final DefaultHandler handler = handler(result);
 			
 			parser.parse(stream, handler);
 			
@@ -265,6 +223,46 @@ public class DDF_RxInstrumentProvider {
 		
 	}
 	
+	protected static DefaultHandler handler(final Map<String, List<InstrumentState>> result) {
+		return new DefaultHandler() {
+
+			@Override
+			public void startElement(final String uri,
+					final String localName, final String qName,
+					final Attributes ats) throws SAXException {
+
+				if (qName != null && qName.equals("instrument")) {
+
+					try {
+
+						final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
+						final InstrumentDefinition def = InstrumentXML.decodeSAX(ats);
+
+						InstrumentState inst;
+
+						if (def != InstrumentDefinition.getDefaultInstance()) {
+							inst = InstrumentFactory.instrumentState(def);
+						} else {
+							inst = InstrumentState.NULL;
+						}
+
+						final List<InstrumentState> insts = new ArrayList<InstrumentState>();
+						insts.add(inst);
+						result.put(lookup, insts);
+
+					} catch (final SymbolNotFoundException se) {
+						throw new RuntimeException(se); // would be nice to add to map
+					} catch (final Exception e) {
+						throw new RuntimeException(e);
+					}
+
+				}
+
+			}
+
+		};
+	}
+
 	/* ***** ***** ***** CQG ***** ***** ***** */
 	
 	private static final ConcurrentMap<String, String> cqgSymMap =
@@ -272,8 +270,7 @@ public class DDF_RxInstrumentProvider {
 	
 	public static Observable<String> fromCQGString(final String symbol) {
 		try {
-			return Observable.from(executor.submit(
-					callableFromCQGString(SearchContext.NULL, symbol)));
+			return Observable.from(executor.submit(callableFromCQGString(SearchContext.NULL, symbol)));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

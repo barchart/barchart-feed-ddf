@@ -196,8 +196,7 @@ public final class DDF_InstrumentProvider {
 		}
 		
 		if(db.containsKey(symbol)) {
-			final InstrumentState instState = InstrumentStateFactory.
-				newInstrument(symbol);
+			final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
 			instState.process(db.get(symbol));
 			final List<InstrumentState> list = new ArrayList<InstrumentState>();
 			list.add(instState);
@@ -205,8 +204,7 @@ public final class DDF_InstrumentProvider {
 			return instState;
 		}
 		
-		final InstrumentState instState = InstrumentStateFactory.
-				newInstrument(symbol);
+		final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
 		
 		final List<InstrumentState> list = new ArrayList<InstrumentState>();
 		list.add(instState);
@@ -404,42 +402,6 @@ public final class DDF_InstrumentProvider {
 
 	private static final String urlInstrumentLookup(final CharSequence lookup) {
 		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
-	}
-	
-	static Callable<InstrumentDefinition> remoteSingle(final String lookup) {
-		
-		return new Callable<InstrumentDefinition>() {
-	
-			@Override
-			public InstrumentDefinition call() throws Exception {
-				
-				try {
-					
-					log.debug("Starting remote lookup for {}", lookup);
-					
-					final String symbolURI = urlInstrumentLookup(lookup);
-					final Element root = HelperXML.xmlDocumentDecode(symbolURI);
-					final Element tag = xmlFirstChild(root, "instrument", XML_STOP);
-					final InstrumentDefinition instDOM = InstrumentXML.decodeXML(tag);
-					
-					if(instDOM == null || instDOM == InstrumentDefinition.getDefaultInstance()) {
-						log.trace("Empty instrument def returned from remote lookup: {}", lookup);
-						failedRemoteQueue.add(lookup);
-						return InstrumentDefinition.getDefaultInstance();
-					}
-					
-					return instDOM;
-					
-				} catch (final Throwable t) {
-					failedRemoteQueue.add(lookup);
-					log.trace("Remote instrument lookup callable exception: {}", t);
-					return InstrumentDefinition.getDefaultInstance();
-				}
-				
-			}
-		
-		};
-		
 	}
 	
 	static Callable<Map<String, InstrumentDefinition>> remoteBatch(final String symbols) {

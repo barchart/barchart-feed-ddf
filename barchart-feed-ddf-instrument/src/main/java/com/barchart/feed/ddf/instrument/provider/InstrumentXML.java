@@ -12,6 +12,7 @@ import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_CODE
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_COMMENT;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_REAL;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPIRE;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REALTIME;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.TIME_ZONE_DDF;
 import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
@@ -31,7 +32,6 @@ import org.openfeed.proto.inst.Interval;
 import org.openfeed.proto.inst.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
 import com.barchart.feed.api.model.meta.id.VendorID;
@@ -55,121 +55,6 @@ public final class InstrumentXML {
 			.getLogger(InstrumentXML.class);
 
 	private InstrumentXML() {
-
-	}
-
-	public static InstrumentDefinition decodeXML(final Element tag)
-			throws Exception {
-
-		final InstrumentDefinition.Builder builder =
-				InstrumentDefinition.newBuilder();
-
-		// lookup status
-		final String statusCode = xmlStringDecode(tag, STATUS, XML_STOP);
-		final StatusXML status = StatusXML.fromCode(statusCode);
-		if (!status.isFound()) {
-			final String lookup = xmlStringDecode(tag, LOOKUP, XML_STOP);
-			throw new SymbolNotFoundException(lookup);
-		}
-
-		/* market identifier; must be globally unique; */
-		try {
-			builder.setMarketId(Long.parseLong(xmlStringDecode(tag, ID,
-					XML_STOP)));
-		} catch (final Exception e) {
-			return InstrumentDefinition.getDefaultInstance();
-		}
-		/* type of security, Forex, Equity, etc. */
-		builder.setInstrumentType(InstrumentType.NO_INSTRUMENT);
-
-		/* liquidy type, default / implied / combined */
-		builder.setBookLiquidity(BookLiquidity.NO_BOOK_LIQUIDITY);
-
-		/* structure of book */
-		builder.setBookStructure(BookStructure.NO_BOOK_STRUCTURE);
-
-		/* vendor */
-		builder.setVendorId("Barchart");
-
-		/* market symbol; can be non unique; */
-		builder.setSymbol(xmlStringDecode(tag, SYMBOL_REALTIME, XML_STOP));
-
-		/* market free style description; can be used in full text search */
-		builder.setDescription(String.valueOf(xmlStringDecode(tag,
-				SYMBOL_COMMENT, XML_PASS)));
-
-		/* stock vs future vs etc. */
-		builder.setCfiCode(xmlStringDecode(tag, SYMBOL_CODE_CFI, XML_PASS));
-
-		/* price currency */
-		builder.setCurrencyCode("USD");
-
-		/* market originating exchange identifier */
-		final DDF_Exchange exchange =
-				DDF_Exchange
-						.fromCode(xmlByteDecode(tag, EXCHANGE_DDF, XML_PASS));
-		String eCode = new String(new byte[] {
-			exchange.code
-		});
-		if (eCode == null || eCode.isEmpty()) {
-			eCode = Exchanges.NULL_CODE;
-		}
-		builder.setExchangeCode(eCode);
-
-		final DDF_Fraction frac =
-				DDF_Fraction.fromBaseCode(xmlByteDecode(tag, BASE_CODE_DDF,
-						XML_STOP));
-
-		/* price step / increment size / tick size */
-		try {
-			final long priceStepMantissa =
-					xmlDecimalDecode(frac, tag, PRICE_TICK_INCREMENT, XML_STOP);
-			builder.setMinimumPriceIncrement(buildDecimal(priceStepMantissa,
-					frac.decimalExponent));
-		} catch (final Exception e) {
-			builder.setMinimumPriceIncrement(buildDecimal(0, 0));
-		}
-
-		/* value of a future contract / stock share */
-		final String pricePointString =
-				xmlStringDecode(tag, PRICE_POINT_VALUE, XML_PASS);
-		if (pricePointString == null || pricePointString.isEmpty()) {
-			builder.setContractPointValue(buildDecimal(0, 0));
-		} else {
-			final PriceValue pricePoint =
-					ValueBuilder.newPrice(Double.valueOf(pricePointString));
-			builder.setContractPointValue(buildDecimal(pricePoint.mantissa(),
-					pricePoint.exponent()));
-		}
-
-		/* display fraction base : decimal(10) vs binary(2), etc. */
-		builder.setDisplayBase((int) frac.fraction.base());
-		builder.setDisplayExponent(frac.fraction.exponent());
-
-		/* Calendar */
-		final Time expire = xmlTimeDecode(tag, SYMBOL_EXPIRE, XML_PASS);
-		final Calendar.Builder calBuilder = Calendar.newBuilder();
-		final Interval.Builder intBuilder = Interval.newBuilder();
-
-		intBuilder.setTimeStart(0);
-		if (expire == null) {
-			intBuilder.setTimeFinish(0);
-		} else {
-			intBuilder.setTimeFinish(expire.millisecond());
-		}
-
-		calBuilder.setLifeTime(intBuilder.build());
-		builder.setCalendar(calBuilder.build());
-
-		//
-		final DDF_TimeZone zone =
-				DDF_TimeZone.fromCode(xmlStringDecode(tag, TIME_ZONE_DDF,
-						XML_STOP));
-
-		/* time zone name as text */
-		builder.setTimeZoneName(zone.code());
-
-		return builder.build();
 
 	}
 
@@ -202,11 +87,10 @@ public final class InstrumentXML {
 			/* structure of book */
 			builder.setBookStructure(BookStructure.NO_BOOK_STRUCTURE);
 
-			/* book depth */
-			builder.setBookDepth(0);
+			/* book depth - NOT AVAIL */
 
 			/* vendor */
-			builder.setVendorId("Barchart");
+			builder.setVendorId("Barchart"); // Seems like this should be VendorID.BARCHART.toString()
 
 			/* market symbol; can be non unique; */
 			builder.setSymbol(xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));
@@ -218,6 +102,17 @@ public final class InstrumentXML {
 				final Symbol.Builder b = Symbol.newBuilder();
 				b.setVendor(VendorID.BARCHART.toString());
 				b.setSymbol(bar);
+				final Symbol symbol = b.build();
+				builder.addSymbols(symbol);
+			}
+
+			/* Barchart historical symbol, used for historical data queries */
+			final String hist = xmlStringDecode(ats, SYMBOL_HIST, XML_PASS);
+			
+			if (hist != null) {
+				final Symbol.Builder b = Symbol.newBuilder();
+				b.setVendor(VendorID.BARCHART_HISTORICAL.toString());
+				b.setSymbol(hist);
 				final Symbol symbol = b.build();
 				builder.addSymbols(symbol);
 			}

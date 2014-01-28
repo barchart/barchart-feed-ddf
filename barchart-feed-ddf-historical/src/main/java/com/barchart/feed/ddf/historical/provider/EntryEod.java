@@ -7,7 +7,14 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeEodTime;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeLong;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeMantissa;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeEodTime;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeInstrument;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeLong;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeMantissa;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.splitCSV;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -59,6 +66,7 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 
 		final String[] inputArray = splitCSV(inputLine);
 
+		// INV REMOVING
 		symbol = inputArray[0];
 
 		millisUTC = decodeEodTime(inputArray[1], inst);

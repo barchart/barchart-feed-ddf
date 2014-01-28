@@ -65,6 +65,7 @@ class EntryEodTrend extends Entry implements DDF_EntryTrend {
 	@Override
 	public void decodeHead(final String[] inputArray) {
 
+		// INV REMOVING
 		symbol = inputArray[0];
 
 		millisUTC = decodeEodTime(inputArray[1], inst);
