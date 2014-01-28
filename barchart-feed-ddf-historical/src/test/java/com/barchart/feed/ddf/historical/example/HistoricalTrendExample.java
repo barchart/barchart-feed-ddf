@@ -94,7 +94,7 @@ public class HistoricalTrendExample {
 		query.instrument = instrument;
 
 		query.timeStart = //
-		new DateTime(2011, 01, 14, /**/14, 00, 00, /**/
+				new DateTime(2014, 01, 24, /**/14, 00, 00, /**/
 		000, DDF_TimeZone.NEW_YORK.zone);
 
 		query.timeEnd = query.timeStart.plusMinutes(100);

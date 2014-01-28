@@ -66,7 +66,7 @@ public class HistoricalTicksExample {
 		 * 2) lookup instrument definition
 		 */
 
-		final String symbol = "esu10";
+		final String symbol = "ESH2014";
 
 		final Instrument instrument = //
 				BlockingObservable.from(DDF_RxInstrumentProvider.fromString(symbol))
@@ -89,7 +89,7 @@ public class HistoricalTicksExample {
 		query.instrument = instrument;
 
 		query.timeStart = //
-		new DateTime(2010, 06, 01, /**/00, 00, 00, /**/
+				new DateTime(2013, 06, 01, /**/00, 00, 00, /**/
 		000, DDF_TimeZone.CHICAGO.zone);
 
 		query.timeEnd = query.timeStart.plusMinutes(10);

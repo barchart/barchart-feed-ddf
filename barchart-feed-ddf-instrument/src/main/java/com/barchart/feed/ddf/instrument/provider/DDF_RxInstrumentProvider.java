@@ -136,9 +136,10 @@ public class DDF_RxInstrumentProvider {
 				/* Filter out cached symbols */
 				for(String symbol : symbols) {
 					
+					// TODO Add map from user input to formated for query and replace back into result
 					symbol = Symbology.formatSymbol(symbol);
 					
-					if(symbolMap.containsKey(symbol)) {
+					if (symbolMap.containsKey(symbol)) {
 						res.put(symbol, symbolMap.get(symbol));
 					} else {
 						toBatch.add(symbol);
