@@ -186,6 +186,7 @@
 							<goal>jar</goal>
 						</goals>
 						<configuration>
+							<javadocVersion>1.7</javadocVersion>
 							<includeDependencySources>true</includeDependencySources>
 							<dependencySourceIncludes>
 								<dependencySourceInclude>com.barchart.feed:*</dependencySourceInclude>
