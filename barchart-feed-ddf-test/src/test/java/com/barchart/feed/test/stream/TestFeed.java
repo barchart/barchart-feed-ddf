@@ -10,9 +10,12 @@ public class TestFeed {
 	public static void main(final String... args) throws Exception {
 
 		final String[] symbols = new String[] {
-				"ESH4", "ESM4", "ESU4", "ESZ4", "ZCH4", "ZCK4", "ZCN4", "ZCU4", "XFH4", "XFK4", "XFN4", "XFU4",
-				"RMF4", "RMH4", "RMK4", "RMN4", "KCH4", "KCK4", "KCN4", "KCU4", "DXH14", "DXM4", "DXU4",
-				"DXZ4",
+				"_S_BF_CLH4_CLJ4_CLK4"
+				// "ESH4", "ESM4", "ESU4", "ESZ4", "ZCH4", "ZCK4", "ZCN4",
+				// "ZCU4", "XFH4", "XFK4", "XFN4", "XFU4",
+				// "RMF4", "RMH4", "RMK4", "RMN4", "KCH4", "KCK4", "KCN4",
+				// "KCU4", "DXH14", "DXM4", "DXU4",
+				// "DXZ4",
 				// "GOOG.BZ", "IBM.BZ", "AAPL.BZ", "FXE.BZ", "IAU.BZ",
 				// "INTC.BZ", "S.BZ", "SPY.BZ", "XOM.BZ", "ZNGA.BZ"
 		};
@@ -27,7 +30,7 @@ public class TestFeed {
 			public void onNext(final Market m) {
 				final long time = System.currentTimeMillis();
 				// Report every 60 minutes
-				if (time - lastReport > 60 * 60 * 1000) {
+				if (time - lastReport > 10 * 1000) {
 					MarketSnapshot.printReport(marketplace, symbols);
 					lastReport = time;
 				}
