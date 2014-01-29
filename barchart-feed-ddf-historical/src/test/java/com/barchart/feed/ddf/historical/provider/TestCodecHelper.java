@@ -14,6 +14,10 @@ public class TestCodecHelper {
 		assertTrue(CodecHelper.decodeMantissa("-10.5", -1) == -105);
 		assertTrue(CodecHelper.decodeMantissa("-10.05", -2) == -1005);
 		
+		/* Test leading zero */
+		assertTrue(CodecHelper.decodeMantissa("0.2", -2) == 20);
+		assertTrue(CodecHelper.decodeMantissa("-0.2", -2) == -20);
+
 	}
 	
 }

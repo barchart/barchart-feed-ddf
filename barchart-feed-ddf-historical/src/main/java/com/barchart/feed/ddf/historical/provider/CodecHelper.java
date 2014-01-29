@@ -312,6 +312,7 @@ final class CodecHelper {
 		int part;
 		final int spaces;
 
+
 		switch (parts.length) {
 			default:
 			case 0:
@@ -338,7 +339,7 @@ final class CodecHelper {
 		}
 		
 		/* Handle negative values */
-		if(whole < 0) {
+		if (whole < 0 || (whole == 0 && string.startsWith("-"))) {
 			part = part * -1;
 		}
 

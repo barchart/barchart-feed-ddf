@@ -68,7 +68,7 @@ public class HistoricalEodExample {
 		 */
 
 		// final String symbol = "_S_SP_KCH14_KCK14";
-		final String symbol = "ESG14|1745P";
+		final String symbol = "_S_BF_CLH4_CLJ4_CLK4";
 
 		final Instrument instrument = //
 				BlockingObservable.from(DDF_RxInstrumentProvider.fromString(symbol))
@@ -130,7 +130,10 @@ public class HistoricalEodExample {
 				new Runner<Void, DDF_EntryBarEod>() {
 					@Override
 					public Void run(final DDF_EntryBarEod entry) {
-						log.debug(String.valueOf(entry.sizeVolume()));
+						log.debug(String.valueOf(entry.priceOpenMantissa()) + " " +
+								String.valueOf(entry.priceHighMantissa()) + " " +
+								String.valueOf(entry.priceLowMantissa()) + " " +
+								String.valueOf(entry.priceCloseMantissa()));
 						return null;
 					}
 				};
