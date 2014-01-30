@@ -191,6 +191,7 @@
 							<dependencySourceIncludes>
 								<dependencySourceInclude>com.barchart.feed:*</dependencySourceInclude>
 							</dependencySourceIncludes>
+							<excludePackageNames>bench:com.barchart.feed.api.series*:com.barchart.feed.inst*:com.barchart.feed.base*:com.barchart.feed.ddf.*:com.barchart.util.common.*</excludePackageNames>
 						</configuration>
 					</execution>
 				</executions>
