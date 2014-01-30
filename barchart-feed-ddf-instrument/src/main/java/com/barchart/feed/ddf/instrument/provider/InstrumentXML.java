@@ -90,7 +90,7 @@ public final class InstrumentXML {
 			/* book depth - NOT AVAIL */
 
 			/* vendor */
-			builder.setVendorId("Barchart"); // Seems like this should be VendorID.BARCHART.toString()
+			builder.setVendorId(VendorID.BARCHART.toString());
 
 			/* market symbol; can be non unique; */
 			builder.setSymbol(xmlStringDecode(ats, SYMBOL_REALTIME, XML_STOP));

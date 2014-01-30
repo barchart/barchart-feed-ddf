@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import rx.Observer;
 
 import com.barchart.feed.api.consumer.MetadataService.Result;
-import com.barchart.feed.api.consumer.MetadataService.SearchContext;
 import com.barchart.feed.api.model.meta.Instrument;
 
 public class TestDDF_RxInstrumentProvider {
@@ -20,7 +19,7 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString(SearchContext.NULL, "GOOG", "IBM", "CLZ13", "ESF2014|550C")
+		DDF_RxInstrumentProvider.fromString("CLU14", "clu2014", "CLU4")
 				.subscribe(obs());
 		
 		Thread.sleep(10 * 5000);

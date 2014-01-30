@@ -234,45 +234,6 @@ public final class DDF_InstrumentProvider {
 		
 	}
 
-	// public static Instrument fromHistorical(String symbol) {
-	//
-	// if(symbol == null || symbol.isEmpty()) {
-	// return Instrument.NULL;
-	// }
-	//
-	// symbol = Symbology.formatHistoricalSymbol(symbol);
-	//
-	// if(symbolMap.containsKey(symbol)) {
-	// return symbolMap.get(symbol).get(0);
-	// }
-	//
-	// if(db.containsKey(symbol)) {
-	// final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
-	// instState.process(db.get(symbol));
-	// final List<InstrumentState> list = new ArrayList<InstrumentState>();
-	// list.add(instState);
-	// symbolMap.put(symbol, list);
-	// return instState;
-	// }
-	//
-	// final InstrumentState instState = InstrumentStateFactory.
-	// newInstrument(symbol);
-	//
-	// final List<InstrumentState> list = new ArrayList<InstrumentState>();
-	// list.add(instState);
-	// symbolMap.put(symbol, list);
-	//
-	// /* Asnyc lookup */
-	// try {
-	// remoteQueue.put(symbol);
-	// } catch (final Exception e) {
-	// failedRemoteQueue.add(symbol);
-	// }
-	//
-	// return instState;
-	//
-	// }
-	
 	private static final Map<String, Instrument> cqgMap =
             new HashMap<String, Instrument>();
 

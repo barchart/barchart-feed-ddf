@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,17 +133,19 @@ public class DDF_RxInstrumentProvider {
 						new HashMap<String, List<InstrumentState>>();
 				
 				final List<String> toBatch = new ArrayList<String>();
+				final Map<String, String> userSymbols = new HashMap<String, String>();
 				
 				/* Filter out cached symbols */
 				for(String symbol : symbols) {
 					
 					// TODO Add map from user input to formated for query and replace back into result
-					symbol = Symbology.formatSymbol(symbol);
+					final String formattedSymbol = Symbology.formatSymbol(symbol);
 					
-					if (symbolMap.containsKey(symbol)) {
-						res.put(symbol, symbolMap.get(symbol));
+					if (symbolMap.containsKey(formattedSymbol)) {
+						res.put(symbol, symbolMap.get(formattedSymbol));
 					} else {
-						toBatch.add(symbol);
+						toBatch.add(formattedSymbol);
+						userSymbols.put(symbol, formattedSymbol);
 					}
 					
 				}
@@ -169,9 +172,29 @@ public class DDF_RxInstrumentProvider {
 								
 							}
 							
+							/* Match up symbols to user entered symbols and store them in the final result */
+							for (final Map.Entry<String, String> en : userSymbols.entrySet()) {
+
+								if (en.getValue().equals(e.getKey())) {
+									res.put(en.getKey(), e.getValue());
+								}
+
+							}
+
 						}
 						
-						res.putAll(lookup);
+						/*
+						 * Populate symbols for which nothing was returned, guarantee every symbol requested is in map
+						 * returned
+						 */
+						for (final Map.Entry<String, String> en : userSymbols.entrySet()) {
+
+							if (!res.containsKey(en.getKey())) {
+								res.put(en.getKey(), Collections.<InstrumentState> emptyList());
+							}
+
+						}
+
 					}
 					
 					sub.onNext(result(res));
