@@ -84,24 +84,6 @@ public final class DDF_Query<E extends DDF_Entry> {
 	/** The eod volume. */
 	public DDF_QueryEodVolume eodVolume;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#clone()
-	 */
-	// public boolean isTrend;
-
-	@SuppressWarnings("unchecked")
-	public final DDF_Query<E> clone() {
-		try {
-			return (DDF_Query<E>) super.clone();
-		} catch (final Exception e) {
-			// should not happen
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	private final CharSequence renderId() {
 		return instrument == null ? "NONE" : instrument.symbol();
 	}

@@ -189,7 +189,7 @@ class Result<E extends DDF_Entry> implements DDF_Result<E> {
 	 */
 	@Override
 	public DDF_Query<E> getQuery() {
-		return query.clone();
+		return query; // This was cloned, it may need a defensive copy, unclear atm.
 	}
 
 	@Override
