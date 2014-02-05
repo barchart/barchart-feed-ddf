@@ -54,7 +54,6 @@ import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.provider.VarMarket;
-import com.barchart.feed.base.state.api.MarketState;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
 import com.barchart.feed.base.trade.enums.MarketTradeField;
@@ -129,7 +128,7 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	// XXX original
-	public void setBookSnapshotXXX(final MarketDoBookEntry[] entries,
+	/*public void setBookSnapshotXXX(final MarketDoBookEntry[] entries,
 			final TimeValue time) {
 
 		assert entries != null;
@@ -164,7 +163,7 @@ class VarMarketDDF extends VarMarket {
 		book.setTime(time);
 		updateMarket(time);
 
-	}
+	}*/
 
 	@Override
 	public void setBookUpdate(final MarketDoBookEntry entry,
@@ -385,7 +384,7 @@ class VarMarketDDF extends VarMarket {
 
 		assert entry != null;
 
-		final MarketState state = loadState();
+		final com.barchart.feed.base.state.api.MarketState state = loadState();
 
 		if (isOn) {
 			state.add(entry);
