@@ -48,7 +48,7 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.liquidityType() == Instrument.BookLiquidityType.NONE);
 		assertTrue(IBMInst.bookStructure() == Instrument.BookStructureType.NONE);
 		assertTrue(IBMInst.maxBookDepth() == Size.NULL);
-		assertTrue(IBMInst.instrumentDataVendor().equals("Barchart"));
+		assertTrue(IBMInst.instrumentDataVendor().equals("BARCHART"));
 		assertTrue(IBMInst.symbol().equals("IBM"));
 		assertTrue(IBMInst.description().equals("International Business Machines Corp."));
 		assertTrue(IBMInst.CFICode().equals("EXXXXX"));
