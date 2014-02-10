@@ -1,5 +1,7 @@
 package com.barchart.feed.ddf.client.provider;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
@@ -28,7 +30,9 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-			"AAPL"
+		"DJY0"
+		//	"NQY0" 
+		//, "ESH4"
 	};
 	
 	public static void main(final String[] args) throws Exception {
@@ -85,6 +89,8 @@ public class TestBarchartMarketProvider {
 		
 		return new MarketObserver<Market>() {
 
+			private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss z");
+			
 			@Override
 			public void onNext(final Market m) {
 
@@ -95,7 +101,9 @@ public class TestBarchartMarketProvider {
 					sb.append(" ");
 				}
 
-				System.out.println(sb.toString());
+				sb.append(m.updated().format(format));
+				
+				//System.out.println(sb.toString());
 				
 			}
 		};

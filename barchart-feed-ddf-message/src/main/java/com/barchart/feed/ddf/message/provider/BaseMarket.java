@@ -265,8 +265,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * com.barchart.feed.ddf.message.provider.Base#encodeDDF(java.nio.ByteBuffer
-	 * )
+	 * com.barchart.feed.ddf.message.provider.Base#encodeDDF(java.nio.ByteBuffer)
 	 */
 	@Override
 	public final void encodeDDF(final ByteBuffer buffer) {
@@ -318,8 +317,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * com.barchart.feed.ddf.message.provider.Base#decodeDDF(java.nio.ByteBuffer
-	 * )
+	 * com.barchart.feed.ddf.message.provider.Base#decodeDDF(java.nio.ByteBuffer)
 	 */
 	@Override
 	public final void decodeDDF(final ByteBuffer buffer) {
@@ -348,8 +346,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		ordExchange = DDF_Exchange.fromCode(exchCode).ord;
 	}
 
-	protected final void setSymbol(final byte[] symbolMain,
-			final byte[][] symbolLegs) {
+	protected final void setSymbol(final byte[] symbolMain, final byte[][] symbolLegs) {
 		if (symbolMain == null) {
 			symbolArray = null;
 			return;

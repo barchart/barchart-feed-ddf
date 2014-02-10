@@ -329,8 +329,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			case SETTLE_FINAL_PRICE:
 
-				bar.set(MarketBarField.IS_SETTLED,
-						ValueConst.TRUE_BOOLEAN);
+				bar.set(MarketBarField.IS_SETTLED, ValueConst.TRUE_BOOLEAN);
 
 				/* Fall through */
 			case SETTLE_EARLY_PRICE:
