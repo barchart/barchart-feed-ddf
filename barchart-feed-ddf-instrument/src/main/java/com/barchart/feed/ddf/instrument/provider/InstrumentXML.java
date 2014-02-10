@@ -61,8 +61,7 @@ public final class InstrumentXML {
 	public static InstrumentDefinition decodeSAX(final Attributes ats)
 			throws Exception {
 
-		final InstrumentDefinition.Builder builder =
-				InstrumentDefinition.newBuilder();
+		final InstrumentDefinition.Builder builder = InstrumentDefinition.newBuilder();
 
 		try {
 
@@ -75,8 +74,7 @@ public final class InstrumentXML {
 			}
 
 			/* market identifier; must be globally unique; */
-			builder.setMarketId(Long.parseLong(xmlStringDecode(ats, ID,
-					XML_STOP)));
+			builder.setMarketId(Long.parseLong(xmlStringDecode(ats, ID, XML_STOP)));
 
 			/* type of security, Forex, Equity, etc. */
 			builder.setInstrumentType(InstrumentType.NO_INSTRUMENT);
@@ -129,8 +127,7 @@ public final class InstrumentXML {
 			}
 
 			/* market free style description; can be used in full text search */
-			builder.setDescription(String.valueOf(xmlStringDecode(ats,
-					SYMBOL_COMMENT, XML_PASS)));
+			builder.setDescription(String.valueOf(xmlStringDecode(ats, SYMBOL_COMMENT, XML_PASS)));
 
 			/* stock vs future vs etc. */
 			builder.setCfiCode(xmlStringDecode(ats, SYMBOL_CODE_CFI, XML_PASS));
@@ -140,25 +137,19 @@ public final class InstrumentXML {
 
 			/* market originating exchange identifier */
 			final DDF_Exchange exchange =
-					DDF_Exchange.fromCode(xmlByteDecode(ats, EXCHANGE_DDF,
-							XML_PASS));
-			String eCode = new String(new byte[] {
-				exchange.code
-			});
+					DDF_Exchange.fromCode(xmlByteDecode(ats, EXCHANGE_DDF, XML_PASS));
+			String eCode = new String(new byte[] {exchange.code});
 			if (eCode == null || eCode.isEmpty()) {
 				eCode = Exchanges.NULL_CODE;
 			}
 			builder.setExchangeCode(eCode);
 
-			final DDF_Fraction frac =
-					DDF_Fraction.fromBaseCode(xmlByteDecode(ats, BASE_CODE_DDF,
-							XML_STOP));
+			final DDF_Fraction frac = DDF_Fraction.fromBaseCode(xmlByteDecode(ats, BASE_CODE_DDF, XML_STOP));
 
 			/* price step / increment size / tick size */
 			try {
 				final long priceStepMantissa =
-						xmlDecimalDecode(frac, ats, PRICE_TICK_INCREMENT,
-								XML_STOP);
+						xmlDecimalDecode(frac, ats, PRICE_TICK_INCREMENT, XML_STOP);
 				builder.setMinimumPriceIncrement(buildDecimal(
 						priceStepMantissa, frac.decimalExponent));
 			} catch (final Exception e) {
@@ -198,8 +189,7 @@ public final class InstrumentXML {
 
 			//
 			final DDF_TimeZone zone =
-					DDF_TimeZone.fromCode(xmlStringDecode(ats, TIME_ZONE_DDF,
-							XML_STOP));
+					DDF_TimeZone.fromCode(xmlStringDecode(ats, TIME_ZONE_DDF, XML_STOP));
 
 			// /* timezone represented as offset in minutes from utc */
 			// builder.setTimeZoneOffset(zone.getUTCOffset());
