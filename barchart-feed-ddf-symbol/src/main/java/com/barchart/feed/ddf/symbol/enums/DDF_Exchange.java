@@ -146,16 +146,16 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	NYSE(_N_, STOCK), //
 	NYSE_Book_Top(_n_, STOCK), //
 
-	Index_DOW(_O_, INDEX), //
-	Index_DOW_Full(_o_, INDEX), //
+	Index_DOW(_O_, FUTURE), //
+	Index_DOW_Full(_o_, FUTURE), //
 
-	Index_SP(_P_, INDEX), //
-	Index_SP_XXX(_p_, INDEX), // XXX
+	Index_SP(_P_, FUTURE), //
+	Index_SP_XXX(_p_, FUTURE), // XXX
 
 	NASDAQ(_Q_, STOCK), //
 	NASDAQ_Book_Top(_q_, STOCK), //
 
-	CBOE_Futures(_R_, FUTURE), //
+	CBOE_Futures(_R_, INDEX), //
 	CBOE_Index(_r_, INDEX), //  changed from FUTURE
 
 	Fix_Me_S(_S_, FUTURE), //

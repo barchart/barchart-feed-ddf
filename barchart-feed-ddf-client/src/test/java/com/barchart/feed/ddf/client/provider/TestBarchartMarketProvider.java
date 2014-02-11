@@ -30,9 +30,9 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"DJY0"
-		//	"NQY0" 
-		//, "ESH4"
+		"DJY0", "ESY0"
+			//"NQY0", "VIY0" 
+		
 	};
 	
 	public static void main(final String[] args) throws Exception {

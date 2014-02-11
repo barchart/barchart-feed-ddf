@@ -324,6 +324,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 		decodeHead(buffer);
 		decodeBody(buffer);
 		decodeTail(buffer);
+		log.debug(new String(buffer.array()) + getTime().toString());
 	}
 
 	/*
