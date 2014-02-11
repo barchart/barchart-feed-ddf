@@ -30,7 +30,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"DJY0", "ESY0"
+		"DJY0", "$DXY"
 			//"NQY0", "VIY0" 
 		
 	};

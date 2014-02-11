@@ -128,7 +128,7 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	Fix_Me_H(_H_, FUTURE), //
 	Fix_Me_H_XXX(_h_, FUTURE), //
 
-	Index_NO_DOW_NO_SP(_I_, FUTURE), //
+	Index_NO_DOW_NO_SP(_I_, INDEX), //
 	Index_NO_DOW_NO_SP_XXX(_i_, FUTURE), //
 
 	CME_NYMEX(_J_, FUTURE), //
@@ -146,8 +146,8 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	NYSE(_N_, STOCK), //
 	NYSE_Book_Top(_n_, STOCK), //
 
-	Index_DOW(_O_, FUTURE), //
-	Index_DOW_Full(_o_, FUTURE), //
+	Index_DOW(_O_, INDEX), //
+	Index_DOW_Full(_o_, INDEX), //
 
 	Index_SP(_P_, FUTURE), //
 	Index_SP_XXX(_p_, FUTURE), // XXX
