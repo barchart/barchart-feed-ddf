@@ -128,8 +128,8 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	Fix_Me_H(_H_, FUTURE), //
 	Fix_Me_H_XXX(_h_, FUTURE), //
 
-	Index_NO_DOW_NO_SP(_I_, INDEX), //
-	Index_NO_DOW_NO_SP_XXX(_i_, INDEX), //
+	Index_NO_DOW_NO_SP(_I_, FUTURE), //
+	Index_NO_DOW_NO_SP_XXX(_i_, FUTURE), //
 
 	CME_NYMEX(_J_, FUTURE), //
 	CME_NYMEX_Swaps(_j_, FUTURE), //
