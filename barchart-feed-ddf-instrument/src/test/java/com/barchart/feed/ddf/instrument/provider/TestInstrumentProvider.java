@@ -71,7 +71,7 @@ public class TestInstrumentProvider {
 //					+ " "
 //					+ expires.asDateTime().getYear());
 //
-//			System.out.println(e.getValue());
+			System.out.println(e.getValue());
 
 		}
 
