@@ -227,7 +227,7 @@ public class DDF_RxInstrumentProvider {
 			
 			InputStream input = connection.getInputStream();
 	
-			if (connection.getContentEncoding().equals("gzip")) {
+			if (connection.getContentEncoding() != null && connection.getContentEncoding().equals("gzip")) {
 				input = new GZIPInputStream(input);
 			}
 			

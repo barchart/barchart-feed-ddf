@@ -390,7 +390,7 @@ public final class DDF_InstrumentProvider {
 					
 					InputStream input = connection.getInputStream();
 
-					if (connection.getContentEncoding().equals("gzip")) {
+					if (connection.getContentEncoding() != null && connection.getContentEncoding().equals("gzip")) {
 						input = new GZIPInputStream(input);
 					}
 					
