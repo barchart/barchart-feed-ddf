@@ -173,8 +173,8 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	ICE_Canada(_W_, FUTURE), //
 	ICE_Canada_XXX(_w_, FUTURE), //
 
-	Fix_Me_X(_X_, FUTURE), // XXX
-	Fix_Me_X_XXX(_x_, FUTURE), // XXX
+	BATS(_X_, STOCK), // XXX
+	BATS_XXX(_x_, STOCK), // XXX
 
 	NYSE_Metals(_Y_, FUTURE), //
 	NYSE_Metals_XXX(_y_, FUTURE), //

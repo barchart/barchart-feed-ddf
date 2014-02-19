@@ -110,7 +110,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 
 		msg.decodeDDF(buffer);
 
-		assertEquals(msg.getExchange(), DDF_Exchange.Fix_Me_X);
+		assertEquals(msg.getExchange(), DDF_Exchange.BATS);
 		assertEquals(msg.getFraction(), DDF_Fraction.N3);
 		assertEquals(msg.getMessageType(), DDF_MessageType.BOOK_SNAP);
 		assertEquals(msg.getTradeDay(), todayUTC);
