@@ -59,13 +59,17 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	@SuppressWarnings("unchecked")
 	public void fireCallbacks() {
 		
-		for (final MKData d : toFire) {
-			for (final FrameworkAgent fa : agentMap.get(d.clazz)) {
-				fa.callback().onNext(fa.data(this.freeze()));
-			}
-		}
+		synchronized(agentMap) {
 		
-		toFire.clear();
+			for (final MKData d : toFire) {
+				for (final FrameworkAgent fa : agentMap.get(d.clazz)) {
+					fa.callback().onNext(fa.data(this.freeze()));
+				}
+			}
+			
+			toFire.clear();
+		
+		}
 	}
 	
 	@Override
