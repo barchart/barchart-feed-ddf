@@ -163,14 +163,16 @@ public class DDF_RxInstrumentProvider {
 							symbolMap.put(e.getKey(), e.getValue());
 							
 							/* Add alternate options symbol */
-							final InstrumentState inst = e.getValue().get(0);
-							if(inst != null) {
-								
-								if(inst.symbol().contains("|")) {
-									symbolMap.put(inst.vendorSymbols().get(VendorID.BARCHART), e.getValue());
+							if(!e.getValue().isEmpty()) {
+								final InstrumentState inst = e.getValue().get(0);
+								if(inst != null) {
+									
+									if(inst.symbol().contains("|")) {
+										symbolMap.put(inst.vendorSymbols().get(VendorID.BARCHART), e.getValue());
+									}
+									
 								}
-								
-							}
+							}	
 							
 							/* Match up symbols to user entered symbols and store them in the final result */
 							for (final Map.Entry<String, String> en : userSymbols.entrySet()) {
@@ -256,10 +258,11 @@ public class DDF_RxInstrumentProvider {
 					final Attributes ats) throws SAXException {
 
 				if (qName != null && qName.equals("instrument")) {
+					
+					final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
 
 					try {
-
-						final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
+						
 						final InstrumentDefinition def = InstrumentXML.decodeSAX(ats);
 
 						InstrumentState inst;
@@ -275,7 +278,7 @@ public class DDF_RxInstrumentProvider {
 						result.put(lookup, insts);
 
 					} catch (final SymbolNotFoundException se) {
-						throw new RuntimeException(se); // would be nice to add to map
+						result.put(lookup, Collections.<InstrumentState> emptyList());
 					} catch (final Exception e) {
 						throw new RuntimeException(e);
 					}
@@ -346,7 +349,9 @@ public class DDF_RxInstrumentProvider {
 				Map<String, List<Instrument>> result = new HashMap<String, List<Instrument>>();
 				for(final Entry<String, List<InstrumentState>> e : res.entrySet()) {
 					final List<Instrument> list = new ArrayList<Instrument>();
-					list.add(e.getValue().get(0));
+					if(!e.getValue().isEmpty()) {
+						list.add(e.getValue().get(0));
+					}
 					result.put(e.getKey(), list);
 				}
 				return result;

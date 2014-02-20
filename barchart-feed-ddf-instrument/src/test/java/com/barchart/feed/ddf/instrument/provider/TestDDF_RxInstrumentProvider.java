@@ -19,7 +19,7 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("DJY0").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("BADBADSYMBOL").subscribe(obs());
 		
 		Thread.sleep(10 * 5000);
 		
