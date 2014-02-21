@@ -374,7 +374,8 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 * ||<day><session><etx>||<time stamp>
 	 */
 	protected void decodeTail(final ByteBuffer buffer) {
-		final DateTimeZone zone = getExchange().kind.time.zone;
+		//final DateTimeZone zone = getExchange().kind.time.zone;  
+		final DateTimeZone zone = DateTimeZone.forID(getInstrument().timeZoneName());
 		//
 		final byte dayCode = buffer.get(); // <day>
 		final byte sessCode = buffer.get(); // <session>

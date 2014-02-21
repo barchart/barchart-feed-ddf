@@ -2,7 +2,6 @@ package com.barchart.feed.ddf.client.provider;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
@@ -30,7 +29,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"DJY0", "$DXY"
+		"DJY0", "$DOWI"
 			//"NQY0", "VIY0" 
 		
 	};
@@ -52,12 +51,12 @@ public class TestBarchartMarketProvider {
 		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 		// final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
 		// final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
-		// final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
+		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
 		agent1.include(insts).subscribe(instObs());
 		// agent2.include(insts).subscribe(instObs());
 		// agent3.include(insts).subscribe(instObs());
-		// agent4.include(insts).subscribe(instObs());
+		agent4.include(insts).subscribe(instObs());
 		Thread.sleep(2 * 60 * 60 * 1000);
 		
 		agent1.exclude(insts).subscribe(instObs());
@@ -94,16 +93,12 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market m) {
 
-				final Set<Market.Component> changes = m.change();
 				final StringBuilder sb = new StringBuilder();
-				for (final Market.Component c : changes) {
-					sb.append(c);
-					sb.append(" ");
-				}
 
+				sb.append(m.instrument().symbol() + " ");
 				sb.append(m.updated().format(format));
 				
-				//System.out.println(sb.toString());
+				System.out.println(sb.toString());
 				
 			}
 		};
@@ -137,9 +132,11 @@ public class TestBarchartMarketProvider {
 
 		return new MarketObserver<Trade>() {
 
+			private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss z");
+			
 			@Override
 			public void onNext(final Trade t) {
-				System.out.println("TRADE " + t.updated());
+				System.out.println(t.instrument().symbol() + " TRADE " + t.time().format(format));
 			}
 
 		};
