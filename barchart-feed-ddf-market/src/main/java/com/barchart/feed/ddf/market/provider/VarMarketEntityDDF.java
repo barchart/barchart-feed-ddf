@@ -160,17 +160,6 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		toFire.clear();
 		
-//		synchronized(agentMap) {
-//		
-//			for (final MKData d : toFire) {
-//				for (final FrameworkAgent fa : agentMap.get(d.clazz)) {
-//					fa.callback().onNext(fa.data(this.freeze()));
-//				}
-//			}
-//			
-//			toFire.clear();
-//		
-//		}
 	}
 	
 	@Override
