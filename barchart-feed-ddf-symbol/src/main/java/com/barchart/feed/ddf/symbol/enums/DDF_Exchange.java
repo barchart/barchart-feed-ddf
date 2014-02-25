@@ -158,8 +158,8 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	CBOE_Futures(_R_, INDEX), //
 	CBOE_Index(_r_, INDEX), //  changed from FUTURE
 
-	Fix_Me_S(_S_, FUTURE), //
-	Fix_Me_S_XXX(_s_, FUTURE), //
+	TSX(_S_, STOCK), //
+	TSX_XXX(_s_, STOCK), //
 
 	Fix_Me_T(_T_, FUTURE), //
 	Fix_Me_T_XXX(_t_, FUTURE), //
