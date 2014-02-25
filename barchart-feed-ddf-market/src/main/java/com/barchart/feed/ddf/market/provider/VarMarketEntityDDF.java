@@ -26,7 +26,6 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
 
-@SuppressWarnings("rawtypes")
 public class VarMarketEntityDDF extends VarMarketDDF {
 	
 	enum MKData {
@@ -54,22 +53,124 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	
 	/* ***** ***** ***** Update State Methods ***** ***** ***** */
 	
-	
 	@Override
-	@SuppressWarnings("unchecked")
 	public void fireCallbacks() {
 		
-		synchronized(agentMap) {
-		
-			for (final MKData d : toFire) {
-				for (final FrameworkAgent fa : agentMap.get(d.clazz)) {
-					fa.callback().onNext(fa.data(this.freeze()));
-				}
+		while(!marketAgentsToAdd.isEmpty()) {
+			final FrameworkAgent<com.barchart.feed.api.model.data.Market> a = marketAgentsToAdd.remove(0);
+			if(a != null) {
+				marketAgents.add(a);
 			}
-			
-			toFire.clear();
-		
 		}
+		
+		while(!marketAgentsToRemove.isEmpty()) {
+			final FrameworkAgent<com.barchart.feed.api.model.data.Market> a = marketAgentsToRemove.remove(0);
+			if(a != null) {
+				marketAgents.remove(a);
+			}
+		}
+		
+		for(final FrameworkAgent<com.barchart.feed.api.model.data.Market> a : marketAgents) {
+			a.callback().onNext(a.data(this.freeze()));
+		}
+		
+		// BOOK
+		while(!bookAgentsToAdd.isEmpty()) {
+			final FrameworkAgent<Book> a = bookAgentsToAdd.remove(0);
+			if(a != null) {
+				bookAgents.add(a);
+			}
+		}
+		
+		while(!bookAgentsToRemove.isEmpty()) {
+			final FrameworkAgent<Book> a = bookAgentsToRemove.remove(0);
+			if(a != null) {
+				bookAgents.remove(a);
+			}
+		}
+		
+		if(toFire.contains(MKData.BOOK)) {
+			for(final FrameworkAgent<Book> a : bookAgents) {
+				a.callback().onNext(a.data(this.freeze()));
+			}
+		}
+		
+		// TRADE
+		while(!tradeAgentsToAdd.isEmpty()) {
+			final FrameworkAgent<Trade> a = tradeAgentsToAdd.remove(0);
+			if(a != null) {
+				tradeAgents.add(a);
+			}
+		}
+		
+		while(!tradeAgentsToRemove.isEmpty()) {
+			final FrameworkAgent<Trade> a = tradeAgentsToRemove.remove(0);
+			if(a != null) {
+				tradeAgents.remove(a);
+			}
+		}
+		
+		if(toFire.contains(MKData.TRADE)) {
+			for(final FrameworkAgent<Trade> a : tradeAgents) {
+				a.callback().onNext(a.data(this.freeze()));
+			}
+		}
+		
+		// SESSION
+		while(!sessionAgentsToAdd.isEmpty()) {
+			final FrameworkAgent<Session> a = sessionAgentsToAdd.remove(0);
+			if(a != null) {
+				sessionAgents.add(a);
+			}
+		}
+		
+		while(!sessionAgentsToRemove.isEmpty()) {
+			final FrameworkAgent<Session> a = sessionAgentsToRemove.remove(0);
+			if(a != null) {
+				sessionAgents.remove(a);
+			}
+		}
+		
+		if(toFire.contains(MKData.SESSION)) {
+			for(final FrameworkAgent<Session> a : sessionAgents) {
+				a.callback().onNext(a.data(this.freeze()));
+			}
+		}
+		
+		// SESSION
+		while(!cuvolAgentsToAdd.isEmpty()) {
+			final FrameworkAgent<Cuvol> a = cuvolAgentsToAdd.remove(0);
+			if(a != null) {
+				cuvolAgents.add(a);
+			}
+		}
+		
+		while(!cuvolAgentsToRemove.isEmpty()) {
+			final FrameworkAgent<Cuvol> a = cuvolAgentsToRemove.remove(0);
+			if(a != null) {
+				cuvolAgents.remove(a);
+			}
+		}
+		
+		if(toFire.contains(MKData.CUVOL)) {
+			for(final FrameworkAgent<Cuvol> a : cuvolAgents) {
+				a.callback().onNext(a.data(this.freeze()));
+			}
+		}
+		
+		toFire.clear();
+		
+//		synchronized(agentMap) {
+//		
+//			for (final MKData d : toFire) {
+//				for (final FrameworkAgent fa : agentMap.get(d.clazz)) {
+//					fa.callback().onNext(fa.data(this.freeze()));
+//				}
+//			}
+//			
+//			toFire.clear();
+//		
+//		}
 	}
 	
 	@Override

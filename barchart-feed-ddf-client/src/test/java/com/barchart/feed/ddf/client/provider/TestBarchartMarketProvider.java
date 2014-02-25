@@ -29,9 +29,8 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"DJY0", "$DOWI"
+		"GOOG", "AAPL", "ESM4"
 			//"NQY0", "VIY0" 
-		
 	};
 	
 	public static void main(final String[] args) throws Exception {
@@ -49,18 +48,21 @@ public class TestBarchartMarketProvider {
 		lock.await();
 		
 		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
-		// final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
-		// final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
+		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
+		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
 		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
 		agent1.include(insts).subscribe(instObs());
-		// agent2.include(insts).subscribe(instObs());
-		// agent3.include(insts).subscribe(instObs());
+		agent2.include(insts).subscribe(instObs());
+		agent3.include(insts).subscribe(instObs());
 		agent4.include(insts).subscribe(instObs());
-		Thread.sleep(2 * 60 * 60 * 1000);
+		Thread.sleep(10 * 1000);
 		
 		agent1.exclude(insts).subscribe(instObs());
-		Thread.sleep(5 * 1000);
+		agent2.exclude(insts).subscribe(instObs());
+		agent3.exclude(insts).subscribe(instObs());
+		agent4.exclude(insts).subscribe(instObs());
+		Thread.sleep(20 * 1000);
 		
 		log.debug("Shutting down");
 		market.shutdown();
@@ -92,14 +94,7 @@ public class TestBarchartMarketProvider {
 			
 			@Override
 			public void onNext(final Market m) {
-
-				final StringBuilder sb = new StringBuilder();
-
-				sb.append(m.instrument().symbol() + " ");
-				sb.append(m.updated().format(format));
-				
-				System.out.println(sb.toString());
-				
+				System.out.println(m.instrument().symbol() + " MARKET " + m.updated());
 			}
 		};
 	}
@@ -110,7 +105,7 @@ public class TestBarchartMarketProvider {
 
 			@Override
 			public void onNext(final Book b) {
-				System.out.println("BOOK " + b.updated());
+				System.out.println(b.instrument().symbol() + " BOOK " + b.updated());
 			}
 
 		};
@@ -122,7 +117,7 @@ public class TestBarchartMarketProvider {
 
 			@Override
 			public void onNext(final Session s) {
-				System.out.println("SESSION " + s.updated());
+				System.out.println(s.instrument().symbol() + " SESSION " + s.updated());
 			}
 
 		};
@@ -136,7 +131,7 @@ public class TestBarchartMarketProvider {
 			
 			@Override
 			public void onNext(final Trade t) {
-				System.out.println(t.instrument().symbol() + " TRADE " + t.time().format(format));
+				System.out.println(t.instrument().symbol() + " TRADE " + t.updated());
 			}
 
 		};
