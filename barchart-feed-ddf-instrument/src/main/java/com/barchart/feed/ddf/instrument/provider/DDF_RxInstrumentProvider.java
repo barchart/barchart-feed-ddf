@@ -59,6 +59,9 @@ public class DDF_RxInstrumentProvider {
 	static final ConcurrentMap<String, List<InstrumentState>> symbolMap =
 			new ConcurrentHashMap<String, List<InstrumentState>>();
 	
+	static final ConcurrentMap<InstrumentID, InstrumentState> idMap =
+			new ConcurrentHashMap<InstrumentID, InstrumentState>();
+	
 	public static VendorID CQG_VENDOR_ID = new VendorID("CQG");
 	
 	/* ***** ***** ***** Begin Executor ***** ***** ***** */
@@ -100,9 +103,19 @@ public class DDF_RxInstrumentProvider {
 	
 	/* ***** ***** ***** Begin ID Lookup ***** ***** ***** */
 	
-	public static Observable<Instrument> fromID(final InstrumentID... ids) {
-		// TODO
-		return null;
+	public static Observable<Map<InstrumentID, Instrument>> fromID(final InstrumentID... ids) {
+		
+		final Map<InstrumentID, Instrument> res = new HashMap<InstrumentID, Instrument>();
+		
+		for(final InstrumentID id : ids) {
+			if(idMap.containsKey(id)) {
+				res.put(id, idMap.get(id));
+			} else {
+				res.put(id, Instrument.NULL);
+			}
+		}
+		
+		return Observable.from(res);
 	}
 	
 	/* ***** ***** ***** Begin String Search ***** ***** ***** */
@@ -138,7 +151,6 @@ public class DDF_RxInstrumentProvider {
 				/* Filter out cached symbols */
 				for(String symbol : symbols) {
 					
-					// TODO Add map from user input to formated for query and replace back into result
 					final String formattedSymbol = Symbology.formatSymbol(symbol);
 					
 					if (symbolMap.containsKey(formattedSymbol)) {
@@ -161,6 +173,11 @@ public class DDF_RxInstrumentProvider {
 						/* Store instruments returned from lookup */
 						for(final Entry<String, List<InstrumentState>> e : lookup.entrySet()) {
 							symbolMap.put(e.getKey(), e.getValue());
+							
+							if(!e.getValue().isEmpty()) {
+								final InstrumentState i = e.getValue().get(0);
+								idMap.put(i.id(), i);
+							}
 							
 							/* Add alternate options symbol */
 							if(!e.getValue().isEmpty()) {
@@ -186,8 +203,8 @@ public class DDF_RxInstrumentProvider {
 						}
 						
 						/*
-						 * Populate symbols for which nothing was returned, guarantee every symbol requested is in map
-						 * returned
+						 * Populate symbols for which nothing was returned, guarantee every symbol 
+						 * requested is in map returned
 						 */
 						for (final Map.Entry<String, String> en : userSymbols.entrySet()) {
 

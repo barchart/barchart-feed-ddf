@@ -1,8 +1,5 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
-import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
-
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -32,7 +29,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.openfeed.proto.inst.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -40,12 +36,11 @@ import org.xml.sax.helpers.DefaultHandler;
 import rx.Observer;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.base.provider.Symbology;
-import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.inst.InstrumentDefinitionResult;
 import com.barchart.feed.inst.participant.InstrumentState;
 import com.barchart.feed.inst.provider.InstrumentFactory;
-import com.barchart.feed.inst.provider.InstrumentMap;
 
 public final class DDF_InstrumentProvider {
 	
@@ -60,17 +55,17 @@ public final class DDF_InstrumentProvider {
 	private static final ConcurrentMap<String, List<InstrumentState>> symbolMap =
 			DDF_RxInstrumentProvider.symbolMap;
 	
+	private static final ConcurrentMap<InstrumentID, InstrumentState> idMap =
+			DDF_RxInstrumentProvider.idMap;
+	
 	private static final ArrayBlockingQueue<String> remoteQueue = 
 			new ArrayBlockingQueue<String>(1000 * 1000);
 	
 	private static final List<String> failedRemoteQueue =
 			new CopyOnWriteArrayList<String>();
 	
-	private static volatile InstrumentMap db = InstrumentMap.NULL;
-	
 	static final String cqgInstLoopURL(final CharSequence lookup) {
-		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup +
-                 "&provider=CQG";
+		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup + "&provider=CQG";
 	}
 	
 	private DDF_InstrumentProvider() {
@@ -118,16 +113,6 @@ public final class DDF_InstrumentProvider {
 	}
 	
 	/**
-	 * @param map Bind an already built db map
-	 */
-	public synchronized static void bindDatabaseMap(final InstrumentMap map) {
-		
-		log.debug("Binding new database map");
-		
-		db = map;
-	}
-	
-	/**
 	 * This takes an instrument stub from a feed message, and does several things.
 	 * 
 	 * 1. Checks symbol against map.  If the stub represents an instrument already
@@ -152,20 +137,8 @@ public final class DDF_InstrumentProvider {
 			return symbolMap.get(symbol).get(0);
 		}
 		
-		if(db.containsKey(symbol)) {
-			
-			final InstrumentState instState = InstrumentStateFactory.
-					newInstrument(symbol);
-			instState.process(db.get(symbol));
-			final List<InstrumentState> list = new ArrayList<InstrumentState>();
-			list.add(instState);
-			symbolMap.put(symbol, list);
-			return instState;
-		}
-		
 		/* New symbol, create stub */
-		final InstrumentState instState = InstrumentStateFactory.
-				newInstrumentFromStub(inst);
+		final InstrumentState instState = InstrumentStateFactory.newInstrumentFromStub(inst);
 		
 		final List<InstrumentState> list = new ArrayList<InstrumentState>();
 		list.add(instState);
@@ -195,15 +168,6 @@ public final class DDF_InstrumentProvider {
 			return symbolMap.get(symbol).get(0);
 		}
 		
-		if(db.containsKey(symbol)) {
-			final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
-			instState.process(db.get(symbol));
-			final List<InstrumentState> list = new ArrayList<InstrumentState>();
-			list.add(instState);
-			symbolMap.put(symbol, list);
-			return instState;
-		}
-		
 		final InstrumentState instState = InstrumentStateFactory.newInstrument(symbol);
 		
 		final List<InstrumentState> list = new ArrayList<InstrumentState>();
@@ -221,8 +185,7 @@ public final class DDF_InstrumentProvider {
 		
 	} 
 	
-	public static Map<String, Instrument> fromSymbols(
-			final Collection<String> symbols) {
+	public static Map<String, Instrument> fromSymbols(final Collection<String> symbols) {
 		
 		final Map<String, Instrument> map = new HashMap<String, Instrument>();
 		
@@ -234,50 +197,6 @@ public final class DDF_InstrumentProvider {
 		
 	}
 
-	private static final Map<String, Instrument> cqgMap =
-            new HashMap<String, Instrument>();
-
-	public static Instrument findCQG(final String symbol) {
-	    
-	   Instrument result = cqgMap.get(symbol);
-	    
-	    if(result == null) {
-	            
-            try {
-                String barSymbol = remoteCQGLookup(symbol.toString());
-                
-                // ************** TODO
-                //result = find(barSymbol);
-                
-                if(result == null || result.isNull()) {
-                    log.warn("Unable to find barchart instrument for {}", symbol);
-                    return Instrument.NULL;
-                }
-                
-                cqgMap.put(symbol, result);
-                    
-            } catch (final Exception e) {
-                log.error("Exception in CQG lookup on {} {}", symbol, e);
-                return Instrument.NULL;
-            }
-	    }
-	    
-	    return result;
-	    
-	}
-	
-	static String remoteCQGLookup(String symbol) throws Exception {
-        
-        final String symbolURI = cqgInstLoopURL(symbol);
-        
-        final Element root = HelperXML.xmlDocumentDecode(symbolURI);
-
-        final Element tag = xmlFirstChild(root, "symbol", XML_STOP);
-        
-        return tag.getTextContent();
-        
-	}
-	
 	private static Observer<InstrumentDefinitionResult> observer = 
 			new Observer<InstrumentDefinitionResult>() {
 
@@ -302,8 +221,10 @@ public final class DDF_InstrumentProvider {
 			
 			if(iState == null || iState.isNull()) {
 				final List<InstrumentState> list = new ArrayList<InstrumentState>();
-				list.add(InstrumentFactory.instrumentState(result.result()));
+				final InstrumentState i = InstrumentFactory.instrumentState(result.result());
+				list.add(i);
 				symbolMap.put(symbol, list);
+				idMap.put(i.id(), i);
 			} else {
 				iState.process(result.result());
 			}

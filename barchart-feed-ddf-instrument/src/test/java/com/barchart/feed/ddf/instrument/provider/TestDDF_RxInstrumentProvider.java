@@ -65,6 +65,7 @@ public class TestDDF_RxInstrumentProvider {
 					for(final Instrument i : is) {
 						log.debug("Result : \n{}", i);
 						log.debug("Inst Type : {}", i.securityType());
+						log.debug("InstID : {}", i.id().toString());
 					}
 					
 				}

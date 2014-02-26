@@ -56,13 +56,13 @@ public class TestBarchartMarketProvider {
 		agent2.include(insts).subscribe(instObs());
 		agent3.include(insts).subscribe(instObs());
 		agent4.include(insts).subscribe(instObs());
-		Thread.sleep(10 * 1000);
+		Thread.sleep(30 * 1000);
 		
-		agent1.exclude(insts).subscribe(instObs());
-		agent2.exclude(insts).subscribe(instObs());
-		agent3.exclude(insts).subscribe(instObs());
-		agent4.exclude(insts).subscribe(instObs());
-		Thread.sleep(20 * 1000);
+//		agent1.exclude(insts).subscribe(instObs());
+//		agent2.exclude(insts).subscribe(instObs());
+//		agent3.exclude(insts).subscribe(instObs());
+//		agent4.exclude(insts).subscribe(instObs());
+//		Thread.sleep(20 * 1000);
 		
 		log.debug("Shutting down");
 		market.shutdown();

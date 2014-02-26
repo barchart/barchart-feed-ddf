@@ -1,5 +1,7 @@
 package com.barchart.feed.ddf.instrument.provider;
 
+import java.util.Map;
+
 import rx.Observable;
 
 import com.barchart.feed.api.consumer.MetadataService;
@@ -20,7 +22,7 @@ public class DDF_MetadataServiceWrapper implements MetadataService {
 	}
 
 	@Override
-	public Observable<Instrument> instrument(InstrumentID... ids) {
+	public Observable<Map<InstrumentID, Instrument>> instrument(InstrumentID... ids) {
 		return DDF_RxInstrumentProvider.fromID(ids);
 	}
 
