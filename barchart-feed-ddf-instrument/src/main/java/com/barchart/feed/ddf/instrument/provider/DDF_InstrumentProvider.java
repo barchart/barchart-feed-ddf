@@ -112,6 +112,14 @@ public final class DDF_InstrumentProvider {
 		executor.submit(new RemoteRunner());
 	}
 	
+	public static Instrument fromID(final InstrumentID id) {
+		if(!idMap.containsKey(id)) {
+			return Instrument.NULL;
+		} else {
+			return idMap.get(id);
+		}
+	}
+	
 	/**
 	 * This takes an instrument stub from a feed message, and does several things.
 	 * 

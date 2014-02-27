@@ -18,6 +18,7 @@ import com.barchart.feed.base.bar.enums.MarketBarType;
 import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.participant.FrameworkAgent;
+import com.barchart.feed.base.provider.VarMarket;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.enums.MarketTradeSequencing;
 import com.barchart.feed.base.trade.enums.MarketTradeSession;
@@ -56,17 +57,14 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	@Override
 	public void fireCallbacks() {
 		
-		while(!marketAgentsToAdd.isEmpty()) {
-			final FrameworkAgent<com.barchart.feed.api.model.data.Market> a = marketAgentsToAdd.remove(0);
-			if(a != null) {
-				marketAgents.add(a);
-			}
-		}
-		
-		while(!marketAgentsToRemove.isEmpty()) {
-			final FrameworkAgent<com.barchart.feed.api.model.data.Market> a = marketAgentsToRemove.remove(0);
-			if(a != null) {
-				marketAgents.remove(a);
+		while(!marketCmds.isEmpty()) {
+			final Command<com.barchart.feed.api.model.data.Market> cmd = marketCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					marketAgents.add(cmd.agent());
+				} else {
+					marketAgents.remove(cmd.agent());
+				}
 			}
 		}
 		
@@ -75,17 +73,14 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		}
 		
 		// BOOK
-		while(!bookAgentsToAdd.isEmpty()) {
-			final FrameworkAgent<Book> a = bookAgentsToAdd.remove(0);
-			if(a != null) {
-				bookAgents.add(a);
-			}
-		}
-		
-		while(!bookAgentsToRemove.isEmpty()) {
-			final FrameworkAgent<Book> a = bookAgentsToRemove.remove(0);
-			if(a != null) {
-				bookAgents.remove(a);
+		while(!bookCmds.isEmpty()) {
+			final Command<Book> cmd = bookCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					bookAgents.add(cmd.agent());
+				} else {
+					bookAgents.remove(cmd.agent());
+				}
 			}
 		}
 		
@@ -96,17 +91,14 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		}
 		
 		// TRADE
-		while(!tradeAgentsToAdd.isEmpty()) {
-			final FrameworkAgent<Trade> a = tradeAgentsToAdd.remove(0);
-			if(a != null) {
-				tradeAgents.add(a);
-			}
-		}
-		
-		while(!tradeAgentsToRemove.isEmpty()) {
-			final FrameworkAgent<Trade> a = tradeAgentsToRemove.remove(0);
-			if(a != null) {
-				tradeAgents.remove(a);
+		while(!tradeCmds.isEmpty()) {
+			final Command<Trade> cmd = tradeCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					tradeAgents.add(cmd.agent());
+				} else {
+					tradeAgents.remove(cmd.agent());
+				}
 			}
 		}
 		
@@ -117,17 +109,14 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		}
 		
 		// SESSION
-		while(!sessionAgentsToAdd.isEmpty()) {
-			final FrameworkAgent<Session> a = sessionAgentsToAdd.remove(0);
-			if(a != null) {
-				sessionAgents.add(a);
-			}
-		}
-		
-		while(!sessionAgentsToRemove.isEmpty()) {
-			final FrameworkAgent<Session> a = sessionAgentsToRemove.remove(0);
-			if(a != null) {
-				sessionAgents.remove(a);
+		while(!sessionCmds.isEmpty()) {
+			final Command<Session> cmd = sessionCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					sessionAgents.add(cmd.agent());
+				} else {
+					sessionAgents.remove(cmd.agent());
+				}
 			}
 		}
 		
@@ -137,18 +126,15 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			}
 		}
 		
-		// SESSION
-		while(!cuvolAgentsToAdd.isEmpty()) {
-			final FrameworkAgent<Cuvol> a = cuvolAgentsToAdd.remove(0);
-			if(a != null) {
-				cuvolAgents.add(a);
-			}
-		}
-		
-		while(!cuvolAgentsToRemove.isEmpty()) {
-			final FrameworkAgent<Cuvol> a = cuvolAgentsToRemove.remove(0);
-			if(a != null) {
-				cuvolAgents.remove(a);
+		// CUVOL
+		while(!cuvolCmds.isEmpty()) {
+			final Command<Cuvol> cmd = cuvolCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					cuvolAgents.add(cmd.agent());
+				} else {
+					cuvolAgents.remove(cmd.agent());
+				}
 			}
 		}
 		

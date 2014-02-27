@@ -2,6 +2,8 @@ package com.barchart.feed.ddf.client.provider;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
@@ -21,7 +23,9 @@ import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 public class TestBarchartMarketProvider {
 
@@ -29,7 +33,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"GOOG", "AAPL", "ESM4"
+		"GOOG", "AAPL", //"ESM4"
 			//"NQY0", "VIY0" 
 	};
 	
@@ -48,21 +52,43 @@ public class TestBarchartMarketProvider {
 		lock.await();
 		
 		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
-		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
-		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
-		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
+//		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
+//		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
+//		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
 		agent1.include(insts).subscribe(instObs());
-		agent2.include(insts).subscribe(instObs());
-		agent3.include(insts).subscribe(instObs());
-		agent4.include(insts).subscribe(instObs());
-		Thread.sleep(30 * 1000);
+//		agent2.include(insts).subscribe(instObs());
+//		agent3.include(insts).subscribe(instObs());
+//		agent4.include(insts).subscribe(instObs());
+		Thread.sleep(15 * 1000);
 		
-//		agent1.exclude(insts).subscribe(instObs());
+		final List<InstrumentID> instIDs = new ArrayList<InstrumentID>();
+		for(final String i : insts) {
+			
+			final Instrument inst = DDF_InstrumentProvider.fromSymbol(i);
+			if(inst.isNull()) {
+				log.error("inst not found");
+			} else {
+				instIDs.add(inst.id());
+			}
+		}
+		
+		agent1.exclude(insts).subscribe(instObs());
 //		agent2.exclude(insts).subscribe(instObs());
 //		agent3.exclude(insts).subscribe(instObs());
 //		agent4.exclude(insts).subscribe(instObs());
 //		Thread.sleep(20 * 1000);
+
+		Thread.sleep(5 * 1000);
+		log.debug("INCLUDE BY ID ********************************************");
+		
+		agent1.include(instIDs.toArray(new InstrumentID[0]));
+		Thread.sleep(30 * 1000);
+		
+		log.debug("EXCLUDE BY ID ********************************************");
+		
+		agent1.exclude(instIDs.toArray(new InstrumentID[0]));
+		Thread.sleep(15 * 1000);
 		
 		log.debug("Shutting down");
 		market.shutdown();
