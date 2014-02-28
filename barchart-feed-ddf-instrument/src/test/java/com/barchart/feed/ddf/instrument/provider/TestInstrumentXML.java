@@ -10,7 +10,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Test;
-import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -19,7 +19,6 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Size;
-import com.barchart.util.value.api.TimeInterval;
 import com.barchart.util.value.api.ValueFactory;
 
 public class TestInstrumentXML {
@@ -56,7 +55,6 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.tickSize().equals(vals.newPrice(1, -2)));
 		assertTrue(IBMInst.pointValue().equals(vals.newPrice(1, 0)));
 		assertTrue(IBMInst.displayFraction().equals(vals.newFraction(10, -2)));
-		assertTrue(IBMInst.lifetime() == TimeInterval.NULL);
 		assertTrue(IBMInst.marketHours().size() == 0);
 		assertTrue(IBMInst.timeZoneOffset() == -18000000);
 		assertTrue(IBMInst.timeZoneName().equals("America/New_York"));

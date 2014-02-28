@@ -27,7 +27,7 @@ import java.util.zip.GZIPInputStream;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;

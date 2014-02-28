@@ -1,7 +1,7 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import org.openfeed.proto.inst.Decimal;
-import org.openfeed.proto.inst.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition.Decimal;
 
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.inst.participant.InstrumentState;

@@ -10,6 +10,7 @@ import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_TICK_
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.STATUS;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_CODE_CFI;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_COMMENT;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_MONTH;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_REAL;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPIRE;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
@@ -22,14 +23,12 @@ import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 import static com.barchart.feed.ddf.util.HelperXML.xmlTimeDecode;
 
-import org.openfeed.proto.inst.BookLiquidity;
-import org.openfeed.proto.inst.BookStructure;
-import org.openfeed.proto.inst.Calendar;
-import org.openfeed.proto.inst.Decimal;
-import org.openfeed.proto.inst.InstrumentDefinition;
-import org.openfeed.proto.inst.InstrumentType;
-import org.openfeed.proto.inst.Interval;
-import org.openfeed.proto.inst.Symbol;
+import org.openfeed.InstrumentDefinition;
+import org.openfeed.InstrumentDefinition.BookLiquidity;
+import org.openfeed.InstrumentDefinition.BookStructure;
+import org.openfeed.InstrumentDefinition.Decimal;
+import org.openfeed.InstrumentDefinition.InstrumentType;
+import org.openfeed.InstrumentDefinition.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -172,20 +171,13 @@ public final class InstrumentXML {
 			builder.setDisplayBase((int) frac.fraction.base());
 			builder.setDisplayExponent(frac.fraction.exponent());
 
-			/* Calendar */
+			/* Expire Month */
+			final String expMonth = xmlStringDecode(ats, SYMBOL_DDF_EXPIRE_MONTH, XML_PASS);
+			builder.setContractMonth(decodeMonth(expMonth));
+			
+			/* Expire */
 			final Time expire = xmlTimeDecode(ats, SYMBOL_EXPIRE, XML_PASS);
-			final Calendar.Builder calBuilder = Calendar.newBuilder();
-			final Interval.Builder intBuilder = Interval.newBuilder();
-
-			intBuilder.setTimeStart(0);
-			if (expire == null) {
-				intBuilder.setTimeFinish(0);
-			} else {
-				intBuilder.setTimeFinish(expire.millisecond());
-			}
-
-			calBuilder.setLifeTime(intBuilder.build());
-			builder.setCalendar(calBuilder.build());
+			builder.setContractExpire(expire.millisecond());
 
 			//
 			final DDF_TimeZone zone =
@@ -205,7 +197,38 @@ public final class InstrumentXML {
 		}
 
 	}
-
+	
+	public static org.openfeed.InstrumentDefinition.Month decodeMonth(final String m) {
+		
+		if(m.equals("F")) {
+			return org.openfeed.InstrumentDefinition.Month.JANUARY;
+		} else if(m.equals("G")) {
+			return org.openfeed.InstrumentDefinition.Month.FEBRUARY;
+		} else if(m.equals("H")) {
+			return org.openfeed.InstrumentDefinition.Month.MARCH;
+		} else if(m.equals("J")) {
+			return org.openfeed.InstrumentDefinition.Month.APRIL;
+		} else if(m.equals("K")) {
+			return org.openfeed.InstrumentDefinition.Month.MAY;
+		} else if(m.equals("M")) {
+			return org.openfeed.InstrumentDefinition.Month.JUNE;
+		} else if(m.equals("N")) {
+			return org.openfeed.InstrumentDefinition.Month.JULY;
+		} else if(m.equals("Q")) {
+			return org.openfeed.InstrumentDefinition.Month.AUGUST;
+		} else if(m.equals("U")) {
+			return org.openfeed.InstrumentDefinition.Month.SEPTEMBER;
+		} else if(m.equals("V")) {
+			return org.openfeed.InstrumentDefinition.Month.OCTOBER;
+		} else if(m.equals("X")) {
+			return org.openfeed.InstrumentDefinition.Month.NOVEMBER;
+		} else if(m.equals("Z")) {
+			return org.openfeed.InstrumentDefinition.Month.DECEMBER;
+		}
+		
+		return org.openfeed.InstrumentDefinition.Month.NULL_MONTH;
+	}
+	
 	public static Decimal buildDecimal(final long mantissa, final int exponent) {
 
 		final Decimal.Builder builder = Decimal.newBuilder();
