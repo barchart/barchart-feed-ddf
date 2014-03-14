@@ -19,9 +19,7 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("$DOWI").subscribe(obs());
-		DDF_RxInstrumentProvider.fromString("DJY0").subscribe(obs());
-		DDF_RxInstrumentProvider.fromString("ESM4").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("$DOWI", "DJY0","ESM4").subscribe(obs());
 		
 		Thread.sleep(1 * 1000);
 		

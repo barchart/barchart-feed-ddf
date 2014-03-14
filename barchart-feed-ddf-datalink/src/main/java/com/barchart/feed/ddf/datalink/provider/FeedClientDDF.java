@@ -122,7 +122,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	private String username;
 	private String password;
-	private DDF_ServerType serverType = DDF_ServerType.STREAM;
+	private final DDF_ServerType serverType = DDF_ServerType.STREAM;
 	private Executor executor;
 	
 	//private ExecutorService localExecutor = Executors.newFixedThreadPool(100);
@@ -686,10 +686,20 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		terminate();
 		
-//		timer.stop();
-
-		if (boot != null) {
-			boot.releaseExternalResources();
+		killTimer();
+		
+	}
+	
+	private void killTimer() {
+		
+		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+		
+		for(final Thread t : threadSet) {
+			if(t.getName().startsWith("Hashed wheel timer")) {
+				while(t.isAlive()) {
+					t.stop();
+				}
+			}
 		}
 		
 	}

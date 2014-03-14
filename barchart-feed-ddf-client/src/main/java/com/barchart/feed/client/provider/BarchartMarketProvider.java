@@ -243,18 +243,17 @@ public class BarchartMarketProvider implements MarketService {
 	}
 	
 	@Override
-	public Observable<Map<InstrumentID, Instrument>> instrument(InstrumentID... ids) {
+	public Observable<Map<InstrumentID, Instrument>> instrument(final InstrumentID... ids) {
 		return DDF_RxInstrumentProvider.fromID(ids);
 	}
 
 	@Override
-	public Observable<Result<Instrument>> instrument(String... symbols) {
+	public Observable<Result<Instrument>> instrument(final String... symbols) {
 		return DDF_RxInstrumentProvider.fromString(SearchContext.NULL, symbols);
 	}
 
 	@Override
-	public Observable<Result<Instrument>> instrument(SearchContext ctx,
-			String... symbols) {
+	public Observable<Result<Instrument>> instrument(final SearchContext ctx, final String... symbols) {
 		return DDF_RxInstrumentProvider.fromString(ctx, symbols);
 	}
 

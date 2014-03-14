@@ -68,7 +68,7 @@ public class HistoricalEodExample {
 		 */
 
 		// final String symbol = "_S_SP_KCH14_KCK14";
-		final String symbol = "_S_BF_CLH4_CLJ4_CLK4";
+		final String symbol = "ESH4";
 
 		final Instrument instrument = //
 				BlockingObservable.from(DDF_RxInstrumentProvider.fromString(symbol))
@@ -94,7 +94,7 @@ public class HistoricalEodExample {
 				new DateTime(2013, 12, 5, /**/00, 00, 00, /**/
 				000, DDF_TimeZone.CHICAGO.zone);
 
-		query.timeEnd = query.timeStart.plusDays(40);
+		query.timeEnd = query.timeStart.plusDays(100);
 
 		/*
 		 * 4) obtain query result

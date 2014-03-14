@@ -66,7 +66,7 @@ public class HistoricalTicksExample {
 		 * 2) lookup instrument definition
 		 */
 
-		final String symbol = "ESH2014";
+		final String symbol = "ESH4";
 
 		final Instrument instrument = //
 				BlockingObservable.from(DDF_RxInstrumentProvider.fromString(symbol))
