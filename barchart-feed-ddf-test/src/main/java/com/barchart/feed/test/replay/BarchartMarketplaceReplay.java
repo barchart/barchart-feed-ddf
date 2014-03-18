@@ -7,7 +7,7 @@ import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import com.barchart.feed.base.sub.Sub;
+import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
@@ -35,22 +35,22 @@ public class BarchartMarketplaceReplay extends BarchartMarketplace {
 	private static class DummySubHandler implements SubscriptionHandler {
 
 		@Override
-		public Future<Boolean> subscribe(final Sub subscription) {
+		public Future<Boolean> subscribe(final SubCommand subscription) {
 			return null;
 		}
 
 		@Override
-		public Future<Boolean> subscribe(final Set<Sub> subscriptions) {
+		public Future<Boolean> subscribe(final Set<SubCommand> subscriptions) {
 			return null;
 		}
 
 		@Override
-		public Future<Boolean> unsubscribe(final Sub subscription) {
+		public Future<Boolean> unsubscribe(final SubCommand subscription) {
 			return null;
 		}
 
 		@Override
-		public Future<Boolean> unsubscribe(final Set<Sub> subscriptions) {
+		public Future<Boolean> unsubscribe(final Set<SubCommand> subscriptions) {
 			return null;
 		}
 

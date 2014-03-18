@@ -37,8 +37,8 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketRegListener;
 import com.barchart.feed.base.market.enums.MarketEvent;
-import com.barchart.feed.base.sub.Sub;
-import com.barchart.feed.base.sub.Sub.Type;
+import com.barchart.feed.base.sub.SubCommand;
+import com.barchart.feed.base.sub.SubCommand.Type;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
@@ -191,8 +191,8 @@ public class BarchartFeedClient extends BarchartFeedClientBase {
 		public void onRegistrationChange(final Map<Instrument, Set<MarketEvent>> 
 				instMap) {
 
-			final Set<Sub> subs = new HashSet<Sub>();
-			final Set<Sub> unsubs = new HashSet<Sub>();
+			final Set<SubCommand> subs = new HashSet<SubCommand>();
+			final Set<SubCommand> unsubs = new HashSet<SubCommand>();
 
 			for(final Entry<Instrument, Set<MarketEvent>> e: instMap.entrySet()) {
 

@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
-import com.barchart.feed.base.sub.Sub;
+import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.DummyFuture;
@@ -62,8 +62,8 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	private final int socketAddress;
 	private final boolean filterBySub;
 
-	private final Map<String, Sub> subscriptions =
-			new ConcurrentHashMap<String, Sub>();
+	private final Map<String, SubCommand> subscriptions =
+			new ConcurrentHashMap<String, SubCommand>();
 
 	TCPListenerClientDDF(final int socketAddress, final boolean filterBySub,
 			final Executor executor) {
@@ -218,14 +218,14 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Set<Sub> subs) {
+	public Future<Boolean> subscribe(final Set<SubCommand> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return new FailedFuture();
 		}
 
-		for (final Sub sub : subs) {
+		for (final SubCommand sub : subs) {
 
 			if (sub != null) {
 
@@ -245,7 +245,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Sub sub) {
+	public Future<Boolean> subscribe(final SubCommand sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
@@ -268,14 +268,14 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	// the registration and unregistration of instruments in the
 	// market maker and the feed.
 	@Override
-	public Future<Boolean> unsubscribe(final Set<Sub> subs) {
+	public Future<Boolean> unsubscribe(final Set<SubCommand> subs) {
 
 		if (subs == null) {
 			log.error("Null subscribes request recieved");
 			return new FailedFuture();
 		}
 
-		for (final Sub sub : subs) {
+		for (final SubCommand sub : subs) {
 
 			if (sub != null) {
 				subscriptions.remove(sub.encode());
@@ -286,7 +286,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> unsubscribe(final Sub sub) {
+	public Future<Boolean> unsubscribe(final SubCommand sub) {
 
 		if (sub == null) {
 			log.error("Null subscribe request recieved");
