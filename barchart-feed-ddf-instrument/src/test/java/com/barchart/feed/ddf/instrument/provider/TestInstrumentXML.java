@@ -56,7 +56,6 @@ public class TestInstrumentXML {
 		assertTrue(IBMInst.pointValue().equals(vals.newPrice(1, 0)));
 		assertTrue(IBMInst.displayFraction().equals(vals.newFraction(10, -2)));
 		assertTrue(IBMInst.marketHours().size() == 0);
-		assertTrue(IBMInst.timeZoneOffset() == -18000000);
 		assertTrue(IBMInst.timeZoneName().equals("America/New_York"));
 
 	}

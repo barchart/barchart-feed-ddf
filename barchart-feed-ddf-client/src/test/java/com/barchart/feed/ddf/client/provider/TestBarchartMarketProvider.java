@@ -73,7 +73,7 @@ public class TestBarchartMarketProvider {
 			}
 		}
 		
-		agent1.exclude("GOOG").subscribe(instObs());
+		agent1.exclude(insts).subscribe(instObs());
 		Thread.sleep(1 * 1000);
 		System.out.println("EXCLUDING GOOG for 2nd Agent");
 		agent2.exclude("GOOG").subscribe(instObs());
