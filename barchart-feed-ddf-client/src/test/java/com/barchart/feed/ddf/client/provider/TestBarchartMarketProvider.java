@@ -33,7 +33,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"AAPL", "ESM4", "GOOG"
+		"AAPL" //, "ESM4", "GOOG"
 			//"NQY0", "VIY0" 
 	};
 	
@@ -52,15 +52,15 @@ public class TestBarchartMarketProvider {
 		lock.await();
 		
 		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
-		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
+//		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
 //		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
 //		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
 		agent1.include(insts).subscribe(instObs());
-		agent2.include(insts).subscribe(instObs());
+//		agent2.include(insts).subscribe(instObs());
 //		agent3.include(insts).subscribe(instObs());
 //		agent4.include(insts).subscribe(instObs());
-		Thread.sleep(5 * 1000);
+		Thread.sleep(15 * 1000);
 		
 		final List<InstrumentID> instIDs = new ArrayList<InstrumentID>();
 		for(final String i : insts) {
@@ -75,8 +75,7 @@ public class TestBarchartMarketProvider {
 		
 		agent1.exclude(insts).subscribe(instObs());
 		Thread.sleep(1 * 1000);
-		System.out.println("EXCLUDING GOOG for 2nd Agent");
-		agent2.exclude("GOOG").subscribe(instObs());
+//		agent2.exclude("GOOG").subscribe(instObs());
 //		agent3.exclude(insts).subscribe(instObs());
 //		agent4.exclude(insts).subscribe(instObs());
 //		Thread.sleep(20 * 1000);
@@ -114,6 +113,7 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market m) {
 				//System.out.println(m.instrument().symbol() + " MARKET " + m.updated());
+				System.out.println("Prev Close Current Session = " + m.session().previousClose());
 			}
 		};
 	}

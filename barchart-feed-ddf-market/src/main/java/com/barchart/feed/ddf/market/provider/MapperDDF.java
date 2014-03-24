@@ -631,10 +631,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		/*
 		 * If a previous update, set in bar current.
 		 */
-		if (indicator == DDF_Indicator.PREVIOUS) {
-			market.loadBar(MarketBarType.CURRENT.field).set(
-					MarketBarField.CLOSE_PREVIOUS, settle);
-		}
+		/* Commented out to see if there are any cases where the current bar's previous value isn't correct 
+		 * This most likely can be deleted if it doesn't cause problems elsewhere */
+//		if (indicator == DDF_Indicator.PREVIOUS && !settle.isZero()) {
+//			market.loadBar(MarketBarType.CURRENT.field).set(MarketBarField.CLOSE_PREVIOUS, settle);
+//		}
 
 		return null;
 	}
