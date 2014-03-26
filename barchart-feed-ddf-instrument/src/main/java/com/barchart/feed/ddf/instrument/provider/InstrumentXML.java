@@ -49,9 +49,7 @@ public final class InstrumentXML {
 	@SuppressWarnings("unused")
 	private static final ValueFactory factory = new ValueFactoryImpl();
 
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory
-			.getLogger(InstrumentXML.class);
+	private static final Logger log = LoggerFactory.getLogger(InstrumentXML.class);
 
 	private InstrumentXML() {
 
@@ -73,7 +71,12 @@ public final class InstrumentXML {
 			}
 
 			/* market identifier; must be globally unique; */
-			builder.setMarketId(Long.parseLong(xmlStringDecode(ats, ID, XML_STOP)));
+			try {
+				builder.setMarketId(Long.parseLong(xmlStringDecode(ats, ID, XML_STOP)));
+			} catch (final Exception e) {
+				/* Ensure no id collision by making negative */
+				builder.setMarketId(Math.abs(xmlStringDecode(ats, ID, XML_STOP).hashCode()) * -1);
+			}
 
 			/* type of security, Forex, Equity, etc. */
 			builder.setInstrumentType(InstrumentType.NO_INSTRUMENT);
@@ -192,6 +195,7 @@ public final class InstrumentXML {
 			return builder.build();
 
 		} catch (final Exception e) {
+			log.error("Exception parsing instrument \n{}", e);
 			final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
 			throw new SymbolNotFoundException(lookup);
 		}

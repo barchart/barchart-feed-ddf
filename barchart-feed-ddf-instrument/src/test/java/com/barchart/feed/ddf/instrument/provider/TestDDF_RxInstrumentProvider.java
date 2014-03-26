@@ -19,7 +19,7 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("$DOWI", "DJY0","ESM4").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("ZCZ07").subscribe(obs());
 		
 		Thread.sleep(1 * 1000);
 		
@@ -46,7 +46,7 @@ public class TestDDF_RxInstrumentProvider {
 
 			@Override
 			public void onError(Throwable e) {
-				log.debug("On Error Called /n{}", e);
+				log.error("On Error Called \n{}", e);
 			}
 
 			@Override
