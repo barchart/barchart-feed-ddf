@@ -44,7 +44,7 @@ public class BarchartMarketProvider implements MarketService {
 			BarchartMarketProvider.class);
 			
 	/* Value api factory */
-	private static final ValueFactory values = new ValueFactoryImpl();
+	private static final ValueFactory values = ValueFactoryImpl.instance;
 	
 	private volatile DDF_FeedClientBase connection;
 	private final DDF_ConsumerMarketProvider maker;
@@ -108,7 +108,7 @@ public class BarchartMarketProvider implements MarketService {
 			if (message instanceof DDF_ControlTimestamp) {
 				for (final TimestampListener listener : timeStampListeners) {
 					listener.listen(values.newTime(((DDF_ControlTimestamp) message)
-							.getStampUTC().asMillisUTC(), ""));
+							.getStampUTC().asMillisUTC()));
 				}
 			}
 

@@ -19,7 +19,7 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("ZCZ07").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("ESM2014").subscribe(obs());
 		
 		Thread.sleep(1 * 1000);
 		
