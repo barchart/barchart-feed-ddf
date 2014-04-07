@@ -151,6 +151,10 @@ public class DDF_RxInstrumentProvider {
 				/* Filter out cached symbols */
 				for(String symbol : symbols) {
 					
+					if(symbol == null) {
+						continue;
+					}
+					
 					final String formattedSymbol = Symbology.formatSymbol(symbol);
 					
 					if (symbolMap.containsKey(formattedSymbol)) {
