@@ -82,7 +82,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.feed.inst.provider.Exchanges;
+import com.barchart.feed.inst.Exchanges;
 import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc

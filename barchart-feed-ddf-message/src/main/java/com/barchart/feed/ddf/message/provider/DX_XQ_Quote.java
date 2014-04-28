@@ -7,40 +7,10 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_SESSIONS;
-import static com.barchart.feed.ddf.message.provider.CodecHelper.xmlDecSymbol;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.EXCHANGE_DDF;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.EXCHANGE_EXTRA;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.FRACTION_DDF;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.PRICE_ASK;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.PRICE_BID;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.PRICE_POINT_VALUE;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.PRICE_TICK_INCREMENT;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.QUOTE_MODE;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.QUOTE_STATE;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.SIZE_ASK;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.SIZE_BID;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.SYMBOL;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.SYMBOL_NAME;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.TAG;
-import static com.barchart.feed.ddf.message.provider.XmlTagQuote.TIME_UPDATE;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.*;
+import static com.barchart.feed.ddf.message.provider.XmlTagQuote.*;
 import static com.barchart.feed.ddf.util.HelperDDF.newPriceDDF;
-import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
-import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
-import static com.barchart.feed.ddf.util.HelperXML.xmlAsciiDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlAsciiEncode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlByteDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlByteEncode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlCheckTagName;
-import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalEncode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlLongDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlLongEncode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlNewElement;
-import static com.barchart.feed.ddf.util.HelperXML.xmlPriceDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlPriceEncode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlTimeDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlTimeEncode;
+import static com.barchart.feed.ddf.util.HelperXML.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +19,7 @@ import org.w3c.dom.NodeList;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.base.values.api.PriceValue;
@@ -56,7 +27,6 @@ import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
-import com.barchart.feed.ddf.instrument.provider.InstBase;
 import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.api.DDF_MarketSession;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
@@ -68,6 +38,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.feed.meta.instrument.DefaultInstrument;
 import com.barchart.util.common.ascii.ASCII;
 import com.barchart.util.value.api.Fraction;
 import com.barchart.util.value.api.Price;
@@ -75,19 +46,19 @@ import com.barchart.util.value.api.Price;
 // TODO: Auto-generated Javadoc
 /**
  * 15:08:28.935 [# ddf-messages] DEBUG c.d.f.f.example.LoggingHandler - message
- * 
+ *
  * <QUOTE ask="2965" asksize="1" basecode="A" bid="2965" bidsize="1"
  * ddfexchange="Q" exchange="NASDAQ" lastupdate="20110930010822" mode="R"
  * name="Oracle Corp." pointvalue="1.0" symbol="ORCL" tickincrement="1">
- * 
+ *
  * <SESSION day="S" high="3061" id="combined" last="2965" low="2908" open="3000"
  * previous="2945" session="R" timestamp="20110929160822" tradesize="100"
  * tradetime="20110929160055" volume="29247490"/>
- * 
+ *
  * <SESSION day="?" id="previous" last="2945" session="?"/>
- * 
+ *
  * </QUOTE>
- * 
+ *
  */
 
 class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
@@ -96,7 +67,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.barchart.feed.ddf.message.provider.DF_28_BookTop#accept(com.barchart
 	 * .feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
@@ -138,7 +109,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getState()
 	 */
 	@Override
@@ -148,7 +119,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/**
 	 * Sets the state.
-	 * 
+	 *
 	 * @param state
 	 *            the new state
 	 */
@@ -158,7 +129,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getCondition()
 	 */
 	@Override
@@ -168,7 +139,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getMode()
 	 */
 	@Override
@@ -178,7 +149,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/**
 	 * Sets the mode.
-	 * 
+	 *
 	 * @param mode
 	 *            the new mode
 	 */
@@ -188,7 +159,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getPointValue()
 	 */
 	@Override
@@ -201,7 +172,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getSymbolName()
 	 */
 	@Override
@@ -211,7 +182,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/**
 	 * Gets the name bytes.
-	 * 
+	 *
 	 * @return the name bytes
 	 */
 	public final byte[] getNameBytes() {
@@ -220,7 +191,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#getPriceStep()
 	 */
 	@Override
@@ -230,7 +201,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.api.DDF_MarketQuote#sessions()
 	 */
 	@Override
@@ -250,7 +221,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.barchart.feed.ddf.message.provider.Base#decodeXML(org.w3c.dom.Element
 	 * )
@@ -328,7 +299,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * com.barchart.feed.ddf.message.provider.Base#encodeXML(org.w3c.dom.Element
 	 * )
@@ -386,7 +357,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.barchart.feed.ddf.message.provider.Base#toString()
 	 */
 	@Override
@@ -406,16 +377,16 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 		text.append("TODO : ");
 
 	}
-	
+
 	@Override
 	public Instrument getInstrument() {
 		return DDF_InstrumentProvider.fromMessage(stub);
 	}
-	
-	/*  
-	 * Lazy eval instrument stub 
+
+	/*
+	 * Lazy eval instrument stub
 	 */
-	private final Instrument stub = new InstBase() {
+	private final Instrument stub = new DefaultInstrument(InstrumentID.NULL) {
 
 		@Override
 		public String marketGUID() {

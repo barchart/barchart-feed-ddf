@@ -21,7 +21,7 @@ import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
-import com.barchart.feed.inst.provider.Exchanges;
+import com.barchart.feed.inst.Exchanges;
 
 public class TestBarchartFeed {
 	

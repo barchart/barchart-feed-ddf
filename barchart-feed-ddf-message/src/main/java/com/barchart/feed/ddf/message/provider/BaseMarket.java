@@ -7,18 +7,8 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.feed.ddf.message.provider.CodecHelper.DDF_NO_DELAY;
-import static com.barchart.feed.ddf.message.provider.CodecHelper.decodeFeedTimeStamp;
-import static com.barchart.feed.ddf.message.provider.CodecHelper.decodeUnsigned_1;
-import static com.barchart.feed.ddf.message.provider.CodecHelper.decodeUnsigned_2;
-import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeFeedTimeStamp;
-import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeUnsigned_1;
-import static com.barchart.feed.ddf.message.provider.CodecHelper.encodeUnsigned_2;
-import static com.barchart.feed.ddf.message.provider.CodecHelper.read;
-import static com.barchart.util.common.ascii.ASCII.COMMA;
-import static com.barchart.util.common.ascii.ASCII.ETX;
-import static com.barchart.util.common.ascii.ASCII.SOH;
-import static com.barchart.util.common.ascii.ASCII.STX;
+import static com.barchart.feed.ddf.message.provider.CodecHelper.*;
+import static com.barchart.util.common.ascii.ASCII.*;
 
 import java.nio.ByteBuffer;
 
@@ -26,13 +16,13 @@ import org.joda.time.DateTimeZone;
 
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
-import com.barchart.feed.ddf.instrument.provider.InstBase;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
@@ -43,6 +33,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
 import com.barchart.feed.ddf.symbol.provider.DDF_Symbology;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
+import com.barchart.feed.meta.instrument.DefaultInstrument;
 import com.barchart.util.common.ascii.ASCII;
 import com.barchart.util.value.api.Fraction;
 
@@ -87,7 +78,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	/*
 	 * Lazy eval instrument stub
 	 */
-	private final Instrument stub = new InstBase() {
+	private final Instrument stub = new DefaultInstrument(InstrumentID.NULL) {
 
 		/* GUID is symbol for now */
 		@Override
@@ -375,7 +366,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 */
 	protected void decodeTail(final ByteBuffer buffer) {
 		DateTimeZone zone;
-		if("Null Time Zone".equals(getInstrument().timeZoneName())) {
+		if (getInstrument().timeZoneName() == null || "Null Time Zone".equals(getInstrument().timeZoneName())) {
 			zone = getExchange().kind.time.zone;
 		} else {
 			zone = DateTimeZone.forID(getInstrument().timeZoneName());

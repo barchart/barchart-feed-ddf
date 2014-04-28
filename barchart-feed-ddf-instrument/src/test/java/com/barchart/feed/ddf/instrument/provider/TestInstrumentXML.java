@@ -10,13 +10,11 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Test;
-import org.openfeed.InstrumentDefinition;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.inst.provider.InstrumentFactory;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.Size;
 import com.barchart.util.value.api.ValueFactory;
@@ -35,19 +33,19 @@ public class TestInstrumentXML {
 
 		final SAXParserFactory factory = SAXParserFactory.newInstance();
 		final SAXParser parser = factory.newSAXParser();
-		final List<InstrumentDefinition> result = new ArrayList<InstrumentDefinition>();
+		final List<InstrumentState> result = new ArrayList<InstrumentState>();
 		final DefaultHandler handler = handler(result);
 
 		parser.parse(new ByteArrayInputStream(IBM.getBytes()), handler);
 
-		final Instrument IBMInst = InstrumentFactory.instrument(result.get(0));
+		final Instrument IBMInst = result.get(0);
 
 		assertTrue(IBMInst.marketGUID().equals("IBM"));
 		assertTrue(IBMInst.securityType() == Instrument.SecurityType.EQUITY);
 		assertTrue(IBMInst.liquidityType() == Instrument.BookLiquidityType.NONE);
 		assertTrue(IBMInst.bookStructure() == Instrument.BookStructureType.NONE);
 		assertTrue(IBMInst.maxBookDepth() == Size.NULL);
-		assertTrue(IBMInst.instrumentDataVendor().equals("BARCHART"));
+		assertTrue(IBMInst.vendor().id().equals("BARCHART"));
 		assertTrue(IBMInst.symbol().equals("IBM"));
 		assertTrue(IBMInst.description().equals("International Business Machines Corp."));
 		assertTrue(IBMInst.CFICode().equals("EXXXXX"));
@@ -60,7 +58,7 @@ public class TestInstrumentXML {
 
 	}
 
-	protected static DefaultHandler handler(final List<InstrumentDefinition> result) {
+	protected static DefaultHandler handler(final List<InstrumentState> result) {
 		return new DefaultHandler() {
 
 			@Override
@@ -71,9 +69,7 @@ public class TestInstrumentXML {
 				if (qName != null && qName.equals("instrument")) {
 
 					try {
-
-						result.add(InstrumentXML.decodeSAX(ats));
-
+						result.add(new DDF_Instrument(ats));
 					} catch (final SymbolNotFoundException se) {
 						throw new RuntimeException(se); // would be nice to add to map
 					} catch (final Exception e) {
