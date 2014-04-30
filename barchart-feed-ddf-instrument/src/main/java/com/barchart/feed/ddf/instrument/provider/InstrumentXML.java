@@ -47,7 +47,7 @@ import com.barchart.util.value.api.ValueFactory;
 public final class InstrumentXML {
 
 	@SuppressWarnings("unused")
-	private static final ValueFactory factory = new ValueFactoryImpl();
+	private static final ValueFactory factory = ValueFactoryImpl.instance;
 
 	private static final Logger log = LoggerFactory.getLogger(InstrumentXML.class);
 
@@ -195,7 +195,7 @@ public final class InstrumentXML {
 			return builder.build();
 
 		} catch (final Exception e) {
-			log.error("Exception parsing instrument \n{}", e);
+			log.error("Exception parsing instrument \n", e);
 			final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
 			throw new SymbolNotFoundException(lookup);
 		}

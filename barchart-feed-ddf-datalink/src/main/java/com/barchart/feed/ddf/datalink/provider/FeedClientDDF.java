@@ -1157,7 +1157,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				return;
 			}
 
-			log.info("received settings from settings service");
+			log.info("received settings from settings service\n{}", settings);
 
 			final DDF_Server server = settings.getServer(serverType);
 			final String primary = server.getPrimary();
