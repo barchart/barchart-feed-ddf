@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed-ddf</artifactId>
-		<version>4.2.17</version>
+		<version>4.2.18-SNAPSHOT</version>
 	</parent>
 
 	<name>barchart-feed-ddf-historical</name>
@@ -25,7 +25,7 @@
 		<url>https://github.com/barchart/barchart-feed-ddf</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
-	  <tag>barchart-feed-ddf-4.2.17</tag>
+	  <tag>master</tag>
   </scm>
 	
 	<dependencies>
