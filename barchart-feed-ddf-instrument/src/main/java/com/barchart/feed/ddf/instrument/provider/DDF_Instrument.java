@@ -15,6 +15,7 @@ import com.barchart.feed.api.model.meta.instrument.Event;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.inst.Exchanges;
+import com.barchart.feed.meta.instrument.DefaultCalendar;
 import com.barchart.feed.meta.instrument.DefaultEvent;
 import com.barchart.feed.meta.instrument.DefaultInstrument;
 import com.barchart.util.value.ValueFactoryImpl;
@@ -149,23 +150,33 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		/* Expiration */
 		try {
 
-			final DateTime expire = new DateTime(xmlStringDecode(attr, SYMBOL_EXPIRE, XML_PASS), timeZone);
-			calendar.events().add(new DefaultEvent(Event.Type.LAST_TRADE_DATE, expire));
+			final DefaultCalendar cal = new DefaultCalendar();
 
-			/* Delivery */
-			final int delMonth = month(xmlStringDecode(attr, SYMBOL_DDF_EXPIRE_MONTH, XML_PASS));
+			final String expireStr = xmlStringDecode(attr, SYMBOL_EXPIRE, XML_PASS);
 
-			if (delMonth > 0) {
+			if (expireStr != null && !expireStr.isEmpty()) {
 
-				DateTime delivery = new DateTime(expire);
+				calendar = cal;
 
-				if (delMonth < expire.getMonthOfYear()) {
-					// Year rollover, advance a year before setting month
-					delivery = delivery.plusYears(1);
+				final DateTime expire = new DateTime(expireStr);
+				cal.add(new DefaultEvent(Event.Type.LAST_TRADE_DATE, expire));
+
+				/* Delivery */
+				final int delMonth = month(xmlStringDecode(attr, SYMBOL_DDF_EXPIRE_MONTH, XML_PASS));
+
+				if (delMonth > 0) {
+
+					DateTime delivery = new DateTime(expire);
+
+					if (delMonth < expire.getMonthOfYear()) {
+						// Year rollover, advance a year before setting month
+						delivery = delivery.plusYears(1);
+					}
+
+					delivery = delivery.withMonthOfYear(delMonth);
+					cal.add(new DefaultEvent(Event.Type.LAST_DELIVERY_DATE, delivery));
+
 				}
-
-				delivery = delivery.withMonthOfYear(delMonth);
-				calendar.events().add(new DefaultEvent(Event.Type.LAST_DELIVERY_DATE, delivery));
 
 			}
 
