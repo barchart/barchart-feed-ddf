@@ -150,12 +150,11 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		/* Expiration */
 		try {
 
-			final DefaultCalendar cal = new DefaultCalendar();
-
 			final String expireStr = xmlStringDecode(attr, SYMBOL_EXPIRE, XML_PASS);
 
 			if (expireStr != null && !expireStr.isEmpty()) {
 
+				final DefaultCalendar cal = new DefaultCalendar();
 				calendar = cal;
 
 				final DateTime expire = new DateTime(expireStr);
