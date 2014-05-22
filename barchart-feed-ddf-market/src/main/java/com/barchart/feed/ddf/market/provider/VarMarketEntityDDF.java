@@ -69,7 +69,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		}
 		
 		for(final FrameworkAgent<com.barchart.feed.api.model.data.Market> a : marketAgents) {
-			a.callback().onNext(a.data(this.freeze()));
+			if(a.isActive()) {
+				a.callback().onNext(a.data(this.freeze()));
+			}
 		}
 		
 		// BOOK
@@ -86,7 +88,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		if(toFire.contains(MKData.BOOK)) {
 			for(final FrameworkAgent<Book> a : bookAgents) {
-				a.callback().onNext(a.data(this.freeze()));
+				if(a.isActive()) {
+					a.callback().onNext(a.data(this.freeze()));
+				}
 			}
 		}
 		
@@ -104,7 +108,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		if(toFire.contains(MKData.TRADE)) {
 			for(final FrameworkAgent<Trade> a : tradeAgents) {
-				a.callback().onNext(a.data(this.freeze()));
+				if(a.isActive()) {
+					a.callback().onNext(a.data(this.freeze()));
+				}
 			}
 		}
 		
@@ -122,7 +128,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		if(toFire.contains(MKData.SESSION)) {
 			for(final FrameworkAgent<Session> a : sessionAgents) {
-				a.callback().onNext(a.data(this.freeze()));
+				if(a.isActive()) {
+					a.callback().onNext(a.data(this.freeze()));
+				}
 			}
 		}
 		
@@ -140,7 +148,9 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		if(toFire.contains(MKData.CUVOL)) {
 			for(final FrameworkAgent<Cuvol> a : cuvolAgents) {
-				a.callback().onNext(a.data(this.freeze()));
+				if(a.isActive()) {
+					a.callback().onNext(a.data(this.freeze()));
+				}
 			}
 		}
 		

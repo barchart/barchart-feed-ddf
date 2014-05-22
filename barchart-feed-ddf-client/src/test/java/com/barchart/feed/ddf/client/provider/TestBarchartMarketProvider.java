@@ -73,19 +73,15 @@ public class TestBarchartMarketProvider {
 			}
 		}
 		
-		agent1.exclude(insts).subscribe(instObs());
-		Thread.sleep(1 * 1000);
-//		agent2.exclude("GOOG").subscribe(instObs());
-//		agent3.exclude(insts).subscribe(instObs());
-//		agent4.exclude(insts).subscribe(instObs());
-//		Thread.sleep(20 * 1000);
+		agent1.deactivate();
+		System.out.println("AGENT DEACTIVATED");
+		
+//		agent1.exclude(insts).subscribe(instObs());
 
-		Thread.sleep(5 * 1000);
+		Thread.sleep(15 * 1000);
 
 		log.debug("Shutting down");
 		market.shutdown();
-		
-		//Thread.sleep(5 * 1000);
 		
 	}
 	
@@ -113,7 +109,7 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market m) {
 				//System.out.println(m.instrument().symbol() + " MARKET " + m.updated());
-				System.out.println("Prev Close Current Session = " + m.session().previousClose());
+				System.out.println("Top = " + m.book().top().ask().price());
 			}
 		};
 	}
