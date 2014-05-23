@@ -1,10 +1,31 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.*;
-import static com.barchart.feed.ddf.util.HelperXML.*;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ALT_SYMBOL;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.BASE_CODE_DDF;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.EXCHANGE_DDF;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ID;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_POINT_VALUE;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_TICK_INCREMENT;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.STATUS;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_CODE_CFI;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_COMMENT;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_MONTH;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_REAL;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPIRE;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REALTIME;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.TIME_ZONE_DDF;
+import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
+import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
+import static com.barchart.feed.ddf.util.HelperXML.xmlByteDecode;
+import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalDecode;
+import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 
 import com.barchart.feed.api.model.meta.Exchange;
@@ -24,6 +45,8 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.ValueFactory;
 
 public class DDF_Instrument extends DefaultInstrument implements InstrumentState {
+	
+	protected static final Logger log = LoggerFactory.getLogger(DDF_Instrument.class);
 
 	protected static final ValueFactory VALUES = ValueFactoryImpl.getInstance();
 
@@ -58,11 +81,11 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		loadState = state_;
 
 	}
-
+	
 	public DDF_Instrument(final Attributes attr) throws Exception {
 
 		super(xmlId(attr));
-
+		
 		/* vendor */
 		vendor = VendorID.BARCHART;
 
@@ -94,6 +117,17 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		CFICode = xmlStringDecode(attr, SYMBOL_CODE_CFI, XML_PASS);
 
 		securityType = SecurityType.fromCFI(CFICode);
+		
+		/* If type = option, parse out strike price */
+		if(securityType == SecurityType.OPTION) {
+			try {
+				final String split = symbol.split("\\|")[1];
+				strikePrice = VALUES.newPrice(Long.parseLong(
+						split.substring(0, split.length()- 1)), 1);
+			} catch (final Exception e) {
+				log.warn("Exception parsing strike price from symbol {}", symbol);
+			}
+		}
 
 		/* price currency */
 		currencyCode = "USD";

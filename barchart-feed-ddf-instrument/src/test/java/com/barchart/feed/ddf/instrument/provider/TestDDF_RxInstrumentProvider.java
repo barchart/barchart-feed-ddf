@@ -19,7 +19,7 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("XXF15").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("ESM2014|1950C").subscribe(obs());
 		
 		Thread.sleep(1 * 1000);
 		
@@ -65,6 +65,11 @@ public class TestDDF_RxInstrumentProvider {
 						log.debug("Result : \n{}", i);
 						log.debug("Inst Type : {}", i.securityType());
 						log.debug("InstID : {}", i.id().toString());
+						if(i.strikePrice().isNull()) {
+							log.debug("Strike Price is NULL");
+						} else {
+							log.debug("Strike price : {}", i.strikePrice().mantissa());
+						}
 					}
 					
 				}
