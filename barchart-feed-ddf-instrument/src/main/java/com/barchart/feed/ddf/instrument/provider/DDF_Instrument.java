@@ -127,6 +127,27 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 			} catch (final Exception e) {
 				log.warn("Exception parsing strike price from symbol {}", symbol);
 			}
+			
+			final char type = symbol.charAt(symbol.length() - 1);
+			switch(type) {
+			case 'C':
+			case 'D':
+			case 'E':
+			case 'F':
+			case 'G':
+				optionType = OptionType.CALL;
+				break;
+			case 'P':
+			case 'Q':
+			case 'R':
+			case 'S':
+			case 'T':
+				optionType = OptionType.PUT;
+				break;
+			default:
+				log.warn("Null Option type {}", type);
+				break;
+			}
 		}
 
 		/* price currency */
