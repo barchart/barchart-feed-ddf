@@ -410,7 +410,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 						break;
 
 					default:
-						log.error("@@@ unsupported indicator : {}", indicator);
+						// log.error("@@@ unsupported indicator : {}", indicator);
 						break;
 				}
 

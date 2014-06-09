@@ -14,7 +14,6 @@ import com.barchart.feed.base.enums.EnumByteOrdinal;
 import com.barchart.feed.base.enums.EnumCodeString;
 import com.barchart.util.common.math.MathExtra;
 
-// TODO: Auto-generated Javadoc
 /**
  * ddf quote session indicator : "current combo" vs "previous combo" vs
  * "individual session"; possible format:
