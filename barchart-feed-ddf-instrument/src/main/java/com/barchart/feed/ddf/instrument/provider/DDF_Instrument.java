@@ -28,6 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 
+import rx.Observer;
+
+import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
@@ -123,7 +126,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 			try {
 				final String split = symbol.split("\\|")[1];
 				strikePrice = VALUES.newPrice(Long.parseLong(
-						split.substring(0, split.length()- 1)), 1);
+						split.substring(0, split.length()- 1)), 0);
 			} catch (final Exception e) {
 				log.warn("Exception parsing strike price from symbol {}", symbol);
 			}
@@ -148,6 +151,31 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 				log.warn("Null Option type {}", type);
 				break;
 			}
+			
+			final String underlierSymbol = symbol.split("\\|")[0];
+			DDF_RxInstrumentProvider.fromString(underlierSymbol).subscribe(new Observer<Result<Instrument>>() {
+
+				@Override
+				public void onNext(final Result<Instrument> t) {
+					final Instrument inst = t.results().get(underlierSymbol).get(0);
+					if(inst.isNull()) {
+						log.error("Instument was null in underlier lookup");
+					}
+					underlier = inst.id();
+				}
+				
+				@Override
+				public void onCompleted() {
+					
+				}
+
+				@Override
+				public void onError(Throwable e) {
+					log.error("Error retrieving underlier", e);
+				}
+
+			});
+			
 		}
 
 		/* price currency */

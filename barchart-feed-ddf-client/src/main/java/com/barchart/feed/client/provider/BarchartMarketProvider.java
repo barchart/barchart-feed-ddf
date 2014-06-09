@@ -210,8 +210,8 @@ public class BarchartMarketProvider implements MarketService {
 	/* ***** ***** ***** Begin MarketProvider Methods ***** ***** ***** */
 	
 	@Override
-	public <V extends MarketData<V>> ConsumerAgent register(
-			MarketObserver<V> callback, Class<V> clazz) {
+	public <V extends MarketData<V>> ConsumerAgent register(final MarketObserver<V> callback, 
+			final Class<V> clazz) {
 		return maker.register(callback, clazz);
 	}
 

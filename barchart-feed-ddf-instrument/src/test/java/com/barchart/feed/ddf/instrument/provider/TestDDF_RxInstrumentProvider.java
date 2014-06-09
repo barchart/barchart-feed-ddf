@@ -31,6 +31,8 @@ public class TestDDF_RxInstrumentProvider {
 		// 
 		
 		Thread.sleep(1 * 1000);
+		DDF_RxInstrumentProvider.fromString("ESM2014|1950C").subscribe(obs());
+		
 		System.exit(0);
 		
 	}
@@ -68,8 +70,9 @@ public class TestDDF_RxInstrumentProvider {
 						if(i.strikePrice().isNull()) {
 							log.debug("Strike Price is NULL");
 						} else {
-							log.debug("Strike price : {}", i.strikePrice().mantissa());
+							log.debug("Strike price : {}", i.strikePrice());
 						}
+						log.debug("Underlier ID = {}", i.underlier());
 					}
 					
 				}
