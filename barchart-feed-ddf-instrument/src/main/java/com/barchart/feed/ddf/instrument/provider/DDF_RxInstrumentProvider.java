@@ -101,17 +101,101 @@ public class DDF_RxInstrumentProvider {
 
 	public static Observable<Map<InstrumentID, Instrument>> fromID(final InstrumentID... ids) {
 
-		final Map<InstrumentID, Instrument> res = new HashMap<InstrumentID, Instrument>();
+		final ReplaySubject<Map<InstrumentID, Instrument>> sub = ReplaySubject.create();
+		executor.submit(runnableFromIDs(sub, ids));
+		
+		return sub;
+	}
+	
+	public static Runnable runnableFromIDs(final ReplaySubject<Map<InstrumentID, Instrument>> sub, 
+			final InstrumentID... ids) {
+		return new Runnable() {
 
-		for(final InstrumentID id : ids) {
-			if(idMap.containsKey(id)) {
-				res.put(id, idMap.get(id));
-			} else {
-				res.put(id, Instrument.NULL);
+			@Override
+			public void run() {
+				
+				final Map<InstrumentID, Instrument> res = new HashMap<InstrumentID, Instrument>();
+
+				final List<InstrumentID> toBatch = new ArrayList<InstrumentID>();
+
+				/* Filter out cached symbols */
+				for(final InstrumentID id : ids) {
+
+					if(id == null) {
+						continue;
+					}
+
+					if(idMap.containsKey(id)) {
+						res.put(id, idMap.get(id));
+					} else {
+						toBatch.add(id);
+					}
+
+				}
+
+				try {
+
+					final List<String> queries = buildIDQueries(toBatch);
+
+					for(final String query : queries) {
+
+						final Map<InstrumentID, InstrumentState> lookup = remoteIDLookup(query);
+
+						/* Store instruments returned from lookup */
+						for(final Entry<InstrumentID, InstrumentState> e : lookup.entrySet()) {
+							
+							final InstrumentID id = e.getKey();
+							final InstrumentState inst = e.getValue();
+							
+							if(inst == null || inst.isNull()) {
+								continue;
+							}
+							
+							final String sym = inst.symbol();
+							
+							idMap.put(id, e.getValue());
+
+							if(!symbolMap.containsKey(sym)) {
+								symbolMap.put(sym, new ArrayList<InstrumentState>());
+								symbolMap.get(sym).add(inst);
+							}
+
+							/* Add alternate options symbol */
+							if(sym.contains("|")) {
+								final String alt = inst.vendorSymbols().get(VendorID.BARCHART);
+								symbolMap.put(alt, new ArrayList<InstrumentState>());
+								symbolMap.get(alt).add(inst);
+							}
+
+
+							/* Match up symbols to user entered symbols and store them in the final result */
+							res.put(id,  inst);
+
+						}
+
+						/*
+						 * Populate symbols for which nothing was returned, guarantee every symbol
+						 * requested is in map returned
+						 */
+						for (final InstrumentID i : ids) {
+
+							if (!res.containsKey(i)) {
+								res.put(i, InstrumentState.NULL);
+							}
+
+						}
+
+					}
+
+					sub.onNext(res);
+					sub.onCompleted();
+				} catch (final Exception e1) {
+					sub.onError(e1);
+				}
+				
 			}
-		}
-
-		return Observable.from(res);
+			
+		};
 	}
 
 	/* ***** ***** ***** Begin String Search ***** ***** ***** */
@@ -164,11 +248,11 @@ public class DDF_RxInstrumentProvider {
 
 				try {
 
-					final List<String> queries = buildQueries(toBatch);
+					final List<String> queries = buildSymbolQueries(toBatch);
 
 					for(final String query : queries) {
 
-						final Map<String, List<InstrumentState>> lookup = remoteLookup(query);
+						final Map<String, List<InstrumentState>> lookup = remoteSymbolLookup(query);
 
 						/* Store instruments returned from lookup */
 						for(final Entry<String, List<InstrumentState>> e : lookup.entrySet()) {
@@ -227,16 +311,16 @@ public class DDF_RxInstrumentProvider {
 
 	}
 
-	private static Map<String, List<InstrumentState>> remoteLookup(final String query) {
+	private static Map<String, List<InstrumentState>> remoteSymbolLookup(final String query) {
 
 		try {
 
 			final Map<String, List<InstrumentState>> result =
 					new HashMap<String, List<InstrumentState>>();
 
-			log.debug("remote batch on {}", urlInstrumentLookup(query));
+			log.debug("remote batch on {}", urlSymbolLookup(query));
 
-			final URL url = new URL(urlInstrumentLookup(query));
+			final URL url = new URL(urlSymbolLookup(query));
 
 			final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -254,7 +338,7 @@ public class DDF_RxInstrumentProvider {
 
 			final SAXParserFactory factory = SAXParserFactory.newInstance();
 			final SAXParser parser = factory.newSAXParser();
-			final DefaultHandler handler = handler(result);
+			final DefaultHandler handler = symbolHandler(result);
 
 			parser.parse(stream, handler);
 
@@ -265,17 +349,54 @@ public class DDF_RxInstrumentProvider {
 		}
 
 	}
+	
+	private static Map<InstrumentID, InstrumentState> remoteIDLookup(final String query) {
+		
+		try {
 
-	protected static DefaultHandler handler(final Map<String, List<InstrumentState>> result) {
+			final Map<InstrumentID, InstrumentState> result = new HashMap<InstrumentID, InstrumentState>();
+
+			log.debug("remote batch on {}", urlIDLookup(query));
+
+			final URL url = new URL(urlIDLookup(query));
+
+			final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+			connection.setRequestProperty("Accept-Encoding", "gzip");
+
+			connection.connect();
+
+			InputStream input = connection.getInputStream();
+
+			if (connection.getContentEncoding() != null && connection.getContentEncoding().equals("gzip")) {
+				input = new GZIPInputStream(input);
+			}
+
+			final BufferedInputStream stream = new BufferedInputStream(input);
+
+			final SAXParserFactory factory = SAXParserFactory.newInstance();
+			final SAXParser parser = factory.newSAXParser();
+			final DefaultHandler handler = idHandler(result);
+
+			parser.parse(stream, handler);
+
+			return result;
+
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	protected static DefaultHandler symbolHandler(final Map<String, List<InstrumentState>> result) {
 		return new DefaultHandler() {
 
 			@Override
-			public void startElement(final String uri,
-					final String localName, final String qName,
-					final Attributes ats) throws SAXException {
+			public void startElement(final String uri, final String localName, 
+					final String qName,	final Attributes ats) throws SAXException {
 
 				if (qName != null && qName.equals("instrument")) {
-
+					
 					final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
 
 					try {
@@ -292,6 +413,30 @@ public class DDF_RxInstrumentProvider {
 
 		};
 	}
+	
+	protected static DefaultHandler idHandler(final Map<InstrumentID, InstrumentState> result) {
+		return new DefaultHandler() {
+
+			@Override
+			public void startElement(final String uri, final String localName, 
+					final String qName,	final Attributes ats) throws SAXException {
+				
+				if (qName != null && qName.equals("instrument")) {
+
+					try {
+						final InstrumentState inst = new DDF_Instrument(ats);
+						result.put(inst.id(), inst);
+					} catch (final Exception e) {
+						throw new RuntimeException(e);
+					}
+
+				}
+
+			}
+
+		};
+	}
+	
 
 	/* ***** ***** ***** CQG ***** ***** ***** */
 
@@ -374,8 +519,12 @@ public class DDF_RxInstrumentProvider {
 
 	private static final String CQG_SYMBOL = "&symbology=CQG";
 
-	private static final String urlInstrumentLookup(final CharSequence lookup) {
+	private static final String urlSymbolLookup(final CharSequence lookup) {
 		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup + CQG_SYMBOL;
+	}
+	
+	private static final String urlIDLookup(final CharSequence lookup) {
+		return "http://" + SERVER_EXTRAS + "/instruments/?id=" + lookup + CQG_SYMBOL;
 	}
 
 	private static final String cqgInstLoopURL(final CharSequence lookup) {
@@ -383,7 +532,7 @@ public class DDF_RxInstrumentProvider {
                  "&provider=CQG";
 	}
 
-	static List<String> buildQueries(final List<String> symbols) throws Exception {
+	static List<String> buildSymbolQueries(final List<String> symbols) throws Exception {
 
 		final List<String> queries = new ArrayList<String>();
 
@@ -396,6 +545,41 @@ public class DDF_RxInstrumentProvider {
 			while(len < MAX_URL_LEN && symCount < 400 && !symbols.isEmpty()) {
 
 				final String s = symbols.remove(0);
+
+				log.debug("Pulled {} from remote queue", s);
+
+				symCount++;
+				len += s.length() + 1;
+				sb.append(s).append(",");
+
+			}
+
+			/* Remove trailing comma */
+			sb.deleteCharAt(sb.length() - 1);
+
+			queries.add(sb.toString());
+
+			log.debug("Sending {} to remote lookup", sb.toString());
+
+		}
+
+		return queries;
+
+	}
+	
+	static List<String> buildIDQueries(final List<InstrumentID> ids) throws Exception {
+
+		final List<String> queries = new ArrayList<String>();
+
+		while(!ids.isEmpty()) {
+
+			final StringBuilder sb = new StringBuilder();
+			int len = 0;
+			int symCount = 0;
+
+			while(len < MAX_URL_LEN && symCount < 400 && !ids.isEmpty()) {
+
+				final String s = ids.remove(0).id();
 
 				log.debug("Pulled {} from remote queue", s);
 

@@ -11,6 +11,7 @@ import rx.Observer;
 
 import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 
 public class TestDDF_RxInstrumentProvider {
 
@@ -19,24 +20,51 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("ESM2014|1950C").subscribe(obs());
-		
-		Thread.sleep(1 * 1000);
+//		DDF_RxInstrumentProvider.fromString("ESM2014|1950C").subscribe(obs());
+//		
+//		Thread.sleep(1 * 1000);
 		
 		// "F.US.CLES2X12"
 		
-//		DDF_RxInstrumentProvider.fromCQGString("F.US.CLES2X14")
-//				.subscribe(strObs());  
+//		DDF_RxInstrumentProvider.fromCQGString("F.US.CLES2X14").subscribe(strObs());  
 		
-		// 
+		//Thread.sleep(1 * 1000);
+		//DDF_RxInstrumentProvider.fromString("ESM2014|1950C").subscribe(obs());
 		
-		Thread.sleep(1 * 1000);
-		DDF_RxInstrumentProvider.fromString("ESM2014|1950C").subscribe(obs());
+		DDF_RxInstrumentProvider.fromID(new InstrumentID("1000002")).subscribe(idObs());
 		
-		System.exit(0);
+		Thread.sleep(3 * 1000);
+		
+		//System.exit(0);
 		
 	}
 	
+	static Observer<Map<InstrumentID, Instrument>> idObs() {
+		return new Observer<Map<InstrumentID, Instrument>>() {
+
+			@Override
+			public void onCompleted() {
+				log.debug("On Completed Called");
+			}
+
+			@Override
+			public void onError(Throwable e) {
+				log.error("On Error Called", e);
+			}
+
+			@Override
+			public void onNext(Map<InstrumentID, Instrument> t) {
+				log.debug("On Next Called");
+				
+				for(final Entry<InstrumentID, Instrument> e : t.entrySet()) {
+					final Instrument i = e.getValue();
+					log.debug("ID = {} Instrument = \n{}", e.getKey(), e.getValue());
+				}
+				
+			}
+			
+		};
+	}
 	
 	static Observer<Result<Instrument>> obs() {
 		return new Observer<Result<Instrument>>() {
@@ -48,7 +76,7 @@ public class TestDDF_RxInstrumentProvider {
 
 			@Override
 			public void onError(Throwable e) {
-				log.error("On Error Called \n{}", e);
+				log.error("On Error Called", e);
 			}
 
 			@Override

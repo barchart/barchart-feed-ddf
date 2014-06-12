@@ -270,7 +270,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 	}
 
 	private static InstrumentID xmlId(final Attributes attr) throws SymbolNotFoundException {
-
+		
 		// lookup status
 		final String statusCode = xmlStringDecode(attr, STATUS, XML_STOP);
 		final StatusXML status = StatusXML.fromCode(statusCode);

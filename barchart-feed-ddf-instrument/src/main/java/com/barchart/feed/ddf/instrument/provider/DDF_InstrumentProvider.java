@@ -55,11 +55,17 @@ public final class DDF_InstrumentProvider {
 	private static final ConcurrentMap<InstrumentID, InstrumentState> idMap =
 			DDF_RxInstrumentProvider.idMap;
 
-	private static final ArrayBlockingQueue<String> remoteQueue =
+	private static final ArrayBlockingQueue<String> remoteSymbolQueue =
 			new ArrayBlockingQueue<String>(1000 * 1000);
+	
+	private static final ArrayBlockingQueue<InstrumentID> remoteIDQueue =
+			new ArrayBlockingQueue<InstrumentID>(1000 * 1000);
 
-	private static final List<String> failedRemoteQueue =
+	private static final List<String> failedRemoteSymbolQueue =
 			new CopyOnWriteArrayList<String>();
+	
+	private static final List<InstrumentID> failedRemoteIDQueue =
+			new CopyOnWriteArrayList<InstrumentID>();
 
 	static final String cqgInstLoopURL(final CharSequence lookup) {
 		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup + "&provider=CQG";
@@ -110,14 +116,6 @@ public final class DDF_InstrumentProvider {
 		executor.submit(new RemoteRunner());
 	}
 
-	public static Instrument fromID(final InstrumentID id) {
-		if (!idMap.containsKey(id)) {
-			return Instrument.NULL;
-		} else {
-			return idMap.get(id);
-		}
-	}
-
 	/**
 	 * This takes an instrument stub from a feed message, and does several
 	 * things.
@@ -155,15 +153,39 @@ public final class DDF_InstrumentProvider {
 
 		/* Asnyc lookup */
 		try {
-			remoteQueue.put(symbol);
+			remoteSymbolQueue.put(symbol);
 		} catch (final Exception e) {
-			failedRemoteQueue.add(symbol);
+			failedRemoteSymbolQueue.add(symbol);
 		}
 
 		return instState;
 
 	}
 
+	public static Instrument fromID(final InstrumentID id) {
+		
+		if(id == null || id.isNull()) {
+			return Instrument.NULL;
+		}
+		
+		if (idMap.containsKey(id)) {
+			return idMap.get(id);
+		} 
+		
+		final InstrumentState instState = new DDF_Instrument(id);
+		idMap.put(id, instState);
+		
+		/* Asnyc lookup */
+		try {
+			remoteIDQueue.put(id);
+		} catch (final Exception e) {
+			failedRemoteIDQueue.add(id);
+		}
+		
+		return instState;
+		
+	}
+	
 	public static Instrument fromSymbol(String symbol) {
 
 		if (symbol == null || symbol.isEmpty()) {
@@ -184,9 +206,9 @@ public final class DDF_InstrumentProvider {
 
 		/* Asnyc lookup */
 		try {
-			remoteQueue.put(symbol);
+			remoteSymbolQueue.put(symbol);
 		} catch (final Exception e) {
-			failedRemoteQueue.add(symbol);
+			failedRemoteSymbolQueue.add(symbol);
 		}
 
 		return instState;
@@ -205,6 +227,20 @@ public final class DDF_InstrumentProvider {
 
 	}
 
+	private static void handleInstLookup(final InstrumentState state) {
+		
+		final InstrumentState iState = idMap.get(state.id());
+		if (iState == null || iState.isNull()) {
+			idMap.put(iState.id(), state);
+			final List<InstrumentState> list = new ArrayList<InstrumentState>();
+			list.add(state);
+			symbolMap.put(state.symbol(), list);
+		} else {
+			iState.process(state);
+		}
+		
+	}
+	
 	private static Observer<InstrumentResult> observer =
 			new Observer<InstrumentResult>() {
 
@@ -215,7 +251,7 @@ public final class DDF_InstrumentProvider {
 
 					/* If exception, add to failed */
 					if (result.exception() != null) {
-						failedRemoteQueue.add(symbol);
+						failedRemoteSymbolQueue.add(symbol);
 					}
 
 					final Instrument inst = result.result();
@@ -288,11 +324,15 @@ public final class DDF_InstrumentProvider {
 
 	private static final String SERVER_EXTRAS = "extras.ddfplus.com";
 
-	private static final String urlInstrumentLookup(final CharSequence lookup) {
+	private static final String urlSymbolLookup(final CharSequence lookup) {
 		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup;
 	}
+	
+	private static final String urlIDLookup(final CharSequence lookup) {
+		return "http://" + SERVER_EXTRAS + "/instruments/?id=" + lookup;
+	}
 
-	static Callable<Map<String, InstrumentState>> remoteBatch(final String symbols) {
+	static Callable<Map<String, InstrumentState>> remoteSymbolBatch(final String symbols) {
 
 		return new Callable<Map<String, InstrumentState>>() {
 
@@ -303,9 +343,9 @@ public final class DDF_InstrumentProvider {
 
 					final Map<String, InstrumentState> defs = new HashMap<String, InstrumentState>();
 
-					log.debug("remote batch on {}", urlInstrumentLookup(symbols));
+					log.debug("remote batch on {}", urlSymbolLookup(symbols));
 
-					final URL url = new URL(urlInstrumentLookup(symbols));
+					final URL url = new URL(urlSymbolLookup(symbols));
 
 					final HttpURLConnection connection = (HttpURLConnection) url
 							.openConnection();
@@ -356,7 +396,7 @@ public final class DDF_InstrumentProvider {
 					return defs;
 
 				} catch (final Throwable t) {
-					failedRemoteQueue.addAll(Arrays.asList(symbols.split(",")));
+					failedRemoteSymbolQueue.addAll(Arrays.asList(symbols.split(",")));
 					return null;
 				}
 
@@ -366,13 +406,90 @@ public final class DDF_InstrumentProvider {
 
 	}
 
+	static Callable<Map<InstrumentID, InstrumentState>> remoteIDBatch(final String ids) {
+
+		return new Callable<Map<InstrumentID, InstrumentState>>() {
+
+			@Override
+			public Map<InstrumentID, InstrumentState> call() throws Exception {
+
+				try {
+
+					final Map<InstrumentID, InstrumentState> defs = new HashMap<InstrumentID, InstrumentState>();
+
+					log.debug("remote id batch on {}", urlIDLookup(ids));
+
+					final URL url = new URL(urlIDLookup(ids));
+
+					final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+					connection.setRequestProperty("Accept-Encoding", "gzip");
+					connection.connect();
+
+					InputStream input = connection.getInputStream();
+
+					if (connection.getContentEncoding() != null && 
+							connection.getContentEncoding().equals("gzip")) {
+						
+						input = new GZIPInputStream(input);
+					}
+
+					final BufferedInputStream stream = new BufferedInputStream(input);
+					final SAXParserFactory factory = SAXParserFactory.newInstance();
+					final SAXParser parser = factory.newSAXParser();
+
+					final DefaultHandler handler = new DefaultHandler() {
+
+						@Override
+						public void startElement(final String uri,
+								final String localName, final String qName,
+								final Attributes ats) throws SAXException {
+
+							if (qName != null && qName.equals("instrument")) {
+
+								try {
+									final InstrumentState inst = new DDF_Instrument(ats);
+									defs.put(inst.id(), inst);
+								} catch (final SymbolNotFoundException se) {
+									observer.onNext(new InstDefResult(se.getMessage(), se));
+								} catch (final Exception e) {
+									log.trace("Exception in parsing batch lookup {}", e);
+								}
+
+							}
+
+						}
+
+					};
+
+					parser.parse(stream, handler);
+
+					return defs;
+
+				} catch (final Throwable t) {
+					// failedRemoteSymbolQueue.addAll(Arrays.asList(ids.split(",")));
+					return null;
+				}
+
+			}
+
+		};
+
+	}
+	
 	static class RemoteRunner implements Runnable {
 
-		private List<Future<Map<String, InstrumentState>>> futures =
+		private List<Future<Map<String, InstrumentState>>> symbFutures =
 				new ArrayList<Future<Map<String, InstrumentState>>>();
 
-		private final List<Callable<Map<String, InstrumentState>>> callables =
+		private final List<Callable<Map<String, InstrumentState>>> symbCallables =
 				new ArrayList<Callable<Map<String, InstrumentState>>>();
+		
+		private List<Future<Map<InstrumentID, InstrumentState>>> idFutures =
+				new ArrayList<Future<Map<InstrumentID, InstrumentState>>>();
+
+		private final List<Callable<Map<InstrumentID, InstrumentState>>> idCallables =
+				new ArrayList<Callable<Map<InstrumentID, InstrumentState>>>();
 
 		@Override
 		public void run() {
@@ -383,13 +500,13 @@ public final class DDF_InstrumentProvider {
 
 					Thread.sleep(REMOTE_LOOKUP_INTERVAL);
 
-					while (!remoteQueue.isEmpty()) {
-						callables.add(remoteBatch(buildQuerey()));
+					while (!remoteSymbolQueue.isEmpty()) {
+						symbCallables.add(remoteSymbolBatch(buildSymbolQuerey()));
 					}
 
-					futures = executor.invokeAll(callables, DEFAULT_TIMEOUT, MILLIS);
+					symbFutures = executor.invokeAll(symbCallables, DEFAULT_TIMEOUT, MILLIS);
 
-					for (final Future<Map<String, InstrumentState>> f : futures) {
+					for (final Future<Map<String, InstrumentState>> f : symbFutures) {
 
 						for (final Entry<String, InstrumentState> e : f.get().entrySet()) {
 
@@ -406,8 +523,33 @@ public final class DDF_InstrumentProvider {
 
 					}
 
-					futures.clear();
-					callables.clear();
+					symbFutures.clear();
+					symbCallables.clear();
+					
+					while(!remoteIDQueue.isEmpty()) {
+						idCallables.add(remoteIDBatch(buildIDQuerey()));
+					}
+					
+					idFutures = executor.invokeAll(idCallables, DEFAULT_TIMEOUT, MILLIS);
+					
+					for(final Future<Map<InstrumentID, InstrumentState>> f : idFutures) {
+						
+						for(final Entry<InstrumentID, InstrumentState> e : f.get().entrySet()) {
+							
+							final InstrumentState def = e.getValue();
+							
+							if (def == null || def.isNull()) {
+								// Do something
+							} else {
+								handleInstLookup(def);
+							}
+							
+						}
+						
+					}
+					
+					idFutures.clear();
+					idCallables.clear();
 
 				}
 
@@ -419,16 +561,44 @@ public final class DDF_InstrumentProvider {
 
 	}
 
-	private static String buildQuerey() throws Exception {
+	private static String buildSymbolQuerey() throws Exception {
 
 		final StringBuilder sb = new StringBuilder();
 
 		int len = 0;
 		int symCount = 0;
 
-		while (len < MAX_URL_LEN && symCount < 400 && !remoteQueue.isEmpty()) {
+		while (len < MAX_URL_LEN && symCount < 400 && !remoteSymbolQueue.isEmpty()) {
 
-			final String s = remoteQueue.take();
+			final String s = remoteSymbolQueue.take();
+
+			log.debug("Pulled {} from remote queue", s);
+
+			symCount++;
+			len += s.length() + 1;
+			sb.append(s).append(",");
+
+		}
+
+		/* Remove trailing comma */
+		sb.deleteCharAt(sb.length() - 1);
+
+		log.debug("Sending {} to remote lookup", sb.toString());
+
+		return sb.toString();
+
+	}
+	
+	private static String buildIDQuerey() throws Exception {
+
+		final StringBuilder sb = new StringBuilder();
+
+		int len = 0;
+		int symCount = 0;
+
+		while (len < MAX_URL_LEN && symCount < 400 && !remoteIDQueue.isEmpty()) {
+
+			final String s = remoteIDQueue.take().toString();
 
 			log.debug("Pulled {} from remote queue", s);
 
