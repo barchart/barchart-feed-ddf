@@ -276,8 +276,8 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		final StatusXML status = StatusXML.fromCode(statusCode);
 
 		if (!status.isFound()) {
-			final String lookup = xmlStringDecode(attr, LOOKUP, XML_STOP);
-			throw new SymbolNotFoundException(lookup);
+			// Note, ID lookup doesn't return the id used to lookup if it fails, so can't include that here
+			throw new SymbolNotFoundException("Inst lookup by ID failed");
 		}
 
 		/* market identifier; must be globally unique; */
@@ -286,6 +286,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 			return new InstrumentID(String.valueOf(id));
 		} catch (final Exception e) {
 			/* Ensure no id collision by making negative */
+			log.warn("Instrumet with non long ID = {}", xmlStringDecode(attr, ID, XML_STOP));
 			final Long id = Long.valueOf(Math.abs(xmlStringDecode(attr, ID, XML_STOP).hashCode()) * -1);
 			return new InstrumentID(String.valueOf(id));
 		}

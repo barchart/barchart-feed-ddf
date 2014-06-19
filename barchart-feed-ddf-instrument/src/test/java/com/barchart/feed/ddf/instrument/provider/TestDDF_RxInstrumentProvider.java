@@ -20,9 +20,9 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-//		DDF_RxInstrumentProvider.fromString("ESM2014|1950C").subscribe(obs());
-//		
-//		Thread.sleep(1 * 1000);
+		DDF_RxInstrumentProvider.fromString("GCM2015|1725D").subscribe(obs());
+		
+		Thread.sleep(1 * 1000);
 		
 		// "F.US.CLES2X12"
 		
