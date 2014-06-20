@@ -4,7 +4,6 @@ import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ALT_SYMBOL;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.BASE_CODE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.EXCHANGE_DDF;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ID;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_POINT_VALUE;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_TICK_INCREMENT;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.STATUS;
@@ -277,7 +276,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 
 		if (!status.isFound()) {
 			// Note, ID lookup doesn't return the id used to lookup if it fails, so can't include that here
-			throw new SymbolNotFoundException("Inst lookup by ID failed");
+			throw new SymbolNotFoundException("Inst lookup failed");
 		}
 
 		/* market identifier; must be globally unique; */

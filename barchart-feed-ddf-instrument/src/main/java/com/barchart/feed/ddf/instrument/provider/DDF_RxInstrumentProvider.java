@@ -100,7 +100,7 @@ public class DDF_RxInstrumentProvider {
 	/* ***** ***** ***** Begin ID Lookup ***** ***** ***** */
 
 	public static Observable<Map<InstrumentID, Instrument>> fromID(final InstrumentID... ids) {
-
+		
 		final ReplaySubject<Map<InstrumentID, Instrument>> sub = ReplaySubject.create();
 		executor.submit(runnableFromIDs(sub, ids));
 		
@@ -383,6 +383,7 @@ public class DDF_RxInstrumentProvider {
 			return result;
 
 		} catch (final Exception e) {
+			log.error("Exception on remote ID lookup  -  {}", query);
 			throw new RuntimeException(e);
 		}
 		
