@@ -20,7 +20,7 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("GCM2015|1725D").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("GCM2015|1725C").subscribe(obs());
 		
 		Thread.sleep(1 * 1000);
 		

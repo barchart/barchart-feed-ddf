@@ -15,6 +15,7 @@ import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPI
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REALTIME;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.TIME_ZONE_DDF;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.UNDERLIER_ID;
 import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
 import static com.barchart.feed.ddf.util.HelperXML.xmlByteDecode;
@@ -27,9 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 
-import rx.Observer;
-
-import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
@@ -151,29 +149,11 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 				break;
 			}
 			
-			final String underlierSymbol = symbol.split("\\|")[0];
-			DDF_RxInstrumentProvider.fromString(underlierSymbol).subscribe(new Observer<Result<Instrument>>() {
-
-				@Override
-				public void onNext(final Result<Instrument> t) {
-					final Instrument inst = t.results().get(underlierSymbol).get(0);
-					if(inst.isNull()) {
-						log.error("Instument was null in underlier lookup");
-					}
-					underlier = inst.id();
-				}
-				
-				@Override
-				public void onCompleted() {
-					
-				}
-
-				@Override
-				public void onError(Throwable e) {
-					log.error("Error retrieving underlier", e);
-				}
-
-			});
+			/* Set underlier ID */
+			final String under = xmlStringDecode(attr, UNDERLIER_ID, XML_PASS); 
+			if(under != null && under.length() > 0) {
+				underlier = new InstrumentID(under);
+			}
 			
 		}
 
