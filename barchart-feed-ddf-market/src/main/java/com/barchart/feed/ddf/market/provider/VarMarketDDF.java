@@ -126,44 +126,6 @@ class VarMarketDDF extends VarMarket {
 
 	}
 
-	// XXX original
-	/*public void setBookSnapshotXXX(final MarketDoBookEntry[] entries,
-			final TimeValue time) {
-
-		assert entries != null;
-		assert time != null;
-
-		final MarketDoBook book = loadBook();
-
-		book.clear();
-
-		for (final MarketDoBookEntry entry : entries) {
-
-			if (entry == null) {
-				continue;
-			}
-
-			final UniBookResult result = book.setEntry(entry);
-
-			switch (result) {
-				case TOP:
-				case NORMAL:
-					break;
-				default:
-					eventAdd(NEW_BOOK_ERROR);
-					log.error("result : {} entry : {}", result, entry);
-					break;
-			}
-
-		}
-
-		eventAdd(NEW_BOOK_SNAPSHOT);
-
-		book.setTime(time);
-		updateMarket(time);
-
-	}*/
-
 	@Override
 	public void setBookUpdate(final MarketDoBookEntry entry,
 			final TimeValue time) {
@@ -230,10 +192,14 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	@Override
-	public void setTrade(final MarketTradeType type,
+	public void setTrade(
+			final MarketTradeType type,
 			final MarketTradeSession session,
-			final MarketTradeSequencing sequencing, final PriceValue price,
-			final SizeValue size, final TimeValue time, final TimeValue date) {
+			final MarketTradeSequencing sequencing, 
+			final PriceValue price,
+			final SizeValue size, 
+			final TimeValue time, 
+			final TimeValue date) {
 
 		assert type != null;
 		assert session != null;
@@ -272,10 +238,19 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	@Override
-	public void setSnapshot(final TimeValue tradeDate, final PriceValue open, final PriceValue high,
-			final PriceValue low, final PriceValue close, final PriceValue settle, final PriceValue previousSettle,
-			final SizeValue volume, final SizeValue interest, final BooleanValue isSettled, final TimeValue barTime) {
-
+	public void setSnapshot(
+			final TimeValue tradeDate, 
+			final PriceValue open, 
+			final PriceValue high,
+			final PriceValue low, 
+			final PriceValue close, 
+			final PriceValue settle, 
+			final PriceValue previousSettle,
+			final SizeValue volume, 
+			final SizeValue interest, 
+			final BooleanValue isSettled, 
+			final TimeValue barTime) {
+		
 		final MarketBarType type = ensureBar(tradeDate);
 
 		if (type.isNull())
@@ -326,7 +301,12 @@ class VarMarketDDF extends VarMarket {
 
 		eventAdd(type.event);
 
-		updateMarket(bar.get(BAR_TIME));
+		/* Don't update time based on previous bar */
+		if(type == MarketBarType.PREVIOUS) {
+			eventAdd(MARKET_UPDATED);
+		} else {
+			updateMarket(bar.get(BAR_TIME));
+		}
 
 	}
 

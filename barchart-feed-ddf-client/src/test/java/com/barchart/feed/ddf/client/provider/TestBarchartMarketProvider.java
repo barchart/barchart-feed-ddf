@@ -3,6 +3,7 @@ package com.barchart.feed.ddf.client.provider;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -33,7 +34,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"AAPL" //, "ESM4", "GOOG"
+		"ZCU14", "ZSU14" //, "ESM4", "GOOG"
 			//"NQY0", "VIY0" 
 	};
 	
@@ -60,21 +61,7 @@ public class TestBarchartMarketProvider {
 //		agent2.include(insts).subscribe(instObs());
 //		agent3.include(insts).subscribe(instObs());
 //		agent4.include(insts).subscribe(instObs());
-		Thread.sleep(15 * 1000);
-		
-		final List<InstrumentID> instIDs = new ArrayList<InstrumentID>();
-		for(final String i : insts) {
-			
-			final Instrument inst = DDF_InstrumentProvider.fromSymbol(i);
-			if(inst.isNull()) {
-				log.error("inst not found");
-			} else {
-				instIDs.add(inst.id());
-			}
-		}
-		
-		agent1.deactivate();
-		System.out.println("AGENT DEACTIVATED");
+		Thread.sleep(30 * 1000);
 		
 //		agent1.exclude(insts).subscribe(instObs());
 
@@ -108,8 +95,8 @@ public class TestBarchartMarketProvider {
 			
 			@Override
 			public void onNext(final Market m) {
-				//System.out.println(m.instrument().symbol() + " MARKET " + m.updated());
-				System.out.println("Top = " + m.book().top().ask().price());
+				System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()));
+				System.out.println("Updated = " + m.updated().isNull());
 			}
 		};
 	}
@@ -120,7 +107,7 @@ public class TestBarchartMarketProvider {
 
 			@Override
 			public void onNext(final Book b) {
-				//System.out.println(b.instrument().symbol() + " BOOK " + b.updated());
+				System.out.println(b.instrument().symbol() + " BOOK " + b.updated());
 			}
 
 		};

@@ -592,13 +592,18 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	/**
 	 * via xml quote >> xml session
 	 */
-	protected Void visit(final DDF_MarketSnapshot message,
-			final MarketDo market, final DDF_Indicator indicator) {
+	protected Void visit(
+			final DDF_MarketSnapshot message,
+			final MarketDo market, 
+			final DDF_Indicator indicator) {
+		
 		return visit(message, market, indicator, false);
 	}
 
-	protected Void visit(final DDF_MarketSnapshot message,
-			final MarketDo market, final DDF_Indicator indicator,
+	protected Void visit(
+			final DDF_MarketSnapshot message,
+			final MarketDo market, 
+			final DDF_Indicator indicator,
 			final boolean forceSettle) {
 
 		market.clearChanges();
