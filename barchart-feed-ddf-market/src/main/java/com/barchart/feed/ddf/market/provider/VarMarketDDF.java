@@ -87,7 +87,9 @@ class VarMarketDDF extends VarMarket {
 
 	private final void updateMarket(final TimeValue time) {
 
-		set(MARKET_TIME, time);
+		if(time.compareTo(get(MARKET_TIME)) > 0) {
+			set(MARKET_TIME, time);
+		}
 
 		eventAdd(MARKET_UPDATED);
 

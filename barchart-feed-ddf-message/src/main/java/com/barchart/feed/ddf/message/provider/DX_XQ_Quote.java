@@ -291,8 +291,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 		//
 
-		final long millisUTC =
-				xmlTimeDecode(exch.kind.time.zone, tag, TIME_UPDATE, XML_PASS);
+		final long millisUTC = xmlTimeDecode(exch.kind.time.zone, tag, TIME_UPDATE, XML_PASS);
 		setDecodeDefaults(millisUTC);
 
 	}

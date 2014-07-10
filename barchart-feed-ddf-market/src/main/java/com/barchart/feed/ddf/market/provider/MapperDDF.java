@@ -101,6 +101,8 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		market.clearChanges();
 
 		final TimeValue time = message.getTime();
+		
+		message.getTime();
 
 		applyTop(message.entry(market.instrument(), Book.Side.BID), time, market);
 		applyTop(message.entry(market.instrument(), Book.Side.ASK), time, market);

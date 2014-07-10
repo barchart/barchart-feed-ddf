@@ -34,8 +34,10 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"ZCU14", "ZSU14" //, "ESM4", "GOOG"
-			//"NQY0", "VIY0" 
+		"YMU2014", 
+		//"ZCU14", "ZSU14" 
+		//, "ESM4", "GOOG"
+		//"NQY0", "VIY0" 
 	};
 	
 	public static void main(final String[] args) throws Exception {
@@ -61,7 +63,7 @@ public class TestBarchartMarketProvider {
 //		agent2.include(insts).subscribe(instObs());
 //		agent3.include(insts).subscribe(instObs());
 //		agent4.include(insts).subscribe(instObs());
-		Thread.sleep(30 * 1000);
+		Thread.sleep(3000 * 1000);
 		
 //		agent1.exclude(insts).subscribe(instObs());
 
