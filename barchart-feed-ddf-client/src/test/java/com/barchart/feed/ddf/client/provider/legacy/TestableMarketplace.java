@@ -12,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.consumer.MetadataService;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
@@ -23,17 +24,16 @@ import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.RegTaker;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.base.values.api.Value;
-import com.barchart.feed.ddf.instrument.provider.InstrumentProviderWrapper;
+import com.barchart.feed.ddf.instrument.provider.DDF_MetadataServiceWrapper;
 import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
 import com.barchart.feed.ddf.market.provider.VarMarketEntityDDF;
-import com.barchart.feed.inst.InstrumentService;
 
 public class TestableMarketplace extends DDF_Marketplace {
 
 	private static final Logger log = LoggerFactory.getLogger(TestableMarketplace.class);
 	
 	protected TestableMarketplace(MarketFactory factory,
-			InstrumentService<String> instLookup,
+			MetadataService instLookup,
 			SubscriptionHandler handler) {
 		super(factory, instLookup, handler);
 	}
@@ -54,7 +54,7 @@ public class TestableMarketplace extends DDF_Marketplace {
 				return new VarMarketEntityDDF(instrument);
 			}
 
-		}, new InstrumentProviderWrapper(), handler);
+		}, new DDF_MetadataServiceWrapper(), handler);
 		
 	}
 	

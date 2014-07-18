@@ -2,6 +2,7 @@ package com.barchart.feed.client.provider;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,11 +13,15 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import rx.Observable;
+
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.connection.Connection;
+import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.TimestampListener;
+import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
@@ -24,6 +29,7 @@ import com.barchart.feed.api.model.data.MarketData;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -42,7 +48,7 @@ public class BarchartMarketplace implements Marketplace {
 			.getLogger(BarchartMarketplace.class);
 
 	/* Value api factory */
-	private static final ValueFactory factory = new ValueFactoryImpl();
+	private static final ValueFactory factory = ValueFactoryImpl.instance;
 
 	/* Used if unable to retrieve system default temp directory */
 	private static final String TEMP_DIR = "C:\\windows\\temp\\";
@@ -380,11 +386,6 @@ public class BarchartMarketplace implements Marketplace {
 	}
 
 	@Override
-	public Market snapshot(final InstrumentID instID) {
-		return maker.snapshot(instID);
-	}
-
-	@Override
 	public Market snapshot(final String symbol) {
 		return maker.snapshot(symbol);
 	}
@@ -474,6 +475,44 @@ public class BarchartMarketplace implements Marketplace {
 		final Agent agent = newAgent(Cuvol.class, cuvol);
 
 		return agent;
+	}
+
+	@Override
+	public <V extends MarketData<V>> ConsumerAgent register(
+			final MarketObserver<V> callback, final Class<V> clazz) {
+		return maker.register(callback, clazz);
+	}
+
+	@Override
+	public Observable<Market> snapshot(final InstrumentID instID) {
+		return maker.snapshot(instID);
+	}
+
+	@Override
+	public Observable<Map<InstrumentID, Instrument>> instrument(
+			final InstrumentID... ids) {
+		return maker.instrument(ids);
+	}
+
+	@Override
+	public Observable<Result<Instrument>> instrument(final String... symbols) {
+		return maker.instrument(symbols);
+	}
+
+	@Override
+	public Observable<Result<Instrument>> instrument(final SearchContext ctx,
+			final String... symbols) {
+		return maker.instrument(ctx, symbols);
+	}
+
+	@Override
+	public Map<InstrumentID, Subscription<Instrument>> instruments() {
+		return maker.instruments();
+	}
+
+	@Override
+	public Map<ExchangeID, Subscription<Exchange>> exchanges() {
+		return maker.exchanges();
 	}
 
 }

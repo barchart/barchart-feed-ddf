@@ -35,7 +35,7 @@ public class TestBarchartMarketProvider {
 	
 	private static final String[] insts = {
 		"YMU2014", 
-		//"ZCU14", "ZSU14" 
+		"ZCU14", "ZSU14" 
 		//, "ESM4", "GOOG"
 		//"NQY0", "VIY0" 
 	};
