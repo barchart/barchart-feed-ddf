@@ -20,6 +20,7 @@ import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.consumer.MarketService;
 import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
@@ -34,8 +35,9 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"YMU2014", 
-		"ZCU14", "ZSU14" 
+		"LEM15",
+		//"YMU2014", 
+		//"ZCU14", "ZSU14" 
 		//, "ESM4", "GOOG"
 		//"NQY0", "VIY0" 
 	};
@@ -98,7 +100,13 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market m) {
 				System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()));
-				System.out.println("Updated = " + m.updated().isNull());
+				
+				for(final Cuvol.Entry e : m.cuvol().entryList()) {
+					if(!e.isNull()) {
+						System.out.println(e.price() + "   " + e.size());
+					}
+				}
+				
 			}
 		};
 	}
