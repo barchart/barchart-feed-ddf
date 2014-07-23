@@ -383,9 +383,14 @@ class FeedClientDDF implements DDF_FeedClient {
 
 					if (DDF_FeedEvent.isConnectionError(event)) {
 
-						log.info("Setting feed state to logged out");
-						updateFeedStateListeners(FeedState.LOGGED_OUT);
-
+						if(event == DDF_FeedEvent.SESSION_LOCKOUT){
+							log.debug("Setting feed state to locked out");
+							updateFeedStateListeners(FeedState.LOCKED_OUT);
+						}else{
+							log.info("Setting feed state to logged out");
+							updateFeedStateListeners(FeedState.LOGGED_OUT);
+						}
+						
 					} else if (event == DDF_FeedEvent.LOGIN_SUCCESS) {
 
 						log.info("Login success, feed state updated");
