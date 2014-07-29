@@ -114,7 +114,6 @@ public class BarchartMarketProvider implements MarketService {
 
 			if (message instanceof DDF_MarketBase) {
 				final DDF_MarketBase marketMessage = (DDF_MarketBase) message;
-				
 				maker.make(marketMessage);
 			}
 		}

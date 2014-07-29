@@ -109,6 +109,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		if(toFire.contains(MKData.TRADE)) {
 			for(final FrameworkAgent<Trade> a : tradeAgents) {
 				if(a.isActive()) {
+					final Market m = this.freeze();
 					a.callback().onNext(a.data(this.freeze()));
 				}
 			}

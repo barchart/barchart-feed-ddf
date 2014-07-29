@@ -38,7 +38,8 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"LEM15",
+		"CLX14",
+		//"LEM15",
 		//"YMZ2014", 
 		//"ZCZ14", "ZSZ14", 
 		//"ESZ4", "GOOG"
@@ -59,21 +60,19 @@ public class TestBarchartMarketProvider {
 		
 		lock.await();
 		
-		final ConsumerAgent agent1 = market.register(marketObs(market), Market.class);
+//		final ConsumerAgent agent1 = market.register(marketObs(market), Market.class);
 //		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
 //		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
-//		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
+		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
-		agent1.include(insts).subscribe(instObs());
+//		agent1.include(insts).subscribe(instObs());
 //		agent2.include(insts).subscribe(instObs());
 //		agent3.include(insts).subscribe(instObs());
-//		agent4.include(insts).subscribe(instObs());
-		Thread.sleep(3 * 1000);
-		
-		
+		agent4.include(insts).subscribe(instObs());
+		Thread.sleep(30000 * 1000);
 		
 //		agent1.exclude(insts).subscribe(instObs());
-
+		
 		Thread.sleep(15 * 1000);
 
 		log.debug("Shutting down");
@@ -164,7 +163,12 @@ public class TestBarchartMarketProvider {
 			
 			@Override
 			public void onNext(final Trade t) {
-				System.out.println(t.instrument().symbol() + " TRADE " + t.updated());
+				if(t.isNull()) {
+					System.out.println("NULL TRADE");
+					new RuntimeException().printStackTrace();
+				} else {
+					System.out.println(t.instrument().symbol() + " TRADE " + t.updated());
+				}
 			}
 
 		};

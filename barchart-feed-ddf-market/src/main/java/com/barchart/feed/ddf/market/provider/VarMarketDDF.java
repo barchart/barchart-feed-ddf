@@ -210,7 +210,7 @@ class VarMarketDDF extends VarMarket {
 		assert size != null;
 		assert time != null;
 		assert date != null;
-
+		
 		// Update trade
 		if (sequencing != MarketTradeSequencing.UNSEQUENCED_VOLUME) {
 

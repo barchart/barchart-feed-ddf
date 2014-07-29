@@ -649,7 +649,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 	@Override
 	public Void visit(final DDF_MarketTrade message, final MarketDo market) {
-
+		
 		market.clearChanges();
 
 		final DDF_MessageType tradeType = message.getMessageType();
