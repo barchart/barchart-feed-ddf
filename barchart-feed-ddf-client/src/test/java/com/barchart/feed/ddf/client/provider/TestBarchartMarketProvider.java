@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import rx.Observer;
 
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.connection.Connection;
+import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.consumer.ConsumerAgent;
@@ -36,9 +39,9 @@ public class TestBarchartMarketProvider {
 	
 	private static final String[] insts = {
 		"LEM15",
-		//"YMU2014", 
-		//"ZCU14", "ZSU14" 
-		//, "ESM4", "GOOG"
+		//"YMZ2014", 
+		//"ZCZ14", "ZSZ14", 
+		//"ESZ4", "GOOG"
 		//"NQY0", "VIY0" 
 	};
 	
@@ -56,7 +59,7 @@ public class TestBarchartMarketProvider {
 		
 		lock.await();
 		
-		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
+		final ConsumerAgent agent1 = market.register(marketObs(market), Market.class);
 //		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
 //		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
 //		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
@@ -65,7 +68,9 @@ public class TestBarchartMarketProvider {
 //		agent2.include(insts).subscribe(instObs());
 //		agent3.include(insts).subscribe(instObs());
 //		agent4.include(insts).subscribe(instObs());
-		Thread.sleep(3000 * 1000);
+		Thread.sleep(3 * 1000);
+		
+		
 		
 //		agent1.exclude(insts).subscribe(instObs());
 
@@ -91,7 +96,7 @@ public class TestBarchartMarketProvider {
 		};
 	}
 	
-	private static MarketObserver<Market> marketObs() {
+	private static MarketObserver<Market> marketObs(final MarketService market) {
 		
 		return new MarketObserver<Market>() {
 
@@ -99,13 +104,29 @@ public class TestBarchartMarketProvider {
 			
 			@Override
 			public void onNext(final Market m) {
-				System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()));
 				
-				for(final Cuvol.Entry e : m.cuvol().entryList()) {
-					if(!e.isNull()) {
-						System.out.println(e.price() + "   " + e.size());
+				final Map<InstrumentID, Subscription<Instrument>> subs = market.instruments();
+
+				final Instrument inst = m.instrument();
+				System.out.println(inst);
+				
+				final InstrumentID instID = inst.id();
+				System.out.println(instID);
+				if(subs.isEmpty()) {
+					System.out.println("Subs from MarketService is empty");
+				} else if(!subs.containsKey(instID)) {
+					System.out.println("Inst Not In Subs Map");
+					for(final Entry<InstrumentID, Subscription<Instrument>> e : subs.entrySet()) {
+						System.out.println(e.getKey());
 					}
+				} else {
+					final Instrument instFromSub = subs.get(instID).metadata();
+					System.out.println("Instrument GOOD " + instFromSub.toString());
 				}
+				
+				System.out.println(inst);
+				
+				System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()));
 				
 			}
 		};
