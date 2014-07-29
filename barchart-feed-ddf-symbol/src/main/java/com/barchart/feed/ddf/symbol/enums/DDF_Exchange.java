@@ -97,7 +97,7 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 	Fix_Me_1(_1_, FUTURE), //
 	Fix_Me_2(_2_, FUTURE), //
 	Fix_Me_3(_3_, FUTURE), //
-	Fix_Me_4(_4_, FUTURE), //
+	Fix_Me_4(_4_, STOCK), // CNSX
 	Fix_Me_5(_5_, FUTURE), //
 	Fix_Me_6(_6_, FUTURE), //
 	Fix_Me_7(_7_, FUTURE), //
