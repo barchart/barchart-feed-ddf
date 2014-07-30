@@ -38,7 +38,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"CLX14",
+		"^USDCOP",
 		//"LEM15",
 		//"YMZ2014", 
 		//"ZCZ14", "ZSZ14", 
@@ -60,15 +60,15 @@ public class TestBarchartMarketProvider {
 		
 		lock.await();
 		
-//		final ConsumerAgent agent1 = market.register(marketObs(market), Market.class);
+		final ConsumerAgent agent1 = market.register(marketObs(market), Market.class);
 //		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
 //		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
-		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
+//		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
-//		agent1.include(insts).subscribe(instObs());
+		agent1.include(insts).subscribe(instObs());
 //		agent2.include(insts).subscribe(instObs());
 //		agent3.include(insts).subscribe(instObs());
-		agent4.include(insts).subscribe(instObs());
+//		agent4.include(insts).subscribe(instObs());
 		Thread.sleep(30000 * 1000);
 		
 //		agent1.exclude(insts).subscribe(instObs());
@@ -104,28 +104,8 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market m) {
 				
-				final Map<InstrumentID, Subscription<Instrument>> subs = market.instruments();
-
-				final Instrument inst = m.instrument();
-				System.out.println(inst);
-				
-				final InstrumentID instID = inst.id();
-				System.out.println(instID);
-				if(subs.isEmpty()) {
-					System.out.println("Subs from MarketService is empty");
-				} else if(!subs.containsKey(instID)) {
-					System.out.println("Inst Not In Subs Map");
-					for(final Entry<InstrumentID, Subscription<Instrument>> e : subs.entrySet()) {
-						System.out.println(e.getKey());
-					}
-				} else {
-					final Instrument instFromSub = subs.get(instID).metadata();
-					System.out.println("Instrument GOOD " + instFromSub.toString());
-				}
-				
-				System.out.println(inst);
-				
-				System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()));
+				System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()) + " " + m.updated().millisecond());
+				System.out.println(m.session());
 				
 			}
 		};

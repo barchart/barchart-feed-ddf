@@ -622,7 +622,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		} else if (indicator == DDF_Indicator.PREVIOUS || forceSettle) {
 			settled = ValueConst.TRUE_BOOLEAN;
 		}
-
+		
 		market.setSnapshot(date,
 				message.getPriceOpen(),
 				message.getPriceHigh(),
