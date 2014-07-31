@@ -408,7 +408,7 @@ public class BarchartMarketplace implements Marketplace {
 
 		final Agent agent = newAgent(clazz, callback);
 
-		agent.include(symbols);
+		agent.include(symbols).subscribe();
 
 		return agent;
 	}
@@ -441,7 +441,7 @@ public class BarchartMarketplace implements Marketplace {
 
 		final Agent agent = newAgent(Market.class, callback);
 
-		agent.include(symbols);
+		agent.include(symbols).subscribe();
 
 		return agent;
 	}
@@ -463,7 +463,7 @@ public class BarchartMarketplace implements Marketplace {
 
 		final Agent agent = newAgent(Book.class, book);
 
-		agent.include(symbols);
+		agent.include(symbols).subscribe();
 
 		return agent;
 	}
@@ -473,6 +473,8 @@ public class BarchartMarketplace implements Marketplace {
 			final String... symbols) {
 
 		final Agent agent = newAgent(Cuvol.class, cuvol);
+		
+		agent.include(symbols).subscribe();
 
 		return agent;
 	}

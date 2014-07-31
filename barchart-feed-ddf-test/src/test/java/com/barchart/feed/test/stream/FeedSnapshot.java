@@ -5,6 +5,8 @@ import java.util.TreeMap;
 
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.base.provider.Symbology;
+import com.barchart.feed.base.provider.Symbology.ExpireMonth;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.test.replay.BarchartMarketplaceReplay;
@@ -19,10 +21,17 @@ public class FeedSnapshot implements Runnable {
 
 	@Override
 	public void run() {
+		
+		/* Set time so symbols are parsed correctly */
+		Symbology.setMonthYear(ExpireMonth.JAN, 2014);
 
 		final String[] symbols = new String[] {
-				"ESH4", "ESM4", "ESU4", "ESZ4", "ZCH4", "ZCK4", "ZCN4", "ZCU4", "XFH4", "XFK4", "XFN4", "XFU4", "RMF4",
-				"RMH4", "RMK4", "RMN4", "KCH4", "KCK4", "KCN4", "KCU4", "DXH14", "DXM4", "DXU4", "DXZ4"
+				"ESH4", "ESM4", "ESU4", "ESZ4", 
+				"ZCH4", "ZCK4", "ZCN4", "ZCU4", 
+				"XFH4", "XFK4", "XFN4", "XFU4", 
+				"RMF4", "RMH4", "RMK4", "RMN4", 
+				"KCH4", "KCK4", "KCN4", "KCU4", 
+				"DXH4", "DXM4", "DXU4", "DXZ4"
 		};
 
 		final Map<String, Market> markets = new TreeMap<String, Market>();
