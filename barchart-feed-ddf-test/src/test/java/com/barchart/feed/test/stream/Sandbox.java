@@ -18,9 +18,10 @@ public class Sandbox {
 			@Override
 			public synchronized void onNext(final Market m) {
 				System.out.println(m.instrument().symbol() + ": " + m.lastPrice().price());
+				//System.out.println(m.instrument().symbol() + ": " + (m.lastPrice().isNull() ? "NULL" : m.lastPrice().price()));
 			}
 
-		}, "IBM");
+		}, "CTZ14");
 
 		while (true) {
 			Thread.sleep(10000);

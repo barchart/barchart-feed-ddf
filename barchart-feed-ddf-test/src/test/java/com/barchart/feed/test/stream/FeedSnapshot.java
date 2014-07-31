@@ -26,11 +26,11 @@ public class FeedSnapshot implements Runnable {
 		Symbology.setMonthYear(ExpireMonth.JAN, 2014);
 
 		final String[] symbols = new String[] {
-				"ESH4", "ESM4", "ESU4", "ESZ4", 
-				"ZCH4", "ZCK4", "ZCN4", "ZCU4", 
-				"XFH4", "XFK4", "XFN4", "XFU4", 
-				"RMF4", "RMH4", "RMK4", "RMN4", 
-				"KCH4", "KCK4", "KCN4", "KCU4", 
+//				"ESH4", "ESM4", "ESU4", "ESZ4", 
+//				"ZCH4", "ZCK4", "ZCN4", "ZCU4", 
+//				"XFH4", "XFK4", "XFN4", "XFU4", 
+//				"RMF4", "RMH4", "RMK4", "RMN4", 
+//				"KCH4", "KCK4", "KCN4", "KCU4", 
 				"DXH4", "DXM4", "DXU4", "DXZ4"
 		};
 

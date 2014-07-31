@@ -38,7 +38,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"^USDCOP",
+		"CTZ14",
 		//"LEM15",
 		//"YMZ2014", 
 		//"ZCZ14", "ZSZ14", 
@@ -106,6 +106,7 @@ public class TestBarchartMarketProvider {
 				
 				System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()) + " " + m.updated().millisecond());
 				System.out.println(m.session());
+				System.out.println(m.lastPrice());
 				
 			}
 		};
