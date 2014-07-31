@@ -42,14 +42,14 @@ class MarketSnapshot {
 			stream.println(String.format(
 					" %-8s | %s | %8.3f%1s | %12s | %9.3f | %8.3f | %7b | %8.3f ",
 					m.instrument().symbol(),
-					DF.format(new Date(current.updated().millisecond())),
-					m.lastPrice().price().asDouble(),
-					m.lastPrice().source().flag(),
-					m.lastPrice().source().name(),
-					previous.close().asDouble(),
-					current.settle().asDouble(),
-					current.isSettled().value(),
-					previous.settle().asDouble()));
+					DF.format(current.updated().isNull() ? new Date(0) : new Date(current.updated().millisecond())),
+					m.lastPrice().isNull() || m.lastPrice().price().isNull() ? 0 : m.lastPrice().price().asDouble(),
+					m.lastPrice().isNull() ? "" : m.lastPrice().source().flag(),
+					m.lastPrice().isNull() ? "" : m.lastPrice().source().name(),
+					previous.close().isNull() ? 0 : previous.close().asDouble(),
+					current.settle().isNull() ? 0 : current.settle().asDouble(),
+					current.isSettled().isNull() ? false : current.isSettled().value(),
+					previous.settle().isNull() ? 0 : previous.settle().asDouble()));
 
 		}
 

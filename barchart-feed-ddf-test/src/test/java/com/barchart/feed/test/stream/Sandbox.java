@@ -2,7 +2,7 @@ package com.barchart.feed.test.stream;
 
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
-import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 
 public class Sandbox {
@@ -13,16 +13,14 @@ public class Sandbox {
 
 		marketplace.startup();
 
-		marketplace.subscribe(Book.class, new MarketObserver<Book>() {
+		marketplace.subscribe(Market.class, new MarketObserver<Market>() {
 
 			@Override
-			public synchronized void onNext(final Book b) {
-				System.out.println(b.instrument().symbol() + ": "
-						+ b.top().bid().price().asDouble() + "/"
-						+ b.top().bid().price().asDouble());
+			public synchronized void onNext(final Market m) {
+				System.out.println(m.instrument().symbol() + ": " + m.lastPrice().price());
 			}
 
-		}, "ESZ14");
+		}, "IBM");
 
 		while (true) {
 			Thread.sleep(10000);
