@@ -1,26 +1,7 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ALT_SYMBOL;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.BASE_CODE_DDF;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.EXCHANGE_DDF;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ID;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_POINT_VALUE;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_TICK_INCREMENT;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.STATUS;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_CODE_CFI;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_COMMENT;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_MONTH;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_REAL;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPIRE;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REALTIME;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.TIME_ZONE_DDF;
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.UNDERLIER_ID;
-import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
-import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
-import static com.barchart.feed.ddf.util.HelperXML.xmlByteDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalDecode;
-import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.*;
+import static com.barchart.feed.ddf.util.HelperXML.*;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -45,7 +26,7 @@ import com.barchart.util.value.api.Price;
 import com.barchart.util.value.api.ValueFactory;
 
 public class DDF_Instrument extends DefaultInstrument implements InstrumentState {
-	
+
 	protected static final Logger log = LoggerFactory.getLogger(DDF_Instrument.class);
 
 	protected static final ValueFactory VALUES = ValueFactoryImpl.getInstance();
@@ -81,11 +62,11 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		loadState = state_;
 
 	}
-	
+
 	public DDF_Instrument(final Attributes attr) throws Exception {
 
 		super(xmlId(attr));
-		
+
 		/* vendor */
 		vendor = VendorID.BARCHART;
 
@@ -117,7 +98,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		CFICode = xmlStringDecode(attr, SYMBOL_CODE_CFI, XML_PASS);
 
 		securityType = SecurityType.fromCFI(CFICode);
-		
+
 		/* If type = option, parse out strike price */
 		if(securityType == SecurityType.OPTION) {
 			try {
@@ -127,7 +108,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 			} catch (final Exception e) {
 				log.warn("Exception parsing strike price from symbol {}", symbol);
 			}
-			
+
 			final char type = symbol.charAt(symbol.length() - 1);
 			switch(type) {
 			case 'C':
@@ -148,13 +129,13 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 				log.warn("Null Option type {}", type);
 				break;
 			}
-			
+
 			/* Set underlier ID */
-			final String under = xmlStringDecode(attr, UNDERLIER_ID, XML_PASS); 
+			final String under = xmlStringDecode(attr, UNDERLIER_ID, XML_PASS);
 			if(under != null && under.length() > 0) {
 				underlier = new InstrumentID(under);
 			}
-			
+
 		}
 
 		/* price currency */
@@ -249,7 +230,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 	}
 
 	private static InstrumentID xmlId(final Attributes attr) throws SymbolNotFoundException {
-		
+
 		// lookup status
 		final String statusCode = xmlStringDecode(attr, STATUS, XML_STOP);
 		final StatusXML status = StatusXML.fromCode(statusCode);
@@ -358,6 +339,8 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 
 		spreadLegs.clear();
 		spreadLegs.addAll(inst.spreadLegs());
+
+		displayFraction = inst.displayFraction();
 
 	}
 
