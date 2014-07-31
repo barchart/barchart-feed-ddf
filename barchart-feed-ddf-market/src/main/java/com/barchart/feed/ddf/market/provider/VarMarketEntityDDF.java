@@ -43,9 +43,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	
 	private final Set<MKData> toFire = EnumSet.noneOf(MKData.class);
 
-	@SuppressWarnings("unused")
-	private static final Logger log = 
-			LoggerFactory.getLogger(VarMarketEntityDDF.class);
+	private static final Logger log = LoggerFactory.getLogger(VarMarketEntityDDF.class);
 	
 	public VarMarketEntityDDF(final Instrument instrument) {
 		super(instrument);
@@ -70,7 +68,11 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		
 		for(final FrameworkAgent<com.barchart.feed.api.model.data.Market> a : marketAgents) {
 			if(a.isActive()) {
-				a.callback().onNext(a.data(this.freeze()));
+				try {
+					a.callback().onNext(a.data(this.freeze()));
+				} catch(final Exception e) {
+					log.error("Exception in MARKET agent callback", e);
+				}
 			}
 		}
 		
@@ -89,7 +91,11 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		if(toFire.contains(MKData.BOOK)) {
 			for(final FrameworkAgent<Book> a : bookAgents) {
 				if(a.isActive()) {
-					a.callback().onNext(a.data(this.freeze()));
+					try {
+						a.callback().onNext(a.data(this.freeze()));
+					} catch(final Exception e) {
+						log.error("Exception in BOOK agent callback", e);
+					}
 				}
 			}
 		}
@@ -109,8 +115,11 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		if(toFire.contains(MKData.TRADE)) {
 			for(final FrameworkAgent<Trade> a : tradeAgents) {
 				if(a.isActive()) {
-					final Market m = this.freeze();
-					a.callback().onNext(a.data(this.freeze()));
+					try {
+						a.callback().onNext(a.data(this.freeze()));
+					} catch(final Exception e) {
+						log.error("Exception in TRADE agent callback", e);
+					}
 				}
 			}
 		}
@@ -130,7 +139,11 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		if(toFire.contains(MKData.SESSION)) {
 			for(final FrameworkAgent<Session> a : sessionAgents) {
 				if(a.isActive()) {
-					a.callback().onNext(a.data(this.freeze()));
+					try {
+						a.callback().onNext(a.data(this.freeze()));
+					} catch(final Exception e) {
+						log.error("Exception in SESSION agent callback", e);
+					}
 				}
 			}
 		}
@@ -150,7 +163,11 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		if(toFire.contains(MKData.CUVOL)) {
 			for(final FrameworkAgent<Cuvol> a : cuvolAgents) {
 				if(a.isActive()) {
-					a.callback().onNext(a.data(this.freeze()));
+					try {
+						a.callback().onNext(a.data(this.freeze()));
+					} catch(final Exception e) {
+						log.error("Exception in CUVOL agent callback", e);
+					}
 				}
 			}
 		}
