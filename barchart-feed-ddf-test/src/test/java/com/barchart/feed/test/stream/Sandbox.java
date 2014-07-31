@@ -17,12 +17,12 @@ public class Sandbox {
 
 			@Override
 			public synchronized void onNext(final Book b) {
-				// System.out.println(b.instrument().symbol() + ": "
-				// + b.top().bid().price().asDouble() + "/"
-				// + b.top().bid().price().asDouble());
+				System.out.println(b.instrument().symbol() + ": "
+						+ b.top().bid().price().asDouble() + "/"
+						+ b.top().bid().price().asDouble());
 			}
 
-		}, "GOOG.BZ", "IBM.BZ", "AAPL.BZ", "FXE.BZ", "IAU.BZ", "INTC.BZ", "S.BZ", "SPY.BZ", "XOM.BZ", "ZNGA.BZ");
+		}, "ESZ14");
 
 		while (true) {
 			Thread.sleep(10000);
