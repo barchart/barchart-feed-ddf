@@ -26,6 +26,7 @@ import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Session;
+import com.barchart.feed.api.model.data.Session.Type;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
@@ -104,9 +105,9 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market m) {
 				
-				System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()) + " " + m.updated().millisecond());
-				System.out.println(m.session());
-				System.out.println(m.lastPrice());
+				//System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()) + " " + m.updated().millisecond());
+				System.out.println(m.sessionSet().session(Type.DEFAULT_PREVIOUS));
+				//System.out.println(m.lastPrice());
 				
 			}
 		};

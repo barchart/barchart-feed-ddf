@@ -51,10 +51,14 @@ import com.barchart.feed.ddf.datalink.api.DummyFuture;
 import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
+import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
+import com.barchart.feed.ddf.message.provider.CodecHelper;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 import com.barchart.feed.ddf.settings.provider.DDF_SettingsService;
+import com.barchart.feed.ddf.util.ClockDDF;
+import com.barchart.feed.ddf.util.FeedClock;
 import com.barchart.feed.ddf.util.FeedDDF;
 
 class FeedClientDDF implements DDF_FeedClient {
@@ -430,8 +434,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			final int threadNumber = messageTaskNumber.getAndIncrement();
 
-			Thread.currentThread()
-					.setName("# DDF MESSAGE TASK " + threadNumber);
+			Thread.currentThread().setName("# DDF MESSAGE TASK " + threadNumber);
 
 			log.warn("# started DDF-MessageTask {}", threadNumber);
 
@@ -442,16 +445,23 @@ class FeedClientDDF implements DDF_FeedClient {
 					final DDF_BaseMessage message = messageQueue.take();
 					if (msgListener != null) {
 						
+						/* We set the clock by the timestamp messages, however,
+						 * we also set the clock by market messages, but this has to
+						 * happen in the message decoding */
+						if (message instanceof DDF_ControlTimestamp) {
+							ClockDDF.clock.set(((DDF_ControlTimestamp) message)
+									.getStampUTC().asMillisUTC());
+						} 
+						
 						//// #######################
-						//log.debug(message.toStringFields());
+						// log.debug(message.toString());
 						// #######################
 						
 						msgListener.handleMessage(message);
 					}
 				} catch (final InterruptedException e) {
 
-					log.warn("# DDF-MessageTask InterruptedException {}",
-							threadNumber);
+					log.warn("# DDF-MessageTask InterruptedException {}", threadNumber);
 
 					Thread.currentThread().interrupt();
 
@@ -463,6 +473,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.error("# DDF-MessageTask death {}", threadNumber);
 		}
 	};
+	
+	
 
 	@Override
 	public void setPolicy(final DDF_FeedEvent event, final EventPolicy policy) {

@@ -32,5 +32,5 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 *            The even policy to register.
 	 */
 	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
-
+	
 }

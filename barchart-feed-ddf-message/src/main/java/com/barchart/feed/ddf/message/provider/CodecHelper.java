@@ -7,7 +7,15 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.common.ascii.ASCII.*;
+import static com.barchart.util.common.ascii.ASCII.NUL;
+import static com.barchart.util.common.ascii.ASCII._0_;
+import static com.barchart.util.common.ascii.ASCII._A_;
+import static com.barchart.util.common.ascii.ASCII._J_;
+import static com.barchart.util.common.ascii.ASCII._K_;
+import static com.barchart.util.common.ascii.ASCII._T_;
+import static com.barchart.util.common.ascii.ASCII._Z_;
+import static com.barchart.util.common.ascii.ASCII.isDigit;
+import static com.barchart.util.common.ascii.ASCII.isLetterUpper;
 
 import java.nio.ByteBuffer;
 
@@ -18,13 +26,15 @@ import org.w3c.dom.Element;
 
 import com.barchart.feed.ddf.message.api.DDF_MarketBook;
 import com.barchart.feed.ddf.symbol.provider.DDF_Symbology;
+import com.barchart.feed.ddf.util.ClockDDF;
+import com.barchart.feed.ddf.util.FeedClock;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.HelperXML;
 import com.barchart.util.common.ascii.ASCII;
 
 /* TODO make public ? */
 
-class CodecHelper {
+public class CodecHelper {
 
 	// TODO make configurable
 	static final boolean IS_FEED_TIME_STAMP_PRESENT = true;
@@ -58,12 +68,14 @@ class CodecHelper {
 	// ///////////////////////////////////////////////
 
 	// feed time stamp - "magic 9 bytes" or "current default"
-
+	
+	private static final FeedClock clock = ClockDDF.clock;
+	
 	static final long decodeFeedTimeStamp(final DateTimeZone zone,
 			final ByteBuffer buffer) {
 		if (buffer.position() == buffer.limit()) {
 			// no suffix; return current
-			return System.currentTimeMillis();
+			return clock.millis();
 		}
 		//
 		buffer.mark();
@@ -71,10 +83,12 @@ class CodecHelper {
 		buffer.reset();
 		if (timeStampStart == DDF_CENTURY) {
 			// magic 9 bytes
-			return CodecHelper.decodeMillisUTC(zone, buffer);
+			final long time = CodecHelper.decodeMillisUTC(zone, buffer);
+			clock.set(time);
+			return time;
 		} else {
 			// unknown suffix; return current
-			return System.currentTimeMillis();
+			return clock.millis();
 		}
 	}
 

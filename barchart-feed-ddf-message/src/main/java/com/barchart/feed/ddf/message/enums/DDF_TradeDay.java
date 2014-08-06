@@ -49,6 +49,7 @@ import com.barchart.feed.base.enums.EnumByteOrdinal;
 import com.barchart.feed.base.enums.EnumCodeByte;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
+import com.barchart.feed.ddf.util.ClockDDF;
 import com.barchart.util.common.math.MathExtra;
 
 // TODO: Auto-generated Javadoc
@@ -257,7 +258,7 @@ public enum DDF_TradeDay implements EnumCodeByte, EnumByteOrdinal {
 	public TimeValue tradeDate() {
 
 		// current date in chicago
-		final DateTime todayCST = new DateTime(ZONE_CST);
+		final DateTime todayCST = new DateTime(ClockDDF.clock.millis(), ZONE_CST);
 
 		final TimeValue tradeDate = tradeDateFrom(this, todayCST);
 
