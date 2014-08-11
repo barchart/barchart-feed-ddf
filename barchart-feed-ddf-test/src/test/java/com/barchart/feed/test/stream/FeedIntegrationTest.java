@@ -22,10 +22,10 @@ import com.barchart.feed.test.replay.BarchartMarketplaceReplay;
 import com.barchart.feed.test.replay.FeedReplay;
 import com.barchart.feed.test.replay.FeedReplay.MessageListener;
 
-public class FeedIntegrationTests {
+public class FeedIntegrationTest {
 	
 	private static final Logger log = LoggerFactory.getLogger(
-			FeedIntegrationTests.class);
+			FeedIntegrationTest.class);
 
 	@Test
 	public void HistoricReplayMarketStateTest() throws InterruptedException, IOException {

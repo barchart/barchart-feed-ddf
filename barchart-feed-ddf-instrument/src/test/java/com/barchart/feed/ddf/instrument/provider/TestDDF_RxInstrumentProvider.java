@@ -20,7 +20,7 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("GCM2015|1725C").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("_S_BF_CLU4_CLV4_CLX4").subscribe(obs());
 		
 		Thread.sleep(1 * 1000);
 		
@@ -101,6 +101,8 @@ public class TestDDF_RxInstrumentProvider {
 							log.debug("Strike price : {}", i.strikePrice());
 						}
 						log.debug("Underlier ID = {}", i.underlier());
+						log.debug("Spread Type is = {}", i.spreadType());
+						log.debug("Number of legs = {}", i.spreadLegs().size());
 					}
 					
 				}

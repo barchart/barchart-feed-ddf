@@ -86,5 +86,33 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	
+	<profiles>
+	
+     	<profile>
+       		<id>bld</id>
+      		<modules>
+           		<module>barchart-feed-ddf-settings</module>
+				<module>barchart-feed-ddf-instrument</module>
+				<module>barchart-feed-ddf-message</module>
+				<module>barchart-feed-ddf-historical</module>
+				<module>barchart-feed-ddf-datalink</module>
+				<module>barchart-feed-ddf-market</module>
+				<module>barchart-feed-ddf-symbol</module>
+				<module>barchart-feed-ddf-util</module>
+				<module>barchart-feed-ddf-resolver</module>
+				<module>barchart-feed-ddf-client</module>
+				<module>barchart-feed-ddf-assembly</module>
+       		</modules> 
+		</profile>
+		
+    	<profile>
+      		<id>test</id>
+      		<modules>
+      			<module>barchart-feed-ddf-test</module>
+      		</modules>
+      	</profile>
+      	
+  	</profiles>
 
 </project>
