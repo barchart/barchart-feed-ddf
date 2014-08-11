@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.model.data.Market;
@@ -17,6 +18,10 @@ import com.barchart.feed.api.model.data.SessionData;
 class MarketSnapshot {
 
 	private static final DateFormat DF = new SimpleDateFormat("MM-dd HH:mm:ss");
+	
+	static {
+		DF.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+	}
 
 	public static void printReport(final Marketplace marketplace, final String... symbols) {
 		printReport(marketplace, System.out, symbols);
