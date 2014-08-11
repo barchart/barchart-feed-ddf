@@ -45,12 +45,12 @@ public class IntegrationTestResultWriter {
 			}
 		}, symbols);
 		
-		final File outFile = new File("/home/gavin/Desktop/ZC-20140110_Result.txt");
+		final File outFile = new File("/home/gavin/Desktop/ES-20140110_Result.txt");
 		final FileWriter fileWriter = new FileWriter(outFile);
 		final BufferedWriter writer = new BufferedWriter(fileWriter);
 
 		final FeedReplay replay = FeedReplay.builder()
-				.source(IntegrationTestResultWriter.class.getResource("/ZC-20140110-week.ddf.gz"))
+				.source(IntegrationTestResultWriter.class.getResource("/ES-20140110-week.ddf.gz"))
 				.start("2014-01-13 00:00:00")
 				.end("2014-01-14 08:30:00")
 				.listener(new MessageListener() {

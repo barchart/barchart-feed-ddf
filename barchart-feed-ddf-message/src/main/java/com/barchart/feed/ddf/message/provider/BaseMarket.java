@@ -32,6 +32,7 @@ import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
 import com.barchart.feed.ddf.symbol.provider.DDF_SymbolService;
 import com.barchart.feed.ddf.symbol.provider.DDF_Symbology;
+import com.barchart.feed.ddf.util.ClockDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 import com.barchart.feed.meta.instrument.DefaultInstrument;
 import com.barchart.util.common.ascii.ASCII;
@@ -441,7 +442,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	// ######################
 
 	protected final void setDecodeDefaults() {
-		setDecodeDefaults(System.currentTimeMillis());
+		setDecodeDefaults(ClockDDF.clock.millis());
 	}
 
 	protected final void setDecodeDefaults(final long millisUTC) {

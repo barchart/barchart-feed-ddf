@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.TimeZone;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -73,6 +74,7 @@ public class FeedIntegrationTest {
 			
 			final FeedReplay replay = FeedReplay.builder()
 					.source(IntegrationTestResultWriter.class.getResource("/" + prod + "-20140110-week.ddf.gz"))
+					.zone(TimeZone.getTimeZone("America/New_York"))
 					.start("2014-01-13 00:00:00")
 					.end("2014-01-14 08:30:00")
 					.listener(new MessageListener() {
@@ -98,6 +100,7 @@ public class FeedIntegrationTest {
 											log.error("Line mismatch for product {}", prod);
 											log.error("Expected Line  {}", testLine);
 											log.error("Current line   {}", curLine);
+											log.error("Line that failed {}", parsed);
 											assertTrue(false);
 										}
 										

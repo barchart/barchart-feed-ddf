@@ -83,7 +83,7 @@ public class CodecHelper {
 		buffer.reset();
 		if (timeStampStart == DDF_CENTURY) {
 			// magic 9 bytes
-			final long time = CodecHelper.decodeMillisUTC(zone, buffer);
+			final long time = decodeMillisUTC(zone, buffer);
 			clock.set(time);
 			return time;
 		} else {

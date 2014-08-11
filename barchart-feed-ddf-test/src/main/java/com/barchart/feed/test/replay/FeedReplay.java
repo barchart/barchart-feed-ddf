@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 
 import org.slf4j.Logger;
@@ -64,6 +65,11 @@ public class FeedReplay {
 			} catch (final MalformedURLException e) {
 				throw new RuntimeException(e);
 			}
+		}
+		
+		public Builder zone(final TimeZone zone) {
+			DP.setTimeZone(zone);
+			return this;
 		}
 
 		public Builder start(final Date start_) {
