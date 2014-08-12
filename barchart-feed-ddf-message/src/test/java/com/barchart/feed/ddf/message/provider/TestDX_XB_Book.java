@@ -29,6 +29,7 @@ import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
+import com.barchart.feed.ddf.util.ClockDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 
 // TODO: Auto-generated Javadoc
@@ -45,6 +46,7 @@ public class TestDX_XB_Book extends TestDDFBase {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		ClockDDF.reset();
 	}
 
 	/**

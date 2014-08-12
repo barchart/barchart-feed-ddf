@@ -29,6 +29,7 @@ import com.barchart.feed.ddf.message.enums.DDF_Session;
 import com.barchart.feed.ddf.message.enums.DDF_TradeDay;
 import com.barchart.feed.ddf.symbol.enums.DDF_Exchange;
 import com.barchart.feed.ddf.symbol.enums.DDF_SpreadType;
+import com.barchart.feed.ddf.util.ClockDDF;
 import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.enums.DDF_Fraction;
 
@@ -46,6 +47,7 @@ public class TestDF_3B_Book extends TestDDFBase {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		ClockDDF.reset();
 	}
 
 	/**
@@ -70,9 +72,6 @@ public class TestDF_3B_Book extends TestDDFBase {
 	 */
 	@Test
 	public void testDecode_1() {
-
-		final DDF_TradeDay todayUTC = DDF_TradeDay.fromMillisUTC(System
-				.currentTimeMillis());
 
 		final DF_3B_Book msg = new DF_3B_Book();
 
