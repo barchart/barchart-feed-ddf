@@ -95,9 +95,6 @@ public class TestDX_XB_Book extends TestDDFBase {
 	@Test
 	public void testDecodeXML() {
 
-		final DDF_TradeDay todayUTC = DDF_TradeDay.fromMillisUTC(System
-				.currentTimeMillis());
-
 		final DX_XB_Book msg = new DX_XB_Book();
 		MarketBookEntry entry;
 
@@ -112,7 +109,7 @@ public class TestDX_XB_Book extends TestDDFBase {
 		assertEquals(msg.getFraction(), DDF_Fraction.N2);
 		assertEquals(msg.getExchange(), DDF_Exchange.UNKNOWN);
 		assertEquals(msg.getMessageType(), DDF_MessageType.BOOK_SNAP_XML);
-		assertEquals(msg.getTradeDay(), todayUTC);
+		assertEquals(msg.getTradeDay(), DDF_TradeDay.D01);
 		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getDelay(), 0);
 

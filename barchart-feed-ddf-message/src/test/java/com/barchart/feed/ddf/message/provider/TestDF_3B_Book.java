@@ -83,15 +83,11 @@ public class TestDF_3B_Book extends TestDDFBase {
 		assertEquals(msg.getExchange(), DDF_Exchange.CME_Main);
 		assertEquals(msg.getFraction(), DDF_Fraction.N2);
 		assertEquals(msg.getMessageType(), DDF_MessageType.BOOK_SNAP);
-		assertEquals(msg.getTradeDay(), todayUTC);
+		assertEquals(msg.getTradeDay(), DDF_TradeDay.D01);
 		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getId(), "ESZ1");
 		assertEquals(msg.getSpreadType(), DDF_SpreadType.UNKNOWN);
 		assertEquals(msg.getDelay(), 0);
-
-		final long t1 = msg.getTime().asMillisUTC();
-		final long t2 = System.currentTimeMillis();
-		assertTrue(t2 - t1 < 100);
 
 	}
 
@@ -100,9 +96,6 @@ public class TestDF_3B_Book extends TestDDFBase {
 	 */
 	@Test
 	public void testDecode() {
-
-		final DDF_TradeDay todayUTC = DDF_TradeDay.fromMillisUTC(System
-				.currentTimeMillis());
 
 		final DF_3B_Book msg = new DF_3B_Book();
 
@@ -113,15 +106,11 @@ public class TestDF_3B_Book extends TestDDFBase {
 		assertEquals(msg.getExchange(), DDF_Exchange.BATS);
 		assertEquals(msg.getFraction(), DDF_Fraction.N3);
 		assertEquals(msg.getMessageType(), DDF_MessageType.BOOK_SNAP);
-		assertEquals(msg.getTradeDay(), todayUTC);
+		assertEquals(msg.getTradeDay(), DDF_TradeDay.D01);
 		assertEquals(msg.getSession(), DDF_Session.FUT_COMBO);
 		assertEquals(msg.getId(), "XIZ9");
 		assertEquals(msg.getSpreadType(), DDF_SpreadType.UNKNOWN);
 		assertEquals(msg.getDelay(), 0);
-
-		final long t1 = msg.getTime().asMillisUTC();
-		final long t2 = System.currentTimeMillis();
-		assertTrue(t2 - t1 < 100);
 
 	}
 
