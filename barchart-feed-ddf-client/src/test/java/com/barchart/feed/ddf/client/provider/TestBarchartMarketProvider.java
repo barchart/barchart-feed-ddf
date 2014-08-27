@@ -31,6 +31,8 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketProvider;
+import com.barchart.feed.client.provider.BarchartMarketplace;
+import com.barchart.feed.client.provider.BarchartMarketplace.FeedType;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 
 public class TestBarchartMarketProvider {
@@ -39,11 +41,11 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"CTZ14",
+		//"CTZ14",
 		//"LEM15",
 		//"YMZ2014", 
 		//"ZCZ14", "ZSZ14", 
-		//"ESZ4", "GOOG"
+		"ESZ4", "GOOG"
 		//"NQY0", "VIY0" 
 	};
 	
@@ -52,7 +54,11 @@ public class TestBarchartMarketProvider {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 		
-		final MarketService market = new BarchartMarketProvider(username, password);
+		final MarketService market = BarchartMarketplace.builder()
+				.username(username)
+				.password(password)
+				.feedType(FeedType.LISTENER_TCP)
+				.port(41234).build();
 		
 		final CountDownLatch lock = new CountDownLatch(1);
 		

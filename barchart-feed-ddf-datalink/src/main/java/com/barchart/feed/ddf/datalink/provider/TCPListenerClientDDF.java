@@ -41,8 +41,7 @@ import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 
-public class TCPListenerClientDDF extends SimpleChannelHandler implements
-		DDF_FeedClientBase {
+public class TCPListenerClientDDF extends SimpleChannelHandler implements DDF_FeedClientBase {
 
 	/** use slf4j for internal NETTY LoggingHandler facade */
 	static {
@@ -214,7 +213,6 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements
 	@Override
 	public void startUpProxy() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

@@ -261,6 +261,12 @@ public final class DDF_InstrumentProvider {
 						return; // Ignore
 					}
 
+					if(!symbolMap.containsKey(symbol)) {
+						final InstrumentState i = result.result();
+						symbolMap.put(symbol, Arrays.asList(i));
+						idMap.put(i.id(), i);
+					}
+					
 					final InstrumentState iState = symbolMap.get(symbol).get(0);
 
 					if (iState == null || iState.isNull()) {
@@ -275,8 +281,7 @@ public final class DDF_InstrumentProvider {
 
 				@Override
 				public void onError(final Throwable error) {
-					// TODO Auto-generated method stub
-
+					log.error("Exception in instrument observer", error);
 				}
 
 				@Override

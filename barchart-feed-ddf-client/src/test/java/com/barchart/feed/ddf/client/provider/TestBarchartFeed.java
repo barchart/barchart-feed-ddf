@@ -1,6 +1,5 @@
 package com.barchart.feed.ddf.client.provider;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +20,6 @@ import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
-import com.barchart.feed.inst.Exchanges;
 
 public class TestBarchartFeed {
 	
@@ -32,16 +30,7 @@ public class TestBarchartFeed {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 
-		final File dbFolder = new File("/home/gavin/logs/");
-		
-		final Marketplace feed = BarchartMarketplace.builder().
-				username(username).
-				password(password).
-				useLocalInstDatabase().
-				dbaseFolder(dbFolder).
-				//instrumentDefZip(new File("/home/gavin/logs/instrumentDef.zip")).
-				syncWithRemote(false).
-				build();
+		final Marketplace feed = new BarchartMarketplace(username, password);
 		
 		feed.bindConnectionStateListener(new Connection.Monitor() {
 

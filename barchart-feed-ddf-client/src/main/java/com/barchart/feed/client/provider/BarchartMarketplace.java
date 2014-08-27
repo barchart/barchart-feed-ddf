@@ -1,7 +1,5 @@
 package com.barchart.feed.client.provider;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -43,15 +41,16 @@ import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.ValueFactory;
 
 public class BarchartMarketplace implements Marketplace {
-
+	
 	private static final Logger log = LoggerFactory
 			.getLogger(BarchartMarketplace.class);
+	
+	public enum FeedType {
+		NULL, CONNECTION, CONNECTION_PROXY, LISTENER_TCP, LISTENER_UDP
+	}
 
 	/* Value api factory */
 	private static final ValueFactory factory = ValueFactoryImpl.instance;
-
-	/* Used if unable to retrieve system default temp directory */
-	private static final String TEMP_DIR = "C:\\windows\\temp\\";
 
 	protected volatile DDF_FeedClientBase connection;
 	protected volatile DDF_Marketplace maker;
@@ -64,18 +63,34 @@ public class BarchartMarketplace implements Marketplace {
 			new CopyOnWriteArrayList<TimestampListener>();
 
 	public BarchartMarketplace(final String username, final String password) {
-		this(username, password, getDefault(), getTempFolder(), null, false,
-				true);
+		this(username, password, getDefault(), FeedType.CONNECTION, 0);
 	}
 
-	protected BarchartMarketplace(final String username, final String password,
-			final ExecutorService ex, final File dbFolder,
-			final File instDefZip, final boolean useDB,
-			final boolean syncWithRemote) {
+	protected BarchartMarketplace(
+			final String username, 
+			final String password,
+			final ExecutorService ex,
+			final FeedType type,
+			final int port) {
 
 		executor = ex;
 
-		connection = makeConnection(username, password);
+		switch(type) {
+		default:
+			connection = DDF_FeedClientFactory.newConnectionClient(
+				DDF_Transport.TCP,
+				username, 
+				password, 
+				executor);
+			break;
+		case LISTENER_TCP:
+			connection = DDF_FeedClientFactory.newStatelessTCPListenerClient(port, false, executor);
+			break;
+		case LISTENER_UDP:
+			connection = DDF_FeedClientFactory.newUDPListenerClient(port, false, executor);
+			break;
+		}
+		
 		connection.bindMessageListener(msgListener);
 
 		maker = DDF_Marketplace.newInstance(connection);
@@ -105,10 +120,8 @@ public class BarchartMarketplace implements Marketplace {
 
 		private String username = "NULL USERNAME";
 		private String password = "NULL PASSWORD";
-		private final File dbFolder = getTempFolder();
-		private final File instDefZip = null;
-		private final boolean useLocalDB = false;
-		private final boolean syncWithRemote = true;
+		private FeedType feedType = FeedType.NULL;
+		private int port = 0;
 
 		private ExecutorService executor = getDefault();
 
@@ -129,34 +142,19 @@ public class BarchartMarketplace implements Marketplace {
 			this.executor = executor;
 			return this;
 		}
-
-		@Deprecated
-		public Builder dbaseFolder(final File dbFolder) {
-			// this.dbFolder = dbFolder;
+		
+		public Builder feedType(final FeedType type) {
+			feedType = type;
 			return this;
 		}
-
-		@Deprecated
-		public Builder instrumentDefZip(final File instDefZip) {
-			// this.instDefZip = instDefZip;
-			return this;
-		}
-
-		@Deprecated
-		public Builder useLocalInstDatabase() {
-			// useLocalDB = true;
-			return this;
-		}
-
-		@Deprecated
-		public Builder syncWithRemote(final boolean sync) {
-			// syncWithRemote = sync;
+		
+		public Builder port(final int port) {
+			this.port = port;
 			return this;
 		}
 
 		public Marketplace build() {
-			return new BarchartMarketplace(username, password, executor,
-					dbFolder, instDefZip, useLocalDB, syncWithRemote);
+			return new BarchartMarketplace(username, password, executor, feedType, port);
 		}
 
 	}
@@ -181,29 +179,6 @@ public class BarchartMarketplace implements Marketplace {
 			}
 
 		});
-	}
-
-	/*
-	 * Returns the default temp folder
-	 */
-	private static File getTempFolder() {
-
-		try {
-
-			return File.createTempFile("temp", null).getParentFile();
-
-		} catch (final IOException e) {
-			log.warn("Unable to retrieve system temp folder, using default {}",
-					TEMP_DIR);
-			return new File(TEMP_DIR);
-		}
-
-	}
-
-	private DDF_FeedClientBase makeConnection(final String username,
-			final String password) {
-		return DDF_FeedClientFactory.newConnectionClient(DDF_Transport.TCP,
-				username, password, executor);
 	}
 
 	/* ***** ***** ***** ConnectionLifecycle ***** ***** ***** */
