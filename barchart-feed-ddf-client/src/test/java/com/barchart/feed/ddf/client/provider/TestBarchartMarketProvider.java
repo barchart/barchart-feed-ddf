@@ -34,6 +34,7 @@ import com.barchart.feed.client.provider.BarchartMarketProvider;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.client.provider.BarchartMarketplace.FeedType;
 import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.inst.Exchanges;
 
 public class TestBarchartMarketProvider {
 
@@ -41,14 +42,16 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
+		"LEM2015", "LEZ2014", "UGU2014"
 		//"CTZ14",
 		//"LEM15",
 		//"YMZ2014", 
 		//"ZCZ14", "ZSZ14", 
-		"ESZ4", "GOOG"
+		// "ESZ4", "GOOG"
 		//"NQY0", "VIY0" 
 	};
 	
+	@SuppressWarnings("deprecation")
 	public static void main(final String[] args) throws Exception {
 		
 		final String username = System.getProperty("barchart.username");
@@ -60,19 +63,20 @@ public class TestBarchartMarketProvider {
 				.feedType(FeedType.LISTENER_TCP)
 				.port(41234).build();
 		
-		final CountDownLatch lock = new CountDownLatch(1);
-		
-		market.bindConnectionStateListener(listener(lock));
+//		final CountDownLatch lock = new CountDownLatch(1);
+//		
+//		market.bindConnectionStateListener(listener(lock));
 		market.startup();
+//		
+//		lock.await();
 		
-		lock.await();
-		
-		final ConsumerAgent agent1 = market.register(marketObs(market), Market.class);
+		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 //		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
 //		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
 //		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
-		agent1.include(insts).subscribe(instObs());
+		agent1.include(Exchanges.fromName("CME"));
+		//agent1.include(insts).subscribe(instObs());
 //		agent2.include(insts).subscribe(instObs());
 //		agent3.include(insts).subscribe(instObs());
 //		agent4.include(insts).subscribe(instObs());
@@ -102,7 +106,7 @@ public class TestBarchartMarketProvider {
 		};
 	}
 	
-	private static MarketObserver<Market> marketObs(final MarketService market) {
+	private static MarketObserver<Market> marketObs() {
 		
 		return new MarketObserver<Market>() {
 
@@ -112,7 +116,7 @@ public class TestBarchartMarketProvider {
 			public void onNext(final Market m) {
 				
 				//System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()) + " " + m.updated().millisecond());
-				System.out.println(m.sessionSet().session(Type.DEFAULT_PREVIOUS));
+				log.debug("*************************" + m.sessionSet().session(Type.DEFAULT_PREVIOUS));
 				//System.out.println(m.lastPrice());
 				
 			}
