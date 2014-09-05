@@ -1,13 +1,8 @@
-<!--
+<!-- Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com /> All 
+	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
 
-    Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com />
-
-    All rights reserved. Licensed under the OSI BSD License.
-
-    http://www.opensource.org/licenses/bsd-license.php
-
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -19,18 +14,17 @@
 
 	<artifactId>barchart-feed-ddf-client</artifactId>
 	<packaging>bundle</packaging>
-
 	<name>barchart-feed-ddf-client</name>
 
 	<scm>
 		<url>https://github.com/barchart/barchart-feed-ddf</url>
 		<connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
-	  <tag>master</tag>
-  </scm>
+		<tag>master</tag>
+	</scm>
 
 	<dependencies>
-	
+
 		<!-- DDF -->
 
 		<dependency>
@@ -57,8 +51,8 @@
 			<version>${barchartNettyVersion}</version>
 			<scope>provided</scope>
 		</dependency>
-		
-<!-- Logging framework. -->
+
+		<!-- Logging framework. -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
