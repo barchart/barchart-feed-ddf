@@ -107,5 +107,8 @@ public interface XmlTagExtras {
 	String PRICE_TICK_INCREMENT = "tick_increment";
 
 	String PRICE_POINT_VALUE = "point_value";
+	
+	String PROVIDER = "provider";
+	String SYMBOL = "symbol";
 
 }

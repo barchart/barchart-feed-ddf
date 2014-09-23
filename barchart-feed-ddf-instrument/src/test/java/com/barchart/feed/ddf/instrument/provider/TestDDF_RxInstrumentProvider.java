@@ -20,9 +20,15 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("_S_BF_CLU4_CLV4_CLX4").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("NYU2014").subscribe(obs());
 		
-		Thread.sleep(1 * 1000);
+		Thread.sleep(3 * 1000);
+		
+		log.debug("****************************************************************");
+		
+		DDF_RxInstrumentProvider.fromString("ESU2014").subscribe(obs());
+		
+		Thread.sleep(1000 * 1000);
 		
 		// "F.US.CLES2X12"
 		
@@ -31,9 +37,9 @@ public class TestDDF_RxInstrumentProvider {
 		//Thread.sleep(1 * 1000);
 		//DDF_RxInstrumentProvider.fromString("ESM2014|1950C").subscribe(obs());
 		
-		DDF_RxInstrumentProvider.fromID(new InstrumentID("1000002")).subscribe(idObs());
-		
-		Thread.sleep(3 * 1000);
+//		DDF_RxInstrumentProvider.fromID(new InstrumentID("1000002")).subscribe(idObs());
+//		
+//		Thread.sleep(3 * 1000);
 		
 		//System.exit(0);
 		
@@ -103,6 +109,9 @@ public class TestDDF_RxInstrumentProvider {
 						log.debug("Underlier ID = {}", i.underlier());
 						log.debug("Spread Type is = {}", i.spreadType());
 						log.debug("Number of legs = {}", i.spreadLegs().size());
+						log.debug("Exchange Code = {}", i.exchangeCode());
+						log.debug("Point Value = {}", i.pointValue());
+						log.debug("Tick Size = {}", i.tickSize());
 					}
 					
 				}

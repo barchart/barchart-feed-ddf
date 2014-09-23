@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
 import rx.Observable;
@@ -59,11 +60,12 @@ public class DDF_RxInstrumentProvider {
 			new ConcurrentHashMap<InstrumentID, InstrumentState>();
 
 	public static VendorID CQG_VENDOR_ID = new VendorID("CQG");
+	public static VendorID OEC_VENDOR_ID = new VendorID("OEC");
 
 	/* ***** ***** ***** Begin Executor ***** ***** ***** */
 
 	/**
-	 * Default executor service with dameon threads
+	 * Default executor service with daemon threads
 	 */
 	private volatile static ExecutorService executor = Executors.newCachedThreadPool(
 
@@ -389,27 +391,59 @@ public class DDF_RxInstrumentProvider {
 		
 	}
 
-	protected static DefaultHandler symbolHandler(final Map<String, List<InstrumentState>> result) {
+	public static DefaultHandler symbolHandler(final Map<String, List<InstrumentState>> result) {
 		return new DefaultHandler() {
 
+			private String lookup = null;
+			private Attributes atts = null;
+			private List<Attributes> vendors = new ArrayList<Attributes>();
+			
 			@Override
-			public void startElement(final String uri, final String localName, 
-					final String qName,	final Attributes ats) throws SAXException {
+			public void startElement(
+					final String uri, 
+					final String localName, 
+					final String qName,	
+					final Attributes ats) throws SAXException {
 
-				if (qName != null && qName.equals("instrument")) {
+				if ("instrument".equals(qName)) {
 					
-					final String lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
+					/* Check if we need to make a new instrument object */
+					if(atts != null) {
+						try {
+							result.put(lookup, Arrays.<InstrumentState> asList(new DDF_Instrument(ats, vendors)));
+						} catch (final SymbolNotFoundException se) {
+							result.put(lookup, Collections.<InstrumentState> emptyList());
+						} catch (final Exception e) {
+							e.printStackTrace();
+						}
+						
+						vendors = new ArrayList<Attributes>();
+						
+					} else {
+						atts = new AttributesImpl(ats);
+					}
+					
+					lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
+					
+				} else if("ticker".equals(qName)) {
+					vendors.add(new AttributesImpl(ats));
+				}
 
+			}
+			
+			@Override
+			public void endDocument() {
+				
+				if(atts != null) {
 					try {
-						result.put(lookup, Arrays.<InstrumentState> asList(new DDF_Instrument(ats)));
+						result.put(lookup, Arrays.<InstrumentState> asList(new DDF_Instrument(atts, vendors)));
 					} catch (final SymbolNotFoundException se) {
 						result.put(lookup, Collections.<InstrumentState> emptyList());
 					} catch (final Exception e) {
 						throw new RuntimeException(e);
 					}
-
 				}
-
+				
 			}
 
 		};
@@ -419,8 +453,11 @@ public class DDF_RxInstrumentProvider {
 		return new DefaultHandler() {
 
 			@Override
-			public void startElement(final String uri, final String localName, 
-					final String qName,	final Attributes ats) throws SAXException {
+			public void startElement(
+					final String uri, 
+					final String localName, 
+					final String qName,	
+					final Attributes ats) throws SAXException {
 				
 				if (qName != null && qName.equals("instrument")) {
 
@@ -518,14 +555,14 @@ public class DDF_RxInstrumentProvider {
 
 	private static final String SERVER_EXTRAS = "extras.ddfplus.com";
 
-	private static final String CQG_SYMBOL = "&symbology=CQG";
+	private static final String ALL_VENDORS = "&expanded=1";
 
 	private static final String urlSymbolLookup(final CharSequence lookup) {
-		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup + CQG_SYMBOL;
+		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup + ALL_VENDORS;
 	}
 	
 	private static final String urlIDLookup(final CharSequence lookup) {
-		return "http://" + SERVER_EXTRAS + "/instruments/?id=" + lookup + CQG_SYMBOL;
+		return "http://" + SERVER_EXTRAS + "/instruments/?id=" + lookup + ALL_VENDORS;
 	}
 
 	private static final String cqgInstLoopURL(final CharSequence lookup) {

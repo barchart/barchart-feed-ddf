@@ -3,6 +3,9 @@ package com.barchart.feed.ddf.instrument.provider;
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.*;
 import static com.barchart.feed.ddf.util.HelperXML.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
@@ -64,9 +67,12 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 	}
 
 	public DDF_Instrument(final Attributes attr) throws Exception {
+		this(attr, new ArrayList<Attributes>());
+	}
 
+	public DDF_Instrument(final Attributes attr, final List<Attributes> vendors) throws Exception {
 		super(xmlId(attr));
-
+		
 		/* vendor */
 		vendor = VendorID.BARCHART;
 
@@ -85,10 +91,13 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 			vendorSymbols.put(VendorID.BARCHART_HISTORICAL, hist);
 		}
 
-		// NOTE: Hard coded for CQG
-		final String cqg = xmlStringDecode(attr, ALT_SYMBOL, XML_PASS);
-		if (cqg != null) {
-			vendorSymbols.put(DDF_RxInstrumentProvider.CQG_VENDOR_ID, cqg);
+		/* Assign vendors */
+		for(final Attributes a : vendors) {
+			final VendorID id = new VendorID(xmlStringDecode(a, PROVIDER, XML_STOP));
+			final String sym = xmlStringDecode(a, SYMBOL, XML_PASS);
+			if(sym != null) {
+				vendorSymbols.put(id, sym);
+			}
 		}
 
 		/* market free style description; can be used in full text search */
@@ -228,7 +237,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		loadState = LoadState.FULL;
 
 	}
-
+	
 	private static InstrumentID xmlId(final Attributes attr) throws SymbolNotFoundException {
 
 		// lookup status

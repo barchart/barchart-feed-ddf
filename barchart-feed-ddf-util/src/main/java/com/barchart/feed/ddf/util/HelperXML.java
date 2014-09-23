@@ -58,7 +58,7 @@ import com.barchart.util.value.api.Time;
  */
 public final class HelperXML {
 
-	static final ValueFactory factory = new ValueFactoryImpl();
+	static final ValueFactory factory = ValueFactoryImpl.instance;
 
 	private static Logger log = LoggerFactory.getLogger(HelperXML.class);
 
