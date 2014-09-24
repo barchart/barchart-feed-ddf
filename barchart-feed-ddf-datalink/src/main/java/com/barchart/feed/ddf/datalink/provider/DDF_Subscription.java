@@ -36,6 +36,7 @@ public class DDF_Subscription implements SubCommand {
 	 */
 	public DDF_Subscription(final String instrument, Type type, 
 			final Set<SubscriptionType> interests) {
+		
 		this.interest = instrument;
 		this.interests = interests;
 		this.type = type;
