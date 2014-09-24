@@ -957,7 +957,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (sub != null) {
 				subscriptions.remove(sub.interest());
-				sb.append(sub.encode() + ",");
+				sb.append(sub.interest() + ",");
 			}
 		}
 		
@@ -1014,7 +1014,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* Request subscription from JERQ and return the future */
-		return writeAsync("STOP " + sub.encode());
+		return writeAsync("STOP " + sub.interest());
 		
 	}
 	
