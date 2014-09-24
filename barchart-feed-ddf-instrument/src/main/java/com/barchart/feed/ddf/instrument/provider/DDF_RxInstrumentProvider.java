@@ -164,7 +164,7 @@ public class DDF_RxInstrumentProvider {
 
 							/* Add alternate options symbol */
 							if(sym.contains("|")) {
-								final String alt = inst.vendorSymbols().get(VendorID.BARCHART);
+								final String alt = inst.vendorSymbols().get(VendorID.BARCHART_SHORT);
 								symbolMap.put(alt, new ArrayList<InstrumentState>());
 								symbolMap.get(alt).add(inst);
 							}
@@ -271,7 +271,7 @@ public class DDF_RxInstrumentProvider {
 								if(inst != null) {
 
 									if(inst.symbol().contains("|")) {
-										symbolMap.put(inst.vendorSymbols().get(VendorID.BARCHART), e.getValue());
+										symbolMap.put(inst.vendorSymbols().get(VendorID.BARCHART_SHORT), e.getValue());
 									}
 
 								}
