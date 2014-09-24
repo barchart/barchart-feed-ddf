@@ -12,6 +12,7 @@ import rx.Observer;
 import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
+import com.barchart.feed.api.model.meta.id.VendorID;
 
 public class TestDDF_RxInstrumentProvider {
 
@@ -20,15 +21,15 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("NYU2014").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("ESV2014|1300P").subscribe(obs());
 		
 		Thread.sleep(3 * 1000);
 		
 		log.debug("****************************************************************");
 		
-		DDF_RxInstrumentProvider.fromString("ESU2014").subscribe(obs());
-		
-		Thread.sleep(1000 * 1000);
+//		DDF_RxInstrumentProvider.fromString("ESU2014").subscribe(obs());
+//		
+//		Thread.sleep(1000 * 1000);
 		
 		// "F.US.CLES2X12"
 		
@@ -98,20 +99,26 @@ public class TestDDF_RxInstrumentProvider {
 					final List<Instrument> is = e.getValue();
 					
 					for(final Instrument i : is) {
-						log.debug("Result : \n{}", i);
-						log.debug("Inst Type : {}", i.securityType());
-						log.debug("InstID : {}", i.id().toString());
-						if(i.strikePrice().isNull()) {
-							log.debug("Strike Price is NULL");
-						} else {
-							log.debug("Strike price : {}", i.strikePrice());
+//						log.debug("Result : \n{}", i);
+//						log.debug("Inst Type : {}", i.securityType());
+//						log.debug("InstID : {}", i.id().toString());
+//						if(i.strikePrice().isNull()) {
+//							log.debug("Strike Price is NULL");
+//						} else {
+//							log.debug("Strike price : {}", i.strikePrice());
+//						}
+//						log.debug("Underlier ID = {}", i.underlier());
+//						log.debug("Spread Type is = {}", i.spreadType());
+//						log.debug("Number of legs = {}", i.spreadLegs().size());
+//						log.debug("Exchange Code = {}", i.exchangeCode());
+//						log.debug("Point Value = {}", i.pointValue());
+//						log.debug("Tick Size = {}", i.tickSize());
+						
+						for(final Entry<VendorID, String> v : i.vendorSymbols().entrySet()) {
+							log.debug("VENDOR ID = {} SYMBOL = {}", v.getKey(), v.getValue());
 						}
-						log.debug("Underlier ID = {}", i.underlier());
-						log.debug("Spread Type is = {}", i.spreadType());
-						log.debug("Number of legs = {}", i.spreadLegs().size());
-						log.debug("Exchange Code = {}", i.exchangeCode());
-						log.debug("Point Value = {}", i.pointValue());
-						log.debug("Tick Size = {}", i.tickSize());
+						
+						
 					}
 					
 				}

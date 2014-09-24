@@ -79,10 +79,10 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		/* market symbol; can be non unique; */
 		symbol = xmlStringDecode(attr, SYMBOL_REALTIME, XML_STOP);
 
-		/* Barchart symbol, only used for options */
+		/* Short, DDF Barchart symbol, only used for options */
 		final String bar = xmlStringDecode(attr, SYMBOL_DDF_REAL, XML_PASS);
 		if (bar != null) {
-			vendorSymbols.put(VendorID.BARCHART, bar);
+			vendorSymbols.put(VendorID.BARCHART_SHORT, bar);
 		}
 
 		/* Barchart historical symbol, used for historical data queries */
