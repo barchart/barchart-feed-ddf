@@ -21,7 +21,9 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("ESV2014|1300P").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("ESV2014|1300P"
+				, "ESV2014|2045C"
+				).subscribe(obs());
 		
 		Thread.sleep(3 * 1000);
 		
@@ -66,6 +68,7 @@ public class TestDDF_RxInstrumentProvider {
 				for(final Entry<InstrumentID, Instrument> e : t.entrySet()) {
 					final Instrument i = e.getValue();
 					log.debug("ID = {} Instrument = \n{}", e.getKey(), e.getValue());
+					log.debug("Strike price = {}", i.strikePrice());
 				}
 				
 			}
@@ -117,7 +120,7 @@ public class TestDDF_RxInstrumentProvider {
 						for(final Entry<VendorID, String> v : i.vendorSymbols().entrySet()) {
 							log.debug("VENDOR ID = {} SYMBOL = {}", v.getKey(), v.getValue());
 						}
-						
+						log.debug("STRIKE PRICE = {}", i.strikePrice());
 						
 					}
 					

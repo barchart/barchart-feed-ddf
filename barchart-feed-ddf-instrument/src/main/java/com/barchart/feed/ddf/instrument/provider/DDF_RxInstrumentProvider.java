@@ -410,7 +410,7 @@ public class DDF_RxInstrumentProvider {
 					/* Check if we need to make a new instrument object */
 					if(atts != null) {
 						try {
-							result.put(lookup, Arrays.<InstrumentState> asList(new DDF_Instrument(ats, vendors)));
+							result.put(lookup, Arrays.<InstrumentState> asList(new DDF_Instrument(atts, vendors)));
 						} catch (final SymbolNotFoundException se) {
 							result.put(lookup, Collections.<InstrumentState> emptyList());
 						} catch (final Exception e) {
@@ -418,11 +418,9 @@ public class DDF_RxInstrumentProvider {
 						}
 						
 						vendors = new ArrayList<Attributes>();
-						
-					} else {
-						atts = new AttributesImpl(ats);
 					}
 					
+					atts = new AttributesImpl(ats);
 					lookup = xmlStringDecode(ats, LOOKUP, XML_STOP);
 					
 				} else if("ticker".equals(qName)) {

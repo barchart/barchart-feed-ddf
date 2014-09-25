@@ -1,18 +1,14 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
-import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
-import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -20,7 +16,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.model.meta.Instrument;
@@ -51,6 +46,18 @@ public class TestInstrumentXML {
 				+ "<ticker provider=\"OEC\" id=\"\" symbol=\"ESM5\"/>"
 			+ "</instrument>"
 		+ "</instruments>";
+	
+	private static final String OPTIONS = 
+			"<instruments status=\"200\" count=\"2\">"
+				+ "<instrument lookup=\"ESV2014|1300P\" status=\"200\" guid=\"ESV2014|1300P\" id=\"131144461\" symbol_realtime=\"ESV2014|1300P\" symbol_ddf=\"ESV1300P\" symbol_historical=\"ESV1300P\" symbol_expire=\"2014-10-17T00:00:00-05:00\" symbol_ddf_expire_month=\"V\" symbol_ddf_expire_year=\"4\" symbol_cfi=\"OPXFXX\" exchange=\"XCME\" exchange_channel=\"GBLX\" exchange_description=\"CMEGroup CME (Globex Mini)\" exchange_ddf=\"M\" time_zone_ddf=\"America/Chicago\" tick_increment=\"1\" base_code=\"A\" unit_code=\"2\" point_value=\"50\" currency=\"USD\" underlier=\"ESZ14\" underlier_id=\"165730509\">"
+					+ "<ticker provider=\"BARCHART\" id=\"131144461\" symbol=\"ESV2014|1300P\"/>"
+					+ "<ticker provider=\"CQG\" id=\"\" symbol=\"P.US.EPV1413000\"/>"
+				+ "</instrument>"
+				+ "<instrument lookup=\"ESV2014|2045C\" status=\"200\" guid=\"ESV2014|2045C\" id=\"274515764\" symbol_realtime=\"ESV2014|2045C\" symbol_ddf=\"ESV2045C\" symbol_historical=\"ESV2045C\" symbol_expire=\"2014-10-17T00:00:00-05:00\" symbol_ddf_expire_month=\"V\" symbol_ddf_expire_year=\"4\" symbol_cfi=\"OCXFXX\" exchange=\"XCME\" exchange_channel=\"GBLX\" exchange_description=\"CMEGroup CME (Globex Mini)\" exchange_ddf=\"M\" time_zone_ddf=\"America/Chicago\" tick_increment=\"1\" base_code=\"A\" unit_code=\"2\" point_value=\"50\" currency=\"USD\" underlier=\"ESZ14\" underlier_id=\"165730509\">"
+					+ "<ticker provider=\"BARCHART\" id=\"274515764\" symbol=\"ESV2014|2045C\"/>"
+					+ "<ticker provider=\"CQG\" id=\"\" symbol=\"C.US.EPV1420450\"/>"
+				+ "</instrument>"
+			+ "</instruments>";
 
 	@Test
 	public void testXML() throws Exception {
@@ -103,6 +110,43 @@ public class TestInstrumentXML {
 		
 	}
 
+	@Test
+	public void testOptions() throws Exception {
+		
+		final SAXParserFactory factory = SAXParserFactory.newInstance();
+		final SAXParser parser = factory.newSAXParser();
+		final Map<String, List<InstrumentState>> result = new HashMap<String, List<InstrumentState>>();
+		final DefaultHandler handler = DDF_RxInstrumentProvider.symbolHandler(result);
+		
+		parser.parse(new ByteArrayInputStream(OPTIONS.getBytes()), handler);
+
+		Map<VendorID, String> vendors = result.get("ESV2014|1300P").get(0).vendorSymbols();
+		
+//		for(final Entry<VendorID, String> e : vendors.entrySet()) {
+//			System.out.println(e.getKey() + " " + e.getValue());
+//		}
+		
+		assertEquals("ESV2014|1300P", vendors.get(VendorID.BARCHART));
+		assertEquals("ESV1300P", vendors.get(VendorID.BARCHART_SHORT));
+		assertEquals("P.US.EPV1413000", vendors.get(VendorID.CQG));
+		assertEquals("ESV1300P", vendors.get(VendorID.BARCHART_HISTORICAL));
+		
+		
+		vendors = result.get("ESV2014|2045C").get(0).vendorSymbols();
+		
+//		for(final Entry<VendorID, String> e : vendors.entrySet()) {
+//			System.out.println(e.getKey() + " " + e.getValue());
+//		}
+		
+		assertEquals("ESV2014|2045C", vendors.get(VendorID.BARCHART));
+		assertEquals("ESV2045C", vendors.get(VendorID.BARCHART_SHORT));
+		assertEquals("C.US.EPV1420450", vendors.get(VendorID.CQG));
+		assertEquals("ESV2045C", vendors.get(VendorID.BARCHART_HISTORICAL));
+		
+		
+	}
+	
+	
 	protected static DefaultHandler handler(final List<InstrumentState> result) {
 		return new DefaultHandler() {
 

@@ -60,8 +60,9 @@ public class TestBarchartMarketProvider {
 		final MarketService market = BarchartMarketplace.builder()
 				.username(username)
 				.password(password)
-				.feedType(FeedType.LISTENER_TCP)
-				.port(41234).build();
+				.build();
+//				.feedType(FeedType.LISTENER_TCP)
+//				.port(41234).build();
 		
 //		final CountDownLatch lock = new CountDownLatch(1);
 //		
@@ -76,7 +77,7 @@ public class TestBarchartMarketProvider {
 //		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
 		agent1.include(Exchanges.fromName("CME"));
-		//agent1.include(insts).subscribe(instObs());
+//		agent1.include(insts).subscribe(instObs());
 //		agent2.include(insts).subscribe(instObs());
 //		agent3.include(insts).subscribe(instObs());
 //		agent4.include(insts).subscribe(instObs());
@@ -116,8 +117,7 @@ public class TestBarchartMarketProvider {
 			public void onNext(final Market m) {
 				
 				//System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()) + " " + m.updated().millisecond());
-				log.debug("*************************" + m.sessionSet().session(Type.DEFAULT_PREVIOUS));
-				//System.out.println(m.lastPrice());
+				System.out.println(m.lastPrice());
 				
 			}
 		};
