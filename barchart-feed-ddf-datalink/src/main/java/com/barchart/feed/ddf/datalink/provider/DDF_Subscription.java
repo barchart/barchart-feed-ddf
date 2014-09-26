@@ -34,7 +34,9 @@ public class DDF_Subscription implements SubCommand {
 	 *            send a client. An empty set is interpreted as a request to
 	 *            unsubscribe.
 	 */
-	public DDF_Subscription(final String instrument, Type type, 
+	public DDF_Subscription(
+			final String instrument, 
+			final Type type, 
 			final Set<SubscriptionType> interests) {
 		
 		this.interest = instrument;
@@ -42,7 +44,8 @@ public class DDF_Subscription implements SubCommand {
 		this.type = type;
 	}
 	
-	public DDF_Subscription(final SubCommand sub, Type type) {
+	public DDF_Subscription(final SubCommand sub, final Type type) {
+		
 		interest = sub.interest();
 		interests = sub.types();
 		this.type = type;
@@ -54,10 +57,12 @@ public class DDF_Subscription implements SubCommand {
 	 * @param instrument
 	 * @param events
 	 */
-	public DDF_Subscription(final Instrument instrument,
-			final Set<MarketEvent> events, Type type) {
-		this.interest =
-				instrument.symbol();
+	public DDF_Subscription(
+			final Instrument instrument,
+			final Set<MarketEvent> events, 
+			final Type type) {
+		
+		this.interest = instrument.symbol();
 		this.interests = DDF_FeedInterest.fromEvents(events);
 		this.type = type;
 	}

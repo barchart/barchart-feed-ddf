@@ -2,11 +2,6 @@ package com.barchart.feed.ddf.client.provider;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
@@ -14,26 +9,20 @@ import org.slf4j.LoggerFactory;
 
 import rx.Observer;
 
+import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
+import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.connection.Connection;
-import com.barchart.feed.api.connection.Subscription;
 import com.barchart.feed.api.connection.Connection.Monitor;
 import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.consumer.ConsumerAgent;
-import com.barchart.feed.api.consumer.MarketService;
 import com.barchart.feed.api.consumer.MetadataService.Result;
 import com.barchart.feed.api.model.data.Book;
-import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Session;
-import com.barchart.feed.api.model.data.Session.Type;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.model.meta.id.InstrumentID;
-import com.barchart.feed.client.provider.BarchartMarketProvider;
 import com.barchart.feed.client.provider.BarchartMarketplace;
-import com.barchart.feed.client.provider.BarchartMarketplace.FeedType;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
 import com.barchart.feed.inst.Exchanges;
 
 public class TestBarchartMarketProvider {
@@ -42,7 +31,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"LEM2015", "LEZ2014", "UGU2014"
+		"GOOG"
 		//"CTZ14",
 		//"LEM15",
 		//"YMZ2014", 
@@ -57,7 +46,7 @@ public class TestBarchartMarketProvider {
 		final String username = System.getProperty("barchart.username");
 		final String password = System.getProperty("barchart.password");
 		
-		final MarketService market = BarchartMarketplace.builder()
+		final Marketplace market = BarchartMarketplace.builder()
 				.username(username)
 				.password(password)
 				.build();
@@ -71,12 +60,19 @@ public class TestBarchartMarketProvider {
 //		
 //		lock.await();
 		
-		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
+		final Agent ag = market.subscribe(Trade.class, tradeObs(), insts);
+		
+		Thread.sleep(5 * 1000);
+		log.debug("STOPED");
+		
+		ag.clear();
+		
+//		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 //		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
 //		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
 //		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
-		agent1.include(Exchanges.fromName("CME"));
+//		agent1.include(Exchanges.fromName("BATS"));
 //		agent1.include(insts).subscribe(instObs());
 //		agent2.include(insts).subscribe(instObs());
 //		agent3.include(insts).subscribe(instObs());

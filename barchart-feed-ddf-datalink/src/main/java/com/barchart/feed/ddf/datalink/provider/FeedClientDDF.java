@@ -760,6 +760,8 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 		for(final SubCommand sub : subs) {
 			switch(sub.type()) {
+			default:
+				throw new IllegalStateException("Subscription type cannot be null");
 			case INSTRUMENT:
 				insts.add(sub);
 				break;

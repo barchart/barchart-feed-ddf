@@ -21,8 +21,8 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("ESV2014|1300P"
-				, "ESV2014|2045C"
+		DDF_RxInstrumentProvider.fromString("ESZ14"
+				//, "ESV2014|2045C"
 				).subscribe(obs());
 		
 		Thread.sleep(3 * 1000);
