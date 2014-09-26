@@ -450,24 +450,74 @@ public class DDF_RxInstrumentProvider {
 	protected static DefaultHandler idHandler(final Map<InstrumentID, InstrumentState> result) {
 		return new DefaultHandler() {
 
+			private InstrumentID lookup = null;
+			private Attributes atts = null;
+			private List<Attributes> vendors = new ArrayList<Attributes>();
+			
+//			@Override
+//			public void startElement(
+//					final String uri, 
+//					final String localName, 
+//					final String qName,	
+//					final Attributes ats) throws SAXException {
+//				
+//				if (qName != null && qName.equals("instrument")) {
+//
+//					try {
+//						final InstrumentState inst = new DDF_Instrument(ats);
+//						result.put(inst.id(), inst);
+//					} catch (final Exception e) {
+//						throw new RuntimeException(e);
+//					}
+//
+//				}
+//
+//			}
+			
 			@Override
 			public void startElement(
 					final String uri, 
 					final String localName, 
 					final String qName,	
 					final Attributes ats) throws SAXException {
-				
-				if (qName != null && qName.equals("instrument")) {
 
+				if ("instrument".equals(qName)) {
+					
+					/* Check if we need to make a new instrument object */
+					if(atts != null) {
+						try {
+							result.put(lookup, new DDF_Instrument(atts, vendors));
+						} catch (final SymbolNotFoundException se) {
+							result.put(lookup, InstrumentState.NULL);
+						} catch (final Exception e) {
+							e.printStackTrace();
+						}
+						
+						vendors = new ArrayList<Attributes>();
+					}
+					
+					atts = new AttributesImpl(ats);
+					lookup = new InstrumentID(xmlStringDecode(ats, XmlTagExtras.ID, XML_STOP));
+					
+				} else if("ticker".equals(qName)) {
+					vendors.add(new AttributesImpl(ats));
+				}
+
+			}
+			
+			@Override
+			public void endDocument() {
+				
+				if(atts != null) {
 					try {
-						final InstrumentState inst = new DDF_Instrument(ats);
-						result.put(inst.id(), inst);
+						result.put(lookup, new DDF_Instrument(atts, vendors));
+					} catch (final SymbolNotFoundException se) {
+						result.put(lookup, InstrumentState.NULL);
 					} catch (final Exception e) {
 						throw new RuntimeException(e);
 					}
-
 				}
-
+				
 			}
 
 		};

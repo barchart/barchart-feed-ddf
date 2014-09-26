@@ -21,9 +21,11 @@ public class TestDDF_RxInstrumentProvider {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromString("ESZ14"
+		DDF_RxInstrumentProvider.fromID(new InstrumentID("136439690")
+				, new InstrumentID("165730509")
+				, new InstrumentID("166176649")	
 				//, "ESV2014|2045C"
-				).subscribe(obs());
+				).subscribe(idObs());
 		
 		Thread.sleep(3 * 1000);
 		
@@ -68,8 +70,12 @@ public class TestDDF_RxInstrumentProvider {
 				for(final Entry<InstrumentID, Instrument> e : t.entrySet()) {
 					final Instrument i = e.getValue();
 					log.debug("ID = {} Instrument = \n{}", e.getKey(), e.getValue());
-					log.debug("Strike price = {}", i.strikePrice());
+					for(final Entry<VendorID, String> en : i.vendorSymbols().entrySet()) {
+						log.debug("{} - {}", en.getKey(), en.getValue());
+					}
 				}
+				
+				System.out.println();
 				
 			}
 			
