@@ -454,26 +454,6 @@ public class DDF_RxInstrumentProvider {
 			private Attributes atts = null;
 			private List<Attributes> vendors = new ArrayList<Attributes>();
 			
-//			@Override
-//			public void startElement(
-//					final String uri, 
-//					final String localName, 
-//					final String qName,	
-//					final Attributes ats) throws SAXException {
-//				
-//				if (qName != null && qName.equals("instrument")) {
-//
-//					try {
-//						final InstrumentState inst = new DDF_Instrument(ats);
-//						result.put(inst.id(), inst);
-//					} catch (final Exception e) {
-//						throw new RuntimeException(e);
-//					}
-//
-//				}
-//
-//			}
-			
 			@Override
 			public void startElement(
 					final String uri, 
