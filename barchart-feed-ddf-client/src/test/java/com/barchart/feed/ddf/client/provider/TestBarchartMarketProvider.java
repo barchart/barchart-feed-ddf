@@ -40,7 +40,6 @@ public class TestBarchartMarketProvider {
 		//"NQY0", "VIY0" 
 	};
 	
-	@SuppressWarnings("deprecation")
 	public static void main(final String[] args) throws Exception {
 		
 		final String username = System.getProperty("barchart.username");
@@ -60,12 +59,7 @@ public class TestBarchartMarketProvider {
 //		
 //		lock.await();
 		
-		final Agent ag = market.subscribe(Trade.class, tradeObs(), insts);
-		
-		Thread.sleep(5 * 1000);
-		log.debug("STOPED");
-		
-		ag.clear();
+		final Agent ag = market.subscribe(Trade.class, tradeObs(), Exchanges.fromName("CME"));
 		
 //		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 //		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
@@ -153,7 +147,7 @@ public class TestBarchartMarketProvider {
 			public void onNext(final Trade t) {
 				if(t.isNull()) {
 					System.out.println("NULL TRADE");
-					new RuntimeException().printStackTrace();
+					// new RuntimeException().printStackTrace();
 				} else {
 					System.out.println(t.instrument().symbol() + " TRADE " + t.updated());
 				}

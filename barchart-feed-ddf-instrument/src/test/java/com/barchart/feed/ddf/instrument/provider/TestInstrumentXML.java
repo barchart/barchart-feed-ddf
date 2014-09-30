@@ -4,18 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Test;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.model.meta.Instrument;
@@ -59,17 +55,18 @@ public class TestInstrumentXML {
 				+ "</instrument>"
 			+ "</instruments>";
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testXML() throws Exception {
 
 		final SAXParserFactory factory = SAXParserFactory.newInstance();
 		final SAXParser parser = factory.newSAXParser();
-		final List<InstrumentState> result = new ArrayList<InstrumentState>();
-		final DefaultHandler handler = handler(result);
+		final Map<String, List<InstrumentState>> result = new HashMap<String, List<InstrumentState>>();
+		final DefaultHandler handler = DDF_RxInstrumentProvider.symbolHandler(result);
 
 		parser.parse(new ByteArrayInputStream(IBM.getBytes()), handler);
 
-		final Instrument IBMInst = result.get(0);
+		final Instrument IBMInst = result.get("IBM").get(0);
 
 		assertTrue(IBMInst.marketGUID().equals("IBM"));
 		assertTrue(IBMInst.securityType() == Instrument.SecurityType.EQUITY);
@@ -144,34 +141,6 @@ public class TestInstrumentXML {
 		assertEquals("ESV2045C", vendors.get(VendorID.BARCHART_HISTORICAL));
 		
 		
-	}
-	
-	
-	protected static DefaultHandler handler(final List<InstrumentState> result) {
-		return new DefaultHandler() {
-
-			@Override
-			public void startElement(
-					final String uri,
-					final String localName, 
-					final String qName,
-					final Attributes ats) throws SAXException {
-
-				if (qName != null && qName.equals("instrument")) {
-
-					try {
-						result.add(new DDF_Instrument(ats));
-					} catch (final SymbolNotFoundException se) {
-						throw new RuntimeException(se); // would be nice to add to map
-					} catch (final Exception e) {
-						throw new RuntimeException(e);
-					}
-
-				}
-
-			}
-
-		};
 	}
 	
 }

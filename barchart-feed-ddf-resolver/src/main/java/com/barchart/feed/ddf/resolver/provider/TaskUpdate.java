@@ -10,7 +10,6 @@ package com.barchart.feed.ddf.resolver.provider;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
 
 class TaskUpdate implements Callable<Void> {
 
@@ -203,22 +202,24 @@ class TaskUpdate implements Callable<Void> {
 
 			batchSize += symbolBatch.size();
 
-			final Map<String, Instrument> instrumentList = 
-					DDF_InstrumentProvider.fromSymbols(symbolBatch);
+			final Map<String, List<Instrument>> symbolMap = DDF_RxInstrumentProvider
+					.fromString(symbolBatch.toArray(new String[0]))
+					.toBlockingObservable().first().results();
+			
+			for (final Entry<String, List<Instrument>> e : symbolMap.entrySet()) {
 
-			for (final Entry<String, Instrument> instrument : instrumentList.entrySet()) {
-
+				final Instrument instrument = e.getValue().get(0);
+				
 				checkInterrupt("intrument update");
 
-				final boolean isPresent = CodecHelper.isPresent(searcher,
-						instrument.getValue());
+				final boolean isPresent = CodecHelper.isPresent(searcher, instrument);
 
 				if (isPresent) {
 					// log.debug("isPresent : {}", instrument);
 					continue;
 				}
 
-				CodecHelper.update(writer, instrument.getValue());
+				CodecHelper.update(writer, instrument);
 
 				updateSize++;
 

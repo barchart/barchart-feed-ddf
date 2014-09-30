@@ -66,9 +66,9 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 
 	}
 
-	public DDF_Instrument(final Attributes attr) throws Exception {
-		this(attr, new ArrayList<Attributes>());
-	}
+//	public DDF_Instrument(final Attributes attr) throws Exception {
+//		this(attr, new ArrayList<Attributes>());
+//	}
 
 	public DDF_Instrument(final Attributes attr, final List<Attributes> vendors) throws Exception {
 		super(xmlId(attr));

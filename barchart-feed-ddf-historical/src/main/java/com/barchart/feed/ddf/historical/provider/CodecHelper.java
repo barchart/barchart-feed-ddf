@@ -454,17 +454,6 @@ final class CodecHelper {
 		return false;
 	}
 
-	static Instrument decodeInstrument(/* local */final String symbol) {
-		if (isEmpty(symbol)) {
-			return Instrument.NULL;
-		}
-		// if (DDF_Symbology.isFutureHistorical(symbol)) {
-		// symbol = DDF_Symbology.futureNormalFromHistorical(symbol);
-		// // System.out.println("### YES ###");
-		// }
-		return DDF_InstrumentProvider.fromSymbol(symbol);
-	}
-
 	static String encodeInstrument(final Instrument instrument,
 			final long millisUTC) {
 		if (instrument == null) {

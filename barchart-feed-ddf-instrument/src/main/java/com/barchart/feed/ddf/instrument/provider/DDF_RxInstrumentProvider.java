@@ -1,7 +1,9 @@
 package com.barchart.feed.ddf.instrument.provider;
 
 import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.LOOKUP;
-import static com.barchart.feed.ddf.util.HelperXML.*;
+import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
+import static com.barchart.feed.ddf.util.HelperXML.xmlFirstChild;
+import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -217,7 +219,8 @@ public class DDF_RxInstrumentProvider {
 
 	public static Runnable runnableFromString(
 			final ReplaySubject<Result<Instrument>> sub,
-			final SearchContext ctx, final String... symbols) {
+			final SearchContext ctx, 
+			final String... symbols) {
 
 		return new Runnable() {
 
@@ -313,12 +316,11 @@ public class DDF_RxInstrumentProvider {
 
 	}
 
-	private static Map<String, List<InstrumentState>> remoteSymbolLookup(final String query) {
+	static Map<String, List<InstrumentState>> remoteSymbolLookup(final String query) {
 
 		try {
 
-			final Map<String, List<InstrumentState>> result =
-					new HashMap<String, List<InstrumentState>>();
+			final Map<String, List<InstrumentState>> result = new HashMap<String, List<InstrumentState>>();
 
 			log.debug("remote batch on {}", urlSymbolLookup(query));
 
@@ -347,12 +349,13 @@ public class DDF_RxInstrumentProvider {
 			return result;
 
 		} catch (final Exception e) {
+			log.error("Exception on remote symbol lookup  -  {}", query);
 			throw new RuntimeException(e);
 		}
 
 	}
 	
-	private static Map<InstrumentID, InstrumentState> remoteIDLookup(final String query) {
+	static Map<InstrumentID, InstrumentState> remoteIDLookup(final String query) {
 		
 		try {
 
@@ -581,21 +584,20 @@ public class DDF_RxInstrumentProvider {
 
 	/* ***** ***** ***** Begin Remote Lookup ***** ***** ***** */
 
-	private static final String SERVER_EXTRAS = "extras.ddfplus.com";
+	static final String SERVER_EXTRAS = "extras.ddfplus.com";
 
 	private static final String ALL_VENDORS = "&expanded=1";
 
-	private static final String urlSymbolLookup(final CharSequence lookup) {
+	static final String urlSymbolLookup(final CharSequence lookup) {
 		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup + ALL_VENDORS;
 	}
 	
-	private static final String urlIDLookup(final CharSequence lookup) {
+	static final String urlIDLookup(final CharSequence lookup) {
 		return "http://" + SERVER_EXTRAS + "/instruments/?id=" + lookup + ALL_VENDORS;
 	}
 
 	private static final String cqgInstLoopURL(final CharSequence lookup) {
-		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup +
-                 "&provider=CQG";
+		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup + "&provider=CQG";
 	}
 
 	static List<String> buildSymbolQueries(final List<String> symbols) throws Exception {
