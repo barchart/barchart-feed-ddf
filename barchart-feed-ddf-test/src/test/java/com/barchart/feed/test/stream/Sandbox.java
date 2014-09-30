@@ -1,5 +1,6 @@
 package com.barchart.feed.test.stream;
 
+import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.model.data.Market;
@@ -11,11 +12,16 @@ public class Sandbox {
 
 	public static void main(final String... args) throws Exception {
 
-		final Marketplace marketplace = BarchartMarketplace.builder().username("jongsma").password("pass").build();
+		// final Marketplace marketplace = BarchartMarketplace.builder().username("jongsma").password("pass").build();
+		// final Marketplace marketplace = BarchartMarketplace.builder()
+		// .feedType(FeedType.LISTENER_TCP)
+		// .port(7000)
+		// .build();
+		final Marketplace marketplace = new BarchartMarketplace("abakus", "barchart");
 
 		marketplace.startup();
 
-		marketplace.subscribe(Market.class, new MarketObserver<Market>() {
+		final Agent agent = marketplace.subscribe(Market.class, new MarketObserver<Market>() {
 
 			@Override
 			public synchronized void onNext(final Market m) {
@@ -42,7 +48,9 @@ public class Sandbox {
 
 			}
 
-		}, "ESU2014");
+		}, "GOOG");
+
+		agent.include("IBM");
 
 		while (true) {
 			Thread.sleep(10000);
