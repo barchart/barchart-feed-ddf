@@ -28,7 +28,7 @@ import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_FeedInstProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.util.common.ascii.ASCII;
 

@@ -45,7 +45,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.provider.Symbology;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider.RemoteRunner;
+import com.barchart.feed.ddf.instrument.provider.DDF_FeedInstProvider.RemoteRunner;
 import com.barchart.feed.ddf.util.HelperXML;
 
 public class DDF_RxInstrumentProvider {
@@ -60,9 +60,6 @@ public class DDF_RxInstrumentProvider {
 
 	static final ConcurrentMap<InstrumentID, InstrumentState> idMap =
 			new ConcurrentHashMap<InstrumentID, InstrumentState>();
-
-	public static VendorID CQG_VENDOR_ID = new VendorID("CQG");
-	public static VendorID OEC_VENDOR_ID = new VendorID("OEC");
 
 	/* ***** ***** ***** Begin Executor ***** ***** ***** */
 

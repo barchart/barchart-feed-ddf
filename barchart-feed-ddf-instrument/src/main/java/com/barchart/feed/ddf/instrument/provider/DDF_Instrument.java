@@ -1,9 +1,28 @@
 package com.barchart.feed.ddf.instrument.provider;
 
-import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.*;
-import static com.barchart.feed.ddf.util.HelperXML.*;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.BASE_CODE_DDF;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.EXCHANGE_DDF;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.ID;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_POINT_VALUE;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PRICE_TICK_INCREMENT;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.PROVIDER;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.STATUS;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_CODE_CFI;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_COMMENT;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_EXPIRE_MONTH;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_DDF_REAL;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_EXPIRE;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_HIST;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.SYMBOL_REALTIME;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.TIME_ZONE_DDF;
+import static com.barchart.feed.ddf.instrument.provider.XmlTagExtras.UNDERLIER_ID;
+import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
+import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
+import static com.barchart.feed.ddf.util.HelperXML.xmlByteDecode;
+import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalDecode;
+import static com.barchart.feed.ddf.util.HelperXML.xmlStringDecode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -65,10 +84,6 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		loadState = state_;
 
 	}
-
-//	public DDF_Instrument(final Attributes attr) throws Exception {
-//		this(attr, new ArrayList<Attributes>());
-//	}
 
 	public DDF_Instrument(final Attributes attr, final List<Attributes> vendors) throws Exception {
 		super(xmlId(attr));
@@ -308,6 +323,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void copy(final Instrument inst) {
 
 		// Update parent fields

@@ -26,7 +26,7 @@ import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.base.values.provider.ValueConst;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_FeedInstProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketQuote;
 import com.barchart.feed.ddf.message.api.DDF_MarketSession;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
@@ -379,7 +379,7 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 
 	@Override
 	public Instrument getInstrument() {
-		return DDF_InstrumentProvider.fromMessage(stub);
+		return DDF_FeedInstProvider.fromMessage(stub);
 	}
 
 	/*

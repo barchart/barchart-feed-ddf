@@ -26,13 +26,13 @@ import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.ddf.instrument.provider.InstrumentState.LoadState;
 
-public final class DDF_InstrumentProvider {
+public final class DDF_FeedInstProvider {
 
 	private static final long DEFAULT_TIMEOUT = 5000;
 	private static final long REMOTE_LOOKUP_INTERVAL = 1000;
 
 	private static final Logger log = LoggerFactory
-			.getLogger(DDF_InstrumentProvider.class);
+			.getLogger(DDF_FeedInstProvider.class);
 
 	private static final ConcurrentMap<String, List<InstrumentState>> symbolMap =
 			DDF_RxInstrumentProvider.symbolMap;
@@ -49,7 +49,7 @@ public final class DDF_InstrumentProvider {
 	private static final List<String> failedRemoteSymbolQueue =
 			new CopyOnWriteArrayList<String>();
 	
-	private DDF_InstrumentProvider() {
+	private DDF_FeedInstProvider() {
 
 	}
 

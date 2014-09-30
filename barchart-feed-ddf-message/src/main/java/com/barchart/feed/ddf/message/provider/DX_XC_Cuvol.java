@@ -26,7 +26,7 @@ import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_FeedInstProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketCuvol;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -403,7 +403,7 @@ class DX_XC_Cuvol extends BaseMarket implements DDF_MarketCuvol {
 
 	@Override
 	public Instrument getInstrument() {
-		return DDF_InstrumentProvider.fromMessage(stub);
+		return DDF_FeedInstProvider.fromMessage(stub);
 	}
 
 	/*

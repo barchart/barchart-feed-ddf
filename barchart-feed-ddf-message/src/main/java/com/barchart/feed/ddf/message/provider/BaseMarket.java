@@ -22,7 +22,7 @@ import com.barchart.feed.base.provider.ValueConverter;
 import com.barchart.feed.base.values.api.TextValue;
 import com.barchart.feed.base.values.api.TimeValue;
 import com.barchart.feed.base.values.provider.ValueBuilder;
-import com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider;
+import com.barchart.feed.ddf.instrument.provider.DDF_FeedInstProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
@@ -72,7 +72,7 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	@Override
 	public Instrument getInstrument() {
 
-		return DDF_InstrumentProvider.fromMessage(stub);
+		return DDF_FeedInstProvider.fromMessage(stub);
 
 	}
 
