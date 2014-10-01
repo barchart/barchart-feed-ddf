@@ -6,7 +6,7 @@
  * http://www.opensource.org/licenses/bsd-license.php
  */
 /**
- * 
+ *
  */
 package com.barchart.feed.ddf.datalink.provider;
 
@@ -18,7 +18,7 @@ import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 
 /**
  * @author g-litchfield
- * 
+ *
  */
 public class TestListenerClientDDF {
 
