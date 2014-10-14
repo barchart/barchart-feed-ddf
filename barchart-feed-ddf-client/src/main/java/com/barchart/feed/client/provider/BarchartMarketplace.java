@@ -169,9 +169,7 @@ public class BarchartMarketplace implements Marketplace {
 			@Override
 			public Thread newThread(final Runnable r) {
 
-				final Thread t =
-						new Thread(r, "Feed thread "
-								+ counter.getAndIncrement());
+				final Thread t = new Thread(r, "Feed thread " + counter.getAndIncrement());
 
 				t.setDaemon(true);
 
@@ -315,14 +313,12 @@ public class BarchartMarketplace implements Marketplace {
 						for (final TimestampListener listener : timeStampListeners) {
 							listener.listen(factory.newTime(
 									((DDF_ControlTimestamp) message)
-											.getStampUTC().asMillisUTC(), ""));
+									.getStampUTC().asMillisUTC(), ""));
 						}
 					}
 
 					if (message instanceof DDF_MarketBase) {
-						final DDF_MarketBase marketMessage =
-								(DDF_MarketBase) message;
-
+						final DDF_MarketBase marketMessage = (DDF_MarketBase) message;
 						maker.make(marketMessage);
 					}
 
@@ -338,8 +334,7 @@ public class BarchartMarketplace implements Marketplace {
 		if (connection != null) {
 			connection.bindStateListener(listener);
 		} else {
-			throw new RuntimeException(
-					"Connection state listener already bound");
+			throw new RuntimeException("Connection state listener already bound");
 		}
 
 	}

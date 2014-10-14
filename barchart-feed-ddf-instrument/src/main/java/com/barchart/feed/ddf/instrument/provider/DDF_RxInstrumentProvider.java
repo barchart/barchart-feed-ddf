@@ -611,7 +611,7 @@ public class DDF_RxInstrumentProvider {
 
 				final String s = symbols.remove(0);
 
-				log.debug("Pulled {} from remote queue", s);
+				// log.debug("Pulled {} from remote queue", s);
 
 				symCount++;
 				len += s.length() + 1;
@@ -646,7 +646,7 @@ public class DDF_RxInstrumentProvider {
 
 				final String s = ids.remove(0).id();
 
-				log.debug("Pulled {} from remote queue", s);
+				// log.debug("Pulled {} from remote queue", s);
 
 				symCount++;
 				len += s.length() + 1;

@@ -149,7 +149,7 @@ public class TestBarchartMarketProvider {
 					System.out.println("NULL TRADE");
 					// new RuntimeException().printStackTrace();
 				} else {
-					System.out.println(t.instrument().symbol() + " TRADE " + t.updated());
+					System.out.println(t.instrument().symbol() + " TRADE " + t.price());
 				}
 			}
 

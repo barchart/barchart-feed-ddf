@@ -14,8 +14,7 @@ import com.barchart.feed.ddf.market.api.DDF_MarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.api.DDF_MessageVisitor;
 
-public class DDF_Marketplace extends MarketplaceBase<DDF_MarketBase> implements 
-		DDF_MarketProvider {
+public class DDF_Marketplace extends MarketplaceBase<DDF_MarketBase> implements DDF_MarketProvider {
 	
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(
@@ -25,6 +24,7 @@ public class DDF_Marketplace extends MarketplaceBase<DDF_MarketBase> implements
 			final MarketFactory factory,
 			final MetadataService instLookup,
 			final SubscriptionHandler handler) {
+		
 		super(factory, instLookup, handler);
 	}
 	

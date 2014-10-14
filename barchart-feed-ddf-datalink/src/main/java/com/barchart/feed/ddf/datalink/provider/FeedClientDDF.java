@@ -454,7 +454,7 @@ class FeedClientDDF implements DDF_FeedClient {
 						} 
 						
 						//// #######################
-						// log.debug(message.toString());
+						//log.debug(message.toString());
 						// #######################
 						
 						msgListener.handleMessage(message);

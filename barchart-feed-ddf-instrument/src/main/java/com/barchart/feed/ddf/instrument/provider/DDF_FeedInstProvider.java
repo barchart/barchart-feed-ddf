@@ -126,7 +126,7 @@ public final class DDF_FeedInstProvider {
 		final List<InstrumentState> list = new ArrayList<InstrumentState>();
 		list.add(instState);
 		symbolMap.put(symbol, list);
-		log.debug("Put {} stub into map", symbol);
+		// log.debug("Put {} stub into map", symbol);
 
 		/* Asnyc lookup */
 		try {
@@ -167,10 +167,10 @@ public final class DDF_FeedInstProvider {
 					}
 
 					final Instrument inst = result.result();
-
-					if (inst.isNull()) {
+					
+					if (inst.isNull()) { // Ignore
 						log.trace("Instrument result was empty for {}", symbol);
-						return; // Ignore
+						return; 
 					}
 
 					if(!symbolMap.containsKey(symbol)) {
@@ -198,8 +198,7 @@ public final class DDF_FeedInstProvider {
 
 				@Override
 				public void onCompleted() {
-					// TODO Auto-generated method stub
-
+					/* Long lived observer, should not complete */
 				}
 
 			};
@@ -299,12 +298,15 @@ public final class DDF_FeedInstProvider {
 					symbFutures = executor.invokeAll(symbCallables, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
 
 					for (final Future<Map<String, List<InstrumentState>>> f : symbFutures) {
+						
+						final Map<String, List<InstrumentState>> map = f.get();
 
-						for (final Entry<String, List<InstrumentState>> e : f.get().entrySet()) {
-
+						for (final Entry<String, List<InstrumentState>> e : map.entrySet()) {
+							
+							// This NULL is always getting through
 							InstrumentState def = InstrumentState.NULL;
 							if(!e.getValue().isEmpty()) {
-								e.getValue().get(0);
+								def = e.getValue().get(0);
 							}
 
 							if (def == null || def.isNull()) {

@@ -19,21 +19,23 @@ public class TestDDF_RxInstrumentProvider {
 	private static final Logger log = LoggerFactory.getLogger(
 			TestDDF_RxInstrumentProvider.class);
 	
+	// _S_EQ_ESZ4_ESH5
+	
 	public static void main(final String[] args) throws Exception {
 		
-		DDF_RxInstrumentProvider.fromID(new InstrumentID("136439690")
-				, new InstrumentID("165730509")
-				, new InstrumentID("166176649")	
-				//, "ESV2014|2045C"
-				).subscribe(idObs());
-		
-		Thread.sleep(3 * 1000);
+//		DDF_RxInstrumentProvider.fromID(new InstrumentID("136439690")
+//				, new InstrumentID("165730509")
+//				, new InstrumentID("166176649")	
+//				//, "ESV2014|2045C"
+//				).subscribe(idObs());
+//		
+//		Thread.sleep(3 * 1000);
 		
 		log.debug("****************************************************************");
 		
-//		DDF_RxInstrumentProvider.fromString("ESU2014").subscribe(obs());
-//		
-//		Thread.sleep(1000 * 1000);
+		DDF_RxInstrumentProvider.fromString("ESZ14").subscribe(obs());
+		
+		Thread.sleep(3 * 1000);
 		
 		// "F.US.CLES2X12"
 		
@@ -127,6 +129,9 @@ public class TestDDF_RxInstrumentProvider {
 							log.debug("VENDOR ID = {} SYMBOL = {}", v.getKey(), v.getValue());
 						}
 						log.debug("STRIKE PRICE = {}", i.strikePrice());
+						log.debug("Security Type = {}", i.securityType());
+						log.debug("CFI Code = {}", i.CFICode());
+						log.debug("Price Step = {}", i.tickSize());
 						
 					}
 					

@@ -122,6 +122,9 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		CFICode = xmlStringDecode(attr, SYMBOL_CODE_CFI, XML_PASS);
 
 		securityType = SecurityType.fromCFI(CFICode);
+		if (securityType == SecurityType.FUTURE && symbol.startsWith("_S_")) {
+		    securityType = SecurityType.SPREAD;
+		}
 
 		/* If type = option, parse out strike price */
 		if(securityType == SecurityType.OPTION) {
