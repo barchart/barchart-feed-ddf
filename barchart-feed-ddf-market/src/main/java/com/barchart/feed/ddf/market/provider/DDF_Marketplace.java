@@ -37,6 +37,11 @@ public class DDF_Marketplace extends MarketplaceBase<DDF_MarketBase> implements 
 
 			@Override
 			public MarketDo newMarket(final Instrument instrument) {
+				
+				if(instrument.isNull()) {
+					throw new IllegalArgumentException("Cannot create new market with NULL instrument");
+				}
+				
 				return new VarMarketEntityDDF(instrument);
 			}
 

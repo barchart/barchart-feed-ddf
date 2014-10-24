@@ -57,9 +57,9 @@ public class TestBarchartMarketProvider {
 //		market.bindConnectionStateListener(listener(lock));
 		market.startup();
 //		
-//		lock.await();
+//		lock.await();  // 
 		
-		final Agent ag = market.subscribe(Trade.class, tradeObs(), Exchanges.fromName("CME"));
+		final Agent ag = market.subscribe(Market.class, marketObs(), Exchanges.fromName("AMEX"));
 		
 //		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 //		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
@@ -103,11 +103,14 @@ public class TestBarchartMarketProvider {
 
 			private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss z");
 			
+			//GSAT,PLUG,ADP,ICPT,AVNR
+			
 			@Override
 			public void onNext(final Market m) {
 				
-				//System.out.println(m.instrument().symbol() + " MARKET " + format.format(m.updated().asDate()) + " " + m.updated().millisecond());
-				System.out.println(m.lastPrice());
+				if(m.instrument().symbol().equals("GSAT")) {
+					System.out.println(m.lastPrice());
+				}
 				
 			}
 		};

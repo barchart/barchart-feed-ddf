@@ -33,6 +33,11 @@ public class DDF_ConsumerMarketProvider extends MarketProviderBase<DDF_MarketBas
 			
 			@Override
 			public MarketDo newMarket(final Instrument instrument) {
+				
+				if(instrument.isNull()) {
+					throw new IllegalArgumentException("Cannot create new market with NULL instrument");
+				}
+				
 				return new VarMarketEntityDDF(instrument);
 			}
 			
