@@ -1,7 +1,9 @@
 package com.barchart.feed.ddf.client.provider;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -66,7 +68,7 @@ public class RepoduceClient {
 		
 		return new MarketObserver<Trade> () {
 
-			private final Set<Integer> ids = new HashSet<Integer>();
+			private final Map<String, String> ids = new ConcurrentHashMap<String, String>();
 			private final AtomicInteger counter = new AtomicInteger(0);
 			
 			@Override
@@ -76,8 +78,8 @@ public class RepoduceClient {
 					return;
 				}
 				
-				if(!ids.contains(v.instrument().id().id().hashCode())) {
-					ids.add(v.instrument().id().id().hashCode());
+				if(!ids.containsKey(v.instrument().id().id())) {
+					ids.put(v.instrument().id().id(), v.instrument().id().id());
 				}
 				
 				if(counter.incrementAndGet() >= 5000) {
@@ -95,20 +97,14 @@ public class RepoduceClient {
 		
 		return new MarketObserver<Session> () {
 
-			private final Set<Integer> ids = new HashSet<Integer>();
+			private final Map<String, String> ids = new ConcurrentHashMap<String, String>();
 			private final AtomicInteger counter = new AtomicInteger(0);
 			
 			@Override
 			public void onNext(final Session v) {
 				
-//				if(v.instrument().isNull()) {
-//					log.debug(v.getClass().getCanonicalName());
-//					new RuntimeException().printStackTrace();
-//					return;
-//				}
-				
-				if(!ids.contains(v.instrument().id().id().hashCode())) {
-					ids.add(v.instrument().id().id().hashCode());
+				if(!ids.containsKey(v.instrument().id().id())) {
+					ids.put(v.instrument().id().id(), v.instrument().id().id());
 				}
 				
 				if(counter.incrementAndGet() >= 5000) {
