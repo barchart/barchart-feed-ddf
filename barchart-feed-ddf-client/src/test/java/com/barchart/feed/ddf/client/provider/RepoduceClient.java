@@ -1,8 +1,6 @@
 package com.barchart.feed.ddf.client.provider;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -46,23 +44,6 @@ public class RepoduceClient {
 		Thread.sleep(1000 * 60 * 60);
 		
 	}
-	
-//	    public Client() {
-//	        final Marketplace feed = new BarchartMarketplace(username, password);
-//	 
-//	        // Listen to server timestamps
-//	        feed.bindTimestampListener(new TimestampListener() {
-//	            public void listen(final Time timestamp) {
-//	                dCollector.setStreamTimeStamp(timestamp.millisecond());
-//	            }
-//	        });
-//	 
-//	        // Connect to data server
-//	        feed.startup();
-//	        feed.subscribe(Trade.class, new TradeCollector(), exchanges);
-//	        feed.subscribe(Session.class, new SnapshotCollector(), exchanges);
-//	    }
-	
 	
 	private static MarketObserver<Trade> tradeObs() {
 		
