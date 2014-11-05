@@ -303,28 +303,27 @@ public class BarchartMarketplace implements Marketplace {
 	 * This is the default message listener. Users wishing to handle raw
 	 * messages will need to implement their own feed client.
 	 */
-	protected final DDF_MessageListener msgListener =
-			new DDF_MessageListener() {
+	protected final DDF_MessageListener msgListener = new DDF_MessageListener() {
 
-				@Override
-				public void handleMessage(final DDF_BaseMessage message) {
+		@Override
+		public void handleMessage(final DDF_BaseMessage message) {
 
-					if (message instanceof DDF_ControlTimestamp) {
-						for (final TimestampListener listener : timeStampListeners) {
-							listener.listen(factory.newTime(
-									((DDF_ControlTimestamp) message)
-									.getStampUTC().asMillisUTC(), ""));
-						}
-					}
-
-					if (message instanceof DDF_MarketBase) {
-						final DDF_MarketBase marketMessage = (DDF_MarketBase) message;
-						maker.make(marketMessage);
-					}
-
+			if (message instanceof DDF_ControlTimestamp) {
+				for (final TimestampListener listener : timeStampListeners) {
+					listener.listen(factory.newTime(
+							((DDF_ControlTimestamp) message)
+							.getStampUTC().asMillisUTC(), ""));
 				}
+			}
 
-			};
+			if (message instanceof DDF_MarketBase) {
+				final DDF_MarketBase marketMessage = (DDF_MarketBase) message;
+				maker.make(marketMessage);
+			}
+
+		}
+
+	};
 
 	@Override
 	public void bindConnectionStateListener(final Connection.Monitor listener) {

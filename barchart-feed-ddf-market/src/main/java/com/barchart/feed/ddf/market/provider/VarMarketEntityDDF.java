@@ -55,6 +55,8 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	@Override
 	public void fireCallbacks() {
 		
+		final Market market = this.freeze();
+		
 		while(!marketCmds.isEmpty()) {
 			final Command<com.barchart.feed.api.model.data.Market> cmd = marketCmds.poll();
 			if(cmd != null) {
@@ -69,7 +71,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		for(final FrameworkAgent<com.barchart.feed.api.model.data.Market> a : marketAgents) {
 			if(a.isActive()) {
 				try {
-					a.callback().onNext(a.data(this.freeze()));
+					a.callback().onNext(a.data(market));
 				} catch(final Exception e) {
 					log.error("Exception in MARKET agent callback", e);
 				}
@@ -92,7 +94,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			for(final FrameworkAgent<Book> a : bookAgents) {
 				if(a.isActive()) {
 					try {
-						a.callback().onNext(a.data(this.freeze()));
+						a.callback().onNext(a.data(market));
 					} catch(final Exception e) {
 						log.error("Exception in BOOK agent callback", e);
 					}
@@ -116,7 +118,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			for(final FrameworkAgent<Trade> a : tradeAgents) {
 				if(a.isActive()) {
 					try {
-						a.callback().onNext(a.data(this.freeze()));
+						a.callback().onNext(a.data(market));
 					} catch(final Exception e) {
 						log.error("Exception in TRADE agent callback", e);
 					}
@@ -140,7 +142,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			for(final FrameworkAgent<Session> a : sessionAgents) {
 				if(a.isActive()) {
 					try {
-						a.callback().onNext(a.data(this.freeze()));
+						a.callback().onNext(a.data(market));
 					} catch(final Exception e) {
 						log.error("Exception in SESSION agent callback", e);
 					}
@@ -164,7 +166,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 			for(final FrameworkAgent<Cuvol> a : cuvolAgents) {
 				if(a.isActive()) {
 					try {
-						a.callback().onNext(a.data(this.freeze()));
+						a.callback().onNext(a.data(market));
 					} catch(final Exception e) {
 						log.error("Exception in CUVOL agent callback", e);
 					}

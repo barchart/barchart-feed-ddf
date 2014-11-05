@@ -212,24 +212,21 @@ class VarMarketDDF extends VarMarket {
 		assert date != null;
 		
 		// Update trade
-		if (sequencing != MarketTradeSequencing.UNSEQUENCED_VOLUME) {
 
-			final MarketDoTrade trade = loadTrade();
+		final MarketDoTrade trade = loadTrade();
 
-			trade.set(TYPE, type);
-			trade.set(SESSION, session);
-			trade.set(SEQUENCING, sequencing);
-			trade.set(PRICE, price);
-			trade.set(SIZE, size);
-			trade.set(TRADE_TIME, time);
-			trade.set(MarketTradeField.TRADE_DATE, date);
+		trade.set(TYPE, type);
+		trade.set(SESSION, session);
+		trade.set(SEQUENCING, sequencing);
+		trade.set(PRICE, price);
+		trade.set(SIZE, size);
+		trade.set(TRADE_TIME, time);
+		trade.set(MarketTradeField.TRADE_DATE, date);
 
-			setChange(Component.TRADE);
-			eventAdd(NEW_TRADE);
+		setChange(Component.TRADE);
+		eventAdd(NEW_TRADE);
 
-			set(TRADE, trade);
-
-		}
+		set(TRADE, trade);
 
 		applyTradeToBar(session, sequencing, price, size, time, date);
 
