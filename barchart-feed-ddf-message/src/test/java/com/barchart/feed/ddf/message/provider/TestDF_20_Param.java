@@ -274,5 +274,21 @@ public class TestDF_20_Param extends TestDDFBase {
 		System.out.println("msg2=" + msg2);
 
 	}
+	
+	final byte[] v0 = "2CBZ4,0AL108558,V03 ".getBytes();
+	
+	@Test
+	public void testVWAP() throws Exception {
+		
+		final DF_20_Param msg = (DF_20_Param) DDF_MessageService
+				.newInstance(new DF_20_Param().getMessageType());
+
+		final ByteBuffer buffer = ByteBuffer.wrap(v0);
+
+		msg.decodeDDF(buffer);
+		
+		assertTrue(msg.getParamType() == DDF_ParamType.VWAP_LAST_PRICE);
+		
+	}
 
 }

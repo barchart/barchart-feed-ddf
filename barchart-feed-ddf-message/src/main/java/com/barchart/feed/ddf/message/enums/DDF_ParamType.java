@@ -23,6 +23,7 @@ import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.SETTLE_NOW;
 import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.TRADE;
 import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.VOLUME;
 import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.YEAR_BACK;
+import static com.barchart.feed.ddf.message.enums.DDF_ParamElement.VWAP;
 import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.ASK_PRICE;
 import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.ASK_SIZE;
 import static com.barchart.feed.ddf.message.enums.DDF_ParamModifier.BID_PRICE;
@@ -137,6 +138,9 @@ public enum DDF_ParamType implements EnumCodeChar, EnumByteOrdinal {
 	YEAR_HIGH_PRICE(YEAR_BACK, YEAR_HIGH, PRICE), //
 	/** SL : 52 week low price */
 	YEAR_LOW_PRICE(YEAR_BACK, YEAR_LOW, PRICE), //
+	
+	/** V0 : VWAP */
+	VWAP_LAST_PRICE(VWAP, LAST, PRICE), //
 
 	//
 

@@ -25,6 +25,7 @@ import static com.barchart.util.common.ascii.ASCII._F_;
 import static com.barchart.util.common.ascii.ASCII._S_;
 import static com.barchart.util.common.ascii.ASCII._X_;
 import static com.barchart.util.common.ascii.ASCII._d_;
+import static com.barchart.util.common.ascii.ASCII._V_;
 
 import com.barchart.feed.base.enums.EnumByteOrdinal;
 import com.barchart.feed.base.enums.EnumCodeByte;
@@ -86,6 +87,9 @@ public enum DDF_ParamElement implements EnumCodeByte, EnumByteOrdinal {
 
 	/** X = cancelled trade message */
 	TRADE_CANCEL(_X_), //
+	
+	/** V = VWAP parameter message */
+	VWAP(_V_),
 
 	//
 

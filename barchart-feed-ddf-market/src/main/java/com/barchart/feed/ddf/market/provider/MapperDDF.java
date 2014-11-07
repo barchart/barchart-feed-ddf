@@ -346,6 +346,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				market.setBar(type, bar);
 
 				return null;
+				
+			case VWAP_LAST_PRICE:
+				
+				// TODO
 
 			default:
 				log.debug("@@@ TODO : {} \n{}", param, message.getTime().toString() + " " + message);
