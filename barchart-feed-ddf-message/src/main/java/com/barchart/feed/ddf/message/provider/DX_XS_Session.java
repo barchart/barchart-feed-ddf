@@ -22,6 +22,7 @@ import static com.barchart.feed.ddf.message.provider.XmlTagSession.TAG;
 import static com.barchart.feed.ddf.message.provider.XmlTagSession.TIME_LAST;
 import static com.barchart.feed.ddf.message.provider.XmlTagSession.TIME_UPDATE;
 import static com.barchart.feed.ddf.message.provider.XmlTagSession.TRADE_DAY;
+import static com.barchart.feed.ddf.message.provider.XmlTagSession.VWAP;
 import static com.barchart.feed.ddf.util.HelperDDF.newSizeDDF;
 import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
 import static com.barchart.feed.ddf.util.HelperXML.XML_STOP;
@@ -174,8 +175,8 @@ class DX_XS_Session extends DF_21_Snap implements DDF_MarketSession {
 		millisUTC = xmlTimeDecode(exch.kind.time.zone, tag, TIME_UPDATE,
 				XML_PASS);
 
-		// log.debug("### priceLast : {}", priceLast);
-
+		vwap = xmlDecimalDecode(frac, tag, VWAP, XML_PASS);
+		
 	}
 
 	/* (non-Javadoc)
@@ -223,6 +224,8 @@ class DX_XS_Session extends DF_21_Snap implements DDF_MarketSession {
 		//
 
 		xmlTimeEncode(millisUTC, exch.kind.time.zone, tag, TIME_UPDATE);
+		
+		xmlDecimalEncode(vwap, frac, tag, VWAP);
 
 	}
 

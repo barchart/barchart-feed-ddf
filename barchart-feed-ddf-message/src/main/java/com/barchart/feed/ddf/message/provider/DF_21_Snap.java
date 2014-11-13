@@ -61,6 +61,9 @@ class DF_21_Snap extends BaseMarket implements DDF_MarketSnapshot {
 
 	protected long sizeVolume = HelperDDF.DDF_EMPTY;
 	protected long sizeVolumePrevious = HelperDDF.DDF_EMPTY;
+	
+	/** last VWAP price */
+	protected long vwap = HelperDDF.DDF_EMPTY;
 
 	// //////////////////////////////////////
 
@@ -132,6 +135,11 @@ class DF_21_Snap extends BaseMarket implements DDF_MarketSnapshot {
 	@Override
 	public SizeValue getSizeVolume() {
 		return HelperDDF.newSizeDDF(sizeVolume);
+	}
+	
+	@Override
+	public final PriceValue getVWAP() {
+		return HelperDDF.newPriceDDF(vwap, getFraction());
 	}
 
 	/*

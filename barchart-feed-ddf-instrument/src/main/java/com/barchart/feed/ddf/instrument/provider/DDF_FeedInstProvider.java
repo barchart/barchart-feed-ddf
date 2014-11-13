@@ -112,7 +112,7 @@ public final class DDF_FeedInstProvider {
 		if (inst == null || inst.isNull()) {
 			return Instrument.NULL;
 		}
-
+		
 		/* NOTE id() in ddf is just the realtime symbol, not an actual GUID */
 		final String symbol = Symbology.formatSymbol(inst.symbol());
 
@@ -123,7 +123,7 @@ public final class DDF_FeedInstProvider {
 		/* New symbol, create stub */
 		final InstrumentState instState = new DDF_Instrument(new InstrumentID(inst.symbol()), inst, LoadState.PARTIAL);
 
-		final List<InstrumentState> list = new ArrayList<InstrumentState>();
+		final List<InstrumentState> list = new CopyOnWriteArrayList<InstrumentState>(); 
 		list.add(instState);
 		symbolMap.put(symbol, list);
 		// log.debug("Put {} stub into map", symbol);
@@ -156,52 +156,55 @@ public final class DDF_FeedInstProvider {
 	private static Observer<InstrumentResult> observer =
 			new Observer<InstrumentResult>() {
 
-				@Override
-				public void onNext(final InstrumentResult result) {
+		@Override
+		public void onNext(final InstrumentResult result) {
+			
+			final String symbol = result.expression();
 
-					final String symbol = result.expression();
+			/* If exception, add to failed */
+			if (result.exception() != null) {
+				log.debug("Failed Symbol Lookup for {}", symbol);
+				failedRemoteSymbolQueue.add(symbol);
+				return;
+			}
 
-					/* If exception, add to failed */
-					if (result.exception() != null) {
-						failedRemoteSymbolQueue.add(symbol);
-					}
+			final Instrument inst = result.result();
+			
+			if (inst.isNull()) { // Ignore
+				log.trace("Instrument result was empty for {}", symbol);
+				return; 
+			}
 
-					final Instrument inst = result.result();
-					
-					if (inst.isNull()) { // Ignore
-						log.trace("Instrument result was empty for {}", symbol);
-						return; 
-					}
+			/* This should never be true */
+			if(!symbolMap.containsKey(symbol)) {
+				final InstrumentState i = result.result();
+				symbolMap.put(symbol, Arrays.asList(i));
+				idMap.put(i.id(), i);
+			}
+			
+			final InstrumentState iState = symbolMap.get(symbol).get(0);
 
-					if(!symbolMap.containsKey(symbol)) {
-						final InstrumentState i = result.result();
-						symbolMap.put(symbol, Arrays.asList(i));
-						idMap.put(i.id(), i);
-					}
-					
-					final InstrumentState iState = symbolMap.get(symbol).get(0);
+			if (iState == null || iState.isNull()) {
+				final InstrumentState i = result.result();
+				symbolMap.put(symbol, Arrays.asList(i));
+				idMap.put(i.id(), i);
+			} else {
+				iState.process(result.result());
+			}
 
-					if (iState == null || iState.isNull()) {
-						final InstrumentState i = result.result();
-						symbolMap.put(symbol, Arrays.asList(i));
-						idMap.put(i.id(), i);
-					} else {
-						iState.process(result.result());
-					}
+		}
 
-				}
+		@Override
+		public void onError(final Throwable error) {
+			log.error("Exception in instrument observer", error);
+		}
 
-				@Override
-				public void onError(final Throwable error) {
-					log.error("Exception in instrument observer", error);
-				}
+		@Override
+		public void onCompleted() {
+			/* Long lived observer, should not complete */
+		}
 
-				@Override
-				public void onCompleted() {
-					/* Long lived observer, should not complete */
-				}
-
-			};
+	};
 
 	private static class InstDefResult implements InstrumentResult {
 
@@ -303,15 +306,14 @@ public final class DDF_FeedInstProvider {
 
 						for (final Entry<String, List<InstrumentState>> e : map.entrySet()) {
 							
-							// This NULL is always getting through
 							InstrumentState def = InstrumentState.NULL;
 							if(!e.getValue().isEmpty()) {
 								def = e.getValue().get(0);
 							}
 
 							if (def == null || def.isNull()) {
-								observer.onNext(new InstDefResult(e.getKey(), new Throwable("Could not find "
-										+ e.getKey())));
+								observer.onNext(new InstDefResult(e.getKey(), 
+										new Throwable("Could not find " + e.getKey())));
 							} else {
 								observer.onNext(new InstDefResult(e.getKey(), def));
 							}

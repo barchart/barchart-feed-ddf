@@ -349,7 +349,11 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				
 			case VWAP_LAST_PRICE:
 				
-				// TODO
+				bar.set(MarketBarField.VWAP, price);
+				
+				market.setBar(type, bar);
+				
+				return null;
 
 			default:
 				log.debug("@@@ TODO : {} \n{}", param, message.getTime().toString() + " " + message);
@@ -588,6 +592,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				message.getPriceLastPrevious(),
 				message.getSizeVolume(),
 				message.getSizeInterest(),
+				message.getVWAP(),
 				settled,
 				message.getTime());
 
@@ -636,6 +641,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				message.getPriceLastPrevious(),
 				message.getSizeVolume(),
 				message.getSizeInterest(),
+				message.getVWAP(),
 				settled,
 				message.getTime());
 
@@ -650,7 +656,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		return null;
 	}
-
+	
 	@Override
 	public Void visit(final DDF_MarketTrade message, final MarketDo market) {
 		

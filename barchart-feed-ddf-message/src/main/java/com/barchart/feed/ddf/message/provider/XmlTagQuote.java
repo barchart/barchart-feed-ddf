@@ -63,6 +63,8 @@ final class XmlTagQuote {
 	final static String EXCHANGE_EXTRA = "exchange";
 
 	final static String SYMBOL_NAME = "name";
+	
+	final static String VWAP = "vwap";
 
 	/** book top descriptor */
 	final static String PRICE_BID = "bid";

@@ -47,4 +47,9 @@ public interface DDF_MarketSnapshot extends DDF_MarketSnapBase {
 
 	SizeValue getSizeVolumePrevious();
 
+	/**
+	 * Volume weighted average price
+	 */
+	PriceValue getVWAP();
+	
 }

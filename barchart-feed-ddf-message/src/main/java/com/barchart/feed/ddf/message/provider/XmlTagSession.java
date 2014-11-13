@@ -64,5 +64,7 @@ final class XmlTagSession {
 
 	final static String SIZE_VOLUME = "volume";
 	final static String SIZE_INTEREST = "openinterest";
-
+	
+	final static String VWAP = "vwap";
+	
 }

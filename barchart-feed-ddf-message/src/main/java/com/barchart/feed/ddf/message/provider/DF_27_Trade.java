@@ -7,7 +7,7 @@
  */
 package com.barchart.feed.ddf.message.provider;
 
-import static com.barchart.util.common.ascii.ASCII.*;
+import static com.barchart.util.common.ascii.ASCII.COMMA;
 
 import java.nio.ByteBuffer;
 
@@ -21,6 +21,7 @@ import com.barchart.feed.ddf.util.HelperDDF;
 // TODO: Auto-generated Javadoc
 class DF_27_Trade extends BaseMarket implements DDF_MarketTrade {
 
+	
 	/* (non-Javadoc)
 	 * @see com.barchart.feed.ddf.message.provider.Base#accept(com.barchart.feed.ddf.message.api.DDF_MessageVisitor, java.lang.Object)
 	 */
@@ -74,7 +75,7 @@ class DF_27_Trade extends BaseMarket implements DDF_MarketTrade {
 		HelperDDF.decimalEncode(price, getFraction(), buffer, COMMA); // <price>,
 		HelperDDF.longEncode(size, buffer, COMMA); // <size>,
 	}
-
+	
 	@Override
 	protected final void decodeBody(final ByteBuffer buffer) {
 		price = HelperDDF.decimalDecode(getFraction(), buffer, COMMA); // <price>,

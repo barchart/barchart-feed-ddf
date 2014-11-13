@@ -11,6 +11,8 @@ import static com.barchart.feed.base.values.provider.ValueBuilder.newPrice;
 import static com.barchart.feed.base.values.provider.ValueBuilder.newSize;
 import static com.barchart.feed.base.values.provider.ValueBuilder.newText;
 import static com.barchart.feed.base.values.provider.ValueBuilder.newTime;
+import static com.barchart.feed.ddf.util.HelperXML.XML_PASS;
+import static com.barchart.feed.ddf.util.HelperXML.xmlDecimalDecode;
 import static com.barchart.util.common.ascii.ASCII.ASCII_CHARSET;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,6 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.ddf.message.api.DDF_MarketSession;
 import com.barchart.feed.ddf.message.enums.DDF_Indicator;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -278,5 +281,22 @@ public class TestDX_XQ_Quote extends TestDDFBase {
 		System.out.println("" + msg);
 
 	}
+	
+	static final byte[] vwap = "%<QUOTE symbol=\"KCH5\" name=\"Coffee\" exchange=\"ICEUS\" basecode=\"A\" pointvalue=\"375.0\" tickincrement=\"5\" ddfexchange=\"C\" lastupdate=\"20141113094210\" bid=\"19395\" bidsize=\"7\" ask=\"19410\" asksize=\"4\" mode=\"R\"><SESSION day=\"C\" session=\" \" timestamp=\"20141113094210\" open=\"18880\" high=\"19450\" low=\"18880\" last=\"19400\" previous=\"18875\" tradesize=\"1\" volume=\"9142\" numtrades=\"4311\" pricevolume=\"1119315.50\" vwap=\"19137\" tradetime=\"20141113094209\" ticks=\"..\" id=\"combined\"/><SESSION day=\"B\" timestamp=\"20141112000000\" open=\"18875\" high=\"19080\" low=\"18750\" last=\"18875\" previous=\"18875\" openinterest=\"78429\" volume=\"22256\" ticks=\"..\" id=\"previous\"/></QUOTE>".getBytes();
 
+	@Test
+	public void testDecodeVWAP() {
+		
+		final DX_XQ_Quote msg = new DX_XQ_Quote();
+		
+		final ByteBuffer buffer = ByteBuffer.wrap(vwap);
+		
+		buffer.get();
+		
+		msg.decodeXML(buffer);
+		
+		assertTrue(msg.sessions()[0].getVWAP().equals(ValueBuilder.newPrice(191.37)));
+		
+	}
+	
 }

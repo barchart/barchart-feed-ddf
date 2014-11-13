@@ -32,5 +32,5 @@ public interface DDF_MarketSession extends DDF_MarketSnapshot {
 	 * current vs previous
 	 */
 	DDF_Indicator getIndicator();
-
+	
 }

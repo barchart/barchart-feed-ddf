@@ -21,6 +21,8 @@ import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
+import com.barchart.feed.api.model.data.parameter.Param;
+import com.barchart.feed.api.model.data.parameter.ParamMap;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.inst.Exchanges;
@@ -31,13 +33,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"GOOG"
-		//"CTZ14",
-		//"LEM15",
-		//"YMZ2014", 
-		//"ZCZ14", "ZSZ14", 
-		// "ESZ4", "GOOG"
-		//"NQY0", "VIY0" 
+		"CBF5"
 	};
 	
 	public static void main(final String[] args) throws Exception {
@@ -59,17 +55,17 @@ public class TestBarchartMarketProvider {
 //		
 //		lock.await();  // 
 		
-		final Agent ag = market.subscribe(Market.class, marketObs(), Exchanges.fromName("AMEX"));
+// 		final Agent ag = market.subscribe(Market.class, marketObs(), Exchanges.fromName("AMEX"));
 		
 //		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 //		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
-//		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
+		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
 //		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
 //		agent1.include(Exchanges.fromName("BATS"));
 //		agent1.include(insts).subscribe(instObs());
 //		agent2.include(insts).subscribe(instObs());
-//		agent3.include(insts).subscribe(instObs());
+		agent3.include(insts).subscribe(instObs());
 //		agent4.include(insts).subscribe(instObs());
 		Thread.sleep(30000 * 1000);
 		
@@ -134,7 +130,16 @@ public class TestBarchartMarketProvider {
 
 			@Override
 			public void onNext(final Session s) {
-				System.out.println(s.instrument().symbol() + " SESSION " + s.updated());
+				
+				final ParamMap params = s.parameters();
+				
+				if(!params.has(Param.SESSION_VWAP)) {
+					log.debug("NO VWAP DATA");
+					return;
+				}
+				
+				log.debug("VWAP = {}", params.get(Param.SESSION_VWAP));
+				
 			}
 
 		};

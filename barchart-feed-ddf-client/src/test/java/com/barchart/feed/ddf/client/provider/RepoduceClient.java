@@ -39,7 +39,7 @@ public class RepoduceClient {
 		market.startup();
 		
 		market.subscribe(Trade.class, tradeObs(), exchanges);
-		market.subscribe(Session.class, sessionObs(), exchanges);
+		// market.subscribe(Session.class, sessionObs(), exchanges);
 		
 		Thread.sleep(1000 * 60 * 60);
 		
@@ -49,25 +49,13 @@ public class RepoduceClient {
 		
 		return new MarketObserver<Trade> () {
 
-			private final Map<String, String> ids = new ConcurrentHashMap<String, String>();
 			private final AtomicInteger counter = new AtomicInteger(0);
 			
 			@Override
 			public void onNext(final Trade v) {
 				
-				if(v.instrument().isNull()) {
-					//new RuntimeException().printStackTrace();
-					log.debug("**********************************************************************");
-					return;
-				}
-				
-				if(!ids.containsKey(v.instrument().id().id())) {
-					ids.put(v.instrument().id().id(), v.instrument().id().id());
-				}
-				
-				if(counter.incrementAndGet() >= 5000) {
-					log.debug("Saw " + ids.size() + " unique instruments from TRADES");
-					counter.set(0);
+				if(counter.incrementAndGet() % 500 == 0) {
+					log.debug("Saw TRADE callbacks = " + counter.get());
 				}
 				
 			}

@@ -52,13 +52,11 @@ import com.barchart.feed.ddf.datalink.api.EventPolicy;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
-import com.barchart.feed.ddf.message.provider.CodecHelper;
 import com.barchart.feed.ddf.settings.api.DDF_Server;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.feed.ddf.settings.enums.DDF_ServerType;
 import com.barchart.feed.ddf.settings.provider.DDF_SettingsService;
 import com.barchart.feed.ddf.util.ClockDDF;
-import com.barchart.feed.ddf.util.FeedClock;
 import com.barchart.feed.ddf.util.FeedDDF;
 
 class FeedClientDDF implements DDF_FeedClient {
@@ -427,7 +425,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.error("# DDF-EventTask death {}", threadNumber);
 		}
 	};
-
+	
 	private final RunnerDDF messageTask = new RunnerDDF() {
 		@Override
 		protected void runCore() {

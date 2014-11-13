@@ -75,7 +75,7 @@ public class DDF_RxInstrumentProvider {
 		@Override
 		public Thread newThread(final Runnable r) {
 
-					final Thread t = new Thread(r, "Feed thread " + counter.getAndIncrement());
+			final Thread t = new Thread(r, "Feed thread " + counter.getAndIncrement());
 
 			t.setDaemon(true);
 

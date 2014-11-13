@@ -202,7 +202,7 @@ class VarMarketDDF extends VarMarket {
 			final SizeValue size, 
 			final TimeValue time, 
 			final TimeValue date) {
-
+		
 		assert type != null;
 		assert session != null;
 		assert sequencing != null;
@@ -246,7 +246,8 @@ class VarMarketDDF extends VarMarket {
 			final PriceValue settle, 
 			final PriceValue previousSettle,
 			final SizeValue volume, 
-			final SizeValue interest, 
+			final SizeValue interest,
+			final PriceValue vwap,
 			final BooleanValue isSettled, 
 			final TimeValue barTime) {
 		
@@ -265,6 +266,7 @@ class VarMarketDDF extends VarMarket {
 		applyBar(bar, MarketBarField.CLOSE_PREVIOUS, previousSettle);
 		applyBar(bar, MarketBarField.VOLUME, volume);
 		applyBar(bar, MarketBarField.INTEREST, interest);
+		applyBar(bar, MarketBarField.VWAP, vwap);
 		
 		if (isSettled != null)
 			bar.set(MarketBarField.IS_SETTLED, isSettled);
