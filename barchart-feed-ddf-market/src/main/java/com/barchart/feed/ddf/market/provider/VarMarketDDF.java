@@ -342,8 +342,7 @@ class VarMarketDDF extends VarMarket {
 			final SizeValue size = LIMIT;
 			// TODO ValueConverter
 			final Price tempStep = instrument.tickSize();
-			final PriceValue step = ValueBuilder.newPrice(tempStep.mantissa(),
-					tempStep.exponent());
+			final PriceValue step = ValueBuilder.newPrice(tempStep.mantissa(), tempStep.exponent());
 
 			final VarBookDDF varBook = new VarBookDDF(instrument, type, size, step);
 			final VarBookTopDDF varBookTop = new VarBookTopDDF(varBook);

@@ -33,7 +33,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"CBF5"
+		"GOOG"
 	};
 	
 	public static void main(final String[] args) throws Exception {
