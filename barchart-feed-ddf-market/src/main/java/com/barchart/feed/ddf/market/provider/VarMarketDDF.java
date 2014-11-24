@@ -42,7 +42,6 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.base.bar.api.MarketDoBar;
 import com.barchart.feed.base.bar.enums.MarketBarField;
@@ -64,11 +63,9 @@ import com.barchart.feed.base.values.api.BooleanValue;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
-import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.message.provider.DDF_MessageService;
 import com.barchart.util.common.anno.Mutable;
-import com.barchart.util.value.api.Price;
 
 /**
  * Logic #1
@@ -129,8 +126,7 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	@Override
-	public void setBookUpdate(final MarketDoBookEntry entry,
-			final TimeValue time) {
+	public void setBookUpdate(final MarketDoBookEntry entry, final TimeValue time) {
 
 		assert entry != null && time != null;
 
@@ -320,31 +316,8 @@ class VarMarketDDF extends VarMarket {
 		MarketBook book = get(BOOK);
 
 		if (book.isFrozen()) {
-
-			Book.Type type = null;
-			switch (instrument.liquidityType()) {
-				default:
-					type = Book.Type.NONE;
-					break;
-				case NONE:
-					type = Book.Type.NONE;
-					break;
-				case DEFAULT:
-					type = Book.Type.DEFAULT;
-					break;
-				case IMPLIED:
-					type = Book.Type.IMPLIED;
-					break;
-				case COMBINED:
-					type = Book.Type.COMBINED;
-					break;
-			}
-			final SizeValue size = LIMIT;
-			// TODO ValueConverter
-			final Price tempStep = instrument.tickSize();
-			final PriceValue step = ValueBuilder.newPrice(tempStep.mantissa(), tempStep.exponent());
-
-			final VarBookDDF varBook = new VarBookDDF(instrument, type, size, step);
+			
+			final VarBookDDF varBook = new VarBookDDF(instrument);
 			final VarBookTopDDF varBookTop = new VarBookTopDDF(varBook);
 
 			set(BOOK, varBook);

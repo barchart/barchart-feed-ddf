@@ -41,7 +41,7 @@ public class RepoduceClient {
 		market.subscribe(Trade.class, tradeObs(), exchanges);
 		// market.subscribe(Session.class, sessionObs(), exchanges);
 		
-		Thread.sleep(1000 * 60 * 60);
+		Thread.sleep(1000 * 60 * 60 * 10);
 		
 	}
 	

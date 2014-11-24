@@ -305,6 +305,7 @@ public class DDF_RxInstrumentProvider {
 					sub.onNext(result(res));
 					sub.onCompleted();
 				} catch (final Exception e1) {
+					log.error("Exception in inst lookup runnable", e1);
 					sub.onError(e1);
 				}
 			}

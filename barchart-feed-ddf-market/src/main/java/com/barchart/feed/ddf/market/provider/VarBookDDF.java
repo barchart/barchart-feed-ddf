@@ -79,9 +79,7 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	private final Instrument instrument;
 	
-	VarBookDDF(final Instrument instrument, final Book.Type type, 
-			final SizeValue size, final PriceValue step) {
-		// XXX
+	VarBookDDF(final Instrument instrument) {
 		this.instrument = instrument;
 	}
 

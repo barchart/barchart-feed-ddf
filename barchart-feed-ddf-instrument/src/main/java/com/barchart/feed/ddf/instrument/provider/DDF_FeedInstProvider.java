@@ -126,12 +126,12 @@ public final class DDF_FeedInstProvider {
 		final List<InstrumentState> list = new CopyOnWriteArrayList<InstrumentState>(); 
 		list.add(instState);
 		symbolMap.put(symbol, list);
-		// log.debug("Put {} stub into map", symbol);
 
 		/* Asnyc lookup */
 		try {
 			remoteSymbolQueue.put(symbol);
 		} catch (final Exception e) {
+			log.error("Failed to add {} to remote symbol queue", e, symbol);
 			failedRemoteSymbolQueue.add(symbol);
 		}
 
@@ -302,7 +302,7 @@ public final class DDF_FeedInstProvider {
 
 					for (final Future<Map<String, List<InstrumentState>>> f : symbFutures) {
 						
-						final Map<String, List<InstrumentState>> map = f.get();
+						final Map<String, List<InstrumentState>> map = f.get(10, TimeUnit.SECONDS);
 
 						for (final Entry<String, List<InstrumentState>> e : map.entrySet()) {
 							

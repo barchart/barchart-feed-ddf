@@ -79,9 +79,9 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 
 		super(id_);
 
-		copy(stub_);
-
 		loadState = state_;
+		
+		copy(stub_);
 
 	}
 
@@ -329,6 +329,11 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 	@SuppressWarnings("deprecation")
 	protected void copy(final Instrument inst) {
 
+		if(loadState == LoadState.FULL && inst.tickSize().isNull()) {
+			new IllegalStateException("Tried to process an instrument update with a null tick size \n" + inst.toString())
+					.printStackTrace();
+		}
+		
 		// Update parent fields
 		securityType = inst.securityType();
 		liquidityType = inst.liquidityType();
