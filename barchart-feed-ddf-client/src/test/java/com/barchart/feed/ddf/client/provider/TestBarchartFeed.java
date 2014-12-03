@@ -56,20 +56,6 @@ public class TestBarchartFeed {
 			
 		};
 		
-//		final MarketObserver<Market> callback = new MarketObserver<Market>() {
-//
-//			@Override
-//			public void onNext(final Market v) {
-//				
-//				log.debug(
-//					v.instrument().symbol() + " " +
-//							v.change()
-//				);
-//				
-//			}
-//
-//		};
-		
 		final Agent myAgent = feed.newAgent(Book.class, callback);
 		
 		myAgent.include(getInst("AAPL"));

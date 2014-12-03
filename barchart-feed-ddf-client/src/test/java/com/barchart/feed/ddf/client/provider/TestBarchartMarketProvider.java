@@ -2,12 +2,15 @@ package com.barchart.feed.ddf.client.provider;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rx.Observer;
+import rx.observables.BlockingObservable;
 
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
@@ -25,6 +28,7 @@ import com.barchart.feed.api.model.data.parameter.Param;
 import com.barchart.feed.api.model.data.parameter.ParamMap;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.client.provider.BarchartMarketplace;
+import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
 import com.barchart.feed.inst.Exchanges;
 
 public class TestBarchartMarketProvider {
@@ -33,7 +37,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"GOOG"
+		"GOOG" // RMU15 ZCU16
 	};
 	
 	public static void main(final String[] args) throws Exception {
@@ -48,26 +52,29 @@ public class TestBarchartMarketProvider {
 //				.feedType(FeedType.LISTENER_TCP)
 //				.port(41234).build();
 		
-//		final CountDownLatch lock = new CountDownLatch(1);
-//		
-//		market.bindConnectionStateListener(listener(lock));
 		market.startup();
-//		
-//		lock.await();  // 
 		
 // 		final Agent ag = market.subscribe(Market.class, marketObs(), Exchanges.fromName("AMEX"));
 		
-//		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
+		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
+		final ConsumerAgent agent2 = market.register(marketObs(), Market.class);
 //		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
-		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
+//		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
 //		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
 //		agent1.include(Exchanges.fromName("BATS"));
 //		agent1.include(insts).subscribe(instObs());
 //		agent2.include(insts).subscribe(instObs());
-		agent3.include(insts).subscribe(instObs());
+//		agent3.include(insts).subscribe(instObs());
 //		agent4.include(insts).subscribe(instObs());
-		Thread.sleep(30000 * 1000);
+		
+		agent1.include("ZCU16").subscribe();
+		
+		Thread.sleep(5 * 1000);
+		
+		System.out.println("********** INCLUDING");
+		
+		agent2.include("ZCU16").subscribe();
 		
 //		agent1.exclude(insts).subscribe(instObs());
 		
@@ -104,9 +111,7 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market m) {
 				
-				if(m.instrument().symbol().equals("GSAT")) {
-					System.out.println(m.lastPrice());
-				}
+				System.out.println(m.toString());
 				
 			}
 		};
@@ -186,6 +191,18 @@ public class TestBarchartMarketProvider {
 			}
 			
 		};
+	}
+	
+	public static Instrument getInst(final String barSym) {
+		
+		final Map<String, List<Instrument>> map = BlockingObservable.from(DDF_RxInstrumentProvider
+				.fromString(barSym)).single().results();
+		
+		Instrument result = BlockingObservable.from(DDF_RxInstrumentProvider
+				.fromString(barSym)).single().results().get(barSym).get(0);
+		
+		return result;
+		
 	}
 	
 	
