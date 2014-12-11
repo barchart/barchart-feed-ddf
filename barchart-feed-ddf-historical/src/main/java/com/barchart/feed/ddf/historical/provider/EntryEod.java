@@ -151,8 +151,7 @@ class EntryEod extends EntryBar implements DDF_EntryBarEod {
 		text.append(millisUTC);
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(new DateTime(millisUTC, DateTimeZone.forOffsetMillis(
-				(int)inst.timeZoneOffset())));
+		text.append(new DateTime(millisUTC));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(encodeMantissa(priceOpenMantissa, priceExponent()));
