@@ -172,8 +172,8 @@ abstract class EntryBar extends Entry implements DDF_EntryBar {
 		text.append(millisUTC);
 		text.append(ASCII.STRING_COMMA);
 
-		text.append(new DateTime(millisUTC, DateTimeZone.forOffsetMillis(
-				(int)inst.timeZoneOffset())));
+		text.append(new DateTime(millisUTC, 
+				DateTimeZone.forOffsetMillis((int)inst.timeZoneOffset())));
 		text.append(ASCII.STRING_COMMA);
 
 		text.append(getTradeDay());
