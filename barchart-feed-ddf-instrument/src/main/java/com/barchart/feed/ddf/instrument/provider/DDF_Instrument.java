@@ -224,11 +224,11 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 
 			if (expireStr != null && !expireStr.isEmpty()) {
 
-				final DefaultCalendar cal = new DefaultCalendar();
-				calendar = cal;
+				//final DefaultCalendar cal = new DefaultCalendar();
+				//calendar = cal;
 
 				final DateTime expire = new DateTime(expireStr);
-				cal.add(new DefaultEvent(Event.Type.LAST_TRADE_DATE, expire));
+				calendar.add(new DefaultEvent(Event.Type.LAST_TRADE_DATE, expire));
 
 				/* Delivery */
 				final int delMonth = month(xmlStringDecode(attr, SYMBOL_DDF_EXPIRE_MONTH, XML_PASS));
@@ -243,13 +243,14 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 					}
 
 					delivery = delivery.withMonthOfYear(delMonth);
-					cal.add(new DefaultEvent(Event.Type.LAST_DELIVERY_DATE, delivery));
+					calendar.add(new DefaultEvent(Event.Type.LAST_DELIVERY_DATE, delivery));
 
 				}
 
 			}
 
 		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 
 		loadState = LoadState.FULL;
@@ -344,7 +345,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		CFICode = inst.CFICode();
 		tickSize = inst.tickSize();
 		pointValue = inst.pointValue();
-		calendar = inst.calendar();
+		calendar = new DefaultCalendar(inst.calendar().events());
 		schedule = inst.schedule();
 		symbol = inst.symbol();
 		currencyCode = inst.currencyCode();
