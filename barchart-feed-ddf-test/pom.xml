@@ -19,6 +19,7 @@
 
 	<artifactId>barchart-feed-ddf-test</artifactId>
 	<packaging>bundle</packaging>
+	<version>4.2.34-SNAPSHOT</version>
 
 	<name>barchart-feed-ddf-test</name>
 
