@@ -17,7 +17,8 @@ import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 public class BarchartMarketplaceReplay extends BarchartMarketplace {
 
 	public BarchartMarketplaceReplay() {
-		super(DDF_Marketplace.newInstance(new DummySubHandler()),
+		super(DDF_Marketplace.newInstance(
+				new DummySubHandler()),
 				new InlineExecutorService());
 	}
 

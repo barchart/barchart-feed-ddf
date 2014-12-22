@@ -56,8 +56,7 @@ public final class HelperDDF {
 	 *            the frac
 	 * @return the long
 	 */
-	public final static long fromBinaryToDecimal(final long value,
-			final DDF_Fraction frac) {
+	public final static long fromBinaryToDecimal(final long value, final DDF_Fraction frac) {
 
 		if (value == HelperDDF.DDF_EMPTY || value == HelperDDF.DDF_CLEAR) {
 			return value;
@@ -103,8 +102,7 @@ public final class HelperDDF {
 	 *            the frac
 	 * @return the long
 	 */
-	public final static long fromDecimalToBinary(final long value,
-			final DDF_Fraction frac) {
+	public final static long fromDecimalToBinary(final long value, final DDF_Fraction frac) {
 
 		if (value == HelperDDF.DDF_EMPTY || value == HelperDDF.DDF_CLEAR) {
 			return value;
@@ -146,8 +144,12 @@ public final class HelperDDF {
 	 * @param marker
 	 *            the marker
 	 */
-	public final static void decimalEncode(/* local */long mantissa,
-			final DDF_Fraction frac, final ByteBuffer buffer, final byte marker) {
+	public final static void decimalEncode(
+			long mantissa, /* local */
+			final DDF_Fraction frac, 
+			final ByteBuffer buffer, 
+			final byte marker) {
+		
 		mantissa = fromDecimalToBinary(mantissa, frac);
 		HelperDDF.longEncode(mantissa, buffer, marker);
 	}
@@ -163,8 +165,11 @@ public final class HelperDDF {
 	 *            the marker
 	 * @return the long
 	 */
-	public final static long decimalDecode(final DDF_Fraction frac,
-			final ByteBuffer buffer, final byte marker) {
+	public final static long decimalDecode(
+			final DDF_Fraction frac,
+			final ByteBuffer buffer, 
+			final byte marker) {
+		
 		long mantissa = HelperDDF.longDecode(buffer, marker);
 		mantissa = fromBinaryToDecimal(mantissa, frac);
 		return mantissa;
@@ -179,14 +184,16 @@ public final class HelperDDF {
 	 *            the frac
 	 * @return the decimal value
 	 */
-	public final static DecimalValue newDecimalDDF(final long mantissa,
-			final DDF_Fraction frac) {
+	public final static DecimalValue newDecimalDDF(final long mantissa,	final DDF_Fraction frac) {
+		
 		if (mantissa == HelperDDF.DDF_EMPTY) {
 			return DDF_NulVal.DECIMAL_EMPTY;
 		}
+		
 		if (mantissa == HelperDDF.DDF_CLEAR) {
 			return DDF_ClearVal.DECIMAL_CLEAR;
 		}
+		
 		return ValueBuilder.newDecimal(mantissa, frac.decimalExponent);
 	}
 
@@ -199,14 +206,16 @@ public final class HelperDDF {
 	 *            the frac
 	 * @return the price value
 	 */
-	public final static PriceValue newPriceDDF(final long mantissa,
-			final DDF_Fraction frac) {
+	public final static PriceValue newPriceDDF(final long mantissa, final DDF_Fraction frac) {
+		
 		if (mantissa == HelperDDF.DDF_EMPTY) {
 			return DDF_NulVal.PRICE_EMPTY;
 		}
+		
 		if (mantissa == HelperDDF.DDF_CLEAR) {
 			return DDF_ClearVal.PRICE_CLEAR;
 		}
+		
 		return ValueBuilder.newPrice(mantissa, frac.decimalExponent);
 	}
 
@@ -218,12 +227,15 @@ public final class HelperDDF {
 	 * @return the size value
 	 */
 	public final static SizeValue newSizeDDF(final long sizeValue) {
+		
 		if (sizeValue == HelperDDF.DDF_EMPTY) {
 			return DDF_NulVal.SIZE_EMPTY;
 		}
+		
 		if (sizeValue == HelperDDF.DDF_CLEAR) {
 			return DDF_ClearVal.SIZE_CLEAR;
 		}
+		
 		return ValueBuilder.newSize(sizeValue);
 	}
 
@@ -235,12 +247,15 @@ public final class HelperDDF {
 	 * @return the time value
 	 */
 	public final static TimeValue newTimeDDF(final long millisUTC) {
+		
 		if (millisUTC == HelperDDF.DDF_EMPTY) {
 			return DDF_NulVal.TIME_EMPTY;
 		}
+		
 		if (millisUTC == HelperDDF.DDF_CLEAR) {
 			return DDF_ClearVal.TIME_CLEAR;
 		}
+		
 		return ValueBuilder.newTime(millisUTC);
 	}
 
@@ -253,8 +268,8 @@ public final class HelperDDF {
 	 *            the frac
 	 * @return the long
 	 */
-	public static final long decimalDecode(final String string,
-			final DDF_Fraction frac) {
+	public static final long decimalDecode(final String string, final DDF_Fraction frac) {
+		
 		long value = HelperDDF.longDecode(string);
 		value = fromBinaryToDecimal(value, frac);
 		return value;
@@ -269,8 +284,8 @@ public final class HelperDDF {
 	 *            the frac
 	 * @return the string
 	 */
-	public static final String decimalEncode(/* local */long value,
-			final DDF_Fraction frac) {
+	public static final String decimalEncode(/* local */long value, final DDF_Fraction frac) {
+		
 		value = fromDecimalToBinary(value, frac);
 		final String string = HelperDDF.longEncode(value);
 		return string;
@@ -286,18 +301,23 @@ public final class HelperDDF {
 	 * @param marker
 	 *            the marker
 	 */
-	public final static void longEncode(final long value,
-			final ByteBuffer buffer, final byte marker) {
+	public final static void longEncode(
+			final long value,
+			final ByteBuffer buffer, 
+			final byte marker) {
+		
 		if (value == DDF_EMPTY) {
 			// empty
 			buffer.put(marker);
 			return;
 		}
+		
 		if (value == DDF_CLEAR) {
 			buffer.put(ASCII.DASH);
 			buffer.put(marker);
 			return;
 		}
+		
 		// TODO optimize
 		buffer.put(Long.toString(value).getBytes(ASCII.ASCII_CHARSET));
 		if (marker == ASCII.NUL) {
@@ -316,8 +336,7 @@ public final class HelperDDF {
 	 *            the marker
 	 * @return the long
 	 */
-	public final static long longDecode(final ByteBuffer buffer,
-			final byte marker) {
+	public final static long longDecode(final ByteBuffer buffer, final byte marker) {
 
 		buffer.mark();
 
@@ -406,11 +425,13 @@ public final class HelperDDF {
 	 * @return the price value
 	 */
 	public final static PriceValue priceDecode(final String string) {
+		
 		final String[] array = string.split(ASCII.REGEX_DOT);
 		final String mantString = array[0].concat(array[1]);
 		final long mantissa = Long.parseLong(mantString);
 		final int exponent = -array[1].length();
 		return ValueBuilder.newPrice(mantissa, exponent);
+		
 	}
 
 	
@@ -422,16 +443,19 @@ public final class HelperDDF {
 	 * @return the string
 	 */
 	public final static String priceEncode(final PriceValue price) {
+		
 		long whole = price.mantissa();
 		int e1 = price.exponent();
 		while (e1 > 0) {
 			whole *= 10;
 			e1--;
 		}
+		
 		while (e1 < 0) {
 			whole /= 10;
 			e1++;
 		}
+		
 		long part = 0;
 		int e2 = price.exponent();
 		if (e2 >= 0) {
@@ -444,6 +468,7 @@ public final class HelperDDF {
 			}
 			part = price.mantissa() % denom;
 		}
+		
 		return String.format("%d.%d", whole, part);
 	}
 
@@ -466,6 +491,7 @@ public final class HelperDDF {
 	 * @return the long
 	 */
 	public static final long longDecode(final String string) {
+		
 		if (isEmptyDDF(string)) {
 			return DDF_EMPTY;
 		} else if (isDashDDF(string)) {
@@ -473,6 +499,7 @@ public final class HelperDDF {
 		} else {
 			return Long.parseLong(string);
 		}
+		
 	}
 
 	/**
@@ -483,6 +510,7 @@ public final class HelperDDF {
 	 * @return the string
 	 */
 	public static final String longEncode(final long value) {
+		
 		if (value == DDF_EMPTY) {
 			return ASCII.STRING_EMPTY;
 		} else if (value == DDF_CLEAR) {
@@ -490,6 +518,7 @@ public final class HelperDDF {
 		} else {
 			return Long.toString(value);
 		}
+		
 	}
 
 	/**
@@ -501,8 +530,8 @@ public final class HelperDDF {
 	 *            the zone
 	 * @return the long
 	 */
-	public static final long timeDecode(/* local */long value,
-			final DateTimeZone zone) {
+	public static final long timeDecode(/* local */long value, final DateTimeZone zone) {
+		
 		final int second = (int) (value % 100);
 		value /= 100;
 		final int minute = (int) (value % 100);
@@ -517,6 +546,7 @@ public final class HelperDDF {
 		final DateTime dateTime = new DateTime(year, month, day, hour, minute,
 				second, 0, zone);
 		return dateTime.getMillis();
+		
 	}
 
 	/**
@@ -528,8 +558,8 @@ public final class HelperDDF {
 	 *            the zone
 	 * @return the long
 	 */
-	public static final long timeEncode(final long millisUTC,
-			final DateTimeZone zone) {
+	public static final long timeEncode(final long millisUTC, final DateTimeZone zone) {
+		
 		final DateTime dateTime = new DateTime(millisUTC, zone);
 		long value = 0;
 		final int year = dateTime.getYearOfEra();

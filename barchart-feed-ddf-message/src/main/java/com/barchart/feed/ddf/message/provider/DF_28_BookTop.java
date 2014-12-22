@@ -112,8 +112,7 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 	 * .feed.base.api.market.enums.MarketBookSide)
 	 */
 	@Override
-	public final MarketDoBookEntry entry(final Instrument instrument, 
-			final Book.Side side) {
+	public final MarketDoBookEntry entry(final Instrument instrument, final Book.Side side) {
 
 		final PriceValue price;
 		final SizeValue size;
@@ -134,10 +133,13 @@ class DF_28_BookTop extends BaseMarket implements DDF_MarketBookTop {
 			break;
 		}
 
-		/** XXX note: {@link MarketBook#ENTRY_TOP} */
 		final MarketDoBookEntry entry = new DefBookEntry(
-				MODIFY, side, Book.Type.DEFAULT,
-				MarketBook.ENTRY_TOP, price, size);
+				MODIFY, 
+				side, 
+				Book.Type.DEFAULT,
+				MarketBook.ENTRY_TOP, 
+				price, 
+				size);
 
 		return entry;
 

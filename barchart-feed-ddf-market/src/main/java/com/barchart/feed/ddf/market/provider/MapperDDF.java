@@ -716,8 +716,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 	// ##################################
 
-	protected void applyTop(MarketDoBookEntry entry,
-			final TimeValue time, final MarketDo market) {
+	protected void applyTop(
+			MarketDoBookEntry entry,
+			final TimeValue time, 
+			final MarketDo market) {
 
 		/* ddf signals by special price values */
 		final PriceValue price = entry.priceValue();
@@ -730,9 +732,12 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		/* ",-," a.k.a comma-dash-comma; ddf command : remove */
 		if (isClear(price)) {
 			entry = new DefBookEntry(
-					MarketBookAction.REMOVE, entry.side(),
-					Book.Type.DEFAULT, MarketBook.ENTRY_TOP,
-					ValueConst.NULL_PRICE, ValueConst.NULL_SIZE);
+					MarketBookAction.REMOVE, 
+					entry.side(),
+					Book.Type.DEFAULT, 
+					MarketBook.ENTRY_TOP,
+					ValueConst.NULL_PRICE, 
+					ValueConst.NULL_SIZE);
 		}
 
 		market.setBookUpdate(entry, time);
