@@ -104,29 +104,33 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 		case BID:
 			if (place == ENTRY_TOP) {
 				
-				if(entry.isNull()) {
+				if(entry.price().isNull()) {
 					topBid = MarketBookEntry.NULL;
 				} else {
 					topBid = entry;
 				}
 				
-				//DELETE
-				if(!topBid.price().isNull() &&
-						topBid.price().isZero()) {
-					System.out.println("ZERO");
-				}
-
 				changeSet.add(Component.TOP_BID);
 			}
+			
 			break;
+			
 		case ASK:
 			if (place == ENTRY_TOP) {
-				topAsk = entry;
+				
+				if(entry.price().isNull()) {
+					topAsk = MarketBookEntry.NULL;
+				} else {
+					topAsk = entry;
+				}
+				
 				changeSet.add(Component.TOP_ASK);
 			}
 			break;
+			
 		default:
 			return UniBookResult.ERROR;
+			
 		}
 
 		if (place == ENTRY_TOP) {
