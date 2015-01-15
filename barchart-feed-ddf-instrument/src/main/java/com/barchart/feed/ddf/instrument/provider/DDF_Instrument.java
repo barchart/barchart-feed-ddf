@@ -403,12 +403,22 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		// Temporary hack for specific contracts until we move to OpenFeed
 		// definitions
 
-		if (CFICode().startsWith("F") && (symbol().startsWith("SI") || symbol().startsWith("HG"))) {
+		if(CFICode().startsWith("F") && (symbol().startsWith("SI") || symbol().startsWith("HG"))) {
 			return VALUES.newPrice(1, -2);
 		}
 
-		if (CFICode().startsWith("F") && symbol().startsWith("J6")) {
+		if(CFICode().startsWith("F") && 
+				(symbol().startsWith("J6") // Jap Yen
+					|| symbol().startsWith("J7") // Jap Yen
+					|| symbol().startsWith("WM"))) { // Jap Yen
 			return VALUES.newPrice(1, 2);
+		}
+		
+		if(CFICode().startsWith("F") &&
+				(symbol().startsWith("WU") // Hungarian Forint
+					|| symbol.startsWith("WH") // Hungarian Forint
+					|| symbol.startsWith("KZ"))) { // Korean Won
+			return VALUES.newPrice(1,1);
 		}
 
 		return Price.ONE;

@@ -33,7 +33,7 @@ public class TestDDF_RxInstrumentProvider {
 		
 		log.debug("****************************************************************");
 		
-		DDF_RxInstrumentProvider.fromString("ESZ14").subscribe(obs());
+		DDF_RxInstrumentProvider.fromString("CLZ500C").subscribe(obs());
 		
 		Thread.sleep(3 * 1000);
 		
@@ -132,6 +132,8 @@ public class TestDDF_RxInstrumentProvider {
 						log.debug("Security Type = {}", i.securityType());
 						log.debug("CFI Code = {}", i.CFICode());
 						log.debug("Price Step = {}", i.tickSize());
+						log.debug("Expiration = {}", i.expiration());
+						log.debug("Description = {}", i.description());
 						
 					}
 					

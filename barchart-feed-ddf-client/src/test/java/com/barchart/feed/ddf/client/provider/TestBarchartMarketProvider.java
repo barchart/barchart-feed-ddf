@@ -37,7 +37,7 @@ public class TestBarchartMarketProvider {
 			TestBarchartMarketProvider.class);
 	
 	private static final String[] insts = {
-		"GOOG" // RMU15 ZCU16
+		"CLH500C" // RMU15 ZCU16
 	};
 	
 	public static void main(final String[] args) throws Exception {
@@ -68,17 +68,9 @@ public class TestBarchartMarketProvider {
 //		agent3.include(insts).subscribe(instObs());
 //		agent4.include(insts).subscribe(instObs());
 		
-		agent1.include("ZCU16").subscribe();
+		agent1.include("CL^O").subscribe();
 		
-		Thread.sleep(5 * 1000);
-		
-		System.out.println("********** INCLUDING");
-		
-		agent2.include("ZCU16").subscribe();
-		
-//		agent1.exclude(insts).subscribe(instObs());
-		
-		Thread.sleep(15 * 1000);
+		Thread.sleep(30 * 1000);
 
 		log.debug("Shutting down");
 		market.shutdown();
