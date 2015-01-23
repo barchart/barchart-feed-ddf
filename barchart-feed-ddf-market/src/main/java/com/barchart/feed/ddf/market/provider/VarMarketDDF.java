@@ -84,9 +84,9 @@ class VarMarketDDF extends VarMarket {
 
 	private final void updateMarket(final TimeValue time) {
 
-		if(time.compareTo(get(MARKET_TIME)) > 0) {
-			set(MARKET_TIME, time);
-		}
+//		if(time.compareTo(get(MARKET_TIME)) > 0) {
+//			set(MARKET_TIME, time);
+//		}
 
 		eventAdd(MARKET_UPDATED);
 
@@ -121,6 +121,7 @@ class VarMarketDDF extends VarMarket {
 		eventAdd(NEW_BOOK_SNAPSHOT);
 
 		book.setTime(time);
+		set(MARKET_TIME, time);
 		updateMarket(time);
 
 	}
@@ -151,6 +152,7 @@ class VarMarketDDF extends VarMarket {
 		}
 
 		book.setTime(time);
+		set(MARKET_TIME, time);
 		setChange(Component.BOOK_COMBINED);
 		updateMarket(time);
 
@@ -227,7 +229,7 @@ class VarMarketDDF extends VarMarket {
 		applyTradeToBar(session, sequencing, price, size, time, date);
 
 		makeCuvol(price, size, time);
-
+		
 		updateMarket(time);
 
 	}
@@ -394,9 +396,13 @@ class VarMarketDDF extends VarMarket {
 
 	}
 
-	private final void applyTradeToBar(final MarketTradeSession session,
-			final MarketTradeSequencing sequencing, final PriceValue price,
-			final SizeValue size, final TimeValue time, final TimeValue date) {
+	private final void applyTradeToBar(
+			final MarketTradeSession session,
+			final MarketTradeSequencing sequencing, 
+			final PriceValue price,
+			final SizeValue size, 
+			final TimeValue time, 
+			final TimeValue date) {
 
 		MarketBarType barType = ensureBar(date);
 		if (session == EXTENDED && barType == CURRENT)

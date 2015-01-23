@@ -28,8 +28,7 @@ import com.barchart.util.value.api.Price;
 public class TestSettlements {
 
 	private static final DateFormat DP = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private static final DateFormat DF = new SimpleDateFormat(
-			"yyyy-MM-dd (EEE)");
+	private static final DateFormat DF = new SimpleDateFormat("yyyy-MM-dd (EEE)");
 
 	protected static final Logger log = LoggerFactory
 			.getLogger(TestSettlements.class);

@@ -78,6 +78,7 @@ public class TestBarchartMarketProvider {
 	}
 	
 	private static Monitor listener(final CountDownLatch lock) { 
+		
 		return new Monitor() {
 
 			@Override
