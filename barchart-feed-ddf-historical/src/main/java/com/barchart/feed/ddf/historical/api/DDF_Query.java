@@ -7,11 +7,7 @@
  */
 package com.barchart.feed.ddf.historical.api;
 
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.END_OF_DAY;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_FORM_T;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_NEARBY;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.*;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -26,7 +22,7 @@ import com.barchart.util.common.anno.Mutable;
 // TODO: Auto-generated Javadoc
 /**
  * ddf historical market data query builder.
- * 
+ *
  * @param <E>
  *            the element type
  */
@@ -35,7 +31,7 @@ public final class DDF_Query<E extends DDF_Entry> {
 
 	/**
 	 * Instantiates a new dD f_ query.
-	 * 
+	 *
 	 * @param queryType
 	 *            the query type
 	 */
@@ -77,6 +73,18 @@ public final class DDF_Query<E extends DDF_Entry> {
 	 * then a 1 minute interval (no aggregation) will be the  default.
 	 */
 	public int groupBy = 1;
+
+	/**
+	 * If true, back-adjust continuation chart data.
+	 *
+	 * Explanation: http://www.premiumdata.net/support/futurescontinuous2.php
+	 */
+	public boolean backadjust = false;
+
+	/**
+	 * Number of days before expiration to roll contracts for continuation charts.
+	 */
+	public int daystoexpiration = 0;
 
 	/** The eod type. */
 	public DDF_QueryEodType eodType;
@@ -130,7 +138,7 @@ public final class DDF_Query<E extends DDF_Entry> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -150,7 +158,7 @@ public final class DDF_Query<E extends DDF_Entry> {
 
 	/**
 	 * Description.
-	 * 
+	 *
 	 * @return the string
 	 */
 	public final String description() {
@@ -197,7 +205,7 @@ public final class DDF_Query<E extends DDF_Entry> {
 
 	/**
 	 * Inits the from.
-	 * 
+	 *
 	 * @param that
 	 *            the that
 	 */
