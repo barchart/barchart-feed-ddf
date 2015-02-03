@@ -7,12 +7,10 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
-import static com.barchart.feed.base.bar.enums.MarketBarType.PREVIOUS;
+import static com.barchart.feed.base.bar.enums.MarketBarType.*;
 import static com.barchart.feed.base.book.api.MarketBook.ENTRY_TOP;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
-import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isClear;
-import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isEmpty;
+import static com.barchart.feed.ddf.message.provider.DDF_MessageService.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +99,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		market.clearChanges();
 
 		final TimeValue time = message.getTime();
-		
+
 		message.getTime();
 
 		applyTop(message.entry(market.instrument(), Book.Side.BID), time, market);
@@ -346,13 +344,13 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				market.setBar(type, bar);
 
 				return null;
-				
+
 			case VWAP_LAST_PRICE:
-				
+
 				bar.set(MarketBarField.VWAP, price);
-				
+
 				market.setBar(type, bar);
-				
+
 				return null;
 
 			default:
@@ -384,12 +382,18 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			switch (mode) {
 				case END_OF_DAY:
 				case DELAYED:
-				case SNAPSHOT:
 				case UNKNOWN:
+					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT, false);
 					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, false);
 					market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, true);
 					break;
+				case SNAPSHOT:
+					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT, true);
+					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, false);
+					market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, false);
+					break;
 				case REALTIME:
+					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT, false);
 					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, true);
 					market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, false);
 					break;
@@ -605,15 +609,15 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	 */
 	protected Void visit(
 			final DDF_MarketSnapshot message,
-			final MarketDo market, 
+			final MarketDo market,
 			final DDF_Indicator indicator) {
-		
+
 		return visit(message, market, indicator, false);
 	}
 
 	protected Void visit(
 			final DDF_MarketSnapshot message,
-			final MarketDo market, 
+			final MarketDo market,
 			final DDF_Indicator indicator,
 			final boolean forceSettle) {
 
@@ -631,7 +635,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		} else if (indicator == DDF_Indicator.PREVIOUS || forceSettle) {
 			settled = ValueConst.TRUE_BOOLEAN;
 		}
-		
+
 		market.setSnapshot(date,
 				message.getPriceOpen(),
 				message.getPriceHigh(),
@@ -648,7 +652,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		/*
 		 * If a previous update, set in bar current.
 		 */
-		/* Commented out to see if there are any cases where the current bar's previous value isn't correct 
+		/* Commented out to see if there are any cases where the current bar's previous value isn't correct
 		 * This most likely can be deleted if it doesn't cause problems elsewhere */
 //		if (indicator == DDF_Indicator.PREVIOUS && !settle.isZero()) {
 //			market.loadBar(MarketBarType.CURRENT.field).set(MarketBarField.CLOSE_PREVIOUS, settle);
@@ -656,10 +660,10 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		return null;
 	}
-	
+
 	@Override
 	public Void visit(final DDF_MarketTrade message, final MarketDo market) {
-		
+
 		market.clearChanges();
 
 		final DDF_MessageType tradeType = message.getMessageType();
