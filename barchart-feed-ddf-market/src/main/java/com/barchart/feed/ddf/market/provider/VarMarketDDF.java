@@ -82,16 +82,6 @@ class VarMarketDDF extends VarMarket {
 	private static final Logger log = LoggerFactory
 			.getLogger(VarMarketDDF.class);
 
-	private final void updateMarket(final TimeValue time) {
-
-//		if(time.compareTo(get(MARKET_TIME)) > 0) {
-//			set(MARKET_TIME, time);
-//		}
-
-		eventAdd(MARKET_UPDATED);
-
-	}
-
 	/*
 	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
 	 *
@@ -122,7 +112,7 @@ class VarMarketDDF extends VarMarket {
 
 		book.setTime(time);
 		set(MARKET_TIME, time);
-		updateMarket(time);
+		eventAdd(MARKET_UPDATED);
 
 	}
 
@@ -154,7 +144,7 @@ class VarMarketDDF extends VarMarket {
 		book.setTime(time);
 		set(MARKET_TIME, time);
 		setChange(Component.BOOK_COMBINED);
-		updateMarket(time);
+		eventAdd(MARKET_UPDATED);
 
 	}
 
@@ -166,7 +156,7 @@ class VarMarketDDF extends VarMarket {
 
 		makeCuvol(entry.priceValue(), entry.sizeValue(), time);
 
-		updateMarket(time);
+		eventAdd(MARKET_UPDATED);
 
 	}
 
@@ -187,7 +177,7 @@ class VarMarketDDF extends VarMarket {
 		setChange(Component.CUVOL);
 		eventAdd(NEW_CUVOL_SNAPSHOT);
 
-		updateMarket(time);
+		eventAdd(MARKET_UPDATED);
 
 	}
 
@@ -230,7 +220,7 @@ class VarMarketDDF extends VarMarket {
 
 		makeCuvol(price, size, time);
 		
-		updateMarket(time);
+		eventAdd(MARKET_UPDATED);
 
 	}
 
@@ -301,11 +291,11 @@ class VarMarketDDF extends VarMarket {
 		eventAdd(type.event);
 
 		/* Don't update time based on previous bar */
-		if(type == MarketBarType.PREVIOUS) {
-			eventAdd(MARKET_UPDATED);
-		} else {
-			updateMarket(bar.get(BAR_TIME));
+		if(type != MarketBarType.PREVIOUS) {
+			set(MARKET_TIME, bar.get(BAR_TIME));
 		}
+		
+		eventAdd(MARKET_UPDATED);
 
 	}
 

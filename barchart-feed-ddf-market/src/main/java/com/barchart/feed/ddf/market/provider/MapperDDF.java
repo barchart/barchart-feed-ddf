@@ -373,7 +373,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	 */
 	@Override
 	public Void visit(final DDF_MarketQuote message, final MarketDo market) {
-
+		
 		market.clearChanges();
 
 		final DDF_QuoteState state = message.getState();
@@ -616,7 +616,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			final MarketDo market, 
 			final DDF_Indicator indicator,
 			final boolean forceSettle) {
-
+		
 		market.clearChanges();
 
 		final TimeValue date = message.getTradeDay().tradeDate();
