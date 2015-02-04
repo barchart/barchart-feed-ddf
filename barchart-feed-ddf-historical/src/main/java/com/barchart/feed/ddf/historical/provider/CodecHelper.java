@@ -8,14 +8,7 @@
 package com.barchart.feed.ddf.historical.provider;
 
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryOrder.ASCENDING;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.END_OF_DAY;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.END_OF_DAY_TREND;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_FORM_T;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_NEARBY;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.MINUTES_TREND;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS_FORM_T;
-import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.TICKS_TREND;
+import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.*;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -28,7 +21,6 @@ import com.barchart.feed.ddf.historical.api.DDF_Query;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodType;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryEodVolume;
 import com.barchart.feed.ddf.historical.enums.DDF_QueryOrder;
-import com.barchart.feed.ddf.instrument.provider.DDF_FeedInstProvider;
 import com.barchart.feed.ddf.settings.api.DDF_Settings;
 import com.barchart.util.common.ascii.ASCII;
 
@@ -52,7 +44,7 @@ final class CodecHelper {
 	/**
 	 * http://ds01.ddfplus.com/historical/queryticks.ashx?username=USER&password
 	 * = PASS&symbol=GOOG&start=20100601090000&end=201006020900000
-	 * 
+	 *
 	 */
 
 	final static String urlQuery(final DDF_Settings settings,
@@ -133,6 +125,11 @@ final class CodecHelper {
 		text.append("order=");
 		text.append(order);
 
+		text.append("&");
+
+		text.append("order=");
+		text.append(order);
+
 		//
 
 		if (query.type.isIn(MINUTES, MINUTES_NEARBY, MINUTES_FORM_T,
@@ -173,6 +170,16 @@ final class CodecHelper {
 			text.append("volume=");
 			text.append(volume);
 
+			text.append("&");
+
+			text.append("backadjust=");
+			text.append(query.backadjust ? "1" : "0");
+
+			text.append("&");
+
+			text.append("daystoexpiration=");
+			text.append(query.daystoexpiration);
+
 		}
 
 		if (query.type.isIn(TICKS_TREND, MINUTES_TREND, END_OF_DAY_TREND)) {
@@ -189,7 +196,7 @@ final class CodecHelper {
 	}
 
 	/**
-	 * 
+	 *
 	 * start: this parameter should be set to the desired start date/time for 
 	 * the query (the result
 	 * set will include records back to, and including, this value). If not set,
@@ -197,16 +204,16 @@ final class CodecHelper {
 	 * in the end parameter, if end is specified, or
 	 * to the beginning of the current day
 	 * , if end is not specified. The value should conform to the format 
-	 * 
+	 *
 	 * yyyymmdd[hhmm[ss]]
-	 * 
+	 *
 	 * , where fields in brackets are optional. Any optional fields that
 	 *  are not explicitly set will default to 0 (i.e. 20090203 will default to 
 	 * 20090203000000 or February 3, 2009 at 00:00:00).
-	 * 
+	 *
 	 * Note: all times are in Eastern Time for equities and Central Time for 
 	 * everything else. 
-	 * 
+	 *
 	 */
 
 	static final DateTimeFormatter QUERY_TIME = //
@@ -337,7 +344,7 @@ final class CodecHelper {
 			whole *= 10;
 			thisExp++;
 		}
-		
+
 		/* Handle negative values */
 		if (whole < 0 || (whole == 0 && string.startsWith("-"))) {
 			part = part * -1;
