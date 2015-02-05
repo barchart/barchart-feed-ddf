@@ -34,6 +34,7 @@ import com.barchart.feed.base.values.api.BooleanValue;
 import com.barchart.feed.base.values.api.PriceValue;
 import com.barchart.feed.base.values.api.SizeValue;
 import com.barchart.feed.base.values.api.TimeValue;
+import com.barchart.feed.base.values.provider.ValueBuilder;
 import com.barchart.feed.base.values.provider.ValueConst;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
@@ -58,9 +59,11 @@ import com.barchart.feed.ddf.message.enums.DDF_ParamType;
 import com.barchart.feed.ddf.message.enums.DDF_QuoteMode;
 import com.barchart.feed.ddf.message.enums.DDF_QuoteState;
 import com.barchart.feed.ddf.message.enums.DDF_Session;
+import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
 import com.barchart.feed.ddf.util.provider.DDF_NulVal;
 import com.barchart.util.common.anno.ThreadSafe;
+import com.barchart.util.value.api.Time;
 
 @ThreadSafe
 class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
@@ -95,9 +98,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 	@Override
 	public Void visit(final DDF_MarketBookTop message, final MarketDo market) {
-
+		
 		market.clearChanges();
-
+		
 		final TimeValue time = message.getTime();
 
 		message.getTime();
@@ -378,67 +381,61 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 		final DDF_QuoteMode mode = message.getMode();
 
 		/** Handle quote publish state */
-		{
-			switch (mode) {
-				case END_OF_DAY:
-				case DELAYED:
-				case UNKNOWN:
-					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT, false);
-					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, false);
-					market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, true);
-					break;
-				case SNAPSHOT:
-					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT, true);
-					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, false);
-					market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, false);
-					break;
-				case REALTIME:
-					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT, false);
-					market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, true);
-					market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, false);
-					break;
-				default:
-					break;
-			}
+		switch (mode) {
+			case END_OF_DAY:
+			case DELAYED:
+			case UNKNOWN:
+				market.setState(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT, false);
+				market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, false);
+				market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, true);
+				break;
+			case SNAPSHOT:
+				market.setState(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT, true);
+				market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, false);
+				market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, false);
+				break;
+			case REALTIME:
+				market.setState(MarketStateEntry.IS_PUBLISH_REALTIME_SNAPSHOT, false);
+				market.setState(MarketStateEntry.IS_PUBLISH_REALTIME, true);
+				market.setState(MarketStateEntry.IS_PUBLISH_DELAYED, false);
+				break;
+			default:
+				break;
 		}
 
 		/** Process Sessions */
-		{
-			final DDF_MarketSession[] sessionArray = message.sessions();
+		final DDF_MarketSession[] sessionArray = message.sessions();
+		
+		TimeValue curTime = ValueBuilder.newTime(HelperDDF.DDF_EMPTY);
 
-			for (final DDF_MarketSession session : sessionArray) {
+		for (final DDF_MarketSession session : sessionArray) {
 
-				final DDF_Indicator indicator = session.getIndicator();
+			final DDF_Indicator indicator = session.getIndicator();
 
-				log.debug("DDF_Indicator for session {} : {} ", session
-						.getSession().name(), indicator.name());
+			log.debug("DDF_Indicator for session {} : {} ", session
+					.getSession().name(), indicator.name());
 
-				switch (indicator) {
+			switch (indicator) {
 
-					case CURRENT:
-						visit(session, market, state == DDF_QuoteState.GOT_SETTLE);
-						break;
+				case CURRENT:
+					curTime = session.getTime();
+					visit(session, market, state == DDF_QuoteState.GOT_SETTLE);
+					break;
 
-					case PREVIOUS:
-						visit(session, market, false);
-						break;
+				case PREVIOUS:
+					visit(session, market, false);
+					break;
 
-					default:
-						// log.error("@@@ unsupported indicator : {}", indicator);
-						break;
-				}
-
+				default:
+					// log.error("@@@ unsupported indicator : {}", indicator);
+					break;
 			}
 
 		}
 
 		/** Process top of book */
-		{
-
-			final DDF_MarketBookTop bookTop = message;
-			visit(bookTop, market);
-
-		}
+		applyTop(message.entry(market.instrument(), Book.Side.BID), curTime, market);
+		applyTop(message.entry(market.instrument(), Book.Side.ASK), curTime, market);
 
 		return null;
 
@@ -558,7 +555,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 		final TimeValue date = message.getTradeDay().tradeDate();
 		final TimeValue time = message.getTime();
-
+		
 		/** Update top of book */
 		{
 
@@ -738,7 +735,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					Book.Type.DEFAULT, MarketBook.ENTRY_TOP,
 					ValueConst.NULL_PRICE, ValueConst.NULL_SIZE);
 		}
-
+		
 		market.setBookUpdate(entry, time);
 
 	}

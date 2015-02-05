@@ -99,7 +99,7 @@ class VarMarketDDF extends VarMarket {
 
 	@Override
 	public void setBookSnapshot(final MarketDoBookEntry[] entries, final TimeValue time) {
-
+		
 		assert entries != null;
 		assert time != null;
 
@@ -112,6 +112,7 @@ class VarMarketDDF extends VarMarket {
 
 		book.setTime(time);
 		set(MARKET_TIME, time);
+		
 		eventAdd(MARKET_UPDATED);
 
 	}
@@ -143,6 +144,7 @@ class VarMarketDDF extends VarMarket {
 
 		book.setTime(time);
 		set(MARKET_TIME, time);
+		
 		setChange(Component.BOOK_COMBINED);
 		eventAdd(MARKET_UPDATED);
 
@@ -268,7 +270,7 @@ class VarMarketDDF extends VarMarket {
 
 	@Override
 	public void setBar(final MarketBarType type, final MarketDoBar bar) {
-
+		
 		assert type != null;
 		assert bar != null;
 
@@ -291,7 +293,7 @@ class VarMarketDDF extends VarMarket {
 		eventAdd(type.event);
 
 		/* Don't update time based on previous bar */
-		if(type != MarketBarType.PREVIOUS) {
+		if(type == MarketBarType.CURRENT) {
 			set(MARKET_TIME, bar.get(BAR_TIME));
 		}
 		
