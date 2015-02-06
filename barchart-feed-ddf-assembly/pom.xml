@@ -163,7 +163,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>attach-sources</id>
+						<id>attach-sources-no-fork</id>
 						<phase>package</phase>
 						<goals>
 							<goal>jar-no-fork</goal>
