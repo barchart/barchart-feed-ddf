@@ -125,11 +125,6 @@ final class CodecHelper {
 		text.append("order=");
 		text.append(order);
 
-		text.append("&");
-
-		text.append("order=");
-		text.append(order);
-
 		//
 
 		if (query.type.isIn(MINUTES, MINUTES_NEARBY, MINUTES_FORM_T,
