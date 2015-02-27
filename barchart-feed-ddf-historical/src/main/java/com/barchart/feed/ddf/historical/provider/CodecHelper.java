@@ -165,15 +165,13 @@ final class CodecHelper {
 			text.append("volume=");
 			text.append(volume);
 
-			text.append("&");
+			if (query.backadjust) {
+				text.append("&backadjust=true");
+			}
 
-			text.append("backadjust=");
-			text.append(query.backadjust ? "1" : "0");
-
-			text.append("&");
-
-			text.append("daystoexpiration=");
-			text.append(query.daystoexpiration);
+			if (query.daystoexpiration > 0) {
+				text.append("&daystoexpiration=" + query.daystoexpiration);
+			}
 
 		}
 
