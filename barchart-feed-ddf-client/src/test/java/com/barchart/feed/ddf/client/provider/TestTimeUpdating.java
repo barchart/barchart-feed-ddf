@@ -7,6 +7,7 @@ import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Market.Component;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 
 public class TestTimeUpdating {
@@ -15,7 +16,7 @@ public class TestTimeUpdating {
 			TestTimeUpdating.class);
 	
 	private static final String[] insts = {
-		"ZCH5" //"CLH500C" ,  , "ZCM15"
+		"GOOG" //"CLH500C" ,  , "ZCM15"
 	};
 	
 	public static void main(final String[] args) throws Exception {
@@ -47,7 +48,21 @@ public class TestTimeUpdating {
 			@Override
 			public void onNext(final Market m) {
 				
-				log.debug("Updated {}", m.updated());
+				if(m.trade().time().isNull()) {
+					return;
+				}
+				
+				if(m.change().contains(Component.TRADE)) {
+					log.debug("{} *TRADE UPDATED = {} TRADE = {}", 
+							m.instrument().symbol(), 
+							m.updated().asDate(), 
+							m.trade().time().asDate());
+				} else {
+					log.debug("{} MARKET UPDATED = {} TRADE = {}", 
+							m.instrument().symbol(), 
+							m.updated().asDate(), 
+							m.trade().time().asDate());
+				}
 				
 			}
 			

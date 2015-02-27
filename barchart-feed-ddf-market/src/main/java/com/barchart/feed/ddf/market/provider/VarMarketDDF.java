@@ -217,6 +217,7 @@ class VarMarketDDF extends VarMarket {
 		eventAdd(NEW_TRADE);
 
 		set(TRADE, trade);
+		set(MARKET_TIME, time);
 
 		applyTradeToBar(session, sequencing, price, size, time, date);
 
@@ -258,11 +259,13 @@ class VarMarketDDF extends VarMarket {
 		applyBar(bar, MarketBarField.INTEREST, interest);
 		applyBar(bar, MarketBarField.VWAP, vwap);
 		
-		if (isSettled != null)
+		if (isSettled != null) {
 			bar.set(MarketBarField.IS_SETTLED, isSettled);
+		}
 
-		if (barTime != null)
+		if (barTime != null) {
 			bar.set(MarketBarField.BAR_TIME, barTime);
+		}
 
 		setBar(type, bar);
 
@@ -351,9 +354,11 @@ class VarMarketDDF extends VarMarket {
 	}
 
 	// ##################################################################################
-
-	private void applyBar(final MarketDoBar bar,
-			final MarketBarField<PriceValue> field, final PriceValue value) {
+	
+	private void applyBar(
+			final MarketDoBar bar,
+			final MarketBarField<PriceValue> field, 
+			final PriceValue value) {
 
 		if (DDF_MessageService.isEmpty(value)) {
 			// no change in market field value
@@ -370,8 +375,10 @@ class VarMarketDDF extends VarMarket {
 
 	}
 
-	private void applyBar(final MarketDoBar bar,
-			final MarketBarField<SizeValue> field, final SizeValue value) {
+	private void applyBar(
+			final MarketDoBar bar,
+			final MarketBarField<SizeValue> field, 
+			final SizeValue value) {
 
 		if (DDF_MessageService.isEmpty(value)) {
 			// no change in market field value

@@ -367,7 +367,9 @@ abstract class BaseMarket extends Base implements DDF_MarketBase {
 	 */
 	protected void decodeTail(final ByteBuffer buffer) {
 		DateTimeZone zone;
-		if (getInstrument().timeZoneName() == null || "Null Time Zone".equals(getInstrument().timeZoneName())) {
+		if (getInstrument().timeZoneName() == null 
+				|| "Null Time Zone".equals(getInstrument().timeZoneName())) {
+			
 			zone = getExchange().kind.time.zone;
 		} else {
 			zone = DateTimeZone.forID(getInstrument().timeZoneName());

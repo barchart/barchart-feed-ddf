@@ -84,7 +84,13 @@ public class CodecHelper {
 		if (timeStampStart == DDF_CENTURY) {
 			// magic 9 bytes
 			final long time = decodeMillisUTC(zone, buffer);
-			clock.set(time);
+			
+			/* No longer setting DDF time on every message, revert to only using 
+			 * DDF_ControlTimestamp messages for current time.  This was causing
+			 * real time data to look delayed */
+			
+			// TODO This will still make delayed data look like realtime data
+			// clock.set(time);
 			return time;
 		} else {
 			// unknown suffix; return current

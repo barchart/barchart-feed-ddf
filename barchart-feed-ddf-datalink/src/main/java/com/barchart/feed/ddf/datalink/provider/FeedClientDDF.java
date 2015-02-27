@@ -289,8 +289,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 
 		/* Send login command to JERQ */
-		DDF_FeedEvent writeEvent = blockingWrite(FeedDDF.tcpLogin(username,
-				password));
+		DDF_FeedEvent writeEvent = blockingWrite(FeedDDF.tcpLogin(username, password));
 
 		if (writeEvent == DDF_FeedEvent.COMMAND_WRITE_FAILURE) {
 			log.error("error sending login command to jerq");
@@ -427,6 +426,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	};
 	
 	private final RunnerDDF messageTask = new RunnerDDF() {
+		
 		@Override
 		protected void runCore() {
 
@@ -446,13 +446,16 @@ class FeedClientDDF implements DDF_FeedClient {
 						/* We set the clock by the timestamp messages, however,
 						 * we also set the clock by market messages, but this has to
 						 * happen in the message decoding */
+						// XXX For now, we have removed the setting of time by market
+						// messages because delayed messages were making real time
+						// data look delayed
 						if (message instanceof DDF_ControlTimestamp) {
 							ClockDDF.clock.set(((DDF_ControlTimestamp) message)
 									.getStampUTC().asMillisUTC());
 						} 
 						
 						//// #######################
-						//log.debug(message.toString());
+						log.debug(message.toString());
 						// #######################
 						
 						msgListener.handleMessage(message);
