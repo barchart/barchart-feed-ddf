@@ -410,7 +410,8 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		if(CFICode().startsWith("F") && 
 				(symbol().startsWith("J6") // Jap Yen
 					|| symbol().startsWith("J7") // Jap Yen
-					|| symbol().startsWith("WM"))) { // Jap Yen
+					|| symbol().startsWith("WM") // Jap Yen
+					|| symbol().startsWith("DF"))) { // Non-fat Dairy
 			return VALUES.newPrice(1, 2);
 		}
 		
