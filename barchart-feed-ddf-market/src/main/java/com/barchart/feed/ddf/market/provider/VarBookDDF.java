@@ -100,23 +100,37 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 		// NOTE: This only updates top.  
 
-		//final EntryMap map = map(side);
-
 		switch (side) {
 		case BID:
 			if (place == ENTRY_TOP) {
-				topBid = entry;
+				
+				if(entry.price().isNull()) {
+					topBid = MarketBookEntry.NULL;
+				} else {
+					topBid = entry;
+				}
+				
 				changeSet.add(Component.TOP_BID);
 			}
+			
 			break;
+			
 		case ASK:
 			if (place == ENTRY_TOP) {
-				topAsk = entry;
+				
+				if(entry.price().isNull()) {
+					topAsk = MarketBookEntry.NULL;
+				} else {
+					topAsk = entry;
+				}
+				
 				changeSet.add(Component.TOP_ASK);
 			}
 			break;
+			
 		default:
 			return UniBookResult.ERROR;
+			
 		}
 
 		if (place == ENTRY_TOP) {
@@ -169,11 +183,16 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final DefBook freeze() {
-		return new DefBook(instrument, time(), 
+		
+		return new DefBook(
+				instrument, 
+				time(), 
 				entries(Book.Side.BID),
 				entries(Book.Side.ASK),
-				topBid, topAsk,
-				lastEntry, EnumSet.copyOf(changeSet));
+				topBid, 
+				topAsk,
+				lastEntry, 
+				EnumSet.copyOf(changeSet));
 	}
 	
 	@Override
@@ -193,11 +212,6 @@ public final class VarBookDDF extends ValueFreezer<MarketBook> implements
 
 	@Override
 	public final MarketBookEntry last() {
-
-//		log.debug("last called in VarBookDDF");
-//		final DefBookEntry entry = (DefBookEntry) lastEntry.freeze();
-//
-//		return entry == null ? NULL_BOOK_ENTRY : entry;
 		throw new UnsupportedOperationException("UNUSED");
 	}
 

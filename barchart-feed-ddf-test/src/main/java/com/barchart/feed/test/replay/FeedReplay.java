@@ -140,8 +140,14 @@ public class FeedReplay {
 
 	private Thread thread = null;
 
-	protected FeedReplay(final DDF_Marketplace marketplace_, final URL source_, final double speed_, final Date start_,
-			final Date end_, final Collection<String> symbols_, final MessageListener listener_) {
+	protected FeedReplay(
+			final DDF_Marketplace marketplace_, 
+			final URL source_, 
+			final double speed_, 
+			final Date start_,
+			final Date end_, 
+			final Collection<String> symbols_, 
+			final MessageListener listener_) {
 
 		marketplace = marketplace_;
 		source = source_;
