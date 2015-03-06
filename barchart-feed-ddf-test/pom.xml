@@ -37,6 +37,12 @@
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-ddf-client</artifactId>
 			<version>[4-SNAPSHOT, 5-SNAPSHOT)</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.barchart.feed</groupId>
+			<artifactId>barchart-feed-ddf-datalink</artifactId>
+			<version>[4-SNAPSHOT, 5-SNAPSHOT)</version>
 		</dependency>
 
 		<dependency>

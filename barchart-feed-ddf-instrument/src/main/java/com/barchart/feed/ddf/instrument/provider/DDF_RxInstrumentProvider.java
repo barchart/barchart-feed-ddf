@@ -532,6 +532,8 @@ public class DDF_RxInstrumentProvider {
 				}
 
 				final String query = cqgInstLoopURL(symbol);
+				
+				log.debug(query);
 
 				final Element root = HelperXML.xmlDocumentDecode(query);
 
