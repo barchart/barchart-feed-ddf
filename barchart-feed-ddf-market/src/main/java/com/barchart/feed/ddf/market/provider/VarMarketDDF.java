@@ -110,8 +110,11 @@ class VarMarketDDF extends VarMarket {
 		setChange(Component.BOOK_COMBINED);
 		eventAdd(NEW_BOOK_SNAPSHOT);
 
-		book.setTime(time);
-		set(MARKET_TIME, time);
+		/* Only update time if it's later than the current time, needed for DDF quirks */
+		if(time.compareTo(get(MARKET_TIME)) > 0) {
+			book.setTime(time);
+			set(MARKET_TIME, time);
+		}
 		
 		eventAdd(MARKET_UPDATED);
 
@@ -142,8 +145,11 @@ class VarMarketDDF extends VarMarket {
 				return;
 		}
 
-		book.setTime(time);
-		set(MARKET_TIME, time);
+		/* Only update time if it's later than the current time, needed for DDF quirks */
+		if(time.compareTo(get(MARKET_TIME)) > 0) {
+			book.setTime(time);
+			set(MARKET_TIME, time);
+		}
 		
 		setChange(Component.BOOK_COMBINED);
 		eventAdd(MARKET_UPDATED);
@@ -217,7 +223,11 @@ class VarMarketDDF extends VarMarket {
 		eventAdd(NEW_TRADE);
 
 		set(TRADE, trade);
-		set(MARKET_TIME, time);
+		
+		/* Only update time if it's later than the current time, needed for DDF quirks */
+		if(time.compareTo(get(MARKET_TIME)) > 0) {
+			set(MARKET_TIME, time);
+		}
 
 		applyTradeToBar(session, sequencing, price, size, time, date);
 
@@ -297,7 +307,13 @@ class VarMarketDDF extends VarMarket {
 
 		/* Don't update time based on previous bar */
 		if(type == MarketBarType.CURRENT) {
-			set(MARKET_TIME, bar.get(BAR_TIME));
+			
+			final TimeValue barTime = bar.get(BAR_TIME);
+			
+			/* Only update time if it's later than the current time, needed for DDF quirks */
+			if(barTime.compareTo(get(MARKET_TIME)) > 0) {
+				set(MARKET_TIME, bar.get(BAR_TIME));
+			}
 		}
 		
 		eventAdd(MARKET_UPDATED);
@@ -445,7 +461,9 @@ class VarMarketDDF extends VarMarket {
 					}
 
 					// Update time
-					bar.set(BAR_TIME, time);
+					if(time.compareTo(bar.get(BAR_TIME)) > 0) {
+						bar.set(BAR_TIME, time);
+					}
 
 				}
 
