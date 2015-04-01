@@ -7,7 +7,14 @@
  */
 package com.barchart.feed.ddf.historical.provider;
 
-import static com.barchart.feed.ddf.historical.provider.CodecHelper.*;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeInt;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeLong;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeMantissa;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.decodeMinsTime;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeLong;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeMantissa;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.encodeMinsTime;
+import static com.barchart.feed.ddf.historical.provider.CodecHelper.splitCSV;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
