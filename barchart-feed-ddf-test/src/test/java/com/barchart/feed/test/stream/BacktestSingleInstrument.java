@@ -22,7 +22,7 @@ public class BacktestSingleInstrument {
 	
 	public static void main(final String[] args) throws Exception {
 		
-		final String symbol = "KCK5";
+		final String symbol = "DXM5";
 		
 		final BarchartMarketplaceReplay marketplace = new BarchartMarketplaceReplay();
 		
@@ -43,6 +43,9 @@ public class BacktestSingleInstrument {
 					lastBid = top.bid().price();
 					lastAsk = top.ask().price();
 					
+					log.debug("{} BID = {}  ASK = {}", v.instrument().symbol(), lastBid, lastAsk);
+					
+					
 					final Set<Market.Component> changes = v.change();
 					
 					if(!changes.contains(Market.Component.TRADE)) {
@@ -60,7 +63,8 @@ public class BacktestSingleInstrument {
 						log.debug("***************");
 						log.debug("Last {}  Current {}", lastTrade, tradePx);
 						log.debug("Bid {}  Ask {}", lastBid, lastAsk);
-						log.debug("Is Normal {} Sequencing {} Time {}", isNormalSequencing(v.trade()), v.trade().sequence(), v.trade().time().asDate());
+						log.debug("Is Normal {} Sequencing {} Time {}", 
+								isNormalSequencing(v.trade()), v.trade().sequence(), v.trade().time().asDate());
 						log.debug("Types {}", printTypes(v.trade()));
 					}
 					
@@ -76,7 +80,7 @@ public class BacktestSingleInstrument {
 		
 		
 		final FeedReplay replay = FeedReplay.builder()
-				.source(BacktestSingleInstrument.class.getResource("/KC/KC_2_27.ddf"))
+				.source(BacktestSingleInstrument.class.getResource("/DX/DX_3_6.ddf"))
 				.listener(new MessageListener() {
 
 					@Override
