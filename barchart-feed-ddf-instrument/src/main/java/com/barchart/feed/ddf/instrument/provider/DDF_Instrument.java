@@ -235,16 +235,9 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 
 				if (delMonth > 0) {
 
-					DateTime delivery = new DateTime(expire);
+					final DateTimeZone zone = DateTimeZone.forID("America/Chicago");
+					DateTime delivery = new DateTime(expire, zone);
 					
-					// Not completely sure if these 3 lines break anything. But I've tested a lot of symbols and
-					// it seems fine
-
-					/*if (delMonth < expire.getMonthOfYear()) {
-						// Year rollover, advance a year before setting month
-						delivery = delivery.plusYears(1);
-					}*/
-
 					delivery = delivery.withMonthOfYear(delMonth);
 					calendar.add(new DefaultEvent(Event.Type.LAST_DELIVERY_DATE, delivery));
 
