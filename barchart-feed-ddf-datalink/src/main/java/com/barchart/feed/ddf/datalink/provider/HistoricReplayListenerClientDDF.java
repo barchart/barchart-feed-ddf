@@ -8,6 +8,7 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -307,6 +308,11 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 	public void setPolicy(DDF_FeedEvent event, EventPolicy policy) {
 		// Does nothing for now, some functionality will be added
 		// for tcp listeners
+	}
+
+	@Override
+	public Map<String, SubCommand> subscriptions() {
+		return Collections.<String, SubCommand> unmodifiableMap(subscriptions);
 	}
 	
 }

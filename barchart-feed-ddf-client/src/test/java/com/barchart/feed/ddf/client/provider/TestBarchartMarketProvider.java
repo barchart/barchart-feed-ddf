@@ -36,10 +36,6 @@ public class TestBarchartMarketProvider {
 	private static final Logger log = LoggerFactory.getLogger(
 			TestBarchartMarketProvider.class);
 	
-	private static final String[] insts = {
-		"CLH500C" // RMU15 ZCU16
-	};
-	
 	public static void main(final String[] args) throws Exception {
 		
 		final String username = System.getProperty("barchart.username");
@@ -54,24 +50,36 @@ public class TestBarchartMarketProvider {
 		
 		market.startup();
 		
-// 		final Agent ag = market.subscribe(Market.class, marketObs(), Exchanges.fromName("AMEX"));
+		Thread.sleep(5 * 1000);
 		
 		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
-		final ConsumerAgent agent2 = market.register(marketObs(), Market.class);
-//		final ConsumerAgent agent2 = market.register(bookObs(), Book.class);
-//		final ConsumerAgent agent3 = market.register(sessObs(), Session.class);
-//		final ConsumerAgent agent4 = market.register(tradeObs(), Trade.class);
 		
-//		agent1.include(Exchanges.fromName("BATS"));
-//		agent1.include(insts).subscribe(instObs());
-//		agent2.include(insts).subscribe(instObs());
-//		agent3.include(insts).subscribe(instObs());
-//		agent4.include(insts).subscribe(instObs());
+		agent1.include("ESM15").subscribe();
+		Thread.sleep(3 * 1000);
 		
-		agent1.include("CL^O").subscribe();
+		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
+		Thread.sleep(3 * 1000);
 		
-		Thread.sleep(30 * 1000);
+		agent1.include("CLM15").subscribe();
+		Thread.sleep(3 * 1000);
+		
+		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
+		Thread.sleep(3 * 1000);
+		
+		agent1.exclude("CLM15").subscribe();
+		Thread.sleep(3 * 1000);
+		
+		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
+		Thread.sleep(3 * 1000);
+		
+		agent1.exclude("ESM15").subscribe();
+		Thread.sleep(3 * 1000);
+		
+		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
+		Thread.sleep(3 * 1000);
 
+		Thread.sleep(3 * 1000);
+		
 		log.debug("Shutting down");
 		market.shutdown();
 		
@@ -97,15 +105,9 @@ public class TestBarchartMarketProvider {
 		
 		return new MarketObserver<Market>() {
 
-			private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss z");
-			
-			//GSAT,PLUG,ADP,ICPT,AVNR
-			
 			@Override
 			public void onNext(final Market m) {
-				
-				System.out.println(m.toString());
-				
+				// DO NOTHING
 			}
 		};
 	}

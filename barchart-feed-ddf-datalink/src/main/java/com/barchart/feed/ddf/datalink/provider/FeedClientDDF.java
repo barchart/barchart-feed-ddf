@@ -8,6 +8,7 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -88,8 +89,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
 			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
-	private final Map<String, DDF_Subscription> subscriptions = 
-			new ConcurrentHashMap<String, DDF_Subscription>();
+	private final Map<String, SubCommand> subscriptions = 
+			new ConcurrentHashMap<String, SubCommand>();
 
 	//
 
@@ -329,7 +330,7 @@ class FeedClientDDF implements DDF_FeedClient {
 			if (subscriptions.size() > 0) {
 				log.debug("Requesting current subscriptions");
 				final Set<SubCommand> subs = new HashSet<SubCommand>();
-				for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
+				for(final Entry<String, SubCommand> e : subscriptions.entrySet()) {
 					subs.add(e.getValue());
 				}
 				subscribe(subs);
@@ -875,6 +876,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		
 		/* If we're subscribed already, add new interests, otherwise add */
 		final String inst = sub.interest();
+		
 		if(subscriptions.containsKey(inst)) {
 			subscriptions.get(inst).addTypes(sub.types());
 		} else {
@@ -959,6 +961,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		for (final SubCommand sub : subs) {
 
 			if (sub != null) {
+				
 				subscriptions.remove(sub.interest());
 				sb.append(sub.interest() + ",");
 			}
@@ -985,7 +988,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		writeAsync("STOP");
 		
 		final Set<SubCommand> resubs = new HashSet<SubCommand>();
-		for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
+		for(final Entry<String, SubCommand> e : subscriptions.entrySet()) {
 			resubs.add(e.getValue());
 		}
 		
@@ -1033,12 +1036,17 @@ class FeedClientDDF implements DDF_FeedClient {
 		writeAsync("STOP");
 		
 		final Set<SubCommand> subs = new HashSet<SubCommand>();
-		for(final Entry<String, DDF_Subscription> e : subscriptions.entrySet()) {
+		for(final Entry<String, SubCommand> e : subscriptions.entrySet()) {
 			subs.add(e.getValue());
 		}
 		
 		return subscribe(subs);
 		
+	}
+	
+	@Override
+	public Map<String, SubCommand> subscriptions() {
+		return Collections.<String, SubCommand> unmodifiableMap(subscriptions);
 	}
 
 	@Override

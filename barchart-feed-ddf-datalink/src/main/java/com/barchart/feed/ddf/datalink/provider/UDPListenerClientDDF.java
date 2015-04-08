@@ -11,6 +11,7 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -317,6 +318,11 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 	public void setPolicy(final DDF_FeedEvent event, final EventPolicy policy) {
 		// Does nothing for now, some functionality will be added
 		// for tcp listeners
+	}
+	
+	@Override
+	public Map<String, SubCommand> subscriptions() {
+		return Collections.<String, SubCommand> unmodifiableMap(subscriptions);
 	}
 	
 }
