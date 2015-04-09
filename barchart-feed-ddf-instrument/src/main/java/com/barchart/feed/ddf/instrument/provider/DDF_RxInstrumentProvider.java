@@ -360,7 +360,7 @@ public class DDF_RxInstrumentProvider {
 
 			final Map<InstrumentID, InstrumentState> result = new HashMap<InstrumentID, InstrumentState>();
 
-			log.debug("remote batch on {}", urlIDLookup(query));
+			// log.debug("remote batch on {}", urlIDLookup(query));
 
 			final URL url = new URL(urlIDLookup(query));
 
