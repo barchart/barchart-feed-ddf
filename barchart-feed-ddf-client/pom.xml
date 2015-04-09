@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed-ddf</artifactId>
-		<version>4.2.52-SNAPSHOT</version>
+		<version>4.2.53-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>barchart-feed-ddf-client</artifactId>
