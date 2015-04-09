@@ -274,12 +274,12 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		/* market identifier; must be globally unique; */
 		try {
 			final Long id = Long.parseLong(xmlStringDecode(attr, ID, XML_STOP));
-			return new InstrumentID(String.valueOf(id));
+			return new InstrumentID(id);
 		} catch (final Exception e) {
 			/* Ensure no id collision by making negative */
 			log.warn("Instrumet with non long ID = {}", xmlStringDecode(attr, ID, XML_STOP));
 			final Long id = Long.valueOf(Math.abs(xmlStringDecode(attr, ID, XML_STOP).hashCode()) * -1);
-			return new InstrumentID(String.valueOf(id));
+			return new InstrumentID(id);
 		}
 
 	}

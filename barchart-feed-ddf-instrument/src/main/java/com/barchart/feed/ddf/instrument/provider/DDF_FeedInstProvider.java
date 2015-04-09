@@ -121,7 +121,8 @@ public final class DDF_FeedInstProvider {
 		}
 
 		/* New symbol, create stub */
-		final InstrumentState instState = new DDF_Instrument(new InstrumentID(inst.symbol()), inst, LoadState.PARTIAL);
+		final InstrumentState instState = new DDF_Instrument(
+				new InstrumentID(inst.symbol()), inst, LoadState.PARTIAL);
 
 		final List<InstrumentState> list = new CopyOnWriteArrayList<InstrumentState>(); 
 		list.add(instState);

@@ -215,8 +215,8 @@ public class BarchartMarketProvider implements MarketService {
 	}
 
 	@Override
-	public Observable<Market> snapshot(InstrumentID instrument) {
-		return maker.snapshot(instrument);
+	public Observable<Market> snapshot(InstrumentID instID) {
+		return maker.snapshot(instID);
 	}
 
 	@Override

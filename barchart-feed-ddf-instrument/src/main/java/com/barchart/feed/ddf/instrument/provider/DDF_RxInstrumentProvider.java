@@ -110,6 +110,7 @@ public class DDF_RxInstrumentProvider {
 	
 	public static Runnable runnableFromIDs(final ReplaySubject<Map<InstrumentID, Instrument>> sub, 
 			final InstrumentID... ids) {
+		
 		return new Runnable() {
 
 			@Override
@@ -359,7 +360,7 @@ public class DDF_RxInstrumentProvider {
 
 			final Map<InstrumentID, InstrumentState> result = new HashMap<InstrumentID, InstrumentState>();
 
-			// log.debug("remote batch on {}", urlIDLookup(query));
+			log.debug("remote batch on {}", urlIDLookup(query));
 
 			final URL url = new URL(urlIDLookup(query));
 
