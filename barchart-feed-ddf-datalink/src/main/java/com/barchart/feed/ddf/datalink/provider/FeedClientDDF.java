@@ -42,8 +42,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
+import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.base.provider.Symbology;
 import com.barchart.feed.base.sub.SubCommand;
-import com.barchart.feed.base.sub.SubCommand.Type;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -761,7 +762,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		final Set<SubCommand> exch = new HashSet<SubCommand>();
 		
 		for(final SubCommand sub : subs) {
-			switch(sub.type()) {
+			switch(sub.metaType()) {
 			default:
 				throw new IllegalStateException("Subscription type cannot be null");
 			case INSTRUMENT:
@@ -804,16 +805,16 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (sub != null) {
 				
-				final String interest = sub.interest();
+				final String symbol = Symbology.formatSymbol(sub.interest());
 				
 				/* If we're subscribed already, add new interests, otherwise add  */
-				if(subscriptions.containsKey(interest)) {
-					subscriptions.get(interest).addTypes(sub.types());
+				if(subscriptions.containsKey(symbol)) {
+					subscriptions.get(symbol).addTypes(sub.types());
 				} else {
-					subscriptions.put(interest, new DDF_Subscription(sub, Type.INSTRUMENT));
+					subscriptions.put(symbol, new DDF_Subscription(sub, Metadata.MetaType.INSTRUMENT));
 				}
 				
-				sb.append(subscriptions.get(interest).encode() + ",");
+				sb.append(subscriptions.get(symbol).encode() + ",");
 			}
 		}
 		
@@ -838,7 +839,7 @@ class FeedClientDDF implements DDF_FeedClient {
 				
 				if(!subscriptions.containsKey(interest)) {
 					
-					subscriptions.put(interest, new DDF_Subscription(sub, Type.EXCHANGE));
+					subscriptions.put(interest, new DDF_Subscription(sub, Metadata.MetaType.EXCHANGE));
 					
 				}
 				
@@ -856,60 +857,6 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 	
 	@Override
-	public Future<Boolean> subscribe(final SubCommand sub) {
-
-		//TODO Should these just return DummyFutures? NULL is bad
-		if (sub == null) {
-			log.error("Null subscribe request recieved");
-			return null;
-		}
-		
-		if(sub.type() == Type.EXCHANGE) {
-			return subExc(sub);
-		} else {
-			return subInst(sub);
-		}
-		
-	}
-
-	private Future<Boolean> subInst(final SubCommand sub) {
-		
-		/* If we're subscribed already, add new interests, otherwise add */
-		final String inst = sub.interest();
-		
-		if(subscriptions.containsKey(inst)) {
-			subscriptions.get(inst).addTypes(sub.types());
-		} else {
-			subscriptions.put(inst, new DDF_Subscription(sub, Type.INSTRUMENT));
-		}
-		
-		if (!isConnected()) {
-			return new DummyFuture();
-		}
-		
-		/* Request subscription from JERQ and return the future */
-		return writeAsync("GO " + sub.encode());
-		
-	}
-	
-	private Future<Boolean> subExc(final SubCommand sub) {
-		
-		final String interest = sub.interest();
-		
-		if(!subscriptions.containsKey(interest)) {
-			subscriptions.put(interest, new DDF_Subscription(sub, Type.EXCHANGE));
-		} else {
-			return new DummyFuture();
-		}
-		
-		if (!isConnected()) {
-			return new DummyFuture();
-		}
-		
-		return writeAsync("STR L " + sub.interest());
-	}
-	
-	@Override
 	public Future<Boolean> unsubscribe(final Set<SubCommand> subs) {
 
 		if (subs == null) {
@@ -921,7 +868,7 @@ class FeedClientDDF implements DDF_FeedClient {
 		final Set<SubCommand> exch = new HashSet<SubCommand>();
 		
 		for(final SubCommand sub : subs) {
-			switch(sub.type()) {
+			switch(sub.metaType()) {
 			case INSTRUMENT:
 				insts.add(sub);
 				break;
@@ -962,7 +909,9 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (sub != null) {
 				
-				subscriptions.remove(sub.interest());
+				final String symbol = Symbology.formatSymbol(sub.interest());
+				
+				subscriptions.remove(symbol);
 				sb.append(sub.interest() + ",");
 			}
 		}
@@ -993,55 +942,6 @@ class FeedClientDDF implements DDF_FeedClient {
 		}
 		
 		return subscribe(resubs);
-	}
-	
-	@Override
-	public Future<Boolean> unsubscribe(final SubCommand sub) {
-
-		if (sub == null) {
-			log.error("Null subscribe request recieved");
-			return null;
-		}
-		
-		if(sub.type() == Type.EXCHANGE) {
-			return unsubExc(sub);
-		} else {
-			return unsubInst(sub);
-		}
-
-	}
-	
-	private Future<Boolean> unsubInst(final SubCommand sub) {
-		
-		subscriptions.remove(sub.interest());
-
-		if (!isConnected()) {
-			return new DummyFuture();
-		}
-
-		/* Request subscription from JERQ and return the future */
-		return writeAsync("STOP " + sub.interest());
-		
-	}
-	
-	private Future<Boolean> unsubExc(final SubCommand sub) {
-		
-		subscriptions.remove(sub.interest());
-		
-		if (!isConnected()) {
-			return new DummyFuture();
-		}
-		
-		/* Have to unsub from everything and resub */
-		writeAsync("STOP");
-		
-		final Set<SubCommand> subs = new HashSet<SubCommand>();
-		for(final Entry<String, SubCommand> e : subscriptions.entrySet()) {
-			subs.add(e.getValue());
-		}
-		
-		return subscribe(subs);
-		
 	}
 	
 	@Override

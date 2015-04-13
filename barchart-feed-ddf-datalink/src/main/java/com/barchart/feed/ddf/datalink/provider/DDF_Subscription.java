@@ -13,6 +13,7 @@ package com.barchart.feed.ddf.datalink.provider;
 import java.util.Set;
 
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.base.market.enums.MarketEvent;
 import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.base.sub.SubscriptionType;
@@ -23,8 +24,8 @@ import com.barchart.feed.base.sub.SubscriptionType;
 public class DDF_Subscription implements SubCommand {
 
 	private final String interest;
-	private final Set<SubscriptionType> interests;
-	private final Type type;
+	private final Set<SubscriptionType> types;
+	private final Metadata.MetaType metaType;
 
 	/**
 	 * @param instrument
@@ -36,19 +37,19 @@ public class DDF_Subscription implements SubCommand {
 	 */
 	public DDF_Subscription(
 			final String instrument, 
-			final Type type, 
+			final Metadata.MetaType type, 
 			final Set<SubscriptionType> interests) {
 		
 		this.interest = instrument;
-		this.interests = interests;
-		this.type = type;
+		this.types = interests;
+		this.metaType = type;
 	}
 	
-	public DDF_Subscription(final SubCommand sub, final Type type) {
+	public DDF_Subscription(final SubCommand sub, final Metadata.MetaType type) {
 		
 		interest = sub.interest();
-		interests = sub.types();
-		this.type = type;
+		types = sub.types();
+		this.metaType = type;
 	}
 
 	/**
@@ -60,21 +61,21 @@ public class DDF_Subscription implements SubCommand {
 	public DDF_Subscription(
 			final Instrument instrument,
 			final Set<MarketEvent> events, 
-			final Type type) {
+			final Metadata.MetaType type) {
 		
 		this.interest = instrument.symbol();
-		this.interests = DDF_FeedInterest.fromEvents(events);
-		this.type = type;
+		this.types = DDF_FeedInterest.fromEvents(events);
+		this.metaType = type;
 	}
 
 	@Override
-	public Type type() {
-		return type;
+	public Metadata.MetaType metaType() {
+		return metaType;
 	}
 	
 	@Override
 	public Set<SubscriptionType> types() {
-		return interests;
+		return types;
 	}
 	
 	@Override
@@ -84,17 +85,17 @@ public class DDF_Subscription implements SubCommand {
 	
 	@Override
 	public String encode() {
-		return interest + "=" + DDF_FeedInterest.from(interests);
+		return interest + "=" + DDF_FeedInterest.from(types);
 	}
 
 	@Override
 	public void addTypes(final Set<SubscriptionType> insts) {
-		interests.addAll(insts);
+		types.addAll(insts);
 	}
 	
 	@Override
 	public void removeTypes(final Set<SubscriptionType> insts) {
-		interests.removeAll(insts);
+		types.removeAll(insts);
 	}
 	
 	/**
@@ -102,7 +103,7 @@ public class DDF_Subscription implements SubCommand {
 	 */
 	@Override
 	public String toString() {
-		return interest + " " + DDF_FeedInterest.from(interests);
+		return interest + " " + DDF_FeedInterest.from(types);
 	}
 
 	@Override

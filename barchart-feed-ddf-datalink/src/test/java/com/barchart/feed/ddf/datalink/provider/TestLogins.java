@@ -10,6 +10,7 @@
  */
 package com.barchart.feed.ddf.datalink.provider;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.feed.api.model.meta.Metadata;
 import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.base.sub.SubscriptionType;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
@@ -71,21 +73,21 @@ public class TestLogins {
 
 		final Set<SubscriptionType> interests = new HashSet<SubscriptionType>();
 		interests.addAll(DDF_FeedInterest.setValues());
-		final DDF_Subscription sub = new DDF_Subscription("GOOG", SubCommand.Type.INSTRUMENT, interests);
+		final DDF_Subscription sub = new DDF_Subscription("GOOG", Metadata.MetaType.INSTRUMENT, interests);
 
-		client.subscribe(sub);
+		client.subscribe(Collections.<SubCommand> singleton(sub));
 
 		sleep(45000);
 
 		log.debug("*****************************************  Unsubscribing");
 
-		client.unsubscribe(sub);
+		client.unsubscribe(Collections.<SubCommand> singleton(sub));
 
 		sleep(10000);
 
 		log.debug("*****************************************  Resubscribing");
 
-		client.subscribe(sub);
+		client.subscribe(Collections.<SubCommand> singleton(sub));
 
 		sleep(45000);
 

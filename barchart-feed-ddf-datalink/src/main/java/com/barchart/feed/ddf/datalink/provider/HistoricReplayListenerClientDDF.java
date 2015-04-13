@@ -252,24 +252,6 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 		return new DummyFuture();
 	}
 
-	@Override
-	public Future<Boolean> subscribe(SubCommand sub) {
-		
-		if (sub == null) {
-			log.error("Null subscribe request recieved");
-			return new FailedFuture();
-		}
-		
-		final String inst = sub.encode();
-		if(subscriptions.containsKey(inst)) {
-			subscriptions.get(inst).addTypes(sub.types());
-		} else {
-			subscriptions.put(inst, sub);
-		}
-		
-		return new DummyFuture();
-	}
-	
 	// Unsubscribe is somewhat ambiguous, there is shared behavior between
 	// the registration and unregistration of instruments in the 
 	// market maker and the feed.  
@@ -287,19 +269,6 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 				subscriptions.remove(sub.encode());
 			}
 		}
-		
-		return new DummyFuture();
-	}
-	
-	@Override
-	public Future<Boolean> unsubscribe(SubCommand sub) {
-		
-		if (sub == null) {
-			log.error("Null subscribe request recieved");
-			return new FailedFuture();
-		}
-		
-		subscriptions.remove(sub.encode());
 		
 		return new DummyFuture();
 	}

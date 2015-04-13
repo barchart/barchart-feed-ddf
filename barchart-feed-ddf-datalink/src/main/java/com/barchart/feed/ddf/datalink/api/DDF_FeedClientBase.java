@@ -68,22 +68,6 @@ public interface DDF_FeedClientBase extends SubscriptionHandler {
 	Future<Boolean> subscribe(Set<SubCommand> subscriptions);
 
 	/**
-	 * Handles a subscription request.
-	 * <p>
-	 * If the client already has a subscription for the instrument then this
-	 * will overwrite it.
-	 * <p>
-	 * If called while the client is offline, registers the subscription and
-	 * returns a future which immediately succeeds.
-	 * 
-	 * @param subscription
-	 *            The subscription to subscribe.
-	 * @return A Future which returns true if successful.
-	 */
-	@Override
-	Future<Boolean> subscribe(SubCommand subscription);
-
-	/**
 	 * Handles multiple unsubscription requests.
 	 * <p>
 	 * If called while the client is offline, unregisters the subscriptions and
@@ -95,19 +79,6 @@ public interface DDF_FeedClientBase extends SubscriptionHandler {
 	 */
 	@Override
 	Future<Boolean> unsubscribe(Set<SubCommand> subscriptions);
-
-	/**
-	 * Handles an unsubscription request.
-	 * <p>
-	 * If called while the client is offline, unregisters the subscription and
-	 * returns a future which immediately succeeds.
-	 * 
-	 * @param subscription
-	 *            The subscription to unsubscribe.
-	 * @return A Future which returns true if successful.
-	 */
-	@Override
-	Future<Boolean> unsubscribe(SubCommand subscription);
 
 	/**
 	 * Sets the event policy for a specific feed event. Default policies are set

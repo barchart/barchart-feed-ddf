@@ -78,8 +78,6 @@ public class TestBarchartMarketProvider {
 		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
 		Thread.sleep(3 * 1000);
 
-		Thread.sleep(3 * 1000);
-		
 		log.debug("Shutting down");
 		market.shutdown();
 		

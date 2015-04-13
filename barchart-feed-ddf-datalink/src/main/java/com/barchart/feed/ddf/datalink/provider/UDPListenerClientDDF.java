@@ -266,24 +266,6 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final SubCommand sub) {
-		
-		if (sub == null) {
-			log.error("Null subscribe request recieved");
-			return new FailedFuture();
-		}
-		
-		final String inst = sub.encode();
-		if(subscriptions.containsKey(inst)) {
-			subscriptions.get(inst).addTypes(sub.types());
-		} else {
-			subscriptions.put(inst, sub);
-		}
-		
-		return new DummyFuture();
-	}
-	
-	@Override
 	public Future<Boolean> unsubscribe(final Set<SubCommand> subs) {
 		
 		if (subs == null) {
@@ -297,19 +279,6 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements
 				subscriptions.remove(sub.encode());
 			}
 		}
-		
-		return new DummyFuture();
-	}
-	
-	@Override
-	public Future<Boolean> unsubscribe(final SubCommand sub) {
-		
-		if (sub == null) {
-			log.error("Null subscribe request recieved");
-			return new FailedFuture();
-		}
-		
-		subscriptions.remove(sub.encode());
 		
 		return new DummyFuture();
 	}
