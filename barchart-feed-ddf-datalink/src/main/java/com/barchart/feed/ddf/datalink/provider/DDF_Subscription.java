@@ -50,6 +50,7 @@ public class DDF_Subscription implements SubCommand {
 		interest = sub.interest();
 		types = sub.types();
 		this.metaType = type;
+		
 	}
 
 	/**
