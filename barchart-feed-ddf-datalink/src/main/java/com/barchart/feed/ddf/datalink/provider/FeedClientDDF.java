@@ -805,7 +805,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (sub != null) {
 				
-				final String symbol = Symbology.formatSymbol(sub.interest());
+				final String symbol = sub.interest();
 				
 				/* If we're subscribed already, add new interests, otherwise add  */
 				if(subscriptions.containsKey(symbol)) {
@@ -909,7 +909,7 @@ class FeedClientDDF implements DDF_FeedClient {
 
 			if (sub != null) {
 				
-				final String symbol = Symbology.formatSymbol(sub.interest());
+				final String symbol = sub.interest();
 				
 				subscriptions.remove(symbol);
 				sb.append(sub.interest() + ",");
