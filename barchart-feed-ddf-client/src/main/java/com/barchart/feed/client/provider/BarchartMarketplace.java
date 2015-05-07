@@ -486,4 +486,9 @@ public class BarchartMarketplace implements Marketplace {
 		return maker.exchanges();
 	}
 
+	@Override
+	public int numberOfSubscriptions() {
+		return connection.subscriptions().size();
+	}
+
 }

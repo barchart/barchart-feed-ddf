@@ -267,5 +267,10 @@ public class BarchartMarketProvider implements MarketService {
 	public Map<ExchangeID, Subscription<Exchange>> exchanges() {
 		return maker.exchanges();
 	}
+	
+	@Override
+	public int numberOfSubscriptions() {
+		return connection.subscriptions().size();
+	}
 
 }

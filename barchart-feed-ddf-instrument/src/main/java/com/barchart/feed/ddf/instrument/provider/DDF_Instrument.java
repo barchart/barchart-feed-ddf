@@ -277,7 +277,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 			return new InstrumentID(id);
 		} catch (final Exception e) {
 			/* Ensure no id collision by making negative */
-			log.warn("Instrumet with non long ID = {}", xmlStringDecode(attr, ID, XML_STOP));
+			log.warn("Instrument with non long ID = {}", xmlStringDecode(attr, ID, XML_STOP));
 			final Long id = Long.valueOf(Math.abs(xmlStringDecode(attr, ID, XML_STOP).hashCode()) * -1);
 			return new InstrumentID(id);
 		}

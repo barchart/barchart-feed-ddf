@@ -456,7 +456,7 @@ class FeedClientDDF implements DDF_FeedClient {
 									.getStampUTC().asMillisUTC());
 						} 
 						
-						//// #######################
+						// #######################
 						//log.debug(message.toString());
 						// #######################
 						
@@ -745,6 +745,7 @@ class FeedClientDDF implements DDF_FeedClient {
 	/* Asynchronous write to the channel, future returns true on success */
 	private Future<Boolean> writeAsync(final String message) {
 		log.debug("Attempting to send reqeust to JERQ : {}", message);
+//		log.debug("Message had {} subs and was {} in length", message.split(",").length - 1, message.length());
 		final ChannelFuture future = channel.write(message + "\n");
 		future.addListener(new CommandFailureListener());
 		return new CommandFuture(future);
@@ -757,6 +758,8 @@ class FeedClientDDF implements DDF_FeedClient {
 			log.error("Null subscribes request recieved");
 			return null;
 		}
+		
+		log.debug("Sending {} subscription requests to JERQ", subs.size());
 
 		final Set<SubCommand> insts = new HashSet<SubCommand>();
 		final Set<SubCommand> exch = new HashSet<SubCommand>();

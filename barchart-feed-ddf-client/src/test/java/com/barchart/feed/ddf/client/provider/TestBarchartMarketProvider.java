@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import rx.Observer;
 import rx.observables.BlockingObservable;
 
-import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.connection.Connection;
@@ -27,9 +26,9 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.data.parameter.Param;
 import com.barchart.feed.api.model.data.parameter.ParamMap;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
-import com.barchart.feed.inst.Exchanges;
 
 public class TestBarchartMarketProvider {
 
@@ -55,9 +54,10 @@ public class TestBarchartMarketProvider {
 		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 		
 		agent1.include("ESM15").subscribe();
-		Thread.sleep(3 * 1000);
 		
-		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
+		Thread.sleep(500 * 1000);
+		
+/*		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
 		Thread.sleep(3 * 1000);
 		
 		agent1.include("CLM15").subscribe();
@@ -77,12 +77,36 @@ public class TestBarchartMarketProvider {
 		
 		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
 		Thread.sleep(3 * 1000);
-
+*/
 		log.debug("Shutting down");
 		market.shutdown();
 		
+		Thread.sleep(5 * 1000);
+		
 	}
 	
+	Observer<Result<Instrument>> obs() {
+		
+		return new Observer<Result<Instrument>>() {
+
+			@Override
+			public void onCompleted() {
+				System.out.println("ON COMPLETED");
+			}
+	
+			@Override
+			public void onError(Throwable e) {
+				e.printStackTrace();
+			}
+	
+			@Override
+			public void onNext(Result<Instrument> t) {
+				System.out.println("ON NEXT");
+			}
+			
+		};
+		
+	}
 	private static Monitor listener(final CountDownLatch lock) { 
 		
 		return new Monitor() {
@@ -105,7 +129,15 @@ public class TestBarchartMarketProvider {
 
 			@Override
 			public void onNext(final Market m) {
-				// DO NOTHING
+				
+				if(m.change().contains(Market.Component.TRADE)) {
+					
+					final Book.Top topOfBook = m.book().top();
+					
+					System.out.println("Bid = " + topOfBook.bid().price() + " ASK = " + topOfBook.ask().price());
+					
+				}
+				
 			}
 		};
 	}
