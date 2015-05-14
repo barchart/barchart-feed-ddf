@@ -29,6 +29,7 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
+import com.barchart.feed.inst.Exchanges;
 
 public class TestBarchartMarketProvider {
 
@@ -53,9 +54,9 @@ public class TestBarchartMarketProvider {
 		
 		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 		
-		agent1.include("ESM15").subscribe();
+		agent1.include(Exchanges.fromCode("M").id());
 		
-		Thread.sleep(500 * 1000);
+		Thread.sleep(50000 * 1000);
 		
 /*		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
 		Thread.sleep(3 * 1000);
@@ -130,13 +131,11 @@ public class TestBarchartMarketProvider {
 			@Override
 			public void onNext(final Market m) {
 				
-				if(m.change().contains(Market.Component.TRADE)) {
 					
-					final Book.Top topOfBook = m.book().top();
+//				final Book.Top topOfBook = m.book().top();
+//				
+//				System.out.println("Bid = " + topOfBook.bid().price() + " ASK = " + topOfBook.ask().price());
 					
-					System.out.println("Bid = " + topOfBook.bid().price() + " ASK = " + topOfBook.ask().price());
-					
-				}
 				
 			}
 		};

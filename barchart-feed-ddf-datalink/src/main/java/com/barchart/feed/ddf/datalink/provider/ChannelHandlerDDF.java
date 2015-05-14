@@ -60,7 +60,7 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 		try {
 			eventQueue.put(DDF_FeedEvent.LINK_CONNECT);
 		} catch (final InterruptedException ex) {
-			log.trace("terminated");
+			log.debug("terminated");
 		}
 
 		ctx.sendUpstream(e);
@@ -71,12 +71,12 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 	public void channelDisconnected(final ChannelHandlerContext ctx,
 			final ChannelStateEvent e) throws Exception {
 
-		log.warn("channelDisconnected posting LINK_DISCONNECT");
+		log.debug("channelDisconnected posting LINK_DISCONNECT");
 
 		try {
 			eventQueue.put(DDF_FeedEvent.LINK_DISCONNECT);
 		} catch (final InterruptedException ex) {
-			log.trace("terminated");
+			log.debug("terminated");
 		}
 
 		ctx.sendUpstream(e);
@@ -141,7 +141,7 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 
 			log.debug("unknown message : {}", message);
 		} catch (final InterruptedException e) {
-			log.trace("terminated");
+			log.debug("terminated");
 		}
 	}
 

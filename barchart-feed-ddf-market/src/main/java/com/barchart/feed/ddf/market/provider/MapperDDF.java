@@ -7,10 +7,12 @@
  */
 package com.barchart.feed.ddf.market.provider;
 
-import static com.barchart.feed.base.bar.enums.MarketBarType.*;
+import static com.barchart.feed.base.bar.enums.MarketBarType.CURRENT;
+import static com.barchart.feed.base.bar.enums.MarketBarType.PREVIOUS;
 import static com.barchart.feed.base.book.api.MarketBook.ENTRY_TOP;
 import static com.barchart.feed.base.book.enums.MarketBookAction.MODIFY;
-import static com.barchart.feed.ddf.message.provider.DDF_MessageService.*;
+import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isClear;
+import static com.barchart.feed.ddf.message.provider.DDF_MessageService.isEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +65,6 @@ import com.barchart.feed.ddf.util.HelperDDF;
 import com.barchart.feed.ddf.util.provider.DDF_ClearVal;
 import com.barchart.feed.ddf.util.provider.DDF_NulVal;
 import com.barchart.util.common.anno.ThreadSafe;
-import com.barchart.util.value.api.Time;
 
 @ThreadSafe
 class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
@@ -114,7 +115,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 	@Override
 	public Void visit(final DDF_MarketCondition message, final MarketDo market) {
 		// TODO properly update market state
-		log.error("TODO : \n{}", message);
+		log.debug("TODO : \n{}", message);
 		return null;
 	}
 
@@ -427,7 +428,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 					break;
 
 				default:
-					// log.error("@@@ unsupported indicator : {}", indicator);
 					break;
 			}
 
