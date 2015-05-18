@@ -9,7 +9,9 @@ package com.barchart.feed.ddf.datalink.api;
 
 import java.util.concurrent.Future;
 
+import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+import com.barchart.util.common.anno.UsedOnce;
 
 /**
  * Client responsible for lowest level connectivity to the data server.
@@ -21,7 +23,31 @@ import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
  * for login state changes for the client.
  * <p>
  */
-public interface DDF_FeedClient extends DDF_FeedClientBase, FutureWriter {
+public interface DDF_FeedClient extends FutureWriter {
+	
+	/**
+	 * Binds the feed client to a port or other data source and begins
+	 * listening.
+	 */
+	void startup();
+	
+	void startUpProxy();
+
+	/**
+	 * Stops listening to the data source.
+	 */
+	void shutdown();
+
+	/**
+	 * Attach a feed state listener to the client.
+	 */
+	void bindStateListener(Connection.Monitor stateListener);
+	
+	/**
+	 * Attaches a message listener to the client for data consumption.
+	 */
+	@UsedOnce
+	void bindMessageListener(DDF_MessageListener msgListener);
 	
 	/**
 	 * Sets the event policy for a specific feed event. Default policies are set

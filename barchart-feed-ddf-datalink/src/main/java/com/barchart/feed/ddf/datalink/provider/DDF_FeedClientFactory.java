@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 
@@ -76,7 +75,7 @@ public class DDF_FeedClientFactory {
 	 *            The executor used by the NioDatagramChannel
 	 * @return
 	 */
-	public static DDF_FeedClientBase newUDPListenerClient(final int port, 
+	public static DDF_FeedClient newUDPListenerClient(final int port, 
 			final boolean filterBySub, final Executor executor) {
 
 		return new UDPListenerClientDDF(port, filterBySub, executor);
@@ -92,7 +91,7 @@ public class DDF_FeedClientFactory {
 	 *            The executor used by the NioDatagramChannel
 	 * @return
 	 */
-	public static DDF_FeedClientBase newStatelessTCPListenerClient(final int port, 
+	public static DDF_FeedClient newStatelessTCPListenerClient(final int port, 
 			final boolean filterBySub, final Executor executor) {
 		
 		return new TCPListenerClientDDF(port, filterBySub, executor);

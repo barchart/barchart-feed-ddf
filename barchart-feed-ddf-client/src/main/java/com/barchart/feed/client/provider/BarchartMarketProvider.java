@@ -26,10 +26,13 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
+import com.barchart.feed.base.sub.SubscriptionHandler;
+import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+import com.barchart.feed.ddf.datalink.provider.DDF_SubscriptionHandler;
+import com.barchart.feed.ddf.instrument.provider.DDF_MetadataServiceWrapper;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
 import com.barchart.feed.ddf.market.provider.DDF_ConsumerMarketProvider;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
@@ -46,9 +49,10 @@ public class BarchartMarketProvider implements MarketService {
 	/* Value api factory */
 	private static final ValueFactory values = ValueFactoryImpl.instance;
 	
-	private volatile DDF_FeedClientBase connection;
+	private volatile DDF_FeedClient connection;
 	private final DDF_ConsumerMarketProvider maker;
 	private final ExecutorService executor;
+	private final SubscriptionHandler subHandler;
 	
 	@SuppressWarnings("unused")
 	private volatile Connection.Monitor stateListener;
@@ -70,7 +74,10 @@ public class BarchartMarketProvider implements MarketService {
 		
 		connection.bindMessageListener(msgListener);
 		
-		maker = DDF_ConsumerMarketProvider.newInstance(connection);
+		subHandler = new DDF_SubscriptionHandler(connection, new DDF_MetadataServiceWrapper());
+		
+		maker = DDF_ConsumerMarketProvider.newInstance(subHandler);
+		
 		executor = exe;
 		
 	}
@@ -270,7 +277,7 @@ public class BarchartMarketProvider implements MarketService {
 	
 	@Override
 	public int numberOfSubscriptions() {
-		return connection.subscriptions().size();
+		return subHandler.subscriptions().size();
 	}
 
 }

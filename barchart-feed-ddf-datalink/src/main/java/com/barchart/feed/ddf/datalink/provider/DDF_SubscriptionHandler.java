@@ -15,8 +15,11 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.consumer.MetadataService;
+import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.api.model.meta.id.MetadataID;
+import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.base.sub.SubscriptionHandler;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
@@ -307,19 +310,23 @@ public class DDF_SubscriptionHandler implements SubscriptionHandler {
 			return id.id();
 		case INSTRUMENT:
 			
+			final Instrument i = metaService.instrument((InstrumentID)id)
+				.toBlockingObservable()
+				.first()
+				.get(id);
+				
+			String symbol = i.symbol();
+			if(symbol.contains("|")) {
+				symbol = i.vendorSymbols().get(VendorID.BARCHART_SHORT);
+			} else {
+				symbol = formatForJERQ(i.symbol());
+			}
 			
+			return symbol;
 		
 		}
 		
 	}
-	
-//	/* We have to use an alternate symbol for options */
-//	String symbol = i.symbol();
-//	if(symbol.contains("|")) {
-//		symbol = i.vendorSymbols().get(VendorID.BARCHART_SHORT);
-//	} else {
-//		symbol = formatForJERQ(i.symbol());
-//	}
 	
 	private static String formatForJERQ(final String symbol) {
 

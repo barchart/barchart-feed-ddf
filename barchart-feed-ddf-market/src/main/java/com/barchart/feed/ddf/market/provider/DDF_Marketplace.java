@@ -30,8 +30,7 @@ public class DDF_Marketplace extends MarketplaceBase<DDF_MarketBase> implements 
 	
 	private final DDF_MessageVisitor<Void, MarketDo> visitor = new MapperDDF();
 	
-	public static final DDF_Marketplace newInstance(
-			final SubscriptionHandler handler) {
+	public static final DDF_Marketplace newInstance(final SubscriptionHandler handler) {
 		
 		return new DDF_Marketplace(new MarketFactory() {
 

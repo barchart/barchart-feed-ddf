@@ -8,9 +8,7 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
@@ -32,17 +30,16 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.base.sub.SubCommand;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
+import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.DummyFuture;
 import com.barchart.feed.ddf.datalink.api.EventPolicy;
-import com.barchart.feed.ddf.datalink.api.FailedFuture;
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 
-public class TCPListenerClientDDF extends SimpleChannelHandler implements DDF_FeedClientBase {
+public class TCPListenerClientDDF extends SimpleChannelHandler implements DDF_FeedClient {
 
 	/** use slf4j for internal NETTY LoggingHandler facade */
 	static {
@@ -50,8 +47,7 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements DDF_Fe
 		InternalLoggerFactory.setDefaultFactory(defaultFactory);
 	}
 
-	private static final Logger log = LoggerFactory
-			.getLogger(TCPListenerClientDDF.class);
+	private static final Logger log = LoggerFactory.getLogger(TCPListenerClientDDF.class);
 
 	private final ServerBootstrap boot;
 
@@ -213,66 +209,17 @@ public class TCPListenerClientDDF extends SimpleChannelHandler implements DDF_Fe
 
 	@Override
 	public void startUpProxy() {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Future<Boolean> subscribe(final Set<SubCommand> subs) {
+	public void setPolicy(DDF_FeedEvent event, EventPolicy policy) {
+		/* Does nothing */
+	}
 
-		if (subs == null) {
-			log.error("Null subscribes request recieved");
-			return new FailedFuture();
-		}
-
-		for (final SubCommand sub : subs) {
-
-			if (sub != null) {
-
-				final String inst = sub.encode();
-
-				/* If we're subscribed already, add new interests, otherwise add */
-				if (subscriptions.containsKey(inst)) {
-					subscriptions.get(inst).addTypes(sub.types());
-				} else {
-					subscriptions.put(inst, sub);
-				}
-
-			}
-		}
-
+	@Override
+	public Future<Boolean> write(final String message) {
 		return new DummyFuture();
-	}
-
-	// Unsubscribe is somewhat ambiguous, there is shared behavior between
-	// the registration and unregistration of instruments in the
-	// market maker and the feed.
-	@Override
-	public Future<Boolean> unsubscribe(final Set<SubCommand> subs) {
-
-		if (subs == null) {
-			log.error("Null subscribes request recieved");
-			return new FailedFuture();
-		}
-
-		for (final SubCommand sub : subs) {
-
-			if (sub != null) {
-				subscriptions.remove(sub.encode());
-			}
-		}
-
-		return new DummyFuture();
-	}
-
-	@Override
-	public void setPolicy(final DDF_FeedEvent event, final EventPolicy policy) {
-		// Does nothing for now, some functionality will be added
-		// for tcp listeners
 	}
 	
-	@Override
-	public Map<String, SubCommand> subscriptions() {
-		return Collections.<String, SubCommand> unmodifiableMap(subscriptions);
-	}
-
 }

@@ -29,10 +29,13 @@ import com.barchart.feed.api.model.meta.Exchange;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
+import com.barchart.feed.base.sub.SubscriptionHandler;
+import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+import com.barchart.feed.ddf.datalink.provider.DDF_SubscriptionHandler;
+import com.barchart.feed.ddf.instrument.provider.DDF_MetadataServiceWrapper;
 import com.barchart.feed.ddf.market.provider.DDF_Marketplace;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
@@ -52,9 +55,10 @@ public class BarchartMarketplace implements Marketplace {
 	/* Value api factory */
 	private static final ValueFactory factory = ValueFactoryImpl.instance;
 
-	protected volatile DDF_FeedClientBase connection;
+	protected volatile DDF_FeedClient connection;
 	protected volatile DDF_Marketplace maker;
 	private final ExecutorService executor;
+	private final SubscriptionHandler subHandler;
 
 	@SuppressWarnings("unused")
 	private volatile Connection.Monitor stateListener;
@@ -92,20 +96,10 @@ public class BarchartMarketplace implements Marketplace {
 		}
 		
 		connection.bindMessageListener(msgListener);
+		
+		subHandler = new DDF_SubscriptionHandler(connection, new DDF_MetadataServiceWrapper());
 
-		maker = DDF_Marketplace.newInstance(connection);
-
-	}
-
-	protected BarchartMarketplace(final DDF_Marketplace marketplace) {
-		this(marketplace, getDefault());
-	}
-
-	protected BarchartMarketplace(final DDF_Marketplace marketplace,
-			final ExecutorService ex) {
-
-		executor = ex;
-		maker = marketplace;
+		maker = DDF_Marketplace.newInstance(subHandler);
 
 	}
 
@@ -372,8 +366,10 @@ public class BarchartMarketplace implements Marketplace {
 	/* ***** ***** ***** Helper subscribe methods ***** ***** ***** */
 
 	@Override
-	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketObserver<V> callback, final String... symbols) {
+	public <V extends MarketData<V>> Agent subscribe(
+			final Class<V> clazz,
+			final MarketObserver<V> callback, 
+			final String... symbols) {
 
 		final Agent agent = newAgent(clazz, callback);
 
@@ -382,9 +378,12 @@ public class BarchartMarketplace implements Marketplace {
 		return agent;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketObserver<V> callback, final Instrument... instruments) {
+	public <V extends MarketData<V>> Agent subscribe(
+			final Class<V> clazz,
+			final MarketObserver<V> callback, 
+			final Instrument... instruments) {
 
 		final Agent agent = newAgent(clazz, callback);
 
@@ -393,9 +392,12 @@ public class BarchartMarketplace implements Marketplace {
 		return agent;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public <V extends MarketData<V>> Agent subscribe(final Class<V> clazz,
-			final MarketObserver<V> callback, final Exchange... exchanges) {
+	public <V extends MarketData<V>> Agent subscribe(
+			final Class<V> clazz,
+			final MarketObserver<V> callback, 
+			final Exchange... exchanges) {
 
 		final Agent agent = newAgent(clazz, callback);
 
@@ -460,8 +462,7 @@ public class BarchartMarketplace implements Marketplace {
 	}
 
 	@Override
-	public Observable<Map<InstrumentID, Instrument>> instrument(
-			final InstrumentID... ids) {
+	public Observable<Map<InstrumentID, Instrument>> instrument(final InstrumentID... ids) {
 		return maker.instrument(ids);
 	}
 
@@ -488,7 +489,7 @@ public class BarchartMarketplace implements Marketplace {
 
 	@Override
 	public int numberOfSubscriptions() {
-		return connection.subscriptions().size();
+		return subHandler.subscriptions().size();
 	}
 
 }
