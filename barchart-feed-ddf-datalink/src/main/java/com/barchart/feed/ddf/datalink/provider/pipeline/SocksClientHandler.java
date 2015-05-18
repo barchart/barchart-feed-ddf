@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.datalink.provider;
+package com.barchart.feed.ddf.datalink.provider.pipeline;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -25,6 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.ddf.datalink.api.FeedEvent;
+import com.barchart.feed.ddf.datalink.provider.DDF_SocksProxy;
+import com.barchart.feed.ddf.datalink.provider.FeedClientDDF;
+import com.barchart.feed.ddf.datalink.provider.SocksProxyException;
 
 
 public class SocksClientHandler extends SimpleChannelHandler {

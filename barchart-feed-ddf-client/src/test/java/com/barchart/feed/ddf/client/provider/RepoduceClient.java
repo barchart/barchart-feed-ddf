@@ -18,7 +18,7 @@ import com.barchart.feed.inst.Exchanges;
 public class RepoduceClient {
 
 	private static final Logger log = LoggerFactory.getLogger(
-			TestBarchartMarketProvider.class);
+			SubscriptionCountTester.class);
 	
 	private static final Exchange[] exchanges = new Exchange[] {
 	        Exchanges.fromName("NYSE"), //

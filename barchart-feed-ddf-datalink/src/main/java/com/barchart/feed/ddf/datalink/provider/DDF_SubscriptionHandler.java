@@ -143,8 +143,7 @@ public class DDF_SubscriptionHandler implements SubscriptionHandler {
 	private Future<Boolean> subInsts(final Set<SubCommand> subs) {
 		
 		/*
-		 * Creates a single JERQ command from the set, subscriptions are added
-		 * indivually.
+		 * Creates a single JERQ command from the set, subscriptions are added individually.
 		 */
 		final StringBuffer sb = new StringBuffer();
 		sb.append("GO ");
@@ -157,7 +156,7 @@ public class DDF_SubscriptionHandler implements SubscriptionHandler {
 				
 				log.debug("SUB {}", symbol);
 				
-				/* If we're subscribed already, add new interests, otherwise add  */
+				/* If we're subscribed already, add new interests, otherwise add new subscription */
 				if(subscriptions.containsKey(id)) {
 					subscriptions.get(id).addTypes(sub.types());
 				} else {

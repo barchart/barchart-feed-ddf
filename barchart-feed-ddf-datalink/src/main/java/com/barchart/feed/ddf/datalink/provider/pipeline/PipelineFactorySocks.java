@@ -16,7 +16,6 @@ import org.jboss.netty.channel.Channels;
 
 import com.barchart.feed.ddf.datalink.provider.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.provider.FeedClientDDF;
-import com.barchart.feed.ddf.datalink.provider.SocksClientHandler;
 
 public class PipelineFactorySocks implements ChannelPipelineFactory {
 

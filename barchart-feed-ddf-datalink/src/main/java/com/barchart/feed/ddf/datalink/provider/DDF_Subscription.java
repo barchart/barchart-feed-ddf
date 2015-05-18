@@ -85,7 +85,13 @@ public class DDF_Subscription implements SubCommand {
 	@Override
 	public String typeString() {
 		
-		return null;
+		final StringBuilder sb = new StringBuilder();
+		
+		for(final SubscriptionType t : types) {
+			sb.append(t.code());
+		}
+		
+		return sb.toString();
 	}
 	
 	@Override

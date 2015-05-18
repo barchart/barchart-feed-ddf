@@ -464,7 +464,7 @@ public class FeedClientDDF implements FeedClient {
 
 	//
 
-	void postEvent(final FeedEvent event) {
+	public void postEvent(final FeedEvent event) {
 		try {
 			eventQueue.put(event);
 		} catch (final InterruptedException e) {

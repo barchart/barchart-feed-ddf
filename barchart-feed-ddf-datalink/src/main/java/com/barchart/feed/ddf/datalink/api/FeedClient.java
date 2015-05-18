@@ -76,8 +76,7 @@ public interface FeedClient extends FutureWriter {
 	}
 	
 	/**
-	 * Binds the feed client to a port or other data source and begins
-	 * listening.
+	 * Binds the feed client to a port or other data source and begins listening.
 	 */
 	void startup();
 	

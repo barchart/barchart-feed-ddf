@@ -26,15 +26,13 @@ import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.data.parameter.Param;
 import com.barchart.feed.api.model.data.parameter.ParamMap;
 import com.barchart.feed.api.model.meta.Instrument;
-import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
-import com.barchart.feed.inst.Exchanges;
 
-public class TestBarchartMarketProvider {
+public class SubscriptionCountTester {
 
 	private static final Logger log = LoggerFactory.getLogger(
-			TestBarchartMarketProvider.class);
+			SubscriptionCountTester.class);
 	
 	public static void main(final String[] args) throws Exception {
 		
@@ -54,31 +52,30 @@ public class TestBarchartMarketProvider {
 		
 		final ConsumerAgent agent1 = market.register(marketObs(), Market.class);
 		
-		agent1.include(Exchanges.fromCode("M").id());
+		agent1.include("ESM15").subscribe();
+		Thread.sleep(3 * 1000);
 		
-		Thread.sleep(50000 * 1000);
-		
-/*		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
+		System.out.println("NUMBER OF INSTS = " + market.numberOfSubscriptions());
 		Thread.sleep(3 * 1000);
 		
 		agent1.include("CLM15").subscribe();
 		Thread.sleep(3 * 1000);
 		
-		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
+		System.out.println("NUMBER OF INSTS = " + market.numberOfSubscriptions());
 		Thread.sleep(3 * 1000);
 		
 		agent1.exclude("CLM15").subscribe();
 		Thread.sleep(3 * 1000);
 		
-		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
+		System.out.println("NUMBER OF INSTS = " + market.numberOfSubscriptions());
 		Thread.sleep(3 * 1000);
 		
 		agent1.exclude("ESM15").subscribe();
 		Thread.sleep(3 * 1000);
 		
-		System.out.println("NUMBER OF INSTS = " + market.instruments().size());
+		System.out.println("NUMBER OF INSTS = " + market.numberOfSubscriptions());
 		Thread.sleep(3 * 1000);
-*/
+
 		log.debug("Shutting down");
 		market.shutdown();
 		
