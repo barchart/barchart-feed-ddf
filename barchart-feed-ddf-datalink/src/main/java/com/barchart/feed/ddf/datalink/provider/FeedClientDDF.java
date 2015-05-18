@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.model.meta.Metadata;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.ddf.datalink.api.CommandFuture;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
@@ -89,8 +90,8 @@ class FeedClientDDF implements DDF_FeedClient {
 	private final Map<DDF_FeedEvent, EventPolicy> eventPolicy =
 			new ConcurrentHashMap<DDF_FeedEvent, EventPolicy>();
 
-	private final Map<String, SubCommand> subscriptions = 
-			new ConcurrentHashMap<String, SubCommand>();
+	private final Map<MetadataID<?>, SubCommand> subscriptions = 
+			new ConcurrentHashMap<MetadataID<?>, SubCommand>();
 
 	//
 
@@ -135,22 +136,30 @@ class FeedClientDDF implements DDF_FeedClient {
 
 	//
 
-	FeedClientDDF(final String username, final String password,
+	FeedClientDDF(
+			final String username, 
+			final String password,
 			final Executor executor) {
 
 		startup(username, password, executor, null);
 
 	}
 
-	public FeedClientDDF(String username, String password, Executor executor,
+	public FeedClientDDF(
+			String username, 
+			String password, 
+			Executor executor,
 			DDF_SocksProxy proxySettings) {
 
 		startup(username, password, executor, proxySettings);
 
 	}
 
-	private void startup(final String username, final String password,
-			final Executor exec, final DDF_SocksProxy proxy) {
+	private void startup(
+			final String username, 
+			final String password,
+			final Executor exec, 
+			final DDF_SocksProxy proxy) {
 
 		this.username = username;
 		this.password = password;
@@ -219,9 +228,6 @@ class FeedClientDDF implements DDF_FeedClient {
 				reconnectionPolicy);
 		eventPolicy.put(DDF_FeedEvent.LINK_CONNECT_PROXY_TIMEOUT,
 				reconnectionPolicy);
-
-		/* Add SubscribeAfterLogin to LOGIN_SUCCESS */
-		eventPolicy.put(DDF_FeedEvent.LOGIN_SUCCESS, new SubscribeAfterLogin());
 
 		/* Add HeartbeatPolicy to HEART_BEAT */
 		eventPolicy.put(DDF_FeedEvent.HEART_BEAT, new HeartbeatPolicy());
@@ -314,28 +320,6 @@ class FeedClientDDF implements DDF_FeedClient {
 
 		return true;
 
-	}
-
-	/*
-	 * This policy ensures that all subscribed instruments are requested from
-	 * JERQ upon login or relogin after a dicsonnect
-	 */
-	private class SubscribeAfterLogin implements EventPolicy {
-
-		@Override
-		public void newEvent(DDF_FeedEvent event) {
-			
-			if (subscriptions.size() <= 0) {
-				return;
-			}
-			
-			final Set<SubCommand> subs = new HashSet<SubCommand>();
-			for(final Entry<String, SubCommand> e : subscriptions.entrySet()) {
-				subs.add(e.getValue());
-			}
-			subscribe(subs);
-			
-		}
 	}
 
 	/*
@@ -733,216 +717,13 @@ class FeedClientDDF implements DDF_FeedClient {
 	}
 
 	/* Asynchronous write to the channel, future returns true on success */
-	private Future<Boolean> writeAsync(final String message) {
+	@Override
+	public Future<Boolean> write(final String message) {
 		log.debug("Attempting to send reqeust to JERQ : {}", message);
 //		log.debug("Message had {} subs and was {} in length", message.split(",").length - 1, message.length());
 		final ChannelFuture future = channel.write(message + "\n");
 		future.addListener(new CommandFailureListener());
 		return new CommandFuture(future);
-	}
-
-	@Override
-	public Future<Boolean> subscribe(final Set<SubCommand> subs) {
-
-		if (subs == null) {
-			log.error("Null subscribes request recieved");
-			return null;
-		}
-		
-		log.debug("Sending {} subscription requests to JERQ", subs.size());
-
-		final Set<SubCommand> insts = new HashSet<SubCommand>();
-		final Set<SubCommand> exch = new HashSet<SubCommand>();
-		
-		for(final SubCommand sub : subs) {
-			switch(sub.metaType()) {
-			default:
-				throw new IllegalStateException("Subscription type cannot be null");
-			case INSTRUMENT:
-				insts.add(sub);
-				break;
-			case EXCHANGE:
-				exch.add(sub);
-				break;
-			}
-		}
-		
-		if(!insts.isEmpty()) {
-			
-			if(exch.isEmpty()) {
-				return subInsts(insts);
-			} else {
-				subInsts(insts);
-				return subExcs(exch);
-			}
-			
-		}
-		
-		if(!exch.isEmpty()) {
-			return subExcs(exch);
-		} else {
-			return new DummyFuture();
-		}
-		
-	}
-	
-	private Future<Boolean> subInsts(final Set<SubCommand> subs) {
-		
-		/*
-		 * Creates a single JERQ command from the set, subscriptions are added
-		 * indivually.
-		 */
-		final StringBuffer sb = new StringBuffer();
-		sb.append("GO ");
-		for (final SubCommand sub : subs) {
-
-			if (sub != null) {
-				
-				final String symbol = sub.interest();
-				
-				/* If we're subscribed already, add new interests, otherwise add  */
-				if(subscriptions.containsKey(symbol)) {
-					subscriptions.get(symbol).addTypes(sub.types());
-				} else {
-					subscriptions.put(symbol, new DDF_Subscription(sub, Metadata.MetaType.INSTRUMENT));
-				}
-				
-				sb.append(subscriptions.get(symbol).encode() + ",");
-			}
-		}
-		
-		if (!isConnected()) {
-			return new DummyFuture();
-		}
-		
-		return writeAsync(sb.toString());
-		
-	}
-	
-	private Future<Boolean> subExcs(final Set<SubCommand> subs) {
-		
-		final StringBuffer sb = new StringBuffer();
-		
-		sb.append("STR L ");
-		for(final SubCommand sub : subs) {
-			
-			if(sub != null) {
-			
-				final String interest = sub.interest();
-				
-				if(!subscriptions.containsKey(interest)) {
-					
-					subscriptions.put(interest, new DDF_Subscription(sub, Metadata.MetaType.EXCHANGE));
-					
-				}
-				
-				sb.append(interest + ";");
-				
-			}
-			
-		}
-		
-		if (!isConnected()) {
-			return new DummyFuture();
-		}
-		
-		return writeAsync(sb.toString());
-	}
-	
-	@Override
-	public Future<Boolean> unsubscribe(final Set<SubCommand> subs) {
-
-		if (subs == null) {
-			log.error("Null subscribes request recieved");
-			return null;
-		}
-
-		final Set<SubCommand> insts = new HashSet<SubCommand>();
-		final Set<SubCommand> exch = new HashSet<SubCommand>();
-		
-		for(final SubCommand sub : subs) {
-			switch(sub.metaType()) {
-			case INSTRUMENT:
-				insts.add(sub);
-				break;
-			case EXCHANGE:
-				exch.add(sub);
-				break;
-			default:
-				log.error("Unhandled metadata type {}", sub.metaType());
-				break;
-			}
-		}
-		
-		if(!insts.isEmpty()) {
-			
-			if(exch.isEmpty()) {
-				return unsubInsts(insts);
-			} else {
-				unsubInsts(insts);
-				return unsubExchs(exch);
-			}
-			
-		}
-		
-		if(!exch.isEmpty()) {
-			return unsubExchs(exch);
-		} else {
-			return new DummyFuture();
-		}
-		
-	}
-
-	private Future<Boolean> unsubInsts(final Set<SubCommand> subs) {
-		
-		/*
-		 * Creates a single JERQ command from the set. Subscriptions are removed
-		 * individually.
-		 */
-		final StringBuffer sb = new StringBuffer();
-		sb.append("STOP ");
-		for (final SubCommand sub : subs) {
-
-			if (sub != null) {
-				
-				final String symbol = sub.interest();
-				
-				subscriptions.remove(symbol);
-				sb.append(sub.interest() + ",");
-			}
-		}
-		
-		if (!isConnected()) {
-			return new DummyFuture();
-		}
-		
-		return writeAsync(sb.toString());
-	}
-	
-	private Future<Boolean> unsubExchs(final Set<SubCommand> subs) {
-		
-		for(final SubCommand sub : subs) {
-			subscriptions.remove(sub.interest());
-		}
-		
-		if (!isConnected()) {
-			return new DummyFuture();
-		}
-		
-		/* Have to unsub from everything and resub */
-		writeAsync("STOP");
-		
-		final Set<SubCommand> resubs = new HashSet<SubCommand>();
-		for(final Entry<String, SubCommand> e : subscriptions.entrySet()) {
-			resubs.add(e.getValue());
-		}
-		
-		return subscribe(resubs);
-	}
-	
-	@Override
-	public Map<String, SubCommand> subscriptions() {
-		return Collections.<String, SubCommand> unmodifiableMap(subscriptions);
 	}
 
 	@Override

@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
+import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.ddf.datalink.api.DDF_FeedClientBase;
 import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
@@ -66,8 +67,8 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 
 	private final int socketAddress;
 
-	private final Map<String, SubCommand> subscriptions = 
-			new ConcurrentHashMap<String, SubCommand>();
+	private final Map<MetadataID<?>, SubCommand> subscriptions = 
+			new ConcurrentHashMap<MetadataID<?>, SubCommand>();
 	
 	public HistoricReplayListenerClientDDF(final int socketAddress, final Executor executor) {
 

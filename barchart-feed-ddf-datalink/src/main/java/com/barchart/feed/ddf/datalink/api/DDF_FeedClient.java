@@ -7,6 +7,8 @@
  */
 package com.barchart.feed.ddf.datalink.api;
 
+import java.util.concurrent.Future;
+
 import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
 
 /**
@@ -19,9 +21,8 @@ import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
  * for login state changes for the client.
  * <p>
  */
-public interface DDF_FeedClient extends DDF_FeedClientBase {
-
-
+public interface DDF_FeedClient extends DDF_FeedClientBase, FutureWriter {
+	
 	/**
 	 * Sets the event policy for a specific feed event. Default policies are set
 	 * by the constructor to handle disconnects and login success.
@@ -32,5 +33,8 @@ public interface DDF_FeedClient extends DDF_FeedClientBase {
 	 *            The even policy to register.
 	 */
 	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
+
+	@Override
+	Future<Boolean> write(String message);
 	
 }
