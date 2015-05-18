@@ -27,9 +27,9 @@ import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.ExchangeID;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.base.sub.SubscriptionHandler;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
-import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
+import com.barchart.feed.ddf.datalink.api.FeedClient;
+import com.barchart.feed.ddf.datalink.api.FeedClient.DDF_MessageListener;
+import com.barchart.feed.ddf.datalink.api.FeedClient.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
 import com.barchart.feed.ddf.datalink.provider.DDF_SubscriptionHandler;
 import com.barchart.feed.ddf.instrument.provider.DDF_MetadataServiceWrapper;
@@ -49,7 +49,7 @@ public class BarchartMarketProvider implements MarketService {
 	/* Value api factory */
 	private static final ValueFactory values = ValueFactoryImpl.instance;
 	
-	private volatile DDF_FeedClient connection;
+	private volatile FeedClient connection;
 	private final DDF_ConsumerMarketProvider maker;
 	private final ExecutorService executor;
 	private final SubscriptionHandler subHandler;

@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.datalink.provider;
+package com.barchart.feed.ddf.datalink.provider.pipeline;
 
 
 import java.util.concurrent.Executor;
@@ -14,7 +14,9 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
-import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
+import com.barchart.feed.ddf.datalink.provider.DDF_SocksProxy;
+import com.barchart.feed.ddf.datalink.provider.FeedClientDDF;
+import com.barchart.feed.ddf.datalink.provider.SocksClientHandler;
 
 public class PipelineFactorySocks implements ChannelPipelineFactory {
 

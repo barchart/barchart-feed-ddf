@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.datalink.provider;
+package com.barchart.feed.ddf.datalink.provider.pipeline;
 
 import org.jboss.netty.channel.ChannelHandler;
 import org.jboss.netty.channel.ChannelPipeline;
@@ -14,11 +14,11 @@ import org.jboss.netty.channel.Channels;
 
 /**
  */
-class PipelineFactoryDDF implements ChannelPipelineFactory {
+public class PipelineFactoryDDF implements ChannelPipelineFactory {
 
 	private final ChannelHandler handler;
 
-	PipelineFactoryDDF(final ChannelHandler handler) {
+	public PipelineFactoryDDF(final ChannelHandler handler) {
 		this.handler = handler;
 	}
 

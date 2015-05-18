@@ -10,7 +10,7 @@ package com.barchart.feed.ddf.datalink.api;
 import java.util.concurrent.Future;
 
 import com.barchart.feed.api.connection.Connection;
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.util.common.anno.UsedOnce;
 
 /**
@@ -23,7 +23,57 @@ import com.barchart.util.common.anno.UsedOnce;
  * for login state changes for the client.
  * <p>
  */
-public interface DDF_FeedClient extends FutureWriter {
+public interface FeedClient extends FutureWriter {
+	
+	/**
+	 * A callback action to be fired on a specific event. Registered with a feed
+	 * client along with an event type.
+	 * 
+	 */
+	public interface EventPolicy {
+
+		public void newEvent(FeedEvent event);
+
+	}
+	
+	/**
+	 * Specifies the handling of feed events and data messages from the server.
+	 * <p>
+	 * All calls are handles asynchronously by the feed client which the feed
+	 * handler is bound to.
+	 * 
+	 */
+	public interface DDF_MessageListener {
+
+		/**
+		 * Asynchronous data receipt callback.
+		 * 
+		 * @param message
+		 *            The data message produced by server.
+		 */
+		void handleMessage(DDF_BaseMessage message);
+
+	}
+
+	/**
+	 * transport protocol to be used in the data feed.
+	 */
+	public enum DDF_Transport {
+
+		/***/
+		TCP, //
+
+		/***/
+		UDP, //
+
+		/***/
+		SCTP, //
+
+		WEBSOCKETS, //
+
+		;
+
+	}
 	
 	/**
 	 * Binds the feed client to a port or other data source and begins
@@ -58,7 +108,7 @@ public interface DDF_FeedClient extends FutureWriter {
 	 * @param policy
 	 *            The even policy to register.
 	 */
-	void setPolicy(DDF_FeedEvent event, EventPolicy policy);
+	void setPolicy(FeedEvent event, EventPolicy policy);
 
 	@Override
 	Future<Boolean> write(String message);

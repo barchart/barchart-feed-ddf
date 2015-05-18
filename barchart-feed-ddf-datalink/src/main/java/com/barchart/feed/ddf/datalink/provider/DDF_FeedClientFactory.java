@@ -12,9 +12,8 @@ import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
-import com.barchart.feed.ddf.datalink.enums.DDF_Transport;
+import com.barchart.feed.ddf.datalink.api.FeedClient;
+import com.barchart.feed.ddf.datalink.api.FeedClient.DDF_Transport;
 
 /**
  * Factory class for building FeedClientDDF.
@@ -37,7 +36,7 @@ public class DDF_FeedClientFactory {
 	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
 	 * @return the DDF_FeedClient
 	 */
-	public static DDF_FeedClient newConnectionClient(final DDF_Transport protocol,
+	public static FeedClient newConnectionClient(final DDF_Transport protocol,
 			final String username, final String password,
 			final Executor executor) {
 
@@ -56,7 +55,7 @@ public class DDF_FeedClientFactory {
 	 *            org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory
 	 * @return the DDF_FeedClient
 	 */
-	public static DDF_FeedClient newConnectionClient(final DDF_Transport protocol,
+	public static FeedClient newConnectionClient(final DDF_Transport protocol,
 			final String username, final String password,
 			final Executor executor, final DDF_SocksProxy proxySettings) {
 
@@ -75,7 +74,7 @@ public class DDF_FeedClientFactory {
 	 *            The executor used by the NioDatagramChannel
 	 * @return
 	 */
-	public static DDF_FeedClient newUDPListenerClient(final int port, 
+	public static FeedClient newUDPListenerClient(final int port, 
 			final boolean filterBySub, final Executor executor) {
 
 		return new UDPListenerClientDDF(port, filterBySub, executor);
@@ -91,7 +90,7 @@ public class DDF_FeedClientFactory {
 	 *            The executor used by the NioDatagramChannel
 	 * @return
 	 */
-	public static DDF_FeedClient newStatelessTCPListenerClient(final int port, 
+	public static FeedClient newStatelessTCPListenerClient(final int port, 
 			final boolean filterBySub, final Executor executor) {
 		
 		return new TCPListenerClientDDF(port, filterBySub, executor);

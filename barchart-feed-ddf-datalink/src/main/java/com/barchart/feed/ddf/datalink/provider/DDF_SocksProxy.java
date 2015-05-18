@@ -5,11 +5,9 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.datalink.api;
+package com.barchart.feed.ddf.datalink.provider;
 
 import com.barchart.feed.ddf.settings.api.DDF_Server;
-
-
 
 public class DDF_SocksProxy {
 

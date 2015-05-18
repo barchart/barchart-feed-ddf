@@ -8,7 +8,7 @@
 /**
  * 
  */
-package com.barchart.feed.ddf.datalink.provider;
+package com.barchart.feed.ddf.datalink.provider.pipeline;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -22,7 +22,7 @@ import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+import com.barchart.feed.ddf.datalink.api.FeedEvent;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_ControlResponse;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
@@ -39,11 +39,11 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 	private static final Logger log = LoggerFactory
 			.getLogger(ChannelHandlerDDF.class);
 
-	private final BlockingQueue<DDF_FeedEvent> eventQueue;
+	private final BlockingQueue<FeedEvent> eventQueue;
 
 	private final BlockingQueue<DDF_BaseMessage> messageQueue;
 
-	public ChannelHandlerDDF(final BlockingQueue<DDF_FeedEvent> eventQueue,
+	public ChannelHandlerDDF(final BlockingQueue<FeedEvent> eventQueue,
 			final BlockingQueue<DDF_BaseMessage> messageQueue) {
 
 		this.eventQueue = eventQueue;
@@ -58,7 +58,7 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 		log.debug("Posting LINK_CONNECT");
 
 		try {
-			eventQueue.put(DDF_FeedEvent.LINK_CONNECT);
+			eventQueue.put(FeedEvent.LINK_CONNECT);
 		} catch (final InterruptedException ex) {
 			log.debug("terminated");
 		}
@@ -74,7 +74,7 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 		log.debug("channelDisconnected posting LINK_DISCONNECT");
 
 		try {
-			eventQueue.put(DDF_FeedEvent.LINK_DISCONNECT);
+			eventQueue.put(FeedEvent.LINK_DISCONNECT);
 		} catch (final InterruptedException ex) {
 			log.debug("terminated");
 		}
@@ -129,7 +129,7 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 
 			if (type.isControlTimestamp) {
 				messageQueue.put(message);
-				eventQueue.put(DDF_FeedEvent.HEART_BEAT);
+				eventQueue.put(FeedEvent.HEART_BEAT);
 				return;
 			}
 
@@ -157,17 +157,17 @@ public class ChannelHandlerDDF extends SimpleChannelHandler {
 			/* Note: This is the only place a login success is set */
 			if (comment.contains(FeedDDF.RESPONSE_VERSION_SET_3) ||
 					comment.contains(FeedDDF.RESPONSE_VERSION_SET_4)) {
-				eventQueue.put(DDF_FeedEvent.LOGIN_SUCCESS);
+				eventQueue.put(FeedEvent.LOGIN_SUCCESS);
 			}
 			break;
 		case TCP_REJECT:
 			if (comment.contains(FeedDDF.RESPONSE_LOGIN_FAILURE)) {
-				eventQueue.put(DDF_FeedEvent.LOGIN_FAILURE);
+				eventQueue.put(FeedEvent.LOGIN_FAILURE);
 			}
 			break;
 		case TCP_COMMAND:
 			if (comment.contains(FeedDDF.RESPONSE_SESSION_LOCKOUT)) {
-				eventQueue.put(DDF_FeedEvent.SESSION_LOCKOUT);
+				eventQueue.put(FeedEvent.SESSION_LOCKOUT);
 			}
 			break;
 		default:

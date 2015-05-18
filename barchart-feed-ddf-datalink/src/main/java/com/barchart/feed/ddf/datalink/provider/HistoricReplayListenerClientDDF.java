@@ -33,17 +33,17 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.base.sub.SubCommand;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
-import com.barchart.feed.ddf.datalink.api.DummyFuture;
-import com.barchart.feed.ddf.datalink.api.EventPolicy;
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+import com.barchart.feed.ddf.datalink.api.FeedEvent;
+import com.barchart.feed.ddf.datalink.api.FeedClient;
+import com.barchart.feed.ddf.datalink.provider.pipeline.PipelineFactoryDDF;
+import com.barchart.feed.ddf.datalink.provider.util.DummyFuture;
+import com.barchart.feed.ddf.datalink.provider.util.RunnerDDF;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.feed.ddf.message.enums.DDF_MessageType;
 
 public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implements
-		DDF_FeedClient {
+		FeedClient {
 
 	/** use slf4j for internal NETTY LoggingHandler facade */
 	static {
@@ -223,7 +223,7 @@ public class HistoricReplayListenerClientDDF extends SimpleChannelHandler implem
 	}
 
 	@Override
-	public void setPolicy(DDF_FeedEvent event, EventPolicy policy) {
+	public void setPolicy(FeedEvent event, EventPolicy policy) {
 		/* Do nothing */
 	}
 

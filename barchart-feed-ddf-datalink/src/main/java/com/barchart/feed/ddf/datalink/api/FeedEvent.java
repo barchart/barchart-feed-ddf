@@ -5,14 +5,12 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.datalink.enums;
-
-import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
+package com.barchart.feed.ddf.datalink.api;
 
 /**
  * Data server events handled by a feed handler.
  */
-public enum DDF_FeedEvent {
+public enum FeedEvent {
 
 	/**
 	 * Posted after {@link DDF_FeedClient#login}; when web service lookup
@@ -92,7 +90,7 @@ public enum DDF_FeedEvent {
 
 	;
 
-	public static boolean isConnectionError(final DDF_FeedEvent event) {
+	public static boolean isConnectionError(final FeedEvent event) {
 
 		switch (event) {
 

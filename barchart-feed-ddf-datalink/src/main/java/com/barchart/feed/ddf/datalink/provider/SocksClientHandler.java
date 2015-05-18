@@ -24,8 +24,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.ddf.datalink.api.DDF_SocksProxy;
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+import com.barchart.feed.ddf.datalink.api.FeedEvent;
 
 
 public class SocksClientHandler extends SimpleChannelHandler {
@@ -472,7 +471,7 @@ public class SocksClientHandler extends SimpleChannelHandler {
 		            ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
 			
 			// general socks failure
-			feedClient.postEvent(DDF_FeedEvent.LINK_CONNECT_PROXY_TIMEOUT);
+			feedClient.postEvent(FeedEvent.LINK_CONNECT_PROXY_TIMEOUT);
 			feedClient.setProxiedChannel(null, null, false);
 
 		}
@@ -649,7 +648,7 @@ public class SocksClientHandler extends SimpleChannelHandler {
 		  String exceptionMsg = String.format("%s destination host %s port number %s.  The destination reported " +
 		  		"the host as %s port %s type of %s.", proxyErrorText, destinationHost, destinationPort, addr, Integer.toString(port), addrType);
 
-		  feedClient.postEvent(DDF_FeedEvent.LINK_CONNECT_PROXY_TIMEOUT);
+		  feedClient.postEvent(FeedEvent.LINK_CONNECT_PROXY_TIMEOUT);
 		  feedClient.setProxiedChannel(null, null, false);
 		  
 		  log.error("Socks5 Error : {}", proxyErrorText);

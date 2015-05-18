@@ -13,7 +13,7 @@ package com.barchart.feed.ddf.datalink.provider;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.barchart.feed.ddf.datalink.api.DDF_MessageListener;
+import com.barchart.feed.ddf.datalink.api.FeedClient.DDF_MessageListener;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
 
 /**

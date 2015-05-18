@@ -18,10 +18,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class TestMsgDeframerDDF.
- */
+import com.barchart.feed.ddf.datalink.provider.pipeline.MsgDeframerDDF;
+
 public class TestMsgDeframerDDF {
 
 	private static Logger log = LoggerFactory

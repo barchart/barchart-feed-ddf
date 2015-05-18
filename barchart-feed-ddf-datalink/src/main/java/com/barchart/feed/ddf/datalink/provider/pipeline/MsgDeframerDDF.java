@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.datalink.provider;
+package com.barchart.feed.ddf.datalink.provider.pipeline;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
@@ -23,7 +23,7 @@ import com.barchart.feed.ddf.util.FeedDDF;
  * 
  * TODO re-implement w/o "synchronized"
  */
-class MsgDeframerDDF extends FrameDecoder {
+public class MsgDeframerDDF extends FrameDecoder {
 
 	private static Logger log = LoggerFactory.getLogger(MsgDeframerDDF.class);
 
@@ -38,6 +38,7 @@ class MsgDeframerDDF extends FrameDecoder {
 	/** state machine: continue reading in text-only mode */
 	private static final int S4_PRINTABLE = 4;
 	/** state machine: protocol error; should not happen */
+	@SuppressWarnings("unused")
 	private static final int S5_ERROR = 5;
 
 	private static final int TIME_STAMP_SIZE = 9;
@@ -73,7 +74,7 @@ class MsgDeframerDDF extends FrameDecoder {
 		return frame;
 	}
 
-	MsgDeframerDDF() {
+	public MsgDeframerDDF() {
 		init();
 	}
 
@@ -81,7 +82,7 @@ class MsgDeframerDDF extends FrameDecoder {
 	 * assume JERQ uses LF terminators and optional fixed size time stamp
 	 */
 	@Override
-	protected synchronized Object decode(final ChannelHandlerContext ctx,
+	public synchronized Object decode(final ChannelHandlerContext ctx,
 			final Channel channel, final ChannelBuffer buffer) throws Exception {
 
 		while (true) {

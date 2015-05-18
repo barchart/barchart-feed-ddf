@@ -8,43 +8,57 @@
 /**
  * 
  */
-package com.barchart.feed.ddf.datalink.api;
+package com.barchart.feed.ddf.datalink.provider.util;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.jboss.netty.channel.ChannelFuture;
+
 /**
- * Future that is immediately completed. Used when an asynchronous request is
- * sent to the feed client but the client is not logged in.
+ * Wrapper for a Netty ChannelFuture.
+ * 
  */
-public class DummyFuture implements Future<Boolean> {
+public class CommandFuture implements Future<Boolean> {
+
+	private final ChannelFuture future;
+
+	public CommandFuture(final ChannelFuture channelFuture) {
+
+		if (channelFuture == null) {
+			throw new NullPointerException("ChannelFuture was null");
+		}
+		future = channelFuture;
+	}
 
 	@Override
-	public boolean cancel(final boolean mayInterruptIfRunning) {
-		return true;
+	public boolean cancel(final boolean arg0) {
+		return future.cancel();
 	}
 
 	@Override
 	public Boolean get() throws InterruptedException, ExecutionException {
-		return true;
+		future.await();
+		return future.isSuccess();
 	}
 
 	@Override
 	public Boolean get(final long timeout, final TimeUnit unit)
 			throws InterruptedException, ExecutionException, TimeoutException {
-		return true;
+		future.awaitUninterruptibly(timeout, unit);
+		return future.isSuccess();
 	}
 
 	@Override
 	public boolean isCancelled() {
-		return false;
+		return future.isCancelled();
 	}
 
 	@Override
 	public boolean isDone() {
-		return true;
+		return future.isDone();
 	}
 
 }

@@ -22,10 +22,10 @@ import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.api.model.meta.id.VendorID;
 import com.barchart.feed.base.sub.SubCommand;
 import com.barchart.feed.base.sub.SubscriptionHandler;
-import com.barchart.feed.ddf.datalink.api.DDF_FeedClient;
-import com.barchart.feed.ddf.datalink.api.DummyFuture;
-import com.barchart.feed.ddf.datalink.api.EventPolicy;
-import com.barchart.feed.ddf.datalink.enums.DDF_FeedEvent;
+import com.barchart.feed.ddf.datalink.api.FeedEvent;
+import com.barchart.feed.ddf.datalink.api.FeedClient;
+import com.barchart.feed.ddf.datalink.api.FeedClient.EventPolicy;
+import com.barchart.feed.ddf.datalink.provider.util.DummyFuture;
 
 public class DDF_SubscriptionHandler implements SubscriptionHandler {
 	
@@ -37,10 +37,10 @@ public class DDF_SubscriptionHandler implements SubscriptionHandler {
 	
 	private final AtomicBoolean isConnected = new AtomicBoolean(false);
 	
-	private final DDF_FeedClient feed; 
+	private final FeedClient feed; 
 	private final MetadataService metaService;
 	
-	public DDF_SubscriptionHandler(final DDF_FeedClient feed, final MetadataService metaService) {
+	public DDF_SubscriptionHandler(final FeedClient feed, final MetadataService metaService) {
 		
 		this.feed = feed;
 		this.metaService = metaService;
@@ -50,10 +50,10 @@ public class DDF_SubscriptionHandler implements SubscriptionHandler {
 		 * instruments are requested upon login or re-login after a 
 		 * disconnect. 
 		 */
-		feed.setPolicy(DDF_FeedEvent.LOGIN_SUCCESS, new EventPolicy() {
+		feed.setPolicy(FeedEvent.LOGIN_SUCCESS, new EventPolicy() {
 			
 			@Override
-			public void newEvent(DDF_FeedEvent event) {
+			public void newEvent(FeedEvent event) {
 				
 				if (subscriptions.size() <= 0) {
 					return;
@@ -96,7 +96,7 @@ public class DDF_SubscriptionHandler implements SubscriptionHandler {
 	}
 
 	@Override
-	public Future<Boolean> subscribe(Set<SubCommand> subs) {
+	public Future<Boolean> subscribe(final Set<SubCommand> subs) {
 		
 		if (subs == null) {
 			log.error("Null subscribes request recieved");

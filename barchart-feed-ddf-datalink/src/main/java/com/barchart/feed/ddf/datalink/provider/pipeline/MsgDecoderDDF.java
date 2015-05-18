@@ -5,7 +5,7 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.datalink.provider;
+package com.barchart.feed.ddf.datalink.provider.pipeline;
 
 import java.util.Arrays;
 
@@ -29,7 +29,7 @@ import com.barchart.util.common.ascii.ASCII;
  * faster to parse the ByteBuffer itself, saving the array creation, copy, and
  * GC.
  */
-class MsgDecoderDDF extends SimpleChannelHandler {
+public class MsgDecoderDDF extends SimpleChannelHandler {
 
 	static final Logger log = LoggerFactory.getLogger(MsgDecoderDDF.class);
 

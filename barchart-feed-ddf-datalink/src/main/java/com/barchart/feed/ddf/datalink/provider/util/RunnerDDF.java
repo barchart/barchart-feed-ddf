@@ -5,9 +5,9 @@
  *
  * http://www.opensource.org/licenses/bsd-license.php
  */
-package com.barchart.feed.ddf.datalink.provider;
+package com.barchart.feed.ddf.datalink.provider.util;
 
-abstract class RunnerDDF implements Runnable {
+public abstract class RunnerDDF implements Runnable {
 
 	private volatile Thread thread;
 
@@ -25,7 +25,7 @@ abstract class RunnerDDF implements Runnable {
 
 	}
 
-	void interrupt() {
+	public void interrupt() {
 		if (thread == null) {
 			return;
 		}
