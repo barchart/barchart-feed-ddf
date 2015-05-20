@@ -17,6 +17,7 @@ public class TestSnapshots {
 			TestSnapshots.class);
 	
 	private static final InstrumentID instID //= new InstrumentID("1261904"); // GOOG
+
 	= new InstrumentID(230878362); // ESH15
 	
 	public static void main(final String[] args) throws Exception {
