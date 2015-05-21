@@ -33,7 +33,8 @@ public class TestDDF_RxInstrumentProvider {
 		
 		log.debug("****************************************************************");
 		
-		DDF_RxInstrumentProvider.fromString("M6J2015|665P").subscribe(obs());
+		//DDF_RxInstrumentProvider.fromString("ZCZ2015|350C").subscribe(obs());
+		DDF_RxInstrumentProvider.fromID(new InstrumentID(68926976)).subscribe(idObs());
 		
 		Thread.sleep(3 * 1000);
 		

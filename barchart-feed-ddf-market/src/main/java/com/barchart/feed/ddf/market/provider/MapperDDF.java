@@ -413,9 +413,6 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 
 			final DDF_Indicator indicator = session.getIndicator();
 
-			log.debug("DDF_Indicator for session {} : {} ", session
-					.getSession().name(), indicator.name());
-
 			switch (indicator) {
 
 				case CURRENT:

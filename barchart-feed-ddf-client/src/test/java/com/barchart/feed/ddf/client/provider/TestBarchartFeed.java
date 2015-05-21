@@ -18,6 +18,7 @@ import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.meta.Instrument;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
 
@@ -43,23 +44,23 @@ public class TestBarchartFeed {
 		
 		feed.startup();
 		
-		final MarketObserver<Book> callback = new MarketObserver<Book>() {
+		final MarketObserver<Market> callback = new MarketObserver<Market>() {
 
 			@Override
-			public void onNext(final Book v) {
+			public void onNext(final Market v) {
 				
 				System.out.println(v.toString());
-				System.out.println(v.top().toString());
 				System.out.println("\n***********************************************\n");
 				
 			}
 			
 		};
 		
-		final Agent myAgent = feed.newAgent(Book.class, callback);
+		final Agent myAgent = feed.newAgent(Market.class, callback);
 		
-		myAgent.include(getInst("AAPL"));
-		//myAgent.include("ESU3");
+		final InstrumentID instID = new InstrumentID(19850232);
+		//myAgent.include(instID);					
+		myAgent.include("ZON15|300C").subscribe(); 
 		
 		Thread.sleep(1000000);
 		

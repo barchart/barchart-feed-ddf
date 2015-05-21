@@ -264,6 +264,7 @@ public class DDF_RxInstrumentProvider {
 							if(!e.getValue().isEmpty()) {
 								final InstrumentState i = e.getValue().get(0);
 								idMap.put(i.id(), i);
+								symbolMap.put(i.symbol(), e.getValue()); 
 							}
 
 							/* Add alternate options symbol */
@@ -387,7 +388,7 @@ public class DDF_RxInstrumentProvider {
 			return result;
 
 		} catch (final Exception e) {
-			log.error("Exception on remote ID lookup  -  {}", query);
+			log.error("Exception on remote ID lookup  -  {}", query, e);
 			throw new RuntimeException(e);
 		}
 		
@@ -479,7 +480,8 @@ public class DDF_RxInstrumentProvider {
 					}
 					
 					atts = new AttributesImpl(ats);
-					lookup = new InstrumentID(xmlStringDecode(ats, XmlTagExtras.ID, XML_STOP));
+					final String id = xmlStringDecode(ats, XmlTagExtras.ID, XML_STOP);
+					lookup = new InstrumentID(Long.parseLong(id));
 					
 				} else if("ticker".equals(qName)) {
 					vendors.add(new AttributesImpl(ats));
