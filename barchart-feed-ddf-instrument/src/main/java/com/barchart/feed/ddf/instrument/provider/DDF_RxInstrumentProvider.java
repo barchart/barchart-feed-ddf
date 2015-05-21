@@ -480,8 +480,8 @@ public class DDF_RxInstrumentProvider {
 					}
 					
 					atts = new AttributesImpl(ats);
-					final String id = xmlStringDecode(ats, XmlTagExtras.ID, XML_STOP);
-					lookup = new InstrumentID(Long.parseLong(id));
+					// TODO Review 
+					lookup = new InstrumentID(xmlStringDecode(ats, XmlTagExtras.ID, XML_STOP));
 					
 				} else if("ticker".equals(qName)) {
 					vendors.add(new AttributesImpl(ats));

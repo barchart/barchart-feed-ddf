@@ -65,17 +65,6 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 
 	}
 
-//	@Deprecated
-//	public DDF_Instrument(final String symbol_) {
-//
-//		super(new InstrumentID(symbol_));
-//
-//		symbol = symbol_;
-//
-//		loadState = LoadState.EMPTY;
-//
-//	}
-
 	public DDF_Instrument(final InstrumentID id_, final Instrument stub_, final LoadState state_) {
 
 		super(id_);
