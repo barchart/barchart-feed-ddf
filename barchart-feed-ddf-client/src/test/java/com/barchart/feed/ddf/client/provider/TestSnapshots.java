@@ -7,6 +7,7 @@ import rx.Observer;
 
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Session.Type;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 
@@ -16,7 +17,7 @@ public class TestSnapshots {
 			TestSnapshots.class);
 	
 	private static final InstrumentID instID //= new InstrumentID("1261904"); // GOOG
-	= new InstrumentID("192687582"); // ESH15
+	= new InstrumentID(230878362); // ESH15
 	
 	public static void main(final String[] args) throws Exception {
 		
@@ -44,7 +45,10 @@ public class TestSnapshots {
 
 			@Override
 			public void onNext(final Market market) {
-				log.debug("Market = \n{}", market);
+				//log.debug("Market = \n{}", market);
+				System.out.println(market.sessionSet().session(Type.DEFAULT_PREVIOUS).settle());
+				log.debug(market.session().settle().toString());
+				log.debug("Settle = {}",market.session().settle().asDouble());
 			}
 			
 		});
@@ -65,7 +69,9 @@ public class TestSnapshots {
 
 			@Override
 			public void onNext(final Market market) {
-				log.debug("Market = \n{}", market);
+				//log.debug("Market = \n{}", market);
+				log.debug(market.session().settle().toString());
+				log.debug("Settle = {}",market.session().settle().asDouble());
 			}
 			
 		});
