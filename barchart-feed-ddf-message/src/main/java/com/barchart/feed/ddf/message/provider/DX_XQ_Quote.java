@@ -255,9 +255,6 @@ class DX_XQ_Quote extends DF_28_BookTop implements DDF_MarketQuote {
 		final byte flagCode = xmlByteDecode(tag, QUOTE_STATE, XML_PASS);
 		final DDF_QuoteState flag = DDF_QuoteState.fromCode(flagCode);
 		setState(flag);
-		if (flag == DDF_QuoteState.UNKNOWN) {
-			log.debug("Parsed UNKNOWN QuoteState : {}", flagCode);
-		}
 
 		priceStep = xmlDecimalDecode(frac, tag, PRICE_TICK_INCREMENT, XML_STOP);
 
