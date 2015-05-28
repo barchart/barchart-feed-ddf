@@ -154,8 +154,6 @@ public class DDF_SubscriptionHandler implements SubscriptionHandler {
 				final MetadataID<?> id = sub.interestID();
 				final String symbol = JERQsymbol(id);
 				
-				log.debug("SUB {}", symbol);
-				
 				/* If we're subscribed already, add new interests, otherwise add new subscription */
 				if(subscriptions.containsKey(id)) {
 					subscriptions.get(id).addTypes(sub.types());
