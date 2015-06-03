@@ -445,7 +445,7 @@ class VarMarketDDF extends VarMarket {
 
 				if (price.isNull()) {
 
-					log.warn("null or zero price on trade message, not applying to bar");
+					log.warn("null price on trade message, not applying to bar");
 
 				} else {
 

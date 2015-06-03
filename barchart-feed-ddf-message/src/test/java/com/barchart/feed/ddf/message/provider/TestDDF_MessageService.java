@@ -164,5 +164,5 @@ public class TestDDF_MessageService {
 		assertTrue(DDF_NulVal.TIME_EMPTY != ValueConst.NULL_TIME);
 
 	}
-
+	
 }

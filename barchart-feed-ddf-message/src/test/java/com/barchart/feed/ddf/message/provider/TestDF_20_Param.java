@@ -290,5 +290,24 @@ public class TestDF_20_Param extends TestDDFBase {
 		assertTrue(msg.getParamType() == DDF_ParamType.VWAP_LAST_PRICE);
 		
 	}
+	
+	// {soh}2$IUXX,0{stx}Ai15452422,001 {etx)
+	// final static byte[] ba20 = "2SF0,02B1010533,D0Q JFTKDw9".getBytes(ASCII_CHARSET);
+	
+	final static byte[] ba20Trade = "2$IUXX,0Ai15452422,001 ".getBytes(ASCII_CHARSET);
+	
+	@Test
+	public void testNewTradeParam() throws Exception {
+		
+		final DF_20_Param msg = (DF_20_Param) DDF_MessageService
+				.newInstance(new DF_20_Param().getMessageType());
+		
+		final ByteBuffer buffer = ByteBuffer.wrap(ba20Trade);
+		
+		msg.decodeDDF(buffer);
+		
+		System.out.println(msg.getParamType());
+		
+	}
 
 }

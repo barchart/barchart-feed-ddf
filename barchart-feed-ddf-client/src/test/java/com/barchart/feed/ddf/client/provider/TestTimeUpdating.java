@@ -3,11 +3,12 @@ package com.barchart.feed.ddf.client.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
+import com.barchart.feed.api.consumer.ConsumerAgent;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Market.Component;
+import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 
 public class TestTimeUpdating {
@@ -33,7 +34,8 @@ public class TestTimeUpdating {
 		
 		Thread.sleep(500);
 		
-		final Agent agent = market.subscribeMarket(marketObs(), insts);
+		final ConsumerAgent agent = market.register(marketObs(), Market.class);
+		agent.include(new InstrumentID(1000495));
 		agent.activate();
 		
 		Thread.sleep(10 * 60 * 1000);

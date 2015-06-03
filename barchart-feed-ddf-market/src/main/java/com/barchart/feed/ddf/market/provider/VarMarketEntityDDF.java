@@ -31,8 +31,11 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	
 	enum MKData {
 
-		MARKET(Market.class), BOOK(Book.class), CUVOL(Cuvol.class),
-		TRADE(Trade.class), SESSION(Session.class);
+		MARKET(Market.class), 
+		BOOK(Book.class), 
+		CUVOL(Cuvol.class),
+		TRADE(Trade.class), 
+		SESSION(Session.class);
 
 		final Class<? extends MarketData<?>> clazz;
 

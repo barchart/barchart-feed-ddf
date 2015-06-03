@@ -14,9 +14,9 @@ import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.connection.Connection.State;
-import com.barchart.feed.api.model.data.Book;
 import com.barchart.feed.api.model.data.Cuvol;
 import com.barchart.feed.api.model.data.Market;
+import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Instrument;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketplace;
@@ -44,27 +44,51 @@ public class TestBarchartFeed {
 		
 		feed.startup();
 		
-		final MarketObserver<Market> callback = new MarketObserver<Market>() {
+		final MarketObserver<Trade> callback = new MarketObserver<Trade>() {
 
 			@Override
-			public void onNext(final Market v) {
+			public void onNext(final Trade v) {
 				
-				System.out.println(v.toString());
+				System.out.println(v.price() + " " + v.size() + " " + printTradeTypes(v));
 				System.out.println("\n***********************************************\n");
 				
 			}
 			
 		};
 		
-		final Agent myAgent = feed.newAgent(Market.class, callback);
+		final Agent myAgent = feed.newAgent(Trade.class, callback);
 		
-		final InstrumentID instID = new InstrumentID(19850232);
+		final InstrumentID instID = new InstrumentID(1000495);
 		//myAgent.include(instID);					
-		myAgent.include("ZON15|300C").subscribe(); 
+		myAgent.include(instID); 
 		
 		Thread.sleep(1000000);
 		
 		feed.shutdown();
+		
+	}
+	
+	public static String printTradeTypes(final Trade t) {
+		
+		final StringBuilder sb = new StringBuilder();
+		
+		for(final Trade.TradeType tt : t.types()) {
+			sb.append(tt).append(" ");
+		}
+		
+		return sb.toString();
+		
+	}
+	
+	public static String printChanges(final Market m) {
+		
+		final StringBuilder sb = new StringBuilder();
+		
+		for(final Market.Component c : m.change()) {
+			sb.append(c).append(" ");
+		}
+		
+		return sb.toString();
 		
 	}
 	

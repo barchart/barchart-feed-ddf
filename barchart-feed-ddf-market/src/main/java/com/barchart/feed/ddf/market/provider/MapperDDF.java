@@ -184,7 +184,7 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 				return null;
 
 			case TRADE_LAST_PRICE:
-
+				
 				market.setTrade(ddfSession.type, ddfSession.session,
 						ddfSession.sequencing, price, size, time, date);
 
