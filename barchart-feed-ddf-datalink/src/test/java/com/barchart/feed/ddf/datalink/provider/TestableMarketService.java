@@ -180,6 +180,12 @@ public class TestableMarketService extends MarketProviderBase<DDF_MarketBase> {
 				public void fireCallbacks() {
 					
 				}
+
+				@Override
+				public void refresh() {
+					// TODO Auto-generated method stub
+					
+				}
 				
 			};
 		}

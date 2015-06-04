@@ -82,6 +82,8 @@ class VarMarketDDF extends VarMarket {
 	private static final Logger log = LoggerFactory
 			.getLogger(VarMarketDDF.class);
 
+	
+	
 	/*
 	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
 	 *
@@ -89,6 +91,16 @@ class VarMarketDDF extends VarMarket {
 	 */
 	@Override
 	public void fireCallbacks() {
+		throw new UnsupportedOperationException();
+	}
+	
+	/*
+	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
+	 *
+	 * @see com.barchart.feed.base.market.api.MarketDo#fireCallbacks()
+	 */
+	@Override
+	public void refresh() {
 		throw new UnsupportedOperationException();
 	}
 

@@ -182,6 +182,66 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 	}
 	
 	@Override
+	public synchronized void refresh() {
+		
+		while(!marketCmds.isEmpty()) {
+			final Command<com.barchart.feed.api.model.data.Market> cmd = marketCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					marketAgents.add(cmd.agent());
+				} else {
+					marketAgents.remove(cmd.agent());
+				}
+			}
+		}
+		
+		while(!bookCmds.isEmpty()) {
+			final Command<Book> cmd = bookCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					bookAgents.add(cmd.agent());
+				} else {
+					bookAgents.remove(cmd.agent());
+				}
+			}
+		}
+		
+		while(!tradeCmds.isEmpty()) {
+			final Command<Trade> cmd = tradeCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					tradeAgents.add(cmd.agent());
+				} else {
+					tradeAgents.remove(cmd.agent());
+				}
+			}
+		}
+		
+		while(!sessionCmds.isEmpty()) {
+			final Command<Session> cmd = sessionCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					sessionAgents.add(cmd.agent());
+				} else {
+					sessionAgents.remove(cmd.agent());
+				}
+			}
+		}
+		
+		while(!cuvolCmds.isEmpty()) {
+			final Command<Cuvol> cmd = cuvolCmds.poll();
+			if(cmd != null) {
+				if(cmd.type() == VarMarket.Command.CType.ADD) {
+					cuvolAgents.add(cmd.agent());
+				} else {
+					cuvolAgents.remove(cmd.agent());
+				}
+			}
+		}
+		
+	}
+	
+	@Override
 	public void setInstrument(final Instrument newSymbol) {
 		super.setInstrument(newSymbol);
 		
