@@ -588,11 +588,13 @@ public class DDF_RxInstrumentProvider {
 	/* ***** ***** ***** Begin Remote Lookup ***** ***** ***** */
 
 	static final String SERVER_EXTRAS = "extras.ddfplus.com";
-
+	
+	static String lookupParams = "";
+	
 	private static final String ALL_VENDORS = "&expanded=1";
 
 	static final String urlSymbolLookup(final CharSequence lookup) {
-		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup + ALL_VENDORS;
+		return "http://" + SERVER_EXTRAS + "/instruments/?lookup=" + lookup + ALL_VENDORS + lookupParams;
 	}
 	
 	static final String urlIDLookup(final CharSequence lookup) {
@@ -601,6 +603,16 @@ public class DDF_RxInstrumentProvider {
 
 	private static final String cqgInstLoopURL(final CharSequence lookup) {
 		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup + "&provider=CQG";
+	}
+	
+	/* #QUODDHACKS */
+	
+	public static void setLookupParams(final String params){
+		if(params==null || !params.startsWith("&")){
+			lookupParams="";
+		}else{
+			lookupParams = params;
+		}
 	}
 
 	static List<String> buildSymbolQueries(final List<String> symbols) throws Exception {
