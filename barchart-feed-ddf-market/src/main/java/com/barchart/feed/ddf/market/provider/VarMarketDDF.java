@@ -39,6 +39,7 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.NORMAL;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,7 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
+import com.barchart.feed.base.market.enums.MarketField;
 import com.barchart.feed.base.provider.VarMarket;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
@@ -73,7 +75,7 @@ import com.barchart.util.common.anno.Mutable;
  * keep here value relations and event management logic only
  **/
 @Mutable
-class VarMarketDDF extends VarMarket {
+public class VarMarketDDF extends VarMarket {
 
 	public VarMarketDDF(final Instrument instrument) {
 		super(instrument);
@@ -134,7 +136,7 @@ class VarMarketDDF extends VarMarket {
 
 	@Override
 	public void setBookUpdate(final MarketDoBookEntry entry, final TimeValue time) {
-
+		
 		assert entry != null && time != null;
 
 		final MarketDoBook book = loadBook();
@@ -241,12 +243,14 @@ class VarMarketDDF extends VarMarket {
 			set(MARKET_TIME, time);
 		}
 
+		//log.debug("Set TRADE AND MARKET TIME TO {}", time.asDateTime().toDateTime(DateTimeZone.forID("America/New_York")).toLocalTime());
+		
 		applyTradeToBar(session, sequencing, price, size, time, date);
 
 		makeCuvol(price, size, time);
 		
 		eventAdd(MARKET_UPDATED);
-
+		
 	}
 
 	@Override
