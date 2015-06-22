@@ -1,5 +1,6 @@
 package com.barchart.feed.ddf.client.provider;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -9,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
+import com.barchart.feed.api.model.data.Book;
+import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Session;
 import com.barchart.feed.api.model.data.Trade;
 import com.barchart.feed.api.model.meta.Exchange;
@@ -38,7 +41,7 @@ public class RepoduceClient {
 		
 		market.startup();
 		
-		market.subscribe(Trade.class, tradeObs(), exchanges);
+		market.subscribe(Market.class, marketObs(), "ESM15");
 		// market.subscribe(Session.class, sessionObs(), exchanges);
 		
 		Thread.sleep(1000 * 60 * 60 * 10);
@@ -88,5 +91,64 @@ public class RepoduceClient {
 		};
 		
 	}
+	
+	private static MarketObserver<Book> bookObs() {
+		
+		return new MarketObserver<Book>() {
+
+			@Override
+			public void onNext(final Book v) {
+			
+				final List<Book.Entry> asks = v.entryList(Book.Side.ASK);
+				
+				log.debug("BEST ASK {}   {}", asks.get(0).price(), asks.get(0).size());
+				
+				final Book.Top top = v.top();
+				
+				log.debug("ASK TOP {}   {}", top.ask().price(), top.ask().size());
+				
+			}	
+			
+		};
+		
+	}
+	
+	private static MarketObserver<Market> marketObs() {
+		
+		return new MarketObserver<Market>() {
+
+			@Override
+			public void onNext(Market m) {
+				
+				if(!m.change().contains(Market.Component.BOOK_COMBINED)) {
+					return;
+				}
+				
+				final Book v = m.book();
+				
+				final List<Book.Entry> asks = v.entryList(Book.Side.ASK);
+				
+				log.debug("BEST ASK {}   {}", asks.get(0).price(), asks.get(0).size());
+				
+				final Book.Top top = v.top();
+				
+				log.debug("ASK TOP {}   {}", top.ask().price(), top.ask().size());
+				
+			}
+			
+		};
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
