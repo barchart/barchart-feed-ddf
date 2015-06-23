@@ -103,8 +103,6 @@ public class DDF_SubscriptionHandler implements SubscriptionHandler {
 			return null;
 		}
 		
-		log.debug("Sending {} subscription requests", subs.size());
-
 		final Set<SubCommand> insts = new HashSet<SubCommand>();
 		final Set<SubCommand> exch = new HashSet<SubCommand>();
 		
