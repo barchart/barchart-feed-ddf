@@ -109,7 +109,7 @@ public enum DDF_Indicator implements EnumCodeString, EnumByteOrdinal {
 				return known;
 			}
 		}
-		log.debug("Unknown Indicator {}", code);
+		//log.debug("Unknown Indicator {}", code);
 		return UNKNOWN;
 	}
 

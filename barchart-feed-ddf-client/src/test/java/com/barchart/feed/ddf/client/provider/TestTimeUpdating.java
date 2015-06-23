@@ -17,7 +17,7 @@ public class TestTimeUpdating {
 			TestTimeUpdating.class);
 	
 	private static final String[] insts = {
-		"GOOG" //"CLH500C" ,  , "ZCM15"
+		"GOOG"//"ESU15"
 	};
 	
 	public static void main(final String[] args) throws Exception {
@@ -35,7 +35,8 @@ public class TestTimeUpdating {
 		Thread.sleep(500);
 		
 		final ConsumerAgent agent = market.register(marketObs(), Market.class);
-		agent.include(new InstrumentID(1000495));
+		agent.include(new InstrumentID(1000495)); // $IUXX
+		agent.include(insts).subscribe();
 		agent.activate();
 		
 		Thread.sleep(10 * 60 * 1000);
@@ -50,20 +51,30 @@ public class TestTimeUpdating {
 			@Override
 			public void onNext(final Market m) {
 				
+				String updated;
+				if(m.updated().isNull()) {
+					updated = "NULL";
+				} else {
+					updated = m.updated().asDate().toString();
+				}
+				
+				String tradeTime;
 				if(m.trade().time().isNull()) {
-					return;
+					tradeTime = "NULL";
+				} else {
+					tradeTime = m.trade().time().asDate().toString();
 				}
 				
 				if(m.change().contains(Component.TRADE)) {
 					log.debug("{} *TRADE UPDATED = {} TRADE = {}", 
 							m.instrument().symbol(), 
-							m.updated().asDate(), 
-							m.trade().time().asDate());
+							updated, 
+							tradeTime);
 				} else {
 					log.debug("{} MARKET UPDATED = {} TRADE = {}", 
 							m.instrument().symbol(), 
-							m.updated().asDate(), 
-							m.trade().time().asDate());
+							updated, 
+							tradeTime);
 				}
 				
 			}
