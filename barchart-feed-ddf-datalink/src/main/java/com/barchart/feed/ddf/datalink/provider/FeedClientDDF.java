@@ -140,7 +140,7 @@ public class FeedClientDDF implements FeedClient {
 			final String password,
 			final Executor executor) {
 
-		startup(username, password, executor, null);
+		startup(username, password, executor, null, false);
 
 	}
 
@@ -150,7 +150,17 @@ public class FeedClientDDF implements FeedClient {
 			Executor executor,
 			DDF_SocksProxy proxySettings) {
 
-		startup(username, password, executor, proxySettings);
+		startup(username, password, executor, proxySettings, false);
+
+	}
+	
+	public FeedClientDDF(
+			String username, 
+			String password, 
+			Executor executor,
+			DDF_SocksProxy proxySettings, boolean isMobile) {
+
+		startup(username, password, executor, proxySettings, isMobile);
 
 	}
 
@@ -158,7 +168,8 @@ public class FeedClientDDF implements FeedClient {
 			final String username, 
 			final String password,
 			final Executor exec, 
-			final DDF_SocksProxy proxy) {
+			final DDF_SocksProxy proxy, 
+			final Boolean isMobile) {
 
 		this.username = username;
 		this.password = password;
@@ -168,9 +179,13 @@ public class FeedClientDDF implements FeedClient {
 
 		timer = new HashedWheelTimer();
 		
-		channelFactory = new NioClientSocketChannelFactory(
-				executor, 1, new NioWorkerPool(executor, DEFAULT_IO_THREADS), timer);
-
+		if(isMobile){
+			channelFactory = new NioClientSocketChannelFactory(executor, executor);
+		} else { /* Android hates this constructor */
+			channelFactory = new NioClientSocketChannelFactory(
+					executor, 1, new NioWorkerPool(executor, DEFAULT_IO_THREADS), timer);
+		}
+		
 		boot = new ClientBootstrap(channelFactory);
 
 		if (proxySettings == null) {
