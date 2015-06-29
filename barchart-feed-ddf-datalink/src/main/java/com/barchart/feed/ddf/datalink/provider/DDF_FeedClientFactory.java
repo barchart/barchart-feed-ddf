@@ -46,6 +46,17 @@ public class DDF_FeedClientFactory {
 
 	}
 	
+	public static FeedClient newConnectionClient(final DDF_Transport protocol,
+			final String username, final String password,
+			final Executor executor, final boolean isMobile) {
+
+		log.debug("Built new DDF_FeedClient,using to DDF_ServerType.STREAM");
+
+		return new FeedClientDDF(username, password, executor, null, isMobile);
+
+	}
+	
+	
 	/**
 	 * Returns a stateful two way connection to a data source.
 	 * 

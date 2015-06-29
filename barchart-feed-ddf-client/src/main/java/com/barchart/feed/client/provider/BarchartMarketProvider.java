@@ -68,9 +68,14 @@ public class BarchartMarketProvider implements MarketService {
 	
 	public BarchartMarketProvider(final String username, final String password, 
 			final ExecutorService exe) {
+		this(username, password, exe, false);
+	}
+	
+	public BarchartMarketProvider(final String username, final String password, 
+			final ExecutorService exe, final boolean isMobile) {
 		
 		connection = DDF_FeedClientFactory.newConnectionClient(
-				DDF_Transport.TCP, username, password, exe);
+				DDF_Transport.TCP, username, password, exe, isMobile);
 		
 		connection.bindMessageListener(msgListener);
 		
