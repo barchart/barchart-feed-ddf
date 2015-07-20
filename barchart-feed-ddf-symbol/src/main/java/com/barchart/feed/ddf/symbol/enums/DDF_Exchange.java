@@ -175,9 +175,9 @@ public enum DDF_Exchange implements Value<DDF_Exchange> {
 
 	BATS(_X_, STOCK), // XXX
 	BATS_XXX(_x_, STOCK), // XXX
+	BATS_BOOK(_y_, STOCK),
 
 	NYSE_Metals(_Y_, FUTURE), //
-	NYSE_Metals_XXX(_y_, FUTURE), //
 
 	Futures_Books(_Z_, FUTURE), //
 	Futures_Books_XXX(_z_, FUTURE), //

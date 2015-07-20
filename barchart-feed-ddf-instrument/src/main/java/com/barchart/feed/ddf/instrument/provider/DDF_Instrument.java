@@ -170,7 +170,7 @@ public class DDF_Instrument extends DefaultInstrument implements InstrumentState
 		}
 
 		exchangeCode = eCode;
-
+		
 		final DDF_Fraction frac = DDF_Fraction.fromBaseCode(xmlByteDecode(attr, BASE_CODE_DDF, XML_STOP));
 
 		/* price step / increment size / tick size */

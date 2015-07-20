@@ -650,6 +650,7 @@ public class FeedClientDDF implements FeedClient {
 	}
 
 	private FeedEvent blockingWrite(final CharSequence message) {
+		
 		final ChannelFuture futureWrite = channel.write(message);
 
 		futureWrite.awaitUninterruptibly(TIMEOUT, TIME_UNIT);
@@ -718,7 +719,7 @@ public class FeedClientDDF implements FeedClient {
 	/* Asynchronous write to the channel, future returns true on success */
 	@Override
 	public Future<Boolean> write(final String message) {
-		//log.debug("Attempting to send reqeust to JERQ : {}", message);
+		log.debug("Attempting to send reqeust to JERQ : {}", message);
 		final ChannelFuture future = channel.write(message + "\n");
 		future.addListener(new CommandFailureListener());
 		return new CommandFuture(future);

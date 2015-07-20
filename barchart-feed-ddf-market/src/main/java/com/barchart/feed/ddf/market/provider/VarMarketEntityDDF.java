@@ -94,6 +94,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 		}
 		
 		if(toFire.contains(MKData.BOOK)) {
+			
 			for(final FrameworkAgent<Book> a : bookAgents) {
 				if(a.isActive()) {
 					try {
@@ -103,6 +104,7 @@ public class VarMarketEntityDDF extends VarMarketDDF {
 					}
 				}
 			}
+			
 		}
 		
 		// TRADE

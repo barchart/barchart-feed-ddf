@@ -81,11 +81,8 @@ public class VarMarketDDF extends VarMarket {
 		super(instrument);
 	}
 
-	private static final Logger log = LoggerFactory
-			.getLogger(VarMarketDDF.class);
+	private static final Logger log = LoggerFactory.getLogger(VarMarketDDF.class);
 
-	
-	
 	/*
 	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
 	 *
