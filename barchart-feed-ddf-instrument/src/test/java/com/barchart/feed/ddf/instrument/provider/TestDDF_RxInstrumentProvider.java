@@ -33,8 +33,8 @@ public class TestDDF_RxInstrumentProvider {
 		
 		log.debug("****************************************************************");
 		
-		//DDF_RxInstrumentProvider.fromString("ZCZ2015|350C").subscribe(obs());
-		DDF_RxInstrumentProvider.fromID(new InstrumentID(68926976)).subscribe(idObs());
+		DDF_RxInstrumentProvider.fromString("EADSF.BZ").subscribe(obs());
+		//DDF_RxInstrumentProvider.fromID(new InstrumentID(68926976)).subscribe(idObs());
 		
 		Thread.sleep(3 * 1000);
 		
@@ -109,6 +109,10 @@ public class TestDDF_RxInstrumentProvider {
 					log.debug("Query : {}", e.getKey());
 					
 					final List<Instrument> is = e.getValue();
+					
+					if(is.isEmpty()) {
+						log.error("EMPTY LIST");
+					}
 					
 					for(final Instrument i : is) {
 //						log.debug("Result : \n{}", i);

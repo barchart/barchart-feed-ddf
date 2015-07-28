@@ -322,7 +322,7 @@ public class DDF_RxInstrumentProvider {
 
 			final Map<String, List<InstrumentState>> result = new HashMap<String, List<InstrumentState>>();
 
-			// log.debug("remote batch on {}", urlSymbolLookup(query));
+			log.debug("remote batch on {}", urlSymbolLookup(query));
 
 			final URL url = new URL(urlSymbolLookup(query));
 

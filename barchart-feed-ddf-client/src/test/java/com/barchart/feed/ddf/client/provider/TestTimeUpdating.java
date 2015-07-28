@@ -10,6 +10,7 @@ import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.api.model.data.Market.Component;
 import com.barchart.feed.api.model.meta.id.InstrumentID;
 import com.barchart.feed.client.provider.BarchartMarketplace;
+import com.barchart.feed.inst.Exchanges;
 
 public class TestTimeUpdating {
 
@@ -35,8 +36,8 @@ public class TestTimeUpdating {
 		Thread.sleep(500);
 		
 		final ConsumerAgent agent = market.register(marketObs(), Market.class);
-		agent.include(new InstrumentID(1000495)); // $IUXX
-		agent.include(insts).subscribe();
+		//agent.include(new InstrumentID(1000495)); // $IUXX
+		agent.include(Exchanges.fromCode("X").id());
 		agent.activate();
 		
 		Thread.sleep(10 * 60 * 1000);
