@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.barchart.feed.api.Agent;
 import com.barchart.feed.api.MarketObserver;
 import com.barchart.feed.api.Marketplace;
@@ -15,6 +18,8 @@ import com.barchart.feed.client.provider.BarchartMarketplace;
 import com.barchart.feed.client.provider.BarchartMarketplace.FeedType;
 
 public class DavidTestSettles {
+	
+	protected static final Logger log = LoggerFactory.getLogger(DavidTestSettles.class);
 	
 	private static final DateFormat timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
 
@@ -47,7 +52,7 @@ public class DavidTestSettles {
 				final SettleTracker tracker = settles.get(v.instrument().id());
 				
 				if(tracker == null) {
-					System.out.println("Unexpected Instrument ID " + v.instrument().id());
+					log.debug("Unexpected Instrument ID " + v.instrument().id());
 					return;
 				}
 				
@@ -89,7 +94,7 @@ public class DavidTestSettles {
 				.append(" to ")
 				.append(m.session().isSettled().value());
 			
-			System.out.println(sb.toString());
+			log.debug(sb.toString());
 			
 			// Update last seen value
 			isSettled = m.session().isSettled().value();
