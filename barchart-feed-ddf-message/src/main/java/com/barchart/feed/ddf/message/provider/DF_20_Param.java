@@ -123,7 +123,7 @@ class DF_20_Param extends BaseMarket implements DDF_MarketParameter {
 		final DDF_ParamType param = DDF_ParamType.fromCode(code);
 
 		if(param == DDF_ParamType.UNKNOWN) {
-			log.debug("UNKNOWN PARAM FROM " + toString());
+			// log.debug("UNKNOWN PARAM FROM " + toString());
 		}
 		
 		ordParam = param.ord;

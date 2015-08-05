@@ -32,11 +32,15 @@ public class DavidTestSettles {
 		
 		feed.startup();
 		
+		final Map<InstrumentID, SettleTracker> settles = 
+				new HashMap<InstrumentID, SettleTracker>();
+		
+		settles.put(new InstrumentID(1261904), new SettleTracker());
+		settles.put(new InstrumentID(1025921), new SettleTracker());
+		settles.put(new InstrumentID(1539537), new SettleTracker());
+		
 		final MarketObserver<Market> callback = new MarketObserver<Market>() {
 			
-			final Map<InstrumentID, SettleTracker> settles = 
-					new HashMap<InstrumentID, SettleTracker>();
-
 			@Override
 			public void onNext(final Market v) {
 				
@@ -59,11 +63,11 @@ public class DavidTestSettles {
 		myAgent.include(new InstrumentID(1025921)); // Bank of America NYSE
 		myAgent.include(new InstrumentID(1539537));  // New Gold Inc AMEX
 		
-		Thread.sleep(60 * 1000);
+		Thread.sleep(24 * 60 * 60 * 1000);
 		
 	}
 	
-	private class SettleTracker {
+	private static class SettleTracker {
 		
 		private boolean isSettled = true;
 		
