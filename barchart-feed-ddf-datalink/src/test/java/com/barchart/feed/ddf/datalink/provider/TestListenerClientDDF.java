@@ -10,6 +10,8 @@
  */
 package com.barchart.feed.ddf.datalink.provider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -57,7 +59,10 @@ public class TestListenerClientDDF {
 
 		};
 
-		final UDPListenerClientDDF client = new UDPListenerClientDDF(8000, false, runner);
+		final List<Integer> ports = new ArrayList<Integer>();
+		ports.add(8000);
+		
+		final UDPListenerClientDDF client = new UDPListenerClientDDF(ports, false, runner);
 
 		client.bindMessageListener(msgListener);
 

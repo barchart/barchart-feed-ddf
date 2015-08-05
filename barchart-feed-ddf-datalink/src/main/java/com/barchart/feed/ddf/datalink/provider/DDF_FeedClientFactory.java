@@ -7,6 +7,7 @@
  */
 package com.barchart.feed.ddf.datalink.provider;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import org.slf4j.Logger;
@@ -79,32 +80,32 @@ public class DDF_FeedClientFactory {
 	/**
 	 * Returns a stateless UDP listener client with a user specified executor
 	 * 
-	 * @param port
+	 * @param ports
 	 *            The port to listen to
 	 * @param executor
 	 *            The executor used by the NioDatagramChannel
 	 * @return
 	 */
-	public static FeedClient newUDPListenerClient(final int port, 
+	public static FeedClient newUDPListenerClient(final List<Integer> ports, 
 			final boolean filterBySub, final Executor executor) {
 
-		return new UDPListenerClientDDF(port, filterBySub, executor);
+		return new UDPListenerClientDDF(ports, filterBySub, executor);
 
 	}
 	
 	/**
 	 * Returns a stateless TCP listener client with a user specified executor
 	 * 
-	 * @param port
+	 * @param ports
 	 *            The port to listen to
 	 * @param executor
 	 *            The executor used by the NioDatagramChannel
 	 * @return
 	 */
-	public static FeedClient newStatelessTCPListenerClient(final int port, 
+	public static FeedClient newStatelessTCPListenerClient(final List<Integer> ports, 
 			final boolean filterBySub, final Executor executor) {
 		
-		return new TCPListenerClientDDF(port, filterBySub, executor);
+		return new TCPListenerClientDDF(ports, filterBySub, executor);
 		
 	}
 

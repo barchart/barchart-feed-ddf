@@ -1,5 +1,8 @@
 package com.barchart.feed.client.provider;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -67,7 +70,7 @@ public class BarchartMarketplace implements Marketplace {
 			new CopyOnWriteArrayList<TimestampListener>();
 
 	public BarchartMarketplace(final String username, final String password) {
-		this(username, password, getDefault(), FeedType.CONNECTION, 0);
+		this(username, password, getDefault(), FeedType.CONNECTION, Collections.<Integer> emptyList());
 	}
 
 	protected BarchartMarketplace(
@@ -75,7 +78,7 @@ public class BarchartMarketplace implements Marketplace {
 			final String password,
 			final ExecutorService ex,
 			final FeedType type,
-			final int port) {
+			final List<Integer> port) {
 
 		executor = ex;
 
@@ -115,7 +118,7 @@ public class BarchartMarketplace implements Marketplace {
 		private String username = "NULL USERNAME";
 		private String password = "NULL PASSWORD";
 		private FeedType feedType = FeedType.NULL;
-		private int port = 0;
+		private List<Integer> ports = new ArrayList<Integer>();
 
 		private ExecutorService executor = getDefault();
 
@@ -143,12 +146,12 @@ public class BarchartMarketplace implements Marketplace {
 		}
 		
 		public Builder port(final int port) {
-			this.port = port;
+			ports.add(port);
 			return this;
 		}
 
 		public Marketplace build() {
-			return new BarchartMarketplace(username, password, executor, feedType, port);
+			return new BarchartMarketplace(username, password, executor, feedType, ports);
 		}
 
 	}

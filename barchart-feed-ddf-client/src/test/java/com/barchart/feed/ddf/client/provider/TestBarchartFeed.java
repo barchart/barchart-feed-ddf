@@ -49,7 +49,7 @@ public class TestBarchartFeed {
 			@Override
 			public void onNext(final Trade v) {
 				
-				System.out.println(v.price() + " " + v.size() + " " + printTradeTypes(v));
+				System.out.println(v.instrument().exchange().id());
 				System.out.println("\n***********************************************\n");
 				
 			}

@@ -36,11 +36,11 @@ public class TestTimeUpdating {
 		Thread.sleep(500);
 		
 		final ConsumerAgent agent = market.register(marketObs(), Market.class);
-		//agent.include(new InstrumentID(1000495)); // $IUXX
-		agent.include(Exchanges.fromCode("X").id());
+		agent.include("GOOG").subscribe();
+		agent.include("ESU15").subscribe();
 		agent.activate();
 		
-		Thread.sleep(10 * 60 * 1000);
+		Thread.sleep(1000 * 60 * 1000);
 		market.shutdown();
 		
 	}
@@ -49,34 +49,42 @@ public class TestTimeUpdating {
 		
 		return new MarketObserver<Market>() {
 			
+			private boolean settled;
+			
 			@Override
 			public void onNext(final Market m) {
 				
-				String updated;
-				if(m.updated().isNull()) {
-					updated = "NULL";
-				} else {
-					updated = m.updated().asDate().toString();
+				if(m.session().isSettled().value() != settled) {
+					log.debug("SETTLED CHANGED");
+					log.debug("{}", m);
+					settled = m.session().isSettled().value();
 				}
 				
-				String tradeTime;
-				if(m.trade().time().isNull()) {
-					tradeTime = "NULL";
-				} else {
-					tradeTime = m.trade().time().asDate().toString();
-				}
-				
-				if(m.change().contains(Component.TRADE)) {
-					log.debug("{} *TRADE UPDATED = {} TRADE = {}", 
-							m.instrument().symbol(), 
-							updated, 
-							tradeTime);
-				} else {
-					log.debug("{} MARKET UPDATED = {} TRADE = {}", 
-							m.instrument().symbol(), 
-							updated, 
-							tradeTime);
-				}
+//				String updated;
+//				if(m.updated().isNull()) {
+//					updated = "NULL";
+//				} else {
+//					updated = m.updated().asDate().toString();
+//				}
+//				
+//				String tradeTime;
+//				if(m.trade().time().isNull()) {
+//					tradeTime = "NULL";
+//				} else {
+//					tradeTime = m.trade().time().asDate().toString();
+//				}
+//				
+//				if(m.change().contains(Component.TRADE)) {
+//					log.debug("{} *TRADE UPDATED = {} TRADE = {}", 
+//							m.instrument().symbol(), 
+//							updated, 
+//							tradeTime);
+//				} else {
+//					log.debug("{} MARKET UPDATED = {} TRADE = {}", 
+//							m.instrument().symbol(), 
+//							updated, 
+//							tradeTime);
+//				}
 				
 			}
 			

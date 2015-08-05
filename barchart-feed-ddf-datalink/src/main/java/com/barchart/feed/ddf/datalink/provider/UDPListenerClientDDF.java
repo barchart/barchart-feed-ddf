@@ -11,6 +11,7 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,8 +36,8 @@ import org.slf4j.LoggerFactory;
 
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.base.sub.SubCommand;
-import com.barchart.feed.ddf.datalink.api.FeedEvent;
 import com.barchart.feed.ddf.datalink.api.FeedClient;
+import com.barchart.feed.ddf.datalink.api.FeedEvent;
 import com.barchart.feed.ddf.datalink.provider.pipeline.PipelineFactoryDDF;
 import com.barchart.feed.ddf.datalink.provider.util.DummyFuture;
 import com.barchart.feed.ddf.datalink.provider.util.RunnerDDF;
@@ -66,13 +67,13 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements FeedCl
 
 	private final Executor runner;
 
-	private final int socketAddress;
+	private final List<Integer> socketAddress;
 	private final boolean filterBySub;
 
 	private final Map<String, SubCommand> subscriptions = 
 			new ConcurrentHashMap<String, SubCommand>();
 	
-	UDPListenerClientDDF(final int socketAddress, final boolean filterBySub, 
+	UDPListenerClientDDF(final List<Integer> socketAddress, final boolean filterBySub, 
 			final Executor executor) {
 
 		this.socketAddress = socketAddress;
@@ -147,7 +148,9 @@ public class UDPListenerClientDDF extends SimpleChannelHandler implements FeedCl
 
 		runner.execute(messageTask);
 
-		boot.bind(new InetSocketAddress(socketAddress));
+		for(final int address : socketAddress) {
+			boot.bind(new InetSocketAddress(address));
+		}
 
 	}
 
