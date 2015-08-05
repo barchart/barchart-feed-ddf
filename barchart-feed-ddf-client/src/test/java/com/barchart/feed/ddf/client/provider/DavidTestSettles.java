@@ -85,10 +85,15 @@ public class DavidTestSettles {
 			
 			final StringBuilder sb = new StringBuilder();
 			
+			String time = "Null";
+			if(!m.updated().isNull()) {
+				time = timestamp.format(m.updated().asDate());
+			}
+			
 			sb.append("Flag changed for ")
 				.append(m.instrument().symbol())
 				.append(" ")
-				.append(timestamp.format(m.updated().asDate()))
+				.append(time)
 				.append(" from ")
 				.append(isSettled)
 				.append(" to ")
