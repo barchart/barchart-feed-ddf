@@ -23,11 +23,11 @@
     <appender-ref ref="STDOUT" />
     <!-- <appender-ref ref="FILE" /> -->
   </root>
-  <logger name="com.barchart.feed.ddf.market.provider.VarMarketDDF" level="DEBUG"/>
-  <logger name="com.barchart.feed.ddf.market.provider.MapperDDF" level="DEBUG"/>
-  <logger name="com.barchart.feed.ddf.message.provider.BaseMarket" level="DEBUG"/>
-  <logger name="com.barchart.feed.ddf.client.provider.TestBarchartFeedClient" level="DEBUG"/>
-  <logger name="com.barchart.feed.ddf.message.provider.DDF_MessageService" level="DEBUG"/>
-  <logger name="com.barchart.feed.ddf.instrument.provider.ServiceMemoryDDF" level="ERROR"/>
-  <logger name="com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider" level="ERROR"/>
+  <logger name="com.barchart.feed.ddf.market.provider.VarMarketDDF" level="OFF"/>
+  <logger name="com.barchart.feed.ddf.market.provider.MapperDDF" level="OFF"/>
+  <logger name="com.barchart.feed.ddf.message.provider.BaseMarket" level="OFF"/>
+  <logger name="com.barchart.feed.ddf.message.provider.DDF_MessageService" level="OFF"/>
+  <logger name="com.barchart.feed.ddf.instrument.provider.ServiceMemoryDDF" level="OFF"/>
+  <logger name="com.barchart.feed.ddf.instrument.provider.DDF_InstrumentProvider" level="OFF"/>
+  <logger name="com.barchart.feed.ddf.datalink.provider.pipeline.MsgDecoderDDF" level="OFF"/>
 </configuration>
