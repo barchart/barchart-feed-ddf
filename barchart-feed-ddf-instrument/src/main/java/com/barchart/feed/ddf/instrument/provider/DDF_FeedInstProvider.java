@@ -288,72 +288,78 @@ public final class DDF_FeedInstProvider {
 			try {
 
 				while (!Thread.interrupted()) {
-
-					Thread.sleep(REMOTE_LOOKUP_INTERVAL);
-
-					/* ***** ***** Handle Queued Symbols ***** ***** */
-					final List<String> symbols = new ArrayList<String>();
-					remoteSymbolQueue.drainTo(symbols);
 					
-					for(final String q : DDF_RxInstrumentProvider.buildSymbolQueries(symbols)) {
-						symbCallables.add(remoteSymbolBatch(q));
-					}
+					try {
+
+						Thread.sleep(REMOTE_LOOKUP_INTERVAL);
+	
+						/* ***** ***** Handle Queued Symbols ***** ***** */
+						final List<String> symbols = new ArrayList<String>();
+						remoteSymbolQueue.drainTo(symbols);
 						
-					symbFutures = executor.invokeAll(symbCallables, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
-
-					for (final Future<Map<String, List<InstrumentState>>> f : symbFutures) {
-						
-						final Map<String, List<InstrumentState>> map = f.get(10, TimeUnit.SECONDS);
-
-						for (final Entry<String, List<InstrumentState>> e : map.entrySet()) {
-							
-							InstrumentState def = InstrumentState.NULL;
-							if(!e.getValue().isEmpty()) {
-								def = e.getValue().get(0);
-							}
-
-							if (def == null || def.isNull()) {
-								observer.onNext(new InstDefResult(e.getKey(), 
-										new Throwable("Could not find " + e.getKey())));
-							} else {
-								observer.onNext(new InstDefResult(e.getKey(), def));
-							}
-
+						for(final String q : DDF_RxInstrumentProvider.buildSymbolQueries(symbols)) {
+							symbCallables.add(remoteSymbolBatch(q));
 						}
-
-					}
-
-					symbFutures.clear();
-					symbCallables.clear();
-					
-					/* ***** ***** Handle Queued IDs ***** ***** */
-					final List<InstrumentID> ids = new ArrayList<InstrumentID>();
-					remoteIDQueue.drainTo(ids);
-					
-					for(final String q : DDF_RxInstrumentProvider.buildIDQueries(ids)) {
-						idCallables.add(remoteIDBatch(q));
-					}
-					
-					idFutures = executor.invokeAll(idCallables, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
-					
-					for(final Future<Map<InstrumentID, InstrumentState>> f : idFutures) {
-						
-						for(final Entry<InstrumentID, InstrumentState> e : f.get().entrySet()) {
 							
-							final InstrumentState def = e.getValue();
+						symbFutures = executor.invokeAll(symbCallables, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
+	
+						for (final Future<Map<String, List<InstrumentState>>> f : symbFutures) {
 							
-							if (def == null || def.isNull()) {
-								// Do something
-							} else {
-								handleInstLookup(def);
+							final Map<String, List<InstrumentState>> map = f.get(10, TimeUnit.SECONDS);
+	
+							for (final Entry<String, List<InstrumentState>> e : map.entrySet()) {
+								
+								InstrumentState def = InstrumentState.NULL;
+								if(!e.getValue().isEmpty()) {
+									def = e.getValue().get(0);
+								}
+	
+								if (def == null || def.isNull()) {
+									observer.onNext(new InstDefResult(e.getKey(), 
+											new Throwable("Could not find " + e.getKey())));
+								} else {
+									observer.onNext(new InstDefResult(e.getKey(), def));
+								}
+	
 							}
-							
+	
+						}
+	
+						symbFutures.clear();
+						symbCallables.clear();
+						
+						/* ***** ***** Handle Queued IDs ***** ***** */
+						final List<InstrumentID> ids = new ArrayList<InstrumentID>();
+						remoteIDQueue.drainTo(ids);
+						
+						for(final String q : DDF_RxInstrumentProvider.buildIDQueries(ids)) {
+							idCallables.add(remoteIDBatch(q));
 						}
 						
-					}
+						idFutures = executor.invokeAll(idCallables, DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
+						
+						for(final Future<Map<InstrumentID, InstrumentState>> f : idFutures) {
+							
+							for(final Entry<InstrumentID, InstrumentState> e : f.get().entrySet()) {
+								
+								final InstrumentState def = e.getValue();
+								
+								if (def == null || def.isNull()) {
+									// Do something
+								} else {
+									handleInstLookup(def);
+								}
+								
+							}
+							
+						}
+						
+						idFutures.clear();
+						idCallables.clear();
 					
-					idFutures.clear();
-					idCallables.clear();
+					} catch (final Exception e) {
+						log.error("Exception in Remote Runner Thread", e);
+					}
 
 				}
 
