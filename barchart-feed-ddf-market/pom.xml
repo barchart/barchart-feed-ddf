@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>com.barchart.feed</groupId>
 		<artifactId>barchart-feed-ddf</artifactId>
-		<version>4.2.69-SNAPSHOT</version>
+		<version>4.2.70-SNAPSHOT</version>
 	</parent>
 
 	<name>barchart-feed-ddf-market</name>
