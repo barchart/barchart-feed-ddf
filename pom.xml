@@ -45,7 +45,7 @@
 
 		<bdbjeVersion>4.0.92</bdbjeVersion>
 		<protoBufVersion>2.4.1</protoBufVersion>
-
+		 <additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
 
 	<dependencies>
