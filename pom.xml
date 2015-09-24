@@ -1,6 +1,7 @@
 <!-- Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com /> All 
 	rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -32,20 +33,20 @@
 
 	<properties>
 
-<!-- 		<barchartUtilVersion>2.0.28</barchartUtilVersion> -->
+		<!-- <barchartUtilVersion>2.0.28</barchartUtilVersion> -->
 
-<!-- 		<barchartFeedAPIVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedAPIVersion> -->
+		<!-- <barchartFeedAPIVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedAPIVersion> -->
 		<barchartFeedInstVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedInstVersion>
 		<barchartFeedBaseVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedBaseVersion>
-<!-- 		<barchartFeedClientVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedClientVersion> -->
+		<!-- <barchartFeedClientVersion>[2-SNAPSHOT,3-SNAPSHOT)</barchartFeedClientVersion> -->
 
-<!-- 		<barchartMissiveVersion>2.0.0</barchartMissiveVersion> -->
+		<!-- <barchartMissiveVersion>2.0.0</barchartMissiveVersion> -->
 		<barchartNettyVersion>3.5.12.Final</barchartNettyVersion>
-<!-- 		<barchartProtoInstVersion>1.2.0</barchartProtoInstVersion> -->
+		<!-- <barchartProtoInstVersion>1.2.0</barchartProtoInstVersion> -->
 
 		<bdbjeVersion>4.0.92</bdbjeVersion>
 		<protoBufVersion>2.4.1</protoBufVersion>
-		 <additionalparam>-Xdoclint:none</additionalparam>
+		<additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
 
 	<dependencies>
@@ -74,6 +75,22 @@
 
 	</modules>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<!-- Override default execution id. -->
+						<id>attach-javadocs</id>
+						<phase>DISABLED</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
 	<reporting>
 		<plugins>
 			<plugin>
@@ -85,5 +102,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	
+
 </project>
