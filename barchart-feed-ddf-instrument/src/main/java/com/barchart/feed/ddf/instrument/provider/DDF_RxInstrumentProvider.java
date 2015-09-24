@@ -602,7 +602,7 @@ public class DDF_RxInstrumentProvider {
 	}
 
 	private static final String cqgInstLoopURL(final CharSequence lookup) {
-		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup + "&provider=CQG";
+		return "http://" + SERVER_EXTRAS + "/symbology/?symbol=" + lookup + "&provider=CQG&log=true";
 	}
 	
 	/* #QUODDHACKS */
