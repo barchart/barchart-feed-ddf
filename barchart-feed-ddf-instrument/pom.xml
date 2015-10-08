@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>com.barchart.feed</groupId>
 			<artifactId>barchart-feed-base</artifactId>
-			<version>[2.0.8-SNAPSHOT, 3-SNAPSHOT]</version>
+			<version>[2.0.61, 3-SNAPSHOT]</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>barchart-util-enums</artifactId>
