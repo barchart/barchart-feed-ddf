@@ -288,9 +288,9 @@ class MapperDDF implements DDF_MessageVisitor<Void, MarketDo> {
 			case OPEN_2_BID_PRICE:
 
 				bar.set(MarketBarField.OPEN, price);
-				bar.set(MarketBarField.HIGH, price);
-				bar.set(MarketBarField.LOW, price);
-				bar.set(MarketBarField.CLOSE, price);
+				//bar.set(MarketBarField.HIGH, price);
+				//bar.set(MarketBarField.LOW, price);
+				//bar.set(MarketBarField.CLOSE, price);
 				bar.set(MarketBarField.INTEREST, size);
 				bar.set(MarketBarField.VOLUME, size);
 				bar.set(MarketBarField.BAR_TIME, time);
