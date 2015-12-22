@@ -39,7 +39,6 @@ import static com.barchart.feed.base.trade.enums.MarketTradeSequencing.NORMAL;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.DEFAULT;
 import static com.barchart.feed.base.trade.enums.MarketTradeSession.EXTENDED;
 
-import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +52,7 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.book.enums.UniBookResult;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvol;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
-import com.barchart.feed.base.market.enums.MarketField;
+import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.provider.VarMarket;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
 import com.barchart.feed.base.trade.api.MarketDoTrade;
@@ -82,6 +81,7 @@ public class VarMarketDDF extends VarMarket {
 	}
 
 	private static final Logger log = LoggerFactory.getLogger(VarMarketDDF.class);
+	private MarketMessage lastDDFMessage;
 
 	/*
 	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
@@ -92,7 +92,7 @@ public class VarMarketDDF extends VarMarket {
 	public void fireCallbacks() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/*
 	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
 	 *
@@ -110,7 +110,7 @@ public class VarMarketDDF extends VarMarket {
 
 	@Override
 	public void setBookSnapshot(final MarketDoBookEntry[] entries, final TimeValue time) {
-		
+
 		assert entries != null;
 		assert time != null;
 
@@ -121,19 +121,22 @@ public class VarMarketDDF extends VarMarket {
 		setChange(Component.BOOK_COMBINED);
 		eventAdd(NEW_BOOK_SNAPSHOT);
 
-		/* Only update time if it's later than the current time, needed for DDF quirks */
-		if(time.compareTo(get(MARKET_TIME)) > 0) {
+		/*
+		 * Only update time if it's later than the current time, needed for DDF
+		 * quirks
+		 */
+		if (time.compareTo(get(MARKET_TIME)) > 0) {
 			book.setTime(time);
 			set(MARKET_TIME, time);
 		}
-		
+
 		eventAdd(MARKET_UPDATED);
 
 	}
 
 	@Override
 	public void setBookUpdate(final MarketDoBookEntry entry, final TimeValue time) {
-		
+
 		assert entry != null && time != null;
 
 		final MarketDoBook book = loadBook();
@@ -141,35 +144,37 @@ public class VarMarketDDF extends VarMarket {
 		final UniBookResult result = book.setEntry(entry);
 
 		switch (result) {
-			case TOP:
-				eventAdd(NEW_BOOK_TOP);
-				// continue
-			case NORMAL:
-				eventAdd(NEW_BOOK_UPDATE);
-				break;
-			default:
-				eventAdd(NEW_BOOK_ERROR);
-				final CharSequence id = instrument.id().toString();
-				final CharSequence comment = instrument.description();
-				log.error("instrument : {} : {}", id, comment);
-				log.error("result : {} ; entry : {} ;", result, entry);
-				return;
+		case TOP:
+			eventAdd(NEW_BOOK_TOP);
+			// continue
+		case NORMAL:
+			eventAdd(NEW_BOOK_UPDATE);
+			break;
+		default:
+			eventAdd(NEW_BOOK_ERROR);
+			final CharSequence id = instrument.id().toString();
+			final CharSequence comment = instrument.description();
+			log.error("instrument : {} : {}", id, comment);
+			log.error("result : {} ; entry : {} ;", result, entry);
+			return;
 		}
 
-		/* Only update time if it's later than the current time, needed for DDF quirks */
-		if(time.compareTo(get(MARKET_TIME)) > 0) {
+		/*
+		 * Only update time if it's later than the current time, needed for DDF
+		 * quirks
+		 */
+		if (time.compareTo(get(MARKET_TIME)) > 0) {
 			book.setTime(time);
 			set(MARKET_TIME, time);
 		}
-		
+
 		setChange(Component.BOOK_COMBINED);
 		eventAdd(MARKET_UPDATED);
 
 	}
 
 	@Override
-	public void setCuvolUpdate(final MarketDoCuvolEntry entry,
-			final TimeValue time) {
+	public void setCuvolUpdate(final MarketDoCuvolEntry entry, final TimeValue time) {
 
 		assert entry != null && time != null;
 
@@ -180,8 +185,7 @@ public class VarMarketDDF extends VarMarket {
 	}
 
 	@Override
-	public void setCuvolSnapshot(final MarketDoCuvolEntry[] entries,
-			final TimeValue time) {
+	public void setCuvolSnapshot(final MarketDoCuvolEntry[] entries, final TimeValue time) {
 
 		assert entries != null && time != null;
 
@@ -201,15 +205,10 @@ public class VarMarketDDF extends VarMarket {
 	}
 
 	@Override
-	public void setTrade(
-			final MarketTradeType type,
-			final MarketTradeSession session,
-			final MarketTradeSequencing sequencing, 
-			final PriceValue price,
-			final SizeValue size, 
-			final TimeValue time, 
+	public void setTrade(final MarketTradeType type, final MarketTradeSession session,
+			final MarketTradeSequencing sequencing, final PriceValue price, final SizeValue size, final TimeValue time,
 			final TimeValue date) {
-		
+
 		assert type != null;
 		assert session != null;
 		assert sequencing != null;
@@ -217,7 +216,7 @@ public class VarMarketDDF extends VarMarket {
 		assert size != null;
 		assert time != null;
 		assert date != null;
-		
+
 		// Update trade
 
 		final MarketDoTrade trade = loadTrade();
@@ -234,37 +233,32 @@ public class VarMarketDDF extends VarMarket {
 		eventAdd(NEW_TRADE);
 
 		set(TRADE, trade);
-		
-		/* Only update time if it's later than the current time, needed for DDF quirks */
-		if(time.compareTo(get(MARKET_TIME)) > 0) {
+
+		/*
+		 * Only update time if it's later than the current time, needed for DDF
+		 * quirks
+		 */
+		if (time.compareTo(get(MARKET_TIME)) > 0) {
 			set(MARKET_TIME, time);
 		}
 
-		//log.debug("Set TRADE AND MARKET TIME TO {}", time.asDateTime().toDateTime(DateTimeZone.forID("America/New_York")).toLocalTime());
-		
+		// log.debug("Set TRADE AND MARKET TIME TO {}",
+		// time.asDateTime().toDateTime(DateTimeZone.forID("America/New_York")).toLocalTime());
+
 		applyTradeToBar(session, sequencing, price, size, time, date);
 
 		makeCuvol(price, size, time);
-		
+
 		eventAdd(MARKET_UPDATED);
-		
+
 	}
 
 	@Override
-	public void setSnapshot(
-			final TimeValue tradeDate, 
-			final PriceValue open, 
-			final PriceValue high,
-			final PriceValue low, 
-			final PriceValue close, 
-			final PriceValue settle, 
-			final PriceValue previousSettle,
-			final SizeValue volume, 
-			final SizeValue interest,
-			final PriceValue vwap,
-			final BooleanValue isSettled, 
+	public void setSnapshot(final TimeValue tradeDate, final PriceValue open, final PriceValue high,
+			final PriceValue low, final PriceValue close, final PriceValue settle, final PriceValue previousSettle,
+			final SizeValue volume, final SizeValue interest, final PriceValue vwap, final BooleanValue isSettled,
 			final TimeValue barTime) {
-		
+
 		final MarketBarType type = ensureBar(tradeDate);
 
 		if (type.isNull())
@@ -281,7 +275,7 @@ public class VarMarketDDF extends VarMarket {
 		applyBar(bar, MarketBarField.VOLUME, volume);
 		applyBar(bar, MarketBarField.INTEREST, interest);
 		applyBar(bar, MarketBarField.VWAP, vwap);
-		
+
 		if (isSettled != null) {
 			bar.set(MarketBarField.IS_SETTLED, isSettled);
 		}
@@ -296,39 +290,42 @@ public class VarMarketDDF extends VarMarket {
 
 	@Override
 	public void setBar(final MarketBarType type, final MarketDoBar bar) {
-		
+
 		assert type != null;
 		assert bar != null;
 
 		set(type.field, bar);
 
 		switch (type) {
-			case CURRENT:
-				setChange(Component.DEFAULT_PREVIOUS);
-				break;
-			case PREVIOUS:
-				setChange(Component.DEFAULT_CURRENT);
-				break;
-			case CURRENT_EXT:
-				setChange(Component.EXTENDED_CURRENT);
-				break;
-			default:
-				break;
+		case CURRENT:
+			setChange(Component.DEFAULT_PREVIOUS);
+			break;
+		case PREVIOUS:
+			setChange(Component.DEFAULT_CURRENT);
+			break;
+		case CURRENT_EXT:
+			setChange(Component.EXTENDED_CURRENT);
+			break;
+		default:
+			break;
 		}
 
 		eventAdd(type.event);
 
 		/* Don't update time based on previous bar */
-		if(type == MarketBarType.CURRENT) {
-			
+		if (type == MarketBarType.CURRENT) {
+
 			final TimeValue barTime = bar.get(BAR_TIME);
-			
-			/* Only update time if it's later than the current time, needed for DDF quirks */
-			if(barTime.compareTo(get(MARKET_TIME)) > 0) {
+
+			/*
+			 * Only update time if it's later than the current time, needed for
+			 * DDF quirks
+			 */
+			if (barTime.compareTo(get(MARKET_TIME)) > 0) {
 				set(MARKET_TIME, bar.get(BAR_TIME));
 			}
 		}
-		
+
 		eventAdd(MARKET_UPDATED);
 
 	}
@@ -342,7 +339,7 @@ public class VarMarketDDF extends VarMarket {
 		MarketBook book = get(BOOK);
 
 		if (book.isFrozen()) {
-			
+
 			final VarBookDDF varBook = new VarBookDDF(instrument);
 			final VarBookTopDDF varBookTop = new VarBookTopDDF(varBook);
 
@@ -383,11 +380,8 @@ public class VarMarketDDF extends VarMarket {
 	}
 
 	// ##################################################################################
-	
-	private void applyBar(
-			final MarketDoBar bar,
-			final MarketBarField<PriceValue> field, 
-			final PriceValue value) {
+
+	private void applyBar(final MarketDoBar bar, final MarketBarField<PriceValue> field, final PriceValue value) {
 
 		if (DDF_MessageService.isEmpty(value)) {
 			// no change in market field value
@@ -404,10 +398,7 @@ public class VarMarketDDF extends VarMarket {
 
 	}
 
-	private void applyBar(
-			final MarketDoBar bar,
-			final MarketBarField<SizeValue> field, 
-			final SizeValue value) {
+	private void applyBar(final MarketDoBar bar, final MarketBarField<SizeValue> field, final SizeValue value) {
 
 		if (DDF_MessageService.isEmpty(value)) {
 			// no change in market field value
@@ -424,13 +415,8 @@ public class VarMarketDDF extends VarMarket {
 
 	}
 
-	private final void applyTradeToBar(
-			final MarketTradeSession session,
-			final MarketTradeSequencing sequencing, 
-			final PriceValue price,
-			final SizeValue size, 
-			final TimeValue time, 
-			final TimeValue date) {
+	private final void applyTradeToBar(final MarketTradeSession session, final MarketTradeSequencing sequencing,
+			final PriceValue price, final SizeValue size, final TimeValue time, final TimeValue date) {
 
 		MarketBarType barType = ensureBar(date);
 		if (session == EXTENDED && barType == CURRENT)
@@ -474,7 +460,7 @@ public class VarMarketDDF extends VarMarket {
 					}
 
 					// Update time
-					if(time.compareTo(bar.get(BAR_TIME)) > 0) {
+					if (time.compareTo(bar.get(BAR_TIME)) > 0) {
 						bar.set(BAR_TIME, time);
 					}
 
@@ -503,8 +489,7 @@ public class VarMarketDDF extends VarMarket {
 
 	}
 
-	private final void makeCuvol(final PriceValue price, final SizeValue size,
-			final TimeValue time) {
+	private final void makeCuvol(final PriceValue price, final SizeValue size, final TimeValue time) {
 
 		final MarketDoCuvol cuvol = loadCuvol();
 
@@ -517,6 +502,17 @@ public class VarMarketDDF extends VarMarket {
 
 		}
 
+	}
+
+	@Override
+	public void setLastDDFMessage(MarketMessage message) {
+		this.lastDDFMessage = message;
+
+	}
+
+	@Override
+	public MarketMessage getLastDDFMessage() {
+		return lastDDFMessage;
 	}
 
 }

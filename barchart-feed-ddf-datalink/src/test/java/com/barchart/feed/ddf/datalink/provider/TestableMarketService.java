@@ -14,6 +14,7 @@ import com.barchart.feed.base.book.api.MarketDoBookEntry;
 import com.barchart.feed.base.cuvol.api.MarketDoCuvolEntry;
 import com.barchart.feed.base.market.api.MarketDo;
 import com.barchart.feed.base.market.api.MarketFactory;
+import com.barchart.feed.base.market.api.MarketMessage;
 import com.barchart.feed.base.provider.MarketProviderBase;
 import com.barchart.feed.base.provider.VarMarket;
 import com.barchart.feed.base.state.enums.MarketStateEntry;
@@ -32,10 +33,8 @@ import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 
 public class TestableMarketService extends MarketProviderBase<DDF_MarketBase> {
 
-	public TestableMarketService(
-			MetadataService metaService, 
-			SubscriptionHandler subHandler) {
-		
+	public TestableMarketService(MetadataService metaService, SubscriptionHandler subHandler) {
+
 		super(new MockMarketFactory(), metaService, subHandler);
 	}
 
@@ -43,67 +42,67 @@ public class TestableMarketService extends MarketProviderBase<DDF_MarketBase> {
 	protected void make(final DDF_MarketBase message, final MarketDo market) {
 		/* Do nothing */
 	}
-	
+
 	public static class TestableFeedClient implements FeedClient {
 
 		private String lastWrite = "NULL";
 		private final List<Monitor> listeners = new ArrayList<Monitor>();
-		
+
 		@Override
 		public Future<Boolean> write(final String message) {
-			
+
 			lastWrite = message;
-			
+
 			return new DummyFuture();
 		}
-		
+
 		public String getLastWrite() {
 			final String temp = new String(lastWrite);
 			lastWrite = "NULL";
 			return temp;
 		}
-		
+
 		public void setOnline() {
-			for(final Monitor m : listeners) {
+			for (final Monitor m : listeners) {
 				m.handle(State.CONNECTED, null);
 			}
 		}
-		
+
 		@Override
 		public void startup() {
-			
+
 		}
 
 		@Override
 		public void startUpProxy() {
-			
+
 		}
 
 		@Override
 		public void shutdown() {
-			
+
 		}
 
 		@Override
 		public void bindStateListener(final Monitor stateListener) {
-			
+
 			System.out.println("State Listener Bound");
-			
+
 			listeners.add(stateListener);
 		}
 
 		@Override
 		public void bindMessageListener(final DDF_MessageListener msgListener) {
-			
+
 		}
 
 		@Override
 		public void setPolicy(final FeedEvent event, final EventPolicy policy) {
-			
+
 		}
 
 	}
-	
+
 	public static class MockMarketFactory implements MarketFactory {
 
 		@Override
@@ -112,84 +111,88 @@ public class TestableMarketService extends MarketProviderBase<DDF_MarketBase> {
 
 				@Override
 				public void setChange(Component c) {
-					
+
 				}
 
 				@Override
 				public void clearChanges() {
-					
+
 				}
 
 				@Override
 				public void setInstrument(Instrument symbol) {
-					
+
 				}
 
 				@Override
-				public void setBookUpdate(MarketDoBookEntry entry,
-						TimeValue time) {
-					
+				public void setBookUpdate(MarketDoBookEntry entry, TimeValue time) {
+
 				}
 
 				@Override
-				public void setBookSnapshot(MarketDoBookEntry[] entries,
-						TimeValue time) {
-					
+				public void setBookSnapshot(MarketDoBookEntry[] entries, TimeValue time) {
+
 				}
 
 				@Override
-				public void setCuvolUpdate(MarketDoCuvolEntry entry,
-						TimeValue time) {
-					
+				public void setCuvolUpdate(MarketDoCuvolEntry entry, TimeValue time) {
+
 				}
 
 				@Override
-				public void setCuvolSnapshot(MarketDoCuvolEntry[] entries,
-						TimeValue time) {
-					
+				public void setCuvolSnapshot(MarketDoCuvolEntry[] entries, TimeValue time) {
+
 				}
 
 				@Override
 				public void setBar(MarketBarType type, MarketDoBar bar) {
-					
+
 				}
 
 				@Override
-				public void setSnapshot(TimeValue tradeDate, PriceValue open,
-						PriceValue high, PriceValue low, PriceValue close,
-						PriceValue settle, PriceValue previousSettle,
-						SizeValue volume, SizeValue interest, PriceValue vwap,
-						BooleanValue isSettled, TimeValue barTime) {
-					
+				public void setSnapshot(TimeValue tradeDate, PriceValue open, PriceValue high, PriceValue low,
+						PriceValue close, PriceValue settle, PriceValue previousSettle, SizeValue volume,
+						SizeValue interest, PriceValue vwap, BooleanValue isSettled, TimeValue barTime) {
+
 				}
 
 				@Override
-				public void setTrade(MarketTradeType type,
-						MarketTradeSession session,
-						MarketTradeSequencing sequencing, PriceValue price,
-						SizeValue size, TimeValue time, TimeValue date) {
-					
+				public void setTrade(MarketTradeType type, MarketTradeSession session, MarketTradeSequencing sequencing,
+						PriceValue price, SizeValue size, TimeValue time, TimeValue date) {
+
 				}
 
 				@Override
 				public void setState(MarketStateEntry entry, boolean isOn) {
-					
+
 				}
 
 				@Override
 				public void fireCallbacks() {
-					
+
 				}
 
 				@Override
 				public void refresh() {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
+				@Override
+				public void setLastDDFMessage(MarketMessage message) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public MarketMessage getLastDDFMessage() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+
 			};
 		}
-		
+
 	}
 
 }
