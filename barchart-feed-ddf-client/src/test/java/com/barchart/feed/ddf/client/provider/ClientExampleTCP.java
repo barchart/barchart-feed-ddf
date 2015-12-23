@@ -8,12 +8,24 @@ import com.barchart.feed.api.connection.Connection.State;
 import com.barchart.feed.api.model.data.Market;
 import com.barchart.feed.client.provider.BarchartMarketplace;
 
+/**
+ * Simple example to subscribe for all Market events for GOOG.
+ * 
+ * Requires system properties:
+ * 
+ * -Dbarchart.username=<name> -Dbarchart.password=<password>
+ * 
+ */
 public class ClientExampleTCP {
 
 	public static void main(final String[] args) throws Exception {
 
-		final String username = System.getProperty("barchart.username", "dlucek");
-		final String password = System.getProperty("barchart.password", "barchart");
+		final String username = System.getProperty("barchart.username");
+		final String password = System.getProperty("barchart.password");
+
+		if (username == null || password == null) {
+			throw new IllegalArgumentException("username and password are required");
+		}
 
 		// Create Client
 		final Marketplace feed = new BarchartMarketplace(username, password);
@@ -37,12 +49,7 @@ public class ClientExampleTCP {
 			@Override
 			public void onNext(Market market) {
 
-				// System.out.println(
-				// "\n############################################################################################################################");
 				System.out.println(market);
-				// throw new RuntimeException("Exception thrown");
-				// System.out.println(
-				// "############################################################################################################################\n");
 
 			}
 
