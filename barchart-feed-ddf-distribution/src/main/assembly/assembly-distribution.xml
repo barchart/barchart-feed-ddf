@@ -24,12 +24,10 @@
 	</fileSets>
 
 	<files>
-    <!--  
 		<file>
 			<source>README.md</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
-  -->
 		<file>
 			<!-- Runnable jar -->
 			<source>${project.build.directory}/${project.artifactId}-${project.version}-exe.jar</source>
