@@ -71,7 +71,7 @@
 		<module>barchart-feed-ddf-resolver</module>
 		<module>barchart-feed-ddf-client</module>
 		<module>barchart-feed-ddf-assembly</module>
-
+		<module>barchart-feed-ddf-distribution</module>
 	</modules>
 
 	<build>

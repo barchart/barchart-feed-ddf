@@ -1,0 +1,47 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3 http://maven.apache.org/xsd/assembly-1.1.3.xsd">
+
+	<id>dist</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+
+
+	<fileSets>
+		<fileSet>
+			<!--  Source -->
+			<directory>${basedir}/src/main/java</directory>
+			<includes>
+				<include>**/*.java</include>
+			</includes>
+		</fileSet>
+			<!--  API Javadoc 
+		<fileSet>
+			<directory>${project.build.directory}/javadoc</directory>
+			<outputDirectory>doc/api</outputDirectory>
+		</fileSet>
+  -->
+	</fileSets>
+
+	<files>
+    <!--  
+		<file>
+			<source>README.md</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
+  -->
+		<file>
+			<!-- Runnable jar -->
+			<source>${project.build.directory}/${project.artifactId}-${project.version}-exe.jar</source>
+			<outputDirectory>/</outputDirectory>
+		</file>
+	</files>
+
+ <dependencySets>
+    <dependencySet>
+      <outputDirectory>lib</outputDirectory>
+      <useProjectArtifact>false</useProjectArtifact>
+    </dependencySet>
+  </dependencySets>
+
+</assembly>

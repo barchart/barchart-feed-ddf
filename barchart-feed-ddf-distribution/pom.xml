@@ -1,0 +1,148 @@
+<!-- Copyright (C) 2011-2012 Barchart, Inc. <http://www.barchart.com /> All 
+ rights reserved. Licensed under the OSI BSD License. http://www.opensource.org/licenses/bsd-license.php -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+ <modelVersion>4.0.0</modelVersion>
+
+ <parent>
+  <groupId>com.barchart.feed</groupId>
+  <artifactId>barchart-feed-ddf</artifactId>
+  <version>4.2.74-SNAPSHOT</version>
+ </parent>
+
+ <artifactId>barchart-feed-ddf-distribution</artifactId>
+ <name>barchart-feed-ddf-distribution</name>
+ <description>barchart Feed Examples and Distribution</description>
+
+ <scm>
+  <url>https://github.com/barchart/barchart-feed-ddf</url>
+  <connection>scm:git:git://github.com/barchart/barchart-feed-ddf.git</connection>
+  <developerConnection>scm:git:ssh://git@github.com/barchart/barchart-feed-ddf.git</developerConnection>
+  <tag>master</tag>
+ </scm>
+
+ <dependencies>
+
+  <dependency>
+   <groupId>com.barchart.feed</groupId>
+   <artifactId>barchart-feed-ddf-client</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>com.barchart.feed</groupId>
+   <artifactId>barchart-feed-ddf-datalink</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>com.barchart.feed</groupId>
+   <artifactId>barchart-feed-ddf-message</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>com.barchart.feed</groupId>
+   <artifactId>barchart-feed-ddf-market</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>com.barchart.feed</groupId>
+   <artifactId>barchart-feed-ddf-historical</artifactId>
+   <version>${project.parent.version}</version>
+  </dependency>
+
+  <!-- External Dependencies -->
+
+  <dependency>
+   <groupId>org.slf4j</groupId>
+   <artifactId>slf4j-api</artifactId>
+  </dependency>
+
+  <dependency>
+   <groupId>joda-time</groupId>
+   <artifactId>joda-time</artifactId>
+  </dependency>
+
+  <dependency>
+   <groupId>io.netty</groupId>
+   <artifactId>netty</artifactId>
+   <version>${barchartNettyVersion}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>com.sleepycat</groupId>
+   <artifactId>je</artifactId>
+   <version>${bdbjeVersion}</version>
+  </dependency>
+
+  <dependency>
+   <groupId>com.google.protobuf</groupId>
+   <artifactId>protobuf-java</artifactId>
+  </dependency>
+
+  <dependency>
+   <groupId>com.netflix.rxjava</groupId>
+   <artifactId>rxjava-core</artifactId>
+  </dependency>
+
+  <!-- An SLF4J implementation must be provided by the user if they want 
+   to see library logging. -->
+  <dependency>
+   <groupId>ch.qos.logback</groupId>
+   <artifactId>logback-classic</artifactId>
+  </dependency>
+
+ </dependencies>
+
+ <properties>
+ </properties>
+
+ <build>
+
+  <plugins>
+
+   <!-- Produce distribution kit -->
+   <plugin>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <executions>
+     <execution>
+      <id>runnable</id>
+      <phase>package</phase>
+      <goals>
+       <goal>single</goal>
+      </goals>
+      <configuration>
+       <descriptors>
+        <descriptor>src/main/assembly/assembly-exe.xml</descriptor>
+       </descriptors>
+       <archive>
+        <manifest>
+         <mainClass>com.barchart.feed.ddf.examples.ClientExampleTCP</mainClass>
+        </manifest>
+       </archive>
+      </configuration>
+     </execution>
+     <execution>
+      <id>distribution</id>
+      <phase>package</phase>
+      <goals>
+       <goal>single</goal>
+      </goals>
+      <configuration>
+       <descriptors>
+        <descriptor>src/main/assembly/assembly-distribution.xml</descriptor>
+       </descriptors>
+      </configuration>
+     </execution>
+    </executions>
+   </plugin>
+
+
+  </plugins>
+
+ </build>
+
+</project>

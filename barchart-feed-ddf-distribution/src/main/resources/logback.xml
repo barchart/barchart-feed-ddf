@@ -1,0 +1,32 @@
+<configuration scan="false" debug="false">
+
+	<jmxConfigurator />
+
+	<property name="PATTERN" value="%date %-5level [%-6thread{6}] | %message %n" />
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+	<appender name="LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>log/ddfclient.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>log/ddfclient.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>20MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+
+
+	<root level="info">
+		<appender-ref ref="console" />
+		<appender-ref ref="LOG" />
+	</root>
+
+</configuration>
