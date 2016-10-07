@@ -188,32 +188,7 @@ public class FeedClientDDF implements FeedClient {
 		
 		boot = new ClientBootstrap(channelFactory);
 
-		if (proxySettings == null) {
-
-			/*
-			 * The vector for data leaving the netty channel and entering the
-			 * business application logic.
-			 */
-			final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(
-					eventQueue, messageQueue);
-
-			final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(
-					ddfHandler);
-
-			boot.setPipelineFactory(pipelineFactory);
-
-		} else {
-
-			final ChannelPipelineFactory socksPipelineFactory = new PipelineFactorySocks(
-					executor, this, proxy);
-
-			boot.setPipelineFactory(socksPipelineFactory);
-			boot.setOption("child.tcpNoDelay", true);
-			boot.setOption("child.keepAlive", true);
-			boot.setOption("child.reuseAddress", true);
-			boot.setOption("readWriteFair", true);
-
-		}
+		initBoot();
 
 		boot.setOption(TIMEOUT_OPTION, TIMEOUT);
 
@@ -250,12 +225,43 @@ public class FeedClientDDF implements FeedClient {
 
 	public void setProxySettings(final DDF_SocksProxy proxy){
 		this.proxySettings = proxy;
+		initBoot();
 		hardRestart("setProxySettings: " + proxy.getProxyAddress() + ":" + proxy.getProxyPort());
 	}
 	
 	public void clearProxySettings(){
 		this.proxySettings = null;
+		initBoot();
 		hardRestart("clearProxySettings()");
+	}
+	
+	private void initBoot(){
+		if (proxySettings == null) {
+
+			/*
+			 * The vector for data leaving the netty channel and entering the
+			 * business application logic.
+			 */
+			final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(
+					eventQueue, messageQueue);
+
+			final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(
+					ddfHandler);
+
+			boot.setPipelineFactory(pipelineFactory);
+
+		} else {
+
+			final ChannelPipelineFactory socksPipelineFactory = new PipelineFactorySocks(
+					executor, this, proxySettings);
+
+			boot.setPipelineFactory(socksPipelineFactory);
+			boot.setOption("child.tcpNoDelay", true);
+			boot.setOption("child.keepAlive", true);
+			boot.setOption("child.reuseAddress", true);
+			boot.setOption("readWriteFair", true);
+
+		}
 	}
 	
 	private final DefaultReloginPolicy reconnectionPolicy = new DefaultReloginPolicy();
