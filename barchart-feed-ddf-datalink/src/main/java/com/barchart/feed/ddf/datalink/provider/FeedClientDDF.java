@@ -250,10 +250,12 @@ public class FeedClientDDF implements FeedClient {
 
 	public void setProxySettings(final DDF_SocksProxy proxy){
 		this.proxySettings = proxy;
+		hardRestart("setProxySettings: " + proxy.getProxyAddress() + ":" + proxy.getProxyPort());
 	}
 	
 	public void clearProxySettings(){
 		this.proxySettings = null;
+		hardRestart("clearProxySettings()");
 	}
 	
 	private final DefaultReloginPolicy reconnectionPolicy = new DefaultReloginPolicy();
