@@ -41,6 +41,7 @@ import com.barchart.feed.ddf.message.api.DDF_ControlTimestamp;
 import com.barchart.feed.ddf.message.api.DDF_MarketBase;
 import com.barchart.util.value.ValueFactoryImpl;
 import com.barchart.util.value.api.ValueFactory;
+import com.barchart.feed.ddf.datalink.provider.FeedClientDDF;
 
 public class BarchartMarketProvider implements MarketService {
 
@@ -86,7 +87,6 @@ public class BarchartMarketProvider implements MarketService {
 			connection = DDF_FeedClientFactory.newConnectionClient(
 					DDF_Transport.TCP, username, password, exe, isMobile);
 		}
-
 		
 		connection.bindMessageListener(msgListener);
 		
@@ -96,6 +96,14 @@ public class BarchartMarketProvider implements MarketService {
 		
 		executor = exe;
 		
+	}
+	
+	public void setProxySettings(final DDF_SocksProxy proxy){
+		((FeedClientDDF)connection).setProxySettings(proxy);
+	}
+	
+	public void clearProxySettings(){
+		((FeedClientDDF)connection).clearProxySettings();
 	}
 	
 	private static ExecutorService getDefault() {
