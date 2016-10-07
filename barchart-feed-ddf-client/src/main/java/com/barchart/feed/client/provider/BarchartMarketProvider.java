@@ -31,6 +31,7 @@ import com.barchart.feed.ddf.datalink.api.FeedClient;
 import com.barchart.feed.ddf.datalink.api.FeedClient.DDF_MessageListener;
 import com.barchart.feed.ddf.datalink.api.FeedClient.DDF_Transport;
 import com.barchart.feed.ddf.datalink.provider.DDF_FeedClientFactory;
+import com.barchart.feed.ddf.datalink.provider.DDF_SocksProxy;
 import com.barchart.feed.ddf.datalink.provider.DDF_SubscriptionHandler;
 import com.barchart.feed.ddf.instrument.provider.DDF_MetadataServiceWrapper;
 import com.barchart.feed.ddf.instrument.provider.DDF_RxInstrumentProvider;
@@ -68,14 +69,24 @@ public class BarchartMarketProvider implements MarketService {
 	
 	public BarchartMarketProvider(final String username, final String password, 
 			final ExecutorService exe) {
-		this(username, password, exe, false);
+		this(username, password, exe, false, null);
+	}
+	
+	public BarchartMarketProvider(final String username, final String password, final DDF_SocksProxy proxySettings){
+		this(username, password, getDefault(), false, proxySettings);
 	}
 	
 	public BarchartMarketProvider(final String username, final String password, 
-			final ExecutorService exe, final boolean isMobile) {
+			final ExecutorService exe, final boolean isMobile, final DDF_SocksProxy proxySettings) {
 		
-		connection = DDF_FeedClientFactory.newConnectionClient(
-				DDF_Transport.TCP, username, password, exe, isMobile);
+		if(proxySettings!=null){
+			connection = DDF_FeedClientFactory.newConnectionClient(
+					DDF_Transport.TCP, username, password, exe, proxySettings);
+		}else{
+			connection = DDF_FeedClientFactory.newConnectionClient(
+					DDF_Transport.TCP, username, password, exe, isMobile);
+		}
+
 		
 		connection.bindMessageListener(msgListener);
 		
