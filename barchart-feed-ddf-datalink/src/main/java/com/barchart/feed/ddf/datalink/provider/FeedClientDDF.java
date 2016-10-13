@@ -67,18 +67,16 @@ public class FeedClientDDF implements FeedClient {
 
 	public static String CUSTOM_HOST = null;
 	public static int CUSTOM_PORT = Integer.MAX_VALUE;
-	
-	private static final int DEFAULT_IO_THREADS = 
-			Runtime.getRuntime().availableProcessors() * 2;
-	
+
+	private static final int DEFAULT_IO_THREADS = Runtime.getRuntime().availableProcessors() * 2;
+
 	/** use slf4j for internal NETTY LoggingHandler facade */
 	static {
 		final InternalLoggerFactory defaultFactory = new Slf4JLoggerFactory();
 		InternalLoggerFactory.setDefaultFactory(defaultFactory);
 	}
 
-	private static final Logger log = LoggerFactory
-			.getLogger(FeedClientDDF.class);
+	private static final Logger log = LoggerFactory.getLogger(FeedClientDDF.class);
 
 	/** channel operation time out */
 	private static final long TIMEOUT = 2 * 1000;
@@ -89,11 +87,9 @@ public class FeedClientDDF implements FeedClient {
 
 	//
 
-	private final Map<FeedEvent, EventPolicy> eventPolicy =
-			new ConcurrentHashMap<FeedEvent, EventPolicy>();
+	private final Map<FeedEvent, EventPolicy> eventPolicy = new ConcurrentHashMap<FeedEvent, EventPolicy>();
 
-	private final Map<MetadataID<?>, SubCommand> subscriptions = 
-			new ConcurrentHashMap<MetadataID<?>, SubCommand>();
+	private final Map<MetadataID<?>, SubCommand> subscriptions = new ConcurrentHashMap<MetadataID<?>, SubCommand>();
 
 	//
 
@@ -101,11 +97,9 @@ public class FeedClientDDF implements FeedClient {
 
 	//
 
-	private final BlockingQueue<FeedEvent> eventQueue = 
-			new LinkedBlockingQueue<FeedEvent>();
+	private final BlockingQueue<FeedEvent> eventQueue = new LinkedBlockingQueue<FeedEvent>();
 
-	private final BlockingQueue<DDF_BaseMessage> messageQueue = 
-			new LinkedBlockingQueue<DDF_BaseMessage>();
+	private final BlockingQueue<DDF_BaseMessage> messageQueue = new LinkedBlockingQueue<DDF_BaseMessage>();
 
 	private final AtomicLong lastHeartbeat = new AtomicLong(0);
 
@@ -113,8 +107,7 @@ public class FeedClientDDF implements FeedClient {
 
 	private volatile DDF_MessageListener msgListener = null;
 
-	private final CopyOnWriteArrayList<Connection.Monitor> feedListeners = 
-			new CopyOnWriteArrayList<Connection.Monitor>();
+	private final CopyOnWriteArrayList<Connection.Monitor> feedListeners = new CopyOnWriteArrayList<Connection.Monitor>();
 
 	//
 
@@ -123,14 +116,14 @@ public class FeedClientDDF implements FeedClient {
 	private ChannelFactory channelFactory;
 	private Channel channel;
 	private HashedWheelTimer timer = null;
-	
+
 	//
 
 	private String username;
 	private String password;
 	private final DDF_ServerType serverType = DDF_ServerType.STREAM;
 	private Executor executor;
-	
+
 	// SOCKS5
 
 	private DDF_SocksProxy proxySettings = null;
@@ -138,57 +131,43 @@ public class FeedClientDDF implements FeedClient {
 
 	//
 
-	FeedClientDDF(
-			final String username, 
-			final String password,
-			final Executor executor) {
+	FeedClientDDF(final String username, final String password, final Executor executor) {
 
 		startup(username, password, executor, null, false);
 
 	}
 
-	public FeedClientDDF(
-			String username, 
-			String password, 
-			Executor executor,
-			DDF_SocksProxy proxySettings) {
+	public FeedClientDDF(String username, String password, Executor executor, DDF_SocksProxy proxySettings) {
 
 		startup(username, password, executor, proxySettings, false);
 
 	}
-	
-	public FeedClientDDF(
-			String username, 
-			String password, 
-			Executor executor,
-			DDF_SocksProxy proxySettings, boolean isMobile) {
+
+	public FeedClientDDF(String username, String password, Executor executor, DDF_SocksProxy proxySettings,
+			boolean isMobile) {
 
 		startup(username, password, executor, proxySettings, isMobile);
 
 	}
 
-	private void startup(
-			final String username, 
-			final String password,
-			final Executor exec, 
-			final DDF_SocksProxy proxy, 
+	private void startup(final String username, final String password, final Executor exec, final DDF_SocksProxy proxy,
 			final Boolean isMobile) {
 
 		this.username = username;
 		this.password = password;
 		this.executor = exec;
-		
+
 		this.proxySettings = proxy;
 
 		timer = new HashedWheelTimer();
-		
-		if(isMobile){
+
+		if (isMobile) {
 			channelFactory = new NioClientSocketChannelFactory(executor, executor);
 		} else { /* Android hates this constructor */
-			channelFactory = new NioClientSocketChannelFactory(
-					executor, 1, new NioWorkerPool(executor, DEFAULT_IO_THREADS), timer);
+			channelFactory = new NioClientSocketChannelFactory(executor, 1,
+					new NioWorkerPool(executor, DEFAULT_IO_THREADS), timer);
 		}
-		
+
 		boot = new ClientBootstrap(channelFactory);
 
 		initBoot();
@@ -211,52 +190,45 @@ public class FeedClientDDF implements FeedClient {
 
 		eventPolicy.put(FeedEvent.LINK_DISCONNECT, reconnectionPolicy);
 
-		eventPolicy.put(FeedEvent.SETTINGS_RETRIEVAL_FAILURE,
-				reconnectionPolicy);
+		eventPolicy.put(FeedEvent.SETTINGS_RETRIEVAL_FAILURE, reconnectionPolicy);
 
-		eventPolicy.put(FeedEvent.CHANNEL_CONNECT_FAILURE,
-				reconnectionPolicy);
-		eventPolicy.put(FeedEvent.CHANNEL_CONNECT_TIMEOUT,
-				reconnectionPolicy);
-		eventPolicy.put(FeedEvent.LINK_CONNECT_PROXY_TIMEOUT,
-				reconnectionPolicy);
+		eventPolicy.put(FeedEvent.CHANNEL_CONNECT_FAILURE, reconnectionPolicy);
+		eventPolicy.put(FeedEvent.CHANNEL_CONNECT_TIMEOUT, reconnectionPolicy);
+		eventPolicy.put(FeedEvent.LINK_CONNECT_PROXY_TIMEOUT, reconnectionPolicy);
 
 		/* Add HeartbeatPolicy to HEART_BEAT */
 		eventPolicy.put(FeedEvent.HEART_BEAT, new HeartbeatPolicy());
 
 	}
 
-	public void setProxySettings(final DDF_SocksProxy proxy){
+	public void setProxySettings(final DDF_SocksProxy proxy) {
 		this.proxySettings = proxy;
 		initBoot();
 		hardRestart("setProxySettings: " + proxy.getProxyAddress() + ":" + proxy.getProxyPort());
 	}
-	
-	public void clearProxySettings(){
+
+	public void clearProxySettings() {
 		this.proxySettings = null;
 		initBoot();
 		hardRestart("clearProxySettings()");
 	}
-	
-	private void initBoot(){
+
+	private void initBoot() {
 		if (proxySettings == null) {
 
 			/*
 			 * The vector for data leaving the netty channel and entering the
 			 * business application logic.
 			 */
-			final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(
-					eventQueue, messageQueue);
+			final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(eventQueue, messageQueue);
 
-			final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(
-					ddfHandler);
+			final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(ddfHandler);
 
 			boot.setPipelineFactory(pipelineFactory);
 
 		} else {
 
-			final ChannelPipelineFactory socksPipelineFactory = new PipelineFactorySocks(
-					executor, this, proxySettings);
+			final ChannelPipelineFactory socksPipelineFactory = new PipelineFactorySocks(executor, this, proxySettings);
 
 			boot.setPipelineFactory(socksPipelineFactory);
 			boot.setOption("child.tcpNoDelay", true);
@@ -266,11 +238,10 @@ public class FeedClientDDF implements FeedClient {
 
 		}
 	}
-	
+
 	private final DefaultReloginPolicy reconnectionPolicy = new DefaultReloginPolicy();
 
-	private boolean loginProxy(String username, String password,
-			DDF_Server feedServers) {
+	private boolean loginProxy(String username, String password, DDF_Server feedServers) {
 
 		terminate();
 
@@ -278,23 +249,21 @@ public class FeedClientDDF implements FeedClient {
 
 		// do socks connection
 
-		log.debug("connect to proxy - address {} port {}",
-				proxySettings.getProxyAddress(), proxySettings.getProxyPort());
+		log.debug("connect to proxy - address {} port {}", proxySettings.getProxyAddress(),
+				proxySettings.getProxyPort());
 
-		final InetSocketAddress address = new InetSocketAddress(
-				proxySettings.getProxyAddress(), proxySettings.getProxyPort());
+		final InetSocketAddress address = new InetSocketAddress(proxySettings.getProxyAddress(),
+				proxySettings.getProxyPort());
 
 		final ChannelFuture futureConnect = boot.connect(address);
 
 		channel = futureConnect.getChannel();
 
-		final boolean isGoodConnect = futureConnect
-				.awaitUninterruptibly(TIMEOUT);
+		final boolean isGoodConnect = futureConnect.awaitUninterruptibly(TIMEOUT);
 
 		if (!isGoodConnect) {
 			log.error("proxy connect error {}", futureConnect.getCause());
-			log.error("proxy; {}:{} ", proxySettings.getProxyAddress(),
-					proxySettings.getProxyPort());
+			log.error("proxy; {}:{} ", proxySettings.getProxyAddress(), proxySettings.getProxyPort());
 
 			postEvent(FeedEvent.LINK_CONNECT_PROXY_TIMEOUT);
 
@@ -437,9 +406,9 @@ public class FeedClientDDF implements FeedClient {
 			log.debug("# DDF-EventTask death {}", threadNumber);
 		}
 	};
-	
+
 	private final RunnerDDF messageTask = new RunnerDDF() {
-		
+
 		@Override
 		protected void runCore() {
 
@@ -455,22 +424,25 @@ public class FeedClientDDF implements FeedClient {
 				try {
 					final DDF_BaseMessage message = messageQueue.take();
 					if (msgListener != null) {
-						
-						/* We set the clock by the timestamp messages, however,
-						 * we also set the clock by market messages, but this has to
-						 * happen in the message decoding */
-						// XXX For now, we have removed the setting of time by market
-						// messages because delayed messages were making real time
+
+						/*
+						 * We set the clock by the timestamp messages, however,
+						 * we also set the clock by market messages, but this
+						 * has to happen in the message decoding
+						 */
+						// XXX For now, we have removed the setting of time by
+						// market
+						// messages because delayed messages were making real
+						// time
 						// data look delayed
 						if (message instanceof DDF_ControlTimestamp) {
-							ClockDDF.clock.set(((DDF_ControlTimestamp) message)
-									.getStampUTC().asMillisUTC());
-						} 
-						
+							ClockDDF.clock.set(((DDF_ControlTimestamp) message).getStampUTC().asMillisUTC());
+						}
+
 						// #######################
-						//log.debug(message.toString());
+						// log.debug(message.toString());
 						// #######################
-						
+
 						msgListener.handleMessage(message);
 					}
 				} catch (final InterruptedException e) {
@@ -487,8 +459,6 @@ public class FeedClientDDF implements FeedClient {
 			log.debug("# DDF-MessageTask death {}", threadNumber);
 		}
 	};
-	
-	
 
 	@Override
 	public void setPolicy(final FeedEvent event, final EventPolicy policy) {
@@ -518,8 +488,7 @@ public class FeedClientDDF implements FeedClient {
 
 		log.debug("# initialize start");
 
-		final StackTraceElement[] trace = Thread.currentThread()
-				.getStackTrace();
+		final StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 
 		for (final StackTraceElement e : trace) {
 			log.debug(e.getClassName() + ":" + e.getLineNumber());
@@ -531,8 +500,7 @@ public class FeedClientDDF implements FeedClient {
 			log.error("error starting DDF_Heartbeat Thread: {} ", e);
 
 			try {
-				executor.execute(new Thread(new Disconnector(
-						"DDF_Heartbeat Thread Start Exception")));
+				executor.execute(new Thread(new Disconnector("DDF_Heartbeat Thread Start Exception")));
 			} catch (Exception e1) {
 			}
 
@@ -545,8 +513,7 @@ public class FeedClientDDF implements FeedClient {
 			log.error("error starting DDF_Event Thread: {} ", e);
 
 			try {
-				executor.execute(new Thread(new Disconnector(
-						"DDF_Event Thread Start Exception")));
+				executor.execute(new Thread(new Disconnector("DDF_Event Thread Start Exception")));
 			} catch (Exception e1) {
 			}
 
@@ -559,8 +526,7 @@ public class FeedClientDDF implements FeedClient {
 			log.error("error starting DDF_Message Thread: {} ", e);
 
 			try {
-				executor.execute(new Thread(new Disconnector(
-						"DDF_Message Thread Start Exception")));
+				executor.execute(new Thread(new Disconnector("DDF_Message Thread Start Exception")));
 			} catch (Exception e1) {
 			}
 
@@ -581,7 +547,7 @@ public class FeedClientDDF implements FeedClient {
 	private void terminate() {
 
 		log.debug("## terminate start");
-		
+
 		eventQueue.clear();
 		messageQueue.clear();
 
@@ -630,7 +596,7 @@ public class FeedClientDDF implements FeedClient {
 			}
 
 		}
-		
+
 		log.debug("## terminate complete");
 
 	}
@@ -677,14 +643,14 @@ public class FeedClientDDF implements FeedClient {
 	public synchronized void startup() {
 
 		log.debug("Public login called");
-		
+
 		loginHandler.enableLogins();
 		loginHandler.login(0);
 
 	}
 
 	private FeedEvent blockingWrite(final CharSequence message) {
-		
+
 		final ChannelFuture futureWrite = channel.write(message);
 
 		futureWrite.awaitUninterruptibly(TIMEOUT, TIME_UNIT);
@@ -701,32 +667,34 @@ public class FeedClientDDF implements FeedClient {
 
 		log.debug("public shutdown() has been called, shutting down now.");
 
-		/* Clear subscriptions, Jerq will stop sending data when we disconnect */
+		/*
+		 * Clear subscriptions, Jerq will stop sending data when we disconnect
+		 */
 		subscriptions.clear();
 
 		postEvent(FeedEvent.LOGOUT);
 
 		terminate();
-		
+
 		killTimer();
-		
+
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private void killTimer() {
-		
+
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		
-		for(final Thread t : threadSet) {
-			if(t.getName().startsWith("Hashed wheel timer")) {
-				while(t.isAlive()) {
+
+		for (final Thread t : threadSet) {
+			if (t.getName().startsWith("Hashed wheel timer")) {
+				while (t.isAlive()) {
 					t.stop();
 				}
 			}
 		}
-		
+
 	}
-	
+
 	private boolean isConnected() {
 		if (channel == null) {
 			return false;
@@ -741,8 +709,7 @@ public class FeedClientDDF implements FeedClient {
 	private class CommandFailureListener implements ChannelFutureListener {
 
 		@Override
-		public void operationComplete(final ChannelFuture future)
-				throws Exception {
+		public void operationComplete(final ChannelFuture future) throws Exception {
 			if (!future.isSuccess()) {
 				postEvent(FeedEvent.COMMAND_WRITE_FAILURE);
 			}
@@ -753,7 +720,7 @@ public class FeedClientDDF implements FeedClient {
 	/* Asynchronous write to the channel, future returns true on success */
 	@Override
 	public Future<Boolean> write(final String message) {
-		//log.debug("Attempting to send reqeust to JERQ : {}", message);
+		// log.debug("Attempting to send reqeust to JERQ : {}", message);
 		final ChannelFuture future = channel.write(message + "\n");
 		future.addListener(new CommandFailureListener());
 		return new CommandFuture(future);
@@ -808,8 +775,8 @@ public class FeedClientDDF implements FeedClient {
 
 			final int threadNumber = loginThreadNumber.getAndIncrement();
 
-			log.debug("# LoginHandler - login called. login enabled = {} isLoginActive = {} ",
-					enabled, isLoginActive() + ". reconnect attempt count = " + threadNumber);
+			log.debug("# LoginHandler - login called. login enabled = {} isLoginActive = {} ", enabled,
+					isLoginActive() + ". reconnect attempt count = " + threadNumber);
 
 			if (proxySettings != null) {
 
@@ -824,8 +791,7 @@ public class FeedClientDDF implements FeedClient {
 
 				updateFeedStateListeners(Connection.State.CONNECTING);
 
-				loginThread = new Thread(
-						new LoginRunnable(delay, threadNumber), "# DDF Login " + threadNumber);
+				loginThread = new Thread(new LoginRunnable(delay, threadNumber), "# DDF Login " + threadNumber);
 
 				loginThread.start();
 
@@ -859,8 +825,7 @@ public class FeedClientDDF implements FeedClient {
 
 			isLoggingIn = true;
 
-			log.debug("starting LoginRunnable "
-					+ Thread.currentThread().getName());
+			log.debug("starting LoginRunnable " + Thread.currentThread().getName());
 
 			initialize();
 
@@ -901,8 +866,7 @@ public class FeedClientDDF implements FeedClient {
 				return;
 			}
 
-			log.warn("failed to connect to primary server {} trying secondary server login {}", 
-					primary, secondary);
+			log.warn("failed to connect to primary server {} trying secondary server login {}", primary, secondary);
 
 			/* Attempt to connect and login to secondary server */
 			final FeedEvent eventTwo = login(secondary, PORT);
@@ -929,13 +893,17 @@ public class FeedClientDDF implements FeedClient {
 
 		/* Handles the login for an individual server */
 		private FeedEvent login(String host, int port) {
-			
-			if(CUSTOM_HOST != null && CUSTOM_PORT != Integer.MAX_VALUE) {
+
+			if (CUSTOM_HOST != null) {
 				host = CUSTOM_HOST;
-				port = CUSTOM_PORT;
-				log.warn("connecting with CUSTOM_HOST: {} and CUSTOM_PORT: {}", CUSTOM_HOST, CUSTOM_PORT);
+				log.warn("connecting with CUSTOM_HOST: {}", CUSTOM_PORT);
 			}
-			
+
+			if (CUSTOM_PORT != Integer.MAX_VALUE) {
+				port = CUSTOM_PORT;
+				log.warn("connecting with CUSTOM_PORT: {}", CUSTOM_PORT);
+			}
+
 			final InetSocketAddress address = new InetSocketAddress(host, port);
 
 			ChannelFuture futureConnect = null;
@@ -962,8 +930,7 @@ public class FeedClientDDF implements FeedClient {
 			}
 
 			/* Send login command to JERQ */
-			FeedEvent writeEvent = blockingWrite(FeedDDF.tcpLogin(username,
-					password));
+			FeedEvent writeEvent = blockingWrite(FeedDDF.tcpLogin(username, password));
 
 			if (writeEvent == FeedEvent.COMMAND_WRITE_FAILURE) {
 				return FeedEvent.COMMAND_WRITE_FAILURE;
@@ -1071,9 +1038,7 @@ public class FeedClientDDF implements FeedClient {
 		@Override
 		public void run() {
 			if (isLoggingIn) {
-				log.warn("## "
-						+ caller
-						+ " is trying to call hardRestart, but we are still logging in.");
+				log.warn("## " + caller + " is trying to call hardRestart, but we are still logging in.");
 				return;
 			}
 
@@ -1092,8 +1057,7 @@ public class FeedClientDDF implements FeedClient {
 			// post ddf link connect
 			postEvent(FeedEvent.LINK_CONNECT);
 
-			final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(
-					eventQueue, messageQueue);
+			final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(eventQueue, messageQueue);
 
 			channel.getPipeline().addLast("ddf frame decoder", new MsgDeframerDDF());
 
