@@ -65,6 +65,9 @@ public class FeedClientDDF implements FeedClient {
 	private static final String VERSION = FeedDDF.VERSION_4;
 	private static final int PORT = 7500;
 
+	public static String CUSTOM_HOST = null;
+	public static int CUSTOM_PORT = Integer.MAX_VALUE;
+	
 	private static final int DEFAULT_IO_THREADS = 
 			Runtime.getRuntime().availableProcessors() * 2;
 	
@@ -925,7 +928,14 @@ public class FeedClientDDF implements FeedClient {
 		}
 
 		/* Handles the login for an individual server */
-		private FeedEvent login(final String host, final int port) {
+		private FeedEvent login(String host, int port) {
+			
+			if(CUSTOM_HOST != null && CUSTOM_PORT != Integer.MAX_VALUE) {
+				host = CUSTOM_HOST;
+				port = CUSTOM_PORT;
+				log.warn("connecting with CUSTOM_HOST: {} and CUSTOM_PORT: {}", CUSTOM_HOST, CUSTOM_PORT);
+			}
+			
 			final InetSocketAddress address = new InetSocketAddress(host, port);
 
 			ChannelFuture futureConnect = null;
