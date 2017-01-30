@@ -47,8 +47,7 @@ final class CodecHelper {
 	 *
 	 */
 
-	final static String urlQuery(final DDF_Settings settings,
-			final DDF_Query<?> query) {
+	final static String urlQuery(final DDF_Settings settings, final DDF_Query<?> query) {
 
 		final StringBuilder text = new StringBuilder(256);
 
@@ -66,15 +65,12 @@ final class CodecHelper {
 		final CharSequence start = requestTime(query.timeStart, timeZone);
 		final CharSequence end = requestTime(query.timeEnd, timeZone);
 
-		final CharSequence maxRecords =
-				query.maxRecords <= 0 ? "" : "" + query.maxRecords;
+		final CharSequence maxRecords = query.maxRecords <= 0 ? "" : "" + query.maxRecords;
 
 		final DDF_QueryOrder resultOrder = query.resultOrder;
-		final CharSequence order =
-				resultOrder == null ? ASCENDING.code : resultOrder.code;
+		final CharSequence order = resultOrder == null ? ASCENDING.code : resultOrder.code;
 
-		final CharSequence interval =
-				query.groupBy <= 1 ? "1" : "" + query.groupBy;
+		final CharSequence interval = query.groupBy <= 1 ? "1" : "" + query.groupBy;
 
 		final DDF_QueryEodType eodType = query.eodType;
 		final CharSequence data = eodType == null ? "" : eodType.code;
@@ -127,8 +123,7 @@ final class CodecHelper {
 
 		//
 
-		if (query.type.isIn(MINUTES, MINUTES_NEARBY, MINUTES_FORM_T,
-				MINUTES_TREND)) {
+		if (query.type.isIn(MINUTES, MINUTES_NEARBY, MINUTES_FORM_T, MINUTES_TREND)) {
 
 			text.append("&");
 
@@ -173,6 +168,10 @@ final class CodecHelper {
 				text.append("&daystoexpiration=" + query.daystoexpiration);
 			}
 
+			if (query.contractroll != null && query.contractroll.length() > 0) {
+				text.append("&contractroll=" + query.contractroll);
+			}
+
 		}
 
 		if (query.type.isIn(TICKS_TREND, MINUTES_TREND, END_OF_DAY_TREND)) {
@@ -212,8 +211,7 @@ final class CodecHelper {
 	static final DateTimeFormatter QUERY_TIME = //
 			DateTimeFormat.forPattern("yyyyMMddHHmmss");
 
-	static final String requestTime(final DateTime dateTime,
-			final DateTimeZone timeZone) {
+	static final String requestTime(final DateTime dateTime, final DateTimeZone timeZone) {
 		if (dateTime == null || timeZone == null) {
 			return "";
 		}
@@ -240,8 +238,7 @@ final class CodecHelper {
 		return decodeTime(string, instrument, RESULT_TIME_TICKS);
 	}
 
-	static String encodeTicksTime(final long millisUTC,
-			final Instrument instrument) {
+	static String encodeTicksTime(final long millisUTC, final Instrument instrument) {
 		return encodeTime(millisUTC, instrument, RESULT_TIME_TICKS);
 	}
 
@@ -256,8 +253,7 @@ final class CodecHelper {
 		return decodeTime(string, instrument, RESULT_TIME_MINS);
 	}
 
-	static String encodeMinsTime(final long millisUTC,
-			final Instrument instrument) {
+	static String encodeMinsTime(final long millisUTC, final Instrument instrument) {
 		return encodeTime(millisUTC, instrument, RESULT_TIME_MINS);
 	}
 
@@ -271,8 +267,7 @@ final class CodecHelper {
 		return decodeTime(string, instrument, RESULT_TIME_EOD);
 	}
 
-	static String encodeEodTime(final long millisUTC,
-			final Instrument instrument) {
+	static String encodeEodTime(final long millisUTC, final Instrument instrument) {
 		return encodeTime(millisUTC, instrument, RESULT_TIME_EOD);
 	}
 
@@ -312,21 +307,20 @@ final class CodecHelper {
 		int part;
 		final int spaces;
 
-
 		switch (parts.length) {
-			default:
-			case 0:
-				return 0;
-			case 1:
-				whole = decodeLong(parts[0]);
-				part = 0;
-				spaces = 0;
-				break;
-			case 2:
-				whole = decodeLong(parts[0]);
-				part = decodeInt(parts[1]);
-				spaces = parts[1].length();
-				break;
+		default:
+		case 0:
+			return 0;
+		case 1:
+			whole = decodeLong(parts[0]);
+			part = 0;
+			spaces = 0;
+			break;
+		case 2:
+			whole = decodeLong(parts[0]);
+			part = decodeInt(parts[1]);
+			spaces = parts[1].length();
+			break;
 		}
 
 		int thisExp;
@@ -367,8 +361,7 @@ final class CodecHelper {
 
 	}
 
-	final static String encodeMantissaXXX(final long mantissa,
-			final int exponent) {
+	final static String encodeMantissaXXX(final long mantissa, final int exponent) {
 
 		long whole = mantissa;
 
@@ -435,14 +428,12 @@ final class CodecHelper {
 
 	}
 
-	static long decodeTime(final String string, final Instrument instrument,
-			final DateTimeFormatter format) {
+	static long decodeTime(final String string, final Instrument instrument, final DateTimeFormatter format) {
 		final DateTimeZone zone = DateTimeZone.forID(instrument.timeZoneName());
 		return format.withZone(zone).parseMillis(string);
 	}
 
-	static String encodeTime(final long millisUTC, final Instrument instrument,
-			final DateTimeFormatter format) {
+	static String encodeTime(final long millisUTC, final Instrument instrument, final DateTimeFormatter format) {
 		final DateTimeZone zone = DateTimeZone.forID(instrument.timeZoneName());
 		return format.withZone(zone).print(millisUTC);
 	}
@@ -454,8 +445,7 @@ final class CodecHelper {
 		return false;
 	}
 
-	static String encodeInstrument(final Instrument instrument,
-			final long millisUTC) {
+	static String encodeInstrument(final Instrument instrument, final long millisUTC) {
 		if (instrument == null) {
 			return "";
 		}

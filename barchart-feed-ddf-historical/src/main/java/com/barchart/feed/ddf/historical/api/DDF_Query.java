@@ -82,9 +82,25 @@ public final class DDF_Query<E extends DDF_Entry> {
 	public boolean backadjust = false;
 
 	/**
-	 * Number of days before expiration to roll contracts for continuation charts.
+	 * Number of days before expiration to roll contracts for continuation
+	 * charts.
 	 */
 	public int daystoexpiration = 0;
+
+	/**
+	 * contractroll: for futures, multi-contract nearest queries (data parameter
+	 * set to dailynearest, weeklynearest, monthlynearest, quarterlynearest or
+	 * yearlynearest), this parameter can be set to one of two values
+	 * (expiration, combined), and determines how the switch from one contract
+	 * to the next in the series is calculated. When the value specified is
+	 * 'expiration', the switch from one contract to the next in the series will
+	 * be based on the expiration date (and the value of the 'daystoexpiration'
+	 * parameter if specified). When the value specified is 'combined', a
+	 * combination of volume and openinterest will be used to determine when to
+	 * switch from one contract to the next in the series (when using this
+	 * value, the 'daystoexpiration' parameter is ignored).
+	 */
+	public String contractroll;
 
 	/** The eod type. */
 	public DDF_QueryEodType eodType;
@@ -109,7 +125,7 @@ public final class DDF_Query<E extends DDF_Entry> {
 		if (instrument == null) {
 			return time.toString();
 		} else {
-			final DateTimeZone zone = DateTimeZone.forOffsetMillis((int)(instrument.timeZoneOffset()));
+			final DateTimeZone zone = DateTimeZone.forOffsetMillis((int) (instrument.timeZoneOffset()));
 			return time.withZone(zone).toString();
 		}
 	}
@@ -128,8 +144,7 @@ public final class DDF_Query<E extends DDF_Entry> {
 		return type.toString();
 	}
 
-	private final CharSequence renderEodVolume(
-	/* local */DDF_QueryEodVolume volume) {
+	private final CharSequence renderEodVolume(/* local */DDF_QueryEodVolume volume) {
 		if (volume == null) {
 			volume = DDF_QueryEodVolume.CONTRACT;
 		}
@@ -190,9 +205,7 @@ public final class DDF_Query<E extends DDF_Entry> {
 				text.append(groupBy);
 				break build;
 			}
-			if (type.is(END_OF_DAY)
-					&& instrument != null
-					&& instrument.CFICode().charAt(0) == 'F') {
+			if (type.is(END_OF_DAY) && instrument != null && instrument.CFICode().charAt(0) == 'F') {
 				text.append(" eodType ");
 				text.append(renderEodType(eodType));
 				text.append(" eodVolume ");
