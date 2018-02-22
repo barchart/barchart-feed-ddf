@@ -8,6 +8,8 @@
 package com.barchart.feed.ddf.datalink.provider;
 
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -32,6 +34,7 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioWorkerPool;
+import org.jboss.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.jboss.netty.logging.Slf4JLoggerFactory;
 import org.jboss.netty.util.HashedWheelTimer;
@@ -41,14 +44,15 @@ import org.slf4j.LoggerFactory;
 import com.barchart.feed.api.connection.Connection;
 import com.barchart.feed.api.model.meta.id.MetadataID;
 import com.barchart.feed.base.sub.SubCommand;
-import com.barchart.feed.ddf.datalink.api.FeedEvent;
 import com.barchart.feed.ddf.datalink.api.FeedClient;
+import com.barchart.feed.ddf.datalink.api.FeedEvent;
 import com.barchart.feed.ddf.datalink.provider.pipeline.ChannelHandlerDDF;
 import com.barchart.feed.ddf.datalink.provider.pipeline.MsgDecoderDDF;
 import com.barchart.feed.ddf.datalink.provider.pipeline.MsgDeframerDDF;
 import com.barchart.feed.ddf.datalink.provider.pipeline.MsgEncoderDDF;
 import com.barchart.feed.ddf.datalink.provider.pipeline.PipelineFactoryDDF;
 import com.barchart.feed.ddf.datalink.provider.pipeline.PipelineFactorySocks;
+import com.barchart.feed.ddf.datalink.provider.pipeline.PipelineFactoryWebSocket;
 import com.barchart.feed.ddf.datalink.provider.util.CommandFuture;
 import com.barchart.feed.ddf.datalink.provider.util.RunnerDDF;
 import com.barchart.feed.ddf.message.api.DDF_BaseMessage;
@@ -62,9 +66,13 @@ import com.barchart.feed.ddf.util.FeedDDF;
 
 public class FeedClientDDF implements FeedClient {
 
+	/* XXX TEMPY for testing */
+	public static boolean isWebSocket = false;
+	public static String WEBSOCKET_EP = "ws://qsws-us-e-02.aws.barchart.com:80/jerq";
+
 	private static final String VERSION = FeedDDF.VERSION_4;
 	private static final int PORT = 7500;
-
+	
 	public static String CUSTOM_HOST = null;
 	public static int CUSTOM_PORT = Integer.MAX_VALUE;
 
@@ -164,8 +172,8 @@ public class FeedClientDDF implements FeedClient {
 		if (isMobile) {
 			channelFactory = new NioClientSocketChannelFactory(executor, executor);
 		} else { /* Android hates this constructor */
-			channelFactory = new NioClientSocketChannelFactory(executor, 1,
-					new NioWorkerPool(executor, DEFAULT_IO_THREADS), timer);
+			channelFactory = new NioClientSocketChannelFactory(executor, 1, new NioWorkerPool(executor,
+					DEFAULT_IO_THREADS), timer);
 		}
 
 		boot = new ClientBootstrap(channelFactory);
@@ -203,30 +211,21 @@ public class FeedClientDDF implements FeedClient {
 
 	public void setProxySettings(final DDF_SocksProxy proxy) {
 		this.proxySettings = proxy;
-		initBoot();
+
 		hardRestart("setProxySettings: " + proxy.getProxyAddress() + ":" + proxy.getProxyPort());
 	}
 
 	public void clearProxySettings() {
 		this.proxySettings = null;
-		initBoot();
+
 		hardRestart("clearProxySettings()");
 	}
 
 	private void initBoot() {
-		if (proxySettings == null) {
 
-			/*
-			 * The vector for data leaving the netty channel and entering the
-			 * business application logic.
-			 */
-			final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(eventQueue, messageQueue);
+		final SimpleChannelHandler ddfHandler = new ChannelHandlerDDF(eventQueue, messageQueue);
 
-			final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(ddfHandler);
-
-			boot.setPipelineFactory(pipelineFactory);
-
-		} else {
+		if (proxySettings != null) {
 
 			final ChannelPipelineFactory socksPipelineFactory = new PipelineFactorySocks(executor, this, proxySettings);
 
@@ -235,6 +234,23 @@ public class FeedClientDDF implements FeedClient {
 			boot.setOption("child.keepAlive", true);
 			boot.setOption("child.reuseAddress", true);
 			boot.setOption("readWriteFair", true);
+
+		} else if (isWebSocket) {
+
+			try {
+				final URI u = new URI(WEBSOCKET_EP);
+				final ChannelPipelineFactory wsFactory = new PipelineFactoryWebSocket(executor, this, ddfHandler, u);
+
+				boot.setPipelineFactory(wsFactory);
+			} catch (Exception e) {
+				log.error("failed to boot WebSocket Pipeline", e);
+			}
+
+		} else {
+
+			final ChannelPipelineFactory pipelineFactory = new PipelineFactoryDDF(ddfHandler);
+
+			boot.setPipelineFactory(pipelineFactory);
 
 		}
 	}
@@ -619,6 +635,8 @@ public class FeedClientDDF implements FeedClient {
 		} catch (InterruptedException e) {
 		}
 
+		initBoot();
+
 		log.debug("#### hardRestart: complete");
 
 		log.debug("#### hardRestart: starting login");
@@ -651,15 +669,29 @@ public class FeedClientDDF implements FeedClient {
 
 	private FeedEvent blockingWrite(final CharSequence message) {
 
-		final ChannelFuture futureWrite = channel.write(message);
+		if (isWebSocket) {
+			log.debug("About to write: {}", message.toString());
+			final ChannelFuture futureWrite = channel.write(new TextWebSocketFrame(message.toString()));
 
-		futureWrite.awaitUninterruptibly(TIMEOUT, TIME_UNIT);
+			futureWrite.awaitUninterruptibly(TIMEOUT, TIME_UNIT);
 
-		if (futureWrite.isSuccess()) {
-			return FeedEvent.COMMAND_WRITE_SUCCESS;
+			if (futureWrite.isSuccess()) {
+				return FeedEvent.COMMAND_WRITE_SUCCESS;
+			} else {
+				return FeedEvent.COMMAND_WRITE_FAILURE;
+			}
 		} else {
-			return FeedEvent.COMMAND_WRITE_FAILURE;
+			final ChannelFuture futureWrite = channel.write(message);
+
+			futureWrite.awaitUninterruptibly(TIMEOUT, TIME_UNIT);
+
+			if (futureWrite.isSuccess()) {
+				return FeedEvent.COMMAND_WRITE_SUCCESS;
+			} else {
+				return FeedEvent.COMMAND_WRITE_FAILURE;
+			}
 		}
+
 	}
 
 	@Override
@@ -775,8 +807,8 @@ public class FeedClientDDF implements FeedClient {
 
 			final int threadNumber = loginThreadNumber.getAndIncrement();
 
-			log.debug("# LoginHandler - login called. login enabled = {} isLoginActive = {} ", enabled,
-					isLoginActive() + ". reconnect attempt count = " + threadNumber);
+			log.debug("# LoginHandler - login called. login enabled = {} isLoginActive = {} ", enabled, isLoginActive()
+					+ ". reconnect attempt count = " + threadNumber);
 
 			if (proxySettings != null) {
 
@@ -904,6 +936,16 @@ public class FeedClientDDF implements FeedClient {
 				log.warn("connecting with CUSTOM_PORT: {}", CUSTOM_PORT);
 			}
 
+			if (isWebSocket) {
+				try {
+					URI u = new URI(WEBSOCKET_EP);
+					host = u.getHost();
+					port = u.getPort();
+				} catch (URISyntaxException e) {
+					log.error("failed to parse WebSocket endpoint = {}", WEBSOCKET_EP, e);
+				}
+			}
+
 			final InetSocketAddress address = new InetSocketAddress(host, port);
 
 			ChannelFuture futureConnect = null;
@@ -929,6 +971,18 @@ public class FeedClientDDF implements FeedClient {
 				return FeedEvent.CHANNEL_CONNECT_FAILURE;
 			}
 
+			/* wait for handshake to complete */
+			if (isWebSocket) {
+				try {
+					final PipelineFactoryWebSocket w = (PipelineFactoryWebSocket) boot.getPipelineFactory();
+					w.getHandshaker().handshake(channel).syncUninterruptibly();
+				} catch (Exception e) {
+					log.error("failed to wait for WS handshake", e);
+				}
+			}
+
+			waitFor(250);
+
 			/* Send login command to JERQ */
 			FeedEvent writeEvent = blockingWrite(FeedDDF.tcpLogin(username, password));
 
@@ -936,12 +990,16 @@ public class FeedClientDDF implements FeedClient {
 				return FeedEvent.COMMAND_WRITE_FAILURE;
 			}
 
+			waitFor(250);
+
 			/* Send VERSION 3 command to JERQ */
 			writeEvent = blockingWrite(FeedDDF.tcpVersion(VERSION));
 
 			if (writeEvent == FeedEvent.COMMAND_WRITE_FAILURE) {
 				return FeedEvent.COMMAND_WRITE_FAILURE;
 			}
+
+			waitFor(250);
 
 			/* Send timestamp command to JERQ */
 			writeEvent = blockingWrite(FeedDDF.tcpGo(FeedDDF.SYMBOL_TIMESTAMP));
@@ -951,6 +1009,15 @@ public class FeedClientDDF implements FeedClient {
 			}
 
 			return FeedEvent.LOGIN_SENT;
+		}
+
+	}
+
+	private void waitFor(long ms) {
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			log.error("failed to wait, interrupted", e);
 		}
 
 	}

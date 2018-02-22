@@ -69,7 +69,8 @@ public class MsgDecoderDDF extends SimpleChannelHandler {
 			 * silent ignore of invalid chunks sometimes sent by JERQ; DDF must
 			 * have at least 1 command char and 1 terminator
 			 */
-			if (array.length < 2) {
+			// MVE: LTE for text websocket compat
+			if (array.length <= 2) {
 				return;
 			}
 
@@ -87,6 +88,8 @@ public class MsgDecoderDDF extends SimpleChannelHandler {
 				log.debug(new String(Arrays.toString(array)));
 				return;
 			}
+			
+			// log.warn("Got DDF Message: {}", messageDDF.getMessageType());
 
 			final MessageEvent eventOut =
 					new UpstreamMessageEvent(eventIn.getChannel(), messageDDF,

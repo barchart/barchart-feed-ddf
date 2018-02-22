@@ -61,7 +61,7 @@ public class MsgDeframerDDF extends FrameDecoder {
 
 		// Keep for debugging
 		// log.debug("###############################################");
-		// log.debug("### stage : {}", stage);
+		// log.debug("### stage : {}, count: {}", stage, count);
 		// log.debug("### buffer.readerIndex : {}", buffer.readerIndex());
 		// log.debug("### buffer :\n{}", new String(buffer.array()));
 		// log.debug("### frame :\n{}", new String(frame.array()));
