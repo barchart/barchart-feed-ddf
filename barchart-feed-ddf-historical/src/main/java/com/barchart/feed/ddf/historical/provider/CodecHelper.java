@@ -164,9 +164,10 @@ final class CodecHelper {
 				text.append("&backadjust=true");
 			}
 
-			if (query.daystoexpiration > 0) {
-				text.append("&daystoexpiration=" + query.daystoexpiration);
-			}
+			// AAL: Needs to be to 0. If you don't include it, it will use 1
+			//if (query.daystoexpiration > 0) {
+			text.append("&daystoexpiration=" + query.daystoexpiration);
+			//}
 
 			if (query.contractroll != null && query.contractroll.length() > 0) {
 				text.append("&contractroll=" + query.contractroll);
