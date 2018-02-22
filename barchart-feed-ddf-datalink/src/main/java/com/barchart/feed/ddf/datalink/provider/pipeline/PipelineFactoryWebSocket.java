@@ -55,7 +55,7 @@ public class PipelineFactoryWebSocket implements ChannelPipelineFactory {
 		// now add message decoder
 		pipeline.addLast("ddf-decoder", new MsgDecoderDDF());
 		// outbound message encoded
-		pipeline.addLast("ddf-ws-encoder", new MessageEncoderWebSocketDDF());
+		//pipeline.addLast("ddf-ws-encoder", new MessageEncoderWebSocketDDF());
 		// feed orchestrator
 		pipeline.addLast("ddf-feed", ddfHandler);
 

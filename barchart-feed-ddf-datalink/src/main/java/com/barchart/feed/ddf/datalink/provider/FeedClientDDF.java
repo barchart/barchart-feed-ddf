@@ -72,7 +72,7 @@ public class FeedClientDDF implements FeedClient {
 
 	private static final String VERSION = FeedDDF.VERSION_4;
 	private static final int PORT = 7500;
-	
+
 	public static String CUSTOM_HOST = null;
 	public static int CUSTOM_PORT = Integer.MAX_VALUE;
 
@@ -753,7 +753,13 @@ public class FeedClientDDF implements FeedClient {
 	@Override
 	public Future<Boolean> write(final String message) {
 		// log.debug("Attempting to send reqeust to JERQ : {}", message);
-		final ChannelFuture future = channel.write(message + "\n");
+		Object m = message + "\n";
+
+		if (isWebSocket) {
+			m = new TextWebSocketFrame(message);// + "\r\n");
+		}
+
+		final ChannelFuture future = channel.write(m);
 		future.addListener(new CommandFailureListener());
 		return new CommandFuture(future);
 	}
