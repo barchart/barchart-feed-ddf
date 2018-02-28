@@ -48,6 +48,8 @@ public interface DDF_Server {
 	 * @return
 	 */
 	String getPrimaryOrSecondary();
+	
+	String getWss();
 
 	/**
 	 * 

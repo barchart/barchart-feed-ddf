@@ -70,5 +70,7 @@ final class XmlTagSettingsDDF {
 
 	/** The Constant SERVERS_SERVER_RECOVERY. */
 	public static final String SERVERS_SERVER_RECOVERY = "recovery";
+	
+	public static final String SERVERS_SERVER_WSS = "wss";
 
 }

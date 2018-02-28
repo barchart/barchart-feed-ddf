@@ -13,6 +13,7 @@ package com.barchart.feed.ddf.settings.provider;
 import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.SERVERS_SERVER_PRIMARY;
 import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.SERVERS_SERVER_RECOVERY;
 import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.SERVERS_SERVER_SECONDARY;
+import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.SERVERS_SERVER_WSS;
 import static com.barchart.feed.ddf.settings.provider.XmlTagSettingsDDF.SERVERS_SERVER_TYPE;
 
 import org.w3c.dom.Element;
@@ -30,6 +31,10 @@ class ServerDDF implements DDF_Server {
 
 	private final String recovery;
 
+	private final String wss;
+	
+	//
+	
 	ServerDDF(final Element nodeServer) {
 
 		this.type = DDF_ServerType.fromCode(nodeServer
@@ -37,6 +42,7 @@ class ServerDDF implements DDF_Server {
 		this.primary = nodeServer.getAttribute(SERVERS_SERVER_PRIMARY);
 		this.secondary = nodeServer.getAttribute(SERVERS_SERVER_SECONDARY);
 		this.recovery = nodeServer.getAttribute(SERVERS_SERVER_RECOVERY);
+		this.wss = nodeServer.getAttribute(SERVERS_SERVER_WSS);
 
 	}
 
@@ -78,6 +84,11 @@ class ServerDDF implements DDF_Server {
 	@Override
 	public String getRecovery() {
 		return recovery;
+	}
+	
+	@Override
+	public String getWss() {
+		return wss;
 	}
 
 	private boolean isPrimary = true;
@@ -147,7 +158,9 @@ class ServerDDF implements DDF_Server {
 				"\n primary   " + primary + //
 				"\n secondary " + secondary + //
 				"\n recovery  " + recovery + //
+				"\n wss  " + wss + //
 				"\n";
 	}
+
 
 }

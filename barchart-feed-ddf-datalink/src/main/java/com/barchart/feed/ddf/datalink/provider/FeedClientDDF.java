@@ -891,8 +891,11 @@ public class FeedClientDDF implements FeedClient {
 			final DDF_Server server = settings.getServer(serverType);
 			final String primary = server.getPrimary();
 			final String secondary = server.getSecondary();
+			final String wss = server.getWss();
 
-			log.debug("trying primary server login " + primary);
+			WEBSOCKET_EP = "ws://" + wss + ":80/jerq";
+
+			log.debug("trying primary server login {}", primary);
 
 			/* Attempt to connect and login to primary server */
 			final FeedEvent eventOne = login(primary, PORT);
@@ -943,6 +946,7 @@ public class FeedClientDDF implements FeedClient {
 			}
 
 			if (isWebSocket) {
+				log.debug("connecting with WSS: {}", WEBSOCKET_EP);
 				try {
 					URI u = new URI(WEBSOCKET_EP);
 					host = u.getHost();

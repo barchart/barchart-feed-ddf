@@ -45,88 +45,90 @@ import com.barchart.feed.ddf.datalink.provider.FeedClientDDF;
 
 public class BarchartMarketProvider implements MarketService {
 
-	private static final Logger log = LoggerFactory.getLogger(
-			BarchartMarketProvider.class);
-			
+	private static final Logger log = LoggerFactory.getLogger(BarchartMarketProvider.class);
+
 	/* Value api factory */
 	private static final ValueFactory values = ValueFactoryImpl.instance;
-	
+
 	private volatile FeedClient connection;
 	private final DDF_ConsumerMarketProvider maker;
 	private final ExecutorService executor;
 	private final SubscriptionHandler subHandler;
-	
+
 	@SuppressWarnings("unused")
 	private volatile Connection.Monitor stateListener;
-	
-	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners =
-			new CopyOnWriteArrayList<TimestampListener>();
-	
+
+	private final CopyOnWriteArrayList<TimestampListener> timeStampListeners = new CopyOnWriteArrayList<TimestampListener>();
+
 	/* ***** ***** ***** Begin Constructors ***** ***** ***** */
-	
+
 	public BarchartMarketProvider(final String username, final String password) {
 		this(username, password, getDefault());
 	}
 	
-	public BarchartMarketProvider(final String username, final String password, 
-			final ExecutorService exe) {
-		this(username, password, exe, false, null);
+	public BarchartMarketProvider(final String username, final String password, final boolean useWebSocket){
+		this(username, password, getDefault(), false, null, true);
 	}
-	
-	public BarchartMarketProvider(final String username, final String password, final DDF_SocksProxy proxySettings){
-		this(username, password, getDefault(), false, proxySettings);
+
+	public BarchartMarketProvider(final String username, final String password, final ExecutorService exe) {
+		this(username, password, exe, false, null, false);
 	}
-	
-	public BarchartMarketProvider(final String username, final String password, 
-			final ExecutorService exe, final boolean isMobile, final DDF_SocksProxy proxySettings) {
+
+	public BarchartMarketProvider(final String username, final String password, final DDF_SocksProxy proxySettings) {
+		this(username, password, getDefault(), false, proxySettings, false);
+	}
+
+	public BarchartMarketProvider(final String username, final String password, final ExecutorService exe,
+			final boolean isMobile, final DDF_SocksProxy proxySettings, final Boolean useWebSocket) {
+
+		FeedClientDDF.isWebSocket = useWebSocket;
 		
-		if(proxySettings!=null){
-			connection = DDF_FeedClientFactory.newConnectionClient(
-					DDF_Transport.TCP, username, password, exe, proxySettings);
-		}else{
-			connection = DDF_FeedClientFactory.newConnectionClient(
-					DDF_Transport.TCP, username, password, exe, isMobile);
+		if (proxySettings != null) {
+			connection = DDF_FeedClientFactory.newConnectionClient(DDF_Transport.TCP, username, password, exe,
+					proxySettings);
+		} else {
+			connection = DDF_FeedClientFactory
+					.newConnectionClient(DDF_Transport.TCP, username, password, exe, isMobile);
 		}
-		
+
 		connection.bindMessageListener(msgListener);
-		
+
 		subHandler = new DDF_SubscriptionHandler(connection, new DDF_MetadataServiceWrapper());
-		
+
 		maker = DDF_ConsumerMarketProvider.newInstance(subHandler);
-		
+
 		executor = exe;
-		
+
 	}
-	
-	public void setProxySettings(final DDF_SocksProxy proxy){
-		((FeedClientDDF)connection).setProxySettings(proxy);
+
+	public void setProxySettings(final DDF_SocksProxy proxy) {
+		((FeedClientDDF) connection).setProxySettings(proxy);
 	}
-	
-	public void clearProxySettings(){
-		((FeedClientDDF)connection).clearProxySettings();
+
+	public void clearProxySettings() {
+		((FeedClientDDF) connection).clearProxySettings();
 	}
-	
+
 	private static ExecutorService getDefault() {
-		return Executors.newCachedThreadPool( 
-				
-				new ThreadFactory() {
+		return Executors.newCachedThreadPool(
+
+		new ThreadFactory() {
 
 			final AtomicLong counter = new AtomicLong(0);
-			
+
 			@Override
 			public Thread newThread(final Runnable r) {
-				
-				final Thread t = new Thread(r, "Feed thread " + 
-						counter.getAndIncrement()); 
-				
+
+				final Thread t = new Thread(r, "Feed thread " + counter.getAndIncrement());
+
 				t.setDaemon(true);
-				
+
 				return t;
 			}
-			
+
 		});
 	}
-	
+
 	/*
 	 * This is the default message listener. Users wishing to handle raw
 	 * messages will need to implement their own feed client.
@@ -138,8 +140,7 @@ public class BarchartMarketProvider implements MarketService {
 
 			if (message instanceof DDF_ControlTimestamp) {
 				for (final TimestampListener listener : timeStampListeners) {
-					listener.listen(values.newTime(((DDF_ControlTimestamp) message)
-							.getStampUTC().asMillisUTC()));
+					listener.listen(values.newTime(((DDF_ControlTimestamp) message).getStampUTC().asMillisUTC()));
 				}
 			}
 
@@ -149,99 +150,96 @@ public class BarchartMarketProvider implements MarketService {
 			}
 		}
 	};
-	
+
 	/* ***** ***** ***** Begin Lifecycle ***** ***** ***** */
-	
+
 	private final AtomicBoolean isStartingup = new AtomicBoolean(false);
 	private final AtomicBoolean isShuttingdown = new AtomicBoolean(false);
-	
+
 	@Override
 	public void startup() {
-		
-		if(isStartingup.get()) {
+
+		if (isStartingup.get()) {
 			throw new IllegalStateException("Startup called while already starting up");
 		}
-		
-		if(isShuttingdown.get()) {
+
+		if (isShuttingdown.get()) {
 			throw new IllegalStateException("Startup called while shutting down");
 		}
-		
+
 		isStartingup.set(true);
 		executor.execute(new StartupRunnable());
-		
+
 		/** Currently just letting it run */
 	}
 
 	private final class StartupRunnable implements Runnable {
-		
+
 		@Override
 		public void run() {
-			
+
 			try {
-			
+
 				log.debug("Startup Runnable starting");
 				connection.startup();
-			
+
 			} catch (final Throwable t) {
 				log.error("Exception starting up marketplace {}", t);
 				isStartingup.set(false);
 				return;
 			}
-			
+
 			isStartingup.set(false);
 		}
-		
+
 	}
-	
+
 	@Override
 	public void shutdown() {
-		
-		if(isStartingup.get()) {
-			throw new IllegalStateException(
-					"Shutdown called while starting up");
+
+		if (isStartingup.get()) {
+			throw new IllegalStateException("Shutdown called while starting up");
 		}
-		
-		if(isShuttingdown.get()) {
-			throw new IllegalStateException(
-					"Shutdown called while already shutting down");
+
+		if (isShuttingdown.get()) {
+			throw new IllegalStateException("Shutdown called while already shutting down");
 		}
-		
+
 		isShuttingdown.set(true);
 		executor.execute(new ShutdownRunnable());
-		
+
 		/** Currently just letting it run */
 	}
-	
+
 	private final class ShutdownRunnable implements Runnable {
 
 		@Override
 		public void run() {
-			
+
 			try {
-				if(maker != null) {
+				if (maker != null) {
 					maker.clearAll();
 				}
-				
+
 				connection.shutdown();
 				log.debug("Barchart Feed shutdown");
-				
+
 			} catch (final Throwable t) {
-				
+
 				log.error("Error {}", t);
 				isShuttingdown.set(false);
 				return;
 			}
-			
+
 			isShuttingdown.set(false);
 			log.debug("Barchart Feed shutdown succeeded");
 		}
 	}
-	
+
 	/* ***** ***** ***** Begin MarketProvider Methods ***** ***** ***** */
-	
+
 	@Override
-	public <V extends MarketData<V>> ConsumerAgent register(final MarketObserver<V> callback, 
-			final Class<V> clazz) {
+	public <V extends MarketData<V>> ConsumerAgent register(final MarketObserver<V> callback, final Class<V> clazz) {
 		return maker.register(callback, clazz);
 	}
 
@@ -252,7 +250,7 @@ public class BarchartMarketProvider implements MarketService {
 
 	@Override
 	public void bindConnectionStateListener(Monitor listener) {
-		
+
 		stateListener = listener;
 
 		if (connection != null) {
@@ -260,18 +258,18 @@ public class BarchartMarketProvider implements MarketService {
 		} else {
 			throw new RuntimeException("Connection state listener already bound");
 		}
-		
+
 	}
 
 	@Override
 	public void bindTimestampListener(TimestampListener listener) {
-		
-		if(listener != null) {
+
+		if (listener != null) {
 			timeStampListeners.add(listener);
 		}
-		
+
 	}
-	
+
 	@Override
 	public Observable<Map<InstrumentID, Instrument>> instrument(final InstrumentID... ids) {
 		return DDF_RxInstrumentProvider.fromID(ids);
@@ -288,7 +286,7 @@ public class BarchartMarketProvider implements MarketService {
 	}
 
 	/* ***** ***** SubscriptionService ***** ***** */
-	
+
 	@Override
 	public Map<InstrumentID, Subscription<Instrument>> instruments() {
 		return maker.instruments();
@@ -298,7 +296,7 @@ public class BarchartMarketProvider implements MarketService {
 	public Map<ExchangeID, Subscription<Exchange>> exchanges() {
 		return maker.exchanges();
 	}
-	
+
 	@Override
 	public int numberOfSubscriptions() {
 		return subHandler.subscriptions().size();
