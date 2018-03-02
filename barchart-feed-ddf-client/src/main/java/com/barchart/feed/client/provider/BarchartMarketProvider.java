@@ -67,7 +67,7 @@ public class BarchartMarketProvider implements MarketService {
 	}
 	
 	public BarchartMarketProvider(final String username, final String password, final boolean useWebSocket){
-		this(username, password, getDefault(), false, null, true);
+		this(username, password, getDefault(), false, null, useWebSocket);
 	}
 
 	public BarchartMarketProvider(final String username, final String password, final ExecutorService exe) {
