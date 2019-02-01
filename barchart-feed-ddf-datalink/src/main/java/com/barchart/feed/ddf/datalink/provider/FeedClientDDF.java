@@ -997,7 +997,7 @@ public class FeedClientDDF implements FeedClient {
 			FeedEvent writeEvent = blockingWrite(FeedDDF.tcpLogin(username, password));
 
 			if (writeEvent == FeedEvent.COMMAND_WRITE_FAILURE) {
-				return FeedEvent.COMMAND_WRITE_FAILURE;
+				return FeedEvent.CHANNEL_CONNECT_FAILURE;
 			}
 
 			waitFor(250);
@@ -1006,7 +1006,7 @@ public class FeedClientDDF implements FeedClient {
 			writeEvent = blockingWrite(FeedDDF.tcpVersion(VERSION));
 
 			if (writeEvent == FeedEvent.COMMAND_WRITE_FAILURE) {
-				return FeedEvent.COMMAND_WRITE_FAILURE;
+				return FeedEvent.CHANNEL_CONNECT_FAILURE;
 			}
 
 			waitFor(250);
@@ -1015,7 +1015,7 @@ public class FeedClientDDF implements FeedClient {
 			writeEvent = blockingWrite(FeedDDF.tcpGo(FeedDDF.SYMBOL_TIMESTAMP));
 
 			if (writeEvent == FeedEvent.COMMAND_WRITE_FAILURE) {
-				return FeedEvent.COMMAND_WRITE_FAILURE;
+				return FeedEvent.CHANNEL_CONNECT_FAILURE;
 			}
 
 			return FeedEvent.LOGIN_SENT;
