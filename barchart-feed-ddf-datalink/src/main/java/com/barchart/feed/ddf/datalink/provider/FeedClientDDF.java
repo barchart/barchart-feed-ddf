@@ -68,7 +68,7 @@ public class FeedClientDDF implements FeedClient {
 
 	/* XXX TEMPY for testing */
 	public static boolean isWebSocket = false;
-	public static String WEBSOCKET_EP = "ws://qsws-us-e-02.aws.barchart.com:80/jerq";
+	public static String WEBSOCKET_EP = "wsqs-cf.aws.barchart.com";
 
 	private static final String VERSION = FeedDDF.VERSION_4;
 	private static final int PORT = 7500;
@@ -906,7 +906,11 @@ public class FeedClientDDF implements FeedClient {
 				isLoggingIn = false;
 				return;
 			}
-
+			
+			if (isWebSocket) { // if we failed to connect to ws (use tcp)
+				isWebSocket = false;
+			}
+			
 			log.warn("failed to connect to primary server {} trying secondary server login {}", primary, secondary);
 
 			/* Attempt to connect and login to secondary server */
