@@ -68,7 +68,7 @@ public class FeedClientDDF implements FeedClient {
 
 	/* XXX TEMPY for testing */
 	public static boolean isWebSocket = false;
-	public static String WEBSOCKET_EP = "wsqs-cf.aws.barchart.com";
+	public static String WEBSOCKET_EP = "ws://wsqs-cf.aws.barchart.com:80/jerq";
 
 	private static final String VERSION = FeedDDF.VERSION_4;
 	private static final int PORT = 7500;
@@ -891,9 +891,9 @@ public class FeedClientDDF implements FeedClient {
 			final DDF_Server server = settings.getServer(serverType);
 			final String primary = server.getPrimary();
 			final String secondary = server.getSecondary();
-			final String wss = server.getWss();
-
-			WEBSOCKET_EP = "ws://" + wss + ":80/jerq";
+			
+			// final String wss = server.getWss();
+			// WEBSOCKET_EP = "ws://" + wss + ":80/jerq";
 
 			log.debug("trying primary server login {}", primary);
 
