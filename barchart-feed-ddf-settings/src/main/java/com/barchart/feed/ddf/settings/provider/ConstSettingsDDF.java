@@ -27,7 +27,7 @@ final class ConstSettingsDDF {
 
 	//
 
-	static final String DDF_CENTRAL = "http://www.ddfplus.com";
+	static final String DDF_CENTRAL = "https://www.ddfplus.com";
 
 	static final String urlCentral(final String username, final String password) {
 		return DDF_CENTRAL + "/" + "getUserSettings.php" + "?" + //
