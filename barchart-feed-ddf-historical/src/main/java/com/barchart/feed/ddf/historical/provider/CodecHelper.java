@@ -10,6 +10,10 @@ package com.barchart.feed.ddf.historical.provider;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryOrder.ASCENDING;
 import static com.barchart.feed.ddf.historical.enums.DDF_QueryType.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -59,7 +63,14 @@ final class CodecHelper {
 		final CharSequence password = settings.getAuthPass();
 
 		final Instrument instrument = query.instrument;
-		final CharSequence symbol = instrument.vendorSymbols().get(VendorID.BARCHART_HISTORICAL);
+		
+		CharSequence symbol;
+		
+		try {
+			symbol = URLEncoder.encode(instrument.vendorSymbols().get(VendorID.BARCHART_HISTORICAL), StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			symbol = instrument.vendorSymbols().get(VendorID.BARCHART_HISTORICAL);
+		}
 
 		final DateTimeZone timeZone = DateTimeZone.forID(instrument.timeZoneName());
 		final CharSequence start = requestTime(query.timeStart, timeZone);
