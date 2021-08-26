@@ -55,7 +55,7 @@ final class CodecHelper {
 
 		final StringBuilder text = new StringBuilder(256);
 
-		final CharSequence server = "https://webapp-proxy.aws.barchart.com/v1/proxies/timeseries/historical"; //ConstHistorical.historicalServer(settings);
+		final CharSequence server = ConstHistorical.historicalServer(settings);
 
 		final CharSequence queryPage = query.type.queryPage;
 
