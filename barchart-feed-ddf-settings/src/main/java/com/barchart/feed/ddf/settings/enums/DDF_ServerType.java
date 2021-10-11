@@ -26,7 +26,7 @@ public enum DDF_ServerType implements EnumCodeString {
 	HISTORICAL("historical"), //
 
 	/** current historical system */
-	HISTORICAL_V2("historicalv2"), //
+	HISTORICAL_V2("historicalv3"), //
 
 	/** instrument lookup service */
 	EXTRAS("extras"), //
