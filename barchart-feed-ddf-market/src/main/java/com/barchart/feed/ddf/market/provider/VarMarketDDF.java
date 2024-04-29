@@ -70,7 +70,7 @@ import com.barchart.util.common.anno.Mutable;
 
 /**
  * Logic #1
- *
+ * 
  * keep here value relations and event management logic only
  **/
 @Mutable
@@ -85,7 +85,7 @@ public class VarMarketDDF extends VarMarket {
 
 	/*
 	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
-	 *
+	 * 
 	 * @see com.barchart.feed.base.market.api.MarketDo#fireCallbacks()
 	 */
 	@Override
@@ -95,7 +95,7 @@ public class VarMarketDDF extends VarMarket {
 
 	/*
 	 * This is just being used in VarMarketEntityDDF (non-Javadoc)
-	 *
+	 * 
 	 * @see com.barchart.feed.base.market.api.MarketDo#fireCallbacks()
 	 */
 	@Override
@@ -490,6 +490,11 @@ public class VarMarketDDF extends VarMarket {
 	}
 
 	private final void makeCuvol(final PriceValue price, final SizeValue size, final TimeValue time) {
+
+		// Do not enable CV for Equities
+		if (this.instrument == null || !this.instrument.securityType().equals(Instrument.SecurityType.FUTURE)) {
+			return;
+		}
 
 		final MarketDoCuvol cuvol = loadCuvol();
 
